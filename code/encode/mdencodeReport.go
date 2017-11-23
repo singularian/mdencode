@@ -114,6 +114,7 @@ func argsReport(argsNumber int) {
 		if fileid != "0" {
 			md.PrintReport(formatInt, "filename", fileInt)
 		} else {
+		// fmt.Println("entire file ", formatInt)
 			md.PrintEntireFileList(formatInt)
 		}
 
