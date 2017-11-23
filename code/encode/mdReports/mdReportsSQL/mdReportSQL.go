@@ -167,6 +167,7 @@ func (md *MdFormat) PrintEntireFileList(format int) {
                         continue
                 }
                 // fmt.Printf("file %d: %s %s %s\n", id, filepath, filename, version)
+		// fmt.Print("test ", id)
 		md.PrintReport(format, filename, id)
         }
 

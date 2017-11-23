@@ -101,7 +101,7 @@ func argsReport(argsNumber int) {
 		// display the entire file list
 		} else {
 			md.PrintEntireFileList(defaultFormat)
-	}	
+		}
 	// mdencode filename fileid format
 	} else if argsNumber == 4 {
 		filename := os.Args[1]
@@ -111,9 +111,11 @@ func argsReport(argsNumber int) {
 
 		formatInt, _ := strconv.Atoi(format)
 		md := mdReportSQL.Init(formatInt, filename, "", 0, 0, 0, "0", "0", filename)
-		md.PrintReport(formatInt, "filename", fileInt)
-
-
+		if fileid != "0" {
+			md.PrintReport(formatInt, "filename", fileInt)
+		} else {
+			md.PrintEntireFileList(formatInt)
+		}
 
 	} else {
 		// display the file list
