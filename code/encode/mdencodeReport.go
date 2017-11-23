@@ -1,7 +1,8 @@
-// Use of this source code is governed by a license
-// that can be found in the LICENSE file
-
 package main
+
+// mdencode
+// copyright (C) Scott Ross 2017
+// https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
 	"hash"
@@ -50,9 +51,6 @@ type fileData struct {
 	hashList map[string]hash.Hash
 	// hash list for blocks
 	hashListBlocks map[string]hash.Hash
-	// md formatter
-	// mdx *mdFormatText.MdFormat
-	// md *mdFormatSQL.MdFormat
 	mdfmt mdformat
 	// log writer
 	log *log.Logger
@@ -62,8 +60,7 @@ var byteblock = 0
 
 func main() {
 
-	// var hashlist string = "01100000000"
-
+	// mddbreport [sqllite db] [number] [format]
 	var argsNumber int = len(os.Args)
 	argsReport(argsNumber)
 
@@ -74,7 +71,6 @@ func main() {
 
 func argsReport(argsNumber int) {
 
-	// var outfilename = ""
 	var defaultFormat = 9 
 
 	// if just the file is given display the file mdencode list
@@ -85,8 +81,6 @@ func argsReport(argsNumber int) {
 			log.Fatal("The mdfile db does not exist")
 			os.Exit(3)
 		}
-		// fdata := fileData{}
-		//fdata.md = mdReportSQL.Init(0, filename, "", 0, 0, 0, "0", "0", filename)
 		md := mdReportSQL.Init(0, filename, "", 0, 0, 0, "0", "0", filename)
 		md.PrintFileList(1, 0)
 
@@ -101,15 +95,11 @@ func argsReport(argsNumber int) {
 			os.Exit(3)
 		}
 
-		// fdata := fileData{}
-		// fdata.md = mdReportSQL.Init(0, filename, "", 0, 0, 0, "0", "0", filename)
 		md := mdReportSQL.Init(0, filename, "", 0, 0, 0, "0", "0", filename)
 		if fileid != "0" {
-			// fdata.md.PrintReport(defaultFormat, "filename", fileInt)
 			md.PrintReport(defaultFormat, "filename", fileInt)
-			// display the entire file list
+		// display the entire file list
 		} else {
-			// fdata.md.PrintEntireFileList(defaultFormat)
 			md.PrintEntireFileList(defaultFormat)
 	}	
 	// mdencode filename fileid format
@@ -119,15 +109,11 @@ func argsReport(argsNumber int) {
 		format := os.Args[3]
 		fileInt, _ := strconv.ParseUint(fileid, 10, 64)
 
-		// fdata := fileData{}
 		formatInt, _ := strconv.Atoi(format)
-		/// fdata.md = mdReportSQL.Init(formatInt, filename, "", 0, 0, 0, "0", "0", filename)
-		////fdata.md.PrintReport(formatInt, "filename", fileInt)
 		md := mdReportSQL.Init(formatInt, filename, "", 0, 0, 0, "0", "0", filename)
 		md.PrintReport(formatInt, "filename", fileInt)
 
 
-		// fdata.md.EncodeEndFile(formatInt)
 
 	} else {
 		// display the file list
