@@ -74,6 +74,33 @@ md -file=Makefile -block=100 -line=false -bh=111111 -fh=1111111 -format=19 -line
 
 md -file=Makefile -block=100 -line=false -bh=111111 -fh=1111111 -format=19 -append=true -line=true -out=outputfile
 
+# md example usage
+
+This is a file signature for Makefile with a block size of 100 bytes and a 128 bit modulus and the fileblock signature bit string and file bit string and a format specified by number 10. It is formatted by go flags args.
+
+nsross@nsross-desktop:~/projects/src/github.com/singularian/mdencode/code/encode$ md -file=Makefile -block=100 -mod=128 -bh=111 -fh=11011 -format=10 -line=true
+
+Makefile
+/home/nsross/projects/src/github.com/singularian/mdencode/code/encode/
+1558:8:100:128:md4:md5:sha224:sha256-md4:md5:sha1:1.0:2017-11-23 09:33:32.083687811 -0500 EST
+z: md4:md5:sha224:sha256 a066c3c3fe90ac16e6760261f2ec4210:d41d8cd98f00b204e9800998ecf8427e:d14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+100:ba4da86b9127bff0c182c58cdb960acc:23417647afff4d83ababf66431fb7355:46e774051493be26d1f557347f0a48a74668e994:797:156046432538903766113216376986191994992
+100:fc1816c3f3c8d8ccfe0dcfda1d9450e6:6fa717598f0fccfa87d712cabab3e6e4:a1067bb6bcf9829c9f36b071b4ef4bb5b4fb9479:798:61384294535547225472044466722774273092
+100:f755d94871fbf6974164eb0ad05c472a:10fb607003759c939f5004191bfe59dc:8161de6b6c675c20506e35505efa62b67010b9d8:798:105425720449915288927656420490829450308
+100:c65fa83ce9a2161bd6cd9d3753265106:407062d79cb533cd992821eb3273ee7d:4e852edfdb668d26de4724772beb49d371a469c9:798:144081703943664589730216165720332190023
+100:c34a6d09d5a00be68d418ed20a212650:474513176f910f1f656a2342c816c884:d8c1698b50ec6e37228128c069ea549b9da9a325:798:63072968340747723343883595144607130725
+100:c9361cf1d878e275adb5ea1c375ed6dd:06ba713f145849f556047233b29acf14:7e17c9ce58ec9fdaaf8cf649ca5b1b94b95d5f7d:798:137487485354948139249947760744556347989
+100:7a32b4172f4b2f84aa93cd0cc73cd4d1:b7e4c5839de02ab718ddf633353aa91e:1628678e91565290a11590f886d35b3798f1bb59:798:137487485354948139249947760744556347989
+100:6379d854c35371d0bba1373350a3431c:a94ab9c8efbe7821c5432fefd116a614:6f813d5e2a110dcb4eb365880c147a87cf5ea741:798:156067065117997145121715642749173331041
+100:4a796dff1b455c77cb56ae5718b43157:3de58a2eb4c36269e1de3cb6ab0aaf61:70090ac41e759afe8d90e927bd6053ed566e71a7:798:147712599435436507965025664839365518437
+100:98068bf526914d2d8ac1f3066f239999:3f662874cce4d2d63212b118ab800045:86d06cdc74546cc16967e2485d3ee3ecff11a795:798:154716865761017993889276371155228255333
+100:66e4f76d2f679af519c846c67cd681be:936d51770e1c7c55d4145a564c3fc8eb:06a3058758f9698d5e2461857068afb35ca55dbf:797:153162576302221144332104219346258126697
+100:799e63c77dd8be08fca6ebc79a5d1413:f8df5e83a7952f48d7d7afd0e96b0590:e00ca135dd1f61a33d6b07b914e76859ed62875a:798:132172131070534005830780023095214173557
+100:f6064cdae7fd6c8c24756ec3f7f4aaf6:65a5fb75d49c92da615804155a8a9b8e:d7e7abf1fe344689df574085be4070b55a35b4b9:798:12500112453260141801211768598085003381
+100:fb2aaeb9cfd641d6523711b87d68a6e1:62c87b5a456b7942e7193332d6b18343:17c528663c00ae9dc3b13965c66743e3d625b817:798:158720269090271827991004656045368412681
+100:11b7c8218ba14185b4288fbddb2c4b99:885597de816cf8086612b7f0c7091312:46359dcc0ab600d5c4d581079603480ed95228e8:798:144134984942068198018378939922176495948
+58:0bf37e8aa18b4b35d0ddc9a027649ecb:f918abc0f68b1a7fc0027f1b813439f7:cc556ee447d84eef7cfd9ea614e1254d14e017d1:461:153464703125801938365299123247572066826
+
 # mddbreport usage
 This example shows how to generate an sql lite file db signature
 
@@ -178,6 +205,52 @@ nsross@nsross-desktop:~/projects/src/github.com/singularian/mdencode/code/encode
 {"Mdtype":"Block","Blocksize":"40","Hashlist":"7a260f932d7d2c59f276ffff0b83d3e4:c0274903d8432b0c063867f89aae540d88cd167a","Modexp":"318","Mod":"1868850530"},
 {"Mdtype":"Block","Blocksize":"40","Hashlist":"05aaf28a3bf3ed6b9b8afe09f5372145:9ccd573dfe1cf87d3d3849d48599d6c25cfa9367","Modexp":"318","Mod":"1846151538"},
 {"Mdtype":"Block","Blocksize":"38","Hashlist":"20ae9e8ab2b3422153495cc81afdcbc7:b8b91ef0604d76bfc1941c8525a42f940667a45d","Modexp":"302","Mod":"1819025930"}}
+
+
+# mddbreport xml format example
+
+<md><hd><filename>Makefile</filename><filepath>/home/nsross/projects/src/github.com/singularian/mdencode/code/encode/</filepath><filesize>1558</filesize><format>100</format><blocksize>40</blocksize><modulussize>32</modulussize><hashlist>md5:sha1-md5:sha1</hashlist><time>2017-11-23 09:31:38.770963168 -0500 EST</time></hd>
+<filehash><hashname>md5:sha1</hashname><hash>cf3bf9b0cc9d76c4807fbe7aa70dd6d2:da39a3ee5e6b4b0d3255bfef95601890afd80709</hash></filehash>
+<b><size>40</size><hashlist>493a1de47de4c76a1fe678e3b1c1263d:255078b58fa4f01057bf5568d55f5b2b63d0b8de</hashlist><modexp>317</modexp><mod>1851880057</mod></b>
+<b><size>40</size><hashlist>38925f2bf8b95ab371933c07c7aa053b:baecfb418ea6c44c970454247da56a2a85bdd6fc</hashlist><modexp>317</modexp><mod>544499813</mod></b>
+<b><size>40</size><hashlist>4def53e92581113421ae20a47ecd45a1:15e7e4c7daef5fd91c71ac9844e95e3a8f144b27</hashlist><modexp>317</modexp><mod>1634624544</mod></b>
+<b><size>40</size><hashlist>5ed3a775ad27c883fcbd8471cc39aac0:6f8ddd4c76be6ff44e69c590b427f1d3648ea36d</hashlist><modexp>318</modexp><mod>1684108389</mod></b>
+<b><size>40</size><hashlist>9f3caadd45eb733501fcd04a43458bfa:716c95ab525c13fd59b2bac483d1ed93221489fe</hashlist><modexp>317</modexp><mod>1430867012</mod></b>
+<b><size>40</size><hashlist>fe4d60885d5e7387dd0a3dcd0c9d6f3c:0dcebe01bb9b501a2bb401aebaae95a603c0c89b</hashlist><modexp>318</modexp><mod>1919508846</mod></b>
+<b><size>40</size><hashlist>1975f015a73caf96dc11b73eb60cb4e8:1ddb89b8edccc0be007602fea9eed3af5f96a73c</hashlist><modexp>317</modexp><mod>1598310738</mod></b>
+<b><size>40</size><hashlist>a2eb9495034ea231fe0aa4329e77a952:65004e18cef38a033336c09faa8c64723d44a9b1</hashlist><modexp>317</modexp><mod>542336372</mod></b>
+<b><size>40</size><hashlist>66e6ebcb8883924ed68fa3a8b325bf7d:6e7d6afdc03e243f827b2e4c2c33e099b177a3b4</hashlist><modexp>318</modexp><mod>1751478885</mod></b>
+<b><size>40</size><hashlist>a44771da23e3471800386005f29ce873:4363afab384d225ec553818b14a812c6187d202e</hashlist><modexp>317</modexp><mod>1179402567</mod></b>
+<b><size>40</size><hashlist>8585982fbfd642c103f06daf60cef152:644ff6d5554ebc551b6b890c71bab35cfaa8a07a</hashlist><modexp>318</modexp><mod>1848601956</mod></b>
+<b><size>40</size><hashlist>58bda4988c3cf4f818f10cc617ee39b2:88292dbf48ed93152e438656bdebf9871f109bc9</hashlist><modexp>318</modexp><mod>1953002850</mod></b>
+<b><size>40</size><hashlist>2e15d3915184e7bf81b0611f2f87d630:8b250fe69e7b9567ce6fa7e0cde5680132acf3cf</hashlist><modexp>317</modexp><mod>1416195429</mod></b>
+<b><size>40</size><hashlist>30f0b49c43f9d7dff8dd4bae6beeb530:e47b0be48d3cdb9e902b809e4ec9dc32c1dd3e7a</hashlist><modexp>317</modexp><mod>2067944777</mod></b>
+<b><size>40</size><hashlist>21641e406f71a0b96aa19aae38d95b2f:649d84ecf54480c8ae424b58d893410504060b13</hashlist><modexp>318</modexp><mod>612057685</mod></b>
+<b><size>40</size><hashlist>11901b1a6f8d3b7ab44253391c28d029:e7e7e95362dab696eb72f99bb9e245173109e2ac</hashlist><modexp>318</modexp><mod>1768711200</mod></b>
+<b><size>40</size><hashlist>9ea9af485765de616f892ac6e1c11410:0cfdd0f02a0d4383f47a49d501b302b7c164c16f</hashlist><modexp>317</modexp><mod>1397836846</mod></b>
+<b><size>40</size><hashlist>5bda4dcf0c7cee7070e85f18cb809b6d:f3d19c8b8805cc11497c8e822bf48b7daf52ba28</hashlist><modexp>318</modexp><mod>544040046</mod></b>
+<b><size>40</size><hashlist>a6a4018580f6d64ba58aa3681d01267d:1a8042eb9157fd5bf61c755b128220110ce72582</hashlist><modexp>318</modexp><mod>1684173413</mod></b>
+<b><size>40</size><hashlist>f475f42ca96939fa6d30e6ad9be57928:f2d1542171ab4d7b62768eae8502a02919b761ff</hashlist><modexp>318</modexp><mod>1853060193</mod></b>
+<b><size>40</size><hashlist>4f74a362d756d2c8678aca6c57554df5:8390d7ce88d18197d82ec790e0a96efc4544e22e</hashlist><modexp>318</modexp><mod>1397836846</mod></b>
+<b><size>40</size><hashlist>f01287cbed23a6af5369bcb71adffd7e:1d0f8ae4c93a7427fd7098de7dd5d549e671f290</hashlist><modexp>318</modexp><mod>1699959116</mod></b>
+<b><size>40</size><hashlist>91f3d6c68614d06c9d06e53ccaa5c14f:d833c9a428d8b454419688d70eaa2973839d0b73</hashlist><modexp>315</modexp><mod>1697539951</mod></b>
+<b><size>40</size><hashlist>fc08e24fc83c60be0e67231f3bd32a47:e2253988d2cfa3982dd815572d247ee5bf3c3fa3</hashlist><modexp>315</modexp><mod>1862935305</mod></b>
+<b><size>40</size><hashlist>eda11ade4af4c1814dadac5e1dd7c2d7:8e5c5484eca0d6419c4b2d9b21d3ee7b2a102ff2</hashlist><modexp>318</modexp><mod>1668244581</mod></b>
+<b><size>40</size><hashlist>1df1a938172eabbc7a1ee64c405cb3d9:b2d49643bcb7b5fdace8a7b3f7de2ab526d81b1c</hashlist><modexp>317</modexp><mod>1684368995</mod></b>
+<b><size>40</size><hashlist>a1f922a9b454cd0de214f8a78504da7c:4cfde2d4bc360936e51b74d09c788db9386b76ec</hashlist><modexp>318</modexp><mod>1930061669</mod></b>
+<b><size>40</size><hashlist>a1544ddb840e5d34bd6454d0c45dc276:ef96b8c803ae4d7ababb3910204c9f42ee869d6c</hashlist><modexp>318</modexp><mod>1768318255</mod></b>
+<b><size>40</size><hashlist>83f24f81c758a50073c7dc934c8b8be2:2b9ed66b94e1e8d9982cffc9defdd9d511d9a4c3</hashlist><modexp>318</modexp><mod>1865249649</mod></b>
+<b><size>40</size><hashlist>9c2b713afcd930a122c1ebf800be25ec:91f827eb85262bbba58903c59198d3c41e770daf</hashlist><modexp>318</modexp><mod>1747938677</mod></b>
+<b><size>40</size><hashlist>f46f97e0bbc9f5ce6c20be10355cb469:b10961e20e9d2e1db42c1eec5673b7cf1a97d6b5</hashlist><modexp>318</modexp><mod>796027248</mod></b>
+<b><size>40</size><hashlist>37c08392f161c86b84356474c260fe4f:4589e6860c9f25c280a1b38c5b305cb4a3678703</hashlist><modexp>318</modexp><mod>1936289896</mod></b>
+<b><size>40</size><hashlist>6d7c24fcac4489298484a6067e0f874d:c7e3b8504c9a9d9b4bf65474597ed37ea97a0590</hashlist><modexp>318</modexp><mod>168388463</mod></b>
+<b><size>40</size><hashlist>0e20dcca42982f58b40d09d8db3e6e07:a1b0db9f6e60d2265705ad8db1ab18e04957eada</hashlist><modexp>317</modexp><mod>1702109229</mod></b>
+<b><size>40</size><hashlist>2e53ec3a0470f4552664e184c0d561a0:aac70169f8a235ab9b01f543082814d286673d14</hashlist><modexp>318</modexp><mod>1949960713</mod></b>
+<b><size>40</size><hashlist>797e7c9d041c629e1ef0a54ea737cc66:b156eabfe6d455e4b5e63b21b76009f17fde942c</hashlist><modexp>318</modexp><mod>1684368995</mod></b>
+<b><size>40</size><hashlist>7a260f932d7d2c59f276ffff0b83d3e4:c0274903d8432b0c063867f89aae540d88cd167a</hashlist><modexp>318</modexp><mod>1868850530</mod></b>
+<b><size>40</size><hashlist>05aaf28a3bf3ed6b9b8afe09f5372145:9ccd573dfe1cf87d3d3849d48599d6c25cfa9367</hashlist><modexp>318</modexp><mod>1846151538</mod></b>
+<b><size>38</size><hashlist>20ae9e8ab2b3422153495cc81afdcbc7:b8b91ef0604d76bfc1941c8525a42f940667a45d</hashlist><modexp>302</modexp><mod>1819025930</mod></b>
+</md>
 
 # License 
 
