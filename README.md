@@ -48,8 +48,11 @@ Formats
 2000 - SQL Lite 3 DB File
 
 md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line
+
 md -file=Makefile -block=100 -line=false -bh=111 -fh=0 -format=19 -line
+
 md -file=Makefile -block=100 -line=false -bh=111111 -fh=1111111 -format=19 -line=true -out=outputfile
+
 md -file=Makefile -block=100 -line=false -bh=111111 -fh=1111111 -format=19 -append=true -line=true -out=outputfile
 
 # mddbreport usage
@@ -60,8 +63,13 @@ md -file=Makefile -format=2000 -line=true -out=ssss
 It can also generate a formatted signature from the ssss.db sqlite 3 file.
 
 nsross@nsross-desktop:~/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db
+
 file 1: /home/nsross/projects/src/github.com/singularian/mdencode/code/encode/ Makefile 1.0
+
+# mddbreport text format example
+
 nsross@nsross-desktop:~/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1
+
 Makefile
 /home/nsross/projects/src/github.com/singularian/mdencode/code/encode/
 1558:8:40:32:md5:sha1-md5:sha1:1.0:2017-11-23 09:14:13.074325487 -0500 EST
@@ -105,7 +113,11 @@ z: md5:sha1 cf3bf9b0cc9d76c4807fbe7aa70dd6d2:da39a3ee5e6b4b0d3255bfef95601890afd
 40:7a260f932d7d2c59f276ffff0b83d3e4:c0274903d8432b0c063867f89aae540d88cd167a:318:1868850530
 40:05aaf28a3bf3ed6b9b8afe09f5372145:9ccd573dfe1cf87d3d3849d48599d6c25cfa9367:318:1846151538
 38:20ae9e8ab2b3422153495cc81afdcbc7:b8b91ef0604d76bfc1941c8525a42f940667a45d:302:1819025930
+
+# mddbreport json format example
+
 nsross@nsross-desktop:~/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1 600
+
 {"mdfile": {"FileName":"Makefile","FilePath":"/home/nsross/projects/src/github.com/singularian/mdencode/code/encode/","Filesize":1558,"Blocksize":40,"Modsize":32,"Format":600,"Hashlist":"md5:sha1-md5:sha1","Version":"1.0","Time":"2017-11-23 09:14:15.906471611 -0500 EST"},
 {"Mdtype":"File","Hashname":"md5:sha1","Filehashlist":"cf3bf9b0cc9d76c4807fbe7aa70dd6d2:da39a3ee5e6b4b0d3255bfef95601890afd80709"},
 {"Mdtype":"Block","Blocksize":"40","Hashlist":"493a1de47de4c76a1fe678e3b1c1263d:255078b58fa4f01057bf5568d55f5b2b63d0b8de","Modexp":"317","Mod":"1851880057"},
