@@ -10,28 +10,42 @@ It can write to an sqllite db
 # mdencode usage
 
 Usage of md:
-  -append
-     Append To Output File
+     
   -bh string
      Block Hash Boolean String List (default "011")
-  -block string
-     File Block Size Bytes (default "40")
-  -byte
-     Generate the File Byteblock
+     
   -fh string
-     File Hash Boolean String List (default "011")
+     File Hash Boolean String List (default "011")   
+     
+  -block string
+     File Block Size Bytes (default "40")   
+ 
+ -mod string
+     Modulus Size in Bits (default "32")
+     
+   -append
+     Append To Output File    
+
   -file string
-     Filename
+     Input filename
+     
   -format int
      Output Format (default 4)
+     
   -key string
      Signature Key (Minimum 16 bytes for siphash) (default "LomaLindaSanSerento9000")
+  
   -line
      File Hash as one line
+  
   -log string
      Log Filename
-  -mod string
-     Modulus Size in Bits (default "32")
+ 
+ 
+  
+ -byte
+     Generate the File Byteblock
+     
   -out string
      Output Filename
 
