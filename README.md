@@ -159,3 +159,7 @@ nsross@nsross-desktop:~/projects/src/github.com/singularian/mdencode/code/encode
 {"Mdtype":"Block","Blocksize":"40","Hashlist":"7a260f932d7d2c59f276ffff0b83d3e4:c0274903d8432b0c063867f89aae540d88cd167a","Modexp":"318","Mod":"1868850530"},
 {"Mdtype":"Block","Blocksize":"40","Hashlist":"05aaf28a3bf3ed6b9b8afe09f5372145:9ccd573dfe1cf87d3d3849d48599d6c25cfa9367","Modexp":"318","Mod":"1846151538"},
 {"Mdtype":"Block","Blocksize":"38","Hashlist":"20ae9e8ab2b3422153495cc81afdcbc7:b8b91ef0604d76bfc1941c8525a42f940667a45d","Modexp":"302","Mod":"1819025930"}}
+
+# License 
+
+https://github.com/singularian/mdencode/blob/master/LICENSE
