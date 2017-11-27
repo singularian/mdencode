@@ -41,8 +41,6 @@ Usage of md:
   -log string
      Log Filename
  
- 
-  
  -byte
      Generate the File Byteblock
      
@@ -51,14 +49,21 @@ Usage of md:
 
 Version: 1.0 復甦 復活
 
-Formats
+Output Formats
 0 - 98 - Text
+
 99 - Inform
+
 100 - Json
+
 101 - CSV
+
 102 - CSV
+
 600 - Json
+
 1000 - Binary
+
 2000 - SQL Lite 3 DB File
 
 md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line
