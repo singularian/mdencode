@@ -25,60 +25,42 @@ It can write to an sqlite db.
 
 Usage of md:
      
-  -bh string
-     Block Hash Boolean String List (default "011")
-     
-  -fh string
-     File Hash Boolean String List (default "011")   
-     
-  -block string
-     File Block Size Bytes (default "40")   
- 
- -mod string
-     Modulus Size in Bits (default "32")
-     
-   -append
-     Append To Output File    
-
-  -file string
-     Input filename
-     
-  -format int
-     Output Format (default 4)
-     
-  -key string
-     Signature Key (Minimum 16 bytes for siphash) (default "LomaLindaSanSerento9000")
-  
-  -line
-     File Hash as one line
-  
-  -log string
-     Log Filename
- 
- -byte
-     Generate the File Byteblock
-     
-  -out string
-     Output Filename
+  -bh string  
+     Block Hash Boolean String List (default "011")   
+  -fh string  
+     File Hash Boolean String List (default "011")         
+  -block string  
+     File Block Size Bytes (default "40")    
+  -mod string  
+     Modulus Size in Bits (default "32")       
+  -append  
+     Append To Output File     
+  -file string  
+     Input filename       
+  -format int  
+     Output Format (default 4)      
+  -key string  
+     Signature Key (Minimum 16 bytes for siphash) (default "LomaLindaSanSerento9000")  
+  -line  
+     File Hash as one line    
+  -log string  
+     Log Filename  
+ -byte  
+     Generate the File Byteblock      
+  -out string  
+     Output Filename  
 
 Version: 1.0 復甦 復活
 
-Output Formats
-0 - 98 - Text
-
-99 - Inform
-
-100 - Json
-
-101 - CSV
-
-102 - CSV
-
-600 - Json
-
-1000 - Binary
-
-2000 - SQL Lite 3 DB File
+Output Formats  
+0 - 98 - Text  
+99 - Inform  
+100 - Json  
+101 - CSV  
+102 - CSV  
+600 - Json  
+1000 - Binary  
+2000 - SQL Lite 3 DB File  
 
 md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line
 
