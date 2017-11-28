@@ -68,9 +68,11 @@ md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line
 
 md -file=Makefile -block=100 -line=false -bh=111 -fh=0 -format=19 -line
 
-md -file=Makefile -block=100 -line=false -bh=111111 -fh=1111111 -format=19 -line=true -out=outputfile
+md -file=Makefile -block=100 -bh=111111 -fh=1111111 -format=19 -line=true -out=outputfile
 
-md -file=Makefile -block=100 -line=false -bh=111111 -fh=1111111 -format=19 -append=true -line=true -out=outputfile
+md -file=Makefile -block=100 -bh=111111 -fh=1111111 -format=19 -append=true -line=true -out=outputfile
+
+md -block=1000 -mod=256 -bh=001100 -fh=100100111 -format=100 -file=destiny.txt
 
 # md example usage
 
