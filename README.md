@@ -9,6 +9,18 @@ This is a golang command line file signature generator with a modular floor.
 It can generate a file signature at the file or block level and format and write the output in different formats.
 It can write to an sqllite db
 
+# Output Formats
+
+1. TEXT
+2. INFORM
+3. XML
+4. JSON
+5. BINARY
+6. CSV
+7. SQLITE3 DB
+8. BUILD YOUR OWN
+
+
 # mdencode usage
 
 Usage of md:
