@@ -1,13 +1,13 @@
 # mdencode
-A message digest signature generator for files with modular floors
-mdencode is written in golang and uses an interface for pluggin formatters
-mdencode allows for the creation of sqlite3 db file signatures
+A message digest signature generator for files with modular floors  
+mdencode is written in golang and uses an interface for pluggin formatters  
+mdencode allows for the creation of sqlite3 db file signatures  
 
 # overview
 
-This is a golang command line file signature generator with a modular floor.
-It can generate a file signature at the file or block level and format and write the output in different formats.
-It can write to an sqllite db
+This is a golang command line file signature generator with a modular floor.  
+This program can generate a file signature at the file or block level and format and write the output in different formats.  
+It can write to an sqlite db.
 
 # Output Formats
 
