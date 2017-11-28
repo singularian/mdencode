@@ -20,6 +20,19 @@ It can write to an sqlite db. The mdencode sqlite db files contain a table schem
 7. SQLITE3 DB
 8. BUILD YOUR OWN
 
+# Digital Signature List
+
+This is a partial list of the digital signatures. More can be added to the signature chain and are selectable via a binary flag argument for file blocks and files
+
+1. md4
+2. md5
+3. sha
+4. sha3
+5. Tiger
+6. Whirlpool
+
+
+
 
 # Mdencode usage
 
