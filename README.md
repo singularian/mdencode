@@ -62,6 +62,8 @@ Output Formats
 1000 - Binary  
 2000 - SQL Lite 3 DB File  
 
+# Command Line Examples
+
 md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line
 
 md -file=Makefile -block=100 -line=false -bh=111 -fh=0 -format=19 -line
