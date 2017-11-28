@@ -7,7 +7,7 @@ mdencode allows for the creation of sqlite3 db file signatures
 
 This is a golang command line file signature generator with a modular floor.  
 This program can generate a file signature at the file or block level and format and write the output in different formats.  
-It can write to an sqlite db.
+It can write to an sqlite db. The mdencode sqlite db files contain a table schema and can be exported into multiple formats.  
 
 # Output Formats
 
