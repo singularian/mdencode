@@ -68,7 +68,7 @@ Version: 1.0 復甦 復活
 Output Formats  
 0 - 98 - Text  
 99 - Inform  
-100 - Json  
+100 - XML    
 101 - CSV  
 102 - CSV  
 600 - Json  
