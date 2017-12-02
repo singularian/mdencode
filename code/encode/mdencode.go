@@ -71,7 +71,7 @@ func argsSimple(argsNumber int) int {
 		fmt.Println("Formats")
 		fmt.Println("0 - 98 - Text")
 		fmt.Println("99 - Inform")
-		fmt.Println("100 - Json")
+		fmt.Println("100 - XML")
 		fmt.Println("101 - CSV")
 		fmt.Println("102 - CSV")
 		fmt.Println("600 - Json")

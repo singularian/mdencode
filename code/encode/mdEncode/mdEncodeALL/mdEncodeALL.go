@@ -101,6 +101,9 @@ type FileData struct {
 	hashList  map[string]hash.Hash
 	// hash list for blocks
 	hashListBlocks  map[string]hash.Hash
+	// modulus 
+	// N *big.Int // modulus
+	// https://stackoverflow.com/questions/37502134/declaring-type-big-int-overflowing-constant-golang
 	// formatter
 	// md *mdFormatText.MdFormat
 	// mdformat interface for modular type assignment
@@ -391,6 +394,9 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
 		}
 
 
+		// add something for zero which makes it skip generating the byteblockbigint
+		// mod=0
+
 		// create the biginteger representation of the bytes
 		z := new(big.Int)
                 z.SetBytes(buf)
@@ -401,7 +407,7 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
 			hlistarray = append(hlistarray, bufstring)
 			// retrieve the block bigint
 			// hlistarray = append(hlistarray, ":")
-			hlistarray = append(hlistarray, blockbytesBigInt)
+			///// hlistarray = append(hlistarray, blockbytesBigInt)
 		}
 
                 // critical test code for byte comparison
