@@ -32,7 +32,11 @@ This is a partial list of the digital signatures. More can be added to the signa
 6. Whirlpool
 
 
+# Modular Floor
 
+This program uses a modular floor paired with a package of digital signatures. This makes the digital signature more unique. A modular floor consists of a polynomial
+which is the modular exponent plus n times the modulus plus the remainder. It is possible to use a modular scan to find matching byte blocks associated with the digital signature package.
+A digital signature package or group can consist of 1 or more block and file signatures. A modular floor is generaly computed at the block level for a file byte block and utilizes a big integer.
 
 # Mdencode usage
 
