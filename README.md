@@ -93,13 +93,13 @@ This is a file signature for Makefile with a block size of 100 bytes and a 128 b
 
 md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=9 -file=america.txt -out=america.txt_b100_mod128_f9_.md
 
-https://raw.githubusercontent.com/singularian/singularian.github.io/master/mdencode/america.txt_b100_mod128_f9_.md
+https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f9_.md
 
 # md example usage of the input file Makefile and the output format json
 
 md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=600 -file=america.txt -out=america.txt_b100_mod128_f600_.md
 
-https://raw.githubusercontent.com/singularian/singularian.github.io/master/mdencode/america.txt_b100_mod128_f600_.md
+https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f600_.md
 
 # mddbreport usage
 This example shows how to generate an sql lite file db signature
