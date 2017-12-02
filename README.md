@@ -55,7 +55,7 @@ Usage of md:
   -key string  
      Signature Key (Minimum 16 bytes for siphash) (default "LomaLindaSanSerento9000")  
   -line  
-     File Hash as one line    
+     File Hash as one line  
   -log string  
      Log Filename  
  -byte  
