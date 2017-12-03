@@ -123,6 +123,7 @@ func Init() (md *FileData) {
 	mdata := new(FileData)
 	mdata.appendfile = false
 	mdata.byteblock = false
+	mdata.byteblockint = false
 	mdata.filehashline = false
 	mdata.key = "LomaLindaSanSerento9000"
 	mdata.logfile = ""
