@@ -98,7 +98,7 @@ Output Formats
 1000 - Binary  
 2000 - SQL Lite 3 DB File  
 
-# Go Libraries
+# Go Library Dependencies
 
 go get -u golang.org/x/crypto/blake2s  
 go get -u golang.org/x/crypto/md4  
