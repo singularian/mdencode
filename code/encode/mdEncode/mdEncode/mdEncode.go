@@ -1,4 +1,4 @@
-package mdEncodeALL
+package mdEncode
 
 // mdencode
 // copyright (C) Scott Ross 2017
@@ -720,6 +720,5 @@ func (l *FileData) calculateFileBlocks(fileSize uint64, blockSize uint64) (uint6
 
 // display the object type
 func (l *FileData) PrintType() {
-	fmt.Println("mdencodeALL")
-
+	fmt.Println("mdencode")
 }
