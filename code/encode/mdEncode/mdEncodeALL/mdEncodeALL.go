@@ -154,15 +154,8 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
         blocksize, _ := strconv.ParseInt(blockSize, 10, 64)
 
         // process the modulus bitsize argument
-        // exponent
         bitsize, _ := strconv.ParseInt(modSize, 10, 64)
-        // var i, e = big.NewInt(2), big.NewInt(bitsize)
-        // i.Exp(i, e, nil)
 
-	// initialize fileData struct
-        // fdata := fileData{}
-	// fdata = l
-        // initialize the fileData struct information
 	// set the filename
         fdata.fileName  = fileName
 	// find the fileData file path
@@ -347,11 +340,11 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
         blocksize, err := strconv.ParseInt(blockSize, 10, 64)
 
         // process the modulus bitsize argument
-        // exponent
         bitsize, err := strconv.ParseInt(modSize, 10, 64)
+
+	// create the modulus bigint 2 to the bitsize exponent
         var modulusBigInt, e = big.NewInt(2), big.NewInt(bitsize)
         modulusBigInt = modulusBigInt.Exp(modulusBigInt, e, nil)
-
 
         // Open the file for reading
         file, err := os.Open(fileName)
@@ -730,9 +723,11 @@ func (l *FileData) logN(fileblockint *big.Int, base *big.Int) int {
 // calculate the file byte block bigint modulus remainder
 func (l *FileData) calculateFileBlockModulus(blockBigInt *big.Int, modulusBigInt *big.Int)  {
 
+	// calclute the modulus exponent
 	two := big.NewInt(2)
 	l.modExp = l.logN(blockBigInt, two)
 
+	// calculate the modulus remainder
 	fileblockmodulus := new(big.Int)
 	fileblockmodulus = fileblockmodulus.Mod(blockBigInt, modulusBigInt)
 	l.fileblockmodulusString = fileblockmodulus.String()
