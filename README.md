@@ -135,13 +135,13 @@ This example shows how to list the files in a ssss.db file sqlite3 signature db
 
 /projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db
 
-file 1: /projects/src/github.com/singularian/mdencode/code/encode/ Makefile 1.0
+file 1: /projects/src/github.com/singularian/mdencode/code/encode/ Makefile 1.0  
 
-/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport filesig.db
+/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport filesig.db  
 
-file 1: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ america.txt 1.0
-file 2: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ twelve.doc 1.0
-file 3: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ century.xml 1.0
+file 1: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ america.txt 1.0  
+file 2: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ twelve.doc 1.0  
+file 3: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ century.xml 1.0  
 
 # Example mddbreport formats
 
