@@ -101,6 +101,11 @@ type FileData struct {
 	hashList  map[string]hash.Hash
 	// hash list for blocks
 	hashListBlocks  map[string]hash.Hash
+	// byte buffer
+	filebuffer []byte
+	// modulus
+	modExp int 
+	fileblockmodulusString string
 	// modulus 
 	// N *big.Int // modulus
 	// https://stackoverflow.com/questions/37502134/declaring-type-big-int-overflowing-constant-golang
@@ -344,8 +349,8 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
         // process the modulus bitsize argument
         // exponent
         bitsize, err := strconv.ParseInt(modSize, 10, 64)
-        var i, e = big.NewInt(2), big.NewInt(bitsize)
-        i.Exp(i, e, nil)
+        var modulusBigInt, e = big.NewInt(2), big.NewInt(bitsize)
+        modulusBigInt = modulusBigInt.Exp(modulusBigInt, e, nil)
 
 
         // Open the file for reading
@@ -358,7 +363,9 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
         defer file.Close()
 
 	// intialize the buffer with the default blocksize
-        buf := make([]byte, blocksize)
+        // buf := make([]byte, blocksize)
+        l.filebuffer = make([]byte, blocksize)
+	// fmt.Println("bytes ", l.filebuffer)
 
 	// setup the file block count and last block remainder
         blocks := l.blockCount
@@ -378,7 +385,7 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
         for{
 
 		// break on end of file
-	        if _, err := file.Read(buf); err == io.EOF {
+	        if _, err := file.Read(l.filebuffer); err == io.EOF {
 		    break
 		}
 
@@ -389,63 +396,53 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
 
 
 		if blocksRead == blocks {
-			buf = buf[0:remainder]
+			l.filebuffer = l.filebuffer[0:remainder]
 			bytesRead = remainder
 		}
 
 
-		// add something for zero which makes it skip generating the byteblockbigint
-		// mod=0
-
 		// create the biginteger representation of the bytes
-		z := new(big.Int)
-                z.SetBytes(buf)
+		blockBigInt := new(big.Int)
+                blockBigInt.SetBytes(l.filebuffer)
+
+		// fmt.Println("bytes ", blockBigInt.String())
 
 		if l.byteblock {
-			blockbytesBigInt := z.String()
-			var bufstring = fmt.Sprint(buf)
+			blockbytesBigInt := blockBigInt.String() /// 
+			var bufstring = fmt.Sprint(l.filebuffer)
 			hlistarray = append(hlistarray, bufstring)
 			// retrieve the block bigint
-			// hlistarray = append(hlistarray, ":")
-			///// hlistarray = append(hlistarray, blockbytesBigInt)
+			hlistarray = append(hlistarray, ":")
+			hlistarray = append(hlistarray, blockbytesBigInt)
 		}
 
-                // critical test code for byte comparison
-                // fmt.Println("buffer bytes ", z)
-                // bigstr2 := fmt.Sprint(z)
-                // this allows you to compare the bytes
-                // should make this a hash or argument to display the byte buffer
-                /////////////////////fmt.Println("buffer bytes ", z.Bytes(), " ", buf, " ", z)
+		// if the modulus bitsize is greater than zero calculate the byte block modulus
+		// otherwise skip generating the byte block modulus
+		if bitsize > 0 {
+			l.calculateFileBlockModulus(blockBigInt, modulusBigInt)
+		} else {
+			l.modExp = 0
+			l.fileblockmodulusString = "0"
+		}
 
-                // this could be 2^exp then put the modulus somewhere within it so it has a larger floor
-                // ie 2^151 and < 2^152
-                //
-                two := big.NewInt(2)
-                modExp := l.logN(z, two)
-                // alternate exponent floor the modulus to the power 1 less than the file block power greater than the file block
-                // ie mod^151 and mod^152
-                // generate the modulus exponent less than the file block size bigint
-                // fmt.Print(":", logN(z, i))
-                /// modExp := logN(z, i)
-
-                // generate the file block modulus remainder
-                mod := new(big.Int)
-                mod = z.Mod(z, i);
+		// fmt.Println("file block ", blockBigInt, " modulus ", modulusBigInt)
+		// fmt.Println("modulus ", fileblockmodulus.String(), " ", modulusBigInt.String())
+		// fmt.Println("file modulus ", fileblockmodulus.String(), " ", fileblockmodulusString, " ", modulusBigInt.String())
 
 		// generate the file block signatures from the hash list
 		for _, hashvalue := range l.blockHashListNames {
 			// if the hashname is not block treat it as a hash context
 			if hashvalue != "block" {
 				h := l.hashListBlocks[hashvalue]
-				h.Write([]byte(buf))
+				h.Write([]byte(l.filebuffer))
 				hlistarray = append(hlistarray, hex.EncodeToString(h.Sum(nil)))
 				h.Reset()
 			}
 		}
-		// message formatter version
-		l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, modExp, mod.String());
+		// generate the block message digest signature with the formatter
+		l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, l.modExp, l.fileblockmodulusString)
 		blocksRead++
-		hlistarray = hlistarray[0:0] 
+		hlistarray = hlistarray[0:0]
         }
 
 
@@ -689,7 +686,7 @@ int logN(int num,int base)
 
 // calculate the bigint log
 // the bitsize exponent less than the blocksize big integer
-func (l *FileData) logNold(x *big.Int, base *big.Int) int {
+func (l *FileData) logNrecursive(x *big.Int, base *big.Int) int {
 
 	gt := x.Cmp(base)
 
@@ -697,21 +694,55 @@ func (l *FileData) logNold(x *big.Int, base *big.Int) int {
 		return 0
 	}
 	z := new(big.Int).Quo(x, base) 
-	return 1 + l.logN(z, base)
+	return 1 + l.logNrecursive(z, base)
 
 }
 
 // calculate the bigint log
 // the bitsize exponent less than the blocksize big integer
-func (l *FileData) logN(x *big.Int, base *big.Int) int {
+// faster than the recursive version
+func (l *FileData) logN(fileblockint *big.Int, base *big.Int) int {
 
-        gt := x.Cmp(base)
+	var exponent int = 1
+        gt := fileblockint.Cmp(base)
 
         if gt < 0 {
                 return 0
         }
-        z := new(big.Int).Quo(x, base) 
-        return 1 + l.logN(z, base)
+	fileblockintcopy := big.NewInt(0)
+	fileblockintcopy.Add(fileblockintcopy, fileblockint)
+	for {
+		// z := new(big.Int).Quo(x, base) 
+		//return 1 + l.logN(z, base)
+		// x = new(big.Int).Quo(x, base)
+		fileblockintcopy.Quo(fileblockintcopy, base)
+		gt = fileblockintcopy.Cmp(base)
+		// fmt.Println("bigint ", fileblockintcopy.String())
+		// fmt.Println("bigint exponent ", exponent)
+		if gt < 0 {
+			break
+		}
+		exponent = exponent + 1
+	}
+
+	return exponent
+
+}
+
+// calculateFileBlockModulus
+// calculate the file byte block bigint modulus exponent with base 2 currently
+// ie mod^151 and less than mod^152
+// it could use the block modulus as the base but two is a larger base
+//
+// calculate the file byte block bigint modulus remainder
+func (l *FileData) calculateFileBlockModulus(blockBigInt *big.Int, modulusBigInt *big.Int)  {
+
+	two := big.NewInt(2)
+	l.modExp = l.logN(blockBigInt, two)
+
+	fileblockmodulus := new(big.Int)
+	fileblockmodulus = fileblockmodulus.Mod(blockBigInt, modulusBigInt)
+	l.fileblockmodulusString = fileblockmodulus.String()
 
 }
 

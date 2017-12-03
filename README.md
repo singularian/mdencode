@@ -24,12 +24,15 @@ It can write to an sqlite db. The mdencode sqlite db files contain a table schem
 
 This is a partial list of the digital signatures. More can be added to the signature chain and are selectable via a binary flag argument for file blocks and files
 
-1. md4
-2. md5
-3. sha
-4. sha3
-5. Tiger
-6. Whirlpool
+1. fnv
+2. md4
+3. md5
+4. ripe160
+5. sha
+6. sha3
+7. skein
+8. Tiger
+9. Whirlpool
 
 
 # Modular Floor
