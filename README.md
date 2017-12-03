@@ -64,7 +64,7 @@ Usage of md:
   -fh string  
      File Hash Boolean String List (default "011")         
   -block string  
-     File Block Size Bytes (default "40")    
+     File Block Size Bytes (default "40")  
   -mod string  
      Modulus Size in Bits (default "32")       
   -append  
@@ -79,8 +79,10 @@ Usage of md:
      File Hash as one line  
   -log string  
      Log Filename  
- -byte  
-     Generate the File Byteblock      
+  -byte  
+     Append the File Byteblock to the Hash List
+  -blockint  
+     Append the File Byteblock Bigint to the Hash List  
   -out string  
      Output Filename  
 
