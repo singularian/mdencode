@@ -16,7 +16,6 @@ LDFLAGS=-ldflags "-X github.com/singularian/mdencode/core.Version=${VERSION} -X 
 all:
 	go build -o ${BUILD_DIR}/md mdencode.go
 	go build -o ${BUILD_DIR}/mdencode mdencode.go
-	go build -o ${BUILD_DIR}/mdencodeSQL mdencodeSQL.go
 	go build -o ${BUILD_DIR}/mdnewdb mdnewdb.go
 	go build -o ${BUILD_DIR}/mddbreport mdencodeReport.go
 build:
