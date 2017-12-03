@@ -1,4 +1,4 @@
-# mdencode
+# mdencode :octocat:
 A message digest signature generator for files with modular floors  
 mdencode is written in golang and uses an interface for pluggin formatters  
 mdencode allows for the creation of sqlite3 db file signatures  
