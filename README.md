@@ -131,21 +131,23 @@ It can also generate a formatted signature from the ssss.db sqlite 3 file.
 
 nsross@nsross-desktop:~/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db
 
-file 1: /home/nsross/projects/src/github.com/singularian/mdencode/code/encode/ Makefile 1.0
+file 1: /projects/src/github.com/singularian/mdencode/code/encode/ Makefile 1.0
 
 # mddbreport text format example
 
-nsross@nsross-desktop:~/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1
+/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1
 
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.txt
 
 # mddbreport json format example
 
-nsross@nsross-desktop:~/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1 600
+/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1 600
 
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.json
 
 # mddbreport xml format example
+
+/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1 100
 
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.xml
 
