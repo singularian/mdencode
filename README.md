@@ -122,7 +122,7 @@ https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.t
 
 md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=600 -file=america.txt -out=america.txt_b100_mod128_f600_.md
 
-https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f600_.md
+[JSON Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f600_.md)
 
 # Example mddbreport usage
 This example shows how to generate an sql lite file db signature
