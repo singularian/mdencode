@@ -35,6 +35,7 @@ func argsSimple(argsNumber int) int {
 	var key string
 	var appendfile bool
 	var byteblock bool
+	var byteblockint bool
 	var filehashline bool
 	var filename string
 	var outfilename string
@@ -49,7 +50,8 @@ func argsSimple(argsNumber int) int {
 	flag.StringVar(&key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
 	flag.StringVar(&filename, "file", "", "Filename")
 	flag.BoolVar(&appendfile, "append", false, "Append To Output File")
-	flag.BoolVar(&byteblock, "byte", false, "Generate the File Byteblock")
+	flag.BoolVar(&byteblock, "byte", false, "Append the File Byteblock to the Hash List")
+	flag.BoolVar(&byteblockint, "blockint", false, "Append the File Byteblock Bigint to the Hash List")
 	flag.BoolVar(&filehashline, "line", false, "File Hash as one line")
 	flag.StringVar(&outfilename, "out", "", "Output Filename")
 	flag.StringVar(&logfilename, "log", "", "Log Filename")
@@ -88,6 +90,7 @@ func argsSimple(argsNumber int) int {
 	// initialize the mdencode file object
 	var md = mdEncodeALL.Init()
 	md.SetByteBlock(byteblock)
+	md.SetByteBlockBigInt(byteblockint)
 	md.SetAppendFile(appendfile)
 	md.SetFileHashLine(filehashline)
 	md.SetKeyFile(key)
