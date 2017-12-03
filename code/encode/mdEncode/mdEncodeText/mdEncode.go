@@ -1,13 +1,11 @@
-// Use of this source code is governed by a license
-// that can be found in the LICENSE file
+package mdEncodeALL
 
-
-package mdEncode
+// mdencode
+// copyright (C) Scott Ross 2017
+// https://github.com/singularian/mdencode/blob/master/LICENSE
 
 
 import (
-	// "strings"
-        // "bytes"
         "regexp"
 	"hash"
 	"hash/fnv"
@@ -16,7 +14,6 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
-	// "encoding/base64"
 	"crypto/hmac"
 	"github.com/codahale/blake2"
 	// "golang.org/x/crypto/blake2b"
@@ -42,10 +39,10 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 	"sort"
+	"strings"
 	"github.com/singularian/mdencode_private/code/encode/mdFormats/mdFormatText"
-	// "github.com/singularian/mdencode_private/code/encode/mdFormats/mdFormatSQL"
+
 )
 
 // mdformat interface struct
@@ -74,17 +71,23 @@ type FileData struct {
 	mdFormat int
 	mdVersion string
 	// append file
-	appendfile bool
+        appendfile bool
 	// byte block
-        byteblock bool
+	byteblock bool
+	// filehashline
+	filehashline bool
+	// key string
+	key string
+	// logfile
+	logfile string
 	// argument hash list bits
 	fileHashListString string
 	blockHashListString string
-	// argument hash list arrays 
-        fileHashListArray    []string
+	// argument hash list bit arrays 
+        fileHashListArray     []string
         blockHashListArray    []string
-	// argument signature hash list 
-	fileHashListNames []string
+	// argument signature hash list names
+	fileHashListNames  []string
 	blockHashListNames []string
 	// dictionary
 	dictionary map[string]string
@@ -92,6 +95,14 @@ type FileData struct {
 	hashList  map[string]hash.Hash
 	// hash list for blocks
 	hashListBlocks  map[string]hash.Hash
+	// byte buffer
+	filebuffer []byte
+	// modulus
+	modExp int 
+	fileblockmodulusString string
+	// modulus 
+	// N *big.Int // modulus
+	// https://stackoverflow.com/questions/37502134/declaring-type-big-int-overflowing-constant-golang
 	// formatter
 	// md *mdFormatText.MdFormat
 	// mdformat interface for modular type assignment
@@ -101,19 +112,23 @@ type FileData struct {
 }
 
 
-// need to modify this a bit
+// Init returns a new mdEncode object
 func Init() (md *FileData) {
 
         mdata := new(FileData)
 	mdata.appendfile = false
 	mdata.byteblock  = false
+	mdata.filehashline = false
+	mdata.key = "LomaLindaSanSerento9000"
+	mdata.logfile = ""
         return mdata
 }
 
-
+// Mdencode
 // mdencode the file
-// this can generate a file level top signature
-// this creates a file block signature with a group of file blocks with a modular floor
+//
+// mdencode creates an optional top file level signature list
+// mdencode creates an optional file block signature with a group of file blocks with a modular floor
 //
 // in one alternative format it can have a single signature with a x-bit collision number to differentiate between collisions
 // ie sha-256 and a 128-bit collision number to differentiate the correct collision or block with an equal signature and a modular floor
@@ -187,13 +202,15 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	}
 
 	// log file
-	logfile, err := os.OpenFile("mdencode.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalln("Failed to open log file:", err)
+	if fdata.logfile != "" {
+		logfile, err := os.OpenFile(fdata.logfile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		if err != nil {
+			fmt.Println("Failed to open log file:", err)
+		}
+		defer logfile.Close()
+		fdata.log =  log.New(logfile, "", log.Ldate|log.Ltime|log.Lshortfile)
+		fdata.log.Println("mdencode file ", fileName, " blocksize ", fdata.blockSize, " modsize ", fdata.modSize )
 	}
-	defer logfile.Close()
-	fdata.log =  log.New(logfile, "", log.Ldate|log.Ltime|log.Lshortfile)
-	fdata.log.Println("mdencode file ", fileName, " blocksize ", fdata.blockSize, " modsize ", fdata.modSize )
 
 	// set the file size
 	size := fi.Size()
@@ -203,7 +220,7 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	fdata.blockCount     = uint64(blocks)
 	fdata.blockRemainder = uint64(remainder)
 
-	// setup the formatter
+	// setup the file md formatter
 	fdata.setmdFormat(format)
 
 	// fdata.mdfmt.Println()
@@ -214,14 +231,8 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	// fmt.Println("file hashlist names ", fdata.fileHashListNames)
 	// fmt.Println("hashlist names ", fdata.blockHashListNames)
 
-	// add a method to display the header block
-        // It has an optional format to not display the block size
-        // It would auto calculate it by adding up the block totals
-        // and calculating what the last block size would be
+	// encode the File Header
 	fdata.mdfmt.EncodeFileHeader(format, fileName, fdata.filePath, size, blocksize, fdata.fileHashListNames, fdata.blockHashListNames, bitsize)
-
-	// mdXML := mdFormatXML.Init()
-	// mdXML.EncodeFileHeader(format, fileName, fdata.filePath, size, blocksize, fdata.blockHashListNames, bitsize)
 
 	// create a function to hash the entire file as one signature or multiple digital hash signatures
         // then collisions between the blocks can be resolved because the correct ones will fit together and be verified by the top level signature or signature group
@@ -231,22 +242,28 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	//
 	// The cost of the file block can be ammortized over the entire file
 	//
-	// could also have a mod2 encoding file / block mod 2 with exponent floor	
-        ////////// fdata.encodeFile(fileName)
-        fdata.encodeFileLine(fileName)
+	// could also have a mod2 encoding file / block mod 2 with exponent floor
+	if fdata.filehashline {
+		fdata.encodeFileHashLine(fileName)
+	} else {
+		fdata.encodeFile(fileName)
+	}
 
 	// encode the blocks
 	fdata.mdencodeBlock(blockSize, modSize, format, fileName)
 
-	// endcode the end of file xml
+	// endcode the end of file formatter 
 	fdata.mdfmt.EncodeEndFile(format)
 
 	return 0
 
 }
 
+// encodeFile
+//
 // add a top level file signature or group of signatures
 // this will resolve any collisions in the block signatures
+// 
 // it allows a modulus scan to find all the blocks matching a signature group and modulus
 // then the top level file signature can validate against all the combinations of the blocks matched
 // and find the correct one
@@ -254,8 +271,6 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 // it can be a combination of 1 to 10+ signatures and a file modulus 
 // like ripe160, sha1, sha512, md5, md6, md4 etc
 // this makes it very collision resistant
-//
-// this can encode the block as minimal simple, inform, xml
 func (l *FileData) encodeFile(fileName string) {
         f, err := os.Open(fileName)
         if err != nil {
@@ -282,8 +297,9 @@ func (l *FileData) encodeFile(fileName string) {
 
 }
 
-// encode the file hash as one line
-func (l *FileData) encodeFileLine(fileName string) {
+// encodeFileHashLine
+// encode the file hash list as one line
+func (l *FileData) encodeFileHashLine(fileName string) {
         f, err := os.Open(fileName)
         if err != nil {
                 // log.Fatal(err)
@@ -295,7 +311,7 @@ func (l *FileData) encodeFileLine(fileName string) {
         // hash list  
         // for k, h := range l.hashList {
         // for hashname, hashvalue := range fileHashListArrayNames {
-	var hlistarray []string
+        var hlistarray []string
         for _, hashvalue := range l.fileHashListNames {
                 h := l.hashList[hashvalue]
                 if _, err := io.Copy(h, f); err != nil {
@@ -305,18 +321,20 @@ func (l *FileData) encodeFileLine(fileName string) {
                 // h.Reset()
                 // fmt.Println("z: ", md, " ", hex.EncodeToString(h.Sum(nil)))
                 // l.mdfmt.EncodeFileHash(l.mdFormat, hashvalue, hex.EncodeToString(h.Sum(nil)))
-		hlistarray = append(hlistarray, hex.EncodeToString(h.Sum(nil)))
+                hlistarray = append(hlistarray, hex.EncodeToString(h.Sum(nil)))
         }
-	var hashListString = strings.Join(l.fileHashListNames, ":")
-	var hashListHex = strings.Join(hlistarray, ":")
-	l.mdfmt.EncodeFileHash(l.mdFormat, hashListString, hashListHex)
+        var hashListString = strings.Join(l.fileHashListNames, ":")
+        var hashListHex = strings.Join(hlistarray, ":")
+        l.mdfmt.EncodeFileHash(l.mdFormat, hashListString, hashListHex)
 
 
 }
 
+
+// mdencodeBlock
 // mdencode the file blocks
-// this can generate a file level top signature
-// this creates a file block signature with a group of file blocks with a modular floor
+// this creates a file block hash signature with a group of file byte blocks with a modular floora
+// they are n-byte sized file blocks with a modulus and a modular floor
 func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, fileName string) int {
 
         // process the blocksize argument
@@ -325,8 +343,8 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
         // process the modulus bitsize argument
         // exponent
         bitsize, err := strconv.ParseInt(modSize, 10, 64)
-        var i, e = big.NewInt(2), big.NewInt(bitsize)
-        i.Exp(i, e, nil)
+        var modulusBigInt, e = big.NewInt(2), big.NewInt(bitsize)
+        modulusBigInt = modulusBigInt.Exp(modulusBigInt, e, nil)
 
 
         // Open the file for reading
@@ -339,7 +357,9 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
         defer file.Close()
 
 	// intialize the buffer with the default blocksize
-        buf := make([]byte, blocksize)
+        // buf := make([]byte, blocksize)
+        l.filebuffer = make([]byte, blocksize)
+	// fmt.Println("bytes ", l.filebuffer)
 
 	// setup the file block count and last block remainder
         blocks := l.blockCount
@@ -359,7 +379,7 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
         for{
 
 		// break on end of file
-	        if _, err := file.Read(buf); err == io.EOF {
+	        if _, err := file.Read(l.filebuffer); err == io.EOF {
 		    break
 		}
 
@@ -370,60 +390,53 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
 
 
 		if blocksRead == blocks {
-			buf = buf[0:remainder]
+			l.filebuffer = l.filebuffer[0:remainder]
 			bytesRead = remainder
 		}
 
 
 		// create the biginteger representation of the bytes
-		z := new(big.Int)
-                z.SetBytes(buf)
+		blockBigInt := new(big.Int)
+                blockBigInt.SetBytes(l.filebuffer)
+
+		// fmt.Println("bytes ", blockBigInt.String())
 
 		if l.byteblock {
-			blockbytesBigInt := z.String()
-			var bufstring = fmt.Sprint(buf)
+			blockbytesBigInt := blockBigInt.String() /// 
+			var bufstring = fmt.Sprint(l.filebuffer)
 			hlistarray = append(hlistarray, bufstring)
 			// retrieve the block bigint
-			// hlistarray = append(hlistarray, ":")
+			hlistarray = append(hlistarray, ":")
 			hlistarray = append(hlistarray, blockbytesBigInt)
 		}
 
-                // critical test code for byte comparison
-                // fmt.Println("buffer bytes ", z)
-                // bigstr2 := fmt.Sprint(z)
-                // this allows you to compare the bytes
-                // should make this a hash or argument to display the byte buffer
-                /////////////////////fmt.Println("buffer bytes ", z.Bytes(), " ", buf, " ", z)
+		// if the modulus bitsize is greater than zero calculate the byte block modulus
+		// otherwise skip generating the byte block modulus
+		if bitsize > 0 {
+			l.calculateFileBlockModulus(blockBigInt, modulusBigInt)
+		} else {
+			l.modExp = 0
+			l.fileblockmodulusString = "0"
+		}
 
-                // this could be 2^exp then put the modulus somewhere within it so it has a larger floor
-                // ie 2^151 and < 2^152
-                //
-                two := big.NewInt(2)
-                modExp := l.logN(z, two)
-                // alternate exponent floor the modulus to the power 1 less than the file block power greater than the file block
-                // ie mod^151 and mod^152
-                // generate the modulus exponent less than the file block size bigint
-                // fmt.Print(":", logN(z, i))
-                /// modExp := logN(z, i)
-
-                // generate the file block modulus remainder
-                mod := new(big.Int)
-                mod = z.Mod(z, i);
+		// fmt.Println("file block ", blockBigInt, " modulus ", modulusBigInt)
+		// fmt.Println("modulus ", fileblockmodulus.String(), " ", modulusBigInt.String())
+		// fmt.Println("file modulus ", fileblockmodulus.String(), " ", fileblockmodulusString, " ", modulusBigInt.String())
 
 		// generate the file block signatures from the hash list
 		for _, hashvalue := range l.blockHashListNames {
 			// if the hashname is not block treat it as a hash context
 			if hashvalue != "block" {
 				h := l.hashListBlocks[hashvalue]
-				h.Write([]byte(buf))
+				h.Write([]byte(l.filebuffer))
 				hlistarray = append(hlistarray, hex.EncodeToString(h.Sum(nil)))
 				h.Reset()
 			}
 		}
-		// message formatter version
-		l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, modExp, mod.String());
+		// generate the block message digest signature with the formatter
+		l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, l.modExp, l.fileblockmodulusString)
 		blocksRead++
-		hlistarray = hlistarray[0:0] 
+		hlistarray = hlistarray[0:0]
         }
 
 
@@ -431,11 +444,16 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
 
 }
 
-
-// create the hash list map
+// createHashListMap
+// create the hash context hash list map
 func (l *FileData) createHashListMap (fileBlockflag int ) {
 
-	var key = []byte("LomaLindaSanSerento9000")
+	var defaultkey = []byte("LomaLindaSanSerento9000")
+	var keystring = l.key
+	key := []byte(keystring)
+	if len(keystring) < 15 {
+		key = defaultkey
+	}
 
 	// file sig variables
 	// l.fileHashListArray[i]
@@ -575,45 +593,55 @@ func (l *FileData) createHashListMap (fileBlockflag int ) {
 	}
 }
 
-// setmdFormat sets the correct md format object 
+
+// setmdFormat 
+// sets the correct md format object 
 func (l *FileData) setmdFormat (format int ) {
 
-	l.mdfmt = mdFormatText.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+        l.mdfmt = mdFormatText.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 
-	l.mdfmt.InitFile()
-	l.mdfmt.OpenFile(l.appendfile)
-
+        l.mdfmt.InitFile()
+        l.mdfmt.OpenFile(l.appendfile)
 }
 
+// SetByteBlock
 // set the byte block mode
 func (l *FileData) SetByteBlock (byteblock bool ) {
-        l.byteblock = byteblock
+	l.byteblock = byteblock
 }
 
+// SetAppendFile
 // set the append file mode
 func (l *FileData) SetAppendFile (appendfile bool) {
         l.appendfile = appendfile 
 }
 
-// set the md key
-// doesn't currently work 
-// func (l *FileData) SetKeyFile (key string) {
-//        l.key = []byte(key)
-//}
-
-
-/*
-int logN(int num,int base)
-{
-      if(num<base)
-           return 0;
-     return 1 + logN(num/base,base);
+// SetFileHashLine
+// set the file hash format 
+// if true it will write or display the file hash list as one line  
+func (l *FileData) SetFileHashLine (filehashline bool) {
+        l.filehashline = filehashline 
 }
-*/
 
-// calculate the bigint log
+// SetKeyFile
+// set the md key
+// this defaults to a default key if the key is less than 16 bytes
+// one of the hash libs faults if the key is to small 
+// some of the signatures use a key
+func (l *FileData) SetKeyFile (key string) {
+        l.key = key
+}
+
+// SetLogFile
+// set the optional logfile
+func (l *FileData) SetLogFile (logfile string) {
+        l.logfile = logfile 
+}
+
+// logNrecursive
+// calculate the bigint log exponent recursivelly
 // the bitsize exponent less than the blocksize big integer
-func (l *FileData) logNold(x *big.Int, base *big.Int) int {
+func (l *FileData) logNrecursive(x *big.Int, base *big.Int) int {
 
 	gt := x.Cmp(base)
 
@@ -621,21 +649,56 @@ func (l *FileData) logNold(x *big.Int, base *big.Int) int {
 		return 0
 	}
 	z := new(big.Int).Quo(x, base) 
-	return 1 + l.logN(z, base)
+	return 1 + l.logNrecursive(z, base)
 
 }
 
-// calculate the bigint log
+// logN
+// calculate the bigint log exponent
 // the bitsize exponent less than the blocksize big integer
-func (l *FileData) logN(x *big.Int, base *big.Int) int {
+// faster than the recursive version
+func (l *FileData) logN(fileblockint *big.Int, base *big.Int) int {
 
-        gt := x.Cmp(base)
+	var exponent int = 1
+        gt := fileblockint.Cmp(base)
 
         if gt < 0 {
                 return 0
         }
-        z := new(big.Int).Quo(x, base) 
-        return 1 + l.logN(z, base)
+	fileblockintcopy := big.NewInt(0)
+	fileblockintcopy.Add(fileblockintcopy, fileblockint)
+	for {
+		// z := new(big.Int).Quo(x, base) 
+		//return 1 + l.logN(z, base)
+		// x = new(big.Int).Quo(x, base)
+		fileblockintcopy.Quo(fileblockintcopy, base)
+		gt = fileblockintcopy.Cmp(base)
+		// fmt.Println("bigint ", fileblockintcopy.String())
+		// fmt.Println("bigint exponent ", exponent)
+		if gt < 0 {
+			break
+		}
+		exponent = exponent + 1
+	}
+
+	return exponent
+
+}
+
+// calculateFileBlockModulus
+// calculate the file byte block bigint modulus exponent with base 2 currently
+// ie mod^151 and less than mod^152
+// it could use the block modulus as the base but two is a larger base
+//
+// calculate the file byte block bigint modulus remainder
+func (l *FileData) calculateFileBlockModulus(blockBigInt *big.Int, modulusBigInt *big.Int)  {
+
+	two := big.NewInt(2)
+	l.modExp = l.logN(blockBigInt, two)
+
+	fileblockmodulus := new(big.Int)
+	fileblockmodulus = fileblockmodulus.Mod(blockBigInt, modulusBigInt)
+	l.fileblockmodulusString = fileblockmodulus.String()
 
 }
 
@@ -655,7 +718,8 @@ func (l *FileData) calculateFileBlocks(fileSize uint64, blockSize uint64) (uint6
 	return blocksCount, remainder 
 }
 
+// display the object type
 func (l *FileData) PrintType() {
-	fmt.Println("mdencode")
+	fmt.Println("mdencodeALL")
 
 }
