@@ -80,7 +80,7 @@ Usage of md:
   -log string  
      Log Filename  
   -byte  
-     Append the File Byteblock to the Hash List
+     Append the File Byteblock to the Hash List  
   -blockint  
      Append the File Byteblock Bigint to the Hash List  
   -out string  
