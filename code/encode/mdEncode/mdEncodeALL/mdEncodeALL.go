@@ -388,6 +388,7 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
 			bytesRead = remainder
 		}
 
+		// if the byteblock is specified add it to the hash list
 		if l.byteblock {
 			var bufstring = fmt.Sprint(l.filebuffer)
 			hlistarray = append(hlistarray, bufstring)
@@ -400,7 +401,7 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
 			blockBigInt := new(big.Int)
 			blockBigInt.SetBytes(l.filebuffer)
 
-			// if the byteblock is specified
+			// if the byteblock bigint option is specified add it to the hash list
 			if l.byteblockint {
 				blockbytesBigInt := blockBigInt.String()
 				// hlistarray = append(hlistarray, ":")
