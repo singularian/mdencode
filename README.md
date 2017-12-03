@@ -110,7 +110,7 @@ md -file=Makefile -block=100 -bh=111111 -fh=1111111 -format=19 -append=true -lin
 
 md -block=1000 -mod=256 -bh=001100 -fh=100100111 -format=100 -file=destiny.txt
 
-# md example usage
+# Eample usage
 
 This is a file signature for Makefile with a block size of 100 bytes and a 128 bit modulus and the fileblock signature bit string and file bit string and a format specified by number 10. It is formatted by go flags args.
 
@@ -118,40 +118,46 @@ md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=9 -file=america.txt -ou
 
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f9_.md
 
-# md example usage of the input file Makefile and the output format json
+# Example usage of the input file Makefile and the output format json
 
 md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=600 -file=america.txt -out=america.txt_b100_mod128_f600_.md
 
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f600_.md
 
-# mddbreport usage
+# Example mddbreport usage
 This example shows how to generate an sql lite file db signature
 
 md -file=Makefile -format=2000 -line=true -out=ssss
 
-It can also generate a formatted signature from the ssss.db sqlite 3 file.
+It can also generate a formatted signature from the ssss.db sqlite 3 file
+
+This example shows how to list the files in a ssss.db file sqlite3 signature db
 
 nsross@nsross-desktop:~/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db
 
 file 1: /projects/src/github.com/singularian/mdencode/code/encode/ Makefile 1.0
 
-# mddbreport text format example
+# Example mddbreport formats
+
+This example shows how to use the mddbreport utility to display the file signatures in a format. 
 
 /projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1
 
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.txt
 
-# mddbreport json format example
 
 /projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1 600
 
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.json
 
-# mddbreport xml format example
 
 /projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1 100
 
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.xml
+
+If zero is specified for the argument it will format and output all the signature db files in the numeric format
+
+/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 0 100
 
 # License 
 

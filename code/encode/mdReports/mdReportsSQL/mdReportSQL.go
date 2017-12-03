@@ -319,7 +319,7 @@ func (md *MdFormat) println(line  ...interface{}) {
 
 // test inteface function
 func (md *MdFormat) PrintFormatType() {
-        fmt.Println("Format mdFormatSQL")
+        fmt.Println("Format mdReportsSQL")
 }
 
 // check the error
