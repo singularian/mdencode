@@ -675,15 +675,6 @@ func (l *FileData) SetLogFile (logfile string) {
         l.logfile = logfile 
 }
 
-/*
-int logN(int num,int base)
-{
-      if(num<base)
-           return 0;
-     return 1 + logN(num/base,base);
-}
-*/
-
 // calculate the bigint log
 // the bitsize exponent less than the blocksize big integer
 func (l *FileData) logNrecursive(x *big.Int, base *big.Int) int {
@@ -698,7 +689,8 @@ func (l *FileData) logNrecursive(x *big.Int, base *big.Int) int {
 
 }
 
-// calculate the bigint log
+// logN
+// calculate the bigint log exponent
 // the bitsize exponent less than the blocksize big integer
 // faster than the recursive version
 func (l *FileData) logN(fileblockint *big.Int, base *big.Int) int {
