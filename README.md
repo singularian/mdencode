@@ -116,9 +116,11 @@ This is a file signature for Makefile with a block size of 100 bytes and a 128 b
 
 md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=9 -file=america.txt -out=america.txt_b100_mod128_f9_.md
 
-https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f9_.md
+[Text Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f9_.md)
 
-# Example usage of the input file Makefile and the output format json
+md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=100 -file=america.txt -out=america.txt_b100_mod128_f100_.md
+
+[XML Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f100_.md)
 
 md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=600 -file=america.txt -out=america.txt_b100_mod128_f600_.md
 
