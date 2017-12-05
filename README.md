@@ -114,6 +114,7 @@ go get -u github.com/mattn/go-sqlite3
 
 # Command Line Examples
 
+```
 md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line
 
 md -file=Makefile -block=100 -line=false -bh=111 -fh=0 -format=19 -line
@@ -123,20 +124,27 @@ md -file=Makefile -block=100 -bh=111111 -fh=1111111 -format=19 -line=true -out=o
 md -file=Makefile -block=100 -bh=111111 -fh=1111111 -format=19 -append=true -line=true -out=outputfile
 
 md -block=1000 -mod=256 -bh=001100 -fh=100100111 -format=100 -file=destiny.txt
+```
 
 # Eample usage
 
 This is a file signature for Makefile with a block size of 100 bytes and a 128 bit modulus and the fileblock signature bit string and file bit string and a format specified by number 10. It is formatted by go flags args.
 
+```
 md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=9 -file=america.txt -out=america.txt_b100_mod128_f9_.md
+```
 
 [Text Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f9_.md)
 
+```
 md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=100 -file=america.txt -out=america.txt_b100_mod128_f100_.md
+```
 
 [XML Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f100_.md)
 
+```
 md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=600 -file=america.txt -out=america.txt_b100_mod128_f600_.md
+```
 
 [JSON Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f600_.md)
 
@@ -149,6 +157,7 @@ It can also generate a formatted signature from the ssss.db sqlite 3 file
 
 This example shows how to list the files in a ssss.db file sqlite3 signature db
 
+```
 /projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db
 
 file 1: /projects/src/github.com/singularian/mdencode/code/encode/ Makefile 1.0  
@@ -158,28 +167,32 @@ file 1: /projects/src/github.com/singularian/mdencode/code/encode/ Makefile 1.0
 file 1: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ america.txt 1.0  
 file 2: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ twelve.doc 1.0  
 file 3: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ century.xml 1.0  
+```
 
 # Example mddbreport formats
 
 This example shows how to use the mddbreport utility to display the file signatures in a format. 
 
+```
 /projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1
+```
 
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.txt
 
-
+```
 /projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1 600
-
+```
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.json
 
-
+```
 /projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1 100
-
+```
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.xml
 
 If zero is specified for the argument it will format and output all the signature db files in the numeric format
-
+```
 /projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 0 100
+```
 
 # License 
 
