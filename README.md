@@ -11,13 +11,13 @@ It can write to an sqlite db. The mdencode sqlite db files contain a table schem
 
 # Features
 
-- File Headers
-- Optional File Signatures
+- Versioned Cryptographic File Headers
+- Optional File Crypto Signatures
 - Optional N-Bit Sized File Block Modular Floors
-- Optional N-Byte Block Signatures
-- SQLite3 DB Signature Files
+- Optional N-Byte Block Crypto Signatures
+- SQLite3 DB Crypto Signature Files
 - Plugin Formatters
-- Multiple Selectable MD Signatures
+- Multiple Selectable Crypto Hash Signatures for Files and File Blocks
 
 # Output Formats
 
