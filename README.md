@@ -194,17 +194,17 @@ This example shows how to use the mddbreport utility to display the file signatu
 $ mddbreport ssss.db 1
 ```
 
-https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.txt
+[ssss.db.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.txt)
 
 ```
 $ mddbreport ssss.db 1 600
 ```
-https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.json
+[ssss.db.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.json)
 
 ```
 $ mddbreport ssss.db 1 100
 ```
-https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.xml
+[ssss.db.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.xml)
 
 If zero is specified for the argument it will format and output all the signature db files in the numeric format
 ```
