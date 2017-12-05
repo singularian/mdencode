@@ -42,7 +42,8 @@ which is the modular exponent plus n times the modulus plus the remainder. It is
 A digital signature package or group can consist of 1 or more block and file signatures. A modular floor is generaly computed at the block level for a file byte block and utilizes a big integer.
 
 This is an example of the modular floor.  
-~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoder4  
+```
+/projects/src/github.com/singularian/mdencode/code/decode$ ./decoder4  
   
 modulo bigint  16777216  
 modulo floor  35184372088832  
@@ -54,6 +55,7 @@ modulo floor  35184372088832
 modulo ceil  70368744177664  
 Found Block  [32 110 97 109 101 32]   [32 110 97 109 101 32]  
 total time  2.200462445s  
+```
 
 # Mdencode usage
 
