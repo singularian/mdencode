@@ -199,12 +199,12 @@ $ mddbreport ssss.db 1
 ```
 $ mddbreport ssss.db 1 600
 ```
-[ssss.db.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.json)
+[ssss.db.json](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.json)
 
 ```
 $ mddbreport ssss.db 1 100
 ```
-[ssss.db.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.xml)
+[ssss.db.xml](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.xml)
 
 If zero is specified for the argument it will format and output all the signature db files in the numeric format
 ```
