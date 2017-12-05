@@ -153,7 +153,9 @@ md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=600 -file=america.txt -
 # Example mddbreport usage
 This example shows how to generate an sql lite file db signature
 
+```
 md -file=Makefile -format=2000 -line=true -out=ssss
+```
 
 It can also generate a formatted signature from the ssss.db sqlite 3 file
 
