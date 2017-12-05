@@ -53,7 +53,7 @@ A digital signature package or group can consist of 1 or more block and file sig
 
 This is an example of the modular floor.  
 ```
-/projects/src/github.com/singularian/mdencode/code/decode$ ./decoder4  
+$ ./decoder4  
   
 modulo bigint  16777216  
 modulo floor  35184372088832  
@@ -175,11 +175,11 @@ It can also generate a formatted signature from the ssss.db sqlite 3 file
 This example shows how to list the files in a ssss.db file sqlite3 signature db
 
 ```
-/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db
+$ mddbreport ssss.db
 
 file 1: /projects/src/github.com/singularian/mdencode/code/encode/ Makefile 1.0  
 
-/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport filesig.db  
+$ mddbreport filesig.db  
 
 file 1: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ america.txt 1.0  
 file 2: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ twelve.doc 1.0  
@@ -191,26 +191,26 @@ file 3: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ cent
 This example shows how to use the mddbreport utility to display the file signatures in a format. 
 
 ```
-/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1
+$ mddbreport ssss.db 1
 ```
 
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.txt
 
 ```
-/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1 600
+$ mddbreport ssss.db 1 600
 ```
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.json
 
 ```
-/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 1 100
+$ mddbreport ssss.db 1 100
 ```
 https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.xml
 
 If zero is specified for the argument it will format and output all the signature db files in the numeric format
 ```
-/projects/src/github.com/singularian/mdencode/code/encode$ mddbreport ssss.db 0 100
+$ mddbreport ssss.db 0 100
 ```
 
 # License 
 
-https://github.com/singularian/mdencode/blob/master/LICENSE
+[License](https://github.com/singularian/mdencode/blob/master/LICENSE)
