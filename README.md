@@ -9,6 +9,16 @@ This is a golang command line file signature generator with a modular floor.
 This program can generate a file signature at the file or block level and format and write the output in different formats.  
 It can write to an sqlite db. The mdencode sqlite db files contain a table schema and can be exported into multiple formats.  
 
+# Features
+
+- File Headers
+- Optional File Signatures
+- Optional N-Bit Sized File Block Modular Floors
+- Optional N-Byte Block Signatures
+- SQLite3 DB Signature Files
+- Plugin Formatters
+- Multiple Selectable MD Signatures
+
 # Output Formats
 
 1. TEXT
