@@ -21,28 +21,28 @@ It can write to an sqlite db. The mdencode sqlite db files contain a table schem
 
 # Output Formats
 
-1. TEXT
-2. INFORM
-3. XML
-4. JSON
-5. BINARY
-6. CSV
-7. SQLITE3 DB
-8. BUILD YOUR OWN
+- TEXT
+- INFORM
+- XML
+- JSON
+- BINARY
+- CSV
+- SQLITE3 DB
+- BUILD YOUR OWN
 
 # Digital Signature List
 
 This is a partial list of the digital signatures. More can be added to the signature chain and are selectable via a binary flag argument for file blocks and files
 
-1. fnv
-2. md4
-3. md5
-4. ripe160
-5. sha
-6. sha3
-7. skein
-8. Tiger
-9. Whirlpool
+- fnv
+- md4
+- md5
+- ripe160
+- sha
+- sha3
+- skein
+- Tiger
+- Whirlpool
 
 
 # Modular Floor
@@ -69,6 +69,7 @@ total time  2.200462445s
 
 # Mdencode usage
 
+```
 Usage of md:
      
   -bh string  
@@ -99,7 +100,9 @@ Usage of md:
      Output Filename  
 
 Version: 1.0 復甦 復活
+```
 
+# Output Formats
 Output Formats  
 0 - 98 - Text  
 99 - Inform  
