@@ -11,7 +11,7 @@ It can write to an sqlite db. The mdencode sqlite db files contain a table schem
 
 # Features
 
-- Versioned Cryptographic File Headers
+- Versioned Cryptographic File Signatures
 - Optional File Crypto Signatures
 - Optional N-Bit Sized File Block Modular Floors
 - Optional N-Byte Block Crypto Signatures
