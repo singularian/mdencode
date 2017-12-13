@@ -219,4 +219,4 @@ $ mddbreport ssss.db 0 100
 
 # License 
 
-[License](https://github.com/singularian/mdencode/blob/master/LICENSE)
+[GNU General Public License v3.0](https://github.com/singularian/mdencode/blob/master/LICENSE)
