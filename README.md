@@ -1,4 +1,4 @@
-# mdencode :octocat:
+# Project mdencode :octocat:
 A message digest signature generator for files with modular floors  
 mdencode is written in golang and uses an interface for pluggin formatters  
 mdencode allows for the creation of sqlite3 db file signatures  
@@ -199,17 +199,17 @@ $ mddbreport ssss.db 0 100
 ```
 # Go Library Dependencies
 
-go get -u golang.org/x/crypto/blake2s
-go get -u golang.org/x/crypto/md4
-go get -u golang.org/x/crypto/sha3
-go get -u golang.org/x/crypto/ripemd160
-go get -u github.com/steakknife/keccak
-go get -u github.com/asadmshah/murmur3
-go get -u github.com/dchest/siphash
-go get -u github.com/aead/skein
-go get -u github.com/cxmcc/tiger
-go get -u github.com/jzelinskie/whirlpool
-go get -u github.com/mattn/go-sqlite3
+go get -u golang.org/x/crypto/blake2s  
+go get -u golang.org/x/crypto/md4  
+go get -u golang.org/x/crypto/sha3  
+go get -u golang.org/x/crypto/ripemd160  
+go get -u github.com/steakknife/keccak  
+go get -u github.com/asadmshah/murmur3  
+go get -u github.com/dchest/siphash  
+go get -u github.com/aead/skein  
+go get -u github.com/cxmcc/tiger  
+go get -u github.com/jzelinskie/whirlpool  
+go get -u github.com/mattn/go-sqlite3  
 
 # Build
 
