@@ -113,20 +113,6 @@ Output Formats
 1000 - Binary  
 2000 - SQL Lite 3 DB File  
 
-# Go Library Dependencies
-
-go get -u golang.org/x/crypto/blake2s  
-go get -u golang.org/x/crypto/md4  
-go get -u golang.org/x/crypto/sha3  
-go get -u golang.org/x/crypto/ripemd160  
-go get -u github.com/steakknife/keccak  
-go get -u github.com/asadmshah/murmur3  
-go get -u github.com/dchest/siphash  
-go get -u github.com/aead/skein  
-go get -u github.com/cxmcc/tiger  
-go get -u github.com/jzelinskie/whirlpool  
-go get -u github.com/mattn/go-sqlite3  
-
 # Command Line Examples
 
 ```sh
@@ -211,6 +197,26 @@ If zero is specified for the argument it will format and output all the signatur
 ```
 $ mddbreport ssss.db 0 100
 ```
+# Go Library Dependencies
+
+go get -u golang.org/x/crypto/blake2s
+go get -u golang.org/x/crypto/md4
+go get -u golang.org/x/crypto/sha3
+go get -u golang.org/x/crypto/ripemd160
+go get -u github.com/steakknife/keccak
+go get -u github.com/asadmshah/murmur3
+go get -u github.com/dchest/siphash
+go get -u github.com/aead/skein
+go get -u github.com/cxmcc/tiger
+go get -u github.com/jzelinskie/whirlpool
+go get -u github.com/mattn/go-sqlite3
+
+# Build
+
+##### Basic Linux / Unix Go Build
+
+~/github.com/singularian/mdencode/code/encode $ make all
+
 
 # Donations
 
