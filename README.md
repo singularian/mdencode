@@ -131,13 +131,10 @@ go get -u github.com/mattn/go-sqlite3
 
 ```
 md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line
-
 md -file=Makefile -block=100 -line=false -bh=111 -fh=0 -format=19 -line
-
 md -file=Makefile -block=100 -bh=111111 -fh=1111111 -format=19 -line=true -out=outputfile
-
 md -file=Makefile -block=100 -bh=111111 -fh=1111111 -format=19 -append=true -line=true -out=outputfile
-
+md -file=Makefile -block=100 -bh=111100001111 -fh=11011100001 -format=600 -append=true -line=true -out=outputfile
 md -block=1000 -mod=256 -bh=001100 -fh=100100111 -format=100 -file=destiny.txt
 ```
 
@@ -173,6 +170,10 @@ md -file=Makefile -format=2000 -line=true -out=ssss
 It can also generate a formatted signature from the ssss.db sqlite 3 file
 
 This example shows how to list the files in a ssss.db file sqlite3 signature db
+
+The columns are:
+
+file id, filepath, filename, version
 
 ```
 $ mddbreport ssss.db
@@ -210,6 +211,11 @@ If zero is specified for the argument it will format and output all the signatur
 ```
 $ mddbreport ssss.db 0 100
 ```
+
+# Donations
+
+* BTC: `31ixWCPg2Ax5uhYk418C4KBFacnnri9Axb`
+* ETH: `0x68907c4ac25e2041A797Ce8c639994cf9EbFdc8C`
 
 # License 
 
