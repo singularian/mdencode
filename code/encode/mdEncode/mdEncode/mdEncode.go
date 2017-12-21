@@ -154,8 +154,7 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	fdata.fileName = fileName
 	// find the fileData file path
 	path, _ := filepath.Abs(fileName)
-	// dir, file := filepath.Split(path)
-	dir, _ := filepath.Split(path)
+	dir,  _ := filepath.Split(path)
 	fdata.filePath = dir
 	// set the output filename
 	fdata.outputFileName = outputfileName
@@ -173,9 +172,6 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 
 	fdata.fileHashListArray = re.FindAllString(fileHashList, -1)
 	fdata.blockHashListArray = re.FindAllString(blockHashList, -1)
-
-	// need to check the length of the arrays
-	// fmt.Println(fdata.fileHashListArray, fdata.blockHashListArray)
 
 	// initialize the map
 	fdata.dictionary = make(map[string]string)
@@ -215,14 +211,6 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 
 	// setup the file md formatter
 	fdata.setmdFormat(format)
-
-	// fdata.mdfmt.Println()
-
-	// test method to pass in the fdata struct type into the mdFormatText package
-	// fdata.md.SetFileData(fdata)
-
-	// fmt.Println("file hashlist names ", fdata.fileHashListNames)
-	// fmt.Println("hashlist names ", fdata.blockHashListNames)
 
 	// encode the File Header
 	fdata.mdfmt.EncodeFileHeader(format, fileName, fdata.filePath, size, blocksize, fdata.fileHashListNames, fdata.blockHashListNames, bitsize)
@@ -274,16 +262,11 @@ func (l *FileData) encodeFile(fileName string) {
 
 	// this is not in sorted order
 	// hash list
-	// for k, h := range l.hashList {
-	// for hashname, hashvalue := range fileHashListArrayNames {
 	for _, hashvalue := range l.fileHashListNames {
 		h := l.hashList[hashvalue]
 		if _, err := io.Copy(h, f); err != nil {
 			fmt.Println(err)
 		}
-		// md :=  hashvalue
-		// h.Reset()
-		// fmt.Println("z: ", md, " ", hex.EncodeToString(h.Sum(nil)))
 		l.mdfmt.EncodeFileHash(l.mdFormat, hashvalue, hex.EncodeToString(h.Sum(nil)))
 	}
 
@@ -301,18 +284,12 @@ func (l *FileData) encodeFileHashLine(fileName string) {
 
 	// this is not in sorted order
 	// hash list
-	// for k, h := range l.hashList {
-	// for hashname, hashvalue := range fileHashListArrayNames {
 	var hlistarray []string
 	for _, hashvalue := range l.fileHashListNames {
 		h := l.hashList[hashvalue]
 		if _, err := io.Copy(h, f); err != nil {
 			fmt.Println(err)
 		}
-		// md :=  hashvalue
-		// h.Reset()
-		// fmt.Println("z: ", md, " ", hex.EncodeToString(h.Sum(nil)))
-		// l.mdfmt.EncodeFileHash(l.mdFormat, hashvalue, hex.EncodeToString(h.Sum(nil)))
 		hlistarray = append(hlistarray, hex.EncodeToString(h.Sum(nil)))
 	}
 	var hashListString = strings.Join(l.fileHashListNames, ":")
@@ -347,9 +324,7 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
 	defer file.Close()
 
 	// intialize the buffer with the default blocksize
-	// buf := make([]byte, blocksize)
 	l.filebuffer = make([]byte, blocksize)
-	// fmt.Println("bytes ", l.filebuffer)
 
 	// setup the file block count and last block remainder
 	blocks := l.blockCount
@@ -364,6 +339,7 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
 	}
 
 	var hlistarray []string
+
 	// iterate through the file blocks and generate the hash signature list
 	// append them to the hlistarray
 	for {
@@ -408,10 +384,6 @@ func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, f
 			l.modExp = 0
 			l.fileblockmodulusString = "0"
 		}
-
-		// fmt.Println("file block ", blockBigInt, " modulus ", modulusBigInt)
-		// fmt.Println("modulus ", fileblockmodulus.String(), " ", modulusBigInt.String())
-		// fmt.Println("file modulus ", fileblockmodulus.String(), " ", fileblockmodulusString, " ", modulusBigInt.String())
 
 		// generate the file block signatures from the hash list
 		for _, hashvalue := range l.blockHashListNames {
@@ -458,23 +430,15 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 	var last = 30
 	if length < last {
 		last = length
-		//		fmt.Println("create length ", length, " ", last, " ", fileBlockflag)
 	}
 
 	// file block sig variables
-	// l.blockHashListArray
-	// l.hashListBlocks
-	// l.blockHashListNames
-	// var hlistarray []string
-	// hb := l.hashListBlocks
 	hb := make(map[string]hash.Hash)
 
 	var list []string
 	for i := 0; i < last; i++ {
-		// var vbool, _ = strconv.Atoi(l.blockHashListArray[i])
 		var vbool, _ = strconv.Atoi(hlistarray[i])
 		var v = (i * 10) + vbool
-		// fmt.Println("z: ", v)
 		switch v {
 		// md4 file
 		case 1:
@@ -490,7 +454,7 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 			hb["sha224"] = sha256.New224()
 		case 41:
 			hb["sha256"] = sha256.New()
-			// sha512_224
+		// sha512_224
 		case 51:
 			hb["sha512_224"] = sha512.New512_224()
 		case 61:
@@ -515,14 +479,13 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 			hb["blake2b"] = blake2.NewBlake2B()
 		case 131:
 			hb["fnv"] = fnv.New64a()
+		// ripe 160
 		case 141:
 			hb["ripe160"] = ripemd160.New()
 		case 151:
-			// hb["sip128"] = siphash.New128([]byte("H32d87sdfjh"))
 			var seed uint64 = 1120322
 			hb["murmur3"] = murmur3.New128(seed)
-			// hasher := murmur3.New128()
-			// hasher.Write
+		// whirlpool
 		case 161:
 			hb["whirlpool"] = whirlpool.New()
 		case 171:
@@ -556,12 +519,6 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 			hb["blake2s_256"], _ = blake2s.New256(key)
 		case 291:
 			hb["blake2"] = blake2.New(nil)
-			// case 301:
-			// hb["block"] = fnv.New64a()
-			//hb["blake2s"], _ =  blake2s.New128(nil)
-			// case 231:
-			//var customString = []byte("128Ulsurl90Sx789sdreReee12")
-			// hb["kangaroo12"] =  K12.NewK12(customString)
 
 		}
 	}
