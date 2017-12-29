@@ -441,8 +441,6 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 	// l.blockHashListArray
 	// l.hashListBlocks
 	// l.blockHashListNames
-	// var hlistarray []string
-	// hb := l.hashListBlocks
 	hb := make(map[string]hash.Hash)
 
 	var list []string
@@ -515,11 +513,11 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 			hb["skein1024"] = skein.New(128, nil)
 		case 251:
 			hb["tiger"] = tiger.New()
+		// siphash has to have a key 8 or 16 bytes
 		case 261:
-			// has to have a key 8 or 16 bytes
 			hb["siphash"] = siphash.New128(key)
+		// blake2s needs two values since it has a multiple return
 		case 271:
-			// this one needs two values since it has a multiple return
 			hb["blake2s_128"], _ = blake2s.New128(key)
 		case 281:
 			hb["blake2s_256"], _ = blake2s.New256(key)
