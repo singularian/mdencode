@@ -40,8 +40,8 @@ type jsonHead struct {
 	Modsize int64 
 	Format int
 	// Hashlist string
-	fileHashlist string
-	blockHashlist string
+	FileHashlist string
+	BlockHashlist string
 	Version string
 	Time string
 }
@@ -139,8 +139,8 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 			Blocksize: blockSize, 
 			Modsize: modulusSize, 
 			Format: encodingFormat, 
-			fileHashlist: filehashListString, 
-			blockHashlist: blockhashListString, 
+			FileHashlist: filehashListString, 
+			BlockHashlist: blockhashListString, 
 			Version: md.mdVersion, 
 			Time: time}
 
