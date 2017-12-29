@@ -100,18 +100,37 @@ Usage of md:
      Output Filename  
 
 Version: 1.0 復甦 復活
+
+Formats:
+0 - 98 - Text
+99     - Inform
+100    - XML
+101    - CSV
+102    - CSV
+600    - Json
+1000   - Binary
+2000   - SQL Lite 3 DB File
+
+Examples:
+md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line
+md -file=Makefile -block=100 -line=false -bh=111 -fh=0 -format=19 -line
+md -file=Makefile -block=100 -line=false -bh=1100111 -fh=1011111 -format=19 -line=true -out=outputfile
+md -file=Makefile -block=100 -line=false -bh=100111 -fh=11000111 -format=19 -append=true -line=true -out=outputfile
 ```
 
 # Output Formats
-Output Formats  
-0 - 98 - Text  
-99 - Inform  
-100 - XML    
-101 - CSV  
-102 - CSV  
-600 - Json  
-1000 - Binary  
-2000 - SQL Lite 3 DB File  
+
+This is a list of the current numerical format assignment.
+This is subject to change.
+
+0 - 98 - Text
+99     - Inform
+100    - XML
+101    - CSV
+102    - CSV
+600    - Json
+1000   - Binary
+2000   - SQL Lite 3 DB File
 
 # Command Line Examples
 
