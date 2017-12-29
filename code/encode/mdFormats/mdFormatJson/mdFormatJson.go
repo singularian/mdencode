@@ -32,7 +32,7 @@ type MdFormat struct {
 	file *os.File 
 }
 
-type jsonHead struct {
+type jsonHeader struct {
 	FileName string
 	FilePath string
 	Filesize int64 
@@ -132,7 +132,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 	// var fb = filehashListString + "-" + blockhashListString
 	var time = fmt.Sprintf("%v", time.Now())
 
-	mdj := jsonHead{
+	mdj := jsonHeader{
 			FileName: fileName, 
 			FilePath: filePath, 
 			Filesize: fileSize, 
