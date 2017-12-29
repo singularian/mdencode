@@ -33,6 +33,7 @@ import (
 	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatSQL"
 	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatText"
 	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatXML"
+	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatXMLgo"
 	_ "github.com/spaolacci/murmur3"
 	"github.com/steakknife/keccak"
 	_ "github.com/twmb/murmur3"
@@ -595,6 +596,9 @@ func (l *FileData) setmdFormat(format int) {
 	if format == 100 {
 		l.mdfmt = mdFormatXML.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 		l.mdfmt.OpenFile(l.appendfile)
+	} else if format == 106 {
+                l.mdfmt = mdFormatXMLgo.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+                l.mdfmt.OpenFile(l.appendfile)
 	} else if format == 99 {
 		l.mdfmt = mdFormatInform.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 		l.mdfmt.OpenFile(l.appendfile)
