@@ -559,7 +559,7 @@ func (l *FileData) setmdFormat(format int) {
 	// } else if format == 99 {
 	//	l.mdfmt = mdFormatInform.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 	//	l.mdfmt.OpenFile(l.appendfile)
-	} else if format == 101 || format == 102 {
+	if format == 101 || format == 102 {
 		l.mdfmt = mdFormatCSV.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 		l.mdfmt.OpenFile(l.appendfile)
 	// } else if format == 600 {
