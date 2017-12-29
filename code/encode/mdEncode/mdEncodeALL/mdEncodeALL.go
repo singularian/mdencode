@@ -550,21 +550,22 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 // sets the correct md format object
 func (l *FileData) setmdFormat(format int) {
 
-	if format == 100 {
-		l.mdfmt = mdFormatXML.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-		l.mdfmt.OpenFile(l.appendfile)
-	} else if format == 106 {
-                l.mdfmt = mdFormatXMLgo.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-                l.mdfmt.OpenFile(l.appendfile)
-	} else if format == 99 {
-		l.mdfmt = mdFormatInform.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-		l.mdfmt.OpenFile(l.appendfile)
+	// if format == 100 {
+	//	l.mdfmt = mdFormatXML.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+	//	l.mdfmt.OpenFile(l.appendfile)
+	//} else if format == 106 {
+        //        l.mdfmt = mdFormatXMLgo.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+        //        l.mdfmt.OpenFile(l.appendfile)
+	// } else if format == 99 {
+	//	l.mdfmt = mdFormatInform.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+	//	l.mdfmt.OpenFile(l.appendfile)
 	} else if format == 101 || format == 102 {
 		l.mdfmt = mdFormatCSV.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 		l.mdfmt.OpenFile(l.appendfile)
-	} else if format == 600 {
-		l.mdfmt = mdFormatJson.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-		l.mdfmt.OpenFile(l.appendfile)
+	// } else if format == 600 {
+	//	l.mdfmt = mdFormatJson.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+	//	l.mdfmt.OpenFile(l.appendfile)
+	// binary Formatter
 	} else if format == 1000 {
 		// l.mdfmt = mdFormatBinary.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 		if l.outputFileName == "" {
@@ -574,6 +575,7 @@ func (l *FileData) setmdFormat(format int) {
 		l.mdfmt.OpenFile(false)
 		l.mdfmt.InitFile()
 		return
+	// SQL Formatter
 	} else if format == 2000 {
 		// set a default filename if none is provided
 		if l.outputFileName == "" {
@@ -581,6 +583,23 @@ func (l *FileData) setmdFormat(format int) {
 		}
 		l.outputFileName = l.outputFileName + ".db"
 		l.mdfmt = mdFormatSQL.Init(101, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+	// Inform Formatter
+	} else if format == 3000 {
+		l.mdfmt = mdFormatInform.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	// JSON Formatter
+	} else if format == 4000 {
+		l.mdfmt = mdFormatJson.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	// GO XML Formatter
+	} else if format == 5000 {
+		l.mdfmt = mdFormatXMLgo.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	// non GO XML Formatter
+	} else if format == 5001 {
+                l.mdfmt = mdFormatXML.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+                l.mdfmt.OpenFile(l.appendfile)
+	// Text Formatter
 	} else {
 		l.mdfmt = mdFormatText.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 		l.mdfmt.OpenFile(l.appendfile)

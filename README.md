@@ -103,13 +103,14 @@ Version: 1.0 復甦 復活
 
 Formats:
 0 - 98 - Text
-99     - Inform
-100    - XML
 101    - CSV
 102    - CSV
-600    - Json
 1000   - Binary
 2000   - SQL Lite 3 DB File
+3000   - Inform
+4000   - JSON
+5000   - GO XML
+5001   - XML Formatter
 
 Examples:
 md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line
@@ -124,13 +125,14 @@ This is a list of the current numerical format assignment.
 This is subject to change.  
 ```sh
 0 - 98 - Text
-99     - Inform
-100    - XML
 101    - CSV
 102    - CSV
-600    - Json
 1000   - Binary
 2000   - SQL Lite 3 DB File
+3000   - Inform
+4000   - JSON
+5000   - GO XML
+5001   - XML Formatter
 ```
 
 # Command Line Examples
