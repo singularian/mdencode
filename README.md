@@ -160,13 +160,14 @@ md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=9 -file=america.txt -ou
 md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=5000 -file=america.txt -out=america.txt_b100_mod128_xml.md
 ```
 
-[XML Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_xml_.md)
+[XML Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_xml.md)
 
 ```
-md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=4040404000 -file=america.txt -out=america.txt_b100_mod128_f600.md
+md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=4000 -file=america.txt -out=america.txt_b100_mod128_xml.md
 ```
 
 [JSON Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_json.md)
+
 
 # Example mddbreport usage
 This example shows how to generate an sql lite file db signature
