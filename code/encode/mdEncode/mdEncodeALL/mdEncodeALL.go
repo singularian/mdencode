@@ -447,7 +447,7 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 	for i := 0; i < last; i++ {
 		var vbool, _ = strconv.Atoi(hlistarray[i])
 		var v = (i * 10) + vbool
-		// fmt.Println("z: ", v)
+
 		switch v {
 		// md4 file
 		case 1:
