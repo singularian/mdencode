@@ -151,22 +151,22 @@ md -block=1000 -mod=256 -bh=001100 -fh=100100111 -format=100 -file=destiny.txt
 This is a file signature for Makefile with a block size of 100 bytes and a 128 bit modulus and the fileblock signature bit string and file bit string and a format specified by number 10. It is formatted by go flags args.
 
 ```
-md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=9 -file=america.txt -out=america.txt_b100_mod128_f9_.md
+md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=9 -file=america.txt -out=america.txt_b100_mod128_f9.md
 ```
 
-[Text Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f9_.md)
+[Text Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f9.md)
 
 ```
-md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=100 -file=america.txt -out=america.txt_b100_mod128_f100_.md
+md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=5000 -file=america.txt -out=america.txt_b100_mod128_xml.md
 ```
 
-[XML Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f100_.md)
+[XML Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_xml_.md)
 
 ```
-md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=600 -file=america.txt -out=america.txt_b100_mod128_f600_.md
+md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=4040404000 -file=america.txt -out=america.txt_b100_mod128_f600.md
 ```
 
-[JSON Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_f600_.md)
+[JSON Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_json.md)
 
 # Example mddbreport usage
 This example shows how to generate an sql lite file db signature
