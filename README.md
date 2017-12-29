@@ -120,9 +120,9 @@ md -file=Makefile -block=100 -line=false -bh=100111 -fh=11000111 -format=19 -app
 
 # Output Formats
 
-This is a list of the current numerical format assignment.
-This is subject to change.
-
+This is a list of the current numerical format assignment.  
+This is subject to change.  
+```sh
 0 - 98 - Text
 99     - Inform
 100    - XML
@@ -131,6 +131,7 @@ This is subject to change.
 600    - Json
 1000   - Binary
 2000   - SQL Lite 3 DB File
+```
 
 # Command Line Examples
 
