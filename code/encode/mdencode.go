@@ -70,20 +70,21 @@ func argsSimple(argsNumber int) int {
 
 	if argsNumber == 1 { 
 		flag.Usage()
-		fmt.Println("Formats")
+		fmt.Println("Formats:")
 		fmt.Println("0 - 98 - Text")
-		fmt.Println("99 - Inform")
-		fmt.Println("100 - XML")
-		fmt.Println("101 - CSV")
-		fmt.Println("102 - CSV")
-		fmt.Println("600 - Json")
-		fmt.Println("1000 - Binary")
-		fmt.Println("2000 - SQL Lite 3 DB File\n")
+		fmt.Println("99     - Inform")
+		fmt.Println("100    - XML")
+		fmt.Println("101    - CSV")
+		fmt.Println("102    - CSV")
+		fmt.Println("600    - Json")
+		fmt.Println("1000   - Binary")
+		fmt.Println("2000   - SQL Lite 3 DB File\n")
 
-		fmt.Println("md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line\n")
-		fmt.Println("md -file=Makefile -block=100 -line=false -bh=111 -fh=0 -format=19 -line\n")
-		fmt.Println("md -file=Makefile -block=100 -line=false -bh=111111 -fh=1111111 -format=19 -line=true -out=outputfile\n")
-		fmt.Println("md -file=Makefile -block=100 -line=false -bh=111111 -fh=1111111 -format=19 -append=true -line=true -out=outputfile\n")
+		fmt.Println("Examples:")
+		fmt.Println("md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line")
+		fmt.Println("md -file=Makefile -block=100 -line=false -bh=111 -fh=0 -format=19 -line")
+		fmt.Println("md -file=Makefile -block=100 -line=false -bh=1100111 -fh=1011111 -format=19 -line=true -out=outputfile")
+		fmt.Println("md -file=Makefile -block=100 -line=false -bh=100111 -fh=11000111 -format=19 -append=true -line=true -out=outputfile\n")
 		os.Exit(1)
 	}
 
