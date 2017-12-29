@@ -245,5 +245,5 @@ func (md *MdFormat) checkError(err error) {
 
 // test inteface function
 func (md *MdFormat) PrintFormatType() {
-        fmt.Println("Format mdFormatJson")
+        fmt.Println("Format mdFormatXMLgo")
 }
