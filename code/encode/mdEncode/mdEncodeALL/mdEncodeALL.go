@@ -550,21 +550,10 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 // sets the correct md format object
 func (l *FileData) setmdFormat(format int) {
 
-	// if format == 100 {
-	//	l.mdfmt = mdFormatXML.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-	//	l.mdfmt.OpenFile(l.appendfile)
-	//} else if format == 106 {
-        //        l.mdfmt = mdFormatXMLgo.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-        //        l.mdfmt.OpenFile(l.appendfile)
-	// } else if format == 99 {
-	//	l.mdfmt = mdFormatInform.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-	//	l.mdfmt.OpenFile(l.appendfile)
+	// CSV formatter
 	if format == 101 || format == 102 {
 		l.mdfmt = mdFormatCSV.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 		l.mdfmt.OpenFile(l.appendfile)
-	// } else if format == 600 {
-	//	l.mdfmt = mdFormatJson.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-	//	l.mdfmt.OpenFile(l.appendfile)
 	// binary Formatter
 	} else if format == 1000 {
 		// l.mdfmt = mdFormatBinary.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
