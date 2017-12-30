@@ -173,12 +173,12 @@ md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=4000 -file=america.txt 
 This example shows how to generate an sql lite file db signature
 
 ```
-md -file=Makefile -format=2000 -line=true -out=ssss
+md -file=Makefile -format=2000 -line=true -out=sqlite3_example
 ```
 
-It can also generate a formatted signature from the ssss.db sqlite 3 file
+It can also generate a formatted signature from the sqlite3_example.db sqlite 3 file
 
-This example shows how to list the files in a ssss.db file sqlite3 signature db
+This example shows how to list the files in a sqlite3_example.db file sqlite3 signature db
 
 The columns are:
 
@@ -198,23 +198,23 @@ file 3: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ cent
 
 # Example mddbreport formats
 
-This example shows how to use the mddbreport utility to display the file signatures in a format. 
+This example shows how to use the mddbreport utility to display the file sqlite3 db signatures in a numerical format. 
 
 ```
 $ mddbreport example.db 1
 ```
 
-[ssss.db.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.txt)
+[example.db.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/example.db.txt)
 
 ```
 $ mddbreport example.db 1 600
 ```
-[ssss.db.json](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.json)
+[example.db.json](https://raw.githubusercontent.com/singularian/mdencode/master/examples/example.db.json)
 
 ```
 $ mddbreport example.db 1 100
 ```
-[ssss.db.xml](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.xml)
+[example.db.xml](https://raw.githubusercontent.com/singularian/mdencode/master/examples/example.db.xml)
 
 If zero is specified for the argument it will format and output all the signature db files in the numeric format
 ```
