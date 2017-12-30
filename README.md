@@ -87,7 +87,7 @@ Usage of md:
   -format int  
      Output Format (default 4)
   -initdb string
-        SQLite3 Initialize Empty MD Filename      
+     Create SQLite3 Empty DB File      
   -key string  
      Signature Key (Minimum 16 bytes for siphash) (default "LomaLindaSanSerento9000")  
   -line  

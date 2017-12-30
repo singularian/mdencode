@@ -57,7 +57,7 @@ func argsSimple(argsNumber int) int {
 	flag.BoolVar(&filehashline, "line", false, "File Hash as one line")
 	flag.StringVar(&outfilename, "out", "", "Output Filename")
 	flag.StringVar(&logfilename, "log", "", "Log Filename")
-	flag.StringVar(&initdb, "initdb", "", "SQLite3 Initialize Empty MD Filename")
+	flag.StringVar(&initdb, "initdb", "", "Create SQLite3 Empty DB File")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
