@@ -185,7 +185,7 @@ The columns are:
 file id, filepath, filename, version
 
 ```
-$ mddbreport ssss.db
+$ mddbreport sqlite3_example.db
 
 file 1: /projects/src/github.com/singularian/mdencode/code/encode/ Makefile 1.0  
 
@@ -201,24 +201,24 @@ file 3: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ cent
 This example shows how to use the mddbreport utility to display the file signatures in a format. 
 
 ```
-$ mddbreport ssss.db 1
+$ mddbreport example.db 1
 ```
 
 [ssss.db.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.txt)
 
 ```
-$ mddbreport ssss.db 1 600
+$ mddbreport example.db 1 600
 ```
 [ssss.db.json](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.json)
 
 ```
-$ mddbreport ssss.db 1 100
+$ mddbreport example.db 1 100
 ```
 [ssss.db.xml](https://raw.githubusercontent.com/singularian/mdencode/master/examples/ssss.db.xml)
 
 If zero is specified for the argument it will format and output all the signature db files in the numeric format
 ```
-$ mddbreport ssss.db 0 100
+$ mddbreport example.db 0 100
 ```
 # Go Library Dependencies
 
