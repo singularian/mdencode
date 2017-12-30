@@ -13,6 +13,7 @@ import (
 	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatText"
 	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatInform"
 	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatXML"
+	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatXMLgo"
 	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatJson"
 	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatBinary"
 	// "github.com/singularian/mdencode/code/encode/mdFormats/mdFormatSQL"
@@ -165,6 +166,7 @@ func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
 		mdf.InitFile()
 		return mdf
 	*/
+	// Binary
         } else if format == 1000 {
                 // l.mdfmt = mdFormatBinary.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
                 if md.outputFileName == "" {
@@ -198,6 +200,12 @@ func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
                 return mdf
         // XML
         } else if format == 5000 {
+                mdf := mdFormatXMLgo.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+                mdf.OpenFile(md.appendfile)
+                mdf.InitFile()
+                return mdf
+	// XML Non go
+        } else if format == 5001 {
                 mdf := mdFormatXML.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
                 mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
