@@ -15,7 +15,7 @@ import (
 	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatXML"
 	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatJson"
 	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatBinary"
-	// "github.com/singularian/mdencode_private/code/encode/mdFormats/mdFormatSQL"
+	// "github.com/singularian/mdencode/code/encode/mdFormats/mdFormatSQL"
 
 )
 
