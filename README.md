@@ -207,12 +207,12 @@ $ mddbreport example.db 1
 [example.db.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/example.db.txt)
 
 ```
-$ mddbreport example.db 1 600
+$ mddbreport example.db 1 4000
 ```
 [example.db.json](https://raw.githubusercontent.com/singularian/mdencode/master/examples/example.db.json)
 
 ```
-$ mddbreport example.db 1 100
+$ mddbreport example.db 5001
 ```
 [example.db.xml](https://raw.githubusercontent.com/singularian/mdencode/master/examples/example.db.xml)
 
