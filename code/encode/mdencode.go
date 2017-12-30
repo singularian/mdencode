@@ -99,7 +99,15 @@ func argsSimple(argsNumber int) int {
 	md.SetLogFile(logfilename)
 
 	// mdencode generate a file signature
-	md.Mdencode(blocksize, modsize, defaultFormat, hashlist, hashlist2, filename, outfilename)
+	// if argsNumber == 2 && initdb != null {
+	//	md.InitDB(initdb)
+	//	return 0
+	//}
+
+	// mdencode generate a file signature
+	if filename != "" {
+		md.Mdencode(blocksize, modsize, defaultFormat, hashlist, hashlist2, filename, outfilename)
+	}
 
 	// initialize an empty sqlite3 signature db if specified
 	md.InitDB(initdb)
