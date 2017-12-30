@@ -609,6 +609,23 @@ func (l *FileData) setmdFormat(format int) {
 
 }
 
+// create an empty sqlite3 signature db
+func (l *FileData) InitDB(fileName string) {
+
+	if fileName == "" {
+		return
+	} 
+
+	if l.outputFileName == fileName {
+		fileName = fileName + ".2"
+	}
+
+	md := mdFormatSQL.Init(0, fileName, "", 0, 0, 0, "", "", fileName)
+	md.InitFile()
+	md.EncodeEndFile(0)
+
+}
+
 // SetByteBlock
 // set the byte block mode
 func (l *FileData) SetByteBlock(byteblock bool) {

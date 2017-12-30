@@ -41,6 +41,8 @@ func argsSimple(argsNumber int) int {
 	var outfilename string
 	// logfilename
 	var logfilename string
+	// initialize sqlite3 md db
+	var initdb string
 
 	flag.StringVar(&blocksize, "block", "40", "File Block Size Bytes")
 	flag.StringVar(&modsize, "mod", "32", "Modulus Size in Bits")
@@ -55,9 +57,7 @@ func argsSimple(argsNumber int) int {
 	flag.BoolVar(&filehashline, "line", false, "File Hash as one line")
 	flag.StringVar(&outfilename, "out", "", "Output Filename")
 	flag.StringVar(&logfilename, "log", "", "Log Filename")
-
-	// add a key variable or replace or append variable???
-	// byteblock variable
+	flag.StringVar(&initdb, "initdb", "", "SQLite3 Initialize Empty MD Filename")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
@@ -100,5 +100,8 @@ func argsSimple(argsNumber int) int {
 
 	// mdencode generate a file signature
 	md.Mdencode(blocksize, modsize, defaultFormat, hashlist, hashlist2, filename, outfilename)
+
+	// initialize an empty sqlite3 signature db if specified
+	md.InitDB(initdb)
         return 0
 }
