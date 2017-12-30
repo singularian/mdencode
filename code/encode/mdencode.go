@@ -98,12 +98,7 @@ func argsSimple(argsNumber int) int {
 	md.SetKeyFile(key)
 	md.SetLogFile(logfilename)
 
-	// mdencode generate a file signature
-	// if argsNumber == 2 && initdb != null {
-	//	md.InitDB(initdb)
-	//	return 0
-	//}
-
+	// if the filename is specified
 	// mdencode generate a file signature
 	if filename != "" {
 		md.Mdencode(blocksize, modsize, defaultFormat, hashlist, hashlist2, filename, outfilename)
