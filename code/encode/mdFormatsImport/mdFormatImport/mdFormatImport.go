@@ -144,7 +144,7 @@ func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
 
         fmt.Println("test ", format)
 
-        if format == 100 {
+        /*if format == 100 {
                 mdf := mdFormatXML.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
                 mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
@@ -154,22 +154,44 @@ func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
                 mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
                 return mdf
-        } else if format == 101 || format == 102 {
+	*/
+	// CSV
+        if format == 101 || format == 102 {
                 mdf := mdFormatCSV.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
                 mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
                 return mdf
-        } else if format == 600 {
+        /*} else if format == 600 {
                 mdf := mdFormatJson.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
                 mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
                 return mdf
+	*/
+	// Binary
         } else if format == 1000 {
                 if md.outputFileName == "" {
                         md.outputFileName = "default.mdbin"
                 }
                 mdf := mdFormatBinary.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
                 mdf.OpenFile(false)
+                mdf.InitFile()
+                return mdf
+        // Inform
+        } else if format == 3000 {
+                mdf := mdFormatInform.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+                mdf.OpenFile(md.appendfile)
+                mdf.InitFile()
+                return mdf
+        // JSON
+        } else if format == 4000 {
+                mdf := mdFormatJson.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+                mdf.OpenFile(md.appendfile)
+                mdf.InitFile()
+                return mdf
+        // XML
+        } else if format == 5000 {
+                mdf := mdFormatXML.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+                mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
                 return mdf
         } else {
@@ -192,26 +214,28 @@ func (md *FileData) SetmdFormatALL (filehashline bool) (mdfmt mdformat) {
 
         var format = md.mdFormat
 
-        if format == 100 {
-                mdf := mdFormatXML.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(md.appendfile)
-                mdf.InitFile()
-                return mdf
-        } else if format == 99 {
-                mdf := mdFormatInform.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(md.appendfile)
-                mdf.InitFile()
-                return mdf
-        } else if format == 101 || format == 102 {
+        //if format == 100 {
+        //        mdf := mdFormatXML.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+        //        mdf.OpenFile(md.appendfile)
+        //        mdf.InitFile()
+        //        return mdf
+        // } else if format == 99 {
+        //        mdf := mdFormatInform.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+        //        mdf.OpenFile(md.appendfile)
+        //        mdf.InitFile()
+        //        return mdf
+	// CSV
+        if format == 101 || format == 102 {
                 mdf := mdFormatCSV.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
                 mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
                 return mdf
-        } else if format == 600 {
-                mdf := mdFormatJson.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(md.appendfile)
-                mdf.InitFile()
-                return mdf
+        // } else if format == 600 {
+        //        mdf := mdFormatJson.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+        //        mdf.OpenFile(md.appendfile)
+        //        mdf.InitFile()
+        //        return mdf
+	// Binary
         } else if format == 1000 {
                 if md.outputFileName == "" {
                         md.outputFileName = "default.mdbin"
@@ -220,6 +244,7 @@ func (md *FileData) SetmdFormatALL (filehashline bool) (mdfmt mdformat) {
                 mdf.OpenFile(false)
                 mdf.InitFile()
                 return mdf
+	// SQL
         } else if format == 2000 {
                 // set a default filename if none is provided
                 if md.outputFileName == "" {
@@ -229,6 +254,24 @@ func (md *FileData) SetmdFormatALL (filehashline bool) (mdfmt mdformat) {
                 mdf := mdFormatSQL.Init(101, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
 		mdf.InitFile()
 		return mdf
+	// Inform
+	} else if format == 3000 {
+		mdf := mdFormatInform.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+                mdf.OpenFile(md.appendfile)
+                mdf.InitFile()
+                return mdf
+	// JSON
+	} else if format == 4000 {
+		mdf := mdFormatJson.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+                mdf.OpenFile(md.appendfile)
+                mdf.InitFile()
+                return mdf
+	// XML
+	} else if format == 5000 {
+		mdf := mdFormatXML.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+                mdf.OpenFile(md.appendfile)
+                mdf.InitFile()
+                return mdf
         } else {
                 mdf := mdFormatText.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
                 mdf.OpenFile(md.appendfile)

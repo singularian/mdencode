@@ -205,10 +205,20 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 func (md *MdFormat) EncodeFileHash(encodingFormat int, hashName string, hashBytes string) {
 
         switch encodingFormat {
-        case 5:
-		md.println("filehash: ", hashName, " ", hashBytes)
-	default:
+	case 0:
 		md.println("z: ", hashName, " ", hashBytes)
+	case 1:
+		md.println("z: ", hashName, " ", hashBytes)
+	case 2:
+		md.println("z: ", hashName, " ", hashBytes)
+	case 3:
+		md.println("z: ", hashName, " ", hashBytes)
+	case 4: 
+		md.println("z: ", hashName, " ", hashBytes)
+        case 5:
+		md.println("z: ", hashName, " ", hashBytes)
+	default:
+		md.println("filehash: ", hashName, " ", hashBytes)
 	}
 
 }
