@@ -163,7 +163,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
                 buffer.WriteString(":")
                 // add the time
                 buffer.WriteString(fmt.Sprintf("%v", time.Now()))
-	case 9:
+	case 3000:
 		buffer.Reset()
                 buffer.WriteString("\n")
                 buffer.WriteString("[md][hd][filename]")
@@ -193,7 +193,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
                 buffer.WriteString("[time]")
                 buffer.WriteString(fmt.Sprintf("%v", time.Now()))
                 buffer.WriteString("[time][hd]")
-	case 100:
+	case 5001:
 		buffer.Reset()
                 buffer.WriteString("<md><hd><filename>")
                 buffer.WriteString(fileName)
@@ -253,9 +253,9 @@ func (md *MdFormat) EncodeFileHash(encodingFormat int, hashName string, hashByte
         switch encodingFormat {
         case 5:
 		md.println("filehash: ", hashName, " ", hashBytes)
-	case 9:
+	case 3000:
 		md.println("[filehash][hashname]", hashName, "[hashname][hash]", hashBytes, "[hash][filehash]")
-	case 100:
+	case 5001:
 		md.println("<filehash><hashname>", hashName, "</hashname><hash>", hashBytes, "</hash></filehash>")
 	default:
 		md.println("z: ", hashName, " ", hashBytes)
@@ -324,13 +324,13 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
                 // need to pass this in or something
                 // output the block bigint
                 // fmt.Print(":", mod);
-        case 9:
+        case 3000:
                 md.print("[b][size]", blockSize, "[size]")
                 md.print("[hashlist]", hashListString, "[hashlist]");
                 md.print("[modexp]", modExp, "[modexp]");
                 md.print("[mod]", mod, "[mod][b]");
                 //md.print(":COLLISION");
-        case 100: 
+        case 5001: 
                 md.print("<b><size>", blockSize, "</size>")
                 md.print("<hashlist>",  hashListString, "</hashlist>");
                 md.print("<modexp>", modExp, "</modexp>");
@@ -351,9 +351,9 @@ func (md *MdFormat) EncodeEndFile(encodingFormat int) {
 
         switch encodingFormat {
 	// used to be case 6
-	case 9:
+	case 3000:
 		md.println("[md]")
-	case 100:
+	case 5001:
 		md.println("</md>")
 	}
 }
