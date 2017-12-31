@@ -107,7 +107,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
         var blockhashListString = strings.Join(blockhashList, ":")
 
 	switch encodingFormat {
-	case 100:
+	case 5001:
 		buffer.Reset()
                 buffer.WriteString("<md><hd><filename>")
                 buffer.WriteString(fileName)
@@ -152,7 +152,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 func (md *MdFormat) EncodeFileHash(encodingFormat int, hashName string, hashBytes string) {
 
         switch encodingFormat {
-	case 100:
+	case 5001:
 		md.println("<filehash><hashname>", hashName, "</hashname><hash>", hashBytes, "</hash></filehash>")
 	default:
 		md.println("<filehash><hashname>", hashName, "</hashname><hash>", hashBytes, "</hash></filehash>")
@@ -189,7 +189,7 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 func (md *MdFormat) EncodeEndFile(encodingFormat int) {
 
         switch encodingFormat {
-	case 100:
+	case 5001:
 		md.println("</md>")
 	}
 }
