@@ -115,10 +115,16 @@ Formats:
 5001    - XML Formatter
 
 Examples:
-md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line
-md -file=Makefile -block=100 -line=false -bh=111 -fh=0 -format=19 -line
-md -file=Makefile -block=100 -line=false -bh=1100111 -fh=1011111 -format=19 -line=true -out=outputfile
-md -file=Makefile -block=100 -line=false -bh=100111 -fh=11000111 -format=19 -append=true -line=true -out=outputfile
+md -file=Makefile -block=100 -bh=0 -fh=1 -format=19 -line=true
+md -file=Makefile -block=100 -bh=0 -fh=1111111 -format=19 -line=false
+md -file=Makefile -block=100 -bh=111 -fh=0 -format=19 -line
+md -file=Makefile -block=100 -bh=1100111  -fh=1011111 -format=19 -line=true -out=outputfile
+md -file=Makefile -block=100 -bh=100111   -fh=11000111 -format=19 -append=true -line=true -out=outputfile
+md -file=Makefile -block=100 -bh=10011101 -fh=11000111 -format=3000 -append=true -line=true -out=outputfile.inform
+md -file=Makefile -block=100 -bh=100111   -fh=11000111 -format=4000 -append=true -line=true -out=outputfile.json
+md -file=Makefile -block=1000 -mod=0 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
+md -file=Makefile -block=100 -mod=64 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
+md -file=Makefile -block=100 -mod=128 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
 ```
 
 # Output Formats
@@ -140,12 +146,16 @@ This is subject to change.
 # Command Line Examples
 
 ```sh
-md -file=Makefile -block=100 -line=false -bh=0 -fh=1111111 -format=19 -line
-md -file=Makefile -block=100 -line=false -bh=111 -fh=0 -format=19 -line
-md -file=Makefile -block=100 -bh=111111 -fh=1111111 -format=19 -line=true -out=outputfile
-md -file=Makefile -block=100 -bh=111111 -fh=1111111 -format=19 -append=true -line=true -out=outputfile
-md -file=Makefile -block=100 -bh=111100001111 -fh=11011100001 -format=600 -append=true -line=true -out=outputfile
-md -block=1000 -mod=256 -bh=001100 -fh=100100111 -format=100 -file=destiny.txt
+md -file=Makefile -block=100 -bh=0 -fh=1 -format=19 -line=true
+md -file=Makefile -block=100 -bh=0 -fh=1111111 -format=19 -line=false
+md -file=Makefile -block=100 -bh=111 -fh=0 -format=19 -line
+md -file=Makefile -block=100 -bh=1100111  -fh=1011111 -format=19 -line=true -out=outputfile
+md -file=Makefile -block=100 -bh=100111   -fh=11000111 -format=19 -append=true -line=true -out=outputfile
+md -file=Makefile -block=100 -bh=10011101 -fh=11000111 -format=3000 -append=true -line=true -out=outputfile.inform
+md -file=Makefile -block=100 -bh=100111   -fh=11000111 -format=4000 -append=true -line=true -out=outputfile.json
+md -file=Makefile -block=1000 -mod=0 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
+md -file=Makefile -block=100 -mod=64 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
+md -file=Makefile -block=100 -mod=128 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
 ```
 
 # Eample usage
