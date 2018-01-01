@@ -1,5 +1,5 @@
 
-{"mdfile": {"FileName":"Makefile","FilePath":"/home/nsross/projects/src/github.com/singularian/mdencode/code/encode/","Filesize":1558,"Blocksize":40,"Modsize":32,"Format":600,"Hashlist":"md5:sha1-md5:sha1","Version":"1.0","Time":"2017-11-23 09:14:15.906471611 -0500 EST"},
+{"mdfile": {"Mdtype":"MDheader","FileName":"Makefile","FilePath":"/home/nsross/projects/src/github.com/singularian/mdencode/code/encode/","Filesize":1558,"Blocksize":40,"Modsize":32,"Format":600,"Hashlist":"md5:sha1-md5:sha1","Version":"1.0","Time":"2017-11-23 09:14:15.906471611 -0500 EST"},
 {"Mdtype":"File","Hashname":"md5:sha1","Filehashlist":"cf3bf9b0cc9d76c4807fbe7aa70dd6d2:da39a3ee5e6b4b0d3255bfef95601890afd80709"},
 {"Mdtype":"Block","Blocksize":"40","Hashlist":"493a1de47de4c76a1fe678e3b1c1263d:255078b58fa4f01057bf5568d55f5b2b63d0b8de","Modexp":"317","Mod":"1851880057"},
 {"Mdtype":"Block","Blocksize":"40","Hashlist":"38925f2bf8b95ab371933c07c7aa053b:baecfb418ea6c44c970454247da56a2a85bdd6fc","Modexp":"317","Mod":"544499813"},
