@@ -7,7 +7,7 @@ package main
 import (
 	"fmt"
 	"flag"
-	"log"
+	_ "log"
 	"os"
 	"github.com/singularian/mdencode/code/encode/mdReports/mdReportsSQL"
 )
@@ -71,7 +71,8 @@ func argsReport(argsNumber int) {
 	if argsNumber == 2 {
 		// filename := os.Args[1]
 		if _, err := os.Stat(filename); os.IsNotExist(err) {
-			log.Fatal("The mdfile db does not exist")
+			// log.Fatal("The mdfile db does not exist")
+			fmt.Println("The mdfile db does not exist")
 			os.Exit(3)
 		}
 		md := mdReportSQL.Init(0, filename, "", 0, 0, 0, "0", "0", filename)
