@@ -95,13 +95,10 @@ func (md *MdFormat) InitFile() {
 func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64) {
 
         var buffer bytes.Buffer
-	// not equal to xml
-	if encodingFormat != 100  {
-		buffer.WriteString(fileName)
+	buffer.WriteString(fileName)
 
-		buffer.WriteString("\n")
-		buffer.WriteString(filePath)
-	}
+	buffer.WriteString("\n")
+	buffer.WriteString(filePath)
 
 	var filehashListString = strings.Join(filehashList, ":")
 	var blockhashListString = strings.Join(blockhashList, ":")
