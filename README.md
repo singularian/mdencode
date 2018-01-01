@@ -197,11 +197,11 @@ The columns are:
 file id, filepath, filename, version
 
 ```
-$ mddbreport sqlite3_example.db
+$ mddbreport -file=sqlite3_example.db
 
 file 1: /projects/src/github.com/singularian/mdencode/code/encode/ Makefile 1.0  
 
-$ mddbreport filesig.db  
+$ mddbreport -file=filesig.db  
 
 file 1: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ america.txt 1.0  
 file 2: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ twelve.doc 1.0  
@@ -214,23 +214,25 @@ This example shows how to use the mddbreport utility to display the file sqlite3
 
 ```
 $ mddbreport example.db 1
+$ mddbreport -file=example.db -fileid=1
 ```
 
 [example.db.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/example.db.txt)
 
 ```
-$ mddbreport example.db 1 4000
+$ mddbreport -file=example.db -fileid=1 -format=4000
+
 ```
 [example.db.json](https://raw.githubusercontent.com/singularian/mdencode/master/examples/example.db.json)
 
 ```
-$ mddbreport example.db 5001
+$ mddbreport -file=example.db -fileid=1 -format=5001
 ```
 [example.db.xml](https://raw.githubusercontent.com/singularian/mdencode/master/examples/example.db.xml)
 
 If zero is specified for the argument it will format and output all the signature db files in the numeric format
 ```
-$ mddbreport example.db 0 100
+$ mddbreport -file=example.db -fileid=0 -format=100
 ```
 # Go Library Dependencies
 
