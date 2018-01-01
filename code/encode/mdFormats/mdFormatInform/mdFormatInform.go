@@ -89,8 +89,8 @@ func (md *MdFormat) InitFile() {
 
 
 // generate the file signature header 
-// it contains the file size in bytes, format type, block signature size, modulus bit size and signatures list as well as a potential time attribute
-//
+// it contains the file md format type, filename, filepath, filesize, block signature size, file hash signature list, block hash signature list and modulus bit size 
+// it can also add time attribute
 // format: inform
 func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64) {
 

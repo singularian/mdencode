@@ -85,10 +85,9 @@ func (md *MdFormat) InitFile() {
 
 
 // generate the file signature header
-// it contains the file size in bytes, format type, block signature size, modulus bit size and signatures as well as a potential time attribute
-// 522:2:64:16:md5:sha1:2017-09-14 20:51:00.671424081 -0400 EDT
+// it contains the file md format type, filename, filepath, filesize, block signature size, file hash signature list, block hash signature list and modulus bit size 
+// it can also add time attribute
 //
-// also could have a binary encoded signature format for efficiency in size
 func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64) {
 
         var buffer bytes.Buffer

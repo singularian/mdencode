@@ -223,7 +223,8 @@ func (md *MdFormat) insertFile () {
 
 // EncodeFileHeader 
 // add the file signature header to the sqlite3 db
-// it contains the file size in bytes, format type, block signature size, modulus bit size and signatures as well as a potential time attribute
+// it contains the file md format type, filename, filepath, filesize, block signature size, file hash signature list, block hash signature list and modulus bit size 
+// it can also add time attribute
 func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64) {
 
 	var fileListString = strings.Join(filehashList, ":")
