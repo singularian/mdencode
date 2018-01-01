@@ -65,6 +65,8 @@ func argsReport(argsNumber int) {
 
 		fmt.Println("Examples:")
 		fmt.Println("mddbreport -file=md.db -fileid=1 -format=10")
+		fmt.Println("mddbreport -file=md.db -fileid=1 -format=10 -out=outputfile.txt -append=true")
+		fmt.Println("mddbreport -file=md.db -fileid=1 -format=5000 -out=outputfile.xml -append=false")
 		os.Exit(1)
 	}
 
