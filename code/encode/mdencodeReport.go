@@ -37,7 +37,8 @@ func argsReport(argsNumber int) {
 	var fileid uint64 = 0
 	// var fileid int = 0 
 	var dumpAll bool
-	// var outfilename string
+	var outfilename string
+	var appendfile bool
 	// logfilename
 	// var logfilename string
 	// initialize sqlite3 md db
@@ -47,7 +48,8 @@ func argsReport(argsNumber int) {
 	flag.StringVar(&filename, "file", "", "SQLite3 DB Signature Filename")
 	flag.Uint64Var(&fileid, "fileid", 0, "Fileid")
 	flag.BoolVar(&dumpAll, "dumpall", false, "Dump all the sql file signatures")
-	// flag.BoolVar(&appendfile, "append", false, "Append To Output File")
+	flag.StringVar(&outfilename, "out", "", "Output Filename")
+	flag.BoolVar(&appendfile, "append", false, "Append To Output File")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
@@ -75,17 +77,18 @@ func argsReport(argsNumber int) {
 			fmt.Println("The mdfile db does not exist")
 			os.Exit(3)
 		}
-		md := mdReportSQL.Init(0, filename, "", 0, 0, 0, "0", "0", filename)
+		// md := mdReportSQL.Init(0, filename, "", 0, 0, 0, "0", "0", filename)
+		md := mdReportSQL.Init(0, filename, "", 0, 0, 0, "0", "0", outfilename, false) // test for the output filename
 		md.PrintFileList(1, 0)
 		os.Exit(0)
 	} else {
 		// display the file from the db with the fileid
 		if fileid > 0 {
-			md := mdReportSQL.Init(defaultFormat, filename, "", 0, 0, 0, "0", "0", filename)
+			md := mdReportSQL.Init(defaultFormat, filename, "", 0, 0, 0, "0", "0", outfilename, appendfile)
 			md.PrintReport(defaultFormat, "filename", fileid)
 		// if the fileid is zero display everything with the format
 		} else if fileid == 0 {
-			md := mdReportSQL.Init(defaultFormat, filename, "", 0, 0, 0, "0", "0", filename)
+			md := mdReportSQL.Init(defaultFormat, filename, "", 0, 0, 0, "0", "0", outfilename, appendfile)
 			md.PrintEntireFileList(defaultFormat)
 		}
 

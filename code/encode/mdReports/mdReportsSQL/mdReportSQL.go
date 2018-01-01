@@ -42,6 +42,7 @@ type MdFormat struct {
 	// output file variables
 	outputFile string
 	file *os.File
+	appendfile bool
 	// err
 	err     error
 	// go sqlite3 variables
@@ -52,7 +53,7 @@ var version string = "1.0"
 
 // Init returns a new sqlite3 db md file type
 // this writes to the file and block signatures to the sqlite3 db file.
-func Init(encodingFormat int, fileName string, filePath string, fileSize uint64, blockSize uint64, modulusSize uint64, fileHashListString string, blockHashListString string, outputfileName string) (mdfmt *MdFormat) {
+func Init(encodingFormat int, fileName string, filePath string, fileSize uint64, blockSize uint64, modulusSize uint64, fileHashListString string, blockHashListString string, outputfileName string, appendfile bool) (mdfmt *MdFormat) {
 
 	md := new(MdFormat)
 	md.mdFormat = encodingFormat
@@ -70,12 +71,13 @@ func Init(encodingFormat int, fileName string, filePath string, fileSize uint64,
         md.mdblockHashListString = blockHashListString
         // set the output file name
 	md.outputFile = outputfileName
+	md.appendfile = appendfile
 	md.fileID = 0
 	md.blockNumber = 0
 
         // detect if the db file exists
         // var dbfile string = outputfileName // + ".db"
-        var dbfile string = outputfileName 
+        var dbfile string = fileName 
 	if info, err := os.Stat(fileName); err == nil && info.IsDir() {
 		log.Fatal("The dbfile path is a directory")
 		os.Exit(3)
@@ -91,6 +93,9 @@ func Init(encodingFormat int, fileName string, filePath string, fileSize uint64,
         md.err = err 
 	md.checkError()
 
+	// fmt.Println("report md file ", md.fileName)
+        // fmt.Println("report output file ", md.outputFile)
+
 	// mdata.sqlCreateTable()
 
 	// defer db.Close()
@@ -103,7 +108,7 @@ func (md *MdFormat) OpenFile(append bool) {
 
         // detect if the db file exists
         // var dbfile string = outputfileName // + ".db"
-	var outputfileName = md.outputFile
+	var outputfileName = md.fileName
         var dbfile string = outputfileName
         // if info, err := os.Stat(fileName); err == nil && info.IsDir() {
         if info, err := os.Stat(dbfile); err == nil && info.IsDir() {
@@ -201,7 +206,8 @@ func (md *MdFormat) PrintReport(format int, fileName string, fileid uint64) {
 	// mdfmt := mdFormatText.Init(format, fileName, "", 0, 0, 0, "0", "0", "")
 	// var mdfmt
 	// mdload := mdFormatImport.Init(format, fileName, "", 0, 0, 0, filehashlistbits, blockhashlistbits, "")
-	mdload := mdFormatImport.Init(format, fileName, "", 0, 0, 0, "", "", "")
+	mdload := mdFormatImport.Init(format, fileName, "", 0, 0, 0, "", "", md.outputFile)
+	mdload.SetAppendFile(md.appendfile)
 	mdfmt := mdload.SetmdFormatNoSQL(true)
         for rows.Next() {
                 if err := rows.Scan(&id, &filename, &filepath, &blocksize, &filesize, &modulusbitsize, &filehashlist, &blockhashlist, &filehashlistbits, &blockhashlistbits, &date); err != nil {

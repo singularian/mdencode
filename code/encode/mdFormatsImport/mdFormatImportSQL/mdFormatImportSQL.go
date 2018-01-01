@@ -74,7 +74,7 @@ type FileData struct {
         mdblockHashListString string
         mdHashlist string
         // output file variables
-        outputFile string
+        ////outputFileName string // not needed
 	// ===========================================
 	// dictionary
 	dictionary map[string]string
@@ -112,12 +112,15 @@ func Init(encodingFormat int, fileName string, filePath string, fileSize uint64,
         md.mdfileHashListString  = fileHashListString
         md.mdblockHashListString = blockHashListString
         // set the output file name
-        md.outputFile = outputfileName
+        md.outputFileName = outputfileName
 	// other initializers
 	md.appendfile = false
 	md.byteblock  = false
 	md.filehashline = false
 	md.logfile = ""
+
+	// fmt.Println("init import md file ", md.fileName)
+        // fmt.Println("init import output file ", md.outputFileName)
 
         return md
 }
@@ -142,6 +145,9 @@ func (md *FileData) SetmdFormatText (filehashline bool) (mdfmt mdformat) {
 func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
 
         var format = md.mdFormat
+
+	// fmt.Println("md file ", md.fileName)
+	// fmt.Println("output file ", md.outputFileName)
 
         /* if format == 100 {
                 mdf := mdFormatXML.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
