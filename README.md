@@ -213,7 +213,6 @@ file 3: /home/nsross/projects/src/github.com/singularian/mdencode/examples/ cent
 This example shows how to use the mddbreport utility to display the file sqlite3 db signatures in a numerical format. 
 
 ```
-$ mddbreport example.db 1
 $ mddbreport -file=example.db -fileid=1
 ```
 
