@@ -29,6 +29,10 @@ func main() {
 		md.EncodeEndFile(0)
 	// create a db file signature with the default name
         } else {
+
+		fmt.Print("Creating the new md db file")
+		fmt.Print(" \"", filename, "\"\n\n")
+
 		md := mdFormatSQL.Init(0, filename, "", 0, 0, 0, "", "", filename)
 		md.InitFile()
 		md.EncodeEndFile(0)
