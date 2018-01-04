@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	// "fmt"
-        "github.com/singularian/mdencode_private/code/encode/mdFormats/mdFormatSQL"
+        "github.com/singularian/mdencode/code/encode/mdFormats/mdFormatSQL"
 )
 
 
