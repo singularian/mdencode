@@ -1,8 +1,12 @@
 package main
 
+// mdencode
+// copyright (C) Scott Ross 2017
+// https://github.com/singularian/mdencode/blob/master/LICENSE
+
 import (
 	"os"
-	// "fmt"
+	"fmt"
         "github.com/singularian/mdencode/code/encode/mdFormats/mdFormatSQL"
 )
 
@@ -16,6 +20,9 @@ func main() {
         // create a new sqlite3 db file signature with the argument filename
 	if argsNumber == 2 {
                 filename := os.Args[1]
+
+		fmt.Print("Creating the new md db file")
+		fmt.Print(" \"", filename, "\"\n\n")
 
 		md := mdFormatSQL.Init(0, filename, "", 0, 0, 0, "", "", filename)
 		md.InitFile()
