@@ -22,11 +22,6 @@ func main() {
 		md.EncodeEndFile(0)
 	// create a db file signature with the default name
         } else {
-		/* fdata := fileData{}
-                fdata.md = mdFormatSQL.Init(0, filename, "", 0, 0, 0, defaultDBname)
-                fdata.md.InitFile()
-		fdata.md.EncodeEndFile(0)
-		*/
 		md := mdFormatSQL.Init(0, filename, "", 0, 0, 0, "", "", filename)
 		md.InitFile()
 		md.EncodeEndFile(0)
