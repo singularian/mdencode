@@ -1,4 +1,4 @@
-{"mdfile": [{"Mdtype":"MDheader","FileName":"america.txt","FilePath":"/home/nsross/projects/src/github.com/singularian/mdencode/examples/","Filesize":869,"Blocksize":100,"Modsize":128,"Format":4000,"FileHashlist":"md4:sha512:sha512_224:sha512_256","BlockHashlist":"md4:sha256:sha512:sha512_224:sha512_256","Version":"1.0","Time":"2018-01-07 17:49:31.158409662 -0500 EST"},
+{"mdfile": [{"Mdtype":"MDheader","FileName":"america.txt","FilePath":"/home/nsross/projects/src/github.com/singularian/mdencode/examples/","Filesize":869,"Blocksize":100,"Modsize":128,"Format":4000,"FileHashlist":"md4:sha512:sha512_224:sha512_256","BlockHashlist":"md4:sha256:sha512:sha512_224:sha512_256","Version":"1.0","Time":"2018-01-07 18:03:52.979950666 -0500 EST"},
 {"Mdtype":"File","Hashname":"md4","Filehashlist":"5e7bd13dbf9673088708103fafd93b9f"},
 {"Mdtype":"File","Hashname":"sha512","Filehashlist":"cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e"},
 {"Mdtype":"File","Hashname":"sha512_224","Filehashlist":"6ed0dd02806fa89e25de060c19d3ac86cabb87d6a0ddd05c333b84f4"},
