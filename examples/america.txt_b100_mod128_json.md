@@ -1,4 +1,4 @@
-{"mdfile": [{"Mdtype":"MDheader","FileName":"america.txt","FilePath":"/home/nsross/projects/src/github.com/singularian/mdencode/examples/","Filesize":869,"Blocksize":100,"Modsize":128,"Format":4000,"FileHashlist":"md5:sha1","BlockHashlist":"md5:sha1","Version":"1.0","Time":"2017-12-29 18:42:36.597329707 -0500 EST"},
+{"mdfile": [{"Mdtype":"MDheader","FileName":"america.txt","FilePath":"/home/nsross/projects/src/github.com/singularian/mdencode/examples/","Filesize":869,"Blocksize":100,"Modsize":128,"Format":4000,"FileHashlist":"md5:sha1","BlockHashlist":"md5:sha1","Version":"1.0","Time":"2018-01-07 17:33:17.638996416 -0500 EST"},
 {"Mdtype":"File","Hashname":"md5","Filehashlist":"0132dbb5d9752c1fbf450f8a44807509"},
 {"Mdtype":"File","Hashname":"sha1","Filehashlist":"da39a3ee5e6b4b0d3255bfef95601890afd80709"},
 {"Mdtype":"Block","Blocksize":"100","Hashlist":"df9fa1c253580d146a267f84d4df6258:cfa8afe6eae65c5c38c3b58cd7e19d327047b3ef","Modexp":"798","Mod":"140095694829749756065515465871410095730"},
