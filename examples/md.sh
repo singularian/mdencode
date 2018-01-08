@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# this is a simple bash script to mdencode a file signature with an output 
+# this is a simple bash script to mdencode a file signature with an output filename and signature
 # it specifies the block size and modulus size and format
 # it also can include the block and file signatures 
 
