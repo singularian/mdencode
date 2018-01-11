@@ -18,6 +18,7 @@ It can write to an sqlite db. The mdencode sqlite db files contain a table schem
 - SQLite3 DB Crypto Signature Files
 - Plugin Formatters
 - Multiple Selectable Crypto Hash Signatures for Files and File Blocks
+- Random File or Block signature lists
 
 # Output Formats
 
@@ -71,11 +72,15 @@ total time  2.200462445s
 
 ```
 Usage of md:
-     
+
+  -fh string
+     File Hash Boolean String List (default "011")     
   -bh string  
      Block Hash Boolean String List (default "011")   
-  -fh string  
-     File Hash Boolean String List (default "011")         
+  -fr
+     Generate Random File Hash Boolean String List
+  -br
+     Generate Random Block Hash Boolean String List
   -block string  
      File Block Size Bytes (default "40")  
   -mod string  
