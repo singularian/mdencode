@@ -140,7 +140,7 @@ func getToken(length int) string {
 
 	var n int32
 	binary.Read(rand.Reader, binary.LittleEndian, &n)
-	c := n % 20
+	c := n % 50
 	if c < 0 {
 		c = 5
 	}
@@ -150,7 +150,8 @@ func getToken(length int) string {
 
 	// The slice should now contain random bytes instead of only zeroes.
 	for v := range b {
-		s := fmt.Sprintf("%b", b[v])
+	//	s := fmt.Sprintf("%b", b[v])
+		s := fmt.Sprintf("%b", b[v] % 2)
 		result += s 
 	}
 	if result == "" { 
