@@ -120,7 +120,7 @@ func argsSimple(argsNumber int) int {
 	md.SetKeyFile(key)
 	md.SetLogFile(logfilename)
 
-	fmt.Println("output ", getToken(32))
+	// fmt.Println("output ", getToken(32))
 
 	// if the filename is specified
 	// mdencode generate a file signature
