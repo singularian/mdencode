@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"flag"
 	"os"
+	"crypto/rand"
+	"encoding/binary"
 	"github.com/singularian/mdencode/code/encode/mdEncode/mdEncodeALL"
 )
 
@@ -37,7 +39,11 @@ func argsSimple(argsNumber int) int {
 	var byteblock bool
 	var byteblockint bool
 	var filehashline bool
+	// random
+	var randomfilehash bool
+	var randomblockhash bool
 	var filename string
+	// output file name
 	var outfilename string
 	// logfilename
 	var logfilename string
@@ -49,6 +55,9 @@ func argsSimple(argsNumber int) int {
 	flag.IntVar(&defaultFormat, "format", 4, "Output Format")
 	flag.StringVar(&hashlist, "fh", "011", "File Hash Boolean String List")
 	flag.StringVar(&hashlist2, "bh", "011", "Block Hash Boolean String List")
+	flag.BoolVar(&randomfilehash, "fr", false, "Generate Random File Hash Boolean String List")
+	flag.BoolVar(&randomblockhash, "br", false, "Generate Random Block Hash Boolean String List")
+
 	flag.StringVar(&key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
 	flag.StringVar(&filename, "file", "", "Filename")
 	flag.BoolVar(&appendfile, "append", false, "Append To Output File")
@@ -95,6 +104,13 @@ func argsSimple(argsNumber int) int {
 		os.Exit(1)
 	}
 
+	if randomfilehash {
+		hashlist = getToken(32)
+	}
+	if randomblockhash {
+		hashlist2 = getToken(32)
+	}
+
 	// initialize the mdencode file object
 	var md = mdEncodeALL.Init()
 	md.SetByteBlock(byteblock)
@@ -103,6 +119,8 @@ func argsSimple(argsNumber int) int {
 	md.SetFileHashLine(filehashline)
 	md.SetKeyFile(key)
 	md.SetLogFile(logfilename)
+
+	fmt.Println("output ", getToken(32))
 
 	// if the filename is specified
 	// mdencode generate a file signature
@@ -113,4 +131,44 @@ func argsSimple(argsNumber int) int {
 	// initialize an empty sqlite3 signature db if specified
 	md.InitDB(initdb)
         return 0
+}
+
+
+// generate a rand bit string for the file hash list or block hash list
+func getToken(length int) string {
+	var result string = ""
+
+	var n int32
+	binary.Read(rand.Reader, binary.LittleEndian, &n)
+	c := n % 20
+	if c < 0 {
+		c = 5
+	}
+
+	b := make([]byte, c)
+	_, _ = rand.Read(b)
+
+	// The slice should now contain random bytes instead of only zeroes.
+	for v := range b {
+		s := fmt.Sprintf("%b", b[v])
+		result += s 
+	}
+	if result == "" { 
+		return "1"
+	}
+
+	return result 
+}
+
+func randint64() (int64, error) {
+	var b [8]byte
+	if _, err := rand.Read(b[:]); err != nil {
+		return 0, err
+	}
+	var result = int64(binary.LittleEndian.Uint64(b[:])) % 5
+	// return int64(binary.LittleEndian.Uint64(b[:])), nil
+	if result == 0 {
+		result = 1
+	}
+	return result, nil
 }
