@@ -1,13 +1,11 @@
 # Project mdencode :octocat:
-A message digest signature generator for files with modular floors  
-mdencode is written in golang and uses an interface for pluggin formatters  
-mdencode allows for the creation of sqlite3 db file signatures  
-
-# Overview
+mdencode is a file digital signature generator with modular floors.  
+mdencode is written in golang and uses an interface for pluggin formatters.  
+mdencode allows for the creation of sqlite3 db file signatures and random file signatures. 
 
 This is a golang command line file signature generator with a modular floor.  
 This program can generate a file signature at the file or block level and format and write the output in different formats.  
-It can write to an sqlite db. The mdencode sqlite db files contain a table schema and can be exported into multiple formats.  
+It can also write to an sqlite db. The mdencode sqlite db files contain a table schema and can be exported into multiple formats.  
 
 # Features
 
@@ -18,7 +16,7 @@ It can write to an sqlite db. The mdencode sqlite db files contain a table schem
 - SQLite3 DB Crypto Signature Files
 - Plugin Formatters
 - Multiple Selectable Crypto Hash Signatures for Files and File Blocks
-- Random File or Block signature lists
+- First Random File or Block signature lists
 
 # Output Formats
 
