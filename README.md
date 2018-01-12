@@ -117,16 +117,19 @@ Formats:
 5001    - XML Formatter
 
 Examples:
-md -file=Makefile -block=100 -bh=0 -fh=1 -format=0 -line=true
-md -file=Makefile -block=100 -bh=0 -fh=1111111 -format=10 -line=false
-md -file=Makefile -block=300 -bh=111 -fh=0 -format=10 -line
-md -file=Makefile -block=100 -bh=1100111  -fh=1011111 -format=19 -line=true -out=outputfile
-md -file=Makefile -block=100 -bh=100111   -fh=11000111 -format=19 -append=true -line=true -out=outputfile
-md -file=Makefile -block=100 -bh=10011101 -fh=11000111 -format=3000 -append=true -line=false -out=outputfile.inform
-md -file=Makefile -block=100 -bh=100111   -fh=11000111 -format=4000 -append=true -line=true -out=outputfile.json
-md -file=Makefile -block=1000 -mod=0 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
-md -file=Makefile -block=100 -mod=64 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
-md -file=Makefile -block=100 -mod=128 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
+
+md -file=Makefile -block=100 -fh=1 -bh=0 -format=0 -line=true
+md -file=Makefile -block=100 fh=1111111 -bh=0 -format=10 -line=false
+md -file=Makefile -block=300 -fh=0 -bh=111 -format=10 -line
+md -file=Makefile -block=100 -fh=1011111 -bh=1100111 -format=19 -line=true -out=outputfile
+md -file=Makefile -block=100 -fh=10100111 -bh=100111   -format=19 -append=true -line=true -out=outputfile
+md -file=Makefile -block=100 -fh=1011111101 -bh=10011101 -format=3000 -append=false -line=true -out=outputfile.inform
+md -file=Makefile -block=100 -fh=1011111001 -bh=100111   -format=4000 -append=true -line=true -out=outputfile.json
+md -file=Makefile -block=1000 -mod=0 -fh=1011111 -bh=100111 -format=5000 -append=true -line=true -out=outputfile.xml
+md -file=Makefile -block=100 -mod=64 -fh=1011111 -bh=100111 -format=5000 -append=true -line=true -out=outputfile.xml
+md -file=Makefile -block=100 -mod=128 -fh=1011111 -bh=100111  -format=5000 -append=true -line=true -out=outputfile.xml
+md -file=Makefile -block=350 -mod=32 -fh=101011 -br
+md -file=Makefile -block=300 -mod=32 -fr -br
 ```
 
 # Output Formats
@@ -148,17 +151,18 @@ This is subject to change.
 # Command Line Examples
 
 ```sh
-md -file=Makefile -block=100 -bh=0 -fh=1 -format=0 -line=true
-md -file=Makefile -block=100 -bh=0 -fh=1111111 -format=10 -line=false
-md -file=Makefile -block=300 -bh=111 -fh=0 -format=10 -line
-md -file=Makefile -block=100 -bh=1100111  -fh=1011111 -format=19 -line=true -out=outputfile
-md -file=Makefile -block=100 -bh=100111   -fh=11000111 -format=19 -append=true -line=true -out=outputfile
-md -file=Makefile -block=100 -bh=10011101 -fh=11000111 -format=3000 -append=true -line=false -out=outputfile.inform
-md -file=Makefile -block=100 -bh=100111   -fh=11000111 -format=4000 -append=true -line=true -out=outputfile.json
-md -file=Makefile -block=1000 -mod=0 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
-md -file=Makefile -block=100 -mod=64 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
-md -file=Makefile -block=100 -mod=128 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
-md -file=north.txt -block=250 -mod=32 -fh=101011 -br
+md -file=Makefile -block=100 -fh=1 -bh=0 -format=0 -line=true
+md -file=Makefile -block=100 fh=1111111 -bh=0 -format=10 -line=false
+md -file=Makefile -block=300 -fh=0 -bh=111 -format=10 -line
+md -file=Makefile -block=100 -fh=1011111 -bh=1100111 -format=19 -line=true -out=outputfile
+md -file=Makefile -block=100 -fh=10100111 -bh=100111   -format=19 -append=true -line=true -out=outputfile
+md -file=Makefile -block=100 -fh=1011111101 -bh=10011101 -format=3000 -append=false -line=true -out=outputfile.inform
+md -file=Makefile -block=100 -fh=1011111001 -bh=100111   -format=4000 -append=true -line=true -out=outputfile.json
+md -file=Makefile -block=1000 -mod=0 -fh=1011111 -bh=100111 -format=5000 -append=true -line=true -out=outputfile.xml
+md -file=Makefile -block=100 -mod=64 -fh=1011111 -bh=100111 -format=5000 -append=true -line=true -out=outputfile.xml
+md -file=Makefile -block=100 -mod=128 -fh=1011111 -bh=100111  -format=5000 -append=true -line=true -out=outputfile.xml
+md -file=Makefile -block=350 -mod=32 -fh=101011 -br
+md -file=Makefile -block=300 -mod=32 -fr -br
 ```
 
 # Eample usage
