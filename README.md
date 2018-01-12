@@ -15,7 +15,7 @@ It can also write to an sqlite db. The mdencode sqlite db files contain a table 
 - SQLite3 DB Crypto Signature Files
 - Plugin Formatters
 - Multiple Selectable Crypto Hash Signatures for Files and File Blocks
-- First Random File or Block signature lists
+- The "First" Random File or Block signature lists
 
 # Output Formats
 
@@ -158,6 +158,7 @@ md -file=Makefile -block=100 -bh=100111   -fh=11000111 -format=4000 -append=true
 md -file=Makefile -block=1000 -mod=0 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
 md -file=Makefile -block=100 -mod=64 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
 md -file=Makefile -block=100 -mod=128 -bh=100111 -fh=11000111 -format=5000 -append=true -line=true -out=outputfile.xml
+md -file=north.txt -block=250 -mod=32 -fh=101011 -br
 ```
 
 # Eample usage
