@@ -32,16 +32,17 @@ func argsSimple(argsNumber int) int {
 	// var modsize uint64 
 	var blocksize string
 	var modsize string
-	var hashlist string
-	var hashlist2 string
+	var fhashlist string
+	var bhashlist string
 	var key string
 	var appendfile bool
 	var byteblock bool
 	var byteblockint bool
 	var filehashline bool
-	// random
+	// random hashlist booleans
 	var randomfilehash bool
 	var randomblockhash bool
+	// input signature filename
 	var filename string
 	// output file name
 	var outfilename string
@@ -53,8 +54,8 @@ func argsSimple(argsNumber int) int {
 	flag.StringVar(&blocksize, "block", "40", "File Block Size Bytes")
 	flag.StringVar(&modsize, "mod", "32", "Modulus Size in Bits")
 	flag.IntVar(&defaultFormat, "format", 4, "Output Format")
-	flag.StringVar(&hashlist, "fh", "011", "File Hash Boolean String List")
-	flag.StringVar(&hashlist2, "bh", "011", "Block Hash Boolean String List")
+	flag.StringVar(&fhashlist, "fh", "011", "File Hash Boolean String List")
+	flag.StringVar(&bhashlist, "bh", "011", "Block Hash Boolean String List")
 	flag.BoolVar(&randomfilehash, "fr", false, "Generate Random File Hash Boolean String List")
 	flag.BoolVar(&randomblockhash, "br", false, "Generate Random Block Hash Boolean String List")
 
@@ -107,10 +108,10 @@ func argsSimple(argsNumber int) int {
 	}
 
 	if randomfilehash {
-		hashlist = getToken(32)
+		fhashlist = getToken(32)
 	}
 	if randomblockhash {
-		hashlist2 = getToken(32)
+		bhashlist = getToken(32)
 	}
 
 	// initialize the mdencode file object
@@ -127,7 +128,7 @@ func argsSimple(argsNumber int) int {
 	// if the filename is specified
 	// mdencode generate a file signature
 	if filename != "" {
-		md.Mdencode(blocksize, modsize, defaultFormat, hashlist, hashlist2, filename, outfilename)
+		md.Mdencode(blocksize, modsize, defaultFormat, fhashlist, bhashlist, filename, outfilename)
 	}
 
 	// initialize an empty sqlite3 signature db if specified
