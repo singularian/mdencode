@@ -39,7 +39,6 @@ getlibs:
 fmt:
 	@gofmt -l -w $(SRC)
 clean:
-# rm -r mdencode mdencodeString mdencodeXML mdencodebyteblock mdencodeSQL mdencode.version
-	rm -r ${BUILD_DIR}/*
+	rm -r ${BUILD_DIR}/mdencode ${BUILD_DIR}/md ${BUILD_DIR}/mdnewdb ${BUILD_DIR}/mddbreport
 list:
 	echo "all"
