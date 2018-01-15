@@ -1,5 +1,5 @@
 
-[md][hd][filename]america.txt[filename][filepath]/home/nsross/projects/src/github.com/singularian/mdencode/examples/[filepath][filesize]869[filesize][format]3000[format][blocksize]100[blocksize][modulussize]128[modulussize][hashlist]md4:sha512:sha512_224:sha512_256-md4:sha256:sha512:sha512_224:sha512_256[hashlist][version]1.0[version][time]2018-01-07 18:03:52.970495183 -0500 EST[time][hd]
+[md][hd][filename]america.txt[filename][filepath]/home/nsross/projects/src/github.com/singularian/mdencode/examples/[filepath][filesize]869[filesize][format]3000[format][blocksize]100[blocksize][modulussize]128[modulussize][hashlist]md4:sha512:sha512_224:sha512_256-md4:sha256:sha512:sha512_224:sha512_256[hashlist][version]1.0[version][time]2018-01-15 18:30:20.935941122 -0500 EST[time][hd]
 [filehash][hashname]md4[hashname][hash]5e7bd13dbf9673088708103fafd93b9f[hash][filehash]
 [filehash][hashname]sha512[hashname][hash]cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e[hash][filehash]
 [filehash][hashname]sha512_224[hashname][hash]6ed0dd02806fa89e25de060c19d3ac86cabb87d6a0ddd05c333b84f4[hash][filehash]

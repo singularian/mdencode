@@ -98,10 +98,10 @@ func (md *MdFormat) InitFile() {
 func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64) {
 
         var buffer bytes.Buffer
-	buffer.WriteString(fileName)
+	// buffer.WriteString(fileName)
 
-	buffer.WriteString("\n")
-	buffer.WriteString(filePath)
+	//buffer.WriteString("\n")
+	//buffer.WriteString(filePath)
 
 	var filehashListString = strings.Join(filehashList, ":")
 	var blockhashListString = strings.Join(blockhashList, ":")
@@ -120,6 +120,9 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 
 	switch encodingFormat {
 	case 0:
+		buffer.WriteString(fileName)
+		buffer.WriteString("\n")
+		buffer.WriteString(filePath)
 		buffer.WriteString("\n")
 		buffer.WriteString(fmt.Sprintf("%v", fileSize))
                 buffer.WriteString(":")
@@ -131,6 +134,9 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
                 buffer.WriteString(":")
                 buffer.WriteString(hashListString)
 	case 4:
+		buffer.WriteString(fileName)
+                buffer.WriteString("\n")
+                buffer.WriteString(filePath)
                 buffer.WriteString("\n")
                 buffer.WriteString(fmt.Sprintf("%v", fileSize))
                 buffer.WriteString(":")
@@ -145,6 +151,9 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
                 // add the time
                 buffer.WriteString(fmt.Sprintf("%v", time.Now()))
 	case 5:
+		buffer.WriteString(fileName)
+                buffer.WriteString("\n")
+                buffer.WriteString(filePath)
                 buffer.WriteString("\n")
                 buffer.WriteString(fmt.Sprintf("%v", fileSize))
                 buffer.WriteString(":")
@@ -159,6 +168,9 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
                 // add the time
                 buffer.WriteString(fmt.Sprintf("%v", time.Now()))
 	case 7:
+		buffer.WriteString(fileName)
+                buffer.WriteString("\n")
+                buffer.WriteString(filePath)
                 buffer.WriteString("\n")
                 buffer.WriteString(fmt.Sprintf("%v", fileSize))
                 buffer.WriteString(":")
@@ -175,9 +187,14 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
                 // add the time
                 buffer.WriteString(fmt.Sprintf("%v", time.Now()))
 	default:
-		encodingFormat = 8 
-
+		encodingFormat = 10 
+		buffer.WriteString("filename: ")
+		buffer.WriteString(fileName)
                 buffer.WriteString("\n")
+		buffer.WriteString("filepath: ")
+                buffer.WriteString(filePath)
+                buffer.WriteString("\n")
+		buffer.WriteString("header: ")
                 buffer.WriteString(fmt.Sprintf("%v", fileSize))
                 buffer.WriteString(":")
                 buffer.WriteString(fmt.Sprintf("%v", encodingFormat))
@@ -282,6 +299,7 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
                 // output the block bigint
                 // fmt.Print(":", mod);
 	default:
+		md.print("blockhash: ")
                 md.print(blockSize, ":")
                 md.print(hashListString);
                 md.print(":", modExp);
