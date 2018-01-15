@@ -85,7 +85,9 @@ Usage of md:
   -append  
      Append To Output File     
   -file string  
-     Input filename       
+     Input filename  
+  -dir string
+     Input Directory
   -format int  
      Output Format (default 4)
   -initdb string

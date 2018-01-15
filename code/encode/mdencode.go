@@ -71,8 +71,8 @@ func argsSimple(argsNumber int) int {
 	flag.BoolVar(&fd.randomblockhash, "br", false, "Generate Random Block Hash Boolean String List")
 
 	flag.StringVar(&fd.key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
-	flag.StringVar(&fd.filename, "file", "", "Filename")
-	flag.StringVar(&fd.directory, "dir", "", "Directory")
+	flag.StringVar(&fd.filename, "file", "", "Input Filename")
+	flag.StringVar(&fd.directory, "dir", "", "Input Directory")
 	flag.BoolVar(&fd.appendfile, "append", false, "Append To Output File")
 	flag.BoolVar(&fd.byteblock, "byte", false, "Append the File Byteblock to the Block Hash List")
 	flag.BoolVar(&fd.byteblockint, "blockint", false, "Append the File Byteblock Bigint to the Block Hash List")
