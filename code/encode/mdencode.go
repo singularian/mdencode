@@ -202,7 +202,6 @@ func randint64() (int64, error) {
 func (fd *FlagData) hashDirectory(directory string) {
         files, _ := ioutil.ReadDir(directory)
         for _, file := range files {
-                // fileName := path + string(os.PathSeparator) + file.Name()
                 fileName := directory + string(os.PathSeparator) + file.Name()
 		// need to skip the output file directory
                 if file.IsDir() {
