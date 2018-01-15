@@ -158,6 +158,9 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	bitsize, _ := strconv.ParseInt(modSize, 10, 64)
 
 	// set the filename
+	// remove the directory path if it is prefixed before the directory
+	fileBaseName := filepath.Base(fileName)
+	// set the filename
 	fdata.fileName = fileName
 	// find the fileData file path
 	path, _ := filepath.Abs(fileName)
@@ -221,7 +224,7 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	fdata.setmdFormat(format)
 
 	// encode the File Header
-	fdata.mdfmt.EncodeFileHeader(format, fileName, fdata.filePath, size, blocksize, fdata.fileHashListNames, fdata.blockHashListNames, bitsize)
+	fdata.mdfmt.EncodeFileHeader(format, fileBaseName, fdata.filePath, size, blocksize, fdata.fileHashListNames, fdata.blockHashListNames, bitsize)
 
 	// create a function to hash the entire file as one signature or multiple digital hash signatures
 	// then collisions between the blocks can be resolved because the correct ones will fit together and be verified by the top level signature or signature group
