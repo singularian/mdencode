@@ -11,7 +11,8 @@ BUILD_TIME=`date +%FT%T%z`
 BUILD_DIR=${GOBIN}
 
 # Setup the -ldflags option for go build here, interpolate the variable values
-LDFLAGS=-ldflags "-X github.com/singularian/mdencode/core.Version=${VERSION} -X github.com/singularian/mdencode/core.BuildTime=${BUILD_TIME}"
+# LDFLAGS=-ldflags "-X github.com/singularian/mdencode/core.Version=${VERSION} -X github.com/singularian/mdencode/main.BuildTime=${BUILD_TIME}"
+LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
 
 all:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/md mdencode.go
