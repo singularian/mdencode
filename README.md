@@ -288,7 +288,9 @@ go get -u github.com/mattn/go-sqlite3
 
 ##### Basic Linux / Unix Go Build
 
-~/github.com/singularian/mdencode/code/encode $ make all
+git clone https://github.com/singularian/mdencode.git
+
+/github.com/singularian/mdencode/code/encode $ make all
 
 
 # Donations
