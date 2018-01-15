@@ -14,10 +14,10 @@ BUILD_DIR=${GOBIN}
 LDFLAGS=-ldflags "-X github.com/singularian/mdencode/core.Version=${VERSION} -X github.com/singularian/mdencode/core.BuildTime=${BUILD_TIME}"
 
 all:
-	go build -o ${BUILD_DIR}/md mdencode.go
-	go build -o ${BUILD_DIR}/mdencode mdencode.go
-	go build -o ${BUILD_DIR}/mdnewdb mdnewdb.go
-	go build -o ${BUILD_DIR}/mddbreport mdencodeReport.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/md mdencode.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdencode mdencode.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdnewdb mdnewdb.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mddbreport mdencodeReport.go
 build:
 #	go install mdencode.go
 #	go install mdencodeSQL.go
