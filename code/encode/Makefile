@@ -6,7 +6,7 @@ VERSION=1.0.0
 BUILD_TIME=`date +%FT%T%z`
 
 # BUILD_DIR=../build
-# BUILD_DIR=${GOPATH}src/github.com/singularian/mdencode_private/code/build
+# BUILD_DIR=${GOPATH}src/github.com/singularian/mdencode/code/build
 # BUILD_DIR=${GOPATH}/bin
 BUILD_DIR=${GOBIN}
 
