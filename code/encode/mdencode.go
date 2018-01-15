@@ -9,6 +9,8 @@ import (
 	"encoding/binary"
 	"flag"
 	"fmt"
+        // "io"
+        "io/ioutil"
 	"github.com/singularian/mdencode/code/encode/mdEncode/mdEncodeALL"
 	"os"
 )
@@ -18,12 +20,40 @@ var (
 	BuildTime = "2015-06-16-0431 UTC"
 )
 
+// mdencode struct
+type FlagData struct {
+	defaultFormat int
+        // var blocksize uint64
+        // var modsize uint64
+        blocksize string
+        modsize string
+        fhashlist string
+        bhashlist string
+        key string
+        appendfile bool
+        byteblock bool
+        byteblockint bool
+        filehashline bool
+        // random hashlist booleans
+        randomfilehash bool
+        randomblockhash bool
+        // input signature filename
+        filename string
+        // input directory name
+        directory string
+        // output file name
+        outfilename string
+        // logfilename
+        logfilename string
+        // initialize sqlite3 md db
+        initdb string
+	md *mdEncodeALL.FileData
+}
+
 func main() {
 
 	var argsNumber int = len(os.Args)
-
 	argsSimple(argsNumber)
-
 	os.Exit(0)
 
 }
@@ -31,47 +61,25 @@ func main() {
 // mdencode file
 func argsSimple(argsNumber int) int {
 
-	var defaultFormat int = 4
-	// var blocksize uint64
-	// var modsize uint64
-	var blocksize string
-	var modsize string
-	var fhashlist string
-	var bhashlist string
-	var key string
-	var appendfile bool
-	var byteblock bool
-	var byteblockint bool
-	var filehashline bool
-	// random hashlist booleans
-	var randomfilehash bool
-	var randomblockhash bool
-	// input signature filename
-	var filename string
-	// output file name
-	var outfilename string
-	// logfilename
-	var logfilename string
-	// initialize sqlite3 md db
-	var initdb string
+	fd := new(FlagData)
+	flag.StringVar(&fd.blocksize, "block", "40", "File Block Size Bytes")
+	flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
+	flag.IntVar(&fd.defaultFormat, "format", 4, "Output Format")
+	flag.StringVar(&fd.fhashlist, "fh", "011", "File Hash Boolean String List")
+	flag.StringVar(&fd.bhashlist, "bh", "011", "Block Hash Boolean String List")
+	flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate Random File Hash Boolean String List")
+	flag.BoolVar(&fd.randomblockhash, "br", false, "Generate Random Block Hash Boolean String List")
 
-	flag.StringVar(&blocksize, "block", "40", "File Block Size Bytes")
-	flag.StringVar(&modsize, "mod", "32", "Modulus Size in Bits")
-	flag.IntVar(&defaultFormat, "format", 4, "Output Format")
-	flag.StringVar(&fhashlist, "fh", "011", "File Hash Boolean String List")
-	flag.StringVar(&bhashlist, "bh", "011", "Block Hash Boolean String List")
-	flag.BoolVar(&randomfilehash, "fr", false, "Generate Random File Hash Boolean String List")
-	flag.BoolVar(&randomblockhash, "br", false, "Generate Random Block Hash Boolean String List")
-
-	flag.StringVar(&key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
-	flag.StringVar(&filename, "file", "", "Filename")
-	flag.BoolVar(&appendfile, "append", false, "Append To Output File")
-	flag.BoolVar(&byteblock, "byte", false, "Append the File Byteblock to the Block Hash List")
-	flag.BoolVar(&byteblockint, "blockint", false, "Append the File Byteblock Bigint to the Hash List")
-	flag.BoolVar(&filehashline, "line", false, "File Hash as one line")
-	flag.StringVar(&outfilename, "out", "", "Output Filename")
-	flag.StringVar(&logfilename, "log", "", "Log Filename")
-	flag.StringVar(&initdb, "initdb", "", "Create SQLite3 Empty DB File")
+	flag.StringVar(&fd.key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
+	flag.StringVar(&fd.filename, "file", "", "Filename")
+	flag.StringVar(&fd.directory, "dir", "", "Directory")
+	flag.BoolVar(&fd.appendfile, "append", false, "Append To Output File")
+	flag.BoolVar(&fd.byteblock, "byte", false, "Append the File Byteblock to the Block Hash List")
+	flag.BoolVar(&fd.byteblockint, "blockint", false, "Append the File Byteblock Bigint to the Block Hash List")
+	flag.BoolVar(&fd.filehashline, "line", false, "File Hash as one line")
+	flag.StringVar(&fd.outfilename, "out", "", "Output Filename")
+	flag.StringVar(&fd.logfilename, "log", "", "Log Filename")
+	flag.StringVar(&fd.initdb, "initdb", "", "Create SQLite3 Empty DB File")
 
 	flag.Usage = myUsage
 
@@ -82,30 +90,37 @@ func argsSimple(argsNumber int) int {
 		os.Exit(1)
 	}
 
-	if randomfilehash {
-		fhashlist = getRandomBits(32)
+	if fd.randomfilehash {
+		fd.fhashlist = getRandomBits(32)
 	}
-	if randomblockhash {
-		bhashlist = getRandomBits(32)
+	if fd.randomblockhash {
+		fd.bhashlist = getRandomBits(32)
 	}
 
 	// initialize the mdencode file object
-	var md = mdEncodeALL.Init()
-	md.SetByteBlock(byteblock)
-	md.SetByteBlockBigInt(byteblockint)
-	md.SetAppendFile(appendfile)
-	md.SetFileHashLine(filehashline)
-	md.SetKeyFile(key)
-	md.SetLogFile(logfilename)
+	// var md = mdEncodeALL.Init()
+	fd.md = mdEncodeALL.Init()
+	fd.md.SetByteBlock(fd.byteblock)
+	fd.md.SetByteBlockBigInt(fd.byteblockint)
+	fd.md.SetAppendFile(fd.appendfile)
+	fd.md.SetFileHashLine(fd.filehashline)
+	fd.md.SetKeyFile(fd.key)
+	fd.md.SetLogFile(fd.logfilename)
 
 	// if the filename is specified
 	// mdencode generate a file signature
-	if filename != "" {
-		md.Mdencode(blocksize, modsize, defaultFormat, fhashlist, bhashlist, filename, outfilename)
+	if fd.filename != "" {
+		fd.md.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.filename, fd.outfilename)
+	}
+
+	// if the drectory is specified
+	// mdencode generate a directory signature of all the files
+	if fd.directory != "" {
+		fd.hashDirectory(fd.directory)
 	}
 
 	// initialize an empty sqlite3 signature db if specified
-	md.InitDB(initdb)
+	fd.md.InitDB(fd.initdb)
 	return 0
 }
 
@@ -181,4 +196,20 @@ func randint64() (int64, error) {
 		result = 1
 	}
 	return result, nil
+}
+
+// test directory hash code
+func (fd *FlagData) hashDirectory(directory string) {
+        files, _ := ioutil.ReadDir(directory)
+        for _, file := range files {
+                // fileName := path + string(os.PathSeparator) + file.Name()
+                fileName := directory + string(os.PathSeparator) + file.Name()
+		// need to skip the output file directory
+                if file.IsDir() {
+                        fd.hashDirectory(fileName)
+                } else {
+			fd.md.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outfilename)
+                }
+        }
+
 }
