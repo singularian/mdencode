@@ -20,7 +20,7 @@ var (
 	BuildTime = "2015-06-16-0431 UTC"
 )
 
-// mdencode struct
+// mdencode flag struct
 type FlagData struct {
 	defaultFormat int
         // var blocksize uint64
@@ -47,6 +47,7 @@ type FlagData struct {
         logfilename string
         // initialize sqlite3 md db
         initdb string
+	// mdEncodeAll variable
 	md *mdEncodeALL.FileData
 }
 
@@ -124,6 +125,7 @@ func argsSimple(argsNumber int) int {
 	return 0
 }
 
+// myUsage 
 func myUsage() {
 	fmt.Printf("Usage of %s:\n", os.Args[0])
 	flag.PrintDefaults()
@@ -159,6 +161,7 @@ func myUsage() {
 }
 
 // generate a rand bit string for the file hash list or block hash list
+// this use crypto/rand 
 func getRandomBits(length int) string {
 	var result string = ""
 
@@ -203,7 +206,7 @@ func (fd *FlagData) hashDirectory(directory string) {
         files, _ := ioutil.ReadDir(directory)
         for _, file := range files {
                 fileName := directory + string(os.PathSeparator) + file.Name()
-		// need to skip the output file directory
+		// todo: need to skip the output file so it doesn't process it in the directory
                 if file.IsDir() {
                         fd.hashDirectory(fileName)
                 } else {
