@@ -89,7 +89,7 @@ Usage of md:
   -dir string
      Input Directory
   -format int  
-     Output Format (default 4)
+     Output Format (default 10)
   -initdb string
      Create SQLite3 Empty DB File      
   -key string  
