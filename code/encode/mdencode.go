@@ -64,7 +64,7 @@ func argsSimple(argsNumber int) int {
 	fd := new(FlagData)
 	flag.StringVar(&fd.blocksize, "block", "40", "File Block Size Bytes")
 	flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
-	flag.IntVar(&fd.defaultFormat, "format", 4, "Output Format")
+	flag.IntVar(&fd.defaultFormat, "format", 10, "Output Format")
 	flag.StringVar(&fd.fhashlist, "fh", "011", "File Hash Boolean String List")
 	flag.StringVar(&fd.bhashlist, "bh", "011", "Block Hash Boolean String List")
 	flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate Random File Hash Boolean String List")
