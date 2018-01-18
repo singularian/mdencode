@@ -37,6 +37,7 @@ type FlagData struct {
         // random hashlist booleans
         randomfilehash bool
         randomblockhash bool
+        randomfileblockhash bool
         // input signature filename
         filename string
         // input directory name
@@ -68,8 +69,9 @@ func argsSimple(argsNumber int) int {
 	flag.IntVar(&fd.defaultFormat, "format", 10, "Output Format")
 	flag.StringVar(&fd.fhashlist, "fh", "011", "File Hash Boolean String List")
 	flag.StringVar(&fd.bhashlist, "bh", "011", "Block Hash Boolean String List")
-	flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate Random File Hash Boolean String List")
-	flag.BoolVar(&fd.randomblockhash, "br", false, "Generate Random Block Hash Boolean String List")
+	flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate A Random File Hash Boolean String List")
+	flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random Block Hash Boolean String List")
+	flag.BoolVar(&fd.randomfileblockhash, "fbr", false, "Generate A Random File and Block Hash Boolean String List")
 
 	flag.StringVar(&fd.key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
 	flag.StringVar(&fd.filename, "file", "", "Input Filename")
@@ -95,6 +97,10 @@ func argsSimple(argsNumber int) int {
 		fd.fhashlist = getRandomBits(32)
 	}
 	if fd.randomblockhash {
+		fd.bhashlist = getRandomBits(32)
+	}
+	if fd.randomfileblockhash {
+		fd.fhashlist = getRandomBits(32)
 		fd.bhashlist = getRandomBits(32)
 	}
 

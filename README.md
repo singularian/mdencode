@@ -78,6 +78,8 @@ Usage of md:
      Generate Random File Hash Boolean String List
   -br
      Generate Random Block Hash Boolean String List
+  -fbr
+     Generate A Random File and Block Hash Boolean String List
   -block string  
      File Block Size Bytes (default "40")  
   -mod string  
