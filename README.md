@@ -75,9 +75,9 @@ Usage of md:
   -bh string  
      Block Hash Boolean String List (default "011")   
   -fr
-     Generate Random File Hash Boolean String List
+     Generate A Random File Hash Boolean String List
   -br
-     Generate Random Block Hash Boolean String List
+     Generate A Random Block Hash Boolean String List
   -fbr
      Generate A Random File and Block Hash Boolean String List
   -block string  
