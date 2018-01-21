@@ -260,8 +260,9 @@ It is possible to use a modular scan to find matching byte blocks associated wit
 A digital signature package or group can consist of 1 or more block and file signatures. 
 A modular floor is generaly computed at the block level for a file byte block and utilizes a big integer.
 
-fileblockbigint = mod * n + modremainder where n equals 0 to x  
-fileblockbigint = mod ^ exp + mod * n + modremainder where n equals 0 to x  
+modremainder    = fileblockbigint % modulus  
+fileblockbigint = modulus * n + modremainder where n equals 0 to x  
+fileblockbigint = modulus ^ exponent + modulus * n + modremainder where n equals 0 to m    
 
 This is an example of the modular floor.
 ```
