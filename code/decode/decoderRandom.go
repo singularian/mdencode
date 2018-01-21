@@ -28,7 +28,7 @@ func main() {
 
 	// 8 bytes ran in 24 hours
 	//	decode("8", "24", "61", "7544937", "b597b21cd5ddcde0944cc7734d2f5da9", "19cfdd42d9389ee1a7709194020ce055e2493e05")
-	// modulusScanRandom(8, "24")
+	modulusScanRandom(8, "24")
 	os.Exit(0)
 }
 
@@ -52,6 +52,7 @@ func modulusScanRandom(blockSize int, modSize string) {
         // create the biginteger representation of the bytes
         blockBigInt := new(big.Int)
         blockBigInt.SetBytes(bytes)
+	var blockBigIntstring = blockBigInt.String()
 
         // calculate the modulus remainder
         fileblockmodulus := new(big.Int)
@@ -73,6 +74,7 @@ func modulusScanRandom(blockSize int, modSize string) {
         md5hash.Write([]byte(bytes))
         var md5sum = hex.EncodeToString(md5hash.Sum(nil))
 
+        fmt.Println("random ", blockSize, " bytes ", bytes, " ", blockBigIntstring)
         fmt.Println("random ", blockSize, " bytes ", bytes)
         fmt.Println("modulus size bits ", bitsize)
         fmt.Println("byte modulus ", modulusBigIntString)
@@ -124,8 +126,10 @@ func decode(blockSize string, modbitSize string, modexp string, remainder string
         fmt.Println("modulo bigint ", modulostr)
 	log.Println("modulo bigint", modulostr)
 
-        // module exponent floor and ceiling
-        // 2 to the power 1 number less than greater than the block number
+        // calculate the module exponent floor and ceiling
+	// the base in the exponent is 2 it can also be the modulus to some power less than the big block int
+        // floor = 2 to the power
+	// ceil = 2 to the power + 1 number less than greater than the block number
 	floor, _ := strconv.ParseInt(modexp, 10, 64)
 	ceil := floor + 1
         var modfloor, modexponent = big.NewInt(2), big.NewInt(floor)
@@ -135,15 +139,11 @@ func decode(blockSize string, modbitSize string, modexp string, remainder string
         modulofloorstr :=  fmt.Sprint(modfloor)
         moduloceilstr :=  fmt.Sprint(modceil)
 
-        fmt.Println("modulo floor ", modulofloorstr)
-        fmt.Println("modulo ceil ", moduloceilstr)
+	fmt.Println("modulo floor ", modulofloorstr, " ceil ", moduloceilstr)
 	log.Println("modulo floor ", modulofloorstr, " ceil ", moduloceilstr)
 
-	// calcluate the 2^exp mod floor
-	mod := new(big.Int)
-        mod = modfloor.Mod(modfloor, i);
-	mod = mod.Sub(modfloor, mod)
-
+	// I think there is a bug here 
+	// with the exponent
 
         // fmt.Println("buf ", buf)
 
@@ -156,16 +156,48 @@ func decode(blockSize string, modbitSize string, modexp string, remainder string
         // mod := new(big.Int)
         // mod = z.Mod(z, i);
 
+	log.Println("modulo floor ", modexp, " ", modulofloorstr, " ceil ", moduloceilstr)
+	fmt.Println("modulo floor UUUU ", modexp, " ", modulofloorstr, " ceil ", moduloceilstr, " mod ", i)
+
+        // calcluate the 2^exp mod floor
+	// this converts the 2^exponent to modulus*n for the modfloor + the remainder
+	modremainder := new(big.Int)
+	fmt.Println("modulo floor ", modfloor)
+	modremainder = convertFloorBase2(modfloor, i)
+	// os.Exit(0)
+        
+/*
+        log.Println("modulo floor ", fmt.Sprint(modfloor))
+        log.Println("modulo i ", fmt.Sprint(i))
+        log.Println("modulo remainder ", fmt.Sprint(modremainder))
+
+	fmt.Println("modulo floor ", fmt.Sprint(modfloor))
+        fmt.Println("modulo i ", fmt.Sprint(i))
+        fmt.Println("modulo remainder ", fmt.Sprint(modremainder))
+
         // start with remainder
         remainderString, _ := strconv.ParseInt(remainder, 10, 64)
         modstart := big.NewInt(remainderString);
 
+	fmt.Println("modulo remainder ", modstart)
 	log.Println("modulo remainder ", modstart)
 
 	// add the modular floor two to the exponent mod modulus
-	modstart = modstart.Add(modstart, mod)
+	// not working
+	modstart = modstart.Add(modstart, modremainder)
 
+	fmt.Println("modstart test result ", fmt.Sprint(modstart), " ", fmt.Sprint(modremainder))
+	log.Println("modstart test result ", fmt.Sprint(modstart))
+*/
+	// this adds the modulus remainder + the modulus exponent converted from base 2
+	remainderString, _ := strconv.ParseInt(remainder, 10, 64)
+        modstart := big.NewInt(remainderString);
+	modstart = modstart.Add(modstart, modremainder)
 
+        fmt.Println("modstart test result ", fmt.Sprint(modstart), " ", fmt.Sprint(modremainder))
+        log.Println("modstart test result ", fmt.Sprint(modstart))
+
+	// create the hash contexts
         md5  := md5.New()
         sha1 := sha1.New()
 
@@ -243,4 +275,34 @@ func logN(fileblockint *big.Int, base *big.Int) int {
 
         return exponent
 
+}
+
+// converts 2 ^ exp to the modulus floor
+func convertFloorBase2 (modfloor *big.Int, modi *big.Int) *big.Int {
+
+	mfloor := big.NewInt(0)
+        mfloor = mfloor.Set(modfloor)
+        zero := big.NewInt(0)
+        modremainder := new(big.Int)
+        modremainder = modfloor.Mod(modfloor, modi);
+        gt := modremainder.Cmp(zero)
+
+	fmt.Println("mfloor ", mfloor, " ", modfloor)
+
+        // if the remainder is zero set modremainder to modfloor
+        if gt == 0 {
+                fmt.Println("modulo floor equals zero ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
+                modremainder = modremainder.Set(mfloor)
+                fmt.Println("modulo floor equals zero setting ", fmt.Sprint(modremainder), " ", mfloor)
+        // otherwise subtract the modremainder from modfloor
+        } else {
+                fmt.Println("modulo floor greater than zero ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
+                // modremainder = mfloor
+                modremainder = modremainder.Sub(modfloor, modremainder)
+                fmt.Println("modulo floor sub ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
+        }
+	remstring := modremainder.String()
+	fmt.Println("modremainder ", modremainder, " ", remstring)
+	// return 0
+	return modremainder
 }
