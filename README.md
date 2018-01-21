@@ -286,7 +286,34 @@ modulo ceil  281474976710656
 Found Block  [192 23 56 135 142 160]
 total time  69.720817ms
 ```
+This example of decoderRandom uses a 32-bit and 24-bit modulus to calculate a 6 byte block associated with an sha1 and md5 signature.
+```
+random bytes  [250 247 120 133 98 151]
+modulus size bits  32
+byte modulus  4294967296
+block modulus  2022007447
+modulus exponent  47
+shasum  6efefe38f54ea745d3b4706c6df99ae6a8b77b53
+md5sum  39eaf9054ece8be6696f013021f8447b
+modulo bigint  4294967296
+modulo floor  140737488355328
+modulo ceil  281474976710656
+Found Block  [250 247 120 133 98 151]
+total time  98.79705ms
 
+random bytes  [64 43 191 64 191 16]
+modulus size bits  24
+byte modulus  16777216
+block modulus  4243216
+modulus exponent  46
+shasum  7a244a6cdb4fb24d8c37ca34ff7b5ab349fc241d
+md5sum  a7910c15d7a9bd190335dc1c0ef755fd
+modulo bigint  16777216
+modulo floor  70368744177664
+modulo ceil  140737488355328
+Found Block  [64 43 191 64 191 16]
+total time  4.461464034s
+```
 
 # Go Library Dependencies
 

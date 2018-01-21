@@ -25,7 +25,8 @@ import (
 // it then runs it through the modulus scan
 func main() {
 
-	modulusScanRandom(6)
+	modulusScanRandom(6, "32")
+	modulusScanRandom(6, "24")
 
 	// 8 bytes ran in 24 hours
 	//	decode("8", "24", "61", "7544937", "b597b21cd5ddcde0944cc7734d2f5da9", "19cfdd42d9389ee1a7709194020ce055e2493e05")
@@ -33,13 +34,13 @@ func main() {
 }
 
 // run a modulus scan on a random byte array
-func modulusScanRandom(blockSize int) {
+func modulusScanRandom(blockSize int, modSize string) {
         // create a random 6 byte array
         bytes := make([]byte, blockSize)
         _, _ = rand.Read(bytes)
 
         // process the modulus bitsize argument
-        var modSize = "32"
+        // var modSize = "32"
         bitsize, _ := strconv.ParseInt(modSize, 10, 64)
 
         // create the modulus bigint 2 to the bitsize exponent
