@@ -9,7 +9,7 @@ import (
 	"encoding/binary"
 	"flag"
 	"fmt"
-        // "io"
+	"path/filepath"
         "io/ioutil"
 	"github.com/singularian/mdencode/code/encode/mdEncode/mdEncodeALL"
 	"os"
@@ -38,12 +38,15 @@ type FlagData struct {
         randomfilehash bool
         randomblockhash bool
         randomfileblockhash bool
+	// current working directory
+	cwd string
+	cwdoutputfile string
         // input signature filename
         filename string
         // input directory name
         directory string
         // output file name
-        outfilename string
+        outputfilename string
         // logfilename
         logfilename string
         // initialize sqlite3 md db
@@ -70,8 +73,11 @@ func argsSimple(argsNumber int) int {
 	flag.StringVar(&fd.fhashlist, "fh", "011", "File Hash Boolean String List")
 	flag.StringVar(&fd.bhashlist, "bh", "011", "Block Hash Boolean String List")
 	flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate A Random File Hash Boolean String List")
-	flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random Block Hash Boolean String List")
-	flag.BoolVar(&fd.randomfileblockhash, "fbr", false, "Generate A Random File and Block Hash Boolean String List")
+	flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random File Hash Boolean String List")
+	flag.BoolVar(&fd.randomfileblockhash, "fbr", false, "Generate A Random File Hash Boolean String List")
+	flag.BoolVar(&fd.randomfilehash, "fhr", false, "Generate A Random File Hash Boolean String List")
+	flag.BoolVar(&fd.randomblockhash, "bhr", false, "Generate A Random Block Hash Boolean String List")
+	flag.BoolVar(&fd.randomfileblockhash, "fbhr", false, "Generate A Random File and Block Hash Boolean String List")
 
 	flag.StringVar(&fd.key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
 	flag.StringVar(&fd.filename, "file", "", "Input Filename")
@@ -80,11 +86,11 @@ func argsSimple(argsNumber int) int {
 	flag.BoolVar(&fd.byteblock, "byte", false, "Append the File Byteblock to the Block Hash List")
 	flag.BoolVar(&fd.byteblockint, "blockint", false, "Append the File Byteblock Bigint to the Block Hash List")
 	flag.BoolVar(&fd.filehashline, "line", false, "File Hash as one line")
-	flag.StringVar(&fd.outfilename, "out", "", "Output Filename")
+	flag.StringVar(&fd.outputfilename, "out", "", "Output Filename")
 	flag.StringVar(&fd.logfilename, "log", "", "Log Filename")
 	flag.StringVar(&fd.initdb, "initdb", "", "Create SQLite3 Empty DB File")
 
-	flag.Usage = myUsage
+	flag.Usage = printUsage
 
 	flag.Parse()
 
@@ -92,6 +98,9 @@ func argsSimple(argsNumber int) int {
 		flag.Usage()
 		os.Exit(1)
 	}
+
+	// set the current working directory
+	fd.getCWD()
 
 	if fd.randomfilehash {
 		fd.fhashlist = getRandomBits(32)
@@ -103,7 +112,7 @@ func argsSimple(argsNumber int) int {
 		fd.fhashlist = getRandomBits(32)
 		fd.bhashlist = getRandomBits(32)
 	}
-
+	
 	// initialize the mdencode file object
 	// var md = mdEncodeALL.Init()
 	fd.md = mdEncodeALL.Init()
@@ -117,13 +126,13 @@ func argsSimple(argsNumber int) int {
 	// if the filename is specified
 	// mdencode generate a file signature
 	if fd.filename != "" {
-		fd.md.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.filename, fd.outfilename)
+		fd.md.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.filename, fd.outputfilename)
 	}
 
 	// if the drectory is specified
 	// mdencode generate a directory signature of all the files
 	if fd.directory != "" {
-		fd.hashDirectory(fd.directory)
+		fd.hashDirectory2(fd.directory)
 	}
 
 	// initialize an empty sqlite3 signature db if specified
@@ -131,9 +140,10 @@ func argsSimple(argsNumber int) int {
 	return 0
 }
 
-// myUsage 
-func myUsage() {
+// printUsage 
+func printUsage() {
 	fmt.Printf("Usage of %s:\n", os.Args[0])
+	// flag.defaultUsage()
 	flag.PrintDefaults()
 	fmt.Println()
 
@@ -200,14 +210,13 @@ func randint64() (int64, error) {
 		return 0, err
 	}
 	var result = int64(binary.LittleEndian.Uint64(b[:])) % 5
-	// return int64(binary.LittleEndian.Uint64(b[:])), nil
 	if result == 0 {
 		result = 1
 	}
 	return result, nil
 }
 
-// test directory hash code
+// test directory hash code recursivelly
 func (fd *FlagData) hashDirectory(directory string) {
         files, _ := ioutil.ReadDir(directory)
         for _, file := range files {
@@ -216,8 +225,55 @@ func (fd *FlagData) hashDirectory(directory string) {
                 if file.IsDir() {
                         fd.hashDirectory(fileName)
                 } else {
-			fd.md.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outfilename)
+			fd.md.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
                 }
         }
 
+}
+
+// hash directory as a array list
+// this skips the outputfile if it is specified so it doesn't try to recursivelly hash it as it is appended
+// https://gist.github.com/fubarhouse/5ae3fdd5ed5be9e718a92d9b3c780a22
+func (fd *FlagData) hashDirectory2(searchDir string) {
+
+	// find the output filename file path
+        outputpath, _ := filepath.Abs(fd.outputfilename)
+        // find the fileData file directory
+        // dir, _ := filepath.Split(outputpath)
+	// fmt.Println("output file = ", outputpath, " ", dir)
+
+	fileList := make([]string, 0)
+	e := filepath.Walk(searchDir, func(path string, f os.FileInfo, err error) error {
+		if stat, err := os.Stat(path); err == nil && !stat.IsDir() {
+			fileList = append(fileList, path)
+		}
+		return err
+	})
+	
+	if e != nil {
+		panic(e)
+	}
+
+	for _, fileName := range fileList {
+		// fmt.Println(fileName)
+		// skip the output file if it is specified
+		if ((fileName != outputpath) && (fd.outputfilename != "")) {
+			fd.md.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
+		}
+	}
+
+}
+
+// https://jsonlint.com/
+// probably don't need this
+// get the current working directory for the mdencode
+func (fd *FlagData) getCWD() string {
+	cwddir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	fd.cwd = cwddir
+
+	return cwddir
 }

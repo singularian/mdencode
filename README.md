@@ -43,27 +43,6 @@ This is a partial list of the digital signatures. More can be added to the signa
 - Whirlpool
 
 
-# Modular Floor
-
-This program uses a modular floor paired with a package of digital signatures. This makes the digital signature more unique. A modular floor consists of a polynomial
-which is the modular exponent plus n times the modulus plus the remainder. It is possible to use a modular scan to find matching byte blocks associated with the digital signature package.
-A digital signature package or group can consist of 1 or more block and file signatures. A modular floor is generaly computed at the block level for a file byte block and utilizes a big integer.
-
-This is an example of the modular floor.  
-```
-$ ./decoder4  
-  
-modulo bigint  16777216  
-modulo floor  35184372088832  
-modulo ceil  70368744177664  
-Found Block  [35 32 84 104 105 115]   [35 32 84 104 105 115]  
-total time  2.438805771s  
-modulo bigint  16777216  
-modulo floor  35184372088832  
-modulo ceil  70368744177664  
-Found Block  [32 110 97 109 101 32]   [32 110 97 109 101 32]  
-total time  2.200462445s  
-```
 
 # Mdencode usage
 
@@ -272,6 +251,33 @@ If zero is specified for the argument it will format and output all the signatur
 ```
 $ mddbreport -file=example.db -fileid=0 -format=100
 ```
+
+# Modular Floor
+
+This program uses a modular floor paired with a package of digital signatures. This makes the digital signature more unique. A modular floor consists of a polynomial
+which is the modular exponent plus n times the modulus plus the remainder. It is possible to use a modular scan to find matching byte blocks associated with the digital signature package.
+A digital signature package or group can consist of 1 or more block and file signatures. A modular floor is generaly computed at the block level for a file byte block and utilizes a big integer.
+
+fileblockbigint = mod * n + modremainder where n equals 0 to x
+fileblockbigint = mod ^ exp + mod * n + modremainder where n equals 0 to x
+
+This is an example of the modular floor.
+```
+$ ./decoder4
+
+modulo bigint  16777216
+modulo floor  35184372088832
+modulo ceil  70368744177664
+Found Block  [35 32 84 104 105 115]   [35 32 84 104 105 115]
+total time  2.438805771s
+modulo bigint  16777216
+modulo floor  35184372088832
+modulo ceil  70368744177664
+Found Block  [32 110 97 109 101 32]   [32 110 97 109 101 32]
+total time  2.200462445s
+```
+
+
 # Go Library Dependencies
 
 go get -u golang.org/x/crypto/blake2s  

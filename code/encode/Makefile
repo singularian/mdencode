@@ -20,6 +20,10 @@ all:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdnewdb mdnewdb.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mddbreport mdencodeReport.go
 build:
+	go build $(LDFLAGS) -o mdBuild/md mdencode.go
+	go build $(LDFLAGS) -o mdBuild/mdencode mdencode.go
+	go build $(LDFLAGS) -o mdBuild/mdnewdb mdnewdb.go
+	go build $(LDFLAGS) -o mdBuild/mddbreport mdencodeReport.go
 #	go install mdencode.go
 #	go install mdencodeSQL.go
 #	go install ${BUILD_DIR}/mdencodeSQL
@@ -41,5 +45,6 @@ fmt:
 	@gofmt -l -w $(SRC)
 clean:
 	rm -r ${BUILD_DIR}/mdencode ${BUILD_DIR}/md ${BUILD_DIR}/mdnewdb ${BUILD_DIR}/mddbreport
+	rm -r mdBuild/md mdBuild/mdencode mdBuild/mdnewdb mdBuild/mddbreport
 list:
 	echo "all"
