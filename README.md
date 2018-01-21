@@ -286,7 +286,7 @@ It calculated and found a hashed 6 byte block in two seconds on a Pentium n3700.
 `$GOPATH/github.com/singularian/mdencode/code/decode/decoderRandom`
 ```
 $ ./decoderRandom
-random bytes  [175 149 193 192 35 31]
+random  6  bytes  [175 149 193 192 35 31]
 modulus size bits  32
 byte modulus  4294967296
 block modulus  3250594591
@@ -303,7 +303,7 @@ random bytestring and modulusscan bytestring match  [175 149 193 192 35 31]   [1
 This example of decoderRandom uses a 32-bit and 24-bit modulus to calculate a 6 byte block associated with an sha1 and md5 signature.
 ```
 $ ./decoderRandom
-random bytes  [139 111 156 34 193 144]
+random  6  bytes  [139 111 156 34 193 144]
 modulus size bits  32
 byte modulus  4294967296
 block modulus  2619523472
@@ -317,7 +317,7 @@ Found Block  [139 111 156 34 193 144]
 total time  58.27042ms
 random bytestring and modulusscan bytestring match  [139 111 156 34 193 144]   [139 111 156 34 193 144]
 
-random bytes  [221 166 184 36 29 8]
+random  6  bytes   [221 166 184 36 29 8]
 modulus size bits  24
 byte modulus  16777216
 block modulus  2366728
