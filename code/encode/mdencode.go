@@ -112,7 +112,7 @@ func argsSimple(argsNumber int) int {
 		fd.fhashlist = getRandomBits(32)
 		fd.bhashlist = getRandomBits(32)
 	}
-	
+
 	// initialize the mdencode file object
 	// var md = mdEncodeALL.Init()
 	fd.md = mdEncodeALL.Init()
@@ -132,7 +132,7 @@ func argsSimple(argsNumber int) int {
 	// if the drectory is specified
 	// mdencode generate a directory signature of all the files
 	if fd.directory != "" {
-		fd.hashDirectory2(fd.directory)
+		fd.hashDirectory(fd.directory)
 	}
 
 	// initialize an empty sqlite3 signature db if specified
@@ -217,7 +217,7 @@ func randint64() (int64, error) {
 }
 
 // test directory hash code recursivelly
-func (fd *FlagData) hashDirectory(directory string) {
+func (fd *FlagData) hashDirectoryRecursive(directory string) {
         files, _ := ioutil.ReadDir(directory)
         for _, file := range files {
                 fileName := directory + string(os.PathSeparator) + file.Name()
@@ -234,7 +234,7 @@ func (fd *FlagData) hashDirectory(directory string) {
 // hash directory as a array list
 // this skips the outputfile if it is specified so it doesn't try to recursivelly hash it as it is appended
 // https://gist.github.com/fubarhouse/5ae3fdd5ed5be9e718a92d9b3c780a22
-func (fd *FlagData) hashDirectory2(searchDir string) {
+func (fd *FlagData) hashDirectory(searchDir string) {
 
 	// find the output filename file path
         outputpath, _ := filepath.Abs(fd.outputfilename)
@@ -249,7 +249,7 @@ func (fd *FlagData) hashDirectory2(searchDir string) {
 		}
 		return err
 	})
-	
+
 	if e != nil {
 		panic(e)
 	}
