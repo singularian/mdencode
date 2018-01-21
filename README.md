@@ -301,8 +301,13 @@ go get -u github.com/mattn/go-sqlite3
 
 git clone https://github.com/singularian/mdencode.git
 
+make all builds mdencode to gobin by default
+
 /github.com/singularian/mdencode/code/encode $ make all
 
+make build builds the mdencode to the mdBuild directory
+
+/github.com/singularian/mdencode/code/encode $ make build
 
 # Donations
 
