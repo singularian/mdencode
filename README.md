@@ -290,6 +290,7 @@ random bytestring and modulusscan bytestring match  [175 149 193 192 35 31]   [1
 ```
 This example of decoderRandom uses a 32-bit and 24-bit modulus to calculate a 6 byte block associated with an sha1 and md5 signature.
 ```
+$ ./decoderRandom
 random bytes  [139 111 156 34 193 144]
 modulus size bits  32
 byte modulus  4294967296
