@@ -25,20 +25,26 @@ import (
 // it then runs it through the modulus scan
 func main() {
 
-	// create a random 6 byte array
+	modulusScanRandom()
+
+	// 8 bytes ran in 24 hours
+	//	decode("8", "24", "61", "7544937", "b597b21cd5ddcde0944cc7734d2f5da9", "19cfdd42d9389ee1a7709194020ce055e2493e05")
+	os.Exit(0)
+}
+
+func modulusScanRandom() {
+        // create a random 6 byte array
         bytes := make([]byte, 6)
         _, _ = rand.Read(bytes)
 
         // process the modulus bitsize argument
-	var modSize = "32"
+        var modSize = "32"
         bitsize, _ := strconv.ParseInt(modSize, 10, 64)
 
         // create the modulus bigint 2 to the bitsize exponent
         var modulusBigInt, e = big.NewInt(2), big.NewInt(bitsize)
-	modulusBigInt = modulusBigInt.Exp(modulusBigInt, e, nil)
-	var modulusBigIntString = modulusBigInt.String()
-
-	fmt.Println("random bytes ", bytes)
+        modulusBigInt = modulusBigInt.Exp(modulusBigInt, e, nil)
+        var modulusBigIntString = modulusBigInt.String()
 
         // create the biginteger representation of the bytes
         blockBigInt := new(big.Int)
@@ -49,29 +55,32 @@ func main() {
         fileblockmodulus = fileblockmodulus.Mod(blockBigInt, modulusBigInt)
         var blockmod = fileblockmodulus.String()
 
-	// calculate the modulus exponent
-	two := big.NewInt(2)
-	modexp := logN(blockBigInt, two)
-	s := strconv.Itoa(modexp)
+        // calculate the modulus exponent
+        two := big.NewInt(2)
+        modexp := logN(blockBigInt, two)
+        s := strconv.Itoa(modexp)
 
-	h := sha1.New()
+        h := sha1.New()
         h.Write([]byte(bytes))
         var shasum =  hex.EncodeToString(h.Sum(nil))
 
-	md5hash := md5.New()
-	md5hash.Write([]byte(bytes))
-	var md5sum = hex.EncodeToString(md5hash.Sum(nil))
+        md5hash := md5.New()
+        md5hash.Write([]byte(bytes))
+        var md5sum = hex.EncodeToString(md5hash.Sum(nil))
 
-	fmt.Println("shasum ", shasum);
-	fmt.Println("md5sum ", md5sum);
-	fmt.Println("modulus ", modulusBigIntString, "blockmod ", blockmod, " modexp ", modexp);
+        fmt.Println("random bytes ", bytes)
+        fmt.Println("modulus size bits ", bitsize)
+        fmt.Println("byte modulus ", modulusBigIntString)
+        fmt.Println("block modulus ", blockmod)
+        fmt.Println("modulus exponent ", modexp)
+
+        fmt.Println("shasum ", shasum);
+        fmt.Println("md5sum ", md5sum);
 
 
-	decode("6", modSize, s, blockmod, md5sum, shasum)
+        decode("6", modSize, s, blockmod, md5sum, shasum)
 
-	// 8 bytes ran in 24 hours
-	//	decode("8", "24", "61", "7544937", "b597b21cd5ddcde0944cc7734d2f5da9", "19cfdd42d9389ee1a7709194020ce055e2493e05")
-	os.Exit(0)
+
 }
 
 func decode(blockSize string, modbitSize string, modexp string, remainder string, md5hex string, sha1hex string) int {
@@ -81,7 +90,7 @@ func decode(blockSize string, modbitSize string, modexp string, remainder string
         var hashtwo string  = sha1hex
 
 	//create log file with desired read/write permissions
-        f, err := os.OpenFile("decoder4.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+        f, err := os.OpenFile("decoderRandom.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
         if err != nil {
                 log.Fatal(err)
         }
@@ -91,7 +100,7 @@ func decode(blockSize string, modbitSize string, modexp string, remainder string
         log.SetOutput(f)
 
 	start := time.Now()
-	log.Println("Starting decoder4")
+	log.Println("Starting decoderRandom")
 
         blocksize, _ := strconv.ParseInt(blockSize, 10, 64)
         buf := make([]byte, blocksize)
@@ -167,8 +176,8 @@ func decode(blockSize string, modbitSize string, modexp string, remainder string
 			// fmt.Println("md5 sha1 ", hex.EncodeToString(md5.Sum(nil)), " ", hex.EncodeToString(sha1.Sum(nil)))
 
 			if md5string == hashone && sha1string == hashtwo {
-				fmt.Println("Found Block ", buf, " ", bigbytes)
-				log.Println("Found Block ", buf, " ", bigbytes)
+				fmt.Println("Found Block ", buf)
+				log.Println("Found Block ", buf)
 				break
 			}
 			sha1.Reset()
