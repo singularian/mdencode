@@ -264,7 +264,8 @@ modremainder    = fileblockbigint % modulus
 fileblockbigint = modulus * n + modremainder where n equals 0 to x  
 fileblockbigint = modulus ^ exponent + modulus * n + modremainder where n equals 0 to m    
 
-This is an example of the modular floor.
+This is an example of the modular floor. The program decoder4 is running a modulus scan to find the corresponding file block associated with a digital signature.  
+It calculated a and found a hashed 6 byte block in two seconds on a Pentium n3700.
 ```
 $ ./decoder4
 
