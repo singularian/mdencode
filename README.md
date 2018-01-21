@@ -265,21 +265,20 @@ fileblockbigint = modulus * n + modremainder where n equals 0 to x
 fileblockbigint = modulus ^ exponent + modulus * n + modremainder where n equals 0 to m    
   
 This is an example of the modular floor.  
-The program decoder4 is running a modulus scan to find the corresponding file block associated with a digital signature.  
+The program `decoderRandom` is creating a 6 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
 It calculated a and found a hashed 6 byte block in two seconds on a Pentium n3700.  
 ```
 $ ./decoderRandom
 
-modulo bigint  16777216
-modulo floor  35184372088832
-modulo ceil  70368744177664
-Found Block  [35 32 84 104 105 115]   [35 32 84 104 105 115]
-total time  2.438805771s
-modulo bigint  16777216
-modulo floor  35184372088832
-modulo ceil  70368744177664
-Found Block  [32 110 97 109 101 32]   [32 110 97 109 101 32]
-total time  2.200462445s
+random bytes  [125 5 23 77 26 161]
+shasum  1bcf3c736f8830ddf7546af90b251dda953811e0
+md5sum  a8770cc418b572f41e3a1c9e4a6bcdf3
+modulus  4294967296 blockmod  390929057  modexp  46
+modulo bigint  4294967296
+modulo floor  70368744177664
+modulo ceil  140737488355328
+Found Block  [125 5 23 77 26 161]   [125 5 23 77 26 161]
+total time  43.631044ms
 ```
 
 
