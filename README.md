@@ -48,12 +48,14 @@ This is a partial list of the digital signatures. More can be added to the signa
 This is the mdencode usage.
 mdencode has three main golang programs. 
 
-- md or mdencode
-- mddbreport
-- mdnewdb 
+- md or mdencode - generates file signatures
+- mddbreport - generates formatted signatures dumps of file signatures stored in a mdencode sqlite3 db
+- mdnewdb  - creates new sqlite3 mdencode signatures
+
+mdencode or md can generate a signature for a file or directory and a modular floor
 
 mdencode can generate random file signatures and block signatures.
-mdencode is split into encode and decode.
+mdencode is split into encode and decode parts.
 
 
 ```
@@ -279,7 +281,7 @@ fileblockbigint = modulus ^ exponent x + modulus * n + modremainder where n equa
 This is an example of the modular floor.  
 The program `decoderRandom` is creating a random 6 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
 It creates a random 6 byte array and a 32 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
-It calculated a and found a hashed 6 byte block in two seconds on a Pentium n3700.  
+It calculated and found a hashed 6 byte block in two seconds on a Pentium n3700.  
 
 `$GOPATH/github.com/singularian/mdencode/code/decode/decoderRandom`
 ```
