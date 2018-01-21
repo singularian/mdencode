@@ -28,7 +28,7 @@ func main() {
 
 	// 8 bytes ran in 24 hours
 	//	decode("8", "24", "61", "7544937", "b597b21cd5ddcde0944cc7734d2f5da9", "19cfdd42d9389ee1a7709194020ce055e2493e05")
-	// modulusScanRandom(8, "24")
+	modulusScanRandom(8, "24")
 	os.Exit(0)
 }
 

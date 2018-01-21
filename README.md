@@ -274,9 +274,11 @@ A modular floor is generaly computed at the block level for a file byte block an
 
 The modulus scan polynomial is calculated as follows.
 
+```
 modremainder    = fileblockbigint % modulus  
 fileblockbigint = modulus * n + modremainder where n equals 0 to x  
 fileblockbigint = modulus ^ exponent x + modulus * n + modremainder where n equals 0 to m    
+```
   
 This is an example of the modular floor.  
 The program `decoderRandom` is creating a random 6 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
