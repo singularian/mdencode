@@ -11,7 +11,8 @@ LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X githu
 all:
 	go build -o decoder4 decoder4.go
 	go build -o decoder5 decoder5.go
+	go build -o decoderRandom decoderRandom.go
 clean:
-	rm -r testHash
+	rm -r decoderRandom decoder4 decoder5
 list:
 	echo "all"
