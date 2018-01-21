@@ -75,7 +75,6 @@ func modulusScanRandom(blockSize int, modSize string) {
         var md5sum = hex.EncodeToString(md5hash.Sum(nil))
 
         fmt.Println("random ", blockSize, " bytes ", bytes, " ", blockBigIntstring)
-        fmt.Println("random ", blockSize, " bytes ", bytes)
         fmt.Println("modulus size bits ", bitsize)
         fmt.Println("byte modulus ", modulusBigIntString)
         fmt.Println("block modulus ", blockmod)
