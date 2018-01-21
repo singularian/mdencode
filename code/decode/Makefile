@@ -9,9 +9,8 @@ BUILD_TIME=`date +%FT%T%z`
 LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X github.com/nsross/mdencode/core.BuildTime=${BUILD_TIME}"
 
 all:
-	go build -o decoder4 decoder4.go
 	go build -o decoderRandom decoderRandom.go
 clean:
-	rm -r decoderRandom decoder4
+	rm -r decoderRandom
 list:
 	echo "all"
