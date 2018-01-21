@@ -28,20 +28,20 @@ func main() {
 
 	// 8 bytes ran in 24 hours
 	//	decode("8", "24", "61", "7544937", "b597b21cd5ddcde0944cc7734d2f5da9", "19cfdd42d9389ee1a7709194020ce055e2493e05")
+	// modulusScanRandom(8, "24")
 	os.Exit(0)
 }
 
 // run a modulus scan on a random byte array
 func modulusScanRandom(blockSize int, modSize string) {
-        // create a random 6 byte array
+        // create a random byte array
         bytes := make([]byte, blockSize)
         _, _ = rand.Read(bytes)
-	// var bytestring = string(bytes)
-	// bytestring := bytes.Join(bytes, " ")
+
+	// convert the bytes to a string
 	bytestring := fmt.Sprintf("%v", bytes)
 
         // process the modulus bitsize argument
-        // var modSize = "32"
         bitsize, _ := strconv.ParseInt(modSize, 10, 64)
 
         // create the modulus bigint 2 to the bitsize exponent
@@ -73,7 +73,7 @@ func modulusScanRandom(blockSize int, modSize string) {
         md5hash.Write([]byte(bytes))
         var md5sum = hex.EncodeToString(md5hash.Sum(nil))
 
-        fmt.Println("random bytes ", bytes)
+        fmt.Println("random bytes ", blockSize, " ", bytes)
         fmt.Println("modulus size bits ", bitsize)
         fmt.Println("byte modulus ", modulusBigIntString)
         fmt.Println("block modulus ", blockmod)
