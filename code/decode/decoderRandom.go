@@ -91,6 +91,8 @@ func modulusScanRandom(blockSize int, modSize string) {
 
 }
 
+// calculate the byte block assicated with a blocksize and modulus and modulus exponent with a sha1 and md5 hash
+// this will run the modulus scan decode
 func decode(blockSize string, modbitSize string, modexp string, remainder string, md5hex string, sha1hex string) (int, string) {
 
 
@@ -213,13 +215,12 @@ func decode(blockSize string, modbitSize string, modexp string, remainder string
 	fmt.Println("total time ", elapsed)
 	log.Println("Total time ", elapsed)
 
-	// bufstring := string(buf)
-	// bufstring := bytes.Join(buf, " ")
 	bufstring := fmt.Sprintf("%v", buf)
 
 	return 0, bufstring
 }
 
+// calculate the modulus exponent
 func logN(fileblockint *big.Int, base *big.Int) int {
 
         var exponent int = 1
