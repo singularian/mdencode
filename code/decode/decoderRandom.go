@@ -23,14 +23,23 @@ import (
 // it then runs it through the modulus scan
 func main() {
 
-	modulusScanRandom(6, "32")
-	modulusScanRandom(6, "24")
-
-	// 8 bytes ran in 24 hours
-	//	decode("8", "24", "61", "7544937", "b597b21cd5ddcde0944cc7734d2f5da9", "19cfdd42d9389ee1a7709194020ce055e2493e05")
-	modulusScanRandom(8, "24")
+	testmodulusScanRandom()
 	os.Exit(0)
 }
+
+
+// test method
+func testmodulusScanRandom() {
+
+        modulusScanRandom(6, "32")
+        modulusScanRandom(6, "24")
+
+        // 8 bytes ran in 24 hours
+        //      decode("8", "24", "61", "7544937", "b597b21cd5ddcde0944cc7734d2f5da9", "19cfdd42d9389ee1a7709194020ce055e2493e05")
+        // modulusScanRandom(8, "24")
+
+}
+
 
 // run a modulus scan on a random byte array
 func modulusScanRandom(blockSize int, modSize string) {
@@ -193,8 +202,8 @@ func decode(blockSize string, modbitSize string, modexp string, remainder string
         modstart := big.NewInt(remainderString);
 	modstart = modstart.Add(modstart, modremainder)
 
-        fmt.Println("modstart test result ", fmt.Sprint(modstart), " ", fmt.Sprint(modremainder))
-        log.Println("modstart test result ", fmt.Sprint(modstart))
+        fmt.Println("modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder))
+        log.Println("modstart test result floor ", fmt.Sprint(modstart))
 
 	// create the hash contexts
         md5  := md5.New()
