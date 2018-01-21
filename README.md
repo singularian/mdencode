@@ -45,6 +45,16 @@ This is a partial list of the digital signatures. More can be added to the signa
 
 
 # Mdencode usage
+This is the mdencode usage.
+mdencode has three main golang programs. 
+
+- md or mdencode
+- mddbreport
+- mdnewdb 
+
+mdencode can generate random file signatures and block signatures.
+mdencode is split into encode and decode.
+
 
 ```
 Usage of md:
