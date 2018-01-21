@@ -355,12 +355,17 @@ git clone https://github.com/singularian/mdencode.git
 ```
 make all builds mdencode to gobin by default
 ```
-/github.com/singularian/mdencode/code/encode $ make all
+$GOPATH/github.com/singularian/mdencode/code/encode $ make all
 ```
 
 make build builds the mdencode to the mdBuild directory
 ```
-/github.com/singularian/mdencode/code/encode $ make build
+$GOPATH/github.com/singularian/mdencode/code/encode $ make build
+```
+
+This example builds the mdencode decoder files
+```
+$GOPATH/github.com/singularian/mdencode/code/decode $ make build
 ```
 
 # Donations
