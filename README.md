@@ -254,12 +254,14 @@ $ mddbreport -file=example.db -fileid=0 -format=100
 
 # Modular Floor
 
-This program uses a modular floor paired with a package of digital signatures. This makes the digital signature more unique. A modular floor consists of a polynomial
-which is the modular exponent plus n times the modulus plus the remainder. It is possible to use a modular scan to find matching byte blocks associated with the digital signature package.
-A digital signature package or group can consist of 1 or more block and file signatures. A modular floor is generaly computed at the block level for a file byte block and utilizes a big integer.
+This program uses a modular floor paired with a package of digital signatures. This makes the digital signature more unique. 
+A modular floor consists of a polynomial which is the modular exponent plus n times the modulus plus the remainder. 
+It is possible to use a modular scan to find matching byte blocks associated with the digital signature package.
+A digital signature package or group can consist of 1 or more block and file signatures. 
+A modular floor is generaly computed at the block level for a file byte block and utilizes a big integer.
 
-fileblockbigint = mod * n + modremainder where n equals 0 to x
-fileblockbigint = mod ^ exp + mod * n + modremainder where n equals 0 to x
+fileblockbigint = mod * n + modremainder where n equals 0 to x  
+fileblockbigint = mod ^ exp + mod * n + modremainder where n equals 0 to x  
 
 This is an example of the modular floor.
 ```
