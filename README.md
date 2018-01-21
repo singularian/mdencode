@@ -274,47 +274,49 @@ It calculated a and found a hashed 6 byte block in two seconds on a Pentium n370
 `$GOPATH/github.com/singularian/mdencode/code/decode/decoderRandom`
 ```
 $ ./decoderRandom
-
-random bytes  [192 23 56 135 142 160]
+random bytes  [175 149 193 192 35 31]
 modulus size bits  32
 byte modulus  4294967296
-block modulus  948407968
+block modulus  3250594591
 modulus exponent  47
-shasum  d1a7ad00223297122770521efbe6f1605610ddbe
-md5sum  81830c85c413086de18ab03cc457208b
+shasum  dc483a03987b1e24cc6e235671767b2c6ce17dd1
+md5sum  a09f627e7dc71be69f7d0f20a214864f
 modulo bigint  4294967296
 modulo floor  140737488355328
 modulo ceil  281474976710656
-Found Block  [192 23 56 135 142 160]
-total time  69.720817ms
+Found Block  [175 149 193 192 35 31]
+total time  71.219466ms
+random bytestring and modulusscan bytestring match  [175 149 193 192 35 31]   [175 149 193 192 35 31]
 ```
 This example of decoderRandom uses a 32-bit and 24-bit modulus to calculate a 6 byte block associated with an sha1 and md5 signature.
 ```
-random bytes  [250 247 120 133 98 151]
+random bytes  [139 111 156 34 193 144]
 modulus size bits  32
 byte modulus  4294967296
-block modulus  2022007447
+block modulus  2619523472
 modulus exponent  47
-shasum  6efefe38f54ea745d3b4706c6df99ae6a8b77b53
-md5sum  39eaf9054ece8be6696f013021f8447b
+shasum  af2757f99333d0f693cb70d5ff0e1caaf90cdb50
+md5sum  448497bb2b4327b46de2d7cfc6b351c7
 modulo bigint  4294967296
 modulo floor  140737488355328
 modulo ceil  281474976710656
-Found Block  [250 247 120 133 98 151]
-total time  98.79705ms
+Found Block  [139 111 156 34 193 144]
+total time  58.27042ms
+random bytestring and modulusscan bytestring match  [139 111 156 34 193 144]   [139 111 156 34 193 144]
 
-random bytes  [64 43 191 64 191 16]
+random bytes  [221 166 184 36 29 8]
 modulus size bits  24
 byte modulus  16777216
-block modulus  4243216
-modulus exponent  46
-shasum  7a244a6cdb4fb24d8c37ca34ff7b5ab349fc241d
-md5sum  a7910c15d7a9bd190335dc1c0ef755fd
+block modulus  2366728
+modulus exponent  47
+shasum  c3a9edb837e4d3fbc7a16f24f4f789f2ca758e32
+md5sum  7f5dacfd281a1732880232315e12d3b4
 modulo bigint  16777216
-modulo floor  70368744177664
-modulo ceil  140737488355328
-Found Block  [64 43 191 64 191 16]
-total time  4.461464034s
+modulo floor  140737488355328
+modulo ceil  281474976710656
+Found Block  [221 166 184 36 29 8]
+total time  15.123651922s
+random bytestring and modulusscan bytestring match  [221 166 184 36 29 8]   [221 166 184 36 29 8]
 ```
 
 # Go Library Dependencies

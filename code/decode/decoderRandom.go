@@ -6,14 +6,12 @@ package main
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import ( 
+	// "bytes"
 	"crypto/rand"
 	"fmt"
 	"encoding/hex"
-        _ "golang.org/x/crypto/md4"
         "crypto/md5"
         "crypto/sha1"
-        _ "crypto/sha256"
-        _ "crypto/sha512"
         "math/big"
 	"strconv"
 	"os"
@@ -38,6 +36,9 @@ func modulusScanRandom(blockSize int, modSize string) {
         // create a random 6 byte array
         bytes := make([]byte, blockSize)
         _, _ = rand.Read(bytes)
+	// var bytestring = string(bytes)
+	// bytestring := bytes.Join(bytes, " ")
+	bytestring := fmt.Sprintf("%v", bytes)
 
         // process the modulus bitsize argument
         // var modSize = "32"
@@ -81,13 +82,16 @@ func modulusScanRandom(blockSize int, modSize string) {
         fmt.Println("shasum ", shasum);
         fmt.Println("md5sum ", md5sum);
 
+        _, buffer := decode("6", modSize, s, blockmod, md5sum, shasum)
 
-        decode("6", modSize, s, blockmod, md5sum, shasum)
-
+	if(bytestring == buffer) {
+		fmt.Println("random bytestring and modulusscan bytestring match ", bytestring, " ", buffer)
+		fmt.Println("\n")
+	}
 
 }
 
-func decode(blockSize string, modbitSize string, modexp string, remainder string, md5hex string, sha1hex string) int {
+func decode(blockSize string, modbitSize string, modexp string, remainder string, md5hex string, sha1hex string) (int, string) {
 
 
         var hashone string  = md5hex
@@ -209,7 +213,11 @@ func decode(blockSize string, modbitSize string, modexp string, remainder string
 	fmt.Println("total time ", elapsed)
 	log.Println("Total time ", elapsed)
 
-	return 0
+	// bufstring := string(buf)
+	// bufstring := bytes.Join(buf, " ")
+	bufstring := fmt.Sprintf("%v", buf)
+
+	return 0, bufstring
 }
 
 func logN(fileblockint *big.Int, base *big.Int) int {
