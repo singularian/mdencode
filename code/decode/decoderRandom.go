@@ -138,7 +138,7 @@ func decode(blockSize string, modbitSize string, modexp string, remainder string
         modulofloorstr :=  fmt.Sprint(modfloor)
         moduloceilstr :=  fmt.Sprint(modceil)
 
-	fmt.Println("modulo floor ", modulofloorstr, " ceil ", moduloceilstr)
+	fmt.Println("modulo floor ", modulofloorstr, " ceil ", moduloceilstr, " ", modceiltwo)
 	log.Println("modulo floor ", modulofloorstr, " ceil ", moduloceilstr)
 
 	// I think there is a bug here 
@@ -226,9 +226,10 @@ func decode(blockSize string, modbitSize string, modexp string, remainder string
                 md5.Reset()
 
                 modstart := modstart.Add(modstart, i)
-                gt := modstart.Cmp(modceiltwo)
+                gt := modstart.Cmp(modceil) // have to check this
 
-                if gt < 0 {
+                if gt > 0 {
+			fmt.Println("Not Found Block ", buf, " modstart ", modstart, " mod ceil ", modceil, " ", modceiltwo)
                        break
                 }
 
