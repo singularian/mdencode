@@ -334,6 +334,28 @@ total time  15.123651922s
 random bytestring and modulusscan bytestring match  [221 166 184 36 29 8]   [221 166 184 36 29 8]
 ```
 
+```
+random  7  bytes  [21 209 197 154 67 38 91]   6141621137778267
+modulus size bits  32
+byte modulus  4294967296
+block modulus  2588091995
+modulus exponent  52
+shasum  150bb90a2f5cc13d9ce4b9ca7a97cf9272becf6b
+md5sum  cbaa0f63b037ce8c45b6827462905188
+modulo bigint  4294967296
+modulo floor  4503599627370496  ceil  9007199254740992   2
+modulo floor UUUU  52   4503599627370496  ceil  9007199254740992  mod  4294967296
+modulo floor  4503599627370496
+mfloor  4503599627370496   0
+modulo floor equals zero  0   0
+modulo floor equals zero setting  4503599627370496   4503599627370496
+modremainder  4503599627370496   4503599627370496
+modstart test result floor  4503602215462491  initial remainder  4503599627370496
+Found Block  [21 209 197 154 67 38 91]
+total time  453.257177ms
+random bytestring and modulusscan bytestring match  [21 209 197 154 67 38 91]   [21 209 197 154 67 38 91]
+```
+
 # Go Library Dependencies
 
 go get -u golang.org/x/crypto/blake2s  
