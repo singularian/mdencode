@@ -19,6 +19,17 @@ import (
 	"time"
 )
 
+// mdencode flag struct
+type DecodeData struct {
+	blocksize string
+	modsize string
+	modulusBigInt *big.Int
+	blockBigInt *big.Int
+	fileblockmodulus *big.Int
+        // log writer
+        log *log.Logger
+}
+
 // generates a random n byte array and then hashes it
 // it then runs it through the modulus scan
 func main() {
@@ -46,6 +57,8 @@ func main() {
 // test method
 func testmodulusScanRandom() {
 
+	// fd := new(DecodeData)
+
         modulusScanRandom(6, "32")
         modulusScanRandom(6, "24")
 
@@ -61,6 +74,7 @@ func modulusScanRandom(blockSize int, modSize string) {
         // create a random byte array
         bytes := make([]byte, blockSize)
         _, _ = rand.Read(bytes)
+	blockSizeStr := strconv.Itoa(blockSize)
 
 	// convert the bytes to a string
 	bytestring := fmt.Sprintf("%v", bytes)
@@ -107,7 +121,7 @@ func modulusScanRandom(blockSize int, modSize string) {
         fmt.Println("shasum ", shasum);
         fmt.Println("md5sum ", md5sum);
 
-        _, buffer := decode("6", modSize, s, blockmod, md5sum, shasum)
+        _, buffer := decode(blockSizeStr, modSize, s, blockmod, md5sum, shasum)
 
 	if(bytestring == buffer) {
 		fmt.Println("random bytestring and modulusscan bytestring match ", bytestring, " ", buffer)
@@ -329,4 +343,15 @@ func convertFloorBase2 (modfloor *big.Int, modi *big.Int) *big.Int {
 	fmt.Println("modremainder ", modremainder, " ", remstring)
 	// return 0
 	return modremainder
+}
+
+func setLog() {
+/*
+        logfile, err := os.OpenFile(fdata.logfile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+        if err != nil {
+                fmt.Println("Failed to open log file:", err)
+        }
+        defer logfile.Close()
+        fdata.log = log.New(logfile, "", log.Ldate|log.Ltime|log.Lshortfile)
+*/
 }
