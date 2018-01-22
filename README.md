@@ -356,6 +356,30 @@ total time  453.257177ms
 random bytestring and modulusscan bytestring match  [21 209 197 154 67 38 91]   [21 209 197 154 67 38 91]
 ```
 
+This is a test run of the decoderRandom and an 8-byte block with a 48-bit modulus
+
+```
+random  8  bytes  [177 64 44 204 68 188 251 64]   12772257799060912960
+modulus size bits  48
+byte modulus  281474976710656
+block modulus  49255838186304
+modulus exponent  63
+shasum  6b044398c783f714cdde112bdfa54b3e3fc27478
+md5sum  2927e31d7947053d296ec4c66b740f43
+modulo bigint  281474976710656
+modulo floor  9223372036854775808  ceil  18446744073709551616   2
+modulo floor UUUU  63   9223372036854775808  ceil  18446744073709551616  mod  281474976710656
+modulo floor  9223372036854775808
+mfloor  9223372036854775808   0
+modulo floor equals zero  0   0
+modulo floor equals zero setting  9223372036854775808   9223372036854775808
+modremainder  9223372036854775808   9223372036854775808
+modstart test result floor  9223421292692962112  initial remainder  9223372036854775808
+Found Block  [177 64 44 204 68 188 251 64]
+total time  22.83303ms
+random bytestring and modulusscan bytestring match  [177 64 44 204 68 188 251 64]   [177 64 44 204 68 188 251 64]
+```
+
 # Go Library Dependencies
 
 go get -u golang.org/x/crypto/blake2s  
