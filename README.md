@@ -57,6 +57,10 @@ mdencode or md can generate a signature for a file or directory and a modular fl
 mdencode can generate random file signatures and block signatures.
 mdencode is split into encode and decode parts.
 
+Random file signatures are file signatures that can change block or file hash lists and block size randomly from program executions.
+In one run the mdencode program can run ripe160, sha1, sha224 and whirlpool on a file while in another run it might run just md4 and sha1.
+This allows for a file signature to have the lists randomized and improves security by making signatures unpredictable. The signature lists
+for mdencode are bit strings which can be random bit strings. This allows for the first random file signatures.
 
 ```
 Usage of md:
@@ -334,6 +338,8 @@ total time  15.123651922s
 random bytestring and modulusscan bytestring match  [221 166 184 36 29 8]   [221 166 184 36 29 8]
 ```
 
+This is a modulus scan on a 7 byte random block [21 209 197 154 67 38 91] with a 32-bit modulus.
+
 ```
 random  7  bytes  [21 209 197 154 67 38 91]   6141621137778267
 modulus size bits  32
@@ -356,7 +362,7 @@ total time  453.257177ms
 random bytestring and modulusscan bytestring match  [21 209 197 154 67 38 91]   [21 209 197 154 67 38 91]
 ```
 
-This is a test run of the decoderRandom and an 8-byte block with a 48-bit modulus
+This is a modulus scan test run of the decoderRandom and an 8-byte block with a 48-bit modulus
 
 ```
 random  8  bytes  [177 64 44 204 68 188 251 64]   12772257799060912960
