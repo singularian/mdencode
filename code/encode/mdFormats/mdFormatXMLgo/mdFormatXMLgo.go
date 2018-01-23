@@ -54,6 +54,7 @@ type xmlFile struct {
 
 type xmlBlock struct {
 	Mdtype string
+	Id uint64  `xml:"id"`
 	Blocksize string
 	Hashlist string
 	Modexp string
@@ -72,6 +73,7 @@ func Init(encodingFormat int, fileName string, filePath string, fileSize uint64,
 	md.filePath = filePath
 	md.fileSize = fileSize
 	md.blockSize = blockSize
+	md.blockCount = 0 
 	md.modSize = modulusSize
 	md.mdVersion = version 
 	// set the input hashlist string
@@ -147,7 +149,8 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 	head, err := xml.Marshal(mdj)
 	md.checkError(err)
 
-	md.println(string(head))
+	// md.println(string(head))
+	md.println(strings.ToLower(string(head)))
 
 
 }
@@ -165,7 +168,8 @@ func (md *MdFormat) EncodeFileHash(encodingFormat int, hashName string, hashByte
 	file, err := xml.Marshal(mdj)
         md.checkError(err)
 
-	md.println(string(file))
+	// md.println(string(file))
+	md.println(strings.ToLower(string(file)))
 }
 
 
@@ -181,6 +185,7 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 
         mdj := xmlBlock{
 			Mdtype: "Block",
+			Id: md.blockCount,
                         Blocksize: blocksize,
                         Hashlist: hashListString,
                         Modexp:  modexp,
@@ -189,8 +194,9 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 	block, err := xml.Marshal(mdj)
         md.checkError(err)
 
-	md.println(string(block))
-
+	// md.println(string(block))
+	md.println(strings.ToLower(string(block)))
+	md.blockCount++
 }
 
 

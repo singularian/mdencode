@@ -42,6 +42,7 @@ func Init(encodingFormat int, fileName string, filePath string, fileSize uint64,
 	md.filePath = filePath
 	md.fileSize = fileSize
 	md.blockSize = blockSize
+	md.blockCount = 0
 	md.modSize = modulusSize
 	md.mdVersion = version
 	// set the input hashlist string
@@ -164,6 +165,7 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
         md.print("[mod]", mod, "[mod][b]");
 
 	md.print("\n")
+	md.blockCount++
 }
 
 

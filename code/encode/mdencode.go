@@ -102,6 +102,8 @@ func argsSimple(argsNumber int) int {
 	// set the current working directory
 	fd.getCWD()
 
+	// need to add a combination of fixed and random file signatures
+	// ie you specify 111 for the filehash and -fbr for random and it appends to the file signature instead of over writing it
 	if fd.randomfilehash {
 		fd.fhashlist = getRandomBits(32)
 	}
