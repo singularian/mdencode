@@ -367,7 +367,7 @@ random bytestring and modulusscan bytestring match  [21 209 197 154 67 38 91]   
 This is a modulus scan test run of the decoderRandom and an 8-byte block with a 48-bit modulus
 
 ```
-$ ./decoderRandom 7 48
+$ ./decoderRandom 8 48
 
 random  8  bytes  [177 64 44 204 68 188 251 64]   12772257799060912960
 modulus size bits  48
