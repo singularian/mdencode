@@ -21,6 +21,7 @@ type MdFormat struct {
         fileSize uint64
         blockSize uint64
         blockCount uint64
+	fileCount uint64
         blockRemainder uint64
         modSize uint64
         modExponent uint64
@@ -73,14 +74,15 @@ func Init(encodingFormat int, fileName string, filePath string, fileSize uint64,
 	md.filePath = filePath
 	md.fileSize = fileSize
 	md.blockSize = blockSize
-	md.blockCount = 0
 	md.modSize = modulusSize
-	md.mdVersion = version 
+	md.blockCount = 0
+	md.fileCount = 0
 	// set the input hashlist string
 	md.mdfileHashListString  = fileHashListString
 	md.mdblockHashListString = blockHashListString
 	// set the output file name
 	md.outputFile = outputfileName
+	md.mdVersion = version 
 
 
 	return md
@@ -126,7 +128,10 @@ func (md *MdFormat) InitFile() {
 //
 func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64) {
 
-	// var hashListString = strings.Join(blockhashList, ":")
+	// reset the block count
+	md.blockCount = 0
+
+	// set the file and block hash list
 	var filehashListString = strings.Join(filehashList, ":")
         var blockhashListString = strings.Join(blockhashList, ":")
 
@@ -151,7 +156,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 
 	md.print("{\"mdfile\": [")
 	md.print(string(head))
-
+	md.fileCount++
 
 }
 

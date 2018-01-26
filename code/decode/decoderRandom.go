@@ -227,8 +227,12 @@ func decode(blockSize string, modbitSize string, modexp string, remainder string
 	log.Println("modstart test result ", fmt.Sprint(modstart))
 */
 	// this adds the modulus remainder + the modulus exponent converted from base 2
-	remainderString, _ := strconv.ParseInt(remainder, 10, 64)
-        modstart := big.NewInt(remainderString);
+	//// bug here // remainderString, _ := strconv.ParseInt(remainder, 10, 64)
+        // modstart := big.NewInt(remainderString);
+	// this should be a bigint and it was a 64 bit int
+     	modstart := new(big.Int)
+        modstart.SetString(remainder, 10) 
+        // modstart := big.NewInt(remainder);
 	modstart = modstart.Add(modstart, modremainder)
 
         fmt.Println("modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder))
@@ -321,7 +325,7 @@ func convertFloorBase2 (modfloor *big.Int, modi *big.Int) *big.Int {
 	mfloor := big.NewInt(0)
         mfloor = mfloor.Set(modfloor)
         zero := big.NewInt(0)
-        modremainder := new(big.Int)
+        modremainder := big.NewInt(0)   //new(big.Int)
         modremainder = modfloor.Mod(modfloor, modi);
         gt := modremainder.Cmp(zero)
 

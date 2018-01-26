@@ -128,6 +128,11 @@ func Init() (md *FileData) {
 	mdata.filehashline = false
 	mdata.key = "LomaLindaSanSerento9000"
 	mdata.logfile = ""
+
+	// need to set the format here???
+        // setup the file md formatter
+        // fdata.setmdFormat(format)
+
 	return mdata
 }
 
