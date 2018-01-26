@@ -465,7 +465,7 @@ total time  1m24.594897512s
 random bytestring and modulusscan bytestring match  [36 70 9 158 250 39 41 175 153 109 249 79 24 40 173 31 178 205 163 246 213 57 62 47 80 202 73 3 115 151 222 203 79 64 44 122 214 8 239 55]   [36 70 9 158 250 39 41 175 153 109 249 79 24 40 173 31 178 205 163 246 213 57 62 47 80 202 73 3 115 151 222 203 79 64 44 122 214 8 239 55]
 ```
 
-This is a test modulus scan on a 1000 byte block with a 7968 byte modules
+This is a test modulus scan on a 1000 byte block with a 7968 byte modules  
 [mddecode1000.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/mddecode1000.txt)
 
 # Go Library Dependencies
