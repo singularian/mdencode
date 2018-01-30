@@ -66,6 +66,7 @@ type jsonBlock struct {
 var version string = "1.0"
 
 // Init returns a new mdFormat object 
+// https://jsonlint.com/
 func Init(encodingFormat int, fileName string, filePath string, fileSize uint64, blockSize uint64, modulusSize uint64, fileHashListString string, blockHashListString string, outputfileName string) (mdfmt *MdFormat) {
 
 	md := new(MdFormat)
