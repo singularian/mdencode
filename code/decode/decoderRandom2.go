@@ -145,20 +145,20 @@ func (md *DecodeData) modulusScanRandom(blockSize int, modSize string) {
         md5hash.Write([]byte(bytes))
         var md5sum = hex.EncodeToString(md5hash.Sum(nil))
 
-        fmt.Println("random ", blockSize, " bytes ", bytes, " ", blockBigIntstring)
-        fmt.Println("modulus size bits ", bitsize)
-        fmt.Println("byte modulus ", modulusBigIntString)
-        fmt.Println("block modulus ", blockmod)
-        fmt.Println("modulus exponent ", modexp)
+        md.Println("Starting Modulus Scan Random")
+        md.Println("random ", blockSize, " bytes ", bytes, " ", blockBigIntstring)
+        md.Println("modulus size bits ", bitsize)
+        md.Println("byte block modulus ", modulusBigIntString)
+        md.Println("byte block modulus remainder ", blockmod)
+        md.Println("modulus exponent ", modexp)
 
-        fmt.Println("shasum ", shasum);
-        fmt.Println("md5sum ", md5sum);
+        md.Println("shasum ", shasum);
+        md.Println("md5sum ", md5sum);
 
         _, buffer := md.decode(blockSizeStr, modSize, s, blockmod, md5sum, shasum)
 
 	if(bytestring == buffer) {
-		fmt.Println("random bytestring and modulusscan bytestring match ", bytestring, " ", buffer)
-		fmt.Println("\n")
+		md.Println("random bytestring and modulusscan bytestring match ", bytestring, " ", buffer)
 	}
 
 }
@@ -199,8 +199,7 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
         modulofloorstr :=  fmt.Sprint(modfloor)
         moduloceilstr :=  fmt.Sprint(modceil)
 
-	fmt.Println("modulo floor ", modulofloorstr, " ceil ", moduloceilstr, " ", modceiltwo)
-	md.Println("modulo floor ", modulofloorstr, " ceil ", moduloceilstr)
+	md.Println("modulo floor ", modulofloorstr, " ceil ", moduloceilstr, " modceiltwo ", modceiltwo)
 
 	// I think there is a bug here 
 	// with the exponent
@@ -217,12 +216,11 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
         // mod = z.Mod(z, i);
 
 	md.Println("modulo floor ", modexp, " ", modulofloorstr, " ceil ", moduloceilstr)
-	fmt.Println("modulo floor UUUU ", modexp, " ", modulofloorstr, " ceil ", moduloceilstr, " mod ", i)
+	fmt.Println("modulo floor exponent ", modexp, " modulo floor ", modulofloorstr, " modulo ceil ", moduloceilstr, " mod ", i)
 
         // calcluate the 2^exp mod floor
 	// this converts the 2^exponent to modulus*n for the modfloor + the remainder
 	modremainder := new(big.Int)
-	fmt.Println("modulo floor ", modfloor)
 	modremainder = md.convertFloorBase2(modfloor, i)
 	// os.Exit(0)
         
@@ -258,8 +256,7 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
         // modstart := big.NewInt(remainder);
 	modstart = modstart.Add(modstart, modremainder)
 
-        fmt.Println("modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder))
-        md.Println("modstart test result floor ", fmt.Sprint(modstart))
+        md.Println("modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder))
 
 	// create the hash contexts
         md5  := md5.New()
@@ -282,7 +279,6 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
 			// fmt.Println("md5 sha1 ", hex.EncodeToString(md5.Sum(nil)), " ", hex.EncodeToString(sha1.Sum(nil)))
 
 			if md5string == hashone && sha1string == hashtwo {
-				fmt.Println("Found Block ", buf)
 				md.Println("Found Block ", buf)
 				break
 			}
@@ -294,12 +290,12 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
                 gt := modstart.Cmp(modceil) // have to check this
 
                 if gt > 0 {
-			fmt.Println("Not Found Block ", buf, " modstart ", modstart, " mod ceil ", modceil, " ", modceiltwo)
+			md.Println("Not Found Block ", buf, " modstart ", modstart, " mod ceil ", modceil, " ", modceiltwo)
 			break
                 }
 
 		if lineCount >= 1000000 {
-			md.Println("blockbuffer value ", modstart)
+			md.Printlog("blockbuffer value ", modstart)
 			lineCount = 0
 		}
 
@@ -309,7 +305,7 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
 
 	t := time.Now()
         elapsed := t.Sub(start)
-	fmt.Println("total time ", elapsed)
+
 	md.Println("Total time ", elapsed)
 
 	bufstring := fmt.Sprintf("%v", buf)
@@ -352,22 +348,22 @@ func (md *DecodeData) convertFloorBase2 (modfloor *big.Int, modi *big.Int) *big.
         modremainder = modfloor.Mod(modfloor, modi);
         gt := modremainder.Cmp(zero)
 
-	fmt.Println("mfloor ", mfloor, " ", modfloor)
+	md.Println("mfloor ", mfloor, " ", modfloor)
 
         // if the remainder is zero set modremainder to modfloor
         if gt == 0 {
-                fmt.Println("modulo floor equals zero ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
+                md.Println("modulo floor equals zero ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
                 modremainder = modremainder.Set(mfloor)
-                fmt.Println("modulo floor equals zero setting ", fmt.Sprint(modremainder), " ", mfloor)
+                md.Println("modulo floor equals zero setting ", fmt.Sprint(modremainder), " ", mfloor)
         // otherwise subtract the modremainder from modfloor
         } else {
-                fmt.Println("modulo floor greater than zero ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
+                md.Println("modulo floor greater than zero ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
                 // modremainder = mfloor
                 modremainder = modremainder.Sub(modfloor, modremainder)
-                fmt.Println("modulo floor sub ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
+                md.Println("modulo floor sub ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
         }
 	remstring := modremainder.String()
-	fmt.Println("modremainder ", modremainder, " ", remstring)
+	md.Println("modremainder ", modremainder, " ", remstring)
 	// return 0
 	return modremainder
 }
