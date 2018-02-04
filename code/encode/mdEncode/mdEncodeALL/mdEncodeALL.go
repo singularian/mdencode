@@ -139,9 +139,11 @@ func Init() (md *FileData) {
 	return mdata
 }
 
-// mdencode the directory
+// MdencodeDirectory
+// mdencode the directory non recursivelly with a array list
 func (fdata *FileData) MdencodeDirectory(blockSize string, modSize string, format int, fileHashList string, blockHashList string, directoryName string, outputfileName string) int {
 
+	// need to clean up the output file check a little bit
         // find the output filename file path
         //////////////////////////////outputpath, _ := filepath.Abs(fd.outputfilename)
         // find the fileData file directory
@@ -166,7 +168,7 @@ func (fdata *FileData) MdencodeDirectory(blockSize string, modSize string, forma
                 // if ((fileName != outputpath) && (fd.outputfilename != "")) {
                 // might be bug here???
                         // fdata.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
-                        fdata.Mdencode(blockSize, modSize, format, fileHashList, blockHashList, fileName, outputfileName)
+                        fdata.MdencodeFile(blockSize, modSize, format, fileHashList, blockHashList, fileName, outputfileName)
                 //}
         }
 
@@ -185,7 +187,7 @@ func (fdata *FileData) MdencodeDirectory(blockSize string, modSize string, forma
 // ie sha-256 and a 128-bit collision number to differentiate the correct collision or block with an equal signature and a modular floor
 // in another case there could be a signature pair md5 or sha1 and a modular floor and a 1 to 4 byte collision integer to differentiate the correct collision
 // the correct collision is just the nth block with the same signature
-func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fileHashList string, blockHashList string, fileName string, outputfileName string) int {
+func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int, fileHashList string, blockHashList string, fileName string, outputfileName string) int {
 
 	// check if the input file is a directory
 	// and throw an error
@@ -217,28 +219,7 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	// initialize the blocksize and modsize
 	fdata.blockSize = uint64(blocksize)
 	fdata.modSize = uint64(bitsize)
-	// initalize the format
-	fdata.mdFormat = format
-/*
-	// process the hash list arguments
-	fdata.fileHashListString = fileHashList
-	fdata.blockHashListString = blockHashList
-	// hash list regex
-	re := regexp.MustCompile("[01]")
 
-	fdata.fileHashListArray = re.FindAllString(fileHashList, -1)
-	fdata.blockHashListArray = re.FindAllString(blockHashList, -1)
-
-	// initialize the map
-	fdata.dictionary = make(map[string]string)
-	// initialize the hash list maps
-	fdata.hashList = make(map[string]hash.Hash) // this is for the entire file
-	fdata.hashListBlocks = make(map[string]hash.Hash)
-
-	// create the Hash List Map
-	fdata.createHashListMap(0) // files
-	fdata.createHashListMap(1) // blocks
-*/
 	// get the file size
 	fi, e := os.Stat(fileName)
 	if e != nil {
@@ -260,9 +241,6 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	blocks, remainder := fdata.calculateFileBlocks(uint64(size), uint64(blocksize))
 	fdata.blockCount = uint64(blocks)
 	fdata.blockRemainder = uint64(remainder)
-
-	// setup the file md formatter
-	// fdata.setmdFormat(format)
 
 	// encode the File Header
 	fdata.mdfmt.EncodeFileHeader(format, fileBaseName, fdata.filePath, size, blocksize, fdata.fileHashListNames, fdata.blockHashListNames, bitsize)

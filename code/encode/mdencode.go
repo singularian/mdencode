@@ -132,7 +132,7 @@ func argsSimple(argsNumber int) int {
 	// if the filename is specified
 	// mdencode generate a file signature
 	if fd.filename != "" {
-		fd.md.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.filename, fd.outputfilename)
+		fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.filename, fd.outputfilename)
 	}
 
 	// if the drectory is specified
