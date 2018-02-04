@@ -99,10 +99,9 @@ func (md *MdFormat) InitFile() {
 func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64) {
 
         var buffer bytes.Buffer
-	// buffer.WriteString(fileName)
 
-	//buffer.WriteString("\n")
-	//buffer.WriteString(filePath)
+	// reset the block count
+	md.blockCount = 0
 
 	var filehashListString = strings.Join(filehashList, ":")
 	var blockhashListString = strings.Join(blockhashList, ":")
@@ -242,6 +241,11 @@ func (md *MdFormat) EncodeFileHash(encodingFormat int, hashName string, hashByte
                 md.println(z)
         case 7:
                 md.println(z)
+	case 10:
+		hashName = strings.Replace(hashName, ":", " ", -1)
+		hashBytes = strings.Replace(hashBytes, ":", " ", -1)
+		var last  = fmt.Sprintf("filehash: %v %v", hashName, hashBytes)
+		md.println(last)
 	default:
 		md.println("filehash: ", hashName, " ", hashBytes)
 		md.println(last)
