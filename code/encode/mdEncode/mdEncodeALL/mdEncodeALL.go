@@ -116,25 +116,64 @@ type FileData struct {
 	mdfmt mdformat
 	// log writer
 	log *log.Logger
+	islogging bool
 }
 
 // Init returns a new mdEncode object
 func Init() (md *FileData) {
 
 	mdata := new(FileData)
-	mdata.appendfile = false
-	mdata.byteblock = false
+	mdata.appendfile   = false
+	mdata.byteblock    = false
 	mdata.byteblockint = false
 	mdata.filehashline = false
-	mdata.key = "LomaLindaSanSerento9000"
-	mdata.logfile = ""
+	mdata.key          = "LomaLindaSanSerento9000"
+	mdata.logfile      = ""
+	mdata.islogging    = false
 
 	// need to set the format here???
+	// there are advantage to not have mdencode init everything
         // setup the file md formatter
         // fdata.setmdFormat(format)
 
 	return mdata
 }
+
+// mdencode the directory
+func (fdata *FileData) MdencodeDirectory(blockSize string, modSize string, format int, fileHashList string, blockHashList string, directoryName string, outputfileName string) int {
+
+        // find the output filename file path
+        //////////////////////////////outputpath, _ := filepath.Abs(fd.outputfilename)
+        // find the fileData file directory
+        // dir, _ := filepath.Split(outputpath)
+        // fmt.Println("output file = ", outputpath, " ", dir)
+
+        fileList := make([]string, 0)
+        e := filepath.Walk(directoryName, func(path string, f os.FileInfo, err error) error {
+                if stat, err := os.Stat(path); err == nil && !stat.IsDir() {
+                        fileList = append(fileList, path)
+                }
+                return err
+        })
+
+        if e != nil {
+                panic(e)
+        }
+
+        for _, fileName := range fileList {
+                fmt.Println(fileName)
+                // skip the output file if it is specified
+                // if ((fileName != outputpath) && (fd.outputfilename != "")) {
+                // might be bug here???
+                        // fdata.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
+                        fdata.Mdencode(blockSize, modSize, format, fileHashList, blockHashList, fileName, outputfileName)
+                //}
+        }
+
+	return 0
+
+}
+
 
 // Mdencode
 // mdencode the file
@@ -150,7 +189,8 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 
 	// check if the input file is a directory
 	// and throw an error
-	// mdencode doesn't currently handle directorys
+	// mdencode doesn't currently handle directories
+	// probably could change this to handle directories
 	if info, err := os.Stat(fileName); err == nil && info.IsDir() {
 		log.Fatal("The mdfile is a directory")
 		os.Exit(3)
@@ -179,7 +219,7 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	fdata.modSize = uint64(bitsize)
 	// initalize the format
 	fdata.mdFormat = format
-
+/*
 	// process the hash list arguments
 	fdata.fileHashListString = fileHashList
 	fdata.blockHashListString = blockHashList
@@ -198,7 +238,7 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	// create the Hash List Map
 	fdata.createHashListMap(0) // files
 	fdata.createHashListMap(1) // blocks
-
+*/
 	// get the file size
 	fi, e := os.Stat(fileName)
 	if e != nil {
@@ -207,13 +247,9 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	}
 
 	// log file
+	// need to replace this with init logfile
+	// need to add a log print method that checks if islogging is true before logging
 	if fdata.logfile != "" {
-		logfile, err := os.OpenFile(fdata.logfile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-		if err != nil {
-			fmt.Println("Failed to open log file:", err)
-		}
-		defer logfile.Close()
-		fdata.log = log.New(logfile, "", log.Ldate|log.Ltime|log.Lshortfile)
 		fdata.log.Println("mdencode file ", fileName, " blocksize ", fdata.blockSize, " modsize ", fdata.modSize)
 	}
 
@@ -226,7 +262,7 @@ func (fdata *FileData) Mdencode(blockSize string, modSize string, format int, fi
 	fdata.blockRemainder = uint64(remainder)
 
 	// setup the file md formatter
-	fdata.setmdFormat(format)
+	// fdata.setmdFormat(format)
 
 	// encode the File Header
 	fdata.mdfmt.EncodeFileHeader(format, fileBaseName, fdata.filePath, size, blocksize, fdata.fileHashListNames, fdata.blockHashListNames, bitsize)
@@ -558,6 +594,8 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 // sets the correct md format object
 func (l *FileData) setmdFormat(format int) {
 
+	l.mdFormat = format
+
 	// CSV formatter
 	if format == 101 || format == 102 {
 		l.mdfmt = mdFormatCSV.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
@@ -623,6 +661,27 @@ func (l *FileData) InitDB(fileName string) {
 
 }
 
+// initialize the logfile
+func (l *FileData) initLog() {
+
+	if l.logfile != "" {
+		var logfilename = l.logfile
+		// var logfile = md.logfile
+
+		logfile, err := os.OpenFile(logfilename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		if err != nil {
+			fmt.Println("Failed to open log file:", err)
+		}
+		// using defer close causes it to close the logfile
+		// and not write
+		// defer logfile.Close()
+		// l.Logfile = log.New(logfile, "", log.Ldate|log.Ltime)
+		l.log = log.New(logfile, "", log.Ldate|log.Ltime)
+		l.islogging = true
+	}
+
+}
+
 // SetByteBlock
 // set the byte block mode
 func (l *FileData) SetByteBlock(byteblock bool) {
@@ -661,6 +720,44 @@ func (l *FileData) SetKeyFile(key string) {
 // set the optional logfile
 func (l *FileData) SetLogFile(logfile string) {
 	l.logfile = logfile
+	l.initLog()
+
+        // setup the file md formatter
+	// possibly add the logfile if it is set
+	// need to set this for the mdFormat 
+        l.setmdFormat(l.mdFormat)
+}
+
+// SetMdFormat
+// set the md output format
+func (l *FileData) SetMdFormat(format int) {
+
+        l.setmdFormat(format)
+}
+
+// setHashLists
+// this sets the block hash list and file hash list maps
+// it also set the block hash list contexts and file hash list context maps
+func (l *FileData) SetHashLists(fileHashList string, blockHashList string) {
+
+	// process the hash list arguments
+        l.fileHashListString = fileHashList
+        l.blockHashListString = blockHashList
+        // hash list regex
+        re := regexp.MustCompile("[01]")
+
+        l.fileHashListArray = re.FindAllString(fileHashList, -1)
+        l.blockHashListArray = re.FindAllString(blockHashList, -1)
+
+        // initialize the map
+        l.dictionary = make(map[string]string)
+        // initialize the hash list maps
+        l.hashList = make(map[string]hash.Hash) // this is for the entire file
+        l.hashListBlocks = make(map[string]hash.Hash)
+
+        // create the Hash List Map
+        l.createHashListMap(0) // files
+        l.createHashListMap(1) // blocks
 }
 
 // logNrecursive

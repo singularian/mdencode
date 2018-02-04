@@ -124,6 +124,10 @@ func argsSimple(argsNumber int) int {
 	fd.md.SetFileHashLine(fd.filehashline)
 	fd.md.SetKeyFile(fd.key)
 	fd.md.SetLogFile(fd.logfilename)
+	// set the default format
+	fd.md.SetMdFormat(fd.defaultFormat)
+	// set the hash lists
+	fd.md.SetHashLists(fd.fhashlist, fd.bhashlist)
 
 	// if the filename is specified
 	// mdencode generate a file signature
@@ -134,7 +138,8 @@ func argsSimple(argsNumber int) int {
 	// if the drectory is specified
 	// mdencode generate a directory signature of all the files
 	if fd.directory != "" {
-		fd.hashDirectory(fd.directory)
+		// fd.hashDirectory(fd.directory)
+		fd.md.MdencodeDirectory(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.directory, fd.outputfilename)
 	}
 
 	// initialize an empty sqlite3 signature db if specified
@@ -239,7 +244,7 @@ func (fd *FlagData) hashDirectoryRecursive(directory string) {
 func (fd *FlagData) hashDirectory(searchDir string) {
 
 	// find the output filename file path
-        outputpath, _ := filepath.Abs(fd.outputfilename)
+        //////////////////////////////outputpath, _ := filepath.Abs(fd.outputfilename)
         // find the fileData file directory
         // dir, _ := filepath.Split(outputpath)
 	// fmt.Println("output file = ", outputpath, " ", dir)
@@ -257,11 +262,12 @@ func (fd *FlagData) hashDirectory(searchDir string) {
 	}
 
 	for _, fileName := range fileList {
-		// fmt.Println(fileName)
+		fmt.Println(fileName)
 		// skip the output file if it is specified
-		if ((fileName != outputpath) && (fd.outputfilename != "")) {
+		// if ((fileName != outputpath) && (fd.outputfilename != "")) {
+		// might be bug here???
 			fd.md.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
-		}
+		//}
 	}
 
 }

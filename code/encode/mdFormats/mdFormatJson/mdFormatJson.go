@@ -155,7 +155,17 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 	head, err := json.Marshal(mdj)
 	md.checkError(err)
 
-	md.print("{\"mdfile\": [")
+	if md.fileCount == 0 {
+		md.print("[")
+	}
+
+	if md.fileCount > 1 {
+		md.print(",\n")
+	}
+
+	md.print("{\"mdfile")
+	md.print(md.fileCount)
+	md.print("\": [")
 	md.print(string(head))
 	md.fileCount++
 

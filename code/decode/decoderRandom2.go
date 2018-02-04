@@ -183,7 +183,7 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
         var i, e = big.NewInt(2), big.NewInt(bitsize)
         i.Exp(i, e, nil)
         modulostr := fmt.Sprint(i)
-        fmt.Println("modulo bigint ", modulostr)
+
 	md.Println("modulo bigint", modulostr)
 
         // calculate the module exponent floor and ceiling
