@@ -10,7 +10,7 @@ import (
 	"flag"
 	"fmt"
 	"path/filepath"
-        "io/ioutil"
+        _ "io/ioutil"
 	"github.com/singularian/mdencode/code/encode/mdEncode/mdEncodeALL"
 	"os"
 )
@@ -138,7 +138,7 @@ func argsSimple(argsNumber int) int {
 	// if the drectory is specified
 	// mdencode generate a directory signature of all the files
 	if fd.directory != "" {
-		// fd.hashDirectory(fd.directory)
+		// fd.md.hashDirectory(fd.directory)
 		fd.md.MdencodeDirectory(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.directory, fd.outputfilename)
 	}
 
@@ -221,55 +221,6 @@ func randint64() (int64, error) {
 		result = 1
 	}
 	return result, nil
-}
-
-// test directory hash code recursivelly
-func (fd *FlagData) hashDirectoryRecursive(directory string) {
-        files, _ := ioutil.ReadDir(directory)
-        for _, file := range files {
-                fileName := directory + string(os.PathSeparator) + file.Name()
-		// todo: need to skip the output file so it doesn't process it in the directory
-                if file.IsDir() {
-                        fd.hashDirectory(fileName)
-                } else {
-			fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
-                }
-        }
-
-}
-
-// hash directory as a array list
-// this skips the outputfile if it is specified so it doesn't try to recursivelly hash it as it is appended
-// https://gist.github.com/fubarhouse/5ae3fdd5ed5be9e718a92d9b3c780a22
-func (fd *FlagData) hashDirectory(searchDir string) {
-
-	// find the output filename file path
-        //////////////////////////////outputpath, _ := filepath.Abs(fd.outputfilename)
-        // find the fileData file directory
-        // dir, _ := filepath.Split(outputpath)
-	// fmt.Println("output file = ", outputpath, " ", dir)
-
-	fileList := make([]string, 0)
-	e := filepath.Walk(searchDir, func(path string, f os.FileInfo, err error) error {
-		if stat, err := os.Stat(path); err == nil && !stat.IsDir() {
-			fileList = append(fileList, path)
-		}
-		return err
-	})
-
-	if e != nil {
-		panic(e)
-	}
-
-	for _, fileName := range fileList {
-		fmt.Println(fileName)
-		// skip the output file if it is specified
-		// if ((fileName != outputpath) && (fd.outputfilename != "")) {
-		// might be bug here???
-			fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
-		//}
-	}
-
 }
 
 // https://jsonlint.com/

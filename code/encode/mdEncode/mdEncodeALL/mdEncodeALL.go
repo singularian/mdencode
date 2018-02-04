@@ -55,10 +55,12 @@ type mdformat interface {
 	PrintFormatType()
 	OpenFile(appendfile bool)
 	InitFile()
+	// EncodeDirStart() // for the directory
 	EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64)
 	EncodeFileHash(encodingFormat int, hashName string, hashBytes string)
 	EncodeBlock(encodingFormat int, blockSize uint64, hashList []string, modExp int, mod string)
 	EncodeEndFile(encodingFormat int)
+	// EncodeDirEnd() // for the directory end - has a list of files
 }
 
 // mdencode struct
@@ -175,6 +177,21 @@ func (fdata *FileData) MdencodeDirectory(blockSize string, modSize string, forma
 	return 0
 
 }
+
+// test directory hash code recursivelly
+/* func (fd *FileData) hashDirectoryRecursive(directory string) {
+        files, _ := ioutil.ReadDir(directory)
+        for _, file := range files {
+                fileName := directory + string(os.PathSeparator) + file.Name()
+                // todo: need to skip the output file so it doesn't process it in the directory
+                if file.IsDir() {
+                        fd.hashDirectoryRecursive(fileName)
+                } else {
+                        fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
+                }
+        }
+
+} */
 
 
 // Mdencode
