@@ -228,11 +228,6 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 	}
 
 	// log file
-	// need to replace this with init logfile
-	// need to add a log print method that checks if islogging is true before logging
-	/* if fdata.logfile != "" {
-		fdata.log.Println("mdencode file ", fileName, " blocksize ", fdata.blockSize, " modsize ", fdata.modSize)
-	} */
 	// should close the log at the end???
 	fdata.Printlog("mdencode file ", fileName, " blocksize ", fdata.blockSize, " modsize ", fdata.modSize)
 
