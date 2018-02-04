@@ -233,6 +233,7 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 	/* if fdata.logfile != "" {
 		fdata.log.Println("mdencode file ", fileName, " blocksize ", fdata.blockSize, " modsize ", fdata.modSize)
 	} */
+	fdata.Printlog("mdencode file ", fileName, " blocksize ", fdata.blockSize, " modsize ", fdata.modSize)
 
 	// set the file size
 	size := fi.Size()
@@ -814,6 +815,15 @@ func (l *FileData) calculateFileBlocks(fileSize uint64, blockSize uint64) (uint6
 	}
 
 	return blocksCount, remainder
+}
+
+// write to the log
+func (l *FileData) Printlog (v ...interface{}) {
+
+	if l.islogging {
+		l.log.Println(v...)
+	}
+
 }
 
 // display the object type
