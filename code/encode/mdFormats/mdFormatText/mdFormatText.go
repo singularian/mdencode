@@ -43,6 +43,7 @@ func Init(encodingFormat int, fileName string, filePath string, fileSize uint64,
 	md.filePath = filePath
 	md.fileSize = fileSize
 	md.blockSize = blockSize
+	md.blockCount = 0
 	md.modSize = modulusSize
 	md.mdVersion = version 
 	// set the input hashlist string
@@ -221,21 +222,29 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 // this is the entire file signature hash type and signature hex bytes
 func (md *MdFormat) EncodeFileHash(encodingFormat int, hashName string, hashBytes string) {
 
+	var z     = fmt.Sprintf("z: %v %v", hashName, hashBytes)
+	var last  = fmt.Sprintf("filehash: %v %v", hashName, hashBytes)
+
         switch encodingFormat {
 	case 0:
-		md.println("z: ", hashName, " ", hashBytes)
+		md.println(z)
 	case 1:
-		md.println("z: ", hashName, " ", hashBytes)
+		md.println(z)
 	case 2:
-		md.println("z: ", hashName, " ", hashBytes)
+		md.println(z)
 	case 3:
-		md.println("z: ", hashName, " ", hashBytes)
+		md.println(z)
 	case 4: 
-		md.println("z: ", hashName, " ", hashBytes)
+		md.println(z)
         case 5:
-		md.println("z: ", hashName, " ", hashBytes)
+		md.println(z)
+        case 6:
+                md.println(z)
+        case 7:
+                md.println(z)
 	default:
 		md.println("filehash: ", hashName, " ", hashBytes)
+		md.println(last)
 	}
 
 }
@@ -252,45 +261,30 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 	// minimal format
         case 0:
                 hashListString = strings.Join(hashList, "")
-                md.print(hashListString);
-                md.print(modExp);
-                md.print(mod);
-                // fmt.Print(":", logN(z, i))
+		var mdb = fmt.Sprintf("%s%d%s", hashListString, modExp, mod)
+		md.println(mdb)
 	case 1:
-                hashListString = strings.Join(hashList, "")
-                md.print(hashListString);
-                md.print(modExp);
-                md.print(":", mod);
-                // fmt.Print(":", logN(z, i))
+		hashListString = strings.Join(hashList, "")
+		var mdb = fmt.Sprintf("%v%s%d%s", md.blockCount, hashListString, modExp, mod)
+		md.println(mdb)
 	case 2:
-                md.print(hashListString);
-                md.print(modExp);
-                md.print(":", mod);
-                // fmt.Print(":", logN(z, i))
+                hashListString = strings.Join(hashList, "")
+		var mdb = fmt.Sprintf("%s%d:%s", hashListString, modExp, mod)
+		md.println(mdb)
 	case 3:
-                md.print(blockSize, ":")
-                md.print(hashListString);
-                md.print(":", modExp);
-                md.print(":", mod);
-		// fmt.Print(":", logN(z, i))
+		var mdb = fmt.Sprintf("%s%d:%s", hashListString, modExp, mod)
+		md.println(mdb)
 	case 4:
-	        md.print(blockSize, ":")
-                md.print(hashListString);
-                md.print(":", modExp);
-                md.print(":", mod);
-                // need to pass this in or something
-                // output the block bigint
-                // fmt.Print(":", mod);
-        case 5:
-                md.print(blockSize, ":")
-                md.print(hashListString);
-                md.print(":", modExp);
-                md.print(":", mod);
-                // need to pass this in or something
-                // output the block bigint
-                // fmt.Print(":", mod);
-	case 6:
-                md.print(blockSize, ":")
+		var mdb = fmt.Sprintf("%v:%s:%d:%s", blockSize, hashListString, modExp, mod)
+		md.println(mdb)
+	case 5:
+		var mdb = fmt.Sprintf("%v:%s:%d:%s", blockSize, hashListString, modExp, mod)
+		md.println(mdb)
+        case 6:
+		var mdb = fmt.Sprintf("%v:%s:%d:%s", blockSize, hashListString, modExp, mod)
+		md.println(mdb)
+	case 7:
+        /*        md.print(blockSize, ":")
                 md.print(hashListString);
                 md.print(":", modExp);
                 md.print(":", mod);
@@ -298,29 +292,25 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
                 // need to pass this in or something
                 // output the block bigint
                 // fmt.Print(":", mod);
+	*/
+		var mdb = fmt.Sprintf("%v:%s:%d:%s", blockSize, hashListString, modExp, mod)
+		md.println(mdb)
+	case 8:
+		var mdb = fmt.Sprintf("blockhash: %v:%v:%s:%d:%s", md.blockCount, blockSize, hashListString, modExp, mod)
+		md.println(mdb)
 	default:
-		md.print("blockhash: ")
-                md.print(blockSize, ":")
-                md.print(hashListString);
-                md.print(":", modExp);
-                md.print(":", mod);
+		var mdb = fmt.Sprintf("blockhash: %v:%s:%d:%s", blockSize, hashListString, modExp, mod)
+		md.println(mdb)
 	}
 
-	md.print("\n")
+	// md.print("\n")
+	md.blockCount++
 }
 
 
 // this can encode the block as minimal simple, inform, xml
 func (md *MdFormat) EncodeEndFile(encodingFormat int) {
 
-/*        switch encodingFormat {
-	// used to be case 6
-	case 9:
-		md.println("[md]")
-	case 100:
-		md.println("</md>")
-	}
-*/
 }
 
 // md print
