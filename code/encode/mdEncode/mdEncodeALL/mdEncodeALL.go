@@ -230,9 +230,9 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 	// log file
 	// need to replace this with init logfile
 	// need to add a log print method that checks if islogging is true before logging
-	if fdata.logfile != "" {
+	/* if fdata.logfile != "" {
 		fdata.log.Println("mdencode file ", fileName, " blocksize ", fdata.blockSize, " modsize ", fdata.modSize)
-	}
+	} */
 
 	// set the file size
 	size := fi.Size()
@@ -255,13 +255,13 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 	//
 	// could also have a mod2 encoding file / block mod 2 with exponent floor
 	if fdata.filehashline {
-		fdata.encodeFileHashLine(fileName)
+		fdata.mdencodeFileHashLine(fileName)
 	} else {
-		fdata.encodeFile(fileName)
+		fdata.mdencodeFile(fileName)
 	}
 
-	// encode the blocks
-	fdata.mdencodeBlock(blockSize, modSize, format, fileName)
+	// encode the file blocks
+	fdata.mdencodeFileBlock(blockSize, modSize, format, fileName)
 
 	// endcode the end of file formatter
 	fdata.mdfmt.EncodeEndFile(format)
@@ -270,7 +270,7 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 
 }
 
-// encodeFile
+// mdencodeFile
 //
 // add a top level file signature or group of signatures
 // this will resolve any collisions in the block signatures
@@ -282,7 +282,7 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 // it can be a combination of 1 to 10+ signatures and a file modulus
 // like ripe160, sha1, sha512, md5, md6, md4 etc
 // this makes it very collision resistant
-func (l *FileData) encodeFile(fileName string) {
+func (l *FileData) mdencodeFile(fileName string) {
 	f, err := os.Open(fileName)
 	if err != nil {
 		// log.Fatal(err)
@@ -302,9 +302,9 @@ func (l *FileData) encodeFile(fileName string) {
 
 }
 
-// encodeFileHashLine
+// mdencodeFileHashLine
 // encode the file hash list as one line
-func (l *FileData) encodeFileHashLine(fileName string) {
+func (l *FileData) mdencodeFileHashLine(fileName string) {
 	f, err := os.Open(fileName)
 	if err != nil {
 		fmt.Println(err)
@@ -327,11 +327,11 @@ func (l *FileData) encodeFileHashLine(fileName string) {
 
 }
 
-// mdencodeBlock
+// mdencodeFileBlock
 // mdencode the file blocks
 // this creates a file block hash signature with a group of file byte blocks with a modular floora
 // they are n-byte sized file blocks with a modulus and a modular floor
-func (l *FileData) mdencodeBlock(blockSize string, modSize string, format int, fileName string) int {
+func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format int, fileName string) int {
 
 	// process the blocksize argument
 	blocksize, err := strconv.ParseInt(blockSize, 10, 64)

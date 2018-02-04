@@ -232,7 +232,7 @@ func (fd *FlagData) hashDirectoryRecursive(directory string) {
                 if file.IsDir() {
                         fd.hashDirectory(fileName)
                 } else {
-			fd.md.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
+			fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
                 }
         }
 
@@ -266,7 +266,7 @@ func (fd *FlagData) hashDirectory(searchDir string) {
 		// skip the output file if it is specified
 		// if ((fileName != outputpath) && (fd.outputfilename != "")) {
 		// might be bug here???
-			fd.md.Mdencode(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
+			fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
 		//}
 	}
 
