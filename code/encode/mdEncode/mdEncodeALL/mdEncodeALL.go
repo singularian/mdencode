@@ -233,6 +233,7 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 	/* if fdata.logfile != "" {
 		fdata.log.Println("mdencode file ", fileName, " blocksize ", fdata.blockSize, " modsize ", fdata.modSize)
 	} */
+	// should close the log at the end???
 	fdata.Printlog("mdencode file ", fileName, " blocksize ", fdata.blockSize, " modsize ", fdata.modSize)
 
 	// set the file size
