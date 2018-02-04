@@ -298,6 +298,9 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 	case 8:
 		var mdb = fmt.Sprintf("blockhash: %v:%v:%s:%d:%s", md.blockCount, blockSize, hashListString, modExp, mod)
 		md.println(mdb)
+	case 9:
+		var mdb = fmt.Sprintf("blockhash%v: %v:%s:%d:%s", md.blockCount, blockSize, hashListString, modExp, mod)
+                md.println(mdb)
 	default:
 		var mdb = fmt.Sprintf("blockhash: %v:%s:%d:%s", blockSize, hashListString, modExp, mod)
 		md.println(mdb)
