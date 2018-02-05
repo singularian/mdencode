@@ -106,7 +106,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 	var filehashListString = strings.Join(filehashList, ":")
 	var blockhashListString = strings.Join(blockhashList, ":")
 
-	var hashListString = strings.Join(blockhashList, ":")
+	// var hashListString = strings.Join(blockhashList, ":")
 
 	if filehashListString == "" { 
 		filehashListString = "empty"
