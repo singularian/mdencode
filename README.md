@@ -270,6 +270,8 @@ $ mddbreport -file=example.db -fileid=0 -format=100
 
 # Modular Floor
 
+![This is my block chopper](https://github.com/singularian/mdencode/blob/master/diagrams/blockchopped.jpg "Coyau's Cleaver")
+
 This program uses a modular floor paired with a package of digital signatures. This makes the digital signature more unique. 
 A modular floor consists of a polynomial which is the modular exponent plus n times the modulus plus the remainder. 
 It is possible to use a modular scan to find matching byte blocks associated with the digital signature package.
