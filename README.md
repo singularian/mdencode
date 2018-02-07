@@ -281,7 +281,7 @@ The modulus scan polynomial is calculated as follows.
 ```
 modremainder    = fileblockbigint % modulus  
 fileblockbigint = modulus * n + modremainder where n equals 0 to x  
-fileblockbigint = modulus ^ exponent x + modulus * n + modremainder where n equals 0 to m    
+fileblockbigint = modulus ^ exponent x + modulus * n + modremainder where x is a power and n equals 0 to m    
 ```
 
 # Modular Floor Equation
