@@ -283,8 +283,8 @@ modremainder    = fileblockbigint % modulus
 fileblockbigint = modulus * n + modremainder where n equals 0 to x  
 fileblockbigint = modulus ^ exponent x + modulus * n + modremainder where n equals 0 to m    
 ```
-![](https://github.com/singularian/mdencode/blob/master/diagrams/modularfloor.png)
-![](https://github.com/singularian/mdencode/blob/master/diagrams/modularfloorexponent.png)
+![](https://github.com/singularian/mdencode/blob/master/diagrams/modularfloor.png)  
+![](https://github.com/singularian/mdencode/blob/master/diagrams/modularfloorexponent.png)  
   
 This is an example of the modular floor.  
 The program `decoderRandom` is creating a random 6 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
