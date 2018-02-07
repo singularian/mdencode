@@ -270,6 +270,8 @@ $ mddbreport -file=example.db -fileid=0 -format=100
 
 # Modular Floor
 
+This is my block chopper.  
+
 ![This is my block chopper](https://github.com/singularian/mdencode/blob/master/diagrams/blockchopper.jpg "Coyau's Cleaver")
 
 This program uses a modular floor paired with a package of digital signatures. This makes the digital signature more unique. 
