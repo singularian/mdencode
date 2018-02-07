@@ -283,8 +283,10 @@ modremainder    = fileblockbigint % modulus
 fileblockbigint = modulus * n + modremainder where n equals 0 to x  
 fileblockbigint = modulus ^ exponent x + modulus * n + modremainder where n equals 0 to m    
 ```
-$-m*n + r$  
-$-m^p + m*n + r$
+$m*n + r$  
+$m^p + m*n + r$
+
+(https://latex.codecogs.com/svg.latex?m^p&space;&plus;&space;m*n&space;&plus;r)
 
   
 This is an example of the modular floor.  

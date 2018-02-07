@@ -30,6 +30,11 @@ type MdFormat struct {
 	outputFile string
         err     error
 	file *os.File 
+	// byte buffer
+	// optionally add an option -buffer boolean
+	// when println is called and it is specified it writes to byte buffer
+	// then add a method to output it as a string
+	buffer bytes.Buffer
 }
 
 var version string = "1.0"
