@@ -280,14 +280,14 @@ The modulus scan polynomial is calculated as follows.
 
 ```
 modremainder    = fileblockbigint % modulus  
-fileblockbigint = modulus * n + modremainder where n equals 0 to x  
-fileblockbigint = modulus ^ exponent x + modulus * n + modremainder where x is a power and n equals 0 to m    
+fileblockbigint = modulus * n + modremainder where n equals 0 to m  
+fileblockbigint = modulus ^ (exponent p) + modulus * n + modremainder where p is an optional power and n equals 0 to m    
 ```
 
 # Modular Floor Equation
 
 This is the modular floor equation for two forms. One is the exponential floor while the other contains a multiple of the modular floor plus the remainder.
-A modulus should be considered part of the file signature subset.
+A modulus should be considered part of the file signature subset. A modulus is a digital signature.
 
 ![](https://github.com/singularian/mdencode/blob/master/diagrams/modularfloor.png)  
 ![](https://github.com/singularian/mdencode/blob/master/diagrams/modularfloorexponent.png)  
