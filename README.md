@@ -286,6 +286,9 @@ fileblockbigint = modulus ^ exponent x + modulus * n + modremainder where n equa
 
 # Modular Floor Equation
 
+This is the modular floor equation for two forms. One is the exponential floor while the other contains a multiple of the modular floor plus the remainder.
+A modulus should be considered part of the file signature subset.
+
 ![](https://github.com/singularian/mdencode/blob/master/diagrams/modularfloor.png)  
 ![](https://github.com/singularian/mdencode/blob/master/diagrams/modularfloorexponent.png)  
 
