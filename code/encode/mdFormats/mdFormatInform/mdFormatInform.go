@@ -100,6 +100,8 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 	var filehashListString = strings.Join(filehashList, ":")
         var blockhashListString = strings.Join(blockhashList, ":")
 
+	md.blockCount = 0
+
 //	switch encodingFormat {
 //	case 100:
                 buffer.WriteString("\n")
@@ -160,6 +162,7 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 	var hashListString = strings.Join(hashList, ":")
 
 	md.print("[b][size]", blockSize, "[size]")
+	md.print("[id]", md.blockCount, "[id]")
         md.print("[hashlist]", hashListString, "[hashlist]");
         md.print("[modexp]", modExp, "[modexp]");
         md.print("[mod]", mod, "[mod][b]");
