@@ -12,6 +12,7 @@ import (
 	"path/filepath"
         _ "io/ioutil"
 	"github.com/singularian/mdencode/code/encode/mdEncode/mdEncodeALL"
+	"github.com/singularian/mdencode/code/encode/mdRand"
 	"os"
 )
 
@@ -105,14 +106,14 @@ func argsSimple(argsNumber int) int {
 	// need to add a combination of fixed and random file signatures
 	// ie you specify 111 for the filehash and -fbr for random and it appends to the file signature instead of over writing it
 	if fd.randomfilehash {
-		fd.fhashlist = getRandomBits(32)
+		fd.fhashlist = mdRand.GetRandomBits(32)
 	}
 	if fd.randomblockhash {
-		fd.bhashlist = getRandomBits(32)
+		fd.bhashlist = mdRand.GetRandomBits(32)
 	}
 	if fd.randomfileblockhash {
-		fd.fhashlist = getRandomBits(32)
-		fd.bhashlist = getRandomBits(32)
+		fd.fhashlist = mdRand.GetRandomBits(32)
+		fd.bhashlist = mdRand.GetRandomBits(32)
 	}
 
 	// initialize the mdencode file object
@@ -181,46 +182,6 @@ func printUsage() {
 
 	fmt.Printf("\n\nBuild Time: %s\n", BuildTime)
 	fmt.Printf("Version:    %s 復甦 復活\n", Version)
-}
-
-// generate a rand bit string for the file hash list or block hash list
-// this use crypto/rand 
-func getRandomBits(length int) string {
-	var result string = ""
-
-	var n int32
-	binary.Read(rand.Reader, binary.LittleEndian, &n)
-	c := n % 50
-	if c < 0 {
-		c = 5
-	}
-
-	b := make([]byte, c)
-	_, _ = rand.Read(b)
-
-	// The slice should now contain random bytes instead of only zeroes.
-	for v := range b {
-		//	s := fmt.Sprintf("%b", b[v])
-		s := fmt.Sprintf("%b", b[v]%2)
-		result += s
-	}
-	if result == "" {
-		return "1"
-	}
-
-	return result
-}
-
-func randint64() (int64, error) {
-	var b [8]byte
-	if _, err := rand.Read(b[:]); err != nil {
-		return 0, err
-	}
-	var result = int64(binary.LittleEndian.Uint64(b[:])) % 5
-	if result == 0 {
-		result = 1
-	}
-	return result, nil
 }
 
 // https://jsonlint.com/

@@ -155,11 +155,11 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 	head, err := json.Marshal(mdj)
 	md.checkError(err)
 
-	if md.fileCount == 0 {
-		md.print("[")
-	}
+	//if md.fileCount == 0 {
+	//	md.print("[")
+	//}
 
-	if md.fileCount > 1 {
+	if md.fileCount > 0 {
 		md.print(",\n")
 	}
 
@@ -217,7 +217,7 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 // this can encode the block as minimal simple, inform, xml
 func (md *MdFormat) EncodeEndFile(encodingFormat int) {
 
-	md.println("]}")
+	md.print("]}")
 }
 
 // md print

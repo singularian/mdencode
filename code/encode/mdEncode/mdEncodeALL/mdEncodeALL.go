@@ -166,7 +166,7 @@ func (fdata *FileData) MdencodeDirectory(blockSize string, modSize string, forma
         }
 
         for _, fileName := range fileList {
-                fmt.Println(fileName)
+                ///// fmt.Println(fileName)
                 // skip the output file if it is specified
                 // if ((fileName != outputpath) && (fd.outputfilename != "")) {
                 // might be bug here???
