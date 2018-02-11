@@ -117,7 +117,6 @@ func argsSimple(argsNumber int) int {
 		fd.bhashlist = mdRand.GetRandomBits(32)
 	}
 	if fd.randomfileblockhash {
-		// fd.blocksize = strconv.Itoa(mdRand.GetRandomBlockSize())
 		fd.blocksize = strconv.FormatInt(mdRand.GetRandomBlockSize(), 10)
 	}
 

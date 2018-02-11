@@ -38,12 +38,8 @@ func GetRandomBits(length int) string {
 
 // generate a random file block size
 func GetRandomBlockSize () (int64) {
-	var result int64 = 50
 
-        // if _, err := rand.Read(b[:]); err != nil {
-        //        return 500
-        //}
-        // result = int64(binary.LittleEndian.Uint64(b[:])) % 1000
+	var result int64 = 50
 	binary.Read(rand.Reader, binary.LittleEndian, &result)
 	c := result % 1000
 
@@ -52,7 +48,6 @@ func GetRandomBlockSize () (int64) {
 		result = 100 
 		c = 100
         }
-	fmt.Println("test ", c)
         return c 
 
 }
