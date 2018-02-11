@@ -116,8 +116,8 @@ func argsSimple(argsNumber int) int {
 		fd.fhashlist = mdRand.GetRandomBits(32)
 		fd.bhashlist = mdRand.GetRandomBits(32)
 	}
-	if fd.randomfileblockhash {
-		fd.blocksize = strconv.FormatInt(mdRand.GetRandomBlockSize(), 10)
+	if fd.randomfileblocksize {
+		fd.blocksize = strconv.FormatUint(mdRand.GetRandomBlockSize(), 10)
 	}
 
 	// initialize the mdencode file object

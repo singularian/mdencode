@@ -8,6 +8,8 @@ import (
 	"encoding/binary"
 )
 
+var defaultBlockSize uint64 = 100
+
 // generate a rand bit string for the file hash list or block hash list
 // this use crypto/rand 
 func GetRandomBits(length int) string {
@@ -37,16 +39,15 @@ func GetRandomBits(length int) string {
 }
 
 // generate a random file block size
-func GetRandomBlockSize () (int64) {
+func GetRandomBlockSize () (uint64) {
 
-	var result int64 = 50
+	var result uint64 = 0
 	binary.Read(rand.Reader, binary.LittleEndian, &result)
-	c := result % 1000
+	c := result % 1000 
 
 	// should be greater than zero or make this a uint64
         if c <= 0 {
-		result = 100 
-		c = 100
+		c = defaultBlockSize
         }
         return c 
 
