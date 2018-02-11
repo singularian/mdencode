@@ -5,8 +5,6 @@ package main
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
-	"crypto/rand"
-	"encoding/binary"
 	"flag"
 	"fmt"
 	"path/filepath"
@@ -14,6 +12,7 @@ import (
 	"github.com/singularian/mdencode/code/encode/mdEncode/mdEncodeALL"
 	"github.com/singularian/mdencode/code/encode/mdRand"
 	"os"
+	"strconv"
 )
 
 var (
@@ -39,6 +38,7 @@ type FlagData struct {
         randomfilehash bool
         randomblockhash bool
         randomfileblockhash bool
+        randomfileblocksize bool
 	// current working directory
 	cwd string
 	cwdoutputfile string
@@ -76,9 +76,10 @@ func argsSimple(argsNumber int) int {
 	flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate A Random File Hash Boolean String List")
 	flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random File Hash Boolean String List")
 	flag.BoolVar(&fd.randomfileblockhash, "fbr", false, "Generate A Random File Hash Boolean String List")
-	flag.BoolVar(&fd.randomfilehash, "fhr", false, "Generate A Random File Hash Boolean String List")
-	flag.BoolVar(&fd.randomblockhash, "bhr", false, "Generate A Random Block Hash Boolean String List")
-	flag.BoolVar(&fd.randomfileblockhash, "fbhr", false, "Generate A Random File and Block Hash Boolean String List")
+	flag.BoolVar(&fd.randomfileblocksize, "blockr", false, "Generate A Random File Block Size")
+	// flag.BoolVar(&fd.randomfilehash, "fhr", false, "Generate A Random File Hash Boolean String List")
+	// flag.BoolVar(&fd.randomblockhash, "bhr", false, "Generate A Random Block Hash Boolean String List")
+	// flag.BoolVar(&fd.randomfileblockhash, "fbhr", false, "Generate A Random File and Block Hash Boolean String List")
 
 	flag.StringVar(&fd.key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
 	flag.StringVar(&fd.filename, "file", "", "Input Filename")
@@ -114,6 +115,10 @@ func argsSimple(argsNumber int) int {
 	if fd.randomfileblockhash {
 		fd.fhashlist = mdRand.GetRandomBits(32)
 		fd.bhashlist = mdRand.GetRandomBits(32)
+	}
+	if fd.randomfileblockhash {
+		// fd.blocksize = strconv.Itoa(mdRand.GetRandomBlockSize())
+		fd.blocksize = strconv.FormatInt(mdRand.GetRandomBlockSize(), 10)
 	}
 
 	// initialize the mdencode file object
