@@ -65,44 +65,44 @@ for mdencode are bit strings which can be random bit strings. This allows for th
 ```
 Usage of md:
 
+  -file string
+        Input Filename
+  -block string
+        File Block Size Bytes (default "40")
   -fh string
-     File Hash Boolean String List (default "011")     
-  -bh string  
-     Block Hash Boolean String List (default "011")   
-  -fr
-     Generate A Random File Hash Boolean String List
-  -br
-     Generate A Random Block Hash Boolean String List
-  -fbr
-     Generate A Random File and Block Hash Boolean String List
+        File Hash Boolean String List (default "011")
+  -bh string
+        Block Hash Boolean String List (default "011")
+  -mod string
+        Modulus Size in Bits (default "32")
+  -format int
+        Output Format (default 10)
+  -fr   
+        Generate A Random File Hash Boolean String List
+  -br   
+        Generate A Random Block Hash Boolean String List
+  -fbr  
+        Generate A Random File Hash and Block Hash Boolean String List
   -blockr
         Generate A Random File Block Size
-  -block string  
-     File Block Size Bytes (default "40")  
-  -mod string  
-     Modulus Size in Bits (default "32")       
-  -append  
-     Append To Output File     
-  -file string  
-     Input filename  
+  -out string
+        Output Filename
   -dir string
-     Input Directory
-  -format int  
-     Output Format (default 10)
+        Input Directory
+  -append
+        Append To Output File
+  -line
+        File Hash as one line
+  -byte 
+        Append the File Byteblock to the Block Hash List
+  -blockint
+        Append the File Byteblock Bigint to the Block Hash List
+  -log string
+        Log Filename
   -initdb string
-     Create SQLite3 Empty DB File      
-  -key string  
-     Signature Key (Minimum 16 bytes for siphash) (default "LomaLindaSanSerento9000")  
-  -line  
-     File Hash as one line  
-  -log string  
-     Log Filename  
-  -byte  
-     Append the File Byteblock to the Hash List  
-  -blockint  
-     Append the File Byteblock Bigint to the Hash List  
-  -out string  
-     Output Filename  
+        Create SQLite3 Empty DB File
+  -key string
+        Signature Key (Minimum 16 bytes for siphash) (default "LomaLindaSanSerento9000")
 
 Version: 1.0 復甦 復活
 
