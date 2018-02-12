@@ -155,8 +155,10 @@ func argsSimple(argsNumber int) int {
 // printUsage 
 func printUsage() {
 	fmt.Printf("USAGE of %s:\n", os.Args[0])
-	// flag.defaultUsage()
+	// prints the flag arguments in sorted order
 	// flag.PrintDefaults()
+
+	// prints the flag arguments in non sorted order
 	fmt.Println(`
   -file string
         Input Filename
@@ -173,9 +175,9 @@ func printUsage() {
   -fr   
         Generate A Random File Hash Boolean String List
   -br   
-        Generate A Random File Hash Boolean String List
+        Generate A Random Block Hash Boolean String List
   -fbr  
-        Generate A Random File Hash Boolean String List
+        Generate A Random File Hash and Block Hash Boolean String List
   -blockr
         Generate A Random File Block Size
   -out string
