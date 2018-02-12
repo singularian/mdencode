@@ -152,6 +152,8 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 	// md.println(string(head))
 	md.println(strings.ToLower(string(head)))
 
+	md.blockCount = 0
+
 
 }
 
