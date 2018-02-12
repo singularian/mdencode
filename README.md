@@ -70,19 +70,19 @@ Usage of md:
   -block string
         File Block Size Bytes (default "40")
   -fh string
-        File Hash Boolean String List (default "011")
+        File Hash Bit String List (default "011")
   -bh string
-        Block Hash Boolean String List (default "011")
+        Block Hash Bit String List (default "011")
   -mod string
         Modulus Size in Bits (default "32")
   -format int
         Output Format (default 10)
   -fr   
-        Generate A Random File Hash Boolean String List
+        Generate A Random File Hash Bit String List
   -br   
-        Generate A Random Block Hash Boolean String List
+        Generate A Random Block Hash Bit String List
   -fbr  
-        Generate A Random File Hash and Block Hash Boolean String List
+        Generate A Random File Hash and Block Hash Bit String List
   -blockr
         Generate A Random File Block Size
   -out string
