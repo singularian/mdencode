@@ -155,6 +155,7 @@ func argsSimple(argsNumber int) int {
 // printUsage 
 func printUsage() {
 	fmt.Printf("USAGE of %s:\n", os.Args[0])
+	// fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
 	// prints the flag arguments in sorted order
 	// flag.PrintDefaults()
 
