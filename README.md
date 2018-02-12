@@ -339,6 +339,7 @@ modulo ceil  281474976710656
 Found Block  [139 111 156 34 193 144]
 total time  58.27042ms
 random bytestring and modulusscan bytestring match  [139 111 156 34 193 144]   [139 111 156 34 193 144]
+```
 
 [Other Decoder Examples](https://github.com/singularian/mdencode/blob/master/EXAMPLES.md)
 
