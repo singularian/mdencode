@@ -36,23 +36,6 @@ type DecodeData struct {
 // it then runs it through the modulus scan
 func main() {
 
-/*	var argsNumber int = len(os.Args)
-
-	// TODO: there are still some bugs in the floor setter
-
-	// test a random byte block
-	// arguments blocksize bytes and modsize bits
-	// more than 6 bytes takes a while 
-        if argsNumber == 3 {
-                blocksize  := os.Args[1]
-                modsize    := os.Args[2]
-		blocksizeint, _ := strconv.Atoi(blocksize)
-		modulusScanRandom(blocksizeint, modsize)
-        // test random
-        } else {
-		testmodulusScanRandom()
-	}
-*/
 	mddecode()
 	os.Exit(0)
 }
@@ -65,8 +48,6 @@ func mddecode() int {
 
         md := new(DecodeData)
 	md.initLog()
-
-        // TODO: there are still some bugs in the floor setter
 
         // test a random byte block
         // arguments blocksize bytes and modsize bits

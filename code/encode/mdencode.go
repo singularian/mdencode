@@ -154,9 +154,50 @@ func argsSimple(argsNumber int) int {
 
 // printUsage 
 func printUsage() {
-	fmt.Printf("Usage of %s:\n", os.Args[0])
+	fmt.Printf("USAGE of %s:\n", os.Args[0])
 	// flag.defaultUsage()
-	flag.PrintDefaults()
+	// flag.PrintDefaults()
+	fmt.Println(`
+  -file string
+        Input Filename
+  -block string
+        File Block Size Bytes (default "40")
+  -fh string
+        File Hash Boolean String List (default "011")
+  -bh string
+        Block Hash Boolean String List (default "011")
+  -mod string
+        Modulus Size in Bits (default "32")
+  -format int
+        Output Format (default 10)
+  -fr   
+        Generate A Random File Hash Boolean String List
+  -br   
+        Generate A Random File Hash Boolean String List
+  -fbr  
+        Generate A Random File Hash Boolean String List
+  -blockr
+        Generate A Random File Block Size
+  -out string
+        Output Filename
+  -dir string
+        Input Directory
+  -append
+        Append To Output File
+  -line
+        File Hash as one line
+  -byte 
+        Append the File Byteblock to the Block Hash List
+  -blockint
+        Append the File Byteblock Bigint to the Block Hash List
+  -log string
+        Log Filename
+  -initdb string
+        Create SQLite3 Empty DB File
+  -key string
+        Signature Key (Minimum 16 bytes for siphash) (default "LomaLindaSanSerento9000")
+    `)
+
 	fmt.Println()
 
 	fmt.Println("Formats:")
