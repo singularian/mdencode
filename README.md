@@ -166,7 +166,7 @@ md -file=Makefile -block=350 -mod=32 -fh=101011 -br
 md -file=Makefile -block=300 -mod=32 -fr -br
 ```
 
-# Eample usage
+# Example usage
 
 This is a file signature for Makefile with a block size of 100 bytes and a 128 bit modulus and the fileblock signature bit string and file bit string and a format specified by number 10. It is formatted by go flags args.
 
