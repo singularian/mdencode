@@ -305,7 +305,7 @@ The program `decoderRandom` is creating a random 6 byte array and then running a
 It creates a random 6 byte array and a 32 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
 It calculated and found a hashed 6 byte block in two seconds on a Pentium n3700.  
 
-[EXMPLES.md](https://github.com/singularian/mdencode/EXAMPLES.md)
+[EXMPLES.md](https://github.com/singularian/mdencode/blob/master/EXAMPLES.md)
 
 `$GOPATH/github.com/singularian/mdencode/code/decode/decoderRandom`
 ```
