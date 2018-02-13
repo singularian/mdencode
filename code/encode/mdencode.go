@@ -39,6 +39,7 @@ type FlagData struct {
         randomblockhash bool
         randomfileblockhash bool
         randomfileblocksize bool
+        randomModSize bool
 	// current working directory
 	cwd string
 	cwdoutputfile string
@@ -77,6 +78,7 @@ func argsSimple(argsNumber int) int {
 	flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random File Hash Boolean String List")
 	flag.BoolVar(&fd.randomfileblockhash, "fbr", false, "Generate A Random File Hash Boolean String List")
 	flag.BoolVar(&fd.randomfileblocksize, "blockr", false, "Generate A Random File Block Size")
+	flag.BoolVar(&fd.randomModSize, "modr", false, "Generate A Random File Modulus Size")
 	// flag.BoolVar(&fd.randomfilehash, "fhr", false, "Generate A Random File Hash Boolean String List")
 	// flag.BoolVar(&fd.randomblockhash, "bhr", false, "Generate A Random Block Hash Boolean String List")
 	// flag.BoolVar(&fd.randomfileblockhash, "fbhr", false, "Generate A Random File and Block Hash Boolean String List")
@@ -118,6 +120,9 @@ func argsSimple(argsNumber int) int {
 	}
 	if fd.randomfileblocksize {
 		fd.blocksize = strconv.FormatUint(mdRand.GetRandomBlockSize(), 10)
+	}
+	if fd.randomModSize {
+		fd.modsize = strconv.FormatUint(mdRand.GetRandomModSize(), 10)
 	}
 
 	// initialize the mdencode file object
@@ -181,6 +186,8 @@ func printUsage() {
         Generate A Random File Hash and Block Hash Bit String List
   -blockr
         Generate A Random File Block Size
+  -modr
+        Generate A Random File Block Modulus
   -out string
         Output Filename
   -dir string

@@ -9,6 +9,7 @@ import (
 )
 
 var defaultBlockSize uint64 = 100
+var defaultModSize uint64   = 32
 
 // generate a rand bit string for the file hash list or block hash list
 // this use crypto/rand 
@@ -48,6 +49,21 @@ func GetRandomBlockSize () (uint64) {
 	// should be greater than zero or make this a uint64
         if c <= 0 {
 		c = defaultBlockSize
+        }
+        return c 
+
+}
+
+// generate a random modulus size
+func GetRandomModSize () (uint64) {
+
+        var result uint64 = 0
+        binary.Read(rand.Reader, binary.LittleEndian, &result)
+        c := result %  2048 
+
+        // should be greater than zero or make this a uint64
+        if c <= 0 {
+                c = defaultModSize
         }
         return c 
 
