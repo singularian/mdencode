@@ -85,6 +85,8 @@ Usage of md:
         Generate A Random File Hash and Block Hash Bit String List
   -blockr
         Generate A Random File Block Size
+  -modr
+        Generate A Random File Block Modulus
   -out string
         Output Filename
   -dir string
