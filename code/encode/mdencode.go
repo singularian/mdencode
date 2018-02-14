@@ -40,6 +40,7 @@ type FlagData struct {
         randomfileblockhash bool
         randomfileblocksize bool
         randomModSize bool
+        randomEverything bool
 	// current working directory
 	cwd string
 	cwdoutputfile string
@@ -72,13 +73,14 @@ func argsSimple(argsNumber int) int {
 	flag.StringVar(&fd.blocksize, "block", "40", "File Block Size Bytes")
 	flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
 	flag.IntVar(&fd.defaultFormat, "format", 10, "Output Format")
-	flag.StringVar(&fd.fhashlist, "fh", "011", "File Hash Boolean String List")
-	flag.StringVar(&fd.bhashlist, "bh", "011", "Block Hash Boolean String List")
-	flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate A Random File Hash Boolean String List")
-	flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random File Hash Boolean String List")
-	flag.BoolVar(&fd.randomfileblockhash, "fbr", false, "Generate A Random File Hash Boolean String List")
+	flag.StringVar(&fd.fhashlist, "fh", "011", "File Hash Bit String List")
+	flag.StringVar(&fd.bhashlist, "bh", "011", "Block Hash Bit String List")
+	flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate A Random File Hash Bit String List")
+	flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random Block Hash Bit String List")
+	flag.BoolVar(&fd.randomfileblockhash, "fbr", false, "Generate A Random File and Block Hash Bit String List")
 	flag.BoolVar(&fd.randomfileblocksize, "blockr", false, "Generate A Random File Block Size")
 	flag.BoolVar(&fd.randomModSize, "modr", false, "Generate A Random File Modulus Size")
+	flag.BoolVar(&fd.randomEverything, "all", false, "Randomize Everything")
 	// flag.BoolVar(&fd.randomfilehash, "fhr", false, "Generate A Random File Hash Boolean String List")
 	// flag.BoolVar(&fd.randomblockhash, "bhr", false, "Generate A Random Block Hash Boolean String List")
 	// flag.BoolVar(&fd.randomfileblockhash, "fbhr", false, "Generate A Random File and Block Hash Boolean String List")
@@ -122,6 +124,12 @@ func argsSimple(argsNumber int) int {
 		fd.blocksize = strconv.FormatUint(mdRand.GetRandomBlockSize(), 10)
 	}
 	if fd.randomModSize {
+		fd.modsize = strconv.FormatUint(mdRand.GetRandomModSize(), 10)
+	}
+	if fd.randomEverything {
+		fd.fhashlist = mdRand.GetRandomBits(32)
+		fd.bhashlist = mdRand.GetRandomBits(32)
+		fd.blocksize = strconv.FormatUint(mdRand.GetRandomBlockSize(), 10)
 		fd.modsize = strconv.FormatUint(mdRand.GetRandomModSize(), 10)
 	}
 
