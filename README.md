@@ -87,6 +87,8 @@ Usage of md:
         Generate A Random File Block Size
   -modr
         Generate A Random File Block Modulus
+  -all
+        Randomize everything
   -out string
         Output Filename
   -dir string
