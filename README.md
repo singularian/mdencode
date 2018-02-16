@@ -345,7 +345,7 @@ total time  58.27042ms
 random bytestring and modulusscan bytestring match  [139 111 156 34 193 144]   [139 111 156 34 193 144]
 ```
 
-[Other Decoder Examples](https://github.com/singularian/mdencode/docs/blob/master/EXAMPLES.md)
+[Other Decoder Examples](https://github.com/singularian/mdencode/blob/master/docs/EXAMPLES.md)
 
 # Go Library Dependencies
 
