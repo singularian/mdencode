@@ -9,7 +9,7 @@ import (
 	"flag"
 	_ "log"
 	"os"
-	"github.com/singularian/mdencode/code/encode/mdReports/mdReportsSQL"
+	"github.com/singularian/mdencode/code/mdencode/mdReports/mdReportsSQL"
 )
 
 func main() {

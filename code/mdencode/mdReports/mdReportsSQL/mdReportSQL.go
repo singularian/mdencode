@@ -12,7 +12,7 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"github.com/singularian/mdencode/code/encode/mdFormatsImport/mdFormatImportSQL"
+	"github.com/singularian/mdencode/code/mdencode/mdFormatsImport/mdFormatImportSQL"
 	_ "github.com/mattn/go-sqlite3"
 )
 

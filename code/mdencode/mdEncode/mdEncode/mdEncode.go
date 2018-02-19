@@ -40,7 +40,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"github.com/singularian/mdencode/code/encode/mdFormatsImport/mdFormatImport"
+	"github.com/singularian/mdencode/code/mdencode/mdFormatsImport/mdFormatImport"
 )
 
 // mdformat interface struct

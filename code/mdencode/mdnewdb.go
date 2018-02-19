@@ -7,7 +7,7 @@ package main
 import (
 	"os"
 	"fmt"
-        "github.com/singularian/mdencode/code/encode/mdFormats/mdFormatSQL"
+        "github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatSQL"
 )
 
 

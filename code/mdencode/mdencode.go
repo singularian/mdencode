@@ -9,15 +9,15 @@ import (
 	"fmt"
 	"path/filepath"
         _ "io/ioutil"
-	"github.com/singularian/mdencode/code/encode/mdEncode/mdEncodeALL"
-	"github.com/singularian/mdencode/code/encode/mdRand"
+	"github.com/singularian/mdencode/code/mdencode/mdEncode/mdEncodeALL"
+	"github.com/singularian/mdencode/code/mdencode/mdRand"
 	"os"
 	"strconv"
 )
 
 var (
 	Version   = "1.0.0"
-	BuildTime = "2015-06-16-0431 UTC"
+	BuildTime = "2018-06-16-0431 UTC"
 )
 
 // mdencode flag struct
