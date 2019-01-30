@@ -65,6 +65,7 @@ func mddecode() int {
 		var i int64 
 		threadNumber, _ = strconv.ParseInt(threadsize, 10, 64) 
 
+		// create a random n byte size byte block
 		bytes := make([]byte, blocksizeint)
                 _, _ = rand.Read(bytes)
 
@@ -75,7 +76,6 @@ func mddecode() int {
 			md.threadCount  = threadNumber
 			md.byteblock = bytes
 			md.initLog()
-                	// go md.modulusScanRandom(blocksizeint, modsize, i, 10, c)
 			mdp=append(mdp,md)
 		}
 
@@ -88,9 +88,8 @@ func mddecode() int {
 			fmt.Println("result ", result)
 	
 		}
-        // test random
+        // print program usage
         } else {
-           //       md.testmodulusScanRandom()
 	   fmt.Println("Usage ", os.Args[0], " [BLOCKSIZE BYTES] [MODSIZE BITS] [THREADSIZE GOROUTINES]")
 	   fmt.Println("Usage ", os.Args[0], " 8 32 10")
         }
@@ -118,11 +117,8 @@ func (md *DecodeData) testmodulusScanRandom() {
 
 // run a modulus scan on a random byte array
 func (md *DecodeData) modulusScanRandom(blockSize int, modSize string, threadNumber int64, threadCount int, c chan string) {
-        // create a random byte array
-	// nead to init once
-        // bytes := make([]byte, blockSize)
+	// set the current byte block
 	bytes := md.byteblock
-        // _, _ = rand.Read(bytes)
 	blockSizeStr := strconv.Itoa(blockSize)
 
 	// convert the bytes to a string
