@@ -46,14 +46,12 @@ func main() {
 }
 
 // mdecode file
-// func mddecode(argsNumber int) int {
 func mddecode() int {
 
 	var argsNumber int = len(os.Args)
 
         // test a random byte block
-        // arguments blocksize bytes and modsize bits
-        // more than 6 bytes takes a while 
+        // arguments blocksize bytes modsize bits and thread size of goroutines
         if argsNumber == 4 {
                 var c chan string = make(chan string)
 
@@ -69,6 +67,7 @@ func mddecode() int {
 		bytes := make([]byte, blocksizeint)
                 _, _ = rand.Read(bytes)
 
+		// set up the thread list of go routine objects
 		mdp:=[]*DecodeData{}
                 for i = 0; i<threadNumber; i++ {
 			md := new(DecodeData)
@@ -79,14 +78,15 @@ func mddecode() int {
 			mdp=append(mdp,md)
 		}
 
+		// kick off the thread list go routines
 		for i = 0; i < threadNumber; i++ {
 		 	go mdp[i].modulusScanRandom(blocksizeint, modsize, i, 10, c)
 
 		}
 
+		// wait for the first channel result
 		for result := range c {
 			fmt.Println("result ", result)
-	
 		}
         // print program usage
         } else {
@@ -115,7 +115,7 @@ func (md *DecodeData) testmodulusScanRandom() {
 }
 
 
-// run a modulus scan on a random byte array
+// run a paralell modulus scan on a random byte array
 func (md *DecodeData) modulusScanRandom(blockSize int, modSize string, threadNumber int64, threadCount int, c chan string) {
 	// set the current byte block
 	bytes := md.byteblock
@@ -272,6 +272,8 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
         modstart.SetString(remainder, 10) 
         // modstart := big.NewInt(remainder);
 	modstart = modstart.Add(modstart, modremainder)
+
+	// this code makes the modulus paralell 
 	// thread count
 	var threadNumber = md.threadNumber
 	var threadCount  = md.threadCount
@@ -283,8 +285,6 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
 
 	// modulus * the threadcount 
 	mult            := big.NewInt(threadCount)
-	// modOffSet       := new(big.Int)
-	// i = modOffSet.Mul(i, mult)
 	i = mult.Mul(i, mult)
 
        // md.Println("thread ", threadNumber, " ", threadCount, " modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder))
