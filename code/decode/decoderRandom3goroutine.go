@@ -91,10 +91,11 @@ func mddecode() int {
 			fmt.Println("result ", result)
 	
 		}
-		// fmt.Println(c)
         // test random
-        //} else {
-         //       md.testmodulusScanRandom()
+        } else {
+           //       md.testmodulusScanRandom()
+	   fmt.Println("Usage ", os.Args[0], " [BLOCKSIZE BYTES] [MODSIZE BITS] [THREADSIZE GOROUTINES]")
+	   fmt.Println("Usage ", os.Args[0], " 8 32 10")
         }
 
 
