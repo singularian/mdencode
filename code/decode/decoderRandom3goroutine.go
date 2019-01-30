@@ -177,8 +177,9 @@ func (md *DecodeData) modulusScanRandom(blockSize int, modSize string, threadNum
 
 	if(bytestring == buffer) {
 		md.Println("random bytestring and modulusscan bytestring match ", bytestring, " ", buffer)
-		s := "random bytestring and modulusscan bytestring match " + bytestring + " " + buffer
+		s := "thread " + fmt.Sprint(md.threadNumber) + " random bytestring and modulusscan bytestring match " + bytestring + " " + buffer
 		c <- s
+		close(c)
 	}
 
 	return
