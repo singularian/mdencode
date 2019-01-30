@@ -51,9 +51,6 @@ func mddecode() int {
 
 	var argsNumber int = len(os.Args)
 
-        md := new(DecodeData)
-	md.initLog()
-
         // test a random byte block
         // arguments blocksize bytes and modsize bits
         // more than 6 bytes takes a while 
