@@ -1,4 +1,4 @@
-$ ./decoderRandom3 13 64 16
+sammy@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom3 13 64 16
 
 Starting Modulus Scan Random
 Starting Modulus Scan Random
