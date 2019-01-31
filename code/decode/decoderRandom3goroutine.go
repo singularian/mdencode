@@ -32,6 +32,8 @@ type DecodeData struct {
 	threadCount int64
 	// bytes
 	byteblock []byte
+	// time
+	timeStarted string
         // log writer
         // log *log.Logger
 	Logfile *log.Logger
@@ -67,6 +69,10 @@ func mddecode() int {
 		bytes := make([]byte, blocksizeint)
                 _, _ = rand.Read(bytes)
 
+		// set the timestamp
+        	now := time.Now()
+		var time = fmt.Sprintf("%d%d%d%d%d", now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
+
 		// set up the thread list of go routine objects
 		mdp:=[]*DecodeData{}
                 for i = 0; i<threadNumber; i++ {
@@ -74,6 +80,7 @@ func mddecode() int {
 			md.threadNumber = i
 			md.threadCount  = threadNumber
 			md.byteblock = bytes
+			md.timeStarted = time
 			md.initLog()
 			mdp=append(mdp,md)
 		}
@@ -157,7 +164,9 @@ func (md *DecodeData) modulusScanRandom(blockSize int, modSize string, threadNum
         md5hash.Write([]byte(bytes))
         var md5sum = hex.EncodeToString(md5hash.Sum(nil))
 
-        md.Println("Starting Modulus Scan Random")
+	md.Println("Starting Modulus Scan Random ", threadNumber)
+
+	if (threadNumber == 0) {
         md.Println("random ", blockSize, " bytes ", bytes, " ", blockBigIntstring)
         md.Println("modulus size bits ", bitsize)
         md.Println("byte block modulus ", modulusBigIntString)
@@ -166,6 +175,7 @@ func (md *DecodeData) modulusScanRandom(blockSize int, modSize string, threadNum
 
         md.Println("shasum ", shasum);
         md.Println("md5sum ", md5sum);
+	}
 
         _, buffer := md.decode(blockSizeStr, modSize, s, blockmod, md5sum, shasum, c)
 
@@ -312,19 +322,6 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
 
 			if md5string == hashone && sha1string == hashtwo {
 				md.Println("Found Block ", buf)
-				// var buffer bytes.Buffer
-				// buffer.WriteString("Found Block ")
-				// s := string(buf[:])
-				// s := fmt.Sprintf("%x", buf)
-				// buffer.WriteString(s)
-				// md.Println("buffer ", buffer.String())
-				// st := buffer.String()
-				// c <- st
-				// c <- buffer.String()
-				// break
-				// done <- true
-				// close(c)
-                                // return
 				break
 			}
 			sha1.Reset()
@@ -418,11 +415,8 @@ func (md *DecodeData) initLog() {
 
 	// now := time.Now()
 	var logfilename = "decodeRandom."
-	// could use random number
-	// var time = fmt.Sprintf("%d%d%d%d%d", now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
-	// logfilename = logfilename  + time + ".log"
 	s := fmt.Sprintf("%d", md.threadNumber)
-	logfilename = logfilename  + s + ".log"
+	logfilename = logfilename  + s + "." + md.timeStarted + ".log"
 	// var logfile = md.logfile
 
         logfile, err := os.OpenFile(logfilename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
