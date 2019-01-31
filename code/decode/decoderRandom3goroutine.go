@@ -122,7 +122,7 @@ func (md *DecodeData) testmodulusScanRandom() {
 }
 
 
-// run a paralell modulus scan on a random byte array
+// run a parallel modulus scan on a random byte array
 func (md *DecodeData) modulusScanRandom(blockSize int, modSize string, threadNumber int64, threadCount int, c chan string) {
 	// set the current byte block
 	bytes := md.byteblock
@@ -413,11 +413,9 @@ func (md *DecodeData) convertFloorBase2 (modfloor *big.Int, modi *big.Int) *big.
 // initialize the logfile
 func (md *DecodeData) initLog() {
 
-	// now := time.Now()
 	var logfilename = "decodeRandom."
 	s := fmt.Sprintf("%d", md.threadNumber)
 	logfilename = logfilename  + s + "." + md.timeStarted + ".log"
-	// var logfile = md.logfile
 
         logfile, err := os.OpenFile(logfilename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
         if err != nil {
