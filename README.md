@@ -350,8 +350,17 @@ random bytestring and modulusscan bytestring match  [139 111 156 34 193 144]   [
 
 # Parallel Modulus Scan
 
-The Modulus Scan can also be run in parallel. This is an example of a parallel modulus scan with 16 threads.
+The Modulus Scan can also be run in parallel. An example program decoderRandom3 shows a modulus scan with configurable number of goroutines.
+Each of the goroutines runs a modulus scan in sync and when a result is founding matching the original signature block it returns a byteblock.
 
+This is the usage of the prototype parallel modulus scan program.
+```
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom3
+Usage  ./decoderRandom3  [BLOCKSIZE BYTES] [MODSIZE BITS] [THREADSIZE GOROUTINES]
+Usage  ./decoderRandom3  8 32 10
+```
+
+This is an example of a parallel modulus scan with 16 threads.
 [Other Decoder3 Parallel Examples](https://github.com/singularian/mdencode/blob/master/examples/mdencodeParallelmodscan2.txt)
 
 # Go Library Dependencies
