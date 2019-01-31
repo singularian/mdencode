@@ -347,6 +347,12 @@ random bytestring and modulusscan bytestring match  [139 111 156 34 193 144]   [
 
 [Other Decoder Examples](https://github.com/singularian/mdencode/blob/master/docs/EXAMPLES.md)
 
+# Parallel Modulus Scan
+
+The Modulus Scan can also be run in parallel. This is an example of a parallel modulus scan with 16 threads.
+
+[Other Decoder3 Parallel Examples](https://github.com/singularian/mdencode/blob/master/examples/mdencodeParallelmodscan2.txt)
+
 # Go Library Dependencies
 
 go get -u golang.org/x/crypto/blake2s  
