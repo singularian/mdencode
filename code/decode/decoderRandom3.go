@@ -40,7 +40,6 @@ type DecodeData struct {
 	// time
 	timeStarted string
         // log writer
-        // log *log.Logger
 	Logfile *log.Logger
 }
 
@@ -69,13 +68,17 @@ func mddecode() int {
                 modsize    := os.Args[2]
                 threadsize := os.Args[3]
                 blocksizeint, _ := strconv.Atoi(blocksize)
-		var threadNumber int64
-		var i int64 
-		threadNumber, _ = strconv.ParseInt(threadsize, 10, 64) 
+		var threadCount int64
+		var thread int64 
+		threadCount, _ = strconv.ParseInt(threadsize, 10, 64) 
 
 		// create a random n byte size byte block
 		bytes := make([]byte, blocksizeint)
                 _, _ = rand.Read(bytes)
+		// test failure with this byteblock there is a bug with the modular exponent
+		// 8 bytes 40 bit mod
+		/// bytes := []byte{ 0, 10, 22, 38, 240, 171, 146, 123 }
+		// _, _ = rand.Read(bytes)
 
 		// set the timestamp
         	now := time.Now()
@@ -83,10 +86,10 @@ func mddecode() int {
 
 		// set up the thread list of go routine objects
 		mdp:=[]*DecodeData{}
-                for i = 0; i<threadNumber; i++ {
+                for thread = 0; thread<threadCount; thread++ {
 			md := new(DecodeData)
-			md.threadNumber = i
-			md.threadCount  = threadNumber
+			md.threadNumber = thread 
+			md.threadCount  = threadCount
 			md.byteblock = bytes
 			md.timeStarted = time
 			md.initLog()
@@ -94,8 +97,8 @@ func mddecode() int {
 		}
 
 		// kick off the thread list go routines
-		for i = 0; i < threadNumber; i++ {
-		 	go mdp[i].modulusScanRandom(blocksizeint, modsize, i, 10, c)
+		for thread = 0; thread < threadCount; thread++ {
+		 	go mdp[thread].modulusScanRandom(blocksizeint, modsize, thread, 10, c)
 
 		}
 
@@ -175,7 +178,7 @@ func (md *DecodeData) modulusScanRandom(blockSize int, modSize string, threadNum
 	md.Println("Starting Modulus Scan Random ", threadNumber)
 
 	if (threadNumber == 0) {
-        md.Println("random ", blockSize, " bytes ", bytes, " ", blockBigIntstring)
+        md.Println("blocksize ", blockSize, " random bytes ", bytes, " bigint ", blockBigIntstring)
         md.Println("modulus size bits ", bitsize)
         md.Println("byte block modulus ", modulusBigIntString)
         md.Println("byte block modulus remainder ", blockmod)
@@ -221,7 +224,7 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
 
 	md.Println("modulo bigint", modulostr)
 
-        // calculate the module exponent floor and ceiling
+        // calculate the modular exponent floor and ceiling
 	// the base in the exponent is 2 it can also be the modulus to some power less than the big block int
         // floor = 2 to the power
 	// ceil = 2 to the power + 1 number less than greater than the block number
@@ -253,6 +256,7 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
 	md.Println("modulo floor ", modexp, " ", modulofloorstr, " ceil ", moduloceilstr)
 	fmt.Println("modulo floor exponent ", modexp, " modulo floor ", modulofloorstr, " modulo ceil ", moduloceilstr, " mod ", i)
 
+	// I think there is a bug here somewhere
         // calcluate the 2^exp mod floor
 	// this converts the 2^exponent to modulus*n for the modfloor + the remainder
 	modremainder := new(big.Int)
@@ -414,7 +418,7 @@ func (md *DecodeData) convertFloorBase2 (modfloor *big.Int, modi *big.Int) *big.
         }
 	remstring := modremainder.String()
 	md.Println("modremainder ", modremainder, " ", remstring)
-	// return 0
+	
 	return modremainder
 }
 
