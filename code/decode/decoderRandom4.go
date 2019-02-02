@@ -45,9 +45,13 @@ func mddecode() int {
                 modsize    := os.Args[2]
                 threadsize := os.Args[3]
                 blocksizeint, _ := strconv.Atoi(blocksize)
+		var blockSizeInt int64
+		var modSizeInt int64
 		var threadCount int64
 		var thread int64 
-		threadCount, _ = strconv.ParseInt(threadsize, 10, 64) 
+		blockSizeInt, _ = strconv.ParseInt(blocksize, 10, 64) 
+		modSizeInt  , _ = strconv.ParseInt(modsize, 10, 64) 
+		threadCount,  _ = strconv.ParseInt(threadsize, 10, 64) 
 
 		// create a random n byte size byte block
 		bytes := make([]byte, blocksizeint)
@@ -63,7 +67,7 @@ func mddecode() int {
 		// set up the thread list of go routine objects
 		mdp:=[]*modScan.DecodeData{}
                 for thread = 0; thread<threadCount; thread++ {
-			md := modScan.Init(thread, threadCount, bytes, time)
+			md := modScan.Init(blockSizeInt, modSizeInt, thread, threadCount, bytes, time)
 			mdp=append(mdp,md)
 		}
 

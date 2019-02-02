@@ -28,6 +28,8 @@ import (
 type DecodeData struct {
 	blocksize string
 	modsize string
+	blocksizeInt int64
+	modsizeInt int64
 	modExp int
 	blockBigInt *big.Int
 	modulusBigInt *big.Int
@@ -45,8 +47,11 @@ type DecodeData struct {
 
 
 // Init returns a new mdEncode object                                              
-func Init(thread int64, threadCount int64, bytes []byte, time string) (md *DecodeData) {
+func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes []byte, time string) (md *DecodeData) {
         mdata := new(DecodeData)
+	mdata.blocksizeInt = blocksize
+        mdata.modsizeInt   = modsize
+        // mdata.modExp       = modexp
         mdata.threadNumber = thread
         mdata.threadCount  = threadCount
         mdata.byteblock    = bytes
@@ -55,86 +60,10 @@ func Init(thread int64, threadCount int64, bytes []byte, time string) (md *Decod
         mdata.islogging = false
         return mdata
 }
-/*
-// mdecode file
-func mddecode() int {
-
-	var argsNumber int = len(os.Args)
-
-        // test a random byte block
-        // arguments:
-        //   blocksize bytes 
-        //   modsize bits 
-        //   thread size of goroutines
-        if argsNumber == 4 {
-                var c chan string = make(chan string)
-
-                blocksize  := os.Args[1]
-                modsize    := os.Args[2]
-                threadsize := os.Args[3]
-                blocksizeint, _ := strconv.Atoi(blocksize)
-		var threadCount int64
-		var thread int64 
-		threadCount, _ = strconv.ParseInt(threadsize, 10, 64) 
-
-		// create a random n byte size byte block
-		bytes := make([]byte, blocksizeint)
-                _, _ = rand.Read(bytes)
-		// test failure with this byteblock there is a bug with the modular exponent
-		// 8 bytes 40 bit mod
-		/// bytes := []byte{ 0, 10, 22, 38, 240, 171, 146, 123 }
-		// _, _ = rand.Read(bytes)
-
-		// set the timestamp
-        	now := time.Now()
-		var time = fmt.Sprintf("%d%d%d%d%d", now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
-
-		// set up the thread list of go routine objects
-		mdp:=[]*DecodeData{}
-                for thread = 0; thread<threadCount; thread++ {
-			md := new(DecodeData)
-			md.threadNumber = thread 
-			md.threadCount  = threadCount
-			md.byteblock = bytes
-			md.timeStarted = time
-			md.initLog()
-			mdp=append(mdp,md)
-		}
-
-		// kick off the thread list go routines
-		for thread = 0; thread < threadCount; thread++ {
-		 	go mdp[thread].modulusScanRandom(blocksizeint, modsize, thread, 10, c)
-
-		}
-
-		// wait for the first channel result
-		for result := range c {
-			fmt.Println("result ", result)
-		}
-
-
-	return 0
-
-}
-*/
-
-// test method
-func (md *DecodeData) testmodulusScanRandom() {
-
-	// fd := new(DecodeData)
-
-        //// md.modulusScanRandom(6, "32")
-        ///// md.modulusScanRandom(6, "24")
-
-        // 8 bytes ran in 24 hours
-        //      decode("8", "24", "61", "7544937", "b597b21cd5ddcde0944cc7734d2f5da9", "19cfdd42d9389ee1a7709194020ce055e2493e05")
-        // modulusScanRandom(8, "24")
-
-}
-
 
 // run a parallel modulus scan on a random byte array
 func (md *DecodeData) ModulusScanRandom(blockSize int, modSize string, threadNumber int64, threadCount int, c chan string) {
+// func (md *DecodeData) ModulusScanRandom(c chan string) {
 	// set the current byte block
 	bytes := md.byteblock
 	blockSizeStr := strconv.Itoa(blockSize)
