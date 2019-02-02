@@ -55,6 +55,7 @@ func main() {
 
  	if argsNumber == 1 {
            fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES]")
+           fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10")
            fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]")
            os.Exit(1)
         }

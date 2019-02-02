@@ -358,6 +358,7 @@ It allows for the blocksize and modulus bitsize and thread count as well as the 
 ```
 user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4
 Usage  ./decoderRandom4  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES]
+Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10
 Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
 ```
 
