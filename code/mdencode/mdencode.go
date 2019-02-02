@@ -133,6 +133,11 @@ func argsSimple(argsNumber int) int {
 		fd.modsize = strconv.FormatUint(mdRand.GetRandomModSize(), 10)
 	}
 
+	// need to add the block group which is a hash of groups of blocks
+	// blockgroup option and number etc
+	// ie bg=10 or blockgroups are 10 times the block size
+	// this eliminates or is one way to address collsions on a block level
+
 	// initialize the mdencode file object
 	// var md = mdEncodeALL.Init()
 	fd.md = mdEncodeALL.Init()
