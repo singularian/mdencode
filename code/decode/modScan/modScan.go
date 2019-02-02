@@ -67,11 +67,12 @@ func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes
 }
 
 // run a parallel modulus scan on a random byte array
-func (md *DecodeData) ModulusScanBytes(blockSize int, modSize string, threadNumber int64, threadCount int, c chan string) {
+func (md *DecodeData) ModulusScanBytes(blockSize int64, modSize string, threadNumber int64, threadCount int, c chan string) {
 // func (md *DecodeData) ModulusScanRandom(c chan string) {
 	// set the current byte block
 	bytes := md.byteblock
-	blockSizeStr := strconv.Itoa(blockSize)
+	// blockSizeStr := strconv.Itoa(blockSize)
+	blockSizeStr := fmt.Sprintf("%v", md.blocksizeInt)
 
         // process the modulus bitsize argument
         bitsize, _ := strconv.ParseInt(modSize, 10, 64)
@@ -108,7 +109,7 @@ func (md *DecodeData) ModulusScanBytes(blockSize int, modSize string, threadNumb
 	md.Println("Starting Modulus Scan Random ", threadNumber)
 
 	if (threadNumber == 0) {
-        md.Println("blocksize ", blockSize, " random bytes ", bytes, " bigint ", blockBigIntstring)
+        md.Println("blocksize ", blockSizeStr, " random bytes ", bytes, " bigint ", blockBigIntstring)
         md.Println("modulus size bits ", bitsize)
         md.Println("byte block modulus ", modulusBigIntString)
         md.Println("byte block modulus remainder ", blockmod)
@@ -142,8 +143,8 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
 	start := time.Now()
 	md.Println("Starting decoderRandom")
 
-        blocksize, _ := strconv.ParseInt(blockSize, 10, 64)
-        buf := make([]byte, blocksize)
+        // blocksize, _ := strconv.ParseInt(blockSize, 10, 64)
+        buf := make([]byte, md.blocksizeInt)
 
         // process the modulus bitsize argument
         // raise 2 to the bitsize exponent

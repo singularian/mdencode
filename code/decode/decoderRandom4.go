@@ -18,6 +18,9 @@ import (
 	"os"
 	// "log"
 	"time"
+	"strings"
+	// "encoding/binary"
+	"encoding/json"
 	"github.com/singularian/mdencode/code/decode/modScan"
 )
 
@@ -32,6 +35,7 @@ type FlagData struct {
 	threadCount int64
 	thread int64
 	bytes []byte
+	bytestring string
 }
 
 // generates a random n byte array and then hashes it
@@ -45,21 +49,22 @@ func main() {
 	flag.StringVar(&fd.blocksize, "block", "8", "File Block Size Bytes")
         flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
         flag.StringVar(&fd.threadsize, "thread", "16", "Go Routine Threadsize")
+        flag.StringVar(&fd.bytestring, "bytes", "", "Specify a byte string")
 
 	flag.Parse()
 
  	if argsNumber == 1 {
            fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES]")
-           fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 ")
+           fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]")
            os.Exit(1)
         }
 
-	mddecode(fd.blocksize, fd.modsize, fd.threadsize)
+	mddecode(fd.blocksize, fd.modsize, fd.threadsize, fd.bytestring)
 	os.Exit(0)
 }
 
 // mdecode file
-func mddecode(blocksize string, modsize string, threadsize string) int {
+func mddecode(blocksize string, modsize string, threadsize string, bytestring string) int {
 
         // test a random byte block
         // arguments:
@@ -76,9 +81,32 @@ func mddecode(blocksize string, modsize string, threadsize string) int {
 	modSizeInt  , _ = strconv.ParseInt(modsize, 10, 64) 
 	threadCount,  _ = strconv.ParseInt(threadsize, 10, 64) 
 
+
+	var bytes []byte
 	// create a random n byte size byte block
-	bytes := make([]byte, blocksizeint)
-	_, _ = rand.Read(bytes)
+	if len(bytestring) < 1  {
+		bytes = make([]byte, blocksizeint)
+		_, _ = rand.Read(bytes)
+	}
+
+
+	// check if the bytes are defined
+	if bytestring != "" {
+		s := strings.Split(bytestring, ",")
+		// stringByte := strings.Join(s, " ")
+		length := len(s)
+		if length > 0 {
+			bytes = make([]byte, length)
+			err := json.Unmarshal([]byte(bytestring), &bytes)
+			if err != nil {
+				fmt.Println("error")
+			}
+			fmt.Println("buffer1 ", bytes)
+			blockSizeInt = int64(length)
+		}
+	}
+
+	// create a random n byte size byte block
 	// test failure with this byteblock there is a bug with the modular exponent
 	// 8 bytes 40 bit mod
 	/// bytes := []byte{ 0, 10, 22, 38, 240, 171, 146, 123 }
@@ -95,9 +123,10 @@ func mddecode(blocksize string, modsize string, threadsize string) int {
 		mdp=append(mdp,md)
 	}
 
+
 	// kick off the thread list go routines
 	for thread = 0; thread < threadCount; thread++ {
-		go mdp[thread].ModulusScanBytes(blocksizeint, modsize, thread, 10, c)
+		go mdp[thread].ModulusScanBytes(blockSizeInt, modsize, thread, 10, c)
 	}
 
 	// wait for the first channel result
