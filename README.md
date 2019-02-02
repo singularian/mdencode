@@ -350,7 +350,7 @@ random bytestring and modulusscan bytestring match  [139 111 156 34 193 144]   [
 
 # Parallel Modulus Scan
 
-The Modulus Scan can also be run in parallel. An example program decoderRandom3 shows a modulus scan with configurable number of goroutines.
+The Modulus Scan can also be run in parallel. An example program decoderRandom4 shows a modulus scan with configurable number of goroutines.
 Each of the goroutines runs a modulus scan in sync and when a result is founding matching the original signature block it returns a byteblock.
 
 This is the usage of the prototype parallel modulus scan program.
