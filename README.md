@@ -354,14 +354,15 @@ The Modulus Scan can also be run in parallel. An example program decoderRandom3 
 Each of the goroutines runs a modulus scan in sync and when a result is founding matching the original signature block it returns a byteblock.
 
 This is the usage of the prototype parallel modulus scan program.
+It allows for the blocksize and modulus bitsize and thread count as well as the bytes either random or specified by the command line argument.
 ```
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom3
-Usage  ./decoderRandom3  [BLOCKSIZE BYTES] [MODSIZE BITS] [THREADSIZE GOROUTINES]
-Usage  ./decoderRandom3  8 32 10
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4
+Usage  ./decoderRandom4  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES]
+Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
 ```
 
 This is an example of a parallel modulus scan with 16 threads.
-[Other Decoder3 Parallel Examples](https://github.com/singularian/mdencode/blob/master/examples/mdencodeParallelmodscan2.txt)
+[Decoder Parallel Examples](https://github.com/singularian/mdencode/blob/master/examples/mdencodeParallelmodscan2.txt)
 
 # Go Library Dependencies
 
