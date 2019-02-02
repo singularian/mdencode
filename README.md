@@ -43,6 +43,15 @@ This is a partial list of the digital signatures. More can be added to the signa
 - Tiger
 - Whirlpool
 
+# Encoding Types
+
+These are the types of file signatures that mdencode will implement.
+
+- File Signatures
+- File Group Block Signatures. TODO. These create signatures of multiple Block Signatures. 
+  If the blocksize is 10 and blockgroups is 10 it will generate signatures every 100 bytes.
+  It minimizes block collisions.
+- File Block Signatures
 
 
 # Mdencode usage
@@ -357,7 +366,7 @@ This is the usage of the prototype parallel modulus scan program.
 It allows for the blocksize and modulus bitsize and thread count as well as the bytes either random or specified by the command line argument.
 ```
 user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4
-Usage  ./decoderRandom4  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES]
+Usage  ./decoderRandom4  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -bytes=[OPTIONAL JSON BYTESTRING]
 Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10
 Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
 ```
