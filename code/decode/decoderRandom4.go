@@ -11,6 +11,7 @@ package main
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import ( 
+	"flag"
 	"crypto/rand"
 	"fmt"
 	"strconv"
@@ -20,72 +21,89 @@ import (
 	"github.com/singularian/mdencode/code/decode/modScan"
 )
 
+
+// mdencode flag struct
+type FlagData struct {
+	blocksize string
+        modsize string
+	threadsize string
+	blockSizeInt int64
+	modSizeInt int64
+	threadCount int64
+	thread int64
+	bytes []byte
+}
+
 // generates a random n byte array and then hashes it
 // it then runs it through the modulus scan
 func main() {
 
-	mddecode()
+	var argsNumber int = len(os.Args)
+
+	fd := new(FlagData)
+	// there is a Uit64 setter
+	flag.StringVar(&fd.blocksize, "block", "8", "File Block Size Bytes")
+        flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
+        flag.StringVar(&fd.threadsize, "thread", "16", "Go Routine Threadsize")
+
+	flag.Parse()
+
+ 	if argsNumber == 1 {
+           fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES]")
+           fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 ")
+           os.Exit(1)
+        }
+
+	mddecode(fd.blocksize, fd.modsize, fd.threadsize)
 	os.Exit(0)
 }
 
 // mdecode file
-func mddecode() int {
-
-	var argsNumber int = len(os.Args)
+func mddecode(blocksize string, modsize string, threadsize string) int {
 
         // test a random byte block
         // arguments:
         //   blocksize bytes 
         //   modsize bits 
         //   thread size of goroutines
-        if argsNumber == 4 {
-                var c chan string = make(chan string)
+	var c chan string = make(chan string)
+	blocksizeint, _ := strconv.Atoi(blocksize)
+	var blockSizeInt int64
+	var modSizeInt int64
+	var threadCount int64
+	var thread int64 
+	blockSizeInt, _ = strconv.ParseInt(blocksize, 10, 64) 
+	modSizeInt  , _ = strconv.ParseInt(modsize, 10, 64) 
+	threadCount,  _ = strconv.ParseInt(threadsize, 10, 64) 
 
-                blocksize  := os.Args[1]
-                modsize    := os.Args[2]
-                threadsize := os.Args[3]
-                blocksizeint, _ := strconv.Atoi(blocksize)
-		var blockSizeInt int64
-		var modSizeInt int64
-		var threadCount int64
-		var thread int64 
-		blockSizeInt, _ = strconv.ParseInt(blocksize, 10, 64) 
-		modSizeInt  , _ = strconv.ParseInt(modsize, 10, 64) 
-		threadCount,  _ = strconv.ParseInt(threadsize, 10, 64) 
+	// create a random n byte size byte block
+	bytes := make([]byte, blocksizeint)
+	_, _ = rand.Read(bytes)
+	// test failure with this byteblock there is a bug with the modular exponent
+	// 8 bytes 40 bit mod
+	/// bytes := []byte{ 0, 10, 22, 38, 240, 171, 146, 123 }
+	// _, _ = rand.Read(bytes)
 
-		// create a random n byte size byte block
-		bytes := make([]byte, blocksizeint)
-                _, _ = rand.Read(bytes)
-		// test failure with this byteblock there is a bug with the modular exponent
-		// 8 bytes 40 bit mod
-		/// bytes := []byte{ 0, 10, 22, 38, 240, 171, 146, 123 }
-		// _, _ = rand.Read(bytes)
+	// set the timestamp
+	now := time.Now()
+	var time = fmt.Sprintf("%d%d%d%d%d", now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
 
-		// set the timestamp
-        	now := time.Now()
-		var time = fmt.Sprintf("%d%d%d%d%d", now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
-		// set up the thread list of go routine objects
-		mdp:=[]*modScan.DecodeData{}
-                for thread = 0; thread<threadCount; thread++ {
-			md := modScan.Init(blockSizeInt, modSizeInt, thread, threadCount, bytes, time)
-			mdp=append(mdp,md)
-		}
+	// set up the thread list of go routine objects
+	mdp:=[]*modScan.DecodeData{}
+        for thread = 0; thread<threadCount; thread++ {
+		md := modScan.Init(blockSizeInt, modSizeInt, thread, threadCount, bytes, time)
+		mdp=append(mdp,md)
+	}
 
-		// kick off the thread list go routines
-		for thread = 0; thread < threadCount; thread++ {
-		  	go mdp[thread].ModulusScanBytes(blocksizeint, modsize, thread, 10, c)
+	// kick off the thread list go routines
+	for thread = 0; thread < threadCount; thread++ {
+		go mdp[thread].ModulusScanBytes(blocksizeint, modsize, thread, 10, c)
+	}
 
-		}
-
-		// wait for the first channel result
-		for result := range c {
-			fmt.Println("result ", result)
-		} 
-        // print program usage
-        } else {
-	   fmt.Println("Usage ", os.Args[0], " [BLOCKSIZE BYTES] [MODSIZE BITS] [THREADSIZE GOROUTINES]")
-	   fmt.Println("Usage ", os.Args[0], " 8 32 10")
-        }
+	// wait for the first channel result
+	for result := range c {
+		fmt.Println("result ", result)
+	} 
 
 
 	return 0
