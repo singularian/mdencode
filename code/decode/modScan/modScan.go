@@ -24,7 +24,7 @@ import (
 	"time"
 )
 
-// mdencode flag struct
+// modScan flag struct
 type DecodeData struct {
 	blocksize string
 	modsize string
@@ -40,13 +40,18 @@ type DecodeData struct {
 	byteblock []byte
 	// time
 	timeStarted string
+	// signatures
+	sha1hex   string
+	md5hex    string
+	mdDigHex  string
+	mdDig2Hex string
         // log writer
 	islogging bool
 	Logfile *log.Logger
 }
 
 
-// Init returns a new mdEncode object                                              
+// Init returns a new modScan object                                              
 func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes []byte, time string) (md *DecodeData) {
         mdata := new(DecodeData)
 	mdata.blocksizeInt = blocksize
@@ -62,22 +67,23 @@ func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes
 }
 
 // run a parallel modulus scan on a random byte array
-func (md *DecodeData) ModulusScanRandom(blockSize int, modSize string, threadNumber int64, threadCount int, c chan string) {
+func (md *DecodeData) ModulusScanBytes(blockSize int, modSize string, threadNumber int64, threadCount int, c chan string) {
 // func (md *DecodeData) ModulusScanRandom(c chan string) {
 	// set the current byte block
 	bytes := md.byteblock
 	blockSizeStr := strconv.Itoa(blockSize)
 
-	// convert the bytes to a string
-	bytestring := fmt.Sprintf("%v", bytes)
-
         // process the modulus bitsize argument
         bitsize, _ := strconv.ParseInt(modSize, 10, 64)
+
+	// convert the bytes to a string
+	bytestring := fmt.Sprintf("%v", bytes)
 
         // create the modulus bigint 2 to the bitsize exponent
         var modulusBigInt, e = big.NewInt(2), big.NewInt(bitsize)
         modulusBigInt = modulusBigInt.Exp(modulusBigInt, e, nil)
         var modulusBigIntString = modulusBigInt.String()
+	md.modulusBigInt = modulusBigInt
 
         // create the biginteger representation of the bytes
         blockBigInt := new(big.Int)
@@ -88,6 +94,7 @@ func (md *DecodeData) ModulusScanRandom(blockSize int, modSize string, threadNum
         fileblockmodulus := new(big.Int)
         fileblockmodulus = fileblockmodulus.Mod(blockBigInt, modulusBigInt)
         var blockmod = fileblockmodulus.String()
+	md.modulusBigIntRemainder = fileblockmodulus
 
         // calculate the modulus exponent
         two := big.NewInt(2)
@@ -95,14 +102,8 @@ func (md *DecodeData) ModulusScanRandom(blockSize int, modSize string, threadNum
         s := strconv.Itoa(modexp)
 
 	// create a sha1 hash of the bytes
-        h := sha1.New()
-        h.Write([]byte(bytes))
-        var shasum =  hex.EncodeToString(h.Sum(nil))
-
 	// create an md5 hash of the bytes
-        md5hash := md5.New()
-        md5hash.Write([]byte(bytes))
-        var md5sum = hex.EncodeToString(md5hash.Sum(nil))
+	md.setSignature()
 
 	md.Println("Starting Modulus Scan Random ", threadNumber)
 
@@ -113,11 +114,11 @@ func (md *DecodeData) ModulusScanRandom(blockSize int, modSize string, threadNum
         md.Println("byte block modulus remainder ", blockmod)
         md.Println("modulus exponent ", modexp)
 
-        md.Println("shasum ", shasum);
-        md.Println("md5sum ", md5sum);
+        md.Println("shasum ", md.sha1hex);
+        md.Println("md5sum ", md.md5hex);
 	}
 
-        _, buffer := md.decode(blockSizeStr, modSize, s, blockmod, md5sum, shasum, c)
+        _, buffer := md.decode(blockSizeStr, modSize, s, blockmod, c)
 
 	if(bytestring == buffer) {
 		md.Println("random bytestring and modulusscan bytestring match ", bytestring, " ", buffer)
@@ -132,11 +133,11 @@ func (md *DecodeData) ModulusScanRandom(blockSize int, modSize string, threadNum
 
 // calculate the byte block assicated with a blocksize and modulus and modulus exponent with a sha1 and md5 hash
 // this will run the modulus scan decode
-func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string, remainder string, md5hex string, sha1hex string, c chan string) (int, string) {
+func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string, remainder string, c chan string) (int, string) {
 
 
-        var hashone string  = md5hex
-        var hashtwo string  = sha1hex
+        var hashone string  = md.md5hex
+        var hashtwo string  = md.sha1hex
 
 	start := time.Now()
 	md.Println("Starting decoderRandom")
@@ -349,6 +350,25 @@ func (md *DecodeData) convertFloorBase2 (modfloor *big.Int, modi *big.Int) *big.
 	md.Println("modremainder ", modremainder, " ", remstring)
 	
 	return modremainder
+}
+
+// 
+func (md *DecodeData) setSignature() {
+
+	bytes := md.byteblock
+
+	// create an sha1 hash of the bytes
+        h := sha1.New()
+        h.Write([]byte(bytes))
+        var shasum =  hex.EncodeToString(h.Sum(nil))
+        md.sha1hex = shasum
+
+        // create an md5 hash of the bytes
+        md5hash := md5.New()
+        md5hash.Write([]byte(bytes))
+        var md5sum = hex.EncodeToString(md5hash.Sum(nil))
+        md.md5hex = md5sum
+
 }
 
 // initialize the logfile

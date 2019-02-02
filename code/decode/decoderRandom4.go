@@ -73,7 +73,7 @@ func mddecode() int {
 
 		// kick off the thread list go routines
 		for thread = 0; thread < threadCount; thread++ {
-		  	go mdp[thread].ModulusScanRandom(blocksizeint, modsize, thread, 10, c)
+		  	go mdp[thread].ModulusScanBytes(blocksizeint, modsize, thread, 10, c)
 
 		}
 
