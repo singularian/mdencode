@@ -28,18 +28,22 @@ import (
 // modScan flag struct
 type DecodeData struct {
 	blocksize string
-	modsize string
 	blocksizeInt int64
+	// modulus size 
+	modsize string
 	modsizeInt int64
+	// modulus exponent
 	modExp int64
+	// byte block bigint
 	blockBigInt *big.Int
 	// modulus data
 	modulusBigInt *big.Int
 	modulusBigIntString string
 	modulusBigIntRemainder *big.Int
+	// threads
 	threadNumber int64
 	threadCount int64
-	// bytes
+	// bytes buffer
 	byteblock []byte
 	// time
 	timeStarted string
