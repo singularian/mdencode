@@ -33,7 +33,9 @@ type DecodeData struct {
 	modsizeInt int64
 	modExp int64
 	blockBigInt *big.Int
+	// modulus data
 	modulusBigInt *big.Int
+	modulusBigIntString string
 	modulusBigIntRemainder *big.Int
 	threadNumber int64
 	threadCount int64
@@ -68,62 +70,43 @@ func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes
 }
 
 // run a parallel modulus scan on a random byte array
-func (md *DecodeData) ModulusScanBytes(blockSize int64, modSize string, threadNumber int64, threadCount int, c chan string) {
-// func (md *DecodeData) ModulusScanRandom(c chan string) {
-	// set the current byte block
-	bytes := md.byteblock
-	// blockSizeStr := strconv.Itoa(blockSize)
-	blockSizeStr := fmt.Sprintf("%v", md.blocksizeInt)
+func (md *DecodeData) ModulusScanBytes(c chan string) {
 
         // process the modulus bitsize argument
-        // bitsize, _ := strconv.ParseInt(modSize, 10, 64)
 	bitsize := md.modsizeInt
 
 	// convert the bytes to a string
-	bytestring := fmt.Sprintf("%v", bytes)
+	bytestring := fmt.Sprintf("%v", md.byteblock) 
+
+	// create the biginteger representation of the bytes
+        blockBigInt := new(big.Int)
+        md.blockBigInt = blockBigInt.SetBytes(md.byteblock)
 
         // create the modulus bigint 2 to the bitsize exponent
+	// ie if it is 8 then it is 2 to the 8th
         var modulusBigInt, e = big.NewInt(2), big.NewInt(bitsize)
-        modulusBigInt = modulusBigInt.Exp(modulusBigInt, e, nil)
-        var modulusBigIntString = modulusBigInt.String()
-	md.modulusBigInt = modulusBigInt
-
-        // create the biginteger representation of the bytes
-        blockBigInt := new(big.Int)
-        blockBigInt.SetBytes(bytes)
-	var blockBigIntstring = blockBigInt.String()
+        md.modulusBigInt = modulusBigInt.Exp(modulusBigInt, e, nil)
+        md.modulusBigIntString = modulusBigInt.String()
+	// md.modulusBigInt = modulusBigInt
 
         // calculate the modulus remainder
         fileblockmodulus := new(big.Int)
-        fileblockmodulus = fileblockmodulus.Mod(blockBigInt, modulusBigInt)
-        var blockmod = fileblockmodulus.String()
+        fileblockmodulus = fileblockmodulus.Mod(md.blockBigInt, md.modulusBigInt)
 	md.modulusBigIntRemainder = fileblockmodulus
 
         // calculate the modulus exponent
         two := big.NewInt(2)
-        modexp := md.logN(blockBigInt, two)
+        var modexp = md.logN(md.blockBigInt, two)
 	md.modExp = modexp
-        // s := strconv.Itoa(modexp)
-	s := fmt.Sprintf("%v", modexp)
 
 	// create a sha1 hash of the bytes
 	// create an md5 hash of the bytes
 	md.setSignature()
 
-	md.Println("Starting Modulus Scan Random ", threadNumber)
+	// print starting data
+	md.modScanData()
 
-	if (threadNumber == 0) {
-        md.Println("blocksize ", blockSizeStr, " random bytes ", bytes, " bigint ", blockBigIntstring)
-        md.Println("modulus size bits ", bitsize)
-        md.Println("byte block modulus ", modulusBigIntString)
-        md.Println("byte block modulus remainder ", blockmod)
-        md.Println("modulus exponent ", modexp)
-
-        md.Println("shasum ", md.sha1hex);
-        md.Println("md5sum ", md.md5hex);
-	}
-
-        _, buffer := md.decode(s, blockmod, c)
+        _, buffer := md.decode(c)
 
 	if(bytestring == buffer) {
 		md.Println("random bytestring and modulusscan bytestring match ", bytestring, " ", buffer)
@@ -138,7 +121,7 @@ func (md *DecodeData) ModulusScanBytes(blockSize int64, modSize string, threadNu
 
 // calculate the byte block assicated with a blocksize and modulus and modulus exponent with a sha1 and md5 hash
 // this will run the modulus scan decode
-func (md *DecodeData) decode(modexp string, remainder string, c chan string) (int, string) {
+func (md *DecodeData) decode(c chan string) (int, string) {
 
         var hashone string  = md.md5hex
         var hashtwo string  = md.sha1hex
@@ -357,7 +340,7 @@ func (md *DecodeData) convertFloorBase2 (modfloor *big.Int, modi *big.Int) *big.
 	return modremainder
 }
 
-// 
+// set the signature of the byte block 
 func (md *DecodeData) setSignature() {
 
 	bytes := md.byteblock
@@ -374,6 +357,24 @@ func (md *DecodeData) setSignature() {
         var md5sum = hex.EncodeToString(md5hash.Sum(nil))
         md.md5hex = md5sum
 
+}
+
+// display the modScan data
+func (md *DecodeData) modScanData() {
+
+	md.Println("Starting Modulus Scan Random ", md.threadNumber)
+
+        if (md.threadNumber == 0) {
+        md.Println("blocksize ", md.blocksizeInt)
+	md.Println("byte block", md.byteblock)
+        md.Println("modulus bit size ", md.modsizeInt)
+        md.Println("byte block modulus ", md.modulusBigIntString)
+        md.Println("byte block modulus remainder ", md.modulusBigIntRemainder.String())
+        md.Println("modulus exponent ", md.modExp)
+
+        md.Println("shasum ", md.sha1hex);
+        md.Println("md5sum ", md.md5hex);
+        }
 }
 
 // initialize the logfile

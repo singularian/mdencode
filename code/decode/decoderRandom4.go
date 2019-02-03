@@ -57,6 +57,7 @@ func main() {
            fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -bytes=[OPTIONAL JSON BYTESTRING]")
            fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10")
            fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]")
+           fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]")
            os.Exit(1)
         }
 
@@ -127,7 +128,7 @@ func mddecode(blocksize string, modsize string, threadsize string, bytestring st
 
 	// kick off the thread list go routines
 	for thread = 0; thread < threadCount; thread++ {
-		go mdp[thread].ModulusScanBytes(blockSizeInt, modsize, thread, 10, c)
+		go mdp[thread].ModulusScanBytes(c)
 	}
 
 	// wait for the first channel result
