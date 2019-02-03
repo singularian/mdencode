@@ -367,6 +367,7 @@ func (md *DecodeData) modScanData() {
         if (md.threadNumber == 0) {
         md.Println("blocksize ", md.blocksizeInt)
 	md.Println("byte block", md.byteblock)
+	md.Println("byte bigint", md.blockBigInt.String())
         md.Println("modulus bit size ", md.modsizeInt)
         md.Println("byte block modulus ", md.modulusBigIntString)
         md.Println("byte block modulus remainder ", md.modulusBigIntRemainder.String())

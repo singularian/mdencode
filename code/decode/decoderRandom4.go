@@ -94,16 +94,20 @@ func mddecode(blocksize string, modsize string, threadsize string, bytestring st
 
 	// check if the bytes are defined
 	if bytestring != "" {
-		s := strings.Split(bytestring, ",")
-		// stringByte := strings.Join(s, " ")
+		var replacestring = bytestring
+		// treats [10 01] as separate arg
+		// replacestring = strings.Replace(replacestring, " ", ",", -2)
+		// replacestring = strings.Replace(bytestring, ",,", ",", -1)
+		// fmt.Println("bytestring ", replacestring, bytestring)
+		s := strings.Split(replacestring, ",")
 		length := len(s)
 		if length > 0 {
 			bytes = make([]byte, length)
-			err := json.Unmarshal([]byte(bytestring), &bytes)
+			err := json.Unmarshal([]byte(replacestring), &bytes)
 			if err != nil {
-				fmt.Println("error")
+				fmt.Println("error ", err)
 			}
-			fmt.Println("buffer1 ", bytes)
+			fmt.Println("buffer ", bytes)
 			blockSizeInt = int64(length)
 		}
 	}
