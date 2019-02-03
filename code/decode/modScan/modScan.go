@@ -19,7 +19,7 @@ import (
         "crypto/md5"
         "crypto/sha1"
         "math/big"
-	"strconv"
+	// "strconv"
 	"os"
 	"log"
 	"time"
@@ -31,7 +31,7 @@ type DecodeData struct {
 	modsize string
 	blocksizeInt int64
 	modsizeInt int64
-	modExp int
+	modExp int64
 	blockBigInt *big.Int
 	modulusBigInt *big.Int
 	modulusBigIntRemainder *big.Int
@@ -76,7 +76,8 @@ func (md *DecodeData) ModulusScanBytes(blockSize int64, modSize string, threadNu
 	blockSizeStr := fmt.Sprintf("%v", md.blocksizeInt)
 
         // process the modulus bitsize argument
-        bitsize, _ := strconv.ParseInt(modSize, 10, 64)
+        // bitsize, _ := strconv.ParseInt(modSize, 10, 64)
+	bitsize := md.modsizeInt
 
 	// convert the bytes to a string
 	bytestring := fmt.Sprintf("%v", bytes)
@@ -101,7 +102,9 @@ func (md *DecodeData) ModulusScanBytes(blockSize int64, modSize string, threadNu
         // calculate the modulus exponent
         two := big.NewInt(2)
         modexp := md.logN(blockBigInt, two)
-        s := strconv.Itoa(modexp)
+	md.modExp = modexp
+        // s := strconv.Itoa(modexp)
+	s := fmt.Sprintf("%v", modexp)
 
 	// create a sha1 hash of the bytes
 	// create an md5 hash of the bytes
@@ -120,7 +123,7 @@ func (md *DecodeData) ModulusScanBytes(blockSize int64, modSize string, threadNu
         md.Println("md5sum ", md.md5hex);
 	}
 
-        _, buffer := md.decode(blockSizeStr, modSize, s, blockmod, c)
+        _, buffer := md.decode(s, blockmod, c)
 
 	if(bytestring == buffer) {
 		md.Println("random bytestring and modulusscan bytestring match ", bytestring, " ", buffer)
@@ -135,8 +138,7 @@ func (md *DecodeData) ModulusScanBytes(blockSize int64, modSize string, threadNu
 
 // calculate the byte block assicated with a blocksize and modulus and modulus exponent with a sha1 and md5 hash
 // this will run the modulus scan decode
-func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string, remainder string, c chan string) (int, string) {
-
+func (md *DecodeData) decode(modexp string, remainder string, c chan string) (int, string) {
 
         var hashone string  = md.md5hex
         var hashtwo string  = md.sha1hex
@@ -149,8 +151,8 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
 
         // process the modulus bitsize argument
         // raise 2 to the bitsize exponent
-        bitsize, _ := strconv.ParseInt(modbitSize, 10, 64)
-        var i, e = big.NewInt(2), big.NewInt(bitsize)
+	bitsize    := md.modsizeInt
+        var i, e    = big.NewInt(2), big.NewInt(bitsize)
         i.Exp(i, e, nil)
         modulostr := fmt.Sprint(i)
 
@@ -160,7 +162,7 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
 	// the base in the exponent is 2 it can also be the modulus to some power less than the big block int
         // floor = 2 to the power
 	// ceil = 2 to the power + 1 number less than greater than the block number
-	floor, _ := strconv.ParseInt(modexp, 10, 64)
+	floor := md.modExp
 	ceil := floor + 1
         var modfloor, modexponent = big.NewInt(2), big.NewInt(floor)
         var modceiltwo, modceil  = big.NewInt(2),  big.NewInt(ceil)
@@ -185,8 +187,8 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
         // mod := new(big.Int)
         // mod = z.Mod(z, i);
 
-	md.Println("modulo floor ", modexp, " ", modulofloorstr, " ceil ", moduloceilstr)
-	fmt.Println("modulo floor exponent ", modexp, " modulo floor ", modulofloorstr, " modulo ceil ", moduloceilstr, " mod ", i)
+	md.Println("modulo floor ", md.modExp, " ", modulofloorstr, " ceil ", moduloceilstr)
+	fmt.Println("modulo floor exponent ", md.modExp, " modulo floor ", modulofloorstr, " modulo ceil ", moduloceilstr, " mod ", i)
 
 	// I think there is a bug here somewhere
         // calcluate the 2^exp mod floor
@@ -222,8 +224,9 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
 	//// bug here // remainderString, _ := strconv.ParseInt(remainder, 10, 64)
         // modstart := big.NewInt(remainderString);
 	// this should be a bigint and it was a 64 bit int
-     	modstart := new(big.Int)
-        modstart.SetString(remainder, 10) 
+     	// modstart := new(big.Int)
+        ///////////////////modstart.SetString(remainder, 10) 
+	modstart :=  md.modulusBigIntRemainder
         // modstart := big.NewInt(remainder);
 	modstart = modstart.Add(modstart, modremainder)
 
@@ -234,15 +237,15 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
         // mult2
 	// modulus * the threadnumber
         mult2           := big.NewInt(threadNumber)
-        mult2 = mult2.Mul(i, mult2)
-        modstart = modstart.Add(modstart, mult2)
+        mult2            = mult2.Mul(i, mult2)
+        modstart         = modstart.Add(modstart, mult2)
 
 	// modulus * the threadcount 
 	mult            := big.NewInt(threadCount)
 	i = mult.Mul(i, mult)
 
-       // md.Println("thread ", threadNumber, " ", threadCount, " modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder))
-       md.Println("thread ", threadNumber, " ", threadCount, " modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder), " iterator ", fmt.Sprint(i), " mult = mod * thc ", fmt.Sprint(mult),  " mult2 = m * thnum ", fmt.Sprint(mult2))
+        // md.Println("thread ", threadNumber, " ", threadCount, " modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder))
+        md.Println("thread ", threadNumber, " ", threadCount, " modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder), " iterator ", fmt.Sprint(i), " mult = mod * thc ", fmt.Sprint(mult),  " mult2 = m * thnum ", fmt.Sprint(mult2))
 
 	// create the hash contexts
         md5  := md5.New()
@@ -300,9 +303,9 @@ func (md *DecodeData) decode(blockSize string, modbitSize string, modexp string,
 }
 
 // calculate the modulus exponent
-func (md *DecodeData) logN(fileblockint *big.Int, base *big.Int) int {
+func (md *DecodeData) logN(fileblockint *big.Int, base *big.Int) int64 {
 
-        var exponent int = 1
+        var exponent int64 = 1
         gt := fileblockint.Cmp(base)
 
         if gt < 0 {
