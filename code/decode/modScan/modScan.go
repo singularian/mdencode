@@ -123,7 +123,7 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 
 }
 
-// calculate the byte block assocated with a blocksize and modulus and modulus exponent with a sha1 and md5 hash
+// calculate the byte block associated with a blocksize and modulus and modulus exponent with a sha1 and md5 hash
 // this will run the modulus scan decode
 func (md *DecodeData) decode(c chan string) (int, string) {
 
