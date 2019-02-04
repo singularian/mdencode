@@ -81,6 +81,9 @@ func argsSimple(argsNumber int) int {
 	flag.BoolVar(&fd.randomfileblocksize, "blockr", false, "Generate A Random File Block Size")
 	flag.BoolVar(&fd.randomModSize, "modr", false, "Generate A Random File Modulus Size")
 	flag.BoolVar(&fd.randomEverything, "all", false, "Randomize Everything")
+	// specify a bigint number for the modulus or the bit modulus plus the bigint modulus
+	// flag.StringVar(&fd.bigint, "big", "011", "Bigint Modulus")
+
 	// flag.BoolVar(&fd.randomfilehash, "fhr", false, "Generate A Random File Hash Boolean String List")
 	// flag.BoolVar(&fd.randomblockhash, "bhr", false, "Generate A Random Block Hash Boolean String List")
 	// flag.BoolVar(&fd.randomfileblockhash, "fbhr", false, "Generate A Random File and Block Hash Boolean String List")

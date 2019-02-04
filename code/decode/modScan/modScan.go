@@ -23,6 +23,8 @@ import (
 	"os"
 	"log"
 	"time"
+	"bytes"
+	"hash"
 )
 
 // modScan flag struct
@@ -48,6 +50,9 @@ type DecodeData struct {
 	// time
 	timeStarted string
 	// signatures
+	md5hash   hash.Hash
+	sha1hash  hash.Hash 
+	// signatures results
 	sha1hex   string
 	md5hex    string
 	mdDigHex  string
@@ -127,8 +132,8 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 // this will run the modulus scan decode
 func (md *DecodeData) decode(c chan string) (int, string) {
 
-        var hashone string  = md.md5hex
-        var hashtwo string  = md.sha1hex
+        // var hashone string  = md.md5hex
+        // var hashtwo string  = md.sha1hex
 
 	start := time.Now()
 	md.Println("Starting decoderRandom")
@@ -247,14 +252,17 @@ func (md *DecodeData) decode(c chan string) (int, string) {
 		// fmt.Println("bigint ", buf, " ", bigbytes)
 
                 md5.Write([]byte(buf))
-		md5string := hex.EncodeToString(md5.Sum(nil))
+		// md5string := hex.EncodeToString(md5.Sum(nil))
 
-		if md5string == hashone {
+		// if md5string == hashone {
+		if bytes.Equal(md5.Sum(nil), md.md5hash.Sum(nil)) {
 			sha1.Write([]byte(buf))
-			sha1string := hex.EncodeToString(sha1.Sum(nil))
+			// sha1string := hex.EncodeToString(sha1.Sum(nil))
 			// fmt.Println("md5 sha1 ", hex.EncodeToString(md5.Sum(nil)), " ", hex.EncodeToString(sha1.Sum(nil)))
 
-			if md5string == hashone && sha1string == hashtwo {
+			// if md5string == hashone && sha1string == hashtwo {
+			// if sha1string == hashtwo {
+			if bytes.Equal(sha1.Sum(nil), md.sha1hash.Sum(nil)) {
 				md.Println("Found Block ", buf)
 				break
 			}
@@ -354,12 +362,16 @@ func (md *DecodeData) setSignature() {
         h.Write([]byte(bytes))
         var shasum =  hex.EncodeToString(h.Sum(nil))
         md.sha1hex = shasum
+	// store context
+	md.sha1hash = h
 
         // create an md5 hash of the bytes
         md5hash := md5.New()
         md5hash.Write([]byte(bytes))
         var md5sum = hex.EncodeToString(md5hash.Sum(nil))
         md.md5hex = md5sum
+	// store context
+	md.md5hash = md5hash
 
 }
 
