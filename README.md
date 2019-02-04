@@ -337,22 +337,35 @@ Found Block  [175 149 193 192 35 31]
 total time  71.219466ms
 random bytestring and modulusscan bytestring match  [175 149 193 192 35 31]   [175 149 193 192 35 31]
 ```
-This example of decoderRandom uses a 32-bit and 24-bit modulus to calculate a 6 byte block associated with an sha1 and md5 signature.
+This example of decoderRandom4 uses a 64-bit modulus to calculate a 12 byte block associated with an sha1 and md5 signature.
+It uses 16 threads and a parallel modulus scan and was run on a Ryzen 2700x. 
 ```
-$ ./decoderRandom
-random  6  bytes  [139 111 156 34 193 144]
-modulus size bits  32
-byte modulus  4294967296
-block modulus  2619523472
-modulus exponent  47
-shasum  af2757f99333d0f693cb70d5ff0e1caaf90cdb50
-md5sum  448497bb2b4327b46de2d7cfc6b351c7
-modulo bigint  4294967296
-modulo floor  140737488355328
-modulo ceil  281474976710656
-Found Block  [139 111 156 34 193 144]
-total time  58.27042ms
-random bytestring and modulusscan bytestring match  [139 111 156 34 193 144]   [139 111 156 34 193 144]
+$ ./decoderRandom4 -mod=64 -block=12 -thread=16 
+2019/02/04 02:53:35 Starting Modulus Scan Random  0
+2019/02/04 02:53:35 blocksize  12
+2019/02/04 02:53:35 byte block [197 170 222 253 176 100 237 126 149 160 151 34]
+2019/02/04 02:53:35 byte bigint 61175117369235458384514291490
+2019/02/04 02:53:35 modulus bit size  64
+2019/02/04 02:53:35 byte block modulus  18446744073709551616
+2019/02/04 02:53:35 byte block modulus remainder  12710545176278374178
+2019/02/04 02:53:35 modulus exponent  95
+2019/02/04 02:53:35 shasum  5f02bab5517b15600692ca5e5c0c97a44a77e86a
+2019/02/04 02:53:35 md5sum  6a6e942ac8efc828bddb5e38c5ce721d
+2019/02/04 02:53:35 Starting decoderRandom
+2019/02/04 02:53:35 modulo bigint 18446744073709551616
+2019/02/04 02:53:35 modulo floor  39614081257132168796771975168  ceil  79228162514264337593543950336  modceiltwo  2
+2019/02/04 02:53:35 modulo floor  95   39614081257132168796771975168  ceil  79228162514264337593543950336
+2019/02/04 02:53:35 mfloor  39614081257132168796771975168   0
+2019/02/04 02:53:35 modulo floor equals zero  0   0
+2019/02/04 02:53:35 modulo floor equals zero setting  39614081257132168796771975168   39614081257132168796771975168
+2019/02/04 02:53:35 modremainder  39614081257132168796771975168   39614081257132168796771975168
+2019/02/04 02:53:35 thread  0   16  modstart test result floor  39614081269842713973050349346  initial remainder  39614081257132168796771975168  iterator  295147905179352825856  mult = mod * thc  295147905179352825856  mult2 = m * thnum  0
+ :
+ :
+ :
+Total time  2m53.344956s
+random bytestring and modulusscan bytestring match  [197 170 222 253 176 100 237 126 149 160 151 34]   [197 170 222 253 176 100 237 126 149 160 151 34]
+result  thread 13 random bytestring and modulusscan bytestring match [197 170 222 253 176 100 237 126 149 160 151 34] [197 170 222 253 176 100 237 126 149 160 151 34]
 ```
 
 [Other Decoder Examples](https://github.com/singularian/mdencode/blob/master/docs/EXAMPLES.md)
