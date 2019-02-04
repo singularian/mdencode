@@ -315,9 +315,9 @@ A modulus should be considered part of the file signature subset. A modulus is a
 # Modular Floor Examples
   
 This is an example of the modular floor.  
-The program `decoderRandom4` is creating a random 6 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
+The program `decoderRandom4` is creating a random 10 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
 It creates a random 10 byte array and a 64 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
-It calculated and found a hashed 10 byte block in two seconds on a Ryzen 2700x.
+It calculated and found a hashed 10 byte block in 11 ms on a Ryzen 2700x.
 
 `$GOPATH/github.com/singularian/mdencode/code/decode/decoderRandom4 `
 ```
