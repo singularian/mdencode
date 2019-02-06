@@ -254,6 +254,7 @@ func (md *DecodeData) decode(c chan string) (int, string) {
                 md5.Write([]byte(buf))
 		// md5string := hex.EncodeToString(md5.Sum(nil))
 
+		// byte comparison is faster than string comparison
 		// if md5string == hashone {
 		if bytes.Equal(md5.Sum(nil), md.md5hash.Sum(nil)) {
 			sha1.Write([]byte(buf))

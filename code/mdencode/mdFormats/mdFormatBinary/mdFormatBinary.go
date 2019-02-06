@@ -38,6 +38,7 @@ type MdFormat struct {
 var version string = "1.0"
 
 // Init returns a new mdFormat object
+//  mdFormatBinary.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 func Init(encodingFormat int, fileName string, filePath string, fileSize uint64, blockSize uint64, modulusSize uint64, fileHashListString string, blockHashListString string, outputfileName string) (mdfmt *MdFormat) {
 
 	md := new(MdFormat)
@@ -51,6 +52,9 @@ func Init(encodingFormat int, fileName string, filePath string, fileSize uint64,
 	// set the input hashlist string
         md.mdfileHashListString  = fileHashListString
         md.mdblockHashListString = blockHashListString
+
+	// fmt.Println("file Hashlist size init ", encodingFormat, fileName, filePath, fileSize, blockSize, modulusSize, fileHashListString, " ", blockHashListString )
+
         // set the output file name
 	md.outputFile = outputfileName
 
@@ -92,64 +96,52 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
                 log.Fatalln(err)
         }
 */
+	var fileAttribute [6]int64
+	fileAttribute[0] = fileSize
+        fileAttribute[1] = blockSize
+        fileAttribute[2] = modulusSize
+	// filename length
 	var length int = len(fileName)
-	fmt.Println("filename length ", length)
-	var number uint32 = uint32(length)
-	fmt.Println("filename int ", number)
-	// number = 9
-	// var err = binary.Write(md.file, binary.LittleEndian, number)
-	var err = binary.Write(md.file, binary.BigEndian, &number)
-        if err != nil {
-                fmt.Println("bad argument filname length ", err)
-        }
+	fileAttribute[3] = int64(length)
+	fmt.Println("filename length ", length, " ", fileAttribute[3])
 
-	// write the filename
-	var fn = []byte(fileName)
-	// fmt.Println("test ", fn)
-	err = binary.Write(md.file, binary.LittleEndian, fn)
-	if err != nil {
-                fmt.Println("bad argument filename ", err)
-        }
-
-	// write the filepath uint32 size
+	// write the filepath uint64 size
+	// filepath length
 	length  = len(filePath)
-	number  = uint32(length)
-	err = binary.Write(md.file, binary.BigEndian, &number)
+	fileAttribute[4]  = int64(length)
 
-	// write the filePathBytes
-	var filePathBytes = []byte(filePath)
-	err = binary.Write(md.file, binary.LittleEndian, filePathBytes)
+	// hashlist size
+	var hashListString = strings.Join(filehashList, ":") + "-" + strings.Join(blockhashList, ":")
+        // mdata.mdfileHashListString
+        // mdata.mdblockHashListString
+        length  = len(hashListString)
+        fileAttribute[5]  = int64(length)
+        fmt.Println("file Hashlist size ", length, " ", hashListString, " attribute 5 ", fileAttribute)
+
+	err := binary.Write(md.file, binary.BigEndian, &fileAttribute)
+        if err != nil {
+                fmt.Println("bad argument ", err)
+        }
+
+        // write the filePathBytes
+        var filePathBytes = []byte(filePath)
+        err = binary.Write(md.file, binary.LittleEndian, filePathBytes)
         if err != nil {
                 fmt.Println("bad argument path ", err)
         }
 
-	// write the hashlist size as a uint32 
-	/*var hashListString = strings.Join(hashList, ":")
-	length  = len(hashListString)
-	number  = uint32(length)
-	err = binary.Write(md.file, binary.BigEndian, &number)
+        // write the filename
+        var fn = []byte(fileName)
+        // fmt.Println("test ", fn)
+        err = binary.Write(md.file, binary.LittleEndian, fn)
         if err != nil {
-                fmt.Println("bad argument ", err)
-        }*/
-	var hashListString = md.mdfileHashListString + "-" + md.mdblockHashListString
-	// mdata.mdfileHashListString
-        // mdata.mdblockHashListString
-	length  = len(hashListString)
-        number  = uint32(length)
-        err = binary.Write(md.file, binary.BigEndian, &number)
-        if err != nil {
-                fmt.Println("bad argument hashlist ", err)
+                fmt.Println("bad argument filename ", err)
         }
 
-	// write the hashListString
-	var fh = []byte(hashListString)
-	err = binary.Write(md.file, binary.BigEndian, fh)
 
-	err = binary.Write(md.file, binary.BigEndian, &fileSize)
-	err = binary.Write(md.file, binary.BigEndian, &blockSize)
-
-	err = binary.Write(md.file, binary.BigEndian, &modulusSize)
-
+        // write the hashListString
+        var fh = []byte(hashListString)
+        err = binary.Write(md.file, binary.BigEndian, fh)
 
 }
 
@@ -180,6 +172,10 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 	n := new(big.Int)
 	// n, ok := n.SetString(mod, 10)
 	n, _ = n.SetString(mod, 10)
+
+	// write the hashListString
+        var fh = []byte(md.mdfileHashListString)
+        _ = binary.Write(md.file, binary.BigEndian, fh)
 
 	modbytes := n.Bytes()
 	_ = binary.Write(md.file, binary.BigEndian, &modbytes)
