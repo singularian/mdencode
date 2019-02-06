@@ -174,8 +174,9 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 	n, _ = n.SetString(mod, 10)
 
 	// write the hashListString
-        var fh = []byte(md.mdfileHashListString)
-        _ = binary.Write(md.file, binary.BigEndian, fh)
+	// duplicate
+        // var fh = []byte(md.mdfileHashListString)
+        //_ = binary.Write(md.file, binary.BigEndian, fh)
 
 	modbytes := n.Bytes()
 	_ = binary.Write(md.file, binary.BigEndian, &modbytes)

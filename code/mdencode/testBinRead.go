@@ -67,14 +67,29 @@ func main() {
 	filelist := hashlist[0]
 	blocklist := hashlist[1]
 	fmt.Println("hashlist ", filelist, blocklist)
-	var filesize uint64 = CalcHashSizeFile(filelist)
-	var fileblocksize uint64 = CalcHashSizeFile(blocklist)
+	//// var filesize uint64
+	var filelistarr []int 
+	//////// filesize, filelistarr = CalcHashSizeFile(filelist)
+	_, filelistarr = CalcHashSizeFile(filelist)
+	// var fileblocksize uint64 
+	//var blocklistarr []int
+	//fileblocksize, blocklistarr = CalcHashSizeFile(blocklist)
 
-	fmt.Println("lll ", filesize, fileblocksize)
+	fmt.Println("test array ", filelistarr)
+	st := strings.Split(filelist, ":")
+	// get the file hash list
+	for i:= 0; i < len(filelistarr); i++ {
+		start = end
+		end = end + uint64(filelistarr[i])
+		var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
+		fmt.Println("hashlistname ", st[i], " hex ", hexstring)
+	}
+
+	// fmt.Println("lll ", filesize, fileblocksize)
 	// return bytes, err
 
-	fmt.Println("test count ", CalcHashSizeFile("sha1:md5"))
-	fmt.Println("test count ", CalcHashSizeFile("sha1:md5:ripe160:sha224"))
+	// fmt.Println("test count ", CalcHashSizeFile("sha1:md5"))
+	// fmt.Println("test count ", CalcHashSizeFile("sha1:md5:ripe160:sha224"))
 
 }
 
@@ -96,67 +111,94 @@ func Convert64(data []byte) (uint64, error) {
 	return v, nil
 }
 
-func CalcHashSizeFile (hashlist string) (uint64) {
-	s := strings.Split(hashlist, ":")
+func CalcHashSizeFile (hashlist string) (uint64, []int) {
+	st := strings.Split(hashlist, ":")
 
 	var blocksize uint64 = 0
+	var s []int
+	// var s = make([]int, 100)
 
-	for i := 0; i < len(s); i++ {
-		fmt.Println("hashlist ", s[i])
+	// s = append(s, 5)
 
-		switch s[i] {
+	for i := 0; i < len(st); i++ {
+		fmt.Println("hashlist ", st[i])
+
+		switch st[i] {
 			case "blake2":
-			blocksize = blocksize + 64
+			// blocksize = blocksize + 64
+			s = append(s, 64)
                         case "blake2b":
-			blocksize = blocksize + 64
+			//blocksize = blocksize + 64
+			s = append(s, 64)
                         case "blake2s_128":
-                        blocksize = blocksize + 16
+                        //blocksize = blocksize + 16
+			s = append(s, 16)
                         case "blake2_256":
-                        blocksize = blocksize + 32
-			case "murmur3"
-			blocksize += 16 
+                        //blocksize = blocksize + 32
+			s = append(s, 32)
+			case "murmur3":
+			//blocksize += 16 
+			s = append(s, 16)
 			case "md4":
-			blocksize = blocksize + 16
+			//blocksize = blocksize + 16
+			s = append(s, 16)
 			case "md5":
-			blocksize = blocksize + 16
+			//blocksize = blocksize + 16
+			s = append(s, 16)
 			case "ripe160":
-			blocksize = blocksize + 20 
+			//blocksize = blocksize + 20 
+			s = append(s, 20)
 			case "sha1":
-			blocksize = blocksize + 20
+			//blocksize = blocksize + 20
+			s = append(s, 20)
 			case "sha224":
-			blocksize += 28
+			//blocksize += 28
+			s = append(s, 28)
 			case "sha256":
-			blocksize += 32
+			//blocksize += 32
+			s = append(s, 32)
 			case "sha512":
-			blocksize += 64
+			//blocksize += 64
+			s = append(s, 64)
 			case "sha512_224":
-			blocksize += 28
+			//blocksize += 28
+			s = append(s, 28)
 			case "sha512_256":
-			blocksize += 32
+			//blocksize += 32
+			s = append(s, 32)
 			case "sha512_384":
-			blocksize += 48
+			//blocksize += 48
+			s = append(s, 48)
 			case "sha3_224":
-			blocksize += 28
+			//blocksize += 28
+			s = append(s, 28)
 			case "skein_160":
-			blocksize += 20
+			//blocksize += 20
+			s = append(s, 20)
 			case "skein_224":
-			blocksize += 28
+			//blocksize += 28
+			s = append(s, 28)
 			case "skein_256":
-			blocksize += 32 
+			//blocksize += 32 
+			s = append(s, 32)
 			case "skein_384":
-			blocksize += 48
+			//blocksize += 48
+			s = append(s, 48)
 			case "skein_512":
-			blocksize += 64
+			//blocksize += 64
+			s = append(s, 64)
 			case "skein_1024":
-			blocksize += 128
+			//blocksize += 128
+			s = append(s, 128)
 			case "tiger":
-			blocksize += 48
+			//blocksize += 48
+			s = append(s, 48)
 			case "whirlpool":
-			blocksize += 64 
-
+			//blocksize += 64 
+			s = append(s, 64)
 		}
 
 	}
-
-	return blocksize 
+	// fmt.Println("test ", s)
+	return blocksize, s 
 }
