@@ -105,7 +105,8 @@ func mddecode(blocksize string, modsize string, threadsize string, bytestring st
 			bytes = make([]byte, length)
 			err := json.Unmarshal([]byte(replacestring), &bytes)
 			if err != nil {
-				fmt.Println("error ", err)
+				fmt.Println("JSON Conversion error in bytestring", err)
+				os.Exit(1)
 			}
 			fmt.Println("buffer ", bytes)
 			blockSizeInt = int64(length)

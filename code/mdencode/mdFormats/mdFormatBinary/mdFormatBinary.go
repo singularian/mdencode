@@ -125,7 +125,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 
         // write the filePathBytes
         var filePathBytes = []byte(filePath)
-        err = binary.Write(md.file, binary.LittleEndian, filePathBytes)
+        err = binary.Write(md.file, binary.BigEndian, filePathBytes)
         if err != nil {
                 fmt.Println("bad argument path ", err)
         }
@@ -133,7 +133,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
         // write the filename
         var fn = []byte(fileName)
         // fmt.Println("test ", fn)
-        err = binary.Write(md.file, binary.LittleEndian, fn)
+        err = binary.Write(md.file, binary.BigEndian, fn)
         if err != nil {
                 fmt.Println("bad argument filename ", err)
         }

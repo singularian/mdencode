@@ -86,6 +86,8 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 
 	// convert the bytes to a string
 	bytestring := fmt.Sprintf("%v", md.byteblock) 
+	// bytestring := bytes(md.byteblock) testing
+	// bytestring := string(md.byteblock[:]) // doesn't like this
 
 	// create the biginteger representation of the bytes
         blockBigInt := new(big.Int)

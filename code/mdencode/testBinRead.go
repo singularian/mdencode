@@ -6,6 +6,7 @@ import (
 	"os"
 	"bufio"
 	"bytes"
+	"strings"
 )
 
 
@@ -27,12 +28,13 @@ func main() {
 	_,_ = bufr.Read(bytes)
 
 	fmt.Println("buf ", bytes)
-	fileSize,_      := Convert64(bytes[0:8])
-	blockSize,_     := Convert64(bytes[8:16])
-	modSize,_       := Convert64(bytes[16:24])
-	fileNameLen,_   := Convert64(bytes[24:32])
-	filePathLen,_   := Convert64(bytes[32:40])
-	fileHashLen,_   := Convert64(bytes[40:48])
+	// fileSize,_      := Convert64(bytes[0:8])
+	fileSize      := binary.BigEndian.Uint64(bytes[0:8])
+	blockSize     := binary.BigEndian.Uint64(bytes[8:16])
+	modSize       := binary.BigEndian.Uint64(bytes[16:24])
+	fileNameLen   := binary.BigEndian.Uint64(bytes[24:32])
+	filePathLen   := binary.BigEndian.Uint64(bytes[32:40])
+	fileHashLen   := binary.BigEndian.Uint64(bytes[40:48])
 
 	fmt.Println("fileSize ", fileSize)
 	fmt.Println("blockSize ", blockSize)
@@ -59,7 +61,16 @@ func main() {
 	start = end
 	end = end + fileHashLen
 	fmt.Println("hashlistname ", string(bytes[start:end]))
+	// split hash list
+	hlist := string(bytes[start:end])
+	hashlist := strings.Split(hlist, "-")
+	filelist := hashlist[0]
+	blocklist := hashlist[1]
+	fmt.Println("hashlist ", filelist, blocklist)
+	var filesize uint64 = CalcHashSizeFile(filelist)
+	var fileblocksize uint64 = CalcHashSizeFile(blocklist)
 
+	fmt.Println("lll ", filesize, fileblocksize)
 	// return bytes, err
 
 }
@@ -80,4 +91,25 @@ func Convert64(data []byte) (uint64, error) {
 		return 0, err
 	}
 	return v, nil
+}
+
+func CalcHashSizeFile (hashlist string) (uint64) {
+	s := strings.Split(hashlist, ":")
+
+	var blocksize uint64 = 0
+
+	for i := 0; i < len(s); i++ {
+		fmt.Println("hashlist ", s[i])
+
+		switch s[i] {
+			case "md5":
+			blocksize = blocksize + 16 
+			case "sha1":
+			blocksize = blocksize + 20
+
+		}
+
+	}
+
+	return blocksize 
 }
