@@ -73,6 +73,9 @@ func main() {
 	fmt.Println("lll ", filesize, fileblocksize)
 	// return bytes, err
 
+	fmt.Println("test count ", CalcHashSizeFile("sha1:md5"))
+	fmt.Println("test count ", CalcHashSizeFile("sha1:md5:ripe160:sha224"))
+
 }
 
 func Convert(data []byte) (uint32, error) {
@@ -102,10 +105,54 @@ func CalcHashSizeFile (hashlist string) (uint64) {
 		fmt.Println("hashlist ", s[i])
 
 		switch s[i] {
+			case "blake2":
+			blocksize = blocksize + 64
+                        case "blake2b":
+			blocksize = blocksize + 64
+                        case "blake2s_128":
+                        blocksize = blocksize + 16
+                        case "blake2_256":
+                        blocksize = blocksize + 32
+			case "murmur3"
+			blocksize += 16 
+			case "md4":
+			blocksize = blocksize + 16
 			case "md5":
-			blocksize = blocksize + 16 
+			blocksize = blocksize + 16
+			case "ripe160":
+			blocksize = blocksize + 20 
 			case "sha1":
 			blocksize = blocksize + 20
+			case "sha224":
+			blocksize += 28
+			case "sha256":
+			blocksize += 32
+			case "sha512":
+			blocksize += 64
+			case "sha512_224":
+			blocksize += 28
+			case "sha512_256":
+			blocksize += 32
+			case "sha512_384":
+			blocksize += 48
+			case "sha3_224":
+			blocksize += 28
+			case "skein_160":
+			blocksize += 20
+			case "skein_224":
+			blocksize += 28
+			case "skein_256":
+			blocksize += 32 
+			case "skein_384":
+			blocksize += 48
+			case "skein_512":
+			blocksize += 64
+			case "skein_1024":
+			blocksize += 128
+			case "tiger":
+			blocksize += 48
+			case "whirlpool":
+			blocksize += 64 
 
 		}
 
