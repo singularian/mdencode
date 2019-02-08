@@ -82,6 +82,7 @@ func main() {
 		start = end
 		end = end + uint64(filelistarr[i])
 		var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
+		// filePathLen   := binary.BigEndian.(bytes[:40])
 		fmt.Println("hashlistname ", st[i], " hex ", hexstring)
 	}
 
@@ -172,6 +173,8 @@ func CalcHashSizeFile (hashlist string) (uint64, []int) {
 			case "sha3_224":
 			//blocksize += 28
 			s = append(s, 28)
+			case "sha3_256":
+			s = append(s, 32)
 			case "skein_160":
 			//blocksize += 20
 			s = append(s, 20)

@@ -25,6 +25,7 @@ import (
 	"time"
 	"bytes"
 	"hash"
+	"sync"
 )
 
 // modScan flag struct
@@ -79,7 +80,9 @@ func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes
 }
 
 // run a parallel modulus scan on a user defined or random byte block array
-func (md *DecodeData) ModulusScanBytes(c chan string) {
+func (md *DecodeData) ModulusScanBytes(c chan string, wg sync.WaitGroup) {
+
+	// defer wg.Done()
 
         // process the modulus bitsize argument
 	bitsize := md.modsizeInt
@@ -117,22 +120,23 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 	// print starting data
 	md.modScanData()
 
-        _, buffer := md.decode(c)
+        _, buffer := md.decode()
 
 	if(bytestring == buffer) {
 		md.Println("random bytestring and modulusscan bytestring match ", bytestring, " ", buffer)
 		s := "thread " + fmt.Sprint(md.threadNumber) + " random bytestring and modulusscan bytestring match " + bytestring + " " + buffer
 		c <- s
-		close(c)
 	}
 
+	c <- "Not found"
 	return
 
 }
 
 // calculate the byte block associated with a blocksize and modulus and modulus exponent with a sha1 and md5 hash
 // this will run the modulus scan decode
-func (md *DecodeData) decode(c chan string) (int, string) {
+// func (md *DecodeData) decode(c chan string) (int, string) {
+func (md *DecodeData) decode() (int, string) {
 
         // var hashone string  = md.md5hex
         // var hashtwo string  = md.sha1hex

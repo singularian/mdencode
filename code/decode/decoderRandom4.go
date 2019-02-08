@@ -22,6 +22,8 @@ import (
 	// "encoding/binary"
 	"encoding/json"
 	"github.com/singularian/mdencode/code/decode/modScan"
+	"sync"
+	"runtime"
 )
 
 
@@ -30,13 +32,20 @@ type FlagData struct {
 	blocksize string
         modsize string
 	threadsize string
+	threadlist string
 	blockSizeInt int64
 	modSizeInt int64
 	threadCount int64
 	thread int64
+	// thread parameters
+	threadStart int64
+	threadEnd int64
+	// bytes
 	bytes []byte
 	bytestring string
 }
+
+var wg sync.WaitGroup
 
 // generates a random n byte array and then hashes it
 // it then runs it through the modulus scan
@@ -45,44 +54,51 @@ func main() {
 	var argsNumber int = len(os.Args)
 
 	fd := new(FlagData)
-	// there is a Uit64 setter
+	// there is a Uint64 setter
 	flag.StringVar(&fd.blocksize, "block", "8", "File Block Size Bytes")
         flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
         flag.StringVar(&fd.threadsize, "thread", "16", "Go Routine Threadsize")
+        flag.Int64Var(&fd.threadStart, "start", 0, "Thread Start (Allows threads to be skipped for multiple computers)")
+        flag.Int64Var(&fd.threadEnd, "end", 0, "Thread End (Allows threads to be skipped for multiple computers)")
         flag.StringVar(&fd.bytestring, "bytes", "", "Specify a byte string")
 
 	flag.Parse()
 
 	if argsNumber == 1 {
-           fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -bytes=[OPTIONAL JSON BYTESTRING]")
+           fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]")
            fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10")
            fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]")
            fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]")
+           fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]")
            os.Exit(1)
         }
 
-	mddecode(fd.blocksize, fd.modsize, fd.threadsize, fd.bytestring)
+	fd.mddecode(fd.blocksize, fd.modsize, fd.threadsize, fd.threadlist, fd.bytestring)
 	os.Exit(0)
 }
 
 // mdecode file
-func mddecode(blocksize string, modsize string, threadsize string, bytestring string) int {
+func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string, threadlist string, bytestring string) int {
 
         // test a random byte block
         // arguments:
         //   blocksize bytes 
         //   modsize bits 
         //   thread size of goroutines
-	var c chan string = make(chan string)
+	// var wg sync.WaitGroup
+	// var c chan string = make(chan []string, threadsize)
+	// var c chan string = make(chan string, 10)
+	//var c chan string = make(chan string)
 	blocksizeint, _ := strconv.Atoi(blocksize)
 	var blockSizeInt int64
-	var modSizeInt int64
-	var threadCount int64
-	var thread int64 
+	var modSizeInt   int64
+	var threadCount  int64
+	var thread       int64 
 	blockSizeInt, _ = strconv.ParseInt(blocksize, 10, 64) 
 	modSizeInt  , _ = strconv.ParseInt(modsize, 10, 64) 
 	threadCount,  _ = strconv.ParseInt(threadsize, 10, 64) 
 
+	runtime.GOMAXPROCS(int(threadCount))
 
 	var bytes []byte
 	// create a random n byte size byte block
@@ -113,10 +129,12 @@ func mddecode(blocksize string, modsize string, threadsize string, bytestring st
 		}
 	}
 
+	// there is a bug in modScan 0 * n + remainder have to fix
+	// if I use mod 8 it works
 	// create a random n byte size byte block
 	// test failure with this byteblock there is a bug with the modular exponent
 	// 8 bytes 40 bit mod
-	/// bytes := []byte{ 0, 10, 22, 38, 240, 171, 146, 123 }
+	// bytes = []byte{ 0, 10, 22, 38, 240, 171, 146, 123 }
 	// _, _ = rand.Read(bytes)
 
 	// set the timestamp
@@ -130,17 +148,47 @@ func mddecode(blocksize string, modsize string, threadsize string, bytestring st
 		mdp=append(mdp,md)
 	}
 
-
-	// kick off the thread list go routines
-	for thread = 0; thread < threadCount; thread++ {
-		go mdp[thread].ModulusScanBytes(c)
+	// set the thread start and thread end
+	var threadStart int64 = 0
+	var threadEnd   int64 = threadCount
+	if (fd.threadStart > 0) && (fd.threadStart < threadCount) {
+		threadStart = fd.threadStart 
+	}
+	if (fd.threadEnd > 0) && (fd.threadEnd < threadCount) {
+		threadEnd = fd.threadEnd
 	}
 
-	// wait for the first channel result
-	for result := range c {
-		fmt.Println("result ", result)
-	} 
+	fmt.Println("start ", threadStart, " ", threadEnd)
+	fmt.Println("start ", fd.threadStart, " ", fd.threadEnd)
 
+	// kick off the thread list go routines
+	// for thread = threadStart; thread < threadCount; thread++ {
+	var count int64 
+	count = threadEnd - threadStart
+	// create a channel the size of the thread list
+	var c chan string = make(chan string, count)
+	// kick off the go routines
+	for thread = threadStart; thread < threadEnd; thread++ {
+		// wg.Add(1)
+		go mdp[thread].ModulusScanBytes(c, wg)
+	}
+
+	var cl int64 = 1 
+	for resp := range c {
+		// if the modScan result is found close the channel
+		if resp != "Not found" {
+			// fmt.Println("close on the first result \n", resp)
+			close(c)
+		// otherwise if the result count equals the thread count close the channel and break
+		} else if cl == count {
+			// fmt.Println("close the channel if the last thread has returned a value", cl)
+			close(c)
+		// otherwise increment the channel count
+		} else {
+			// fmt.Println("incrementing thread counter ", cl)
+			cl++
+		}
+	}
 
 	return 0
 
