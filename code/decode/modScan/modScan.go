@@ -111,7 +111,6 @@ func (md *DecodeData) ModulusScanBytes(c chan string, wg sync.WaitGroup) {
 	base := big.NewInt(2)
         md.modulusBigInt = modulusBigInt.Exp(base, modulusBigInt, nil)
         md.modulusBigIntString = modulusBigInt.String()
-	// md.modulusBigInt = modulusBigInt
 
         // calculate the modulus remainder
         fileblockmodulus := new(big.Int)
@@ -125,18 +124,17 @@ func (md *DecodeData) ModulusScanBytes(c chan string, wg sync.WaitGroup) {
 
 	// calculate the modulus thread multiple
         // this code makes the modulus parallel
-        // thread count
         // modulus * threadnumber
         modthreadNumber         := big.NewInt(md.threadNumber)
         md.modulusThreadNumber   = modthreadNumber.Mul(md.modulusBigInt, modthreadNumber)
 
+	// calculate the modulus threadcount
+	// this is the modulus increment value + the original modulus threadnumber
         // modulus * threadcount
         modthreadCount          := big.NewInt(md.threadCount)
         md.modulusThreadCount   = modthreadCount.Mul(md.modulusBigInt, modthreadCount)
 
-	md.Println("thread ", md.threadNumber, " ", md.modulusThreadNumber.String(), " ", md.modulusThreadCount.String())
-
-	// modulus start
+	// calculate the modulus start
 	md.modulusStart        = md.modulusBigIntRemainder
 	// add the modulusthreadNumber to the modStart
 	md.modulusStart        = md.modulusStart.Add(md.modulusStart, md.modulusThreadNumber)
@@ -215,57 +213,23 @@ func (md *DecodeData) decode() (int, string) {
 	// this converts the 2^exponent to modulus*n for the modfloor + the remainder
 	modremainder := new(big.Int)
 	modremainder = md.convertFloorBase2(modfloor, i)
-	// os.Exit(0)
-        
-/*
-        log.Println("modulo floor ", fmt.Sprint(modfloor))
-        log.Println("modulo i ", fmt.Sprint(i))
-        log.Println("modulo remainder ", fmt.Sprint(modremainder))
 
-	fmt.Println("modulo floor ", fmt.Sprint(modfloor))
-        fmt.Println("modulo i ", fmt.Sprint(i))
-        fmt.Println("modulo remainder ", fmt.Sprint(modremainder))
-
-        // start with remainder
-        remainderString, _ := strconv.ParseInt(remainder, 10, 64)
-        modstart := big.NewInt(remainderString);
-
-	fmt.Println("modulo remainder ", modstart)
-	log.Println("modulo remainder ", modstart)
-
-	// add the modular floor two to the exponent mod modulus
-	// not working
-	modstart = modstart.Add(modstart, modremainder)
-
-	fmt.Println("modstart test result ", fmt.Sprint(modstart), " ", fmt.Sprint(modremainder))
-	log.Println("modstart test result ", fmt.Sprint(modstart))
-*/
-	// this adds the modulus remainder + the modulus exponent converted from base 2
-	//// bug here // remainderString, _ := strconv.ParseInt(remainder, 10, 64)
-        // modstart := big.NewInt(remainderString);
-	// this should be a bigint and it was a 64 bit int
-     	// modstart := new(big.Int)
-        ///////////////////modstart.SetString(remainder, 10) 
-	// modstart :=  md.modulusBigIntRemainder
+	// add the modremainder the the modulusStart
 	md.modulusStart = md.modulusStart.Add(md.modulusStart, modremainder)
 
-        md.Println("thread ", md.threadNumber, " ", md.threadCount, " modstart test result floor ", fmt.Sprint(md.modulusStart), " initial remainder ", fmt.Sprint(modremainder))
-        // md.Printlog("thread ", threadNumber, " ", threadCount, " modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder), " iterator ", fmt.Sprint(i), " mult = mod * thc ", fmt.Sprint(mult),  " mult2 = m * thnum ", fmt.Sprint(mult2))
+        md.Printlog("thread ", md.threadNumber, " ", md.threadCount, " modstart test result floor ", fmt.Sprint(md.modulusStart), " initial remainder ", fmt.Sprint(modremainder))
 
 	// create the hash contexts
         md5  := md5.New()
         sha1 := sha1.New()
 
-
 	var lineCount uint64 = 1
         for {
-		// bigbytes := md.modulusStart.Bytes()
-
+		// copy the modulus bytes to the byte buffer
                 copy(buf[:], md.modulusStart.Bytes()) 
-		// fmt.Println("bigint ", buf, " ", bigbytes)
+		// fmt.Println("bigint ", buf, " ", md.modulusStart.Bytes())
 
                 md5.Write([]byte(buf))
-		// md5string := hex.EncodeToString(md5.Sum(nil))
 
 		// byte comparison is faster than string comparison
 		if bytes.Equal(md5.Sum(nil), md.md5hash.Sum(nil)) {
@@ -277,7 +241,7 @@ func (md *DecodeData) decode() (int, string) {
 			// if they are equal return the block as found
 			if bytes.Equal(sha1.Sum(nil), md.sha1hash.Sum(nil)) {
 				md.Println("Found Block ", buf)
-				md.byteblock  = bigbytes
+				md.byteblock  = md.modulusStart.Bytes()
 				md.matchFound = true
 				break
 			}
@@ -396,18 +360,21 @@ func (md *DecodeData) modScanData() {
 
 	md.Printlog("Starting Modulus Scan Random ", md.threadNumber)
 
-        if (md.threadNumber == 0) {
-        md.Println("blocksize ", md.blocksizeInt)
-	md.Println("byte block", md.byteblock)
-	md.Println("byte bigint", md.blockBigInt.String())
-        md.Println("modulus bit size ", md.modsizeInt)
-        md.Println("byte block modulus ", md.modulusBigIntString)
-        md.Println("byte block modulus remainder ", md.modulusBigIntRemainder.String())
-        md.Println("modulus exponent ", md.modExp)
+        md.Printlog("blocksize ", md.blocksizeInt)
+	md.Printlog("byte block", md.byteblock)
+	md.Printlog("byte bigint", md.blockBigInt.String())
+        md.Printlog("modulus bit size ", md.modsizeInt)
+        md.Printlog("byte block modulus ", md.modulusBigIntString)
+        md.Printlog("byte block modulus remainder ", md.modulusBigIntRemainder.String())
+        md.Printlog("modulus exponent ", md.modExp)
 
-        md.Println("shasum ", md.sha1hex);
-        md.Println("md5sum ", md.md5hex);
-        }
+        md.Printlog("shasum ", md.sha1hex);
+        md.Printlog("md5sum ", md.md5hex);
+
+	md.Printlog("threadnumber ", md.threadNumber)
+	md.Printlog("thread count ", md.threadCount)
+	md.Printlog("modulus * threadnumber ", md.modulusThreadNumber.String())
+	md.Printlog("modulus * threadCount ", md.modulusThreadCount.String())
 }
 
 // get the modScan byteblock
