@@ -86,7 +86,7 @@ members of the project's leadership.
 ### Attribution
 
 This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.0,
-available at [https://github.com/singularian/mdencode/[version]
+available at [https://github.com/singularian/mdencode/]
 
 [homepage]: https://github.com/singularian/mdencode/
 [version]: https://github.com/singularian/mdencode/
