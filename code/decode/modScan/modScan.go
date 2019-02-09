@@ -46,6 +46,10 @@ type DecodeData struct {
 	// threads
 	threadNumber int64
 	threadCount int64
+	// thread incrmenter
+	modulusThreadNumber *big.Int
+	modulusThreadCount  *big.Int
+	modulusStart        *big.Int
 	// bytes buffer
 	byteblock []byte
 	// matchFound
@@ -102,9 +106,10 @@ func (md *DecodeData) ModulusScanBytes(c chan string, wg sync.WaitGroup) {
         md.blockBigInt = blockBigInt.SetBytes(md.byteblock)
 
         // create the modulus bigint 2 to the bitsize exponent
-	// ie if it is 8 then it is 2 to the 8th
-        var modulusBigInt, e = big.NewInt(2), big.NewInt(bitsize)
-        md.modulusBigInt = modulusBigInt.Exp(modulusBigInt, e, nil)
+	// ie if it is 8 then it is 2 to the bitsize nth
+        modulusBigInt := big.NewInt(bitsize)
+	base := big.NewInt(2)
+        md.modulusBigInt = modulusBigInt.Exp(base, modulusBigInt, nil)
         md.modulusBigIntString = modulusBigInt.String()
 	// md.modulusBigInt = modulusBigInt
 
@@ -117,6 +122,24 @@ func (md *DecodeData) ModulusScanBytes(c chan string, wg sync.WaitGroup) {
         two := big.NewInt(2)
         var modexp = md.logN(md.blockBigInt, two)
 	md.modExp = modexp
+
+	// calculate the modulus thread multiple
+        // this code makes the modulus parallel
+        // thread count
+        // modulus * threadnumber
+        modthreadNumber         := big.NewInt(md.threadNumber)
+        md.modulusThreadNumber   = modthreadNumber.Mul(md.modulusBigInt, modthreadNumber)
+
+        // modulus * threadcount
+        modthreadCount          := big.NewInt(md.threadCount)
+        md.modulusThreadCount   = modthreadCount.Mul(md.modulusBigInt, modthreadCount)
+
+	md.Println("thread ", md.threadNumber, " ", md.modulusThreadNumber.String(), " ", md.modulusThreadCount.String())
+
+	// modulus start
+	md.modulusStart        = md.modulusBigIntRemainder
+	// add the modulusthreadNumber to the modStart
+	md.modulusStart        = md.modulusStart.Add(md.modulusStart, md.modulusThreadNumber)
 
 	// create a sha1 hash of the bytes
 	// create an md5 hash of the bytes
@@ -223,26 +246,11 @@ func (md *DecodeData) decode() (int, string) {
 	// this should be a bigint and it was a 64 bit int
      	// modstart := new(big.Int)
         ///////////////////modstart.SetString(remainder, 10) 
-	modstart :=  md.modulusBigIntRemainder
-        // modstart := big.NewInt(remainder);
-	modstart = modstart.Add(modstart, modremainder)
+	// modstart :=  md.modulusBigIntRemainder
+	md.modulusStart = md.modulusStart.Add(md.modulusStart, modremainder)
 
-	// this code makes the modulus paralell 
-	// thread count
-	var threadNumber = md.threadNumber
-	var threadCount  = md.threadCount
-        // mult2
-	// modulus * the threadnumber
-        mult2           := big.NewInt(threadNumber)
-        mult2            = mult2.Mul(i, mult2)
-        modstart         = modstart.Add(modstart, mult2)
-
-	// modulus * the threadcount 
-	mult            := big.NewInt(threadCount)
-	i = mult.Mul(i, mult)
-
-        // md.Println("thread ", threadNumber, " ", threadCount, " modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder))
-        md.Printlog("thread ", threadNumber, " ", threadCount, " modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder), " iterator ", fmt.Sprint(i), " mult = mod * thc ", fmt.Sprint(mult),  " mult2 = m * thnum ", fmt.Sprint(mult2))
+        md.Println("thread ", md.threadNumber, " ", md.threadCount, " modstart test result floor ", fmt.Sprint(md.modulusStart), " initial remainder ", fmt.Sprint(modremainder))
+        // md.Printlog("thread ", threadNumber, " ", threadCount, " modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder), " iterator ", fmt.Sprint(i), " mult = mod * thc ", fmt.Sprint(mult),  " mult2 = m * thnum ", fmt.Sprint(mult2))
 
 	// create the hash contexts
         md5  := md5.New()
@@ -251,23 +259,22 @@ func (md *DecodeData) decode() (int, string) {
 
 	var lineCount uint64 = 1
         for {
-		bigbytes := modstart.Bytes()
+		// bigbytes := md.modulusStart.Bytes()
 
-                copy(buf[:], bigbytes) 
+                copy(buf[:], md.modulusStart.Bytes()) 
 		// fmt.Println("bigint ", buf, " ", bigbytes)
 
                 md5.Write([]byte(buf))
 		// md5string := hex.EncodeToString(md5.Sum(nil))
 
 		// byte comparison is faster than string comparison
-		// if md5string == hashone {
 		if bytes.Equal(md5.Sum(nil), md.md5hash.Sum(nil)) {
 			sha1.Write([]byte(buf))
 			// sha1string := hex.EncodeToString(sha1.Sum(nil))
 			// fmt.Println("md5 sha1 ", hex.EncodeToString(md5.Sum(nil)), " ", hex.EncodeToString(sha1.Sum(nil)))
 
-			// if md5string == hashone && sha1string == hashtwo {
-			// if sha1string == hashtwo {
+			// compare the modulus sha hash bytes with the destination sha hash
+			// if they are equal return the block as found
 			if bytes.Equal(sha1.Sum(nil), md.sha1hash.Sum(nil)) {
 				md.Println("Found Block ", buf)
 				md.byteblock  = bigbytes
@@ -278,16 +285,17 @@ func (md *DecodeData) decode() (int, string) {
 		}
                 md5.Reset()
 
-                modstart := modstart.Add(modstart, i)
-                gt := modstart.Cmp(modceil) // have to check this
+		// increament the modulus bigint by the modulus * thread count
+                md.modulusStart = md.modulusStart.Add(md.modulusStart, md.modulusThreadCount)
+                gt := md.modulusStart.Cmp(modceil) // have to check this
 
                 if gt > 0 {
-			md.Println("Not Found Block ", buf, " modstart ", modstart, " mod ceil ", modceil, " ", modceiltwo)
+			md.Println("Not Found Block ", buf, " modstart ", md.modulusStart, " mod ceil ", modceil, " ", modceiltwo)
 			break
                 }
 
 		if lineCount >= 1000000 {
-			md.Printlog("blockbuffer value ", modstart)
+			md.Printlog("blockbuffer value ", md.modulusStart)
 			lineCount = 0
 		}
 
