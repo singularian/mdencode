@@ -178,9 +178,11 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
 		// if the modScan result is found close the channel
 		if resp != "Not found" {
 			// fmt.Println("close on the first result \n", resp)
+			fmt.Println("Found block ", resp)
 			close(c)
+			break
 		// otherwise if the result count equals the thread count close the channel and break
-		} else if cl == count {
+		} else if cl == count && resp == "Not found" {
 			// fmt.Println("close the channel if the last thread has returned a value", cl)
 			close(c)
 		// otherwise increment the channel count

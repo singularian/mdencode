@@ -48,6 +48,9 @@ type DecodeData struct {
 	threadCount int64
 	// bytes buffer
 	byteblock []byte
+	// matchFound
+	matchFound bool
+	collisionCnt int64
 	// time
 	timeStarted string
 	// signatures
@@ -69,10 +72,12 @@ func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes
         mdata := new(DecodeData)
 	mdata.blocksizeInt = blocksize
         mdata.modsizeInt   = modsize
-        // mdata.modExp       = modexp
+        mdata.modExp       = 0
         mdata.threadNumber = thread
         mdata.threadCount  = threadCount
         mdata.byteblock    = bytes
+	mdata.matchFound   = false
+	mdata.collisionCnt = 0
         mdata.timeStarted  = time
         mdata.initLog()
         mdata.islogging = false
@@ -142,19 +147,13 @@ func (md *DecodeData) decode() (int, string) {
         // var hashtwo string  = md.sha1hex
 
 	start := time.Now()
-	md.Println("Starting decoderRandom")
+	md.Printlog("Starting decoderRandom")
 
-        // blocksize, _ := strconv.ParseInt(blockSize, 10, 64)
+	// create the byte buffer block size in bytes
         buf := make([]byte, md.blocksizeInt)
 
-        // process the modulus bitsize argument
-        // raise 2 to the bitsize exponent
-	bitsize    := md.modsizeInt
-        var i, e    = big.NewInt(2), big.NewInt(bitsize)
-        i.Exp(i, e, nil)
-        modulostr := fmt.Sprint(i)
-
-	md.Println("modulo bigint", modulostr)
+	// set the modulus bigint
+	i := md.modulusBigInt
 
         // calculate the modular exponent floor and ceiling
 	// the base in the exponent is 2 it can also be the modulus to some power less than the big block int
@@ -169,7 +168,7 @@ func (md *DecodeData) decode() (int, string) {
         modulofloorstr :=  fmt.Sprint(modfloor)
         moduloceilstr :=  fmt.Sprint(modceil)
 
-	md.Println("modulo floor ", modulofloorstr, " ceil ", moduloceilstr, " modceiltwo ", modceiltwo)
+	md.Printlog("modulo floor ", modulofloorstr, " ceil ", moduloceilstr, " modceiltwo ", modceiltwo)
 
 	// I think there is a bug here 
 	// with the exponent
@@ -185,8 +184,8 @@ func (md *DecodeData) decode() (int, string) {
         // mod := new(big.Int)
         // mod = z.Mod(z, i);
 
-	md.Println("modulo floor ", md.modExp, " ", modulofloorstr, " ceil ", moduloceilstr)
-	fmt.Println("modulo floor exponent ", md.modExp, " modulo floor ", modulofloorstr, " modulo ceil ", moduloceilstr, " mod ", i)
+	md.Printlog("modulo floor ", md.modExp, " ", modulofloorstr, " ceil ", moduloceilstr)
+	md.Printlog("modulo floor exponent ", md.modExp, " modulo floor ", modulofloorstr, " modulo ceil ", moduloceilstr, " mod ", i)
 
 	// I think there is a bug here somewhere
         // calcluate the 2^exp mod floor
@@ -243,7 +242,7 @@ func (md *DecodeData) decode() (int, string) {
 	i = mult.Mul(i, mult)
 
         // md.Println("thread ", threadNumber, " ", threadCount, " modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder))
-        md.Println("thread ", threadNumber, " ", threadCount, " modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder), " iterator ", fmt.Sprint(i), " mult = mod * thc ", fmt.Sprint(mult),  " mult2 = m * thnum ", fmt.Sprint(mult2))
+        md.Printlog("thread ", threadNumber, " ", threadCount, " modstart test result floor ", fmt.Sprint(modstart), " initial remainder ", fmt.Sprint(modremainder), " iterator ", fmt.Sprint(i), " mult = mod * thc ", fmt.Sprint(mult),  " mult2 = m * thnum ", fmt.Sprint(mult2))
 
 	// create the hash contexts
         md5  := md5.New()
@@ -271,6 +270,8 @@ func (md *DecodeData) decode() (int, string) {
 			// if sha1string == hashtwo {
 			if bytes.Equal(sha1.Sum(nil), md.sha1hash.Sum(nil)) {
 				md.Println("Found Block ", buf)
+				md.byteblock  = bigbytes
+				md.matchFound = true
 				break
 			}
 			sha1.Reset()
@@ -339,22 +340,22 @@ func (md *DecodeData) convertFloorBase2 (modfloor *big.Int, modi *big.Int) *big.
         modremainder = modfloor.Mod(modfloor, modi);
         gt := modremainder.Cmp(zero)
 
-	md.Println("mfloor ", mfloor, " ", modfloor)
+	md.Printlog("mfloor ", mfloor, " ", modfloor)
 
         // if the remainder is zero set modremainder to modfloor
         if gt == 0 {
-                md.Println("modulo floor equals zero ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
+                md.Printlog("modulo floor equals zero ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
                 modremainder = modremainder.Set(mfloor)
-                md.Println("modulo floor equals zero setting ", fmt.Sprint(modremainder), " ", mfloor)
+                md.Printlog("modulo floor equals zero setting ", fmt.Sprint(modremainder), " ", mfloor)
         // otherwise subtract the modremainder from modfloor
         } else {
-                md.Println("modulo floor greater than zero ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
+                md.Printlog("modulo floor greater than zero ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
                 // modremainder = mfloor
                 modremainder = modremainder.Sub(modfloor, modremainder)
-                md.Println("modulo floor sub ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
+                md.Printlog("modulo floor sub ", fmt.Sprint(modremainder), " ", fmt.Sprint(modfloor))
         }
 	remstring := modremainder.String()
-	md.Println("modremainder ", modremainder, " ", remstring)
+	md.Printlog("modremainder ", modremainder, " ", remstring)
 	
 	return modremainder
 }
@@ -385,7 +386,7 @@ func (md *DecodeData) setSignature() {
 // display the modScan data
 func (md *DecodeData) modScanData() {
 
-	md.Println("Starting Modulus Scan Random ", md.threadNumber)
+	md.Printlog("Starting Modulus Scan Random ", md.threadNumber)
 
         if (md.threadNumber == 0) {
         md.Println("blocksize ", md.blocksizeInt)
@@ -400,6 +401,22 @@ func (md *DecodeData) modScanData() {
         md.Println("md5sum ", md.md5hex);
         }
 }
+
+// get the modScan byteblock
+func (md *DecodeData) GetBytes() ([]byte) {
+	return md.byteblock
+}
+
+// get the modScan match found
+func (md *DecodeData) MatchFound() (bool) {
+	return md.matchFound
+}
+
+// get the modScan collision count
+func (md *DecodeData) GetCollisionCount() (int64) {
+        return md.collisionCnt
+}
+
 
 // initialize the logfile
 func (md *DecodeData) initLog() {
