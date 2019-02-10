@@ -218,7 +218,7 @@ func (md *DecodeData) decode() (int, string) {
 		// ie buffer size 3 modulus start byte length 2 [1,1]
 		// buf = [0,1,1]
 		} else {
-			fmt.Println("slice ", lbuf - lenmd, " buf ", lbuf, " mod bytes length ",  lenmd, " bytes ", md.modulusStart.Bytes())
+			// fmt.Println("slice ", lbuf - lenmd, " buf ", lbuf, " mod bytes length ",  lenmd, " bytes ", md.modulusStart.Bytes())
 			var start = lbuf - lenmd
 			var end = lbuf
 			copy(buf[start:end], md.modulusStart.Bytes())
