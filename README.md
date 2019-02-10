@@ -357,6 +357,19 @@ Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]
 Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
 ```
 
+This is a 17 byte block with a 64 bit modulus.
+The byte block was found in 1.87 seconds.
+
+```
+nsross@DESKTOP-A1RITGA:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -mod=64 -thread=16 -bytes=[0,0,1,0,0,1,0,2,0,1,255,2,4,1,6,8,10]
+buffer  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
+starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  17  byteblock  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
+Found Block  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
+Total time  1.873573s
+random bytestring and modulusscan bytestring match  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]   [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
+Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10] [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
+```
+
 This is an example of a parallel modulus scan with 16 threads.
 [Decoder Parallel Examples](https://github.com/singularian/mdencode/blob/master/examples/mdencodeParallelmodscan2.txt)
 
