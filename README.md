@@ -315,64 +315,29 @@ A modulus should be considered part of the file signature subset. A modulus is a
 # Modular Floor Examples
   
 This is an example of the modular floor.  
-The program `decoderRandom4` is creating a random 10 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
+The program `decoderRandom4` is creating a random 11 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
 It creates a random 10 byte array and a 64 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
-It calculated and found a hashed 10 byte block in 11 ms on a Ryzen 2700x.
+It calculated and found a hashed 11 byte block in 58 ms on a Ryzen 2700x.
 
 `$GOPATH/github.com/singularian/mdencode/code/decode/decoderRandom4 `
 ```
-$ ./decoderRandom4 -mod=64 -block=10 -thread=16
-
-2019/02/04 03:09:40 Starting Modulus Scan Random  0
-2019/02/04 03:09:40 blocksize  10
-2019/02/04 03:09:40 byte block [33 209 186 43 161 221 31 71 174 90]
-2019/02/04 03:09:40 byte bigint 159706878439989726129754
-2019/02/04 03:09:40 modulus bit size  64
-2019/02/04 03:09:40 byte block modulus  18446744073709551616
-2019/02/04 03:09:40 byte block modulus remainder  13414993886137790042
-2019/02/04 03:09:40 modulus exponent  77
-2019/02/04 03:09:40 shasum  8235d77c7b1b6d3c88e099f49c4f6d8613a72640
-2019/02/04 03:09:40 md5sum  a58cdac0fc1ec2afc9a8b2728d6e5c40
-2019/02/04 03:09:40 Starting decoderRandom
-2019/02/04 03:09:40 modulo bigint 18446744073709551616
-2019/02/04 03:09:40 modulo floor  151115727451828646838272  ceil  302231454903657293676544  modceiltwo  2
-  :
-  :
-
-Found Block  [33 209 186 43 161 221 31 71 174 90]
-Total time  11.112ms
-random bytestring and modulusscan bytestring match  [33 209 186 43 161 221 31 71 174 90]   [33 209 186 43 161 221 31 71 174 90]
-result  thread 1 random bytestring and modulusscan bytestring match [33 209 186 43 161 221 31 71 174 90] [33 209 186 43 161 221 31 71 174 90]
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -block=11 -mod=64 -thread=16
+starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  11  byteblock  [24 218 209 240 42 198 53 218 173 140 180]
+Found Block  [24 218 209 240 42 198 53 218 173 140 180]
+Total time  58.526ms
+random bytestring and modulusscan bytestring match  [24 218 209 240 42 198 53 218 173 140 180]   [24 218 209 240 42 198 53 218 173 140 180]
+Found block  thread 1 random bytestring and modulusscan bytestring match [24 218 209 240 42 198 53 218 173 140 180] [24 218 209 240 42 198 53 218 173 140 180]
 ```
 This example of decoderRandom4 uses a 64-bit modulus to calculate a 12 byte block associated with an sha1 and md5 signature.
 It uses 16 threads and a parallel modulus scan and was run on a Ryzen 2700x. 
 ```
-$ ./decoderRandom4 -mod=64 -block=12 -thread=16 
-2019/02/04 02:53:35 Starting Modulus Scan Random  0
-2019/02/04 02:53:35 blocksize  12
-2019/02/04 02:53:35 byte block [197 170 222 253 176 100 237 126 149 160 151 34]
-2019/02/04 02:53:35 byte bigint 61175117369235458384514291490
-2019/02/04 02:53:35 modulus bit size  64
-2019/02/04 02:53:35 byte block modulus  18446744073709551616
-2019/02/04 02:53:35 byte block modulus remainder  12710545176278374178
-2019/02/04 02:53:35 modulus exponent  95
-2019/02/04 02:53:35 shasum  5f02bab5517b15600692ca5e5c0c97a44a77e86a
-2019/02/04 02:53:35 md5sum  6a6e942ac8efc828bddb5e38c5ce721d
-2019/02/04 02:53:35 Starting decoderRandom
-2019/02/04 02:53:35 modulo bigint 18446744073709551616
-2019/02/04 02:53:35 modulo floor  39614081257132168796771975168  ceil  79228162514264337593543950336  modceiltwo  2
-2019/02/04 02:53:35 modulo floor  95   39614081257132168796771975168  ceil  79228162514264337593543950336
-2019/02/04 02:53:35 mfloor  39614081257132168796771975168   0
-2019/02/04 02:53:35 modulo floor equals zero  0   0
-2019/02/04 02:53:35 modulo floor equals zero setting  39614081257132168796771975168   39614081257132168796771975168
-2019/02/04 02:53:35 modremainder  39614081257132168796771975168   39614081257132168796771975168
-2019/02/04 02:53:35 thread  0   16  modstart test result floor  39614081269842713973050349346  initial remainder  39614081257132168796771975168  iterator  295147905179352825856  mult = mod * thc  295147905179352825856  mult2 = m * thnum  0
- :
- :
- :
-Total time  2m53.344956s
-random bytestring and modulusscan bytestring match  [197 170 222 253 176 100 237 126 149 160 151 34]   [197 170 222 253 176 100 237 126 149 160 151 34]
-result  thread 13 random bytestring and modulusscan bytestring match [197 170 222 253 176 100 237 126 149 160 151 34] [197 170 222 253 176 100 237 126 149 160 151 34]
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -block=12 -mod=64 -thread=16
+starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  12  byteblock  [165 55 125 101 98 169 203 81 163 83 179 217]
+Found Block  [165 55 125 101 98 169 203 81 163 83 179 217]
+Total time  1m14.791082s
+random bytestring and modulusscan bytestring match  [165 55 125 101 98 169 203 81 163 83 179 217]   [165 55 125 101 98 169 203 81 163 83 179 217]
+Found block  thread 5 random bytestring and modulusscan bytestring match [165 55 125 101 98 169 203 81 163 83 179 217] [165 55 125 101 98 169 203 81 163 83 179 217]
+nsross@DESKTOP-A1RITGA:~/projects/src/github.com/singularian/mdencode/code/decode$
 ```
 
 [Other Decoder Examples](https://github.com/singularian/mdencode/blob/master/docs/EXAMPLES.md)
@@ -386,9 +351,11 @@ This is the usage of the prototype parallel modulus scan program.
 It allows for the blocksize and modulus bitsize and thread count as well as the bytes either random or specified by the command line argument.
 ```
 user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4
-Usage  ./decoderRandom4  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -bytes=[OPTIONAL JSON BYTESTRING]
+Usage  ./decoderRandom4  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]
 Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10
 Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
+Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]
+Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
 ```
 
 This is an example of a parallel modulus scan with 16 threads.
