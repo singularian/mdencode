@@ -316,7 +316,7 @@ A modulus should be considered part of the file signature subset. A modulus is a
   
 This is an example of the modular floor.  
 The program `decoderRandom4` is creating a random 11 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
-It creates a random 10 byte array and a 64 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
+It creates a random 11 byte array and a 64 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
 It calculated and found a hashed 11 byte block in 58 ms on a Ryzen 2700x.
 
 `$GOPATH/github.com/singularian/mdencode/code/decode/decoderRandom4 `
@@ -351,7 +351,7 @@ It allows for the blocksize and modulus bitsize and thread count as well as the 
 ```
 user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4
 Usage  ./decoderRandom4  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]
-Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10
+Usage  ./decoderRandom4  -block=12 -mod=64 -thread=16
 Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
 Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]
 Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]

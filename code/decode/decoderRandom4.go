@@ -63,8 +63,8 @@ func main() {
 
 	if argsNumber == 1 {
            fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]")
-           fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10")
-           fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]")
+           fmt.Println("Usage ", os.Args[0], " -block=12 -mod=64 -thread=16")
+           fmt.Println("Usage ", os.Args[0], " -block=9 -mod=64 -thread=10 -bytes=[1,2,3,4,5]")
            fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]")
            fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]")
            os.Exit(1)
