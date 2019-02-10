@@ -173,9 +173,6 @@ func (md *DecodeData) decode() (int, string) {
 	// create the byte buffer block size in bytes
         buf := make([]byte, md.blocksizeInt)
 
-	// set the modulus bigint
-	i := md.modulusBigInt
-
         // calculate the modular exponent floor and ceiling
 	// the base in the exponent is 2 it can also be the modulus to some power less than the big block int
         // floor = 2 to the power
@@ -190,44 +187,42 @@ func (md *DecodeData) decode() (int, string) {
         moduloceilstr :=  fmt.Sprint(modceil)
 
 	md.Printlog("modulo floor ", modulofloorstr, " ceil ", moduloceilstr, " modceiltwo ", modceiltwo)
-
-	// I think there is a bug here 
-	// with the exponent
-
-        // fmt.Println("buf ", buf)
-
-        // process the modulus bitsize argument
-        // exponent
-        // bitsize, err := strconv.ParseInt(modSize, 10, 64)
-        // var i, e = big.NewInt(2), big.NewInt(bitsize)
-        // i.Exp(i, e, nil)
-
-        // mod := new(big.Int)
-        // mod = z.Mod(z, i);
+	md.Printlog("modulo floor string ", modfloor.String(), " ceil ", modceil.String(), " modceiltwo ", modceiltwo)
+	md.Printlog("modulo floor bytes ", modfloor.Bytes(), " ceil ", modceil.Bytes(), " modceiltwo ", modceiltwo)
 
 	md.Printlog("modulo floor ", md.modExp, " ", modulofloorstr, " ceil ", moduloceilstr)
-	md.Printlog("modulo floor exponent ", md.modExp, " modulo floor ", modulofloorstr, " modulo ceil ", moduloceilstr, " mod ", i)
+	md.Printlog("modulo floor exponent ", md.modExp, " modulo floor ", modulofloorstr, " modulo ceil ", moduloceilstr, " mod ", md.modulusBigInt)
+	md.Printlog("starting modulus byteblock before mod remainder added ", md.modulusStart.Bytes(), " bigint ", md.modulusStart, " ", md.blockBigInt)
 
-	// I think there is a bug here somewhere
         // calcluate the 2^exp mod floor
 	// this converts the 2^exponent to modulus*n for the modfloor + the remainder
 	modremainder := new(big.Int)
-	modremainder = md.convertFloorBase2(modfloor, i)
+	modremainder = md.convertFloorBase2(modfloor, md.modulusBigInt)
 
 	// add the modremainder the the modulusStart
 	md.modulusStart = md.modulusStart.Add(md.modulusStart, modremainder)
 
+	md.Printlog("starting modulus byteblock after remainder added ", md.modulusStart.Bytes(), " bigint ", md.modulusStart, " ", md.blockBigInt)
         md.Printlog("thread ", md.threadNumber, " ", md.threadCount, " modstart test result floor ", fmt.Sprint(md.modulusStart), " initial remainder ", fmt.Sprint(modremainder))
 
 	// create the hash contexts
         md5  := md5.New()
         sha1 := sha1.New()
 
+	md.Println("starting modulus byteblock ", md.modulusStart.Bytes())
+
 	var lineCount uint64 = 1
         for {
 		// copy the modulus bytes to the byte buffer
-                copy(buf[:], md.modulusStart.Bytes()) 
-		// fmt.Println("bigint ", buf, " ", md.modulusStart.Bytes())
+		// if the modulus start byte block is less than the buffer byte block copy it to the end of the buffer byte block
+		if (len(buf) == len(md.modulusStart.Bytes())) {
+			copy(buf[:], md.modulusStart.Bytes()) 
+		} else {
+			var start = len(buf) - len(md.modulusStart.Bytes())
+			var end   = len(buf)
+			copy(buf[start:end], md.modulusStart.Bytes())
+		}
+		// fmt.Println("bigint ", buf, " modulus start bytes ", md.modulusStart.Bytes())
 
                 md5.Write([]byte(buf))
 
