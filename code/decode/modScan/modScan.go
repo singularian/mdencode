@@ -209,7 +209,7 @@ func (md *DecodeData) decode() (int, string) {
         md5  := md5.New()
         sha1 := sha1.New()
 
-	md.Println("starting modulus byteblock ", md.modulusStart.Bytes())
+	md.Printlog("starting modulus byteblock ", md.modulusStart.Bytes())
 
 	var lineCount uint64 = 1
         for {
