@@ -6,7 +6,7 @@ package modScan
 //
 // modScan recives the input byte block with n-bytes and creates an n-bit modular floor
 // modScan will then run a parallel modulus scan to find the original n-byte block with a matching signature
-// modScan uses goroutines to run the scans in sequence
+// decoderRandom4 uses goroutines to run the modScan decoders in sequence
 //
 // copyright (C) Scott Ross 2019
 // https://github.com/singularian/mdencode/blob/master/LICENSE
@@ -155,12 +155,8 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 }
 
 // calculate the byte block associated with a blocksize and modulus and modulus exponent with a sha1 and md5 hash
-// this will run the modulus scan decode
-// func (md *DecodeData) decode(c chan string) (int, string) {
+// this will run the modulus scan decode to find a byte block associated with a modulus floor and sinature
 func (md *DecodeData) decode() (int, string) {
-
-        // var hashone string  = md.md5hex
-        // var hashtwo string  = md.sha1hex
 
 	start := time.Now()
 	md.Printlog("Starting decoderRandom")
