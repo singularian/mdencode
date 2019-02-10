@@ -155,6 +155,20 @@ Found block  thread 3 random bytestring and modulusscan bytestring match [149 24
 
 ```
 
+This is a 55 byte block example of the modulus scan with a 64 bit modulus. Total execution time was 4.3 seconds.
+```
+$ ./decoderRandom4 -mod=64 -thread=16 -bytes=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,1,20,0,0,0,0,0,0,0,0,0,2]
+buffer  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2]
+starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  55  byteblock  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2]
+Found Block  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2]
+Total time  4.335839s
+random bytestring and modulusscan bytestring match  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2]   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2]
+Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2] [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2]
+
+
+
+```
+
 This is a test modulus scan on a 1000 byte block with a 7968 byte modulus  
 [mddecode1000.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/mddecode1000.txt)
 
