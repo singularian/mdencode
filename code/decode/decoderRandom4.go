@@ -10,37 +10,36 @@ package main
 // copyright (C) Scott Ross 2019
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
-import ( 
-	"flag"
+import (
 	"crypto/rand"
+	"flag"
 	"fmt"
-	"strconv"
 	"os"
+	"strconv"
 	// "log"
-	"time"
 	"strings"
+	"time"
 	// "encoding/binary"
 	"encoding/json"
 	"github.com/singularian/mdencode/code/decode/modScan"
 	"runtime"
 )
 
-
 // mdencode flag struct
 type FlagData struct {
-	blocksize string
-        modsize string
-	threadsize string
-	threadlist string
+	blocksize    string
+	modsize      string
+	threadsize   string
+	threadlist   string
 	blockSizeInt int64
-	modSizeInt int64
-	threadCount int64
-	thread int64
+	modSizeInt   int64
+	threadCount  int64
+	thread       int64
 	// thread parameters
 	threadStart int64
-	threadEnd int64
+	threadEnd   int64
 	// bytes
-	bytes []byte
+	bytes      []byte
 	bytestring string
 }
 
@@ -53,22 +52,22 @@ func main() {
 	fd := new(FlagData)
 	// there is a Uint64 setter
 	flag.StringVar(&fd.blocksize, "block", "8", "File Block Size Bytes")
-        flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
-        flag.StringVar(&fd.threadsize, "thread", "16", "Go Routine Threadsize")
-        flag.Int64Var(&fd.threadStart, "start", 0, "Thread Start (Allows threads to be skipped for multiple computers)")
-        flag.Int64Var(&fd.threadEnd, "end", 0, "Thread End (Allows threads to be skipped for multiple computers)")
-        flag.StringVar(&fd.bytestring, "bytes", "", "Specify a byte string")
+	flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
+	flag.StringVar(&fd.threadsize, "thread", "16", "Go Routine Threadsize")
+	flag.Int64Var(&fd.threadStart, "start", 0, "Thread Start (Allows threads to be skipped for multiple computers)")
+	flag.Int64Var(&fd.threadEnd, "end", 0, "Thread End (Allows threads to be skipped for multiple computers)")
+	flag.StringVar(&fd.bytestring, "bytes", "", "Specify a byte string")
 
 	flag.Parse()
 
 	if argsNumber == 1 {
-           fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]")
-           fmt.Println("Usage ", os.Args[0], " -block=12 -mod=64 -thread=16")
-           fmt.Println("Usage ", os.Args[0], " -block=9 -mod=64 -thread=10 -bytes=[1,2,3,4,5]")
-           fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]")
-           fmt.Println("Usage ", os.Args[0], " -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]")
-           os.Exit(1)
-        }
+		fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]")
+		fmt.Println("Usage ", os.Args[0], " -block=12 -mod=64 -thread=16")
+		fmt.Println("Usage ", os.Args[0], " -block=9 -mod=64 -thread=10 -bytes=[1,2,3,4,5]")
+		fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]")
+		fmt.Println("Usage ", os.Args[0], " -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]")
+		os.Exit(1)
+	}
 
 	fd.mddecode(fd.blocksize, fd.modsize, fd.threadsize, fd.threadlist, fd.bytestring)
 	os.Exit(0)
@@ -77,28 +76,27 @@ func main() {
 // mdecode file
 func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string, threadlist string, bytestring string) int {
 
-        // test a random byte block
-        // arguments:
-        //   blocksize bytes 
-        //   modsize bits 
-        //   thread size of goroutines
+	// test a random byte block
+	// arguments:
+	//   blocksize bytes
+	//   modsize bits
+	//   thread size of goroutines
 	var blockSizeInt int64
-	var modSizeInt   int64
-	var threadCount  int64
-	var thread       int64 
-	blockSizeInt, _ = strconv.ParseInt(blocksize, 10, 64) 
-	modSizeInt  , _ = strconv.ParseInt(modsize, 10, 64) 
-	threadCount,  _ = strconv.ParseInt(threadsize, 10, 64) 
+	var modSizeInt int64
+	var threadCount int64
+	var thread int64
+	blockSizeInt, _ = strconv.ParseInt(blocksize, 10, 64)
+	modSizeInt, _ = strconv.ParseInt(modsize, 10, 64)
+	threadCount, _ = strconv.ParseInt(threadsize, 10, 64)
 
 	runtime.GOMAXPROCS(int(threadCount))
 
 	var bytes []byte
 	// create a random n byte size byte block
-	if len(bytestring) < 1  {
+	if len(bytestring) < 1 {
 		bytes = make([]byte, blockSizeInt)
 		_, _ = rand.Read(bytes)
 	}
-
 
 	// check if the bytes are defined
 	if bytestring != "" {
@@ -134,17 +132,17 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
 	var time = fmt.Sprintf("%d%d%d%d%d", now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
 
 	// set up the thread list of go routine objects
-	mdp:=[]*modScan.DecodeData{}
-        for thread = 0; thread<threadCount; thread++ {
+	mdp := []*modScan.DecodeData{}
+	for thread = 0; thread < threadCount; thread++ {
 		md := modScan.Init(blockSizeInt, modSizeInt, thread, threadCount, bytes, time)
-		mdp=append(mdp,md)
+		mdp = append(mdp, md)
 	}
 
 	// set the thread start and thread end
 	var threadStart int64 = 0
-	var threadEnd   int64 = threadCount
+	var threadEnd int64 = threadCount
 	if (fd.threadStart > 0) && (fd.threadStart < threadCount) {
-		threadStart = fd.threadStart 
+		threadStart = fd.threadStart
 	}
 	if (fd.threadEnd > 0) && (fd.threadEnd < threadCount) {
 		threadEnd = fd.threadEnd
@@ -156,7 +154,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
 
 	// kick off the thread list go routines
 	// for thread = threadStart; thread < threadCount; thread++ {
-	var count int64 
+	var count int64
 	count = threadEnd - threadStart
 	// create a channel the size of the thread list
 	var c chan string = make(chan string, count)
@@ -165,7 +163,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
 		go mdp[thread].ModulusScanBytes(c)
 	}
 
-	var cl int64 = 1 
+	var cl int64 = 1
 	for resp := range c {
 		// if the modScan result is found close the channel
 		if resp != "Not found" {
@@ -173,11 +171,11 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
 			fmt.Println("Found block ", resp)
 			close(c)
 			break
-		// otherwise if the result count equals the thread count close the channel and break
+			// otherwise if the result count equals the thread count close the channel and break
 		} else if cl == count && resp == "Not found" {
 			// fmt.Println("close the channel if the last thread has returned a value", cl)
 			close(c)
-		// otherwise increment the channel count
+			// otherwise increment the channel count
 		} else {
 			// fmt.Println("incrementing thread counter ", cl)
 			cl++
@@ -187,4 +185,3 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
 	return 0
 
 }
-
