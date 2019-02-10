@@ -1,5 +1,5 @@
 # This is how we want to name the binary output
-BINARY=testHash
+BINARY=decoderRandom
 
 # These are the values we want to pass for Version and BuildTime
 VERSION=1.0.0
@@ -12,6 +12,6 @@ all:
 	go build -o decoderRandom decoderRandom.go
 	go build -o decoderRandom4 decoderRandom4.go 
 clean:
-	rm -r decoderRandom decoderRandom3 decoderRandom4
+	rm -r decoderRandom decoderRandom4
 list:
 	echo "all"
