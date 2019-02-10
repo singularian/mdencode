@@ -22,7 +22,6 @@ import (
 	// "encoding/binary"
 	"encoding/json"
 	"github.com/singularian/mdencode/code/decode/modScan"
-	"sync"
 	"runtime"
 )
 
@@ -44,8 +43,6 @@ type FlagData struct {
 	bytes []byte
 	bytestring string
 }
-
-var wg sync.WaitGroup
 
 // generates a random n byte array and then hashes it
 // it then runs it through the modulus scan
@@ -85,11 +82,6 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
         //   blocksize bytes 
         //   modsize bits 
         //   thread size of goroutines
-	// var wg sync.WaitGroup
-	// var c chan string = make(chan []string, threadsize)
-	// var c chan string = make(chan string, 10)
-	//var c chan string = make(chan string)
-	blocksizeint, _ := strconv.Atoi(blocksize)
 	var blockSizeInt int64
 	var modSizeInt   int64
 	var threadCount  int64
@@ -103,7 +95,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
 	var bytes []byte
 	// create a random n byte size byte block
 	if len(bytestring) < 1  {
-		bytes = make([]byte, blocksizeint)
+		bytes = make([]byte, blockSizeInt)
 		_, _ = rand.Read(bytes)
 	}
 
@@ -169,8 +161,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
 	var c chan string = make(chan string, count)
 	// kick off the go routines
 	for thread = threadStart; thread < threadEnd; thread++ {
-		// wg.Add(1)
-		go mdp[thread].ModulusScanBytes(c, wg)
+		go mdp[thread].ModulusScanBytes(c)
 	}
 
 	var cl int64 = 1 

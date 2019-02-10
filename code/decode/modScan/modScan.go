@@ -25,7 +25,6 @@ import (
 	"time"
 	"bytes"
 	"hash"
-	"sync"
 )
 
 // modScan flag struct
@@ -89,17 +88,13 @@ func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes
 }
 
 // run a parallel modulus scan on a user defined or random byte block array
-func (md *DecodeData) ModulusScanBytes(c chan string, wg sync.WaitGroup) {
-
-	// defer wg.Done()
+func (md *DecodeData) ModulusScanBytes(c chan string) {
 
         // process the modulus bitsize argument
 	bitsize := md.modsizeInt
 
 	// convert the bytes to a string
 	bytestring := fmt.Sprintf("%v", md.byteblock) 
-	// bytestring := bytes(md.byteblock) testing
-	// bytestring := string(md.byteblock[:]) // doesn't like this
 
 	// create the biginteger representation of the bytes
         blockBigInt := new(big.Int)
@@ -129,7 +124,7 @@ func (md *DecodeData) ModulusScanBytes(c chan string, wg sync.WaitGroup) {
         md.modulusThreadNumber   = modthreadNumber.Mul(md.modulusBigInt, modthreadNumber)
 
 	// calculate the modulus threadcount
-	// this is the modulus increment value + the original modulus threadnumber
+	// this is the modulus increment value + the modulus threadnumber
         // modulus * threadcount
         modthreadCount          := big.NewInt(md.threadCount)
         md.modulusThreadCount   = modthreadCount.Mul(md.modulusBigInt, modthreadCount)
