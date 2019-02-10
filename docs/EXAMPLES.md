@@ -123,7 +123,7 @@ Found block  thread 6 random bytestring and modulusscan bytestring match [253 21
 ```
 
 This is a test modulus scan on a 40 byte random block and a 288-bit modulus. It computed the file block in under 2 minutes.
-The parallel modulus scan in decoderRandom4 ran in 28.3 seconds with a Ryzen 2700x.
+The parallel modulus scan in decoderRandom4 ran in 38.3 seconds with a Ryzen 2700x with a larger byte block and 16 threads.
 ```
 random  40  bytes  [36 70 9 158 250 39 41 175 153 109 249 79 24 40 173 31 178 205 163 246 213 57 62 47 80 202 73 3 115 151 222 203 79 64 44 122 214 8 239 55]   302655882115645057855398278526862402649221125066903900403798877130708027364550200878646484856631
 modulus size bits  288
