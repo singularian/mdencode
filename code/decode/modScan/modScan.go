@@ -244,9 +244,10 @@ func (md *DecodeData) decode() (int, string) {
 		}
                 md5.Reset()
 
-		// increament the modulus bigint by the modulus * thread count
+		// increment the modulus bigint by the modulus * thread count
                 md.modulusStart = md.modulusStart.Add(md.modulusStart, md.modulusThreadCount)
-                gt := md.modulusStart.Cmp(modceil) // have to check this
+		// check if the modulusStart is greater than modceil
+                gt := md.modulusStart.Cmp(modceil) 
 
                 if gt > 0 {
 			md.Println("Not Found Block ", buf, " modstart ", md.modulusStart, " mod ceil ", modceil, " ", modceiltwo)
