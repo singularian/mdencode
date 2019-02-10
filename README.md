@@ -337,7 +337,6 @@ Found Block  [165 55 125 101 98 169 203 81 163 83 179 217]
 Total time  1m14.791082s
 random bytestring and modulusscan bytestring match  [165 55 125 101 98 169 203 81 163 83 179 217]   [165 55 125 101 98 169 203 81 163 83 179 217]
 Found block  thread 5 random bytestring and modulusscan bytestring match [165 55 125 101 98 169 203 81 163 83 179 217] [165 55 125 101 98 169 203 81 163 83 179 217]
-nsross@DESKTOP-A1RITGA:~/projects/src/github.com/singularian/mdencode/code/decode$
 ```
 
 [Other Decoder Examples](https://github.com/singularian/mdencode/blob/master/docs/EXAMPLES.md)
