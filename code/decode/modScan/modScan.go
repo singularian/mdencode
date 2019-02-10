@@ -205,15 +205,21 @@ func (md *DecodeData) decode() (int, string) {
 	for {
 		// copy the modulus bytes to the byte buffer
 		// if the modulus start byte block is less than the buffer byte block copy it to the end of the buffer byte block
-		if len(buf) == len(md.modulusStart.Bytes()) {
+		var lbuf   = len(buf)
+		var lenmd  = len(md.modulusStart.Bytes())
+		if lbuf == lenmd {
 			copy(buf[:], md.modulusStart.Bytes())
-		} else if len(md.modulusStart.Bytes()) >  len(buf) {
+		// if the length of the modulusStart bytes is greater than the buffer stop
+		} else if lenmd >  lbuf {
 			md.Println("Not Found Block ", buf)
 			break
+		// if the length of the buffer is greater than the modulusStart buffer copy it to the end
+		// ie buffer size 3 modulus start byte length 2 [1,1]
+		// buf = [0,1,1]
 		} else {
-			fmt.Println("slice ", len(buf) - len(md.modulusStart.Bytes()), " buf ", len(buf), " mod bytes length ",  len(md.modulusStart.Bytes()), " bytes ", md.modulusStart.Bytes())
-			var start = len(buf) - len(md.modulusStart.Bytes())
-			var end = len(buf)
+			fmt.Println("slice ", lbuf - lenmd, " buf ", lbuf, " mod bytes length ",  lenmd, " bytes ", md.modulusStart.Bytes())
+			var start = lbuf - lenmd
+			var end = lbuf
 			copy(buf[start:end], md.modulusStart.Bytes())
 		}
 		// fmt.Println("bigint ", buf, " modulus start bytes ", md.modulusStart.Bytes())
