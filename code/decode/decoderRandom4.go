@@ -152,7 +152,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
 
 	// fmt.Println("start ", threadStart, " ", threadEnd)
 	// fmt.Println("start ", fd.threadStart, " ", fd.threadEnd)
-	fmt.Println("starting modulus scan threads ", threadCount, " start thread ", threadStart, " end thread ", threadEnd, " bytes ", bytes)
+	fmt.Println("starting modulus scan threads ", threadCount, " start thread ", threadStart, " end thread ", threadEnd, " byteblock size ", blockSizeInt, " byteblock ", bytes)
 
 	// kick off the thread list go routines
 	// for thread = threadStart; thread < threadCount; thread++ {
