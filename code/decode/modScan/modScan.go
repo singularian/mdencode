@@ -207,6 +207,7 @@ func (md *DecodeData) decode() (int, string) {
 		// if the modulus start byte block is less than the buffer byte block copy it to the end of the buffer byte block
 		var lbuf   = len(buf)
 		var lenmd  = len(md.modulusStart.Bytes())
+		// if the buf size equals the modulus start size just copy them
 		if lbuf == lenmd {
 			copy(buf[:], md.modulusStart.Bytes())
 		// if the length of the modulusStart bytes is greater than the buffer stop
