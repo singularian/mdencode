@@ -361,7 +361,7 @@ This is a 17 byte block with a 64 bit modulus.
 The byte block was found in 1.87 seconds.
 
 ```
-nsross@DESKTOP-A1RITGA:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -mod=64 -thread=16 -bytes=[0,0,1,0,0,1,0,2,0,1,255,2,4,1,6,8,10]
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -mod=64 -thread=16 -bytes=[0,0,1,0,0,1,0,2,0,1,255,2,4,1,6,8,10]
 buffer  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
 starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  17  byteblock  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
 Found Block  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
