@@ -137,7 +137,7 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 	// create an md5 hash of the bytes
 	md.setSignature()
 
-	// print starting data
+	// log the starting modScan data
 	md.modScanData()
 
 	_, buffer := md.decode()
@@ -158,7 +158,7 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 func (md *DecodeData) decode() (int, string) {
 
 	start := time.Now()
-	md.Printlog("Starting decoderRandom ", md.blocksizeInt)
+	md.Printlog("Starting modScan byte decoder ", md.threadNumber)
 
 	// create the byte buffer block size in bytes
 	buf := make([]byte, md.blocksizeInt)

@@ -17,139 +17,80 @@ A modulus should be considered part of the file signature subset. A modulus is a
 # Modular Floor Examples
   
 This is an example of the modular floor.  
-The program `decoderRandom` is creating a random 6 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
-It creates a random 6 byte array and a 32 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
-It calculated and found a hashed 6 byte block in two seconds on a Pentium n3700.  
+The program `decoderRandom4` is creating a random 6 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
+It creates a random 10 byte array and a 64 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
+A modulus scan can use any number of signatures including ripe160 or sha3.
+It calculated and found a hashed 10 byte block in two seconds on a Ryzen 2700x with 16 threads.  
 
-`$GOPATH/github.com/singularian/mdencode/code/decode/decoderRandom`
+`$GOPATH/github.com/singularian/mdencode/code/decode/decoderRandom4`
 ```
-$ ./decoderRandom
-random  6  bytes  [175 149 193 192 35 31]
-modulus size bits  32
-byte modulus  4294967296
-block modulus  3250594591
-modulus exponent  47
-shasum  dc483a03987b1e24cc6e235671767b2c6ce17dd1
-md5sum  a09f627e7dc71be69f7d0f20a214864f
-modulo bigint  4294967296
-modulo floor  140737488355328
-modulo ceil  281474976710656
-Found Block  [175 149 193 192 35 31]
-total time  71.219466ms
-random bytestring and modulusscan bytestring match  [175 149 193 192 35 31]   [175 149 193 192 35 31]
+$ ~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -block=10 -mod=64 -thread=16
+starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  10  byteblock  [170 182 97 211 89 129 255 229 35 197]
+Not Found Block  [255 241 97 211 89 129 255 229 35 197]
+Total time  2.733ms
+Not Found Block  [255 243 97 211 89 129 255 229 35 197]
+Not Found Block  [255 249 97 211 89 129 255 229 35 197]
+Total time  2.909ms
+Total time  3.495ms
+Not Found Block  [255 242 97 211 89 129 255 229 35 197]
+Total time  2.606ms
+Not Found Block  [255 253 97 211 89 129 255 229 35 197]
+Total time  2.036ms
+Found Block  [170 182 97 211 89 129 255 229 35 197]
+Total time  848µs
+random bytestring and modulusscan bytestring match  [170 182 97 211 89 129 255 229 35 197]   [170 182 97 211 89 129 255 229 35 197]
+Found block  thread 6 random bytestring and modulusscan bytestring match [170 182 97 211 89 129 255 229 35 197] [170 182 97 211 89 129 255 229 35 197]
 ```
-This example of decoderRandom uses a 32-bit and 24-bit modulus to calculate a 6 byte block associated with an sha1 and md5 signature.
+This example of decoderRandom4 uses a 32-bit modulus to calculate a 9 byte block associated with an sha1 and md5 signature.
+Total computation time on a Ryzen 2700x with 16 threads was 32 minutes 5 seconds.
 ```
-$ ./decoderRandom
-random  6  bytes  [139 111 156 34 193 144]
-modulus size bits  32
-byte modulus  4294967296
-block modulus  2619523472
-modulus exponent  47
-shasum  af2757f99333d0f693cb70d5ff0e1caaf90cdb50
-md5sum  448497bb2b4327b46de2d7cfc6b351c7
-modulo bigint  4294967296
-modulo floor  140737488355328
-modulo ceil  281474976710656
-Found Block  [139 111 156 34 193 144]
-total time  58.27042ms
-random bytestring and modulusscan bytestring match  [139 111 156 34 193 144]   [139 111 156 34 193 144]
+$ :~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -block=9 -mod=32 -thread=16
+starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  9  byteblock  [36 228 92 238 39 36 109 236 20]
+Found Block  [36 228 92 238 39 36 109 236 20]
+Total time  32m5.668088s
+random bytestring and modulusscan bytestring match  [36 228 92 238 39 36 109 236 20]   [36 228 92 238 39 36 109 236 20]
+Found block  thread 7 random bytestring and modulusscan bytestring match [36 228 92 238 39 36 109 236 20] [36 228 92 238 39 36 109 236 20]
 
-random  6  bytes   [221 166 184 36 29 8]
-modulus size bits  24
-byte modulus  16777216
-block modulus  2366728
-modulus exponent  47
-shasum  c3a9edb837e4d3fbc7a16f24f4f789f2ca758e32
-md5sum  7f5dacfd281a1732880232315e12d3b4
-modulo bigint  16777216
-modulo floor  140737488355328
-modulo ceil  281474976710656
-Found Block  [221 166 184 36 29 8]
-total time  15.123651922s
-random bytestring and modulusscan bytestring match  [221 166 184 36 29 8]   [221 166 184 36 29 8]
 ```
 
-This is a modulus scan on a 7 byte random block [21 209 197 154 67 38 91] with a 32-bit modulus.
+This is a modulus scan on a 8 byte random block [53 132 218 83 11 69 48 238] with a 32-bit modulus and 16 goroutine threads.
 
 ```
-$ ./decoderRandom 7 32 
-
-random  7  bytes  [21 209 197 154 67 38 91]   6141621137778267
-modulus size bits  32
-byte modulus  4294967296
-block modulus  2588091995
-modulus exponent  52
-shasum  150bb90a2f5cc13d9ce4b9ca7a97cf9272becf6b
-md5sum  cbaa0f63b037ce8c45b6827462905188
-modulo bigint  4294967296
-modulo floor  4503599627370496  ceil  9007199254740992   2
-modulo floor UUUU  52   4503599627370496  ceil  9007199254740992  mod  4294967296
-modulo floor  4503599627370496
-mfloor  4503599627370496   0
-modulo floor equals zero  0   0
-modulo floor equals zero setting  4503599627370496   4503599627370496
-modremainder  4503599627370496   4503599627370496
-modstart test result floor  4503602215462491  initial remainder  4503599627370496
-Found Block  [21 209 197 154 67 38 91]
-total time  453.257177ms
-random bytestring and modulusscan bytestring match  [21 209 197 154 67 38 91]   [21 209 197 154 67 38 91]
+$ ./decoderRandom4 -block=8 -mod=32 -thread=16
+starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  8  byteblock  [53 132 218 83 11 69 48 238]
+Found Block  [53 132 218 83 11 69 48 238]
+Total time  27.344133s
+random bytestring and modulusscan bytestring match  [53 132 218 83 11 69 48 238]   [53 132 218 83 11 69 48 238]
+Found block  thread 3 random bytestring and modulusscan bytestring match [53 132 218 83 11 69 48 238] [53 132 218 83 11 69 48 238]
 ```
 
-This is a modulus scan test run of the decoderRandom and an 8-byte block with a 48-bit modulus
+This is a modulus scan test run with an 9-byte block with a 48-bit modulus.
+Total computation time was 149 ms.
 
 ```
-$ ./decoderRandom 8 48
+$ :~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -block=9 -mod=48 -thread=16
+starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  9  byteblock  [86 70 2 131 209 24 39 111 115]
+Found Block  [86 70 2 131 209 24 39 111 115]
+Total time  149.567ms
+random bytestring and modulusscan bytestring match  [86 70 2 131 209 24 39 111 115]   [86 70 2 131 209 24 39 111 115]
+Found block  thread 2 random bytestring and modulusscan bytestring match [86 70 2 131 209 24 39 111 115] [86 70 2 131 209 24 39 111 115]
 
-random  8  bytes  [177 64 44 204 68 188 251 64]   12772257799060912960
-modulus size bits  48
-byte modulus  281474976710656
-block modulus  49255838186304
-modulus exponent  63
-shasum  6b044398c783f714cdde112bdfa54b3e3fc27478
-md5sum  2927e31d7947053d296ec4c66b740f43
-modulo bigint  281474976710656
-modulo floor  9223372036854775808  ceil  18446744073709551616   2
-modulo floor UUUU  63   9223372036854775808  ceil  18446744073709551616  mod  281474976710656
-modulo floor  9223372036854775808
-mfloor  9223372036854775808   0
-modulo floor equals zero  0   0
-modulo floor equals zero setting  9223372036854775808   9223372036854775808
-modremainder  9223372036854775808   9223372036854775808
-modstart test result floor  9223421292692962112  initial remainder  9223372036854775808
-Found Block  [177 64 44 204 68 188 251 64]
-total time  22.83303ms
-random bytestring and modulusscan bytestring match  [177 64 44 204 68 188 251 64]   [177 64 44 204 68 188 251 64]
 ```
 
 This is a modulus scan on a 24 byte random block with a 160-bit modulus.
+Total computation time was 13.48 seconds.
+```
+$ :~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -block=24 -mod=160 -thread=16
+starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  24  byteblock  [136 153 119 145 195 82 220 142 182 125 229 102 13 132 97 240 51 1 248 203 77 213 29 61]
+Found Block  [136 153 119 145 195 82 220 142 182 125 229 102 13 132 97 240 51 1 248 203 77 213 29 61]
+Total time  13.485776s
+random bytestring and modulusscan bytestring match  [136 153 119 145 195 82 220 142 182 125 229 102 13 132 97 240 51 1 248 203 77 213 29 61]   [136 153 119 145 195 82 220 142 182 125 229 102 13 132 97 240 51 1 248 203 77 213 29 61]
+Found block  thread 1 random bytestring and modulusscan bytestring match [136 153 119 145 195 82 220 142 182 125 229 102 13 132 97 240 51 1 248 203 77 213 29 61] [136 153 119 145 195 82 220 142 182 125 229 102 13 132 97 240 51 1 248 203 77 213 29 61]
 
 ```
-$ ./decoderRandom 24 160
 
-random  24  bytes  [97 18 163 169 250 131 29 233 141 20 233 130 167 50 111 11 170 249 117 163 189 132 162 246]   2380218370871604582033952342137589732174749121711727485686
-modulus size bits  160
-byte modulus  1461501637330902918203684832716283019655932542976
-block modulus  1430171696056580635811329467257220397964567290614
-modulus exponent  190
-shasum  b771dd3bca98fd0c4500f80ff5b83163422d7a78
-md5sum  24377890c89f8d0fd7f6759a1f781b3f
-modulo bigint  1461501637330902918203684832716283019655932542976
-modulo floor  1569275433846670190958947355801916604025588861116008628224  ceil  3138550867693340381917894711603833208051177722232017256448   2
-modulo floor UUUU  190   1569275433846670190958947355801916604025588861116008628224  ceil  3138550867693340381917894711603833208051177722232017256448  mod  1461501637330902918203684832716283019655932542976
-modulo floor  1569275433846670190958947355801916604025588861116008628224
-mfloor  1569275433846670190958947355801916604025588861116008628224   0
-modulo floor equals zero  0   0
-modulo floor equals zero setting  1569275433846670190958947355801916604025588861116008628224   1569275433846670190958947355801916604025588861116008628224
-modremainder  1569275433846670190958947355801916604025588861116008628224   1569275433846670190958947355801916604025588861116008628224
-modstart test result floor  1569275435276841887015527991613246071282809259080575918838  initial remainder  1569275433846670190958947355801916604025588861116008628224
-Found Block  [97 18 163 169 250 131 29 233 141 20 233 130 167 50 111 11 170 249 117 163 189 132 162 246]
-total time  10m13.626655508s
-random bytestring and modulusscan bytestring match  [97 18 163 169 250 131 29 233 141 20 233 130 167 50 111 11 170 249 117 163 189 132 162 246]   [97 18 163 169 250 131 29 233 141 20 233 130 167 50 111 11 170 249 117 163 189 132 162 246]
-```
-
-This is a test modulus scan on a 30 byte random block and a 208-bit modulus. It computed the file block in 30 minutes.
-
+This is a test modulus scan on a 30 byte random block and a 208-bit modulus. It computed the file block in 30 minutes on a Pentium 3700 and in 3 minutes on a Ryzen 2700x with 16 threads.
+It compares the parallel modulus scan with the single thread modulus scan.
 ```
 $ ./decoderRandom 30 208
 random  30  bytes  [224 32 77 208 119 140 50 111 148 112 51 6 119 78 217 169 127 226 139 12 18 102 11 24 198 47 34 138 150 8]   1546862094779236226658336428465289893654427126483713938810659946210432520
@@ -171,10 +112,18 @@ modstart test result floor  8834235325812978229850805894573816864320494625092246
 Found Block  [224 32 77 208 119 140 50 111 148 112 51 6 119 78 217 169 127 226 139 12 18 102 11 24 198 47 34 138 150 8]
 total time  30m40.336738171s
 random bytestring and modulusscan bytestring match  [224 32 77 208 119 140 50 111 148 112 51 6 119 78 217 169 127 226 139 12 18 102 11 24 198 47 34 138 150 8]   [224 32 77 208 119 140 50 111 148 112 51 6 119 78 217 169 127 226 139 12 18 102 11 24 198 47 34 138 150 8]
+
+$ :~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -block=30 -mod=208 -thread=16
+starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  30  byteblock  [253 214 4 230 246 172 128 179 202 193 176 53 21 98 95 206 221 138 138 23 180 211 145 52 140 183 54 233 178 251]
+Found Block  [253 214 4 230 246 172 128 179 202 193 176 53 21 98 95 206 221 138 138 23 180 211 145 52 140 183 54 233 178 251]
+Total time  3m28.61374s
+random bytestring and modulusscan bytestring match  [253 214 4 230 246 172 128 179 202 193 176 53 21 98 95 206 221 138 138 23 180 211 145 52 140 183 54 233 178 251]   [253 214 4 230 246 172 128 179 202 193 176 53 21 98 95 206 221 138 138 23 180 211 145 52 140 183 54 233 178 251]
+Found block  thread 6 random bytestring and modulusscan bytestring match [253 214 4 230 246 172 128 179 202 193 176 53 21 98 95 206 221 138 138 23 180 211 145 52 140 183 54 233 178 251] [253 214 4 230 246 172 128 179 202 193 176 53 21 98 95 206 221 138 138 23 180 211 145 52 140 183 54 233 178 251]
+
 ```
 
 This is a test modulus scan on a 40 byte random block and a 288-bit modulus. It computed the file block in under 2 minutes.
-
+The parallel modulus scan in decoderRandom4 ran in 28.3 seconds with a Ryzen 2700x.
 ```
 random  40  bytes  [36 70 9 158 250 39 41 175 153 109 249 79 24 40 173 31 178 205 163 246 213 57 62 47 80 202 73 3 115 151 222 203 79 64 44 122 214 8 239 55]   302655882115645057855398278526862402649221125066903900403798877130708027364550200878646484856631
 modulus size bits  288
@@ -195,6 +144,15 @@ modstart test result floor  2669983799760781725066424186458497098452678949811320
 Found Block  [36 70 9 158 250 39 41 175 153 109 249 79 24 40 173 31 178 205 163 246 213 57 62 47 80 202 73 3 115 151 222 203 79 64 44 122 214 8 239 55]
 total time  1m24.594897512s
 random bytestring and modulusscan bytestring match  [36 70 9 158 250 39 41 175 153 109 249 79 24 40 173 31 178 205 163 246 213 57 62 47 80 202 73 3 115 151 222 203 79 64 44 122 214 8 239 55]   [36 70 9 158 250 39 41 175 153 109 249 79 24 40 173 31 178 205 163 246 213 57 62 47 80 202 73 3 115 151 222 203 79 64 44 122 214 8 239 55]
+
+$ :~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -block=40 -mod=288 -thread=16
+starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  40  byteblock  [149 247 202 99 4 91 124 229 111 84 253 171 95 11 146 130 30 236 57 235 10 25 36 69 152 78 196 42 108 227 131 57 181 106 213 148 204 95 164 172]
+Found Block  [149 247 202 99 4 91 124 229 111 84 253 171 95 11 146 130 30 236 57 235 10 25 36 69 152 78 196 42 108 227 131 57 181 106 213 148 204 95 164 172]
+Total time  38.306676s
+random bytestring and modulusscan bytestring match  [149 247 202 99 4 91 124 229 111 84 253 171 95 11 146 130 30 236 57 235 10 25 36 69 152 78 196 42 108 227 131 57 181 106 213 148 204 95 164 172]   [149 247 202 99 4 91 124 229 111 84 253 171 95 11 146 130 30 236 57 235 10 25 36 69 152 78 196 42 108 227 131 57 181 106 213 148 204 95 164 172]
+Found block  thread 3 random bytestring and modulusscan bytestring match [149 247 202 99 4 91 124 229 111 84 253 171 95 11 146 130 30 236 57 235 10 25 36 69 152 78 196 42 108 227 131 57 181 106 213 148 204 95 164 172] [149 247 202 99 4 91 124 229 111 84 253 171 95 11 146 130 30 236 57 235 10 25 36 69 152 78 196 42 108 227 131 57 181 106 213 148 204 95 164 172]
+
+
 ```
 
 This is a test modulus scan on a 1000 byte block with a 7968 byte modulus  
