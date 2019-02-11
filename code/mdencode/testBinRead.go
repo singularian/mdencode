@@ -127,12 +127,12 @@ func main() {
 }
 
 func Convert(data []byte) (uint32, error) {
-var v uint32
-err := binary.Read(bytes.NewReader(data), binary.BigEndian, &v)
-if err != nil {
-return 0, err
-}
-return v, nil
+	var v uint32
+	err := binary.Read(bytes.NewReader(data), binary.BigEndian, &v)
+	if err != nil {
+		return 0, err
+	}
+	return v, nil
 }
 
 func Convert64(data []byte) (uint64, error) {
