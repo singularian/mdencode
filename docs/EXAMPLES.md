@@ -122,9 +122,10 @@ Found block  thread 6 random bytestring and modulusscan bytestring match [253 21
 
 ```
 
-This is a test modulus scan on a 40 byte random block and a 288-bit modulus. It computed the file block in under 2 minutes.
-The parallel modulus scan in decoderRandom4 ran in 38.3 seconds with a Ryzen 2700x with a larger byte block and 16 threads.
+The first test is a modulus scan on a 40 byte random block and a 288-bit modulus. It computed the file block in under 2 minutes.
+The second test is a parallel modulus scan in decoderRandom4 ran in 38.3 seconds with a Ryzen 2700x with a larger byte block and 16 threads.
 ```
+$ ./decoder 40 288 
 random  40  bytes  [36 70 9 158 250 39 41 175 153 109 249 79 24 40 173 31 178 205 163 246 213 57 62 47 80 202 73 3 115 151 222 203 79 64 44 122 214 8 239 55]   302655882115645057855398278526862402649221125066903900403798877130708027364550200878646484856631
 modulus size bits  288
 byte modulus  497323236409786642155382248146820840100456150797347717440463976893159497012533375533056
@@ -164,9 +165,16 @@ Found Block  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
 Total time  4.335839s
 random bytestring and modulusscan bytestring match  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2]   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2]
 Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2] [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2]
+```
 
 
-
+```
+user@serverx:~/go/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -block=13 -mod=64 -thread=24
+starting modulus scan threads  24  start thread  0  end thread  24  byteblock size  13  byteblock  [114 245 178 128 14 118 213 7 141 176 89 26 79]
+Found Block  [114 245 178 128 14 118 213 7 141 176 89 26 79]
+Total time  2h43m5.46892182s
+random bytestring and modulusscan bytestring match  [114 245 178 128 14 118 213 7 141 176 89 26 79]   [114 245 178 128 14 118 213 7 141 176 89 26 79]
+Found block  thread 6 random bytestring and modulusscan bytestring match [114 245 178 128 14 118 213 7 141 176 89 26 79] [114 245 178 128 14 118 213 7 141 176 89 26 79]
 ```
 
 This is a test modulus scan on a 1000 byte block with a 7968 byte modulus  

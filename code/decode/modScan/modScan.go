@@ -251,7 +251,7 @@ func (md *DecodeData) decode() (int, string) {
 		gt := md.modulusStart.Cmp(modceil)
 
 		if gt > 0 {
-			md.Println("Not Found Block ", buf)
+			md.Printlog("Not Found Block ", buf, " thread ", md.threadNumber)
 			break
 		}
 
@@ -267,7 +267,11 @@ func (md *DecodeData) decode() (int, string) {
 	t := time.Now()
 	elapsed := t.Sub(start)
 
-	md.Println("Total time ", elapsed)
+	if md.matchFound == false {
+		md.Printlog("Total time ", elapsed)
+	} else {
+		md.Println("Total time ", elapsed)
+	}
 
 	bufstring := fmt.Sprintf("%v", buf)
 
