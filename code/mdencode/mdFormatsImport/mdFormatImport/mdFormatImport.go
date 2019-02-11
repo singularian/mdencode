@@ -8,13 +8,13 @@ import (
 	"hash"
 	"fmt"
 	"log"
-	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatCSV"
-	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatText"
-	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatInform"
-	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatXML"
-	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatJson"
-	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatBinary"
-	"github.com/singularian/mdencode/code/encode/mdFormats/mdFormatSQL"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatCSV"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatText"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatInform"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatXML"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatJson"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatBinary"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatSQL"
 
 )
 
@@ -142,7 +142,7 @@ func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
 
         var format = md.mdFormat
 
-        fmt.Println("test ", format)
+        // fmt.Println("test ", format)
 
         /*if format == 100 {
                 mdf := mdFormatXML.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)

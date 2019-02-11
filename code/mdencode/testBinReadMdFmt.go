@@ -8,6 +8,8 @@ import (
 	"bytes"
 	"strings"
 	"math/big"
+	"strconv"
+	"github.com/singularian/mdencode/code/mdencode/mdFormatsImport/mdFormatImport"
 )
 
 
@@ -20,6 +22,20 @@ func main() {
 		os.Exit(1)
 	}
 	defer file.Close()
+
+	var format int = 1
+
+	if len(os.Args) > 1 {
+		format, _ = strconv.Atoi(os.Args[1])
+	}
+
+	var fileName = ""
+	var outputFile = ""
+        // mdload := mdFormatImport.Init(format, fileName, "", 0, 0, 0, "", "", md.outputFile)
+        mdload := mdFormatImport.Init(format, fileName, "", 0, 0, 0, "", "", outputFile)
+        // mdload.SetAppendFile(md.appendfile)
+        mdload.SetAppendFile(false)
+        mdfmt := mdload.SetmdFormatNoSQL(true)
 
 	stats, _ := file.Stat()
 	var size int64 = stats.Size()
@@ -39,15 +55,15 @@ func main() {
 
 	// need to add the version
 
-	fmt.Println("fileSize ", fileSize)
+	/* fmt.Println("fileSize ", fileSize)
 	fmt.Println("blockSize ", blockSize)
 	fmt.Println("modSize ", modSize)
 	fmt.Println("fileNameLength ", fileNameLen)
 	fmt.Println("filePathLength ", filePathLen)
 	fmt.Println("fileHashLength ", fileHashLen)
+	*/
 
 	// get the filename
-	// home/uestes/projects/src/github.com/singularian/mdencode/code/mdencode/
 	var start uint64
 	var end   uint64
 	// start = filePathLen 
@@ -55,27 +71,37 @@ func main() {
 	// fmt.Println("filename ", string(bytes[start:end]), start, end, fileNameLen)
 	start = 48 
 	end = start + filePathLen
-	fmt.Println("filePath ", string(bytes[start:end]), start, end)
+	var filepath = string(bytes[start:end])
+	// fmt.Println("filePath ", string(bytes[start:end]), start, end)
 	// fileName
         start = end 
         end = start + fileNameLen
-        fmt.Println("filename ", string(bytes[start:end]), start, end, fileNameLen)
+        // fmt.Println("filename ", string(bytes[start:end]), start, end, fileNameLen)
+	var filename2 = string(bytes[start:end])
 	// get hashlist string
 	start = end
 	end = end + fileHashLen
-	fmt.Println("hashlistname ", string(bytes[start:end]))
+	// fmt.Println("hashlistname ", string(bytes[start:end]))
 	// split hash list
 	hlist := string(bytes[start:end])
 	hashlist := strings.Split(hlist, "-")
 	filelist := hashlist[0]
 	blocklist := hashlist[1]
-	fmt.Println("hashlist ", filelist, blocklist)
+	// fmt.Println("hashlist ", filelist, blocklist)
+
+	fl :=  strings.Split(hashlist[0], "-")
+	bl :=  strings.Split(hashlist[1], "-")
+
+
+	// mdfmt.EncodeFileHeader(format2, filename, filepath, int64(fileSize), int64(blockSize), filelist, blocklist, modSize)
+	mdfmt.EncodeFileHeader(format, filename2, filepath, int64(fileSize), int64(blockSize), fl, bl, int64(modSize))
+
 	//// var filesize uint64
 	var filelistarr []int 
 	//////// filesize, filelistarr = CalcHashSizeFile(filelist)
 	_, filelistarr = CalcHashSizeFile(filelist)
 
-	fmt.Println("test array ", filelistarr)
+	// fmt.Println("test array ", filelistarr)
 	st := strings.Split(filelist, ":")
 	// get the file hash list
 	for i:= 0; i < len(filelistarr); i++ {
@@ -83,29 +109,39 @@ func main() {
 		end = end + uint64(filelistarr[i])
 		var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
 		// filePathLen   := binary.BigEndian.(bytes[:40])
-		fmt.Println("hashlistname ", st[i], " hex ", hexstring)
+		// fmt.Println("hashlistname ", st[i], " hex ", hexstring)
+		// fmt.Println("hashlistname ", st[i], " hex ", hexstring)
+		mdfmt.EncodeFileHash(format, st[i], hexstring)
 	}
 
 
 	// get the file block list
 	// var blocklistarr []int
-        fileblocksize, blocklistarr := CalcHashSizeFile(blocklist)
-	fmt.Println("blockhashlist ", blocklist)
+        ////fileblocksize, blocklistarr := CalcHashSizeFile(blocklist)
+        _, blocklistarr := CalcHashSizeFile(blocklist)
+	// fmt.Println("blockhashlist ", blocklist)
         // fileblocksize, _ = CalcHashSizeFile(blocklist)
 	// blocks, remainder := calculateFileBlocks(fileSize, blockSize)
-	blocks, _ := calculateFileBlocks(fileSize, blockSize)
+	blocks, remainder := calculateFileBlocks(fileSize, blockSize)
 	var i uint64
 	var modByteSize uint64 
 	modByteSize = modSize / 8
 	if modByteSize == 0 {
 		modByteSize = 1 
 	}
-	fmt.Println("mod byte size ", modSize, " ", modByteSize)
+	// var hlistarray = strings.Split(hashhex, ":")
+	var hlistarray []string
+	// fmt.Println("mod byte size ", modSize, " ", modByteSize)
 	for i = 0; i < blocks; i++ {
 		start = end
 		// end = end + fileblocksize + modByteSize + 4;
-		end = end + fileblocksize;
-		var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
+		// end = end + fileblocksize;
+		// var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
+		for i:= 0; i < len(blocklistarr); i++ {
+			start = end
+			end = end + uint64(blocklistarr[i])
+			hlistarray = append(hlistarray, fmt.Sprintf("%x", string(bytes[start:end])))
+		}
 		start = end
 		end = end + 4 
 		modSize       := binary.BigEndian.Uint32(bytes[start:end])
@@ -114,8 +150,14 @@ func main() {
 		n := new(big.Int)
 		n = n.SetBytes(bytes[start:end])
 
-		fmt.Println("blockhashlist ", fileblocksize, " arr ", blocklistarr, " ", " hex ", hexstring, " modexp ", modSize, " modulus byte size ", modByteSize, " mod size ", modSize, " modulus ", n.String())
-		
+		//  fmt.Println("blockhashlist ", fileblocksize, " arr ", blocklistarr, " ", " hex ", hexstring, " modexp ", modSize, " modulus byte size ", modByteSize, " mod size ", modSize, " modulus ", n.String())
+		// mdfmt.EncodeBlock(format, fileblocksize, hlistarray, modSize, n.String());	
+		if i + 1 != blocks {
+			mdfmt.EncodeBlock(format, blockSize, hlistarray, int(modSize), n.String());	
+		} else {
+			mdfmt.EncodeBlock(format, remainder, hlistarray, int(modSize), n.String());
+		}
+		hlistarray = hlistarray[:0]
 	}
 
 	// fmt.Println("lll ", filesize, fileblocksize)
@@ -154,7 +196,7 @@ func CalcHashSizeFile (hashlist string) (uint64, []int) {
 	// s = append(s, 5)
 
 	for i := 0; i < len(st); i++ {
-		fmt.Println("hashlist ", st[i])
+		// fmt.Println("hashlist ", st[i])
 
 		switch st[i] {
 			case "blake2":
