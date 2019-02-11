@@ -212,7 +212,7 @@ func (md *DecodeData) decode() (int, string) {
 			copy(buf[:], md.modulusStart.Bytes())
 		// if the length of the modulusStart bytes is greater than the buffer stop
 		} else if lenmd >  lbuf {
-			md.Println("Not Found Block ", buf)
+			md.Printlog("Not Found Block Greater ", md.modulusStart.Bytes())
 			break
 		// if the length of the buffer is greater than the modulusStart buffer copy it to the end
 		// ie buffer size 3 modulus start byte length 2 [1,1]
