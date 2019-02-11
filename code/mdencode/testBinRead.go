@@ -28,7 +28,7 @@ func main() {
 	bufr := bufio.NewReader(file)
 	_,_ = bufr.Read(bytes)
 
-	fmt.Println("buf ", bytes)
+	/////////// fmt.Println("buf ", bytes)
 	// fileSize,_      := Convert64(bytes[0:8])
 	fileSize      := binary.BigEndian.Uint64(bytes[0:8])
 	blockSize     := binary.BigEndian.Uint64(bytes[8:16])
@@ -90,13 +90,13 @@ func main() {
 	// get the file block list
 	// var blocklistarr []int
         fileblocksize, blocklistarr := CalcHashSizeFile(blocklist)
+	fmt.Println("blockhashlist ", blocklist)
         // fileblocksize, _ = CalcHashSizeFile(blocklist)
 	// blocks, remainder := calculateFileBlocks(fileSize, blockSize)
 	blocks, _ := calculateFileBlocks(fileSize, blockSize)
 	var i uint64
 	var modByteSize uint64 
 	modByteSize = modSize / 8
-	// modByteSize = RecursivePower(2,modSize) 
 	if modByteSize == 0 {
 		modByteSize = 1 
 	}
@@ -242,15 +242,6 @@ func CalcHashSizeFile (hashlist string) (uint64, []int) {
 	// fmt.Println("test ", s)
 	return blocksize, s 
 }
-
-func RecursivePower(base uint64, exponent uint64)  uint64 {
- if exponent != 0 {
-  return (base * RecursivePower(base, exponent-1))
- } else {
-  return 1
- }
-}
-
 
 // calculate the number of file blocks
 func calculateFileBlocks(fileSize uint64, blockSize uint64) (uint64, uint64) {
