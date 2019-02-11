@@ -45,7 +45,6 @@ func main() {
 	_,_ = bufr.Read(bytes)
 
 	/////////// fmt.Println("buf ", bytes)
-	// fileSize,_      := Convert64(bytes[0:8])
 	fileSize      := binary.BigEndian.Uint64(bytes[0:8])
 	blockSize     := binary.BigEndian.Uint64(bytes[8:16])
 	modSize       := binary.BigEndian.Uint64(bytes[16:24])
@@ -142,6 +141,7 @@ func main() {
 			end = end + uint64(blocklistarr[i])
 			hlistarray = append(hlistarray, fmt.Sprintf("%x", string(bytes[start:end])))
 		}
+		// should make modexp an int16
 		start = end
 		end = end + 4 
 		modSize       := binary.BigEndian.Uint32(bytes[start:end])
@@ -153,7 +153,7 @@ func main() {
 		//  fmt.Println("blockhashlist ", fileblocksize, " arr ", blocklistarr, " ", " hex ", hexstring, " modexp ", modSize, " modulus byte size ", modByteSize, " mod size ", modSize, " modulus ", n.String())
 		// mdfmt.EncodeBlock(format, fileblocksize, hlistarray, modSize, n.String());	
 		if i + 1 != blocks {
-			mdfmt.EncodeBlock(format, blockSize, hlistarray, int(modSize), n.String());	
+			mdfmt.EncodeBlock(format, blockSize, hlistarray, int(modSize), n.String());
 		} else {
 			mdfmt.EncodeBlock(format, remainder, hlistarray, int(modSize), n.String());
 		}
@@ -168,13 +168,13 @@ func main() {
 
 }
 
-func Convert(data []byte) (uint32, error) {
-var v uint32
-err := binary.Read(bytes.NewReader(data), binary.BigEndian, &v)
-if err != nil {
-return 0, err
-}
-return v, nil
+func Convert32(data []byte) (uint32, error) {
+	var v uint32
+	err := binary.Read(bytes.NewReader(data), binary.BigEndian, &v)
+	if err != nil {
+		return 0, err
+	}
+	return v, nil
 }
 
 func Convert64(data []byte) (uint64, error) {
