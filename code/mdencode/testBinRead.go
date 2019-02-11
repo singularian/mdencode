@@ -14,11 +14,11 @@ import (
 func main() {
 
 	var filename = "default.mdbin"
-	file, _ := os.Open(filename)
-
-	// if err != nil {
-	//    return nil, err
-	//}
+	file, err := os.Open(filename)
+	if err != nil {
+		fmt.Println("counldn't open file ", err)
+		os.Exit(1)
+	}
 	defer file.Close()
 
 	stats, _ := file.Stat()
@@ -74,10 +74,6 @@ func main() {
 	var filelistarr []int 
 	//////// filesize, filelistarr = CalcHashSizeFile(filelist)
 	_, filelistarr = CalcHashSizeFile(filelist)
-	var fileblocksize uint64 
-	// var blocklistarr []int
-	// fileblocksize, blocklistarr = CalcHashSizeFile(blocklist)
-	fileblocksize, _ = CalcHashSizeFile(blocklist)
 
 	fmt.Println("test array ", filelistarr)
 	st := strings.Split(filelist, ":")
@@ -90,14 +86,21 @@ func main() {
 		fmt.Println("hashlistname ", st[i], " hex ", hexstring)
 	}
 
+
 	// get the file block list
+	// var blocklistarr []int
+        fileblocksize, blocklistarr := CalcHashSizeFile(blocklist)
+        // fileblocksize, _ = CalcHashSizeFile(blocklist)
 	// blocks, remainder := calculateFileBlocks(fileSize, blockSize)
 	blocks, _ := calculateFileBlocks(fileSize, blockSize)
 	var i uint64
-	var modByteSize uint64 = modSize % 8
+	var modByteSize uint64 
+	modByteSize = modSize / 8
+	// modByteSize = RecursivePower(2,modSize) 
 	if modByteSize == 0 {
 		modByteSize = 1 
 	}
+	fmt.Println("mod byte size ", modSize, " ", modByteSize)
 	for i = 0; i < blocks; i++ {
 		start = end
 		// end = end + fileblocksize + modByteSize + 4;
@@ -111,7 +114,7 @@ func main() {
 		n := new(big.Int)
 		n = n.SetBytes(bytes[start:end])
 
-		fmt.Println("blockhashlist ", hexstring, " modexp ", modSize, " modulus ", n.String())
+		fmt.Println("blockhashlist ", fileblocksize, " arr ", blocklistarr, " ", " hex ", hexstring, " modexp ", modSize, " modulus byte size ", modByteSize, " mod size ", modSize, " modulus ", n.String())
 		
 	}
 
@@ -239,6 +242,15 @@ func CalcHashSizeFile (hashlist string) (uint64, []int) {
 	// fmt.Println("test ", s)
 	return blocksize, s 
 }
+
+func RecursivePower(base uint64, exponent uint64)  uint64 {
+ if exponent != 0 {
+  return (base * RecursivePower(base, exponent-1))
+ } else {
+  return 1
+ }
+}
+
 
 // calculate the number of file blocks
 func calculateFileBlocks(fileSize uint64, blockSize uint64) (uint64, uint64) {
