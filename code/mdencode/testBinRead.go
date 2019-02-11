@@ -7,6 +7,7 @@ import (
 	"bufio"
 	"bytes"
 	"strings"
+	"math/big"
 )
 
 
@@ -35,6 +36,8 @@ func main() {
 	fileNameLen   := binary.BigEndian.Uint64(bytes[24:32])
 	filePathLen   := binary.BigEndian.Uint64(bytes[32:40])
 	fileHashLen   := binary.BigEndian.Uint64(bytes[40:48])
+
+	// need to add the version
 
 	fmt.Println("fileSize ", fileSize)
 	fmt.Println("blockSize ", blockSize)
@@ -71,9 +74,10 @@ func main() {
 	var filelistarr []int 
 	//////// filesize, filelistarr = CalcHashSizeFile(filelist)
 	_, filelistarr = CalcHashSizeFile(filelist)
-	// var fileblocksize uint64 
-	//var blocklistarr []int
-	//fileblocksize, blocklistarr = CalcHashSizeFile(blocklist)
+	var fileblocksize uint64 
+	// var blocklistarr []int
+	// fileblocksize, blocklistarr = CalcHashSizeFile(blocklist)
+	fileblocksize, _ = CalcHashSizeFile(blocklist)
 
 	fmt.Println("test array ", filelistarr)
 	st := strings.Split(filelist, ":")
@@ -84,6 +88,31 @@ func main() {
 		var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
 		// filePathLen   := binary.BigEndian.(bytes[:40])
 		fmt.Println("hashlistname ", st[i], " hex ", hexstring)
+	}
+
+	// get the file block list
+	// blocks, remainder := calculateFileBlocks(fileSize, blockSize)
+	blocks, _ := calculateFileBlocks(fileSize, blockSize)
+	var i uint64
+	var modByteSize uint64 = modSize % 8
+	if modByteSize == 0 {
+		modByteSize = 1 
+	}
+	for i = 0; i < blocks; i++ {
+		start = end
+		// end = end + fileblocksize + modByteSize + 4;
+		end = end + fileblocksize;
+		var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
+		start = end
+		end = end + 4 
+		modSize       := binary.BigEndian.Uint32(bytes[start:end])
+		start = end
+		end = end + modByteSize
+		n := new(big.Int)
+		n = n.SetBytes(bytes[start:end])
+
+		fmt.Println("blockhashlist ", hexstring, " modexp ", modSize, " modulus ", n.String())
+		
 	}
 
 	// fmt.Println("lll ", filesize, fileblocksize)
@@ -202,6 +231,27 @@ func CalcHashSizeFile (hashlist string) (uint64, []int) {
 		}
 
 	}
+
+	for i := range s {
+		blocksize += uint64(s[i])
+	}
+
 	// fmt.Println("test ", s)
 	return blocksize, s 
+}
+
+// calculate the number of file blocks
+func calculateFileBlocks(fileSize uint64, blockSize uint64) (uint64, uint64) {
+
+        remainder := fileSize % blockSize
+        var blocksCount uint64 = 0
+        if remainder == 0 {
+                blocksCount = fileSize / blockSize
+                remainder = blockSize
+        } else {
+
+                blocksCount = (fileSize / blockSize) + 1
+        }
+
+        return blocksCount, remainder
 }
