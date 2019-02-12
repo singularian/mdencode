@@ -26,8 +26,6 @@ These are some examples
 
 ```
 ghost@test:~/projects/src/github.com/singularian/mdencode/code/mdencode$ md -file=test -all
-output file    test  32
-filename: test
 filepath: /home/nsross/projects/src/github.com/singularian/mdencode/code/mdencode/
 header: 75:10:200:1086:blake2b:blake2s_128:kekkak:md5:sha3_256:sha3_512:sha512_256:skein160:skein512:whirlpool-fnv:hmac256:hmac512:md4:murmur3:sha256:sha3_224:sha512:sha512_224:sha512_256:skein160:skein512:1.0:2019-02-11 22:35:34.0783265 -0500 STD m=+0.001201001
 filehash: blake2b 57e8678c1a43f89a2fc8aafeda1d55d03ec14b014b382ab18d7fc289f079793c86011809520eb4bf74eacc7a5f4efc6aed34e4c1c9b869fc316d45f6b674bf85
@@ -44,8 +42,6 @@ blockhash0: 75 fcd275440e91a073 dc82293abc1f4d71140140a8e965692dd6f22a5d037bf970
 
 
 ghost@test:~/projects/src/github.com/singularian/mdencode/code/mdencode$ md -file=test -all
-output file    test  32
-filename: test
 filepath: /home/nsross/projects/src/github.com/singularian/mdencode/code/mdencode/
 header: 75:10:325:1135:blake2:fnv:kekkak:md4:murmur3:sha224:sha256:sha3_224:sha3_256:sha3_384:sha3_512:sha512_224:siphash:skein160:tiger-blake2:blake2b:blake2s_256:hmac256:kekkak:sha224:sha3_224:sha3_256:sha3_512:sha512_256:siphash:skein160:skein384:whirlpool:1.0:2019-02-11 22:35:36.6111364 -0500 STD m=+0.001177001
 filehash: blake2 57e8678c1a43f89a2fc8aafeda1d55d03ec14b014b382ab18d7fc289f079793c86011809520eb4bf74eacc7a5f4efc6aed34e4c1c9b869fc316d45f6b674bf85
@@ -71,7 +67,6 @@ This example shows a block randomization and a file hash list randomization as w
 
 ```
 ghost@excelsior:~/projects/src/github.com/singularian/mdencode/code/mdencode$ md -file=Makefile -blockr -bh=11 -fr
-output file    test  32
 filename: Makefile
 filepath: /home/nsross/projects/src/github.com/singularian/mdencode/code/mdencode/
 header: 1880:10:87:32:sha1-md4:md5:1.0:2019-02-11 22:38:44.9557778 -0500 STD m=+0.001263001
@@ -101,7 +96,6 @@ blockhash21: 53 c4401496ab19d5f37df53541e7d97c45 05ed6fc1532013785a8899c3d9dfebf
 
 
 ghost@excelsior:~/projects/src/github.com/singularian/mdencode/code/mdencode$ md -file=Makefile -blockr -bh=11 -fr -modr
-output file    test  32
 filename: Makefile
 filepath: /home/nsross/projects/src/github.com/singularian/mdencode/code/mdencode/
 header: 1880:10:273:341:blake2:blake2s_256:fnv:hmac256:hmac512:ripe160:sha224:sha3_224:sha3_256:sha3_512:sha512:sha512_224:sha512_256:skein1024:skein160:skein256:skein512-md4:md5:1.0:2019-02-11 22:38:51.7858847 -0500 STD m=+0.001138001
@@ -132,7 +126,6 @@ blockhash6: 242 fa8fd529853477992e9da5af2caf1251 b5a1276e0dbb4ed539276ad53c8ecbb
 
 
 ghost@exlcesior:~/projects/src/github.com/singularian/mdencode/code/mdencode$ md -file=Makefile -blockr -bh=11 -fr -modr
-output file    test  32
 filename: Makefile
 filepath: /home/nsross/projects/src/github.com/singularian/mdencode/code/mdencode/
 header: 1880:10:339:1544:empty-md4:md5:1.0:2019-02-11 22:38:57.6070769 -0500 STD m=+0.001007001

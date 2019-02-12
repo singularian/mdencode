@@ -99,7 +99,7 @@ func argsSimple(argsNumber int) int {
 	flag.StringVar(&fd.logfilename, "log", "", "Log Filename")
 	flag.StringVar(&fd.initdb, "initdb", "", "Create SQLite3 Empty DB File")
 
-	fmt.Println("windows bug not using output file variable ", fd.outputfilename, " test ", fd.modsize)
+	// fmt.Println("windows bug not using output file variable ", fd.outputfilename, " test ", fd.modsize)
 
 	flag.Usage = printUsage
 
