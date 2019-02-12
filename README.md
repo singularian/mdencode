@@ -15,7 +15,7 @@ It can also write to an sqlite db. The mdencode sqlite db files contain a table 
 - SQLite3 DB Crypto Signature Files
 - Plugin Formatters
 - Multiple Selectable Crypto Hash Signatures for Files and File Blocks
-- The "First" Random File or Block signatures 
+- The "First" [Random File Signature](https://github.com/singularian/mdencode/blob/master/docs/RandomSignature.md) or Block signatures 
 - An example of a parallel signature modulus scan
 
 # Output Formats
