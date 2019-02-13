@@ -6,7 +6,7 @@ This strengthens a signature by making it more difficult for an attacker to pred
 to spoof signatures. Between executions the entire file signature format can be changed. 
 
 
-# Signature randomization
+# Signature Randomization
 
 This is a brief list of attributes that can be randomized.
 
@@ -95,7 +95,7 @@ blockhash20: 87 26df22c5f5ae159f5d94f0bfdcb4b7f0 6f4438a8a02581be87f2aeb0a829cf7
 blockhash21: 53 c4401496ab19d5f37df53541e7d97c45 05ed6fc1532013785a8899c3d9dfebf3 422 1819025930
 ```
 
-This example shows the modulus randomization. Between the executions the modulus is changed from 341 to 1544.
+This example shows the modulus randomization. Between the executions the modulus is changed from 341 bits to 1544 bits.
 ```
 ghost@excelsior:~/projects/src/github.com/singularian/mdencode/code/mdencode$ md -file=Makefile -blockr -bh=11 -fr -modr
 filename: Makefile
