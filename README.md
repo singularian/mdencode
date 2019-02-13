@@ -43,7 +43,7 @@ This is a partial list of the digital signatures. More can be added to the signa
 - Tiger
 - Whirlpool
 
-# Encoding Types
+# Digital Signature Heirarchy
 
 These are the types of file signatures that mdencode will implement.
 
@@ -53,6 +53,7 @@ These are the types of file signatures that mdencode will implement.
   It minimizes block collisions.
 - File Block Signatures
 
+![This is my block chopper](https://github.com/singularian/mdencode/blob/master/diagrams/modulusScanHeirarchy.png)
 
 # Mdencode usage
 This is the mdencode usage.
