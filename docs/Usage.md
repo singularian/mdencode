@@ -1,5 +1,7 @@
 # Command Line Usage of mdencode
 
+md path: 
+
 ```                                                                                                                                              
 Usage of md:                                                                                                                                     
                                                                                                                                                  
@@ -118,4 +120,20 @@ mddbreport -file=md.db -fileid=1 -format=5000 -out=outputfile.xml -append=false
 
 ```
 
+# Example decoderRandom / decoderRandom4 Usage
+```
+$ ./decoderRandom
+Usage  ./decoderRandom  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]
+Usage  ./decoderRandom  -block=12 -mod=64 -thread=16
+Usage  ./decoderRandom  -block=9 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
+Usage  ./decoderRandom  -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]
+Usage  ./decoderRandom  -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
+```
 
+# Example Usage of testBinReadMdFmt
+
+This is a test binary signature exporter. It will ultimately be used as a mdencode compression file.
+
+```
+./testBinReadMdFmt [Format]
+```
