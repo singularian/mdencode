@@ -129,10 +129,17 @@ Usage  ./decoderRandom  -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]
 Usage  ./decoderRandom  -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
 ```
 
-# Example Usage of testBinReadMdFmt
+# Example Usage of mdbinlist
 
 This is a test binary signature exporter. It will ultimately be used as a mdencode compression file.
 
 ```
-./testBinReadMdFmt [Format]
+nsross@DESKTOP-A1RITGA:~/projects/src/github.com/singularian/mdencode/code/mdencode$ mdbinlist
+USAGE of mdbinlist:
+Examples:
+mdbinlist  [FORMAT]
+mdbinlist  [FORMAT] [FILENAME]
+mdbinlist  4000 (opens default.mdbin)
+mdbinlist  4000
+mdbinlist  4000 mdbintest.md
 ```

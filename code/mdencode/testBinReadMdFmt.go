@@ -16,18 +16,33 @@ import (
 func main() {
 
 	var filename = "default.mdbin"
-	file, err := os.Open(filename)
-	if err != nil {
-		fmt.Println("counldn't open file ", err)
-		os.Exit(1)
-	}
-	defer file.Close()
 
+	var argsNum int = len(os.Args)
 	var format int = 1
 
-	if len(os.Args) > 1 {
+	if argsNum == 2 {
 		format, _ = strconv.Atoi(os.Args[1])
+	} else if (argsNum == 3) {
+		format, _ = strconv.Atoi(os.Args[1])
+		filename  = os.Args[2]
+	} else {
+		var exe = os.Args[0]
+		fmt.Printf("USAGE of %s:\n", os.Args[0])
+		fmt.Println("Examples:")
+		fmt.Println(exe, " [FORMAT] ")
+		fmt.Println(exe, " [FORMAT] [FILENAME]")
+		fmt.Println(exe, " 4000 (opens default.mdbin)")
+		fmt.Println(exe, " 4000 ")
+		fmt.Println(exe, " 4000 mdbintest.md")
+		os.Exit(0)
 	}
+
+	file, err := os.Open(filename)
+        if err != nil {
+                fmt.Println("counldn't open file ", err)
+                os.Exit(1)
+        }
+        defer file.Close()
 
 	var fileName = ""
 	var outputFile = ""
