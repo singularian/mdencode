@@ -134,7 +134,8 @@ Usage  ./decoderRandom  -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55
 This is a test binary signature exporter. It will ultimately be used as a mdencode compression file.
 
 ```
-nsross@DESKTOP-A1RITGA:~/projects/src/github.com/singularian/mdencode/code/mdencode$ mdbinlist
+$ mdbinlist
+
 USAGE of mdbinlist:
 Examples:
 mdbinlist  [FORMAT]
