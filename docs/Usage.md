@@ -1,6 +1,5 @@
 # Command Line Usage of mdencode
 
-md path: 
 
 ```                                                                                                                                              
 Usage of md:                                                                                                                                     
