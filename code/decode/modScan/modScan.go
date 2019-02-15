@@ -25,6 +25,7 @@ import (
 	"log"
 	"os"
 	"time"
+	//"runtime"
 )
 
 // modScan flag struct
@@ -88,6 +89,8 @@ func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes
 
 // run a parallel modulus scan on a user defined or random byte block array
 func (md *DecodeData) ModulusScanBytes(c chan string) {
+
+	//runtime.LockOSThread()
 
 	// process the modulus bitsize argument
 	bitsize := md.modsizeInt

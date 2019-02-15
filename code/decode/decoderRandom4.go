@@ -89,7 +89,8 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
 	modSizeInt, _ = strconv.ParseInt(modsize, 10, 64)
 	threadCount, _ = strconv.ParseInt(threadsize, 10, 64)
 
-	runtime.GOMAXPROCS(int(threadCount))
+	cores := runtime.NumCPU()
+	runtime.GOMAXPROCS(cores)
 
 	var bytes []byte
 	// create a random n byte size byte block
