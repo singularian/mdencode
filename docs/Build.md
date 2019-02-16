@@ -2,7 +2,9 @@
 
 This is the basic Linux / Unix Go mdencode build
 
-git clone https://github.com/singularian/mdencode.git
+git clone https://github.com/singularian/mdencode.git  
+
+git clone ssh://git@github.com/singularian/mdencode.git  
 
 # mdencode Go Library Dependancies
 
