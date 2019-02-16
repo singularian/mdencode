@@ -1,14 +1,8 @@
-# Build mdencode
+# Clone mdencode
 
-Basic Linux / Unix Go mdencode Build  
+This is the basic Linux / Unix Go mdencode build
 
 git clone https://github.com/singularian/mdencode.git
-
-make all builds mdencode to gobin by default
-$GOPATH/github.com/singularian/mdencode/code/encode $ make all
-
-make build builds the mdencode to the mdBuild directory
-$GOPATH/github.com/singularian/mdencode/code/mdencode $ make build
 
 # mdencode Go Library Dependancies
 
@@ -26,9 +20,28 @@ go get -u github.com/jzelinskie/whirlpool
 go get -u github.com/mattn/go-sqlite3
 
 
+# Build mdencode
+
+## Path
+$GOPATH/github.com/singularian/mdencode/code/mdencode  
+
+## Build
+
+make all builds mdencode to gobin by default  
+
+$GOPATH/github.com/singularian/mdencode/code/mdencode $ make all  
+
+make build builds the mdencode to the mdBuild directory  
+
+$GOPATH/github.com/singularian/mdencode/code/mdencode $ make build  
+
 # Build decoderRandom
 
-$GOPATH/github.com/singularian/mdencode/code/decode
+## Path
 
-This example builds the mdencode decoderRandom files
-$GOPATH/github.com/singularian/mdencode/code/decode $ make build
+$GOPATH/github.com/singularian/mdencode/code/decode  
+
+## Build 
+
+This example builds the mdencode decoderRandom files  
+$GOPATH/github.com/singularian/mdencode/code/decode $ make build  
