@@ -45,4 +45,4 @@ $GOPATH/github.com/singularian/mdencode/code/decode
 ## Build 
 
 This example builds the mdencode decoderRandom files  
-$GOPATH/github.com/singularian/mdencode/code/decode $ make build  
+$GOPATH/github.com/singularian/mdencode/code/decode $ make all  
