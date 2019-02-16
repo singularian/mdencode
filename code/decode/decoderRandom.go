@@ -120,11 +120,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
 		}
 	}
 
-	// there is a bug in modScan 0 * n + remainder have to fix
-	// if I use mod 8 it works
-	// create a random n byte size byte block
-	// test failure with this byteblock there is a bug with the modular exponent
-	// 8 bytes 40 bit mod
+	// example byte slice
 	// bytes = []byte{ 0, 10, 22, 38, 240, 171, 146, 123 }
 	// _, _ = rand.Read(bytes)
 
