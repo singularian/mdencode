@@ -6,6 +6,7 @@ git clone https://github.com/singularian/mdencode.git
 
 # mdencode Go Library Dependancies
 
+```
 Go Library Dependencies
 go get -u golang.org/x/crypto/blake2s
 go get -u golang.org/x/crypto/md4
@@ -18,7 +19,7 @@ go get -u github.com/aead/skein
 go get -u github.com/cxmcc/tiger
 go get -u github.com/jzelinskie/whirlpool
 go get -u github.com/mattn/go-sqlite3
-
+```
 
 # Build mdencode
 
