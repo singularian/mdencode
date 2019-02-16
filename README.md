@@ -134,29 +134,7 @@ md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=4000 -file=america.txt 
 
 # Example mddbreport usage
 
-```
-Usage of mddbreport:
-  -append
-        Append To Output File
-  -dumpall
-        Dump all the sql file signatures
-  -file string
-        SQLite3 DB Signature Filename
-  -fileid uint
-        Fileid
-  -format int
-        Output Format (default 4)
-  -out string
-        Output Filename
-
-Version: 1.0 復甦 復活
-
-Examples:
-mddbreport -file=md.db -fileid=1 -format=10
-mddbreport -file=md.db -fileid=1 -format=10 -out=outputfile.txt -append=true
-mddbreport -file=md.db -fileid=1 -format=5000 -out=outputfile.xml -append=false
-
-```
+[Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
 
 # Using mddbreport 
 
