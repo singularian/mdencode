@@ -26,6 +26,15 @@ import (
 	_ "github.com/enceve/crypto/skein"
 	"github.com/jzelinskie/whirlpool"
 	_ "github.com/mimoo/GoKangarooTwelve/K12"
+	_ "github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatBinary"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatCSV"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatInform"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatJson"
+	_ "github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatSQL"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatText"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatXML"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatXMLgo"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatLog"
 	_ "github.com/spaolacci/murmur3"
 	"github.com/steakknife/keccak"
 	_ "github.com/twmb/murmur3"
@@ -40,7 +49,6 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatText"
 )
 
 // mdformat interface struct
@@ -48,10 +56,12 @@ type mdformat interface {
 	PrintFormatType()
 	OpenFile(appendfile bool)
 	InitFile()
+	// EncodeDirStart() // for the directory
 	EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64)
 	EncodeFileHash(encodingFormat int, hashName string, hashBytes string)
 	EncodeBlock(encodingFormat int, blockSize uint64, hashList []string, modExp int, mod string)
 	EncodeEndFile(encodingFormat int)
+	// EncodeDirEnd() // for the directory end - has a list of files
 }
 
 // mdencode struct
@@ -156,7 +166,7 @@ func (fdata *FileData) MdencodeDirectory(blockSize string, modSize string, forma
         }
 
         for _, fileName := range fileList {
-                fmt.Println(fileName)
+                ///// fmt.Println(fileName)
                 // skip the output file if it is specified
                 // if ((fileName != outputpath) && (fd.outputfilename != "")) {
                 // might be bug here???
@@ -168,6 +178,21 @@ func (fdata *FileData) MdencodeDirectory(blockSize string, modSize string, forma
 	return 0
 
 }
+
+// test directory hash code recursivelly
+/* func (fd *FileData) hashDirectoryRecursive(directory string) {
+        files, _ := ioutil.ReadDir(directory)
+        for _, file := range files {
+                fileName := directory + string(os.PathSeparator) + file.Name()
+                // todo: need to skip the output file so it doesn't process it in the directory
+                if file.IsDir() {
+                        fd.hashDirectoryRecursive(fileName)
+                } else {
+                        fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
+                }
+        }
+
+} */
 
 
 // Mdencode
@@ -221,6 +246,7 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 	}
 
 	// log file
+	// should close the log at the end???
 	fdata.Printlog("mdencode file ", fileName, " blocksize ", fdata.blockSize, " modsize ", fdata.modSize)
 
 	// set the file size
@@ -563,10 +589,56 @@ func (l *FileData) setmdFormat(format int) {
 
 	l.mdFormat = format
 
-        l.mdfmt = mdFormatText.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+	// CSV formatter
+	if format == 101 || format == 102 {
+		l.mdfmt = mdFormatCSV.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	// binary Formatter
+	/* } else if format == 1000 {
+		// l.mdfmt = mdFormatBinary.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		if l.outputFileName == "" {
+			l.outputFileName = "default.mdbin"
+		}
+		l.mdfmt = mdFormatBinary.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(false)
+		l.mdfmt.InitFile()
+		return
+	// SQL Formatter
+	} else if format == 2000 {
+		// set a default filename if none is provided
+		if l.outputFileName == "" {
+			l.outputFileName = "default"
+		}
+		l.outputFileName = l.outputFileName + ".db"
+		l.mdfmt = mdFormatSQL.Init(101, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+	*/
+	// Inform Formatter
+	} else if format == 3000 {
+		l.mdfmt = mdFormatInform.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	// JSON Formatter
+	} else if format == 4000 {
+		l.mdfmt = mdFormatJson.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	// GO XML Formatter
+	} else if format == 5000 {
+		l.mdfmt = mdFormatXMLgo.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	// non GO XML Formatter
+	} else if format == 5001 {
+                l.mdfmt = mdFormatXML.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+                l.mdfmt.OpenFile(l.appendfile)
+	} else if format == 6000 {
+		l.mdfmt = mdFormatLog.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+	
+	// log Formatter
+	// Text Formatter
+	} else {
+		l.mdfmt = mdFormatText.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	}
 
-        l.mdfmt.InitFile()
-        l.mdfmt.OpenFile(l.appendfile)
+	l.mdfmt.InitFile()
 
 }
 
@@ -652,6 +724,13 @@ func (l *FileData) SetLogFile(logfile string) {
 	// possibly add the logfile if it is set
 	// need to set this for the mdFormat 
         l.setmdFormat(l.mdFormat)
+}
+
+// SetOutputFile
+func (l *FileData) SetOutputFile(outputfile string) {
+
+	l.outputFileName = outputfile
+
 }
 
 // SetMdFormat
