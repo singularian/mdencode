@@ -661,6 +661,12 @@ func (l *FileData) SetLogFile(logfile string) {
         l.setmdFormat(l.mdFormat)
 }
 
+// SetOutputFile
+func (l *FileData) SetOutputFile(outputfile string) {
+
+        l.outputFileName = outputfile
+}
+
 // SetMdFormat
 // set the md output format
 func (l *FileData) SetMdFormat(format int) {
