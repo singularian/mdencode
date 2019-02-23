@@ -96,10 +96,9 @@ func argsSimple(argsNumber int) int {
 	flag.BoolVar(&fd.byteblockint, "blockint", false, "Append the File Byteblock Bigint to the Block Hash List")
 	flag.BoolVar(&fd.filehashline, "line", false, "File Hash as one line")
 	flag.StringVar(&fd.outputfilename, "out", "", "Output Filename")
+	// flag.StringVar(&fd.outputfilename, "output", "", "Output Filename")
 	flag.StringVar(&fd.logfilename, "log", "", "Log Filename")
 	flag.StringVar(&fd.initdb, "initdb", "", "Create SQLite3 Empty DB File")
-
-	// fmt.Println("windows bug not using output file variable ", fd.outputfilename, " test ", fd.modsize)
 
 	flag.Usage = printUsage
 
@@ -152,6 +151,7 @@ func argsSimple(argsNumber int) int {
 	fd.md.SetFileHashLine(fd.filehashline)
 	fd.md.SetKeyFile(fd.key)
 	fd.md.SetLogFile(fd.logfilename)
+	fd.md.SetOutputFile(fd.outputfilename)
 	// set the default format
 	fd.md.SetMdFormat(fd.defaultFormat)
 	// set the hash lists

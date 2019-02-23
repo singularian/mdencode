@@ -30,6 +30,7 @@ func main() {
 		fmt.Printf("USAGE of %s:\n", os.Args[0])
 		fmt.Println("Examples:")
 		fmt.Println(exe, " [FORMAT] ")
+		// doesn't have an output file
 		fmt.Println(exe, " [FORMAT] [FILENAME]")
 		fmt.Println(exe, " 4000 (opens default.mdbin)")
 		fmt.Println(exe, " 4000 ")
