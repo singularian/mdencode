@@ -387,6 +387,13 @@ func (md *FileData) SetLogFile (logfile string) {
         md.logfile = logfile 
 }
 
+// SetOutputFile
+func (l *FileData) SetOutputFile(outputfile string) {
+
+        l.outputFileName = outputfile
+
+}
+
 // display the object type
 func (md *FileData) PrintType() {
 	fmt.Println("mdFormatImport")

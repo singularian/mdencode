@@ -19,12 +19,18 @@ func main() {
 
 	var argsNum int = len(os.Args)
 	var format int = 1
+	var fileName   = ""
+	var outputFile = ""
 
 	if argsNum == 2 {
 		format, _ = strconv.Atoi(os.Args[1])
 	} else if (argsNum == 3) {
 		format, _ = strconv.Atoi(os.Args[1])
 		filename  = os.Args[2]
+	} else if (argsNum == 4) {
+		format, _ = strconv.Atoi(os.Args[1])
+		filename  = os.Args[2]
+		outputFile = os.Args[3]
 	} else {
 		var exe = os.Args[0]
 		fmt.Printf("USAGE of %s:\n", os.Args[0])
@@ -32,6 +38,7 @@ func main() {
 		fmt.Println(exe, " [FORMAT] ")
 		// doesn't have an output file
 		fmt.Println(exe, " [FORMAT] [FILENAME]")
+		fmt.Println(exe, " [FORMAT] [FILENAME] [OUTPUTFILE]")
 		fmt.Println(exe, " 4000 (opens default.mdbin)")
 		fmt.Println(exe, " 4000 ")
 		fmt.Println(exe, " 4000 mdbintest.md")
@@ -45,12 +52,11 @@ func main() {
         }
         defer file.Close()
 
-	var fileName = ""
-	var outputFile = ""
         // mdload := mdFormatImport.Init(format, fileName, "", 0, 0, 0, "", "", md.outputFile)
         mdload := mdFormatImport.Init(format, fileName, "", 0, 0, 0, "", "", outputFile)
         // mdload.SetAppendFile(md.appendfile)
         mdload.SetAppendFile(false)
+        mdload.SetOutputFile(outputFile)
         mdfmt := mdload.SetmdFormatNoSQL(true)
 
 	stats, _ := file.Stat()
