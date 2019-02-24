@@ -642,9 +642,10 @@ func (l *FileData) setmdFormat(format int) {
 	} else if format == 5001 {
                 l.mdfmt = mdFormatXML.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
                 l.mdfmt.OpenFile(l.appendfile)
+	// log Formatter
 	} else if format == 6000 {
 		l.mdfmt = mdFormatLog.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-	// log Formatter
+	// Image Formatter
 	} else if format == 8000 {
 		l.mdfmt = mdFormatImg.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 	// Text Formatter

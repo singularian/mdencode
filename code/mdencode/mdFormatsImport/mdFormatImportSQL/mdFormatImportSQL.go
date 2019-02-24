@@ -18,6 +18,7 @@ import (
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatJson"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatMD"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatBinary"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatImg"
 	// "github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatSQL"
 
 )
@@ -226,6 +227,12 @@ func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
 	// XML Non go
         } else if format == 5001 {
                 mdf := mdFormatXML.Init(format, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+                mdf.OpenFile(md.appendfile)
+                mdf.InitFile()
+                return mdf
+	        // XML Non go
+        } else if format == 8000 {
+                mdf := mdFormatImg.Init(format, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
                 mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
                 return mdf
