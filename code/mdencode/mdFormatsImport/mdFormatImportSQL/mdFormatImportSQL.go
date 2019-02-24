@@ -16,6 +16,7 @@ import (
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatXML"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatXMLgo"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatJson"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatMD"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatBinary"
 	// "github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatSQL"
 
@@ -202,6 +203,12 @@ func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
         // JSON
         } else if format == 4000 {
                 mdf := mdFormatJson.Init(format, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+                mdf.OpenFile(md.appendfile)
+                mdf.InitFile()
+                return mdf
+        // Mark Down 
+        } else if format == 4300 {
+                mdf := mdFormatMD.Init(format, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
                 mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
                 return mdf
