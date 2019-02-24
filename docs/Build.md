@@ -21,6 +21,7 @@ go get -u github.com/aead/skein
 go get -u github.com/cxmcc/tiger
 go get -u github.com/jzelinskie/whirlpool
 go get -u github.com/mattn/go-sqlite3
+go get -u github.com/fogleman/gg
 ```
 
 # Build mdencode
