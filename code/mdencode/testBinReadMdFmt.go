@@ -188,6 +188,9 @@ func main() {
 	// fmt.Println("test count ", CalcHashSizeFile("sha1:md5"))
 	// fmt.Println("test count ", CalcHashSizeFile("sha1:md5:ripe160:sha224"))
 
+        // endcode the end of file formatter
+        mdfmt.EncodeEndFile(format)
+
 }
 
 func Convert32(data []byte) (uint32, error) {
