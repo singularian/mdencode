@@ -30,6 +30,7 @@ import (
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatCSV"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatInform"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatJson"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatMD"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatSQL"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatText"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatHtml"
@@ -620,6 +621,10 @@ func (l *FileData) setmdFormat(format int) {
 	} else if format == 4000 {
 		l.mdfmt = mdFormatJson.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 		l.mdfmt.OpenFile(l.appendfile)
+	// MD Formatter
+	} else if format == 4300 {
+		l.mdfmt = mdFormatMD.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+                l.mdfmt.OpenFile(l.appendfile)
 	// HTML Formatter
 	} else if format == 4500 {
                l.mdfmt = mdFormatHtml.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)

@@ -15,6 +15,7 @@ import (
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatXML"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatXMLgo"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatJson"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatMD"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatBinary"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatSQL"
 
@@ -174,6 +175,12 @@ func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
                 mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
                 return mdf
+        // Mark Down
+        } else if format == 4300 {
+                mdf := mdFormatMD.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+                mdf.OpenFile(md.appendfile)
+                mdf.InitFile()
+                return mdf
         // HTML Formatter
         } else if format == 4500 {
                 mdf := mdFormatHtml.Init(format, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
@@ -244,6 +251,18 @@ func (md *FileData) SetmdFormatALL (filehashline bool) (mdfmt mdformat) {
 	// JSON
 	} else if format == 4000 {
 		mdf := mdFormatJson.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+                mdf.OpenFile(md.appendfile)
+                mdf.InitFile()
+                return mdf
+	// Mark Down
+	} else if format == 4300 {
+		mdf := mdFormatMD.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
+		mdf.OpenFile(md.appendfile)
+                mdf.InitFile()
+                return mdf
+	// HTML
+	} else if format == 4500 {
+                mdf := mdFormatHtml.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
                 mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
                 return mdf
