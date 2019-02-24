@@ -622,8 +622,8 @@ func (l *FileData) setmdFormat(format int) {
 		l.mdfmt.OpenFile(l.appendfile)
 	// HTML Formatter
 	} else if format == 4500 {
-                l.mdfmt = mdFormatHtml.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-                l.mdfmt.OpenFile(l.appendfile)
+               l.mdfmt = mdFormatHtml.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+               l.mdfmt.OpenFile(l.appendfile)
 	// GO XML Formatter
 	} else if format == 5000 {
 		l.mdfmt = mdFormatXMLgo.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
@@ -634,7 +634,6 @@ func (l *FileData) setmdFormat(format int) {
                 l.mdfmt.OpenFile(l.appendfile)
 	} else if format == 6000 {
 		l.mdfmt = mdFormatLog.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-	
 	// log Formatter
 	// Text Formatter
 	} else {
