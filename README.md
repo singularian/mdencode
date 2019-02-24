@@ -22,8 +22,10 @@ It can also write to an sqlite db. The mdencode sqlite db files contain a table 
 
 - TEXT
 - INFORM
+- HTML
 - XML
 - JSON
+- MARK DOWN
 - BINARY
 - CSV
 - SQLITE3 DB
