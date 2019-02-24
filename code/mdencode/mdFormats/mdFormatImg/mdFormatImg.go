@@ -197,7 +197,13 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 		var color = int(dst[i])
 		// md.gg.SetLineWidth(float64(dst[i]))
 		// md.gg.SetLineWidth(10)
-		md.gg.SetRGB255(color, int(i), int(dst[i+1]))
+	//	if (i+1) < uint64(len(dst) - 2) {
+			md.gg.SetRGB255(color, int(i), int(dst[i+1]))
+	//		md.gg.SetRGB255(color, int(i), 0)
+	//	} else {
+			 //md.gg.SetRGB255(color, int(i), 255)
+	//		return
+	//	}
 		// x1 = float64(blockSize + i) + float64(color) * W // * rand.Float64()
 		//y1 = float64(uint64(modExp) + i) * float64(md.blockCount) * H//* rand.Float64()
 		//x2 = float64(blockSize) + float64(dst[i]) * W
