@@ -156,8 +156,27 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 func (md *MdFormat) EncodeFileHash(encodingFormat int, hashName string, hashBytes string) {
 
 	// var last  = fmt.Sprintf("# Filehash\n %v %v", hashName, hashBytes)
+	src := []byte(hashBytes)
+	dst := make([]byte, hex.DecodedLen(len(src)))
+	_, err := hex.Decode(dst, src)
+	if err != nil {
+                fmt.Println(err)
+        }
 
-	// md.println(last)
+        var i uint64 = 0
+        for i = 0; i < uint64(len(dst) - 1); i++ {
+                var color = int(dst[i])
+		 md.gg.SetRGB255(color, int(i), int(dst[i+1]))
+
+                var x = float64(dst[i]) * 4
+                var y = float64(dst[i+1]) * 4
+                var width = float64((dst[i] % 64) + 1)
+                md.gg.DrawCircle(x, y, width)
+                md.gg.FillPreserve()
+                md.gg.Stroke()
+
+	}
+
 
 }
 
