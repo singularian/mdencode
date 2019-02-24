@@ -226,10 +226,6 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 	// set the file size
 	size := fi.Size()
 	fdata.fileSize = uint64(size)
-	// set the number of blocks in the file and last block size
-	blocks, remainder := fdata.calculateFileBlocks(uint64(size), uint64(blocksize))
-	fdata.blockCount = uint64(blocks)
-	fdata.blockRemainder = uint64(remainder)
 
 	// encode the File Header
 	fdata.mdfmt.EncodeFileHeader(format, fileBaseName, fdata.filePath, size, blocksize, fdata.fileHashListNames, fdata.blockHashListNames, bitsize)
@@ -249,8 +245,16 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 		fdata.mdencodeFile(fileName)
 	}
 
-	// encode the file blocks
-	fdata.mdencodeFileBlock(blockSize, modSize, format, fileName)
+        // encode the file blocks
+        if blocksize > 0 {
+                // set the number of blocks in the file and last block size
+                blocks, remainder := fdata.calculateFileBlocks(uint64(size), uint64(blocksize))
+                fdata.blockCount = uint64(blocks)
+                fdata.blockRemainder = uint64(remainder)
+
+                // mdEncode the File Block
+                fdata.mdencodeFileBlock(blockSize, modSize, format, fileName)
+        }
 
 	// endcode the end of file formatter
 	fdata.mdfmt.EncodeEndFile(format)
