@@ -1,7 +1,7 @@
 package mdFormatImg
 
 // mdencode
-// markdown formatter
+// signature file image png formatter
 // copyright (C) Scott Ross 2017
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
@@ -102,11 +102,6 @@ func (md *MdFormat) InitFile() {
 	md.gg.SetRGB(0, 0, 0)
 	md.gg.Clear()
 
-        // dc := gg.NewContext(W, H)
-
-        //dc.SetRGB(0, 0, 0)
-
-        //dc.Clear()
 }
 
 
@@ -155,7 +150,6 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 // this is the entire file signature hash type and signature hex bytes
 func (md *MdFormat) EncodeFileHash(encodingFormat int, hashName string, hashBytes string) {
 
-	// var last  = fmt.Sprintf("# Filehash\n %v %v", hashName, hashBytes)
 	src := []byte(hashBytes)
 	dst := make([]byte, hex.DecodedLen(len(src)))
 	_, err := hex.Decode(dst, src)
@@ -214,24 +208,7 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 	var i uint64 = 0
 	for i = 0; i < uint64(len(dst) - 1); i++ {
 		var color = int(dst[i])
-		// md.gg.SetLineWidth(float64(dst[i]))
-		// md.gg.SetLineWidth(10)
-	//	if (i+1) < uint64(len(dst) - 2) {
-			md.gg.SetRGB255(color, int(i), int(dst[i+1]))
-	//		md.gg.SetRGB255(color, int(i), 0)
-	//	} else {
-			 //md.gg.SetRGB255(color, int(i), 255)
-	//		return
-	//	}
-		// x1 = float64(blockSize + i) + float64(color) * W // * rand.Float64()
-		//y1 = float64(uint64(modExp) + i) * float64(md.blockCount) * H//* rand.Float64()
-		//x2 = float64(blockSize) + float64(dst[i]) * W
-		//y2 = float64(modExp) + float64(dst[i]) * H 
-		//md.gg.DrawLine(x1, y1, x2, y2)
-                //md.gg.Stroke()
-		// var xx = float64(i) + float64(color)
-		////////var x = float64(dst[i] + dst[i+1]) + 100
-		///var y = float64(color) * 4 
+		md.gg.SetRGB255(color, int(i), int(dst[i+1]))
 		var x = float64(dst[i]) * 4
 		var y = float64(dst[i+1]) * 4
 		var width = float64((dst[i] % 64) + 1)
@@ -301,7 +278,7 @@ func (md *MdFormat) Println2(line  ...interface{}) {
 
 // test inteface function
 func (md *MdFormat) PrintFormatType() {
-        fmt.Println("Format mdFormatMD")
+        fmt.Println("Format mdFormatIMG")
 
 }
 
