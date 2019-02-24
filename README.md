@@ -27,6 +27,7 @@ It can also write to an sqlite db. The mdencode sqlite db files contain a table 
 - JSON
 - MARK DOWN
 - BINARY
+- IMAGES
 - CSV
 - SQLITE3 DB
 - BUILD YOUR OWN
@@ -94,6 +95,7 @@ This is subject to change.
 4500    - HTML
 5000    - GO XML
 5001    - XML Formatter
+8000    - Image PNG Formatter
 ```
 
 # Command Line Examples
