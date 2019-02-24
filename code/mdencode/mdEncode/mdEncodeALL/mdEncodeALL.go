@@ -37,6 +37,7 @@ import (
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatXML"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatXMLgo"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatLog"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatImg"
 	_ "github.com/spaolacci/murmur3"
 	"github.com/steakknife/keccak"
 	_ "github.com/twmb/murmur3"
@@ -644,6 +645,8 @@ func (l *FileData) setmdFormat(format int) {
 	} else if format == 6000 {
 		l.mdfmt = mdFormatLog.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 	// log Formatter
+	} else if format == 8000 {
+		l.mdfmt = mdFormatImg.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 	// Text Formatter
 	} else {
 		l.mdfmt = mdFormatText.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)

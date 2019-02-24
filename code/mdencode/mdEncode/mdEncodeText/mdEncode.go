@@ -281,6 +281,7 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
                 // mdEncode the File Block
                 fdata.mdencodeFileBlock(blockSize, modSize, format, fileName)
         }
+
 	// endcode the end of file formatter
 	fdata.mdfmt.EncodeEndFile(format)
 
