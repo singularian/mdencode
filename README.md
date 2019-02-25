@@ -135,18 +135,17 @@ md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=5000 -file=america.txt 
 md -block=100 -mod=128 -fh=10000111 -bh=10001111 -format=4000 -file=america.txt -out=america.txt_b100_mod128_xml.md
 ```
 
+[JSON Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_json.md)
+
 ```
 md -file=america.txt -block=100 -mod=128 -format=4000 -fh=10000111 -bh=10001111 -out=america.txt_b100_mod128_json.md
 ```
 
-[JSON Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b100_mod128_json.md)
-
+[Mark Down Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b300_mod32_MD.md)
 
 ```
 md -file=america.txt -block=300 -mod=32 -format=4300 -fh=10000111 -bh=10001111 -out=america.txt_b300_mod32_MD.md
 ```
-
-[Mark Down Example](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b300_mod32_MD.md)
 
 # Example mddbreport usage
 
