@@ -151,6 +151,10 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 
 	var hashListString = strings.Join(hashList, ":")
 
+	if md.blockCount == 0 {
+		md.println("")
+	}
+
 	// the higher encoding formats are more verbose
 	var mdb = fmt.Sprintf("# blockhash %v\n- %v bytes\n- Hash List %s\n- Modulus Exponent %d\n- Modulus %s\n", md.blockCount, blockSize, hashListString, modExp, mod)
 	md.println(mdb)
