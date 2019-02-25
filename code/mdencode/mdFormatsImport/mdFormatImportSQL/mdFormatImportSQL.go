@@ -250,44 +250,6 @@ func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
 
 }
 
-// setmdFormatAll 
-// sets the correct md format object 
-/*
-func (md *FileData) SetmdFormatAll (filehashline bool) (mdfmt mdformat) {
-
-	var format = md.mdFormat
-
-	if format == 100 {
-                mdf := mdFormatXML.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(md.appendfile)
-	} else if format == 99 {
-		mdf := mdFormatInform.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-		mdf.OpenFile(md.appendfile)
-	} else if format == 101 || format == 102 {
-		mdf := mdFormatCSV.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-		mdf.OpenFile(md.appendfile)
-	} else if format == 600 {
-		mdf := mdFormatJson.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(md.appendfile)
-	} else if format == 1000 {
-		// l.mdfmt = mdFormatBinary.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-		if md.outputFileName == "" {
-			md.outputFileName = "default.mdbin"
-		}
-		mdf := mdFormatBinary.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-		mdf.OpenFile(false)
-		mdf.InitFile()
-		return mdf
-        } else {
-		mdf := mdFormatText.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-		mdf.OpenFile(md.appendfile)
-        }
-
-	// md.mdfmt.InitFile()
-	var mdf
-	return mdf
-}
-*/
 
 // SetByteBlock
 // set the byte block mode
@@ -321,6 +283,11 @@ func (md *FileData) SetKeyFile (key string) {
 // set the optional logfile
 func (md *FileData) SetLogFile (logfile string) {
         md.logfile = logfile 
+}
+
+// SetOutputFile
+func (md *FileData) SetOutputFile(outputfile string) {
+        md.outputFileName = outputfile
 }
 
 // display the object type
