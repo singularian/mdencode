@@ -124,10 +124,10 @@ This is a test binary signature exporter. It will ultimately be used as a mdenco
 ```
 $ mdbinlist
 
-USAGE of mdbinlist:
-Examples:
+Usage:
 mdbinlist  [FORMAT]
 mdbinlist  [FORMAT] [FILENAME]
+mdbinlist  [FORMAT] [FILENAME] [OUTPUTFILE]
 mdbinlist  4000 (opens default.mdbin)
 mdbinlist  4000
 mdbinlist  4000 mdbintest.md
