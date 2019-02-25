@@ -211,7 +211,8 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 		md.gg.SetRGB255(color, int(i), int(dst[i+1]))
 		var x = float64(dst[i]) * 4
 		var y = float64(dst[i+1]) * 4
-		var width = float64((dst[i] % 64) + 1)
+		// var width = float64((dst[i] % 64) + 1)
+		var width = float64(3)
 		md.gg.DrawCircle(x, y, width)
 		md.gg.FillPreserve()
 		md.gg.Stroke()
