@@ -305,92 +305,6 @@ func (md *FileData) SetmdFormatALL (filehashline bool) (mdfmt mdformat) {
 
 }
 
-// setmdFormatNoSQL 
-// sets the correct md format object 
-/* func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
-
-        var format = md.mdFormat
-        var mdf
-
-        if format == 100 {
-                mdf = mdFormatXML.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(md.appendfile)
-        } else if format == 99 {
-                mdf = mdFormatInform.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(md.appendfile)
-        } else if format == 101 || format == 102 {
-                mdf = mdFormatCSV.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(md.appendfile)
-        } else if format == 600 {
-                mdf = mdFormatJson.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(md.appendfile)
-        } else if format == 1000 {
-                // l.mdfmt = mdFormatBinary.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-                if md.outputFileName == "" {
-                        md.outputFileName = "default.mdbin"
-                }
-                mdf = mdFormatBinary.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(false)
-                mdf.InitFile()
-                return mdf
-        } else {
-                mdf = mdFormatText.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(md.appendfile)
-        }
-
-        md.mdfmt.InitFile()
-
-        return mdf
-
-}
-
-// setmdFormatAll 
-// sets the correct md format object 
-func (md *FileData) SetmdFormatAll (filehashline bool) (mdfmt mdformat) {
-
-	var format = md.mdFormat
-	var mdf
-
-	if format == 100 {
-                mdf = mdFormatXML.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(md.appendfile)
-	} else if format == 99 {
-		mdf = mdFormatInform.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-		mdf.OpenFile(md.appendfile)
-	} else if format == 101 || format == 102 {
-		mdf = mdFormatCSV.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-		mdf.OpenFile(md.appendfile)
-	} else if format == 600 {
-		mdf = mdFormatJson.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                mdf.OpenFile(md.appendfile)
-	} else if format == 1000 {
-		// l.mdfmt = mdFormatBinary.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
-		if md.outputFileName == "" {
-			md.outputFileName = "default.mdbin"
-		}
-		mdf = mdFormatBinary.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-		mdf.OpenFile(false)
-		mdf.InitFile()
-		return mdf
-	} else if format == 2000 {
-		// set a default filename if none is provided
-		if md.outputFileName == "" {
-			md.outputFileName = "default"
-		}
-                md.outputFileName = md.outputFileName + ".db"
-                mdf = mdFormatSQL.Init(101, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-        } else {
-		mdf = mdFormatText.Init(md.mdFormat, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-		mdf.OpenFile(md.appendfile)
-        }
-
-	md.mdfmt.InitFile()
-
-	return mdf
-
-}
-*/
-
 // SetByteBlock
 // set the byte block mode
 func (md *FileData) SetByteBlock (byteblock bool ) {
@@ -426,9 +340,9 @@ func (md *FileData) SetLogFile (logfile string) {
 }
 
 // SetOutputFile
-func (l *FileData) SetOutputFile(outputfile string) {
+func (md *FileData) SetOutputFile(outputfile string) {
 
-        l.outputFileName = outputfile
+        md.outputFileName = outputfile
 
 }
 
