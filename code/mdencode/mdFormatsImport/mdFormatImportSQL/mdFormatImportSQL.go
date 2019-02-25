@@ -230,8 +230,8 @@ func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
                 mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
                 return mdf
-	        // XML Non go
-        } else if format == 8000 {
+        // PNG Image file
+        } else if format == 8000 || format == 8001 {
                 mdf := mdFormatImg.Init(format, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
                 mdf.OpenFile(md.appendfile)
                 mdf.InitFile()
