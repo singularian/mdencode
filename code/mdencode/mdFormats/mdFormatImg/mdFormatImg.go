@@ -14,6 +14,7 @@ import (
 	"github.com/fogleman/gg"
 	"encoding/hex"
 	"math/big"
+	"encoding/binary"
 )
 
 
@@ -182,12 +183,17 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 	modulusBigInt := new(big.Int)
 	modulusBigInt, ok := modulusBigInt.SetString(mod, 16)
 	if !ok {
-        fmt.Println("SetString: error")
-        return
+            fmt.Println("SetString: error")
+            return
 	}
 
+	// modulus exponent
+	modexpbytes := make([]byte, 4)
+	binary.LittleEndian.PutUint32(modexpbytes, uint32(modExp))
+
+	// add the modulus bigint bytes
 	var hashListString = strings.Join(hashList, "00")
-	hashListString     = hashListString + fmt.Sprintf("%x", modulusBigInt.Bytes())
+	hashListString     = hashListString + fmt.Sprintf("%x", modulusBigInt.Bytes()) + fmt.Sprintf("%x", modexpbytes)
 
         src := []byte(hashListString)
 
