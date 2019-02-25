@@ -646,7 +646,7 @@ func (l *FileData) setmdFormat(format int) {
 	} else if format == 6000 {
 		l.mdfmt = mdFormatLog.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 	// Image Formatter
-	} else if format == 8000 {
+	} else if format == 8000 || format == 8001 {
 		l.mdfmt = mdFormatImg.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
 	// Text Formatter
 	} else {
