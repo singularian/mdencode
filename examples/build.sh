@@ -5,6 +5,7 @@ md -file=america.txt -block=100 -mod=128 -format=3000 -fh=10000111 -bh=10001111 
 md -file=america.txt -block=100 -mod=128 -format=4000 -fh=10000111 -bh=10001111 -out=america.txt_b100_mod128_json.md
 md -file=america.txt -block=100 -mod=128 -format=5000 -fh=10000111 -bh=10001111 -out=america.txt_b100_mod128_xml.md
 md -file=america.txt -block=300 -mod=32 -format=4300 -fh=10000111 -bh=10001111 -out=america.txt_b300_mod32_MD.md
+md -file=america.txt -block=300 -mod=32 -format=8000 -fh=10000111 -bh=10001111 -out=america.txt_b300_mod32.png
 
 # random argument with a directory hash
 md -block=100 -mod=128 -format=100 -br -fr -dir=$GOPATH/src/github.com/singularian/mdencode/scripts/ -out=scripts.dir.md -append

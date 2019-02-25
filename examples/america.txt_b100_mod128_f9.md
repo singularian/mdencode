@@ -1,6 +1,6 @@
 filename: america.txt
 filepath: /home/nsross/projects/src/github.com/singularian/mdencode/examples/
-header: 869:10:100:128:md4:sha512:sha512_224:sha512_256-md4:sha256:sha512:sha512_224:sha512_256:1.0:2019-02-24 23:37:38.2954533 -0500 STD m=+0.007183001
+header: 869:10:100:128:md4:sha512:sha512_224:sha512_256-md4:sha256:sha512:sha512_224:sha512_256:1.0:2019-02-24 23:59:29.3683613 -0500 STD m=+0.001289001
 filehash: md4 5e7bd13dbf9673088708103fafd93b9f
 filehash: md4 5e7bd13dbf9673088708103fafd93b9f
 filehash: sha512 cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e

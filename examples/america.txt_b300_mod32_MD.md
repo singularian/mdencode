@@ -5,7 +5,7 @@ america.txt
 /home/nsross/projects/src/github.com/singularian/mdencode/examples/
 
 # File Header
-869:4300:300:32:md4:sha512:sha512_224:sha512_256-md4:sha256:sha512:sha512_224:sha512_256:1.0:2019-02-24 23:37:38.3904927 -0500 STD m=+0.002358001
+869:4300:300:32:md4:sha512:sha512_224:sha512_256-md4:sha256:sha512:sha512_224:sha512_256:1.0:2019-02-24 23:59:29.4406804 -0500 STD m=+0.001284001
 
 - File Size 869 bytes
 - Ecoding Format 4300
@@ -14,7 +14,7 @@ america.txt
 - File Hash List md4:sha512:sha512_224:sha512_256
 - Block Hash List md4:sha256:sha512:sha512_224:sha512_256
 - Version 1.0
-- Time 2019-02-24 23:37:38.3907062 -0500 STD m=+0.002571001
+- Time 2019-02-24 23:59:29.4409086 -0500 STD m=+0.001512001
 
 # Filehash
  md4 5e7bd13dbf9673088708103fafd93b9f
