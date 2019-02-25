@@ -124,7 +124,8 @@ This is a test binary signature exporter. It will ultimately be used as a mdenco
 ```
 $ mdbinlist
 
-Usage:
+USAGE of mdbinlist:
+Examples:
 mdbinlist  [FORMAT]
 mdbinlist  [FORMAT] [FILENAME]
 mdbinlist  [FORMAT] [FILENAME] [OUTPUTFILE]
