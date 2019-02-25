@@ -180,6 +180,7 @@ func (md *MdFormat) EncodeFileHash(encodingFormat int, hashName string, hashByte
 // this could also add a collision number byte or 4 byte 32-bit integer to specify which collsion is the correct hash block
 func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList []string, modExp int, mod string) {
 
+	// convert modulus bigint to hex
 	modulusBigInt := new(big.Int)
 	modulusBigInt, ok := modulusBigInt.SetString(mod, 16)
 	if !ok {
@@ -187,18 +188,17 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
             return
 	}
 
-	// modulus exponent
+	// convert modulus exponent int to hex
 	modexpbytes := make([]byte, 4)
 	binary.LittleEndian.PutUint32(modexpbytes, uint32(modExp))
 
-	// add the modulus bigint bytes
+	// concatenate the hex hashlist and the hex modulus bigint bytes and the hex of the mod exponent bytes
 	var hashListString = strings.Join(hashList, "00")
 	hashListString     = hashListString + fmt.Sprintf("%x", modulusBigInt.Bytes()) + fmt.Sprintf("%x", modexpbytes)
 
         src := []byte(hashListString)
 
 	// var hashListStringSize = len(src)
-	// if (
 
         dst := make([]byte, hex.DecodedLen(len(src)))
         // n, err := hex.Decode(dst, src)
