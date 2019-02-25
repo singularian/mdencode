@@ -96,6 +96,7 @@ This is subject to change.
 5000    - GO XML
 5001    - XML Formatter
 8000    - Image PNG Formatter
+8001    - Image PNG Formatter
 ```
 
 # Command Line Examples

@@ -238,9 +238,12 @@ func printUsage() {
 	fmt.Println("2000    - SQL Lite 3 DB File")
 	fmt.Println("3000    - Inform")
 	fmt.Println("4000    - JSON")
+	fmt.Println("4300    - Mark Down")
 	fmt.Println("4500    - HTML")
 	fmt.Println("5000    - XML GO")
-	fmt.Println("5001    - XML\n")
+	fmt.Println("5001    - XML")
+	fmt.Println("8000    - PNG Image Signature")
+	fmt.Println("8001    - PNG Image Signature\n")
 
 	fmt.Println("Examples:")
 	fmt.Println("md -file=Makefile -block=100 -fh=1 -bh=0 -format=0 -line=true")

@@ -50,15 +50,19 @@ Usage of md:
 Version: 1.0 復甦 復活                                                                                                                               
                                                                                                                                                  
 Formats:                                                                                                                                         
-0 .. 98 - Text                                                                                                                                   
-101     - CSV                                                                                                                                    
-102     - CSV                                                                                                                                    
-1000    - Binary                                                                                                                                 
-2000    - SQL Lite 3 DB File                                                                                                                     
-3000    - Inform                                                                                                                                 
-4000    - JSON                                                                                                                                   
-5000    - GO XML                                                                                                                                 
-5001    - XML Formatter                                                                                                                          
+0 .. 98 - Text
+101     - CSV
+102     - CSV
+1000    - Binary
+2000    - SQL Lite 3 DB File
+3000    - Inform
+4000    - JSON
+4300    - Mark Down
+4500    - HTML
+5000    - XML GO
+5001    - XML
+8000    - PNG Image Signature
+8001    - PNG Image Signature
                                                                                                                                                  
 Examples:                                                                                                                                        
 
