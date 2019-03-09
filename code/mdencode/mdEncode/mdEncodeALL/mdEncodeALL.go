@@ -38,6 +38,7 @@ import (
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatXMLgo"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatLog"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatImg"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatImgFont"
 	_ "github.com/spaolacci/murmur3"
 	"github.com/steakknife/keccak"
 	_ "github.com/twmb/murmur3"
@@ -648,6 +649,15 @@ func (l *FileData) setmdFormat(format int) {
 	// Image Formatter
 	} else if format == 8000 || format == 8001 {
 		l.mdfmt = mdFormatImg.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+		l.mdfmt.InitFile()
+		return
+	        // Image Formatter
+        } else if format == 8002 {
+                l.mdfmt = mdFormatImgFont.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+                l.mdfmt.OpenFile(l.appendfile)
+                l.mdfmt.InitFile()
+                return
 	// Text Formatter
 	} else {
 		l.mdfmt = mdFormatText.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
@@ -740,6 +750,12 @@ func (l *FileData) SetLogFile(logfile string) {
 	// possibly add the logfile if it is set
 	// need to set this for the mdFormat 
         l.setmdFormat(l.mdFormat)
+}
+
+// SetProcessDirectory
+func (l *FileData) SetProcessDir(dir bool) {
+//	l.procDir = dir
+
 }
 
 // SetOutputFile

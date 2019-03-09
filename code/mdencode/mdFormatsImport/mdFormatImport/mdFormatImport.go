@@ -201,7 +201,7 @@ func (md *FileData) SetmdFormatNoSQL (filehashline bool) (mdfmt mdformat) {
 	// Image Hash
 	} else if format == 8000 || format == 8001 {
                 mdf := mdFormatImg.Init(format, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                // mdf.OpenFile(md.appendfile)
+                mdf.OpenFile(md.appendfile)
 		mdf.InitFile()
                 return mdf
         } else {
@@ -286,9 +286,9 @@ func (md *FileData) SetmdFormatALL (filehashline bool) (mdfmt mdformat) {
                 mdf.InitFile()
                 return mdf
         // Image Hash
-        } else if format == 8000 {
+        } else if format == 8000 || format == 8001 {
                 mdf := mdFormatImg.Init(format, md.fileName, md.filePath, md.fileSize, md.blockSize, md.modSize, md.fileHashListString, md.blockHashListString, md.outputFileName)
-                // mdf.OpenFile(md.appendfile)
+                mdf.OpenFile(md.appendfile)
 		mdf.InitFile()
                 return mdf
         } else {

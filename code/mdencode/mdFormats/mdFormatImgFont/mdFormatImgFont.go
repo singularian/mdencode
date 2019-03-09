@@ -1,4 +1,4 @@
-package mdFormatImg
+package mdFormatImgFont
 
 // mdencode
 // signature file image png formatter
@@ -165,15 +165,23 @@ func (md *MdFormat) EncodeFileHash(encodingFormat int, hashName string, hashByte
                 fmt.Println(err)
         }
 
-        var i uint64 = 0
-        for i = 0; i < uint64(len(dst) - 1); i++ {
-                var color = int(dst[i])
-		 md.gg.SetRGB255(color, int(i), int(dst[i+1]))
+	// DrawString(s string, x, y float64)
 
-                var x = float64(dst[i]) * 4
-                var y = float64(dst[i+1]) * 4
-                var width = float64((dst[i] % 64) + 1)
-                md.gg.DrawCircle(x, y, width)
+
+        var i uint64 = 0
+	var x float64 = 1
+	var y float64 = 1
+        for i = 0; i < uint64(len(hashBytes)); i++ {
+
+		if i < uint64(len(dst)) {
+		var color = int(dst[i])
+		md.gg.SetRGB255(color, int(i), 1)
+                 x = float64(dst[i]) * 4
+                 y = float64(i) * 4
+		}
+                // var width = float64((dst[i] % 64) + 1)
+                // md.gg.DrawCircle(x, y, width)
+		md.gg.DrawString(string(src[i]), x, y)
                 md.gg.FillPreserve()
                 md.gg.Stroke()
 
@@ -217,20 +225,21 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 
 	const W = 1024
         const H = 1024
+        var x float64 = 1
+        var y float64 = 1
 
 	var i uint64 = 0
 	for i = 0; i < uint64(len(dst) - 1); i++ {
 		var color = int(dst[i])
-		md.gg.SetRGB255(color, int(i), int(dst[i+1]))
-		var x = float64(dst[i]) * 4
-		var y = float64(dst[i+1]) * 4
-
-		var width = float64(3)
-		if encodingFormat == 8001 {
-			width = float64((dst[i] % 64) + 1)
+		if i < uint64(len(dst)) {
+		md.gg.SetRGB255(color, int(i), 1)
+		x = float64(dst[i]) * 4
+		y = float64(i) * 5 
 		}
 
-		md.gg.DrawCircle(x, y, width)
+
+		// md.gg.DrawCircle(x, y, width)
+		md.gg.DrawString(string(src[i]), x, y)
 		md.gg.FillPreserve()
 		md.gg.Stroke()
 
