@@ -359,6 +359,7 @@ func (md *DecodeData) setSignature() {
 
 }
 
+
 // display the modScan data
 func (md *DecodeData) modScanData() {
 
