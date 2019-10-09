@@ -180,9 +180,9 @@ func main() {
 		// end = end + fileblocksize + modByteSize + 4;
 		// end = end + fileblocksize;
 		// var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
-		for i:= 0; i < len(blocklistarr); i++ {
+		for j:= 0; j < len(blocklistarr); j++ {
 			start = end
-			end = end + uint64(blocklistarr[i])
+			end = end + uint64(blocklistarr[j])
 			hlistarray = append(hlistarray, fmt.Sprintf("%x", string(bytes[start:end])))
 		}
 		hstring := strings.Join(hlistarray, ":")
@@ -194,9 +194,11 @@ func main() {
 		start = end
 		end = end + modByteSize
 		n := new(big.Int)
+		// fmt.Println("sssssssssssss ", start, end, bytes, n.String())
+		fmt.Println("sssssssssssss ", start, end, n.String(), modByteSize)
 		n = n.SetBytes(bytes[start:end])
 
-		//  fmt.Println("blockhashlist ", fileblocksize, " arr ", blocklistarr, " ", " hex ", hexstring, " modexp ", modSize, " modulus byte size ", modByteSize, " mod size ", modSize, " modulus ", n.String())
+		// fmt.Println("blockhashlist ", fileblocksize, " arr ", blocklistarr, " ", " hex ", hexstring, " modexp ", modSize, " modulus byte size ", modByteSize, " mod size ", modSize, " modulus ", n.String())
 		// mdfmt.EncodeBlock(format, fileblocksize, hlistarray, modSize, n.String());
 		var currentBlocksize uint64 = 0
 		if i + 1 != blocks {

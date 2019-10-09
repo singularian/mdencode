@@ -51,7 +51,7 @@ type mdformat interface {
 	// EncodeDirStart() // for the directory
 	EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64)
 	EncodeFileHash(encodingFormat int, hashName string, hashBytes string)
-	EncodeBlock(encodingFormat int, blockSize uint64, hashList []string, modExp int, mod string)
+	EncodeBlock(encodingFormat int, blockSize uint64, hashList []string, modExp int, mod *big.Int)
 	EncodeEndFile(encodingFormat int)
 	// EncodeDirEnd() // for the directory end - has a list of files
 }
@@ -102,6 +102,7 @@ type FileData struct {
 	// modulus
 	modExp                 int
 	fileblockmodulusString string
+	fileBlockModulus *big.Int
 	// modulus
 	// N *big.Int // modulus
 	// https://stackoverflow.com/questions/37502134/declaring-type-big-int-overflowing-constant-golang
@@ -257,11 +258,11 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 	// The cost of the file block can be ammortized over the entire file
 	//
 	// could also have a mod2 encoding file / block mod 2 with exponent floor
-	if fdata.filehashline {
-		fdata.mdencodeFileHashLine(fileName)
-	} else {
-		fdata.mdencodeFile(fileName)
-	}
+	// if fdata.filehashline {
+	//	fdata.mdencodeFileHashLine(fileName)
+	//} else {
+	fdata.mdencodeFile(fileName)
+	//}
 
 	// encode the file blocks
 	if blocksize > 0 {
@@ -386,6 +387,25 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 
 		// break on end of file
 		if _, err := file.Read(l.filebuffer); err == io.EOF {
+			// adding this so it does the last block
+			// eof is getting skipped
+			/*blockBigInt := new(big.Int)
+                        blockBigInt.SetBytes(l.filebuffer)
+			l.modExp = 0
+			l.fileblockmodulusString = "10"
+			l.filebuffer = l.filebuffer[0:1]
+			bytesRead = 1
+			fmt.Println("eof ", l.filebuffer)
+		        // generate the file block signatures from the hash list
+                	for _, hashvalue := range l.blockHashListNames {
+                        // if the hashname is not block treat it as a hash context
+                                h := l.hashListBlocks[hashvalue]
+                                h.Write([]byte(l.filebuffer))
+                                hlistarray = append(hlistarray, hex.EncodeToString(h.Sum(nil)))
+                                h.Reset()
+                	}
+			l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, l.modExp, l.fileblockmodulusString)
+			*/
 			break
 		}
 
@@ -400,10 +420,10 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 		}
 
 		// if the byteblock is specified add it to the hash list
-		if l.byteblock {
-			var bufstring = fmt.Sprint(l.filebuffer)
-			hlistarray = append(hlistarray, bufstring)
-		}
+		//if l.byteblock {
+		//	var bufstring = fmt.Sprint(l.filebuffer)
+		//	hlistarray = append(hlistarray, bufstring)
+		//}
 
 		// if the modulus bitsize is greater than zero calculate the byte block modulus
 		// otherwise skip generating the byte block modulus
@@ -413,16 +433,18 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 			blockBigInt.SetBytes(l.filebuffer)
 
 			// if the byteblock bigint option is specified add it to the hash list
-			if l.byteblockint {
-				blockbytesBigInt := blockBigInt.String()
+			//if l.byteblockint {
+			//	blockbytesBigInt := blockBigInt.String()
 				// hlistarray = append(hlistarray, ":")
-				hlistarray = append(hlistarray, blockbytesBigInt)
-			}
+			//	hlistarray = append(hlistarray, blockbytesBigInt)
+			//}
 
 			l.calculateFileBlockModulus(blockBigInt, modulusBigInt)
 		} else {
 			l.modExp = 0
 			l.fileblockmodulusString = "0"
+			// blockBigInt := new(big.Int)
+			//blockBigInt = l.fileBlockModulus
 		}
 
 		// generate the file block signatures from the hash list
@@ -436,11 +458,31 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 			}
 		}
 		// generate the block message digest signature with the formatter
-		l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, l.modExp, l.fileblockmodulusString)
+		// changing fileblockmodulusString to bigint
+		/////////l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, l.modExp, l.fileblockmodulusString)
+		l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, l.modExp, l.fileBlockModulus)
+		fmt.Println("block number ", blocksRead, bytesRead, hlistarray, l.modExp, l.fileblockmodulusString, modSize)
 		blocksRead++
 		hlistarray = hlistarray[0:0]
 	}
 
+	// create the last block???
+/*
+ 	if int64(bytesRead) < blocksize {
+		fmt.Println("block number ", bytesRead, blocksize)
+		for _, hashvalue := range l.blockHashListNames {                                               
+        // if the hashname is not block treat it as a hash context                             
+        if hashvalue != "block" {                                                              
+                h := l.hashListBlocks[hashvalue]                                               
+                h.Write([]byte(l.filebuffer))                                                  
+                hlistarray = append(hlistarray, hex.EncodeToString(h.Sum(nil)))                
+                h.Reset()                                                                      
+        }                                                                                      
+}                                                                                              
+		l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, 0, l.fileblockmodulusString)
+
+	}
+*/
 	return 0
 
 }
@@ -771,6 +813,8 @@ func (l *FileData) calculateFileBlockModulus(blockBigInt *big.Int, modulusBigInt
 	// calculate the modulus remainder
 	fileblockmodulus := new(big.Int)
 	fileblockmodulus = fileblockmodulus.Mod(blockBigInt, modulusBigInt)
+	l.fileBlockModulus = new(big.Int)
+	l.fileBlockModulus = fileblockmodulus
 	l.fileblockmodulusString = fileblockmodulus.String()
 
 }
