@@ -483,10 +483,10 @@ func (md *DecodeData) decode() (int, string) {
 			break
 		}
 
-		// if lineCount >= 1000000 {
+		if lineCount >= 1000000 {
 			md.Printlog("blockbuffer value ", md.modulusStart)
 			lineCount = 0
-		// }
+		}
 
 		lineCount++
 

@@ -64,6 +64,8 @@ func main() {
         }
         defer file.Close()
 
+	outf,_ := os.Create("junk.bin")
+
         // mdload := mdFormatImport.Init(format, fileName, "", 0, 0, 0, "", "", md.outputFile)
         // mdload := mdFormatImport.Init(format, fileName, "", 0, 0, 0, "", "", outputFile)
         // mdload.SetAppendFile(md.appendfile)
@@ -253,6 +255,7 @@ func main() {
 				fmt.Println("Found block XXXX", i, resp)
                                 ri, _ := strconv.Atoi(resp)
                                 fmt.Println("Found block XXXX", ri, fmt.Sprintf("% x", mdp[int(ri)].Byteblock))
+				WriteFile(outf, mdp[int(ri)].Byteblock)
 				// var str = strings.Replace(resp, " ", ",", -1)
 /*                        	var xbytes = make([]byte, currentBlocksize)
                         	err := json.Unmarshal([]byte(str), &xbytes)
@@ -293,6 +296,13 @@ func main() {
         // endcode the end of file formatter
         ///// mdfmt.EncodeEndFile(format)
 
+	outf.Close()
+
+}
+
+func WriteFile(outf *os.File, bytes []byte) {
+
+	binary.Write(outf,binary.LittleEndian,bytes)
 }
 
 func callGo (blocknumber uint64, currentBlocksize int64, modSize int64, modSize2 uint32, hashlist string, modRemainder string  ) {
