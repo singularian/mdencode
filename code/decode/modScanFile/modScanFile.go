@@ -445,11 +445,11 @@ func (md *DecodeData) decode() (int, string) {
 			// there is a bug here it didn't copy the dummy block *********************** 10/10/2019
 			//     ce e6 2a a2 81 67 3f 95 60 2e - this is 10 bytes instead of 11 bytes which caused it to fail
 			//  00 ce e6 2a a2 81 67 3f 95 60 2e
-			fmt.Println("slice ", lbuf - lenmd, " buf ", lbuf, " mod bytes length ",  lenmd, " bytes ", md.modulusStart.Bytes())
+			/// fmt.Println("slice ", lbuf - lenmd, " buf ", lbuf, " mod bytes length ",  lenmd, " bytes ", md.modulusStart.Bytes())
 			var start = lbuf - lenmd
 			var end = lbuf
 			copy(buf[start:end], md.modulusStart.Bytes())
-			fmt.Println("slice ", lbuf - lenmd, " buf after fix copy ", buf, " ", md.modulusStart.Bytes())
+			/// fmt.Println("slice ", lbuf - lenmd, " buf after fix copy ", buf, " ", md.modulusStart.Bytes())
 		}
 		// fmt.Println("bigint ", buf, " modulus start bytes ", md.modulusStart.Bytes())
 
