@@ -1,4 +1,4 @@
-# Project mdencode :octocat:
+Project mdencode :octocat:
 mdencode is a golang command line file digital signature generator with modular floors.  
 mdencode is written in golang and uses an interface for pluggin formatters.  
 mdencode allows for the creation of sqlite3 db file signatures and the first random file signatures. 
@@ -304,7 +304,7 @@ This is an example of a parallel modulus scan with 16 threads.
 
 # mdzip and mdunzip
 
-mdzip can compress a file into a md block. mdzip only handles sha and md5 as the default cyphers.  
+mdzip can compress a file into a md binary byte block biles. mdzip only handles sha and md5 as the default mdunzip cyphers.  
 mdunzip will decompress the output block file.  
 
 mdunzip only handles sha1 and md5 as the default cyphers currently. More signatures will be added including ripe160 and md5.  
@@ -314,13 +314,15 @@ Proccessing power limits the size of the input block.
 ./mdzip -file=decoderRandom4.go -block=11 -mod=64 -out=decoderRandom4.go.mdz  
  ./mdunzip decoderRandom4.go.mdz decoderRandom4.go.mdz.out  
 
+TODO: Change the mod exponent size in the output block from int16 to int32.  
+
 ```
-nsross@DESKTOP-A1RITGA:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzip
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzip
 USAGE of ./mdunzip:
 Examples:
 ./mdunzip  [FILENAME]
 ./mdunzip  [FILENAME] [OUTPUTFILENAME]
-nsross@DESKTOP-A1RITGA:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdzip
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdzip
 USAGE of ./mdzip:
 
   -file string
