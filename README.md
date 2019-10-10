@@ -248,9 +248,9 @@ The program `decoderRandom4` is creating a random 11 byte array and then running
 It creates a random 11 byte array and a 64 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
 It calculated and found a hashed 11 byte block in 58 ms on a Ryzen 2700x.
 
-`$GOPATH/github.com/singularian/mdencode/code/decode/decoderRandom4 `
+`$GOPATH/github.com/singularian/mdencode/code/testdecode/decoderRandom4 `
 ```
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -block=11 -mod=64 -thread=16
+user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom4 -block=11 -mod=64 -thread=16
 starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  11  byteblock  [24 218 209 240 42 198 53 218 173 140 180]
 Found Block  [24 218 209 240 42 198 53 218 173 140 180]
 Total time  58.526ms
@@ -278,7 +278,7 @@ Each of the goroutines runs a modulus scan in sync and when a result is founding
 This is the usage of the prototype parallel modulus scan program.
 It allows for the blocksize and modulus bitsize and thread count as well as the bytes either random or specified by the command line argument.
 ```
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4
+user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom4
 Usage  ./decoderRandom4  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]
 Usage  ./decoderRandom4  -block=12 -mod=64 -thread=16
 Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
@@ -290,7 +290,7 @@ This is a 17 byte block with a 64 bit modulus.
 The byte block was found in 1.87 seconds.
 
 ```
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -mod=64 -thread=16 -bytes=[0,0,1,0,0,1,0,2,0,1,255,2,4,1,6,8,10]
+user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom4 -mod=64 -thread=16 -bytes=[0,0,1,0,0,1,0,2,0,1,255,2,4,1,6,8,10]
 buffer  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
 starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  17  byteblock  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
 Found Block  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
@@ -301,6 +301,43 @@ Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 1 
 
 This is an example of a parallel modulus scan with 16 threads.
 [Decoder Parallel Examples](https://github.com/singularian/mdencode/blob/master/examples/mdencodeParallelmodscan2.txt)
+
+# mdzip and mdunzip
+
+mdzip can compress a file into a md block. mdzip only handles sha and md5 as the default cyphers.
+mdunzip will decompress the output block file. mdunzip only handles sha1 and md5 as the default cyphers currently.
+
+
+```
+nsross@DESKTOP-A1RITGA:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzip
+USAGE of ./mdunzip:
+Examples:
+./mdunzip  [FILENAME]
+./mdunzip  [FILENAME] [OUTPUTFILENAME]
+nsross@DESKTOP-A1RITGA:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdzip
+USAGE of ./mdzip:
+
+  -file string
+        Input Filename
+  -block string
+        File Block Size Bytes (default "40")
+  -fh string
+        File Hash Bit String List (default "011")
+  -bh string
+        Block Hash Bit String List (default "011")
+  -mod string
+        Modulus Size in Bits (default "32")
+  -format int
+        Output Format (default 10)
+  -out string
+        Output Filename
+  -log string
+        Log Filename
+
+
+Build Time: 2018-06-16-0431 UTC
+Version:    1.0.0 復甦 復活
+```
 
 # Build
 
