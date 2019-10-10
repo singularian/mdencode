@@ -314,7 +314,7 @@ Proccessing power limits the size of the input block.
 ./mdzip -file=decoderRandom4.go -block=11 -mod=64 -out=decoderRandom4.go.mdz  
  ./mdunzip decoderRandom4.go.mdz decoderRandom4.go.mdz.out  
 
-TODO: Change the mod exponent size in the output block from int16 to int32.  
+TODO: Change the mod exponent size in the output block from int32 to int16.  
 
 ```
 user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzip
