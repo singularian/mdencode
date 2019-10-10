@@ -16,6 +16,7 @@ import (
 	// "crypto/rand"
 	"crypto/md5"
 	"crypto/sha1"
+	// "golang.org/x/crypto/ripemd160"
 	"encoding/hex"
 	"fmt"
 	"math/big"
@@ -379,6 +380,7 @@ func (md *DecodeData) decode() (int, string) {
 
 	// create the byte buffer block size in bytes
 	buf := make([]byte, md.blocksizeInt)
+	var lbuf = md.blocksizeInt // fixed here?????????? 10/10/2019
 
 	// calculate the modular exponent floor and ceiling
 	// the base in the exponent is 2 it can also be the modulus to some power less than the big block int
@@ -425,8 +427,10 @@ func (md *DecodeData) decode() (int, string) {
 	for {
 		// copy the modulus bytes to the byte buffer
 		// if the modulus start byte block is less than the buffer byte block copy it to the end of the buffer byte block
-		var lbuf   = len(buf)
-		var lenmd  = len(md.modulusStart.Bytes())
+		// var lbuf   = len(buf)
+		// ********************************************** Test fix 10/10/2019
+		// 
+		var lenmd  = int64(len(md.modulusStart.Bytes()))
 		// if the buf size equals the modulus start size just copy them
 		if lbuf == lenmd {
 			copy(buf[:], md.modulusStart.Bytes())
@@ -438,10 +442,14 @@ func (md *DecodeData) decode() (int, string) {
 		// ie buffer size 3 modulus start byte length 2 [1,1]
 		// buf = [0,1,1]
 		} else {
-			// fmt.Println("slice ", lbuf - lenmd, " buf ", lbuf, " mod bytes length ",  lenmd, " bytes ", md.modulusStart.Bytes())
+			// there is a bug here it didn't copy the dummy block *********************** 10/10/2019
+			//     ce e6 2a a2 81 67 3f 95 60 2e - this is 10 bytes instead of 11 bytes which caused it to fail
+			//  00 ce e6 2a a2 81 67 3f 95 60 2e
+			fmt.Println("slice ", lbuf - lenmd, " buf ", lbuf, " mod bytes length ",  lenmd, " bytes ", md.modulusStart.Bytes())
 			var start = lbuf - lenmd
 			var end = lbuf
 			copy(buf[start:end], md.modulusStart.Bytes())
+			fmt.Println("slice ", lbuf - lenmd, " buf after fix copy ", buf, " ", md.modulusStart.Bytes())
 		}
 		// fmt.Println("bigint ", buf, " modulus start bytes ", md.modulusStart.Bytes())
 
@@ -465,7 +473,9 @@ func (md *DecodeData) decode() (int, string) {
 				// fmt.Println("Found Block ", md.threadNumber, md5string, md.md5hex, sha1string, md.sha1hex, buf)
 				md.Println("Found Block ", md5string, md.md5hex, sha1string, md.sha1hex, buf)
 				// fmt.Printf("Found Block % x\n", buf)
-				md.Byteblock = md.modulusStart.Bytes()
+				/////// md.Byteblock = md.modulusStart.Bytes() // modulus start bytes can be out of sync with the buf length
+				// it fixes this 10/10/2019 *************
+				md.Byteblock = buf
 				md.matchFound = true
 				break
 			}
