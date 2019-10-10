@@ -1,4 +1,4 @@
-Project mdencode :octocat:
+Project Mdencode :octocat:
 mdencode is a golang command line file digital signature generator with modular floors.  
 mdencode is written in golang and uses an interface for pluggin formatters.  
 mdencode allows for the creation of sqlite3 db file signatures and the first random file signatures. 
@@ -304,7 +304,7 @@ This is an example of a parallel modulus scan with 16 threads.
 
 # mdzip and mdunzip
 
-mdzip can compress a file into a md binary byte block biles. mdzip only handles sha and md5 as the default mdunzip cyphers.  
+mdzip is the golang command line utility can compress a file into a md binary byte block files. mdzip only handles sha and md5 as the default mdunzip cyphers.  
 mdunzip will decompress the output block file.  
 
 mdunzip only handles sha1 and md5 as the default cyphers currently. More signatures will be added including ripe160 and md5.  
