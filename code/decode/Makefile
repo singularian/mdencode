@@ -13,7 +13,8 @@ all:
 	go build -o decoderRandom4 decoderRandom4.go 
 	go build -o mdunzip mdunzip.go 
 	go build -o mdzip mdzip.go 
+	go build -o mdlist testBinReadMdFmt.go 
 clean:
-	rm -r decoderRandom decoderRandom4 mdzip mdunzip 
+	rm -r decoderRandom decoderRandom4 mdzip mdunzip mdlist
 list:
 	echo "all"
