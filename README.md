@@ -304,9 +304,15 @@ This is an example of a parallel modulus scan with 16 threads.
 
 # mdzip and mdunzip
 
-mdzip can compress a file into a md block. mdzip only handles sha and md5 as the default cyphers.
-mdunzip will decompress the output block file. mdunzip only handles sha1 and md5 as the default cyphers currently.
+mdzip can compress a file into a md block. mdzip only handles sha and md5 as the default cyphers.  
+mdunzip will decompress the output block file.  
 
+mdunzip only handles sha1 and md5 as the default cyphers currently. More signatures will be added including ripe160 and md5.  
+
+Proccessing power limits the size of the input block.  
+
+./mdzip -file=decoderRandom4.go -block=11 -mod=64 -out=decoderRandom4.go.mdz  
+ ./mdunzip decoderRandom4.go.mdz decoderRandom4.go.mdz.out  
 
 ```
 nsross@DESKTOP-A1RITGA:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzip
