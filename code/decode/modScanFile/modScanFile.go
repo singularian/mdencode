@@ -637,7 +637,8 @@ func (md *DecodeData) initLog() {
 
 	var logfilename = "decodeRandom."
 	s := fmt.Sprintf("%d", md.threadNumber)
-	logfilename = logfilename + s + "." + md.timeStarted + ".log"
+	// logfilename = logfilename + s + "." + md.timeStarted + ".log"
+	logfilename = logfilename + s + ".log"
 
 	logfile, err := os.OpenFile(logfilename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
