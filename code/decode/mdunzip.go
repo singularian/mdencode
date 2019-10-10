@@ -175,7 +175,6 @@ func main() {
 	// blocks, remainder := calculateFileBlocks(fileSize, blockSize)
 	blocks, remainder := calculateFileBlocks(fileSize, blockSize)
 
-	fmt.Println("blah ", remainder)
 	var i uint64
 	var modByteSize uint64 
 	modByteSize = modSize / 8
@@ -207,7 +206,7 @@ func main() {
 		end = end + modByteSize
 		n := new(big.Int)
 		// fmt.Println("sssssssssssss ", start, end, bytes, n.String())
-		fmt.Println("sssssssssssss ", start, end, n.String(), modByteSize)
+		// fmt.Println("sssssssssssss ", start, end, n.String(), modByteSize)
 		n = n.SetBytes(bytes[start:end])
 
 		// fmt.Println("blockhashlist ", fileblocksize, " arr ", blocklistarr, " ", " hex ", hexstring, " modexp ", modSize, " modulus byte size ", modByteSize, " mod size ", modSize, " modulus ", n.String())
@@ -265,7 +264,8 @@ func main() {
 				fmt.Println("Found block XXXX", i, resp)
                                 ri, _ := strconv.Atoi(resp)
                                 fmt.Println("Found block XXXX", ri, fmt.Sprintf("% x", mdp[int(ri)].Byteblock))
-				WriteFile(outf, mdp[int(ri)].Byteblock)
+				// WriteFile(outf, mdp[int(ri)].Byteblock)
+				WriteFile(outf, mdp[int(ri)].GetBytes())
 				// var str = strings.Replace(resp, " ", ",", -1)
 /*                        	var xbytes = make([]byte, currentBlocksize)
                         	err := json.Unmarshal([]byte(str), &xbytes)

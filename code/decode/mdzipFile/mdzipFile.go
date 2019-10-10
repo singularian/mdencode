@@ -258,11 +258,7 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 	// The cost of the file block can be ammortized over the entire file
 	//
 	// could also have a mod2 encoding file / block mod 2 with exponent floor
-	// if fdata.filehashline {
-	//	fdata.mdencodeFileHashLine(fileName)
-	//} else {
 	fdata.mdencodeFile(fileName)
-	//}
 
 	// encode the file blocks
 	if blocksize > 0 {
@@ -341,7 +337,7 @@ func (l *FileData) mdencodeFileHashLine(fileName string) {
 
 // mdencodeFileBlock
 // mdencode the file blocks
-// this creates a file block hash signature with a group of file byte blocks with a modular floora
+// this creates a file block hash signature with a group of file byte blocks with a modular floor
 // they are n-byte sized file blocks with a modulus and a modular floor
 func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format int, fileName string) int {
 
@@ -387,25 +383,6 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 
 		// break on end of file
 		if _, err := file.Read(l.filebuffer); err == io.EOF {
-			// adding this so it does the last block
-			// eof is getting skipped
-			/*blockBigInt := new(big.Int)
-                        blockBigInt.SetBytes(l.filebuffer)
-			l.modExp = 0
-			l.fileblockmodulusString = "10"
-			l.filebuffer = l.filebuffer[0:1]
-			bytesRead = 1
-			fmt.Println("eof ", l.filebuffer)
-		        // generate the file block signatures from the hash list
-                	for _, hashvalue := range l.blockHashListNames {
-                        // if the hashname is not block treat it as a hash context
-                                h := l.hashListBlocks[hashvalue]
-                                h.Write([]byte(l.filebuffer))
-                                hlistarray = append(hlistarray, hex.EncodeToString(h.Sum(nil)))
-                                h.Reset()
-                	}
-			l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, l.modExp, l.fileblockmodulusString)
-			*/
 			break
 		}
 
@@ -419,25 +396,12 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 			bytesRead = remainder
 		}
 
-		// if the byteblock is specified add it to the hash list
-		//if l.byteblock {
-		//	var bufstring = fmt.Sprint(l.filebuffer)
-		//	hlistarray = append(hlistarray, bufstring)
-		//}
-
 		// if the modulus bitsize is greater than zero calculate the byte block modulus
 		// otherwise skip generating the byte block modulus
 		if bitsize > 0 {
 			// create the biginteger representation of the bytes
 			blockBigInt := new(big.Int)
 			blockBigInt.SetBytes(l.filebuffer)
-
-			// if the byteblock bigint option is specified add it to the hash list
-			//if l.byteblockint {
-			//	blockbytesBigInt := blockBigInt.String()
-				// hlistarray = append(hlistarray, ":")
-			//	hlistarray = append(hlistarray, blockbytesBigInt)
-			//}
 
 			l.calculateFileBlockModulus(blockBigInt, modulusBigInt)
 		} else {
@@ -466,23 +430,6 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 		hlistarray = hlistarray[0:0]
 	}
 
-	// create the last block???
-/*
- 	if int64(bytesRead) < blocksize {
-		fmt.Println("block number ", bytesRead, blocksize)
-		for _, hashvalue := range l.blockHashListNames {                                               
-        // if the hashname is not block treat it as a hash context                             
-        if hashvalue != "block" {                                                              
-                h := l.hashListBlocks[hashvalue]                                               
-                h.Write([]byte(l.filebuffer))                                                  
-                hlistarray = append(hlistarray, hex.EncodeToString(h.Sum(nil)))                
-                h.Reset()                                                                      
-        }                                                                                      
-}                                                                                              
-		l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, 0, l.fileblockmodulusString)
-
-	}
-*/
 	return 0
 
 }
