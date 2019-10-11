@@ -139,7 +139,7 @@ func main() {
 	// blocks, remainder := calculateFileBlocks(fileSize, blockSize)
 	blocks, remainder := calculateFileBlocks(fileSize, blockSize)
 
-	fmt.Println("blah ", remainder)
+	// fmt.Println("remainder ", remainder)
 	var i uint64
 	var modByteSize uint64 
 	modByteSize = modSize / 8
