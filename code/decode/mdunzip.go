@@ -256,28 +256,13 @@ func main() {
 
 		// fmt.Println("starting modulus scan threads ", threadCount, " start thread ", threadStart, " end thread ", threadEnd, " byteblock size ", currentBlocksize, " byteblock ", bytes)
 
-		// while {
 		for resp := range c {
 			// if the modScan result is found close the channel
 			if resp != "Not found" {
-				// fmt.Println("close on the first result \n", resp)
-				fmt.Println("Found block XXXX", i, resp)
                                 ri, _ := strconv.Atoi(resp)
-                                fmt.Println("Found block XXXX", ri, fmt.Sprintf("% x", mdp[int(ri)].Byteblock))
-				// WriteFile(outf, mdp[int(ri)].Byteblock)
+                                // fmt.Println("Found block XXXX", ri, fmt.Sprintf("% x", mdp[int(ri)].Byteblock))
+                                fmt.Println("Found block ", i, " thread ", ri, " ", fmt.Sprintf("% x", mdp[int(ri)].GetBytes()))
 				WriteFile(outf, mdp[int(ri)].GetBytes())
-				// var str = strings.Replace(resp, " ", ",", -1)
-/*                        	var xbytes = make([]byte, currentBlocksize)
-                        	err := json.Unmarshal([]byte(str), &xbytes)
-                        	if err != nil {
-                                	fmt.Println("JSON Conversion error in bytestring", err)
-                                	os.Exit(1)
-                        	}
-                        	fmt.Println("buffer ", xbytes)
-				fmt.Printf("buffer % x \n", xbytes)
-				fmt.Println("")*/
-				// bytes = bytes[:0]
-				// fmt.Println("Found block ", hex.EncodeToString(resp))
 				close(c)
 				break
                         // otherwise if the result count equals the thread count close the channel and break
@@ -293,7 +278,6 @@ func main() {
 		}
 
 		
-//*/
 		hlistarray = hlistarray[:0]
 	}
 
@@ -357,7 +341,7 @@ func callGo (blocknumber uint64, currentBlocksize int64, modSize int64, modSize2
                                 // fmt.Println("close on the first result \n", resp)
                                 fmt.Println("Found block XXXX", blocknumber, resp)
 				ri, _ := strconv.Atoi(resp)
-                                fmt.Println("Found block XXXX", blocknumber, mdp[int(ri)].Byteblock)
+                                fmt.Println("Found block XXXX", blocknumber, mdp[int(ri)].GetBytes())
                                 /* var str = strings.Replace(resp, " ", ",", -1)
                                 err := json.Unmarshal([]byte(str), &xbytes)
                                 if err != nil {
