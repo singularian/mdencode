@@ -305,7 +305,7 @@ This is an example of a parallel modulus scan with 16 threads.
 # mdzip and mdunzip
 
 mdzip is the golang command line utility can compress a file into a md binary byte block files. mdzip only handles sha and md5 as the default mdunzip cyphers.  
-mdunzip will decompress the output block file.  
+mdunzip will decompress the input signature binary block file to an output file.  
 
 mdunzip only handles sha1 and md5 as the default cyphers currently. More signatures will be added including ripe160 and md5.  
 

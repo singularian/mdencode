@@ -389,7 +389,7 @@ func (md *DecodeData) decode() (int, string) {
 			sha1string := hex.EncodeToString(sha1.Sum(nil))
 			if sha1string == md.sha1hex {
 				// fmt.Println("Found Block ", md.threadNumber, md5string, md.md5hex, sha1string, md.sha1hex, buf)
-				md.Println("Found Block ", md5string, md.md5hex, sha1string, md.sha1hex, buf)
+				md.Println("Found Block ", md5string, " Matches ",  md.md5hex, sha1string, " Matches ", md.sha1hex, buf)
 				// fmt.Printf("Found Block % x\n", buf)
 				md.byteblock = buf
 				md.matchFound = true

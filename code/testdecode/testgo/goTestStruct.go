@@ -21,7 +21,7 @@ func main() {
     city.FirstName=strconv.Itoa(0)
     cities=append(cities,city)
 
-for i := 1; i<47 ;i++ {
+for i := 1; i<40 ;i++ {
     city=new(node)
     city.FirstName=strconv.Itoa(i)
     cities=append(cities,city)
