@@ -97,9 +97,10 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
         }
 */
 	var fileAttribute [6]int64
-	fileAttribute[0] = fileSize
-        fileAttribute[1] = blockSize
-        fileAttribute[2] = modulusSize
+	fileAttribute[0]   = fileSize
+        fileAttribute[1 ] = blockSize
+        fileAttribute[2]  = modulusSize
+	md.modSize = uint64(modulusSize)
 	// filename length
 	var length int = len(fileName)
 	fileAttribute[3] = int64(length)
@@ -169,17 +170,33 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 	_ = binary.Write(md.file, binary.BigEndian, &number)
 
 	// convert modulus to bigint bytes
-	n := new(big.Int)
+	modremainder := new(big.Int)
 	// n, ok := n.SetString(mod, 10)
-	n, _ = n.SetString(mod, 10)
+	modremainder, _ = modremainder.SetString(mod, 10)
 
 	// write the hashListString
 	// duplicate
         // var fh = []byte(md.mdfileHashListString)
         //_ = binary.Write(md.file, binary.BigEndian, fh)
 
-	modbytes := n.Bytes()
-	_ = binary.Write(md.file, binary.BigEndian, &modbytes)
+	// modbytes := n.Bytes()
+
+	// this makes sure the modulus bytes are the same size as the modulus bitsize in bytes
+	// so it doesn't get an overflow error on different byte slice sizes
+	var modByteSize uint64 = 0
+        if md.modSize % 8 == 0 {
+                modByteSize = md.modSize / 8
+        } else if md.modSize <= 8 {
+                modByteSize = 1;
+        } else {
+                modByteSize = (md.modSize / 8) + 1
+        }
+        padBlock := make([]byte, modByteSize)
+        var start = modByteSize - uint64(len(modremainder.Bytes()))
+        var end = modByteSize
+	copy(padBlock[start:end], modremainder.Bytes())
+
+	_ = binary.Write(md.file, binary.BigEndian, padBlock)
 }
 
 
