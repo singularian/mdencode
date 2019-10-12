@@ -1,6 +1,6 @@
-# Random Signatures
+# Random File Signatures
 
-Random signatures allow a user to generate file signatures that change from executions.
+Random signatures allow a user to generate file signatures that change between file signatures executions.
 The blocksize and file signatures as well as block or block group signatures can all be randomized.
 This strengthens a signature by making it more difficult for an attacker to predict which signatures will be used or
 to spoof signatures. Between executions the entire file signature format can be changed. 
