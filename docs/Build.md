@@ -29,7 +29,7 @@ go get -u github.com/fogleman/gg
 ## Path
 $GOPATH/github.com/singularian/mdencode/code/mdencode  
 
-## Build
+## Build Mdencode
 
 make all builds mdencode to gobin by default  
 
@@ -39,11 +39,15 @@ make build builds the mdencode to the mdBuild directory
 
 $GOPATH/github.com/singularian/mdencode/code/mdencode $ make build  
 
+# Build mdZip and mdUnzip
+
+$GOPATH/github.com/singularian/mdencode/code/decode  
+
 # Build decoderRandom
 
 ## Path
 
-$GOPATH/github.com/singularian/mdencode/code/decode  
+$GOPATH/github.com/singularian/mdencode/code/testdecode  
 
 ## Build 
 
