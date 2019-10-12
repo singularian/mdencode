@@ -1,8 +1,7 @@
-excelsior:~/go/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -block=20 -mod=128 -thread=32
+excelsior:~/go/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom -block=20 -mod=128 -thread=32
 starting modulus scan threads  32  start thread  0  end thread  32  byteblock size  20  byteblock  [207 144 15 141 240 58 25 60 82 184 11 69 3 202 144 236 192 30 116 80]
 Found Block  [207 144 15 141 240 58 25 60 82 184 11 69 3 202 144 236 192 30 116 80]
 Total time  2m17.95379865s
 random bytestring and modulusscan bytestring match  [207 144 15 141 240 58 25 60 82 184 11 69 3 202 144 236 192 30 116 80]   [207 144 15 141 240 58 25 60 82 184 11 69 3 202 144 236 192 30 116 80]
 Found block  thread 13 random bytestring and modulusscan bytestring match [207 144 15 141 240 58 25 60 82 184 11 69 3 202 144 236 192 30 116 80] [207 144 15 141 240 58 25 60 82 184 11 69 3 202 144 236 192 30 116 80]
-excelsior:~/go/src/github.com/singularian/mdencode/code/decode$
 
