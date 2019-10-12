@@ -253,17 +253,19 @@ func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, has
         // s := "" + buffer
 	// md.result = buffer
 	// md.Result = copy(md.Result, buffer)
+	var result string
 	if md.matchFound == true {
 		// fmt.Println("abba ", md.Result, buffer)
 		md.Println("buffer ", buffer)
 		fmt.Printf("Found Block % x\n", md.byteblock)
-		s := "" + fmt.Sprint(md.threadNumber) 
+		result = fmt.Sprint(md.threadNumber) 
 		// c <- s
 		// c <- md.threadNumber
-		md.write(c, s)
-	} else {
+		md.write(c, result)
+	} else if md.matchFound == false {
+//		fmt.Println("Not found ", md.threadNumber, buffer, md.matchFound)
 		// c <- "Not found"
-		md.write(c, "Not Found")
+		// md.write(c, "Not Found")
 	}
         // }
         // c <- "Not found"

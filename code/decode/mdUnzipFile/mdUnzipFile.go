@@ -271,6 +271,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                                 cl++
                         }
 		}
+		// c<-quit
 		hlistarray = hlistarray[:0]
 	}
 	return 0
