@@ -9,12 +9,10 @@ BUILD_TIME=`date +%FT%T%z`
 LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X github.com/nsross/mdencode/core.BuildTime=${BUILD_TIME}"
 
 all:
-	go build -o decoderRandom decoderRandom.go
-	go build -o decoderRandom4 decoderRandom4.go 
 	go build -o mdunzip mdUnzip.go 
 	go build -o mdzip mdzip.go 
 	go build -o mdlist testBinReadMdFmt.go 
 clean:
-	rm -r decoderRandom decoderRandom4 mdzip mdunzip mdlist
+	rm -r mdzip mdunzip mdlist
 list:
 	echo "all"
