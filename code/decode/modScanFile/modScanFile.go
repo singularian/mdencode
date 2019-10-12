@@ -257,10 +257,13 @@ func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, has
 		// fmt.Println("abba ", md.Result, buffer)
 		md.Println("buffer ", buffer)
 		fmt.Printf("Found Block % x\n", md.byteblock)
-        	s := "" + fmt.Sprint(md.threadNumber) 
-        	// c <- s
+		s := "" + fmt.Sprint(md.threadNumber) 
+		// c <- s
 		// c <- md.threadNumber
 		md.write(c, s)
+	} else {
+		// c <- "Not found"
+		md.write(c, "Not Found")
 	}
         // }
         // c <- "Not found"
