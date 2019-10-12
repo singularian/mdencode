@@ -17,7 +17,7 @@ A modulus should be considered part of the file signature subset. A modulus is a
 # Modular Floor Examples
   
 This is an example of the modular floor.  
-The program `decoderRandom4` is creating a random 6 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
+The program `decoderRandom` is creating a random 6 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
 It creates a random 10 byte array and a 64 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
 A modulus scan can use any number of signatures including ripe160 or sha3.
 It calculated and found a hashed 10 byte block in two seconds on a Ryzen 2700x with 16 threads.  
@@ -41,7 +41,7 @@ Total time  848µs
 random bytestring and modulusscan bytestring match  [170 182 97 211 89 129 255 229 35 197]   [170 182 97 211 89 129 255 229 35 197]
 Found block  thread 6 random bytestring and modulusscan bytestring match [170 182 97 211 89 129 255 229 35 197] [170 182 97 211 89 129 255 229 35 197]
 ```
-This example of decoderRandom4 uses a 32-bit modulus to calculate a 9 byte block associated with an sha1 and md5 signature.
+This example of decoderRandom uses a 32-bit modulus to calculate a 9 byte block associated with an sha1 and md5 signature.
 Total computation time on a Ryzen 2700x with 16 threads was 32 minutes 5 seconds.
 ```
 $ :~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom -block=9 -mod=32 -thread=16
@@ -56,7 +56,7 @@ Found block  thread 7 random bytestring and modulusscan bytestring match [36 228
 This is a modulus scan on a 8 byte random block [53 132 218 83 11 69 48 238] with a 32-bit modulus and 16 goroutine threads.
 
 ```
-$ ./decoderRandom4 -block=8 -mod=32 -thread=16
+$ ./decoderRandom -block=8 -mod=32 -thread=16
 starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  8  byteblock  [53 132 218 83 11 69 48 238]
 Found Block  [53 132 218 83 11 69 48 238]
 Total time  27.344133s
@@ -123,9 +123,9 @@ Found block  thread 6 random bytestring and modulusscan bytestring match [253 21
 ```
 
 The first test is a modulus scan on a 40 byte random block and a 288-bit modulus. It computed the file block in under 2 minutes.
-The second test is a parallel modulus scan in decoderRandom4 ran in 38.3 seconds with a Ryzen 2700x with a larger byte block and 16 threads.
+The second test is a parallel modulus scan in decoderRandom ran in 38.3 seconds with a Ryzen 2700x with a larger byte block and 16 threads.
 ```
-$ ./decoder 40 288 
+$ ./decoderRandom 40 288 
 random  40  bytes  [36 70 9 158 250 39 41 175 153 109 249 79 24 40 173 31 178 205 163 246 213 57 62 47 80 202 73 3 115 151 222 203 79 64 44 122 214 8 239 55]   302655882115645057855398278526862402649221125066903900403798877130708027364550200878646484856631
 modulus size bits  288
 byte modulus  497323236409786642155382248146820840100456150797347717440463976893159497012533375533056
