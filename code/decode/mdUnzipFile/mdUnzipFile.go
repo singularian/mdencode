@@ -236,7 +236,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 
                 // create a channel the size of the thread list
                 // var count int64 = 16
-		fmt.Println("Threads ", threadCount)
+		// fmt.Println("Threads ", threadCount)
                 var c chan string = make(chan string, threadCount)
 
                 // kick off the go routines
@@ -261,10 +261,10 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                                 close(c)
                                 break
                         // otherwise if the result count equals the thread count close the channel and break
-                        // } else if cl == int64(threadCount) && resp == "Not found" {
+                        } else if cl == int64(threadCount) && resp == "Not found" {
                                 // fmt.Println("close the channel if the last thread has returned a value", cl)
                                 // close(c)
-                        //        fmt.Println("Not Found")
+                                fmt.Println("Not Found")
                         // otherwise increment the channel count
                         } else {
                                 fmt.Println("incrementing thread counter ", cl)

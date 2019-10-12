@@ -53,8 +53,9 @@ func argsSimple(argsNumber int) int {
 	unzipFile := mdUnzipFile.Init()
 
 	threads, err := strconv.ParseInt(fd.threadCount, 10, 64)
-	if err == nil {
-		fmt.Printf("Invalid Threads ", err)
+	if err != nil {
+		fmt.Printf("Invalid Threads Argument ", err, threads)
+		os.Exit(0)
 	}
 	unzipFile.DecodeFile(fd.inputFilename, fd.outputFilename, uint64(threads))
 
