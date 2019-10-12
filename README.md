@@ -1,4 +1,4 @@
-Project Mdencode :octocat:  
+# Project Mdencode :octocat:  
   
 Mdencode is a golang command line file digital signature generator with modular floors.  
 This program is written in golang and uses an interface for pluggin formatters.  
