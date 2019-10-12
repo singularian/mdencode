@@ -355,6 +355,13 @@ user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzi
 
 ```
 
+mdlist can display the contents of an mdzip file
+```
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdlist
+USAGE of ./mdlist:
+Examples:
+./mdlist  [FILENAME]
+```
 
 # Build
 
