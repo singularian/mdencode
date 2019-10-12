@@ -244,23 +244,23 @@ A modulus should be considered part of the file signature subset. A modulus is a
 # Modular Floor Examples
   
 This is an example of the modular floor.  
-The program `decoderRandom4` is creating a random 11 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
+The program `decoderRandom` is creating a random 11 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
 It creates a random 11 byte array and a 64 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
 It calculated and found a hashed 11 byte block in 58 ms on a Ryzen 2700x.
 
-`$GOPATH/github.com/singularian/mdencode/code/testdecode/decoderRandom4 `
+`$GOPATH/github.com/singularian/mdencode/code/testdecode/decoderRandom `
 ```
-user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom4 -block=11 -mod=64 -thread=16
+user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom -block=11 -mod=64 -thread=16
 starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  11  byteblock  [24 218 209 240 42 198 53 218 173 140 180]
 Found Block  [24 218 209 240 42 198 53 218 173 140 180]
 Total time  58.526ms
 random bytestring and modulusscan bytestring match  [24 218 209 240 42 198 53 218 173 140 180]   [24 218 209 240 42 198 53 218 173 140 180]
 Found block  thread 1 random bytestring and modulusscan bytestring match [24 218 209 240 42 198 53 218 173 140 180] [24 218 209 240 42 198 53 218 173 140 180]
 ```
-This example of decoderRandom4 uses a 64-bit modulus to calculate a 12 byte block associated with an sha1 and md5 signature.
+This example of decoderRandom uses a 64-bit modulus to calculate a 12 byte block associated with an sha1 and md5 signature.
 It uses 16 threads and a parallel modulus scan and was run on a Ryzen 2700x. 
 ```
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./decoderRandom4 -block=12 -mod=64 -thread=16
+user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom -block=12 -mod=64 -thread=16
 starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  12  byteblock  [165 55 125 101 98 169 203 81 163 83 179 217]
 Found Block  [165 55 125 101 98 169 203 81 163 83 179 217]
 Total time  1m14.791082s
@@ -272,25 +272,25 @@ Found block  thread 5 random bytestring and modulusscan bytestring match [165 55
 
 # Parallel Modulus Scan
 
-The Modulus Scan can also be run in parallel. An example program decoderRandom4 shows a modulus scan with configurable number of goroutines.
+The Modulus Scan can also be run in parallel. An example program decoderRandom shows a modulus scan with configurable number of goroutines.
 Each of the goroutines runs a modulus scan in sync and when a result is founding matching the original signature block it returns a byteblock.
 
 This is the usage of the prototype parallel modulus scan program.
 It allows for the blocksize and modulus bitsize and thread count as well as the bytes either random or specified by the command line argument.
 ```
-user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom4
-Usage  ./decoderRandom4  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]
-Usage  ./decoderRandom4  -block=12 -mod=64 -thread=16
-Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
-Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]
-Usage  ./decoderRandom4  -block=8 -mod=64 -thread=10 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
+user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom
+Usage  ./decoderRandom  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]
+Usage  ./decoderRandom  -block=12 -mod=64 -thread=16
+Usage  ./decoderRandom  -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
+Usage  ./decoderRandom  -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]
+Usage  ./decoderRandom  -block=8 -mod=64 -thread=10 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
 ```
 
 This is a 17 byte block with a 64 bit modulus.
 The byte block was found in 1.87 seconds.
 
 ```
-user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom4 -mod=64 -thread=16 -bytes=[0,0,1,0,0,1,0,2,0,1,255,2,4,1,6,8,10]
+user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom -mod=64 -thread=16 -bytes=[0,0,1,0,0,1,0,2,0,1,255,2,4,1,6,8,10]
 buffer  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
 starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  17  byteblock  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
 Found Block  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
@@ -312,16 +312,11 @@ mdunzip only handles sha1 and md5 as the default cyphers currently. More signatu
 Proccessing power limits the size of the input block.  
 
 ./mdzip -file=decoderRandom4.go -block=11 -mod=64 -out=decoderRandom4.go.mdz  
- ./mdunzip decoderRandom4.go.mdz decoderRandom4.go.mdz.out  
+./mdunzip -file=Makefile.mdz -out=Makefile.mdz.uncompressed -thread=8
 
 TODO: Change the mod exponent size in the output block from int32 to int16.  
 
 ```
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzip
-USAGE of ./mdunzip:
-Examples:
-./mdunzip  [FILENAME]
-./mdunzip  [FILENAME] [OUTPUTFILENAME]
 user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdzip
 USAGE of ./mdzip:
 
@@ -346,6 +341,19 @@ USAGE of ./mdzip:
 Build Time: 2018-06-16-0431 UTC
 Version:    1.0.0 復甦 復活
 ```
+
+```
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzip
+
+  -file string
+        Input Filename
+  -out string
+        Output Filename
+  -thread string
+        Go Routine Threadsize
+
+```
+
 
 # Build
 
