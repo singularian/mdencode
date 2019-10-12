@@ -74,7 +74,7 @@ func main() {
                 fmt.Println("counldn't open output file ", err)
                 os.Exit(1)
         }
-        defer file.Close()
+        defer outf.Close()
 
         // mdload := mdFormatImport.Init(format, fileName, "", 0, 0, 0, "", "", md.outputFile)
         // mdload := mdFormatImport.Init(format, fileName, "", 0, 0, 0, "", "", outputFile)

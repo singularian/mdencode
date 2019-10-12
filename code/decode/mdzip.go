@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"path/filepath"
         _ "io/ioutil"
-	"github.com/singularian/mdencode/code/decode/mdzipFile"
+	"github.com/singularian/mdencode/code/decode/mdZipFile"
 	// "github.com/singularian/mdencode/code/mdencode/mdRand"
 	"os"
 //	"strconv"
