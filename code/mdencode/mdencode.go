@@ -116,7 +116,7 @@ func argsSimple(argsNumber int) int {
 	fd.getCWD()
 
 	// initial implimentation of the quaternian file or block hashlist arguments
-	// this could eventually have blockgroups which makes it have another 4 states 1-8
+	// this could eventually have blockgroups which makes it have another 4 states 0-7
 	if fd.uhashlist != "" {
 		var quaternianHashListArray  []string
 		var fhashlist string
@@ -144,12 +144,10 @@ func argsSimple(argsNumber int) int {
 		}
 		fd.fhashlist = fhashlist
 		fd.bhashlist = bhashlist
-		fmt.Println("Quarternian Hashlist ", fd.uhashlist)
-		fmt.Println("Quarternian File Hashlist ", fd.fhashlist)
-		fmt.Println("Quarternian Block Hashlist ", fd.bhashlist)
-
-
-	} 
+		// fmt.Println("Quarternian Hashlist ", fd.uhashlist)
+		// fmt.Println("Quarternian File Hashlist ", fd.fhashlist)
+		// fmt.Println("Quarternian Block Hashlist ", fd.bhashlist)
+	}
 
 	// need to add a combination of fixed and random file signatures
 	// ie you specify 111 for the filehash and -fbr for random and it appends to the file signature instead of over writing it
