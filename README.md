@@ -115,6 +115,7 @@ md -file=Makefile -block=100 -mod=64 -fh=1011111 -bh=100111 -format=5000 -append
 md -file=Makefile -block=100 -mod=128 -fh=1011111 -bh=100111  -format=5000 -append=true -line=true -out=outputfile.xml
 md -file=Makefile -block=350 -mod=32 -fh=101011 -br
 md -file=Makefile -block=300 -mod=32 -fr -br
+md -uh=1122 -block=100 -mod=64 -file=Makefile
 ```
 
 # Example usage

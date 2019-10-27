@@ -11,7 +11,9 @@ Usage of md:
   -fh string                                                                                                                                     
         File Hash Bit String List (default "011")                                                                                                
   -bh string                                                                                                                                     
-        Block Hash Bit String List (default "011")                                                                                               
+        Block Hash Bit String List (default "011")                        
+  -uh string
+        Quarternian Hash String List (Default "033")                                                           
   -mod string                                                                                                                                    
         Modulus Size in Bits (default "32")                                                                                                      
   -format int                                                                                                                                    
@@ -19,7 +21,7 @@ Usage of md:
   -fr                                                                                                                                            
         Generate A Random File Hash Bit String List                                                                                              
   -br                                                                                                                                            
-        Generate A Random Block Hash Bit String List                                                                                             
+        Generate A Random Block Hash Bit String List  
   -fbr                                                                                                                                           
         Generate A Random File Hash and Block Hash Bit String List                                                                               
   -blockr                                                                                                                                        
@@ -78,6 +80,7 @@ md -file=Makefile -block=100 -mod=64 -fh=1011111 -bh=100111 -format=5000 -append
 md -file=Makefile -block=100 -mod=128 -fh=1011111 -bh=100111  -format=5000 -append=true -line=true -out=outputfile.xml
 md -file=Makefile -block=350 -mod=32 -fh=101011 -br
 md -file=Makefile -block=300 -mod=32 -fr -br
+md -uh=1122 -block=100 -mod=64 -file=Makefile
 ```
 
 

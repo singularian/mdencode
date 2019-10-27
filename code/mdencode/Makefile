@@ -20,19 +20,12 @@ all:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdnewdb mdnewdb.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mddbreport mdencodeReport.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdbinlist testBinReadMdFmt.go
-# build:
-#	go build $(LDFLAGS) -o mdBuild/md mdencode.go
-#	go build $(LDFLAGS) -o mdBuild/mdencode mdencode.go
-#	go build $(LDFLAGS) -o mdBuild/mdnewdb mdnewdb.go
-#	go build $(LDFLAGS) -o mdBuild/mddbreport mdencodeReport.go
-#	go build $(LDFLAGS) -o mdBuild/mdbinlist testBinReadMdFmt.go
-#	go install mdencode.go
-#	go install mdencodeSQL.go
-#	go install ${BUILD_DIR}/mdencodeSQL
-#	go install -o mdencodeXML mdencode.go
-#	go install -o mdencode mdencode.go
-#	go install -o mdencodebyteblock mdencode.go
-#	go install -o mdencodereport mdencodeSQL.go
+build:
+	go build $(LDFLAGS) -o ${BUILD_DIR}/md mdencode.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdencode mdencode.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdnewdb mdnewdb.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mddbreport mdencodeReport.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdbinlist testBinReadMdFmt.go
 # retrieve the go libraries
 getlibs:
 	go get -u github.com/steakknife/keccak
