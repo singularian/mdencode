@@ -50,10 +50,13 @@ Two lists are created for file hash lists and block hash lists.
 Quaterniary signature parameters for mdencode include 4 states.
 One list is used for the file and block hash lists and possibly block group hash lists.
 
-0 - No Hash
-1 - File Hash used
-2 - Block Hash used
-3 - File and block hash used 
+0 - No Hash  
+1 - File Hash used  
+2 - Block Hash used  
+3 - File and block hash used  
+
+
+# Quaterniary Mdencode Examples
 
 ```sh
 user@server:~/projects/src/github.com/singularian/mdencode/code/mdencode$ md -file=Makefile -block=300 -mod=32 -uh=11 -format=4300
