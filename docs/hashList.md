@@ -64,7 +64,7 @@ user@server:~/projects/src/github.com/singularian/mdencode/code/mdencode$ md -fi
 Makefile
 
 # Filepath
-/home/nsross/projects/src/github.com/singularian/mdencode/code/mdencode/
+/home/george/projects/src/github.com/singularian/mdencode/code/mdencode/
 
 # File Header
 1792:4300:300:32:md4:md5-empty:1.0:2019-10-27 18:49:46.2424555 -0400 EDT m=+0.000958801
@@ -86,12 +86,12 @@ Makefile
 ```
 
 ```sh
-nsross@DESKTOP-A1RITGA:~/projects/src/github.com/singularian/mdencode/code/mdencode$ md -file=Makefile -block=300 -mod=32 -uh=110023 -format=4300
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdencode$ md -file=Makefile -block=300 -mod=32 -uh=110023 -format=4300
 # Filename
 Makefile
 
 # Filepath
-/home/nsross/projects/src/github.com/singularian/mdencode/code/mdencode/
+/home/george/projects/src/github.com/singularian/mdencode/code/mdencode/
 
 # File Header
 1792:4300:300:32:md4:md5:sha512_224-sha256:sha512_224:1.0:2019-10-27 18:51:43.8975134 -0400 EDT m=+0.001214601
