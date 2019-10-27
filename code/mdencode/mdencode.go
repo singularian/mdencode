@@ -297,6 +297,7 @@ func printUsage() {
 	fmt.Println("md -file=Makefile -block=100 -mod=128 -fh=1011111 -bh=100111  -format=5000 -append=true -line=true -out=outputfile.xml")
 	fmt.Println("md -file=Makefile -block=350 -mod=32 -fh=101011 -br")
 	fmt.Println("md -file=Makefile -block=300 -mod=32 -fr -br")
+	fmt.Println("md -file=Makefile -block=300 -mod=32 -uh=1113")
 
 	fmt.Printf("\n\nBuild Time: %s\n", BuildTime)
 	fmt.Printf("Version:    %s 復甦 復活\n", Version)
