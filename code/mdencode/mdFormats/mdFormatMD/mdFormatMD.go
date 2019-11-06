@@ -129,6 +129,8 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 	buffer.WriteString(mdhead)
 	buffer.WriteString(mdheadlist)
 
+	buffer.WriteString("\n# Filehash")
+
         md.println(buffer.String())
 
 
@@ -138,7 +140,8 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 // this is the entire file signature hash type and signature hex bytes
 func (md *MdFormat) EncodeFileHash(encodingFormat int, hashName string, hashBytes string) {
 
-	var last  = fmt.Sprintf("# Filehash\n %v %v", hashName, hashBytes)
+	// var last  = fmt.Sprintf("# Filehash\n %v %v", hashName, hashBytes)
+	var last  = fmt.Sprintf("- %v %v", hashName, hashBytes)
 
 	md.println(last)
 
