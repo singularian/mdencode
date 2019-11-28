@@ -9,7 +9,7 @@ type Nums struct {
     thread int
 }
 
-// FileMutex is safe to use concurrently.
+// FileMutex is a block match mutex
 type FileMutex struct {
 	mux sync.RWMutex
 	// matchcount / threadnumber
@@ -36,6 +36,11 @@ func (fm *FileMutex) GetMatchListKey(key int) []byte {
 	defer fm.mux.Unlock()
 	numbers := Nums{matchCount: fm.matchCount, thread: key}
 	return fm.matchList[numbers]
+}
+
+// GetLastThread resturn the last match thread or zero if not found
+func (fm *FileMutex) GetLastThread() int {
+	return fm.lastThread
 }
 
 // GetFileBuffer returns the current byte block 
