@@ -60,7 +60,7 @@ func (fm *FileMutex) SetFileBuffer(threadNumber int, data []byte) {
 	numbers := Nums{matchCount: fm.matchCount, thread: threadNumber}
 	fm.matchList[numbers]   = data
 
-	fm.lastThread   = threadNumber
+	fm.lastThread   = threadNumber + 1
 	fm.matchCount++
 	fm.isMatched    = true
 	fm.mux.Unlock()
