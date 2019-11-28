@@ -1,9 +1,7 @@
 package mdUnzipFileMutex 
 
 import (
-//	"fmt"
 	"sync"
-//	"time"
 )
 
 type Nums struct {
@@ -15,7 +13,8 @@ type Nums struct {
 type FileMutex struct {
 	mux sync.RWMutex
 	// matchcount / threadnumber
-	items map[Nums][]byte
+	matchList map[Nums][]byte
+	lastThread int
 	filebuffer []byte
 	isMatched bool
 	matchCount int
@@ -26,58 +25,57 @@ func Init() (mt *FileMutex) {
         mux := new(FileMutex)
         mux.isMatched   = false
 	mux.matchCount  = 0
-	mux.items = make(map[Nums][]byte)
-	// mux.mux         = new(sync.RWMutex)
+	mux.matchList   = make(map[Nums][]byte)
+	mux.lastThread  = 0
         return mux
 }
 
-// Inc increments the counter for the given key.
-/* func (c *FileMutex) Inc(key string) {
-	c.mux.Lock()
-	// Lock so only one goroutine at a time can access the map c.v.
-	// c.v[key]++
-	c.mux.Unlock()
-} */
-
-// Value returns the current value of the buffer for the given key.
-func (c *FileMutex) Value(key int) []byte {
-	c.mux.Lock()
-	// Lock so only one goroutine at a time can access the map 
-	defer c.mux.Unlock()
-	numbers := Nums{matchCount: c.matchCount, thread: key}
-	return c.items[numbers]
+// GetMatchListKey returns the current value of the buffer for the given key.
+func (fm *FileMutex) GetMatchListKey(key int) []byte {
+	fm.mux.Lock()
+	defer fm.mux.Unlock()
+	numbers := Nums{matchCount: fm.matchCount, thread: key}
+	return fm.matchList[numbers]
 }
 
-// Value returns the current value of the file block buffer
-func (c *FileMutex) GetFileBuffer() []byte {
-        c.mux.Lock()
-        defer c.mux.Unlock()
-        return c.filebuffer
+// GetFileBuffer returns the current byte block 
+func (fm *FileMutex) GetFileBuffer() []byte {
+        fm.mux.Lock()
+        defer fm.mux.Unlock()
+        return fm.filebuffer
 }
 
-func (c *FileMutex) GetMatchStatus() bool {
-	return c.isMatched
+// GetMatchStatus Return the current match Status
+func (fm *FileMutex) GetMatchStatus() bool {
+	return fm.isMatched
 
 }
 
-func (c *FileMutex) SetFileBuffer(threadNumber int, data []byte) {
-	c.mux.Lock()
-	// c.items[key]   = data
-	c.filebuffer   = data
-	numbers := Nums{matchCount: c.matchCount, thread: threadNumber}
-	c.items[numbers]   = data
-	c.matchCount++
-	c.isMatched    = true
-	c.mux.Unlock()
+// SetFileBuffer sets the current block found with the thread
+// probably should include the digital signature as well
+func (fm *FileMutex) SetFileBuffer(threadNumber int, data []byte) {
+	fm.mux.Lock()
+	fm.filebuffer   = data
+	// add the last match to the matchList Map
+	numbers := Nums{matchCount: fm.matchCount, thread: threadNumber}
+	fm.matchList[numbers]   = data
+
+	fm.lastThread   = threadNumber
+	fm.matchCount++
+	fm.isMatched    = true
+	fm.mux.Unlock()
 
 }
 
-func (c *FileMutex) ResetFileBuffer(size int, data []byte) {
-        c.mux.Lock()
-	c.items        = make(map[Nums][]byte)
-        c.isMatched    = false
-	c.filebuffer   = data 
-	c.matchCount   = 0
-        c.mux.Unlock()
+// ResetFileBuffer
+// Reset the match Mutex for the next block
+func (fm *FileMutex) ResetFileBuffer(size int, data []byte) {
+        fm.mux.Lock()
+	fm.matchList    = make(map[Nums][]byte)
+        fm.isMatched    = false
+	fm.filebuffer   = data
+	fm.lastThread   = 0
+	fm.matchCount   = 0
+        fm.mux.Unlock()
 
 }
