@@ -86,9 +86,9 @@ func (fm *FileMutex) SetFileBuffer(threadNumber int, data []byte) {
 
 }
 
-// ResetFileBuffer
+// ResetMutex
 // Reset the match Mutex for the next block
-func (fm *FileMutex) ResetFileBuffer(size int, data []byte) {
+func (fm *FileMutex) ResetMutex() {
         fm.mux.Lock()
 	fm.matchList    = make(map[Nums][]byte)
         fm.isMatched    = false
