@@ -17,10 +17,10 @@ echo "Creating a random file $RANDOM_FILE"
 head -c $FILE_SIZE /dev/urandom > $RANDOM_FILE 
 
 echo "\nZipping the file $RANDOM_FILE"
-./mdzip -file=randomfile -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz
+mdzip -file=randomfile -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz
 
 echo "\nmdlist $RANDOM_FILE" 
-./mdlist randomfile.mdz
+mdlist randomfile.mdz
 
 echo "\nmdunzip $RANDOM_FILE"
-./mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -thread=16
+mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -thread=16

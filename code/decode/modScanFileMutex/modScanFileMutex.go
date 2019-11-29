@@ -250,54 +250,18 @@ func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, has
 
         _, buffer := md.decode()
 
-        // run until found
-        // if bytestring == buffer {
-        // md.Println("random bytestring and modulusscan bytestring match ", buffer)
-        // s := "thread " + fmt.Sprint(md.threadNumber) + " random bytestring and modulusscan bytestring match " + buffer
-        // s := "thread " + fmt.Sprint(md.threadNumber) + " found XXX bytestring match " + buffer
-        // s := "" + buffer
-	// md.result = buffer
-	// md.Result = copy(md.Result, buffer)
-	// var result string
+	// if the byte block matches the modscan signature list add it to the Mutex and end the work group
 	if md.matchFound == true {
-		// fmt.Println("abba ", md.Result, buffer)
 		md.Println("buffer ", buffer)
 		fmt.Printf("Found Thread %d Block % x\n", md.threadNumber, md.byteblock)
-		// result = fmt.Sprint(md.threadNumber) 
-		// c <- s
-		// c <- md.threadNumber
-		// md.write(c, result)
 		md.mux.SetFileBuffer(int(md.threadNumber), md.byteblock)
 		c.Done()
 	} else if md.matchFound == false {
-//		fmt.Println("Not found ", md.threadNumber, buffer, md.matchFound)
-		// c <- "Not found"
-		// md.write(c, "Not Found")
+		//	fmt.Println("Not found ", md.threadNumber, buffer, md.matchFound)
 	}
-        // }
-        // c <- "Not found"
         return
 
 }
-
-// how to write on possibly closed channel
-/* func (md *DecodeData) write(out chan string, msg string) (err error) {
-
-	defer func() {
-		// recover from panic caused by writing to a closed channel
-		if r := recover(); r != nil {
-			err = fmt.Errorf("%v", r)
-			// fmt.Printf("write: error writing %d on channel: %v\n", i, err)
-			return
-		}
-
-		// fmt.Printf("write: wrote on channel\n", md.modulusThreadNumber)
-	}()
-
-	out <- msg // write on possibly closed channel
-
-	return err
-} */
 
 
 // calculate the byte block associated with a blocksize and modulus and modulus exponent with a sha1 and md5 hash

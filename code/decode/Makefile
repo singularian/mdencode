@@ -22,6 +22,6 @@ build:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip mdzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist testBinReadMdFmt.go
 clean:
-	rm -r mdzip mdunzip mdunzipwg mdlist
+	rm -r mdzip mdunzip mdunzipwg mdlist *.log
 list:
 	echo "all"
