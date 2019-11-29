@@ -26,4 +26,4 @@ clean:
 cleanlog:
 	rm -r *.log
 list:
-	echo "all"
+	echo "all build clean cleanlog list"
