@@ -17,6 +17,7 @@ type FileMutex struct {
 	lastThread int
 	filebuffer []byte
 	isMatched bool
+	isRunning bool
 	matchCount int
 }
 
@@ -24,6 +25,7 @@ type FileMutex struct {
 func Init() (mt *FileMutex) {
         mux := new(FileMutex)
         mux.isMatched   = false
+        mux.isRunning   = true
 	mux.matchCount  = 0
 	mux.matchList   = make(map[Nums][]byte)
 	mux.lastThread  = 0
@@ -56,6 +58,18 @@ func (fm *FileMutex) GetMatchStatus() bool {
 
 }
 
+// GetRunStatus Return the current match Status
+func (fm *FileMutex) GetRunStatus() bool {
+        return fm.isRunning
+}
+
+// Stop sets the File Mutex to stopped
+func (fm *FileMutex) Stop() {
+	fm.mux.Lock()
+	fm.isRunning = false
+	fm.mux.Unlock()
+}
+
 // SetFileBuffer sets the current block found with the thread
 // probably should include the digital signature as well
 func (fm *FileMutex) SetFileBuffer(threadNumber int, data []byte) {
@@ -78,6 +92,7 @@ func (fm *FileMutex) ResetFileBuffer(size int, data []byte) {
         fm.mux.Lock()
 	fm.matchList    = make(map[Nums][]byte)
         fm.isMatched    = false
+        fm.isRunning    = true
 	fm.filebuffer   = data
 	fm.lastThread   = 0
 	fm.matchCount   = 0
