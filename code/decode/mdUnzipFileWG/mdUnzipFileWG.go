@@ -211,10 +211,10 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 		fmt.Println(" ")
 
                 if blockNumber + 1 != blocks {
-                        fmt.Println("Processing block hash ", blockNumber, " ", blockSize, hlistarray, int(modExp), n.String())
+                        fmt.Println("Processing block hash ", blockNumber, " blocksize ", blockSize, hlistarray, int(modExp), n.String())
                         currentBlocksize = blockSize
                 } else {
-                        fmt.Println("Proccesing block hash ", blockNumber, " ", remainder, hlistarray, int(modExp), n.String())
+                        fmt.Println("Proccesing block hash ", blockNumber, " blocksize ", remainder, hlistarray, int(modExp), n.String())
                         currentBlocksize = remainder
                 }
 
