@@ -3,7 +3,7 @@
 # this is a test file to test the mdzip and mdlist and mdunzip programs
 
 RANDOM_FILE="randomfile"
-FILE_SIZE="1900"
+FILE_SIZE="500"
 BLOCK_SIZE="11"
 MODBITS="64"
 

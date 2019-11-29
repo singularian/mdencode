@@ -1,6 +1,8 @@
 package mdUnzipFileWG
 
 // mdencode
+//
+// mdUnzipFileWG
 // copyright (C) Scott Ross 2017
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
@@ -13,13 +15,9 @@ import (
         "strings"
         "math/big"
         "time"
-_       "encoding/json"
-_       "encoding/hex"
-_        "strconv"
 	"sync"
         "github.com/singularian/mdencode/code/decode/modScanFileMutex"
 	"github.com/singularian/mdencode/code/decode/mdUnzipFileMutex"
-//      "runtime"
 )
 
 
@@ -178,17 +176,16 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 	// create the mutex
 	mutex := mdUnzipFileMutex.Init()
 
-        var i uint64
+        var blockNumber uint64
         var modByteSize uint64
         modByteSize = modSize / 8
         if modByteSize == 0 {
                 modByteSize = 1
         }
+
         // var hlistarray = strings.Split(hashhex, ":")
         var hlistarray []string
-        // var blockbytes = make([]byte, blockSize)
-        // fmt.Println("mod byte size ", modSize, " ", modByteSize)
-        for i = 0; i < blocks; i++ {
+        for blockNumber = 0; blockNumber < blocks; blockNumber++ {
                 start = end
                 // end = end + fileblocksize + modByteSize + 4;
                 // end = end + fileblocksize;
@@ -207,26 +204,20 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                 start = end
                 end = end + modByteSize
                 n := new(big.Int)
-                // fmt.Println("sssssssssssss ", start, end, bytes, n.String())
-                // fmt.Println("sssssssssssss ", start, end, n.String(), modByteSize)
                 n = n.SetBytes(bytes[start:end])
 
                 // fmt.Println("blockhashlist ", fileblocksize, " arr ", blocklistarr, " ", " hex ", hexstring, " modexp ", modSize, " modulus byte size ", modByteSize, " mod size ", modSize, " modulus ", n.String())
-                // mdfmt.EncodeBlock(format, fileblocksize, hlistarray, modSize, n.String());
                 var currentBlocksize uint64 = 0
 		fmt.Println(" ")
 
-                if i + 1 != blocks {
-                        // mdfmt.EncodeBlock(format, blockSize, hlistarray, int(modSize), n.String());
-                        fmt.Println("Processing block hash ", i, " ", blockSize, hlistarray, int(modExp), n.String())
+                if blockNumber + 1 != blocks {
+                        fmt.Println("Processing block hash ", blockNumber, " ", blockSize, hlistarray, int(modExp), n.String())
                         currentBlocksize = blockSize
                 } else {
-                        // mdfmt.EncodeBlock(format, remainder, hlistarray, int(modSize), n.String());
-                        fmt.Println("Proccesing block hash ", i, " ", remainder, hlistarray, int(modExp), n.String())
+                        fmt.Println("Proccesing block hash ", blockNumber, " ", remainder, hlistarray, int(modExp), n.String())
                         currentBlocksize = remainder
                 }
 
-//              callGo( i, int64(currentBlocksize), int64(modExp), uint32(modExp), hstring, n.String())
                 now := time.Now()
                 var time = fmt.Sprintf("%d%d%d%d%d", now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
 
@@ -236,15 +227,11 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                 // var threadCount int64 = 16
                 var emptybytes []byte
                 for thread = 0; thread < int64(threadCount); thread++ {
-                        //md := modScan2.Init(blockSizeInt, modSizeInt, thread, threadCount, bytes, time)
                         md := modScanFileMutex.Init(int64(currentBlocksize), int64(modSize), thread, int64(threadCount), emptybytes, mutex, time)
                         mdp = append(mdp, md)
                 }
 
-                // create a channel the size of the thread list
-                // var count int64 = 16
-		// fmt.Println("Threads ", threadCount)
-                // var c chan string = make(chan string, threadCount)
+                // create the wait group
 		var c sync.WaitGroup
 		c.Add(1)
 
@@ -256,32 +243,6 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                         go mdp[thread].ModulusScanFileBytes(currentBlocksize, modExp, hstring, n.String(), &c)
                 }
 
-                // var cl int64 = 1
-
-                // fmt.Println("starting modulus scan threads ", threadCount, " start thread ", threadStart, " end thread ", threadEnd, " byteblock size ", currentBlocksize, " byteblock ", bytes)
-/*
-                for resp := range c {
-                        // if the modScan result is found close the channel
-                        if resp != "Not found" {
-                                // ri, _ := strconv.Atoi(resp)
-                                // fmt.Println("Found block XXXX", ri, fmt.Sprintf("% x", mdp[int(ri)].Byteblock))
-                                ///// fmt.Println("Found block Modscan ", i, " thread ", ri, " block ", fmt.Sprintf("% x", mdp[int(ri)].GetBytes()))
-                                ////fmt.Println("Found block Mutex ", i, " thread ", mutex.GetLastThread(), " block ", fmt.Sprintf("% x", mutex.GetFileBuffer()))
-                                /////l.WriteFile(outf, mdp[int(ri)].GetBytes())
-                                close(c)
-                                break
-                        // otherwise if the result count equals the thread count close the channel and break
-                        } else if cl == int64(threadCount) && resp == "Not found" {
-                                // fmt.Println("close the channel if the last thread has returned a value", cl)
-                                // close(c)
-                                fmt.Println("Not Found")
-                        // otherwise increment the channel count
-                        } else {
-                                fmt.Println("incrementing thread counter ", cl)
-                                cl++
-                        }
-		}
-*/
 
 		c.Wait()
 
@@ -289,12 +250,9 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 		if mutex.GetMatchStatus() {
 				var mlastThread = mutex.GetLastThread() - 1
 				fmt.Println("Processing ", mutex.GetMatchStatus())
-				fmt.Println("Found block modscan ", i, " thread ", mlastThread, " block ", fmt.Sprintf("% x", mdp[mlastThread].GetBytes()))
-				fmt.Println("Found block Mutex ", i, " thread ", mlastThread, " block ", fmt.Sprintf("% x", mutex.GetFileBuffer()))
+				fmt.Println("Found block modscan ", blockNumber, " thread ", mlastThread, " block ", fmt.Sprintf("% x", mdp[mlastThread].GetBytes()))
+				fmt.Println("Found block Mutex ", blockNumber, " thread ", mlastThread, " block ", fmt.Sprintf("% x", mutex.GetFileBuffer()))
 
-				// l.WriteFile(outf, mdp[int(ri)].GetBytes())
-				// l.WriteFile(outf, mdp[int(mlastThread)].GetBytes())
-				//////////////////////////////////////////////////////////////////// 
 				l.WriteFile(outf, mutex.GetFileBuffer())
 		}
 		fmt.Println("end testing mutex ", mutex.GetMatchStatus())
