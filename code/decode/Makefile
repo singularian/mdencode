@@ -13,13 +13,15 @@ LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X githu
 
 all:
 	go build -o mdunzip mdUnzip.go 
+	go build -o mdunzipwg mdUnzipMutex.go 
 	go build -o mdzip mdzip.go 
 	go build -o mdlist testBinReadMdFmt.go 
 build: 
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip mdUnzip.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzipwg mdUnzipMutex.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip mdzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist testBinReadMdFmt.go
 clean:
-	rm -r mdzip mdunzip mdlist
+	rm -r mdzip mdunzip mdunzipwg mdlist
 list:
 	echo "all"
