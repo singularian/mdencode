@@ -8,8 +8,8 @@ import (
 )
 
 type node struct {
-    FirstName  string 
-    LastName   string
+    Name  string 
+    Country   string
 }
 
 // test of multiple object struct initializer
@@ -18,15 +18,15 @@ func main() {
 
     cities:=[]*node{}
     city:=new(node)
-    city.FirstName=strconv.Itoa(0)
+    city.Name=strconv.Itoa(0)
     cities=append(cities,city)
 
 for i := 1; i<40 ;i++ {
     city=new(node)
-    city.FirstName=strconv.Itoa(i)
+    city.Name=strconv.Itoa(i)
     cities=append(cities,city)
 }
 
-  fmt.Println("test ", cities[2].FirstName)
-  fmt.Println("test ", cities[4].FirstName)
+  fmt.Println("test ", cities[2].Name)
+  fmt.Println("test ", cities[4].Name)
 }
