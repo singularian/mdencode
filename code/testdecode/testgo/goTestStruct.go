@@ -13,7 +13,7 @@ type node struct {
 }
 
 // test of multiple object struct initializer
-//so this can initialize multiple mdencode modulus can objects in go routines
+// this test can initialize multiple mdencode modulus objects in go routines
 func main() {
 
     cities:=[]*node{}
