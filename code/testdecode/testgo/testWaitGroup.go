@@ -33,10 +33,10 @@ func main() {
     // This WaitGroup is used to wait for all the
     // goroutines launched here to finish.
     var wg sync.WaitGroup
+    // only add 1 wait group since we are only using the first result for mdencode
     wg.Add(1)
 
-    // Launch several goroutines and increment the WaitGroup
-    // counter for each.
+    // Launch several goroutines and only set the WaitGroup count to one for the mdencode modulus scan test
     for i := 1; i <= 6; i++ {
 	// wg.Add(1)
         go worker(i, &wg)
