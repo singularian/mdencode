@@ -4,7 +4,7 @@
 
 RANDOM_FILE="randomfile"
 FILE_SIZE="500"
-BLOCK_SIZE="11"
+BLOCK_SIZE="12"
 MODBITS="64"
 
 # check if the file size is specified
