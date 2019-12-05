@@ -49,5 +49,7 @@ fmt:
 clean:
 	rm -r ${BUILD_DIR}/mdencode ${BUILD_DIR}/md ${BUILD_DIR}/mdnewdb ${BUILD_DIR}/mddbreport
 	rm -r mdBuild/md mdBuild/mdencode mdBuild/mdnewdb mdBuild/mddbreport mdBuild/mdbinlist
+cleanlogs:
+	rm *.log
 list:
-	echo "all build getlibs clean list"
+	echo "all build getlibs clean cleanlogs list"
