@@ -27,6 +27,8 @@ import (
 	"os"
 	"time"
 	"strings"
+	"sync"
+	"github.com/singularian/mdencode/code/decode/mdUnzipFileMutex"
 	//"runtime"
 )
 
@@ -71,13 +73,15 @@ type DecodeData struct {
 	// sha1/md5 bytesblock
 	sha1byteblock []byte
 	md5byteblock []byte
+	// file mutex
+	mux *mdUnzipFileMutex.FileMutex
 	// log writer
 	islogging bool
 	Logfile   *log.Logger
 }
 
 // Init returns a new modScan object
-func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes []byte, time string) (md *DecodeData) {
+func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes []byte, mux *mdUnzipFileMutex.FileMutex, time string) (md *DecodeData) {
 	mdata := new(DecodeData)
 	mdata.blocksizeInt = blocksize
 	mdata.modsizeInt = modsize
@@ -90,6 +94,7 @@ func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes
 	mdata.timeStarted = time
 	mdata.initLog()
 	mdata.islogging = false
+	mdata.mux = mux
 	return mdata
 }
 
@@ -165,7 +170,7 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 }
 
 // run a parallel modulus scan on a user defined or random byte block array
-func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, hashlist string, modRemainder string, c chan string) {
+func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, hashlist string, modRemainder string, c *sync.WaitGroup) {
 
         //runtime.LockOSThread()
 
@@ -245,51 +250,17 @@ func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, has
 
         _, buffer := md.decode()
 
-        // run until found
-        // if bytestring == buffer {
-        // md.Println("random bytestring and modulusscan bytestring match ", buffer)
-        // s := "thread " + fmt.Sprint(md.threadNumber) + " random bytestring and modulusscan bytestring match " + buffer
-        // s := "thread " + fmt.Sprint(md.threadNumber) + " found XXX bytestring match " + buffer
-        // s := "" + buffer
-	// md.result = buffer
-	// md.Result = copy(md.Result, buffer)
-	var result string
+	// if the byte block matches the modscan signature list add it to the Mutex and end the work group
 	if md.matchFound == true {
-		// fmt.Println("abba ", md.Result, buffer)
 		md.Println("buffer ", buffer)
-		fmt.Printf("Found Block % x\n", md.byteblock)
-		result = fmt.Sprint(md.threadNumber) 
-		// c <- s
-		// c <- md.threadNumber
-		md.write(c, result)
+		fmt.Printf("Found Thread %d Block % x\n", md.threadNumber, md.byteblock)
+		md.mux.SetFileBuffer(int(md.threadNumber), md.byteblock)
+		c.Done()
 	} else if md.matchFound == false {
-//		fmt.Println("Not found ", md.threadNumber, buffer, md.matchFound)
-		// c <- "Not found"
-		// md.write(c, "Not Found")
+		//	fmt.Println("Not found ", md.threadNumber, buffer, md.matchFound)
 	}
-        // }
-        // c <- "Not found"
         return
 
-}
-
-// how to write on possibly closed channel
-func (md *DecodeData) write(out chan string, msg string) (err error) {
-
-	defer func() {
-		// recover from panic caused by writing to a closed channel
-		if r := recover(); r != nil {
-			err = fmt.Errorf("%v", r)
-			// fmt.Printf("write: error writing %d on channel: %v\n", i, err)
-			return
-		}
-
-		// fmt.Printf("write: wrote on channel\n", md.modulusThreadNumber)
-	}()
-
-	out <- msg // write on possibly closed channel
-
-	return err
 }
 
 
@@ -394,7 +365,7 @@ func (md *DecodeData) decode() (int, string) {
 			sha1string := hex.EncodeToString(sha1.Sum(nil))
 			if sha1string == md.sha1hex {
 				// fmt.Println("Found Block ", md.threadNumber, md5string, md.md5hex, sha1string, md.sha1hex, buf)
-				md.Println("Found Block ", md5string, " Matches ",  md.md5hex, sha1string, " Matches ", md.sha1hex, buf)
+				md.Println("Found Block ", md5string, " Matches ",  md.md5hex, sha1string, " Matches ", md.sha1hex, " buffer ", buf, " thread ", md.threadNumber)
 				// fmt.Printf("Found Block % x\n", buf)
 				md.byteblock = buf
 				md.matchFound = true

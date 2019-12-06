@@ -13,7 +13,6 @@ LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X githu
 
 all:
 	go build -o mdunzip mdUnzip.go 
-	go build -o mdunzipwg mdUnzipMutex.go 
 	go build -o mdzip mdzip.go 
 	go build -o mdlist testBinReadMdFmt.go 
 build: 
@@ -38,6 +37,8 @@ goget:
 	go get -u github.com/codahale/blake2
 	go get -u github.com/enceve/crypto/skein
 	go get -u github.com/mimoo/GoKangarooTwelve/K12
+getlibs:
+	make getlibs
 clean:
 	rm -r mdzip mdunzip mdunzipwg mdlist *.log
 cleanlog:
