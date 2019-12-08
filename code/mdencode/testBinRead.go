@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"strings"
 	"math/big"
+	"github.com/singularian/mdencode/code/decode/mdBlockSize"
 )
 
 
@@ -70,10 +71,13 @@ func main() {
 	filelist := hashlist[0]
 	blocklist := hashlist[1]
 	fmt.Println("hashlist ", filelist, blocklist)
-	//// var filesize uint64
-	var filelistarr []int 
-	//////// filesize, filelistarr = CalcHashSizeFile(filelist)
-	_, filelistarr = CalcHashSizeFile(filelist)
+
+        // initialize the mdBlockSize object
+        mdBlock := mdBlockSize.Init()
+
+        // calculate and return the file signature list byte block size
+        var filelistarr []int
+        _, filelistarr = mdBlock.CalcHashBlockSize(filelist)
 
 	fmt.Println("test array ", filelistarr)
 	st := strings.Split(filelist, ":")
@@ -86,14 +90,18 @@ func main() {
 		fmt.Println("hashlistname ", st[i], " hex ", hexstring)
 	}
 
-
-	// get the file block list
-	// var blocklistarr []int
-        fileblocksize, blocklistarr := CalcHashSizeFile(blocklist)
+        // calculate and return the file signature block byte size list
+        // mdblocksize, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)
+        fileblocksize, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)
 	fmt.Println("blockhashlist ", blocklist)
-        // fileblocksize, _ = CalcHashSizeFile(blocklist)
-	// blocks, remainder := calculateFileBlocks(fileSize, blockSize)
-	blocks, _ := calculateFileBlocks(fileSize, blockSize)
+
+        // calculate the file blocks count and the last file block size
+        // ie if the file size is 100 and block size is 12 calculate the number of blocks and
+        // remainder
+        // 100 byte file contains 9 blocks with the last block 4 bytes
+        // blocks, remainder := calculateFileBlocks(fileSize, blockSize)
+        blocks, _ := calculateFileBlocks(fileSize, blockSize)
+
 	var i uint64
 	var modByteSize uint64 
 	modByteSize = modSize / 8
@@ -101,6 +109,7 @@ func main() {
 		modByteSize = 1 
 	}
 	fmt.Println("mod byte size ", modSize, " ", modByteSize)
+
 	for i = 0; i < blocks; i++ {
 		start = end
 		// end = end + fileblocksize + modByteSize + 4;

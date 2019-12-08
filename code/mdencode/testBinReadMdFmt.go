@@ -9,6 +9,7 @@ import (
 	"strings"
 	"math/big"
 	"strconv"
+	"github.com/singularian/mdencode/code/decode/mdBlockSize"
 	"github.com/singularian/mdencode/code/mdencode/mdFormatsImport/mdFormatImport"
 )
 
@@ -113,14 +114,16 @@ func main() {
 	fl :=  strings.Split(hashlist[0], "-")
 	bl :=  strings.Split(hashlist[1], "-")
 
+	// initialize the mdBlockSize object
+	mdBlock := mdBlockSize.Init()
 
 	// mdfmt.EncodeFileHeader(format2, filename, filepath, int64(fileSize), int64(blockSize), filelist, blocklist, modSize)
 	mdfmt.EncodeFileHeader(format, filename2, filepath, int64(fileSize), int64(blockSize), fl, bl, int64(modSize))
 
-	//// var filesize uint64
-	var filelistarr []int 
-	//////// filesize, filelistarr = CalcHashSizeFile(filelist)
-	_, filelistarr = CalcHashSizeFile(filelist)
+	// calculate and return the file signature list byte block size
+	// var filesize uint64
+	var filelistarr []int
+	_, filelistarr = mdBlock.CalcHashBlockSize(filelist)
 
 	// fmt.Println("test array ", filelistarr)
 	st := strings.Split(filelist, ":")
@@ -135,15 +138,16 @@ func main() {
 		mdfmt.EncodeFileHash(format, st[i], hexstring)
 	}
 
+	// calculate and return the file signature block byte size list
+	// mdblocksize, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)
+	_, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)
 
-	// get the file block list
-	// var blocklistarr []int
-        ////fileblocksize, blocklistarr := CalcHashSizeFile(blocklist)
-        _, blocklistarr := CalcHashSizeFile(blocklist)
-	// fmt.Println("blockhashlist ", blocklist)
-        // fileblocksize, _ = CalcHashSizeFile(blocklist)
-	// blocks, remainder := calculateFileBlocks(fileSize, blockSize)
+	// calculate the file blocks count and the last file block size
+	// ie if the file size is 100 and block size is 12 calculate the number of blocks and
+	// remainder
+	// 100 byte file contains 9 blocks with the last block 4 bytes
 	blocks, remainder := calculateFileBlocks(fileSize, blockSize)
+
 	var i uint64
 	var modByteSize uint64 
 	modByteSize = modSize / 8
@@ -209,81 +213,6 @@ func Convert64(data []byte) (uint64, error) {
 		return 0, err
 	}
 	return v, nil
-}
-
-func CalcHashSizeFile (hashlist string) (uint64, []int) {
-	st := strings.Split(hashlist, ":")
-
-	var blocksize uint64 = 0
-	var s []int
-	// var s = make([]int, 100)
-
-	// s = append(s, 5)
-
-	for i := 0; i < len(st); i++ {
-		// fmt.Println("hashlist ", st[i])
-
-		switch st[i] {
-			case "blake2":
-			s = append(s, 64)
-                        case "blake2b":
-			s = append(s, 64)
-                        case "blake2s_128":
-			s = append(s, 16)
-                        case "blake2_256":
-			s = append(s, 32)
-			case "murmur3":
-			s = append(s, 16)
-			case "md4":
-			s = append(s, 16)
-			case "md5":
-			s = append(s, 16)
-			case "ripe160":
-			s = append(s, 20)
-			case "sha1":
-			s = append(s, 20)
-			case "sha224":
-			s = append(s, 28)
-			case "sha256":
-			s = append(s, 32)
-			case "sha512":
-			s = append(s, 64)
-			case "sha512_224":
-			s = append(s, 28)
-			case "sha512_256":
-			s = append(s, 32)
-			case "sha512_384":
-			s = append(s, 48)
-			case "sha3_224":
-			s = append(s, 28)
-			case "sha3_256":
-			s = append(s, 32)
-			case "skein_160":
-			s = append(s, 20)
-			case "skein_224":
-			s = append(s, 28)
-			case "skein_256":
-			s = append(s, 32)
-			case "skein_384":
-			s = append(s, 48)
-			case "skein_512":
-			s = append(s, 64)
-			case "skein_1024":
-			s = append(s, 128)
-			case "tiger":
-			s = append(s, 48)
-			case "whirlpool":
-			s = append(s, 64)
-		}
-
-	}
-
-	for i := range s {
-		blocksize += uint64(s[i])
-	}
-
-	// fmt.Println("test ", s)
-	return blocksize, s 
 }
 
 // calculate the number of file blocks
