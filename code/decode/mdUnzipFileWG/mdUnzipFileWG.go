@@ -1,7 +1,7 @@
 package mdUnzipFileWG
 
 // mdUnzipFileWG
-// this package unzips and mdzip file with block signatures
+// this package unzips and decodes mdzip files with block signatures and modular floors
 //
 // copyright (C) Scott Ross 2017
 // 
