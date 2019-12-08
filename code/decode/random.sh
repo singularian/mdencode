@@ -3,8 +3,8 @@
 # this is a test file to test the mdzip and mdlist and mdunzip programs
 
 RANDOM_FILE="randomfile"
-FILE_SIZE="1900"
-BLOCK_SIZE="11"
+FILE_SIZE="26"
+BLOCK_SIZE="13"
 MODBITS="64"
 
 # check if the file size is specified
