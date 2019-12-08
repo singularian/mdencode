@@ -18,7 +18,10 @@ func Init() (bl *BlockSize) {
         return blx
 }
 
-
+// CalcHashBlockSize takes a hashlist colon separated string of hash names
+//
+// it calculates the total blocksize and a array of the hash signature block sizes
+// this allows mdprint or mdunzip to decode each signature block and calculate their size
 func (bl *BlockSize) CalcHashBlockSize (hashlist string) (uint64, []int) {
         st := strings.Split(hashlist, ":")
 
