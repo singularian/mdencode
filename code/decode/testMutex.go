@@ -7,6 +7,7 @@ import (
 //    "sync/atomic"
 //	"time"
 	"github.com/singularian/mdencode/code/decode/mdUnzipFileMutex"
+	"github.com/singularian/mdencode/code/decode/mdBlockSize"
 )
 func main() {
 
@@ -17,9 +18,11 @@ func main() {
 	mutex.SetFileBuffer(1, b)
 	fmt.Println("mutex ", mutex.GetMatchStatus(), " ", mutex.GetFileBuffer())
 
-
-
-
-
+	mdBlock := mdBlockSize.Init()
+	var blocksize uint64 = 0
+        var s []int
+	blocksize, s = mdBlock.CalcHashBlockSize("blake2:md5:sha1")
+	fmt.Println("mdBlocksize ", s, blocksize)
+	
 
 }
