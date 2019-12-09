@@ -171,9 +171,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                 end = end + uint64(filelistarr[i])
                 var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
                 // filePathLen   := binary.BigEndian.(bytes[:40])
-                fmt.Println("hashlistname ", st[i], " hex ", hexstring)
-                fmt.Println("hashlistname ", st[i], " hex ", hexstring)
-                ////// mdfmt.EncodeFileHash(format, st[i], hexstring)
+                fmt.Println("file hashlistname ", st[i], " hex ", hexstring)
         }
 
 	// calculate and return the file signature block byte size list

@@ -42,7 +42,7 @@ goget:
 getlibs:
 	make getlibs
 clean:
-	rm -r mdzip mdunzip mdunzipwg mdlist *.log
+	rm -r mdzip mdunzip mdunzipwg mdlist mdlistTest *.log
 cleanlog:
 	rm -r *.log
 list:
