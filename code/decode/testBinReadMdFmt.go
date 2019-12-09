@@ -96,13 +96,16 @@ func main() {
 	// get hashlist string
 	start = end
 	end = end + fileHashLen
-	fmt.Println("hashlistname ", string(bytes[start:end]))
+	fmt.Println("hashlistname   ", string(bytes[start:end]))
 	// split hash list
 	hlist := string(bytes[start:end])
 	hashlist := strings.Split(hlist, "-")
 	filelist := hashlist[0]
 	blocklist := hashlist[1]
-	fmt.Println("hashlist ", filelist, blocklist)
+	fmt.Println("hashlist       ", filelist, blocklist)
+	fmt.Println("file hashlist  ", filelist)
+	fmt.Println("block hashlist ", blocklist)
+	fmt.Println("")
 
 	// fl :=  strings.Split(hashlist[0], "-")
 	// bl :=  strings.Split(hashlist[1], "-")
@@ -126,8 +129,7 @@ func main() {
 		end = end + uint64(filelistarr[i])
 		var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
 		// filePathLen   := binary.BigEndian.(bytes[:40])
-		fmt.Println("hashlistname ", st[i], " hex ", hexstring)
-		fmt.Println("hashlistname ", st[i], " hex ", hexstring)
+		fmt.Println("file hashlistname ", st[i], " hex ", hexstring)
 		////// mdfmt.EncodeFileHash(format, st[i], hexstring)
 	}
 
