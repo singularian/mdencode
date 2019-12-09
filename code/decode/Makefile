@@ -15,11 +15,13 @@ all:
 	go build -o mdunzip mdUnzip.go 
 	go build -o mdzip mdzip.go 
 	go build -o mdlist testBinReadMdFmt.go 
+	go build -o mdlistTest testBinReadMdFmt.go 
 build: 
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip mdUnzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzipwg mdUnzipMutex.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip mdzip.go
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist testBinReadMdFmt.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist mdlist.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest testBinReadMdFmt.go
 goget:
 	go get -u golang.org/x/crypto/blake2s
 	go get -u golang.org/x/crypto/md4
