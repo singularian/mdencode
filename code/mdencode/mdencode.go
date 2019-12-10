@@ -226,9 +226,9 @@ func printUsage() {
   -block string
         File Block Size Bytes (default "40")
   -fh string
-        File Hash Bit String List (default "011")
+        File Hash Bit String List (default "01001")
   -bh string
-        Block Hash Bit String List (default "011")
+        Block Hash Bit String List (default "01001")
   -uh string
         Quarternian Hash String List (Default "033")
   -mod string
