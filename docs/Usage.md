@@ -1,7 +1,8 @@
 # Command Line Usage of mdencode
 
 
-```                                                                                                                                              
+``` 
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdencode
 Usage of md:                                                                                                                                     
                                                                                                                                                  
   -file string                                                                                                                                   
@@ -87,6 +88,7 @@ md -uh=1122 -block=100 -mod=64 -file=Makefile
 # Example mddbreport usage
 
 ```
+
 Usage of mddbreport:
   -append
         Append To Output File
@@ -110,8 +112,10 @@ mddbreport -file=md.db -fileid=1 -format=5000 -out=outputfile.xml -append=false
 
 ```
 
-# Example decoderRandom / decoderRandom4 Usage
+# Example decoderRandom  Usage
+
 ```
+user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode
 $ ./decoderRandom
 Usage  ./decoderRandom  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]
 Usage  ./decoderRandom  -block=12 -mod=64 -thread=16
