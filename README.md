@@ -35,17 +35,10 @@ It can also write to an sqlite db. The mdencode sqlite db files contain a table 
 
 # Digital Signature List
 
-This is a partial list of the digital signatures. More can be added to the signature chain and are selectable via a binary flag argument for file blocks and files
+This is a list of the digital signatures. More can be added to the signature chain and are selectable via a binary flag argument for file blocks and files.
+You can also add signatures. The design goal is to have hundreds of selectable signatures.
 
-- fnv
-- md4
-- md5
-- ripe160
-- sha
-- sha3
-- skein
-- Tiger
-- Whirlpool
+- Digital Signinature List [Signatures](https://github.com/singularian/mdencode/blob/master/docs/hashList.md)
 
 # Digital Signature Heirarchy
 
