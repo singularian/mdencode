@@ -1,5 +1,12 @@
 package main
 
+// mdencode mdzip mdlist block dumper
+// this displays the mdzip binary data in a simplified text format
+//
+// this is a cleaned up version of testBinReadMdFmt.go
+// https://github.com/singularian/mdencode
+// https://github.com/singularian/mdencode/blob/master/LICENSE
+
 import (
 	"fmt"
 	"encoding/binary"
