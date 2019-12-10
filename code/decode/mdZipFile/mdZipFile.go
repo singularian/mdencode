@@ -7,6 +7,7 @@ package mdEncodeALL
 import (
 	"crypto/hmac"
 	"crypto/md5"
+	"github.com/singularian/mdencode/code/hash/sha1_128"
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
@@ -477,75 +478,81 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 		// md5 file
 		case 11:
 			hb["md5"] = md5.New()
-		// sha1 file
+		// sha1 128 skip last four bytes
 		case 21:
+			hb["sha1_128"] = sha1_128.New()
+		// sha1 128 skip first four bytes
+		case 31:
+			hb["sha1_1284"] = sha1_128.New(4, 20)
+		// sha1 file
+		case 41:
 			hb["sha1"] = sha1.New()
 		// sha256
-		case 31:
+		case 51:
 			hb["sha224"] = sha256.New224()
-		case 41:
+		case 61:
 			hb["sha256"] = sha256.New()
 		// sha512_224
-		case 51:
+		case 71:
 			hb["sha512_224"] = sha512.New512_224()
-		case 61:
+		case 81:
 			hb["sha512_256"] = sha512.New512_256()
 		// sha512
-		case 71:
+		case 91:
 			hb["sha512"] = sha512.New()
 		// sha3_224
-		case 81:
+		case 101:
 			hb["sha3_224"] = sha3.New224()
 		// sha3_256
-		case 91:
+		case 111:
 			hb["sha3_256"] = sha3.New256()
 		// sha_384
-		case 101:
+		case 121:
 			hb["sha3_384"] = sha3.New384()
 		// sha3_512
-		case 111:
+		case 131:
 			hb["sha3_512"] = sha3.New512()
 		// blake2b.New256
-		case 121:
-			hb["blake2b"] = blake2.NewBlake2B()
-		case 131:
-			hb["fnv"] = fnv.New64a()
 		case 141:
-			hb["ripe160"] = ripemd160.New()
+			hb["blake2b"] = blake2.NewBlake2B()
 		case 151:
+			hb["fnv"] = fnv.New64a()
+		case 161:
+			hb["ripe160"] = ripemd160.New()
+		case 171:
 			var seed uint64 = 1120322
 			hb["murmur3"] = murmur3.New128(seed)
-		case 161:
-			hb["whirlpool"] = whirlpool.New()
-		case 171:
-			hb["hmac256"] = hmac.New(sha256.New, key)
 		case 181:
-			hb["hmac512"] = hmac.New(sha512.New, key)
+			hb["whirlpool"] = whirlpool.New()
 		case 191:
-			hb["kekkak"] = keccak.New256()
+			hb["hmac256"] = hmac.New(sha256.New, key)
 		case 201:
-			hb["skein160"] = skein.New(20, nil)
+			hb["hmac512"] = hmac.New(sha512.New, key)
 		case 211:
-			hb["skein256"] = skein.New256(key)
+			hb["kekkak"] = keccak.New256()
 		case 221:
-			hb["skein384"] = skein.New(48, nil)
+			hb["skein160"] = skein.New(20, nil)
 		case 231:
-			hb["skein512"] = skein.New512(key)
+			hb["skein256"] = skein.New256(key)
 		case 241:
-			hb["skein1024"] = skein.New(128, nil)
+			hb["skein384"] = skein.New(48, nil)
 		case 251:
+			hb["skein512"] = skein.New512(key)
+		case 261:
+			hb["skein1024"] = skein.New(128, nil)
+		case 271:
 			hb["tiger"] = tiger.New()
 		// siphash has to have a key 8 or 16 bytes
-		case 261:
+		case 281:
 			hb["siphash"] = siphash.New128(key)
 		// blake2s needs two values since it has a multiple return
-		case 271:
-			hb["blake2s_128"], _ = blake2s.New128(key)
-		case 281:
-			hb["blake2s_256"], _ = blake2s.New256(key)
 		case 291:
+			hb["blake2s_128"], _ = blake2s.New128(key)
+		case 301:
+			hb["blake2s_256"], _ = blake2s.New256(key)
+		case 311:
 			hb["blake2"] = blake2.New(nil)
-		// case 301:
+		// case 321:
 		// hb["block"] = fnv.New64a()
 		// hb["blake2s"], _ =  blake2s.New128(nil)
 
