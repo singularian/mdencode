@@ -40,7 +40,8 @@ More can be added to the signature chain and are selectable via a binary flag ar
 You can also add signatures. The design goal is to have hundreds of selectable signatures.
 
 - The capability to add more signatures 
-- A chief design goal to have hundreds of user selectable file or block and block group signatures
+- A chief design goal is to have hundreds of user selectable file or block and block group signatures
+- Prioritize file signature quantity over userability
 - [Digital Signature List](https://github.com/singularian/mdencode/blob/master/docs/hashList.md)
 
 # Digital Signature Heirarchy
