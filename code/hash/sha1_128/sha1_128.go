@@ -1,5 +1,6 @@
 // SHA-1 128 is a 128-bit or 16 byte hash of the SHA-1
 // This is a MD5 equivalent SHA1 function and tests wrapping the hashes
+// this is an example of a write your own signature to add to mdencode
 package sha1_128
 
 import (

@@ -29,7 +29,13 @@ func main() {
 
 	sha1282 := sha1_128.New()
 	io.WriteString(sha1282, "Test of the SHA1 128 hash")
-	fmt.Printf("hex %x\n", sha1282.Sum(nil))
+	fmt.Printf("sha1282 hex % x\n", sha1282.Sum(nil))
+
+	sha1282.Reset()
+	a := []byte{ 0, 10, 22, 38, 240, 171, 146, 123 }
+	sha1282.Write(a)
+	fmt.Printf("sha1282 bytes hex % x\n", sha1282.Sum(nil))
+
 
 
 }
