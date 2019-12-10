@@ -310,7 +310,7 @@ This is an example of a parallel modulus scan with 16 threads.
 mdzip is the golang command line utility can compress a file into a md binary byte block files. mdzip only handles sha and md5 as the default mdunzip cyphers.  
 mdunzip will decompress the input signature binary block file to an output file.  
 
-mdunzip only handles sha1 and md5 as the default cyphers currently. More signatures will be added including ripe160 and md5.  
+mdunzip only handles sha1 and md5 as the default cyphers currently. More signatures will be added including ripe160 and md4.  
 
 Proccessing power limits the size of the input block.  
 
@@ -319,51 +319,17 @@ Proccessing power limits the size of the input block.
 
 TODO: Change the mod exponent size in the output block from int32 to int16.  
 
-```
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdzip
-USAGE of ./mdzip:
+- [Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
 
-  -file string
-        Input Filename
-  -block string
-        File Block Size Bytes (default "40")
-  -fh string
-        File Hash Bit String List (default "01001")
-  -bh string
-        Block Hash Bit String List (default "01001")
-  -mod string
-        Modulus Size in Bits (default "32")
-  -format int
-        Output Format (default 10)
-  -out string
-        Output Filename
-  -log string
-        Log Filename
+# Collision Handling
 
+These are a brief list of collision management in mdzip and mdunzip.
 
-Build Time: 2018-06-16-0431 UTC
-Version:    1.0.0 復甦 復活
-```
-
-```
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzip
-
-  -file string
-        Input Filename
-  -out string
-        Output Filename
-  -thread string
-        Go Routine Threadsize
-
-```
-
-mdlist can display the contents of an mdzip file
-```
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdlist
-USAGE of ./mdlist:
-Examples:
-./mdlist  [FILENAME]
-```
+- File level Signature to validate Block Level Signatures
+- Signature Switching. If one signature or signature group has a collsion choose another
+- Use Block Groups
+- Use Optional Collision Numbers
+- Using Modular floors to skip numbers
 
 # Build
 
