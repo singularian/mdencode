@@ -123,7 +123,7 @@ func main() {
         blocks, remainder := calculateFileBlocks(fileSize, blockSize)
 
 	// fmt.Println("remainder ", remainder)
-	var i uint64
+	var blockNumber uint64
 	var modByteSize uint64 
 	modByteSize = modSize / 8
 	if modByteSize == 0 {
@@ -133,7 +133,7 @@ func main() {
 	// var hlistarray = strings.Split(hashhex, ":")
 	var hlistarray []string
 	// fmt.Println("mod byte size ", modSize, " ", modByteSize)
-	for i = 0; i < blocks; i++ {
+	for blockNumber = 0; blockNumber < blocks; blockNumber++ {
 		start = end
 		// end = end + fileblocksize + modByteSize + 4;
 		// end = end + fileblocksize;
@@ -154,12 +154,13 @@ func main() {
 		n = n.SetBytes(bytes[start:end])
 
 		// display the block hash list
-		if i + 1 != blocks {
+		if blockNumber + 1 != blocks {
 			// mdfmt.EncodeBlock(format, blockSize, hlistarray, int(modSize), n.String());
-			fmt.Println("block hash ", blockSize, hlistarray, int(modSize), n.String());
+			// fmt.Println("block hash ", blockSize, hlistarray, int(modSize), n.String());
+			fmt.Printf("block hash %d %d %s %d %s \n", blockNumber, blockSize, hlistarray, int(modSize), n.String());
 		} else {
 			// mdfmt.EncodeBlock(format, remainder, hlistarray, int(modSize), n.String());
-			fmt.Println("block hash ", remainder, hlistarray, int(modSize), n.String());
+			fmt.Printf("block hash %d %d %s %d %s \n", blockNumber, remainder, hlistarray, int(modSize), n.String());
 		}
 		hlistarray = hlistarray[:0]
 	}

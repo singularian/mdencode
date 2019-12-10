@@ -18,7 +18,7 @@ all:
 	go build -o mdlistTest testBinReadMdFmt.go 
 build: 
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip mdUnzip.go
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzipwg mdUnzipMutex.go
+#	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzipwg mdUnzipMutex.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip mdzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist mdlist.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest testBinReadMdFmt.go
