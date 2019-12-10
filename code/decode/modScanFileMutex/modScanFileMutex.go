@@ -6,9 +6,13 @@ package modScanFileMutex
 //
 // modScan recives the input byte block with n-bytes and creates an n-bit modular floor
 // modScan will then run a parallel modulus scan to find the original n-byte block with a matching signature
-// decoderRandom4 uses goroutines to run the modScan decoders in sequence
+//
+// decoderRandom uses goroutines to run the modScan decoders in sequence
+// There is a modScan for random bytes and modScan for files
 //
 // copyright (C) Scott Ross 2019
+
+// https://github.com/singularian/mdencode
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
