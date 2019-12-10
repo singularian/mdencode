@@ -136,3 +136,52 @@ mdbinlist  4000 (opens default.mdbin)
 mdbinlist  4000
 mdbinlist  4000 mdbintest.md
 ```
+
+# Example Usage of mdzip and mdunzip
+
+                                                                                                    
+```                                                                                                 
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdzip                     
+USAGE of ./mdzip:                                                                                   
+                                                                                                    
+  -file string                                                                                      
+        Input Filename                                                                              
+  -block string                                                                                     
+        File Block Size Bytes (default "40")                                                        
+  -fh string                                                                                        
+        File Hash Bit String List (default "01001")                                                 
+  -bh string                                                                                        
+        Block Hash Bit String List (default "01001")                                                
+  -mod string                                                                                       
+        Modulus Size in Bits (default "32")                                                         
+  -format int                                                                                       
+        Output Format (default 10)                                                                  
+  -out string                                                                                       
+        Output Filename                                                                             
+  -log string                                                                                       
+        Log Filename                                                                                
+                                                                                                    
+                                                                                                    
+Build Time: 2018-06-16-0431 UTC                                                                     
+Version:    1.0.0 復甦 復活                                                                             
+```                                                                                                 
+                                                                                                    
+```                                                                                                 
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzip                   
+                                                                                                    
+  -file string                                                                                      
+        Input Filename                                                                              
+  -out string                                                                                       
+        Output Filename                                                                             
+  -thread string                                                                                    
+        Go Routine Threadsize                                                                       
+                                                                                                    
+```                                                                                                 
+                                                                                                    
+mdlist can display the contents of an mdzip file                                                    
+```                                                                                                 
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdlist
+USAGE of ./mdlist:  
+Examples:  
+./mdlist  [FILENAME]   
+```

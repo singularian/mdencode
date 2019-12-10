@@ -328,9 +328,9 @@ USAGE of ./mdzip:
   -block string
         File Block Size Bytes (default "40")
   -fh string
-        File Hash Bit String List (default "011")
+        File Hash Bit String List (default "01001")
   -bh string
-        Block Hash Bit String List (default "011")
+        Block Hash Bit String List (default "01001")
   -mod string
         Modulus Size in Bits (default "32")
   -format int
