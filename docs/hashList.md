@@ -5,6 +5,7 @@ It corresponds to the binary or quaterniary argument position.
 
 1. md4
 2. md5
+3. sha1_128
 3. sha1
 4. sha224
 5. sha256
