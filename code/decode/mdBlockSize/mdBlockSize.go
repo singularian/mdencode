@@ -48,8 +48,12 @@ func (bl *BlockSize) CalcHashBlockSize (hashlist string) (uint64, []int) {
                         s = append(s, 16)
                         case "ripe160":
                         s = append(s, 20)
-                        case "sha1":
-                        s = append(s, 20)
+			case "sha1_128":
+			s = append(s, 16)
+			case "sha1_1284":
+			s = append(s, 16)
+			case "sha1":
+			s = append(s, 20)
                         case "sha224":
                         s = append(s, 28)
                         case "sha256":
