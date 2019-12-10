@@ -14,7 +14,7 @@ LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X githu
 all:
 	go build -o mdunzip mdUnzip.go 
 	go build -o mdzip mdzip.go 
-	go build -o mdlist testBinReadMdFmt.go 
+	go build -o mdlist mdlist.go 
 	go build -o mdlistTest testBinReadMdFmt.go 
 build: 
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip mdUnzip.go
