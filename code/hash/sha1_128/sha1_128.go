@@ -3,16 +3,13 @@
 package sha1_128
 
 import (
-_	"crypto"
-//	"encoding/binary"
-//	"errors"
 	"hash"
-	// "github.com/singularian/mdencode/code/hash/sha1_128_block"
 	"crypto/sha1"
+_	"errors"
 )
 
 // The size of a SHA-1 checksum in bytes.
-const Size = 16 
+const Size = 16
 
 // The blocksize of SHA-1 in bytes.
 const BlockSize = 64
@@ -22,6 +19,8 @@ const SHA1_128 = 128
 // digest represents the partial evaluation of a checksum.
 type digest struct {
 	sha1hash hash.Hash
+	start    int
+	end      int
 }
 
 func init() {
@@ -45,11 +44,19 @@ func (d *digest) Write(p []byte) (nn int, err error) {
 // New returns a new hash.Hash computing the SHA1 checksum. The Hash also
 // implements encoding.BinaryMarshaler and encoding.BinaryUnmarshaler to
 // marshal and unmarshal the internal state of the hash.
-func New() hash.Hash {
+func New(params ...int) hash.Hash {
 	d := new(digest)
 	h  := sha1.New()
 	d.sha1hash = h
-	// d.Reset()
+
+	d.start = 0
+	d.end   = 16
+
+	if (len(params) == 2) {
+		d.start = params[0]
+		d.end   = params[1]
+	}
+
 	return d
 }
 
@@ -57,6 +64,6 @@ func (d *digest) Sum(in []byte) []byte {
 	// Make a copy of d so that caller can keep writing and summing.
 	sl := d.sha1hash.Sum(nil)
 
-	return sl[0:16]
+	return sl[d.start:d.end]
 }
 
