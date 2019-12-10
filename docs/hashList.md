@@ -109,9 +109,7 @@ Makefile
 
 # Filehash
  md4 6444ab32cf86c8f252e72905ce52c14d
-# Filehash
  md5 d41d8cd98f00b204e9800998ecf8427e
-# Filehash
  sha512_224 6ed0dd02806fa89e25de060c19d3ac86cabb87d6a0ddd05c333b84f4
 
 # blockhash 0
