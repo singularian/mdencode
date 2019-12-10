@@ -328,6 +328,7 @@ These are a brief list of collision management in mdzip and mdunzip.
 - Using File level Signatures to validate Block Level Signatures
 - Signature Switching. If one signature or signature group has a collsion switch to another signature
 - Use Block Groups as a bandaid around signature blocks
+- Use Block Signature Pairs with Modulus / Modular Floors
 - Use Optional Collision Numbers
 - Using Modular floors to skip numbers
 
