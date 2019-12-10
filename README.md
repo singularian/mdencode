@@ -315,7 +315,7 @@ mdunzip only handles sha1 and md5 as the default cyphers currently. More signatu
 Proccessing power limits the size of the input block.  
 
 ./mdzip -file=decoderRandom4.go -block=11 -mod=64 -out=decoderRandom4.go.mdz  
-./mdunzip -file=Makefile.mdz -out=Makefile.mdz.uncompressed -thread=8
+./mdunzip -file=decoderRandom4.go.mdz -out=decoderRandom4.go.mdz.uncompressed -thread=16
 
 TODO: Change the mod exponent size in the output block from int32 to int16.  
 
