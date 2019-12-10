@@ -77,7 +77,7 @@ In one run the mdencode program can run ripe160, sha1, sha224 and whirlpool on a
 This allows for a file signature to have the lists randomized and improves security by making signatures unpredictable. The signature lists
 for mdencode are bit strings which can be random bit strings. This allows for the first random file signatures.
 
-[Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
+- [Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
 
 # Output Formats
 
