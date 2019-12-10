@@ -71,8 +71,8 @@ func argsSimple(argsNumber int) int {
 	flag.StringVar(&fd.blocksize, "block", "40", "File Block Size Bytes")
 	flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
 	flag.IntVar(&fd.defaultFormat, "format", 10, "Output Format")
-	flag.StringVar(&fd.fhashlist, "fh", "011", "File Hash Bit String List")
-	flag.StringVar(&fd.bhashlist, "bh", "011", "Block Hash Bit String List")
+	flag.StringVar(&fd.fhashlist, "fh", "01001", "File Hash Bit String List")
+	flag.StringVar(&fd.bhashlist, "bh", "01001", "Block Hash Bit String List")
 	// flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate A Random File Hash Bit String List")
 	//flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random Block Hash Bit String List")
 	//flag.BoolVar(&fd.randomfileblockhash, "fbr", false, "Generate A Random File and Block Hash Bit String List")
@@ -96,6 +96,9 @@ func argsSimple(argsNumber int) int {
 	flag.StringVar(&fd.outputfilename, "out", "", "Output Filename")
 	flag.StringVar(&fd.outputfilename, "output", "", "Output Filename")
 	flag.StringVar(&fd.logfilename, "log", "", "Log Filename")
+
+	//fmt.Println("block ", fd.bhashlist)
+	//os.Exit(1)
 
 	flag.Usage = printUsage
 
