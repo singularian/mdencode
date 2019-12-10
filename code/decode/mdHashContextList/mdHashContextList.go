@@ -2,6 +2,25 @@ package mdHashContextList
 
 import (
 	"strings"
+	"hash"
+	"hash/fnv"
+        "crypto/hmac"
+	"golang.org/x/crypto/md4"
+        "crypto/md5"
+        "github.com/singularian/mdencode/code/hash/sha1_128"
+        "crypto/sha1"
+        "crypto/sha256"
+        "crypto/sha512"
+        "github.com/codahale/blake2"
+	"golang.org/x/crypto/blake2s"
+	"golang.org/x/crypto/ripemd160"
+	"golang.org/x/crypto/sha3"
+	"github.com/aead/skein"
+	"github.com/asadmshah/murmur3"
+	"github.com/cxmcc/tiger"
+	"github.com/dchest/siphash"
+	"github.com/jzelinskie/whirlpool"
+	"github.com/steakknife/keccak"
 )
 
 // BlockSize object stores the file block signature size
@@ -11,9 +30,9 @@ type HashContextList struct {
 	// hash map
 	// 
 	// hash list for files
-	hashList map[string]hash.Hash
+	HashList map[string]hash.Hash
         // hash list for blocks
-        hashListBlocks map[string]hash.Hash
+        HashListBlocks map[string]hash.Hash
 }
 
 // Init returns a new BlockSize object  
@@ -24,12 +43,17 @@ func Init() (hc *HashContextList) {
 
 // createHashListMap
 // create the hash context hash list map
-func (hc *HashContextList) createHashListMap(hashList string) {
+func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int) {
 
 
 	hb := make(map[string]hash.Hash)
 
 	hashlist := strings.Split(hashList, ":")
+
+	// key          := "LomaLindaSanSerento9000"
+	// var defaultkey = []byte("LomaLindaSanSerento9000")
+	var key = []byte("LomaLindaSanSerento9000")
+	// key = defaultkey
 
         for i := 0; i < len(hashlist); i++ {
                 // fmt.Println("hashlist ", st[i])          
@@ -60,7 +84,7 @@ func (hc *HashContextList) createHashListMap(hashList string) {
                         case "ripe160":
 				hb["ripe160"] = ripemd160.New()
                         case "sha1":
-				hb["sha1"] = sha1.New
+				hb["sha1"] = sha1.New()
 			case "sha1_128":
 				hb["sha1_128"] = sha1_128.New()
 			case "sha1_1284":
@@ -104,7 +128,11 @@ func (hc *HashContextList) createHashListMap(hashList string) {
                 }
 	}
 
-	hc.hashList = hb
+	if mdtype == 0 {
+		hc.HashList = hb
+	} else {
+		hc.HashListBlocks = hb
+	}
 }
 
 // CalcHashBlockSize takes a hashlist colon separated string of hash names
