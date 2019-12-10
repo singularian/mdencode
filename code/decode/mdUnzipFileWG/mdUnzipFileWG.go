@@ -268,6 +268,11 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 		}
 		fmt.Println("end testing mutex ", mutex.GetMatchStatus())
 
+		for thread = threadStart; thread < threadEnd; thread++ {
+			mdp[thread].Stop = true
+
+		}
+
 		mutex.ResetMutex()
 
 		hlistarray = hlistarray[:0]

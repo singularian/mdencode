@@ -33,59 +33,73 @@ func (bl *BlockSize) CalcHashBlockSize (hashlist string) (uint64, []int) {
 
                 switch st[i] {
                         case "blake2":
-                        s = append(s, 64)
+				s = append(s, 64)
                         case "blake2b":
-                        s = append(s, 64)
+				s = append(s, 64)
                         case "blake2s_128":
-                        s = append(s, 16)
+				s = append(s, 16)
                         case "blake2_256":
-                        s = append(s, 32)
+				s = append(s, 32)
+			case "fnv":
+				s = append(s, 8)
+			case "hmac256":
+				s = append(s, 32)
+			case "hmac512":
+				s = append(s, 64)
+			case "kekkak":
+				s = append(s, )
                         case "murmur3":
-                        s = append(s, 16)
+				s = append(s, 16)
                         case "md4":
-                        s = append(s, 16)
+				s = append(s, 16)
                         case "md5":
-                        s = append(s, 16)
+				s = append(s, 16)
                         case "ripe160":
-                        s = append(s, 20)
+				s = append(s, 20)
 			case "sha1_128":
-			s = append(s, 16)
+				s = append(s, 16)
 			case "sha1_1284":
-			s = append(s, 16)
+				s = append(s, 16)
 			case "sha1":
-			s = append(s, 20)
+				s = append(s, 20)
                         case "sha224":
-                        s = append(s, 28)
+				s = append(s, 28)
                         case "sha256":
-                        s = append(s, 32)
+				s = append(s, 32)
                         case "sha512":
-                        s = append(s, 64)
+				s = append(s, 64)
                         case "sha512_224":
-                        s = append(s, 28)
+				s = append(s, 28)
                         case "sha512_256":
-                        s = append(s, 32)
-                        case "sha512_384":
-                        s = append(s, 48)
+				s = append(s, 32)
+                        // case "sha512_384":
+			//	s = append(s, 48)
                         case "sha3_224":
-                        s = append(s, 28)
+				s = append(s, 28)
                         case "sha3_256":
-                        s = append(s, 32)
+				s = append(s, 32)
+			case "sha3_384":
+				s = append(s, 48)
+			case "sha3_512":
+				s = append(s, 64)
+			case "siphash":
+				s = append(s, 16)
                         case "skein_160":
-                        s = append(s, 20)
-                        case "skein_224":
-                        s = append(s, 28)
+				s = append(s, 20)
+                        // case "skein_224":
+			// 	s = append(s, 28)
                         case "skein_256":
-                        s = append(s, 32)
+				s = append(s, 32)
                         case "skein_384":
-                        s = append(s, 48)
+				s = append(s, 48)
                         case "skein_512":
-                        s = append(s, 64)
+				s = append(s, 64)
                         case "skein_1024":
-                        s = append(s, 128)
+				s = append(s, 128)
                         case "tiger":
-                        s = append(s, 48)
+				s = append(s, 48)
                         case "whirlpool":
-                        s = append(s, 64)
+				s = append(s, 64)
                 }
 
         }

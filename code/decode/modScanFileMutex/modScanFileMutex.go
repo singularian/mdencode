@@ -81,6 +81,7 @@ type DecodeData struct {
 	mux *mdUnzipFileMutex.FileMutex
 	// log writer
 	islogging bool
+	Stop bool
 	Logfile   *log.Logger
 }
 
@@ -98,6 +99,7 @@ func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes
 	mdata.timeStarted = time
 	mdata.initLog()
 	mdata.islogging = false
+	mdata.Stop      = false
 	mdata.mux = mux
 	return mdata
 }
@@ -392,6 +394,10 @@ func (md *DecodeData) decode() (int, string) {
 		if lineCount >= 1000000 {
 			md.Printlog("blockbuffer value ", md.modulusStart)
 			lineCount = 0
+		}
+
+		if md.Stop {
+			break
 		}
 
 		lineCount++
