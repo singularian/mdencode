@@ -41,7 +41,7 @@ You can also add signatures. The design goal is to have hundreds of selectable s
 
 - The capability to add more signatures 
 - A chief design goal is to have hundreds of user selectable file or block and block group signatures
-- Prioritize file signature quantity over userability
+- Prioritize file signature quantity over usability
 - A large extensible [Digital Signature List](https://github.com/singularian/mdencode/blob/master/docs/hashList.md)
 
 # Digital Signature Heirarchy
