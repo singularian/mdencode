@@ -182,8 +182,9 @@ This is a test modulus scan on a 1000 byte block with a 7968 byte modulus
 
 # Donations
 
-* BTC: `31ixWCPg2Ax5uhYk418C4KBFacnnri9Axb`
-* ETH: `0x68907c4ac25e2041A797Ce8c639994cf9EbFdc8C`
+* BTC: `32L3gyJdkiFwgJ72rsSzbCBjTjVFxJLHPm`
+* ETH: `0x137eB09cF2e199dA2Aa79607f96719be1491a312`
+* LTC: `MJh8XpUQ5wm8x1HCoQ7dewNqhrLfZZc31x`
 
 # License 
 
