@@ -163,7 +163,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 
 	// calculate and return the file signature list byte block size
 	var filelistarr []int
-	_, filelistarr = mdc.CalcHashBlockSize(filelist)
+	_, filelistarr = mdc.CalcHashBlockSize(filelist, 0)
 
         // fmt.Println("test array ", filelistarr)
         st := strings.Split(filelist, ":")
@@ -177,7 +177,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
         }
 
 	// calculate and return the file signature block byte size list
-	mdblocksize, blocklistarr := mdc.CalcHashBlockSize(blocklist)
+	mdblocksize, blocklistarr := mdc.CalcHashBlockSize(blocklist, 1)
 	// _, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)
 
 	// calculate the file blocks count and the last file block size
@@ -204,10 +204,11 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                 // end = end + fileblocksize;
                 // var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
 
-		// create a byteblock array of the file block bytes
+		// create a byteblock array of the file block hash bytes
 		var blockXsize = start + mdblocksize
 		hashByteBlock := bytes[start:blockXsize]
 		fmt.Printf("Hash ByteBlock %x", hashByteBlock)
+		mdc.SetBlockHash(hashByteBlock)
 
 		// create a string of the file block bytes
                 for j := 0; j < len(blocklistarr); j++ {

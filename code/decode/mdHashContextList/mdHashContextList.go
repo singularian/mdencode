@@ -1,6 +1,7 @@
 package mdHashContextList 
 
 import (
+	"bytes"
 	"fmt"
 	"strings"
 	"hash"
@@ -42,8 +43,14 @@ type HashContextList struct {
 	// hashBlockBytes
 	// this is the current mdzip file signature bytes
 	// it contains the entire byte list
+	hashFileBytes  []byte
 	hashBlockBytes []byte
-	// 
+        // argument signature hash list names
+        fileHashListNames  []string
+        blockHashListNames []string
+	// file and block signature size
+	hashFileBlockSize uint64
+	hashFileBlockSizeList []int
 	hashBlockSize uint64
 	hashBlockSizeList []int
 
@@ -65,24 +72,25 @@ func Init() (hc *HashContextList) {
 // create the hash context hash list map
 // need to incorporate the thread number
 // has to be either a thread list for each or a key_threadnumber
+// create 16 hashlist context objects for each thread once
 func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, threadNumber int) {
 
 
 	hb := make(map[string]hash.Hash)
 
-	hashlist := strings.Split(hashList, ":")
+	hashlistArr := strings.Split(hashList, ":")
 
 	// key          := "LomaLindaSanSerento9000"
 	// var defaultkey = []byte("LomaLindaSanSerento9000")
 	var key = []byte("LomaLindaSanSerento9000")
 	// key = defaultkey
 
-	hashlistsize := len(hashlist)
+	hashlistsize := len(hashlistArr)
 
-	for thread := 0; thread < threadNumber; thread++ {
+	// for thread := 0; thread < threadNumber; thread++ {
 		for hashnum := 0; hashnum < hashlistsize; hashnum++ {
                 // fmt.Println("hashlist ", st[i])          
-		switch hashlist[hashnum] {
+		switch hashlistArr[hashnum] {
                         case "blake2":
 				hb["blake2"] = blake2.New(nil)
                         case "blake2b":
@@ -152,22 +160,34 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["whirlpool"] = whirlpool.New()
                 	}
 		}
-	}
+	// }
 
 	if mdtype == 0 {
+		hc.fileHashListNames  = hashlistArr
+		hc.fileHashList       = hashList 
 		hc.HashList           = hb
 		hc.HashListFileSize   = hashlistsize
 	} else {
+		hc.blockHashListNames = hashlistArr
+		hc.blockHashList      = hashList
 		hc.HashListBlocks     = hb
 		hc.HashListBlockSize  = hashlistsize
 	}
 }
 
-// sets the current mdzip file hash signature block
+// sets the current mdzip file hash signature block bytes
 // this is the list of signature bytes
 func (hc *HashContextList) SetFileHashBlock (byteblock []byte) {
 
-	hc.hashBlockBytes = byteblock
+	hc.hashFileBytes = byteblock
+
+}
+
+// sets the current mdzip file block hash signature block bytes
+// this is the list of signature bytes
+func (hc *HashContextList) SetBlockHash (byteblock []byte) {
+
+        hc.hashBlockBytes = byteblock
 
 }
 
@@ -175,19 +195,54 @@ func (hc *HashContextList) SetFileHashBlock (byteblock []byte) {
 // this compares the current modulus scan byte block with the hash byte block at position start to end
 // the hash byte block is the entire signature block 
 // [0:20]sha1[21:40]ripe160
-func (hc *HashContextList) CheckFileHashBlock (byteblock []byte, hashlist string) (bool) {
+func (hc *HashContextList) CheckFileHashBlock (byteblock []byte) (bool) {
 
-	for hashkey, hashvalue := range hc.HashListBlocks {
-		fmt.Println("hash ", hashkey)
+	var position int = 0
+	var start    int = 0
+	var end      int = 0
+	// hc.hashBlockBytes[start:end]
+
+	fmt.Println("hashlist ", hc.hashBlockSizeList)
+	end = hc.hashBlockSizeList[0]
+	// for hashkey, hashvalue := range hc.HashListBlocks {
+	// for _, hashvalue := range l.blockHashListNames {
+	for _, hashvalue := range hc.blockHashListNames {
+		// fmt.Println("hash ", hashkey)
+		fmt.Println("hash ", hashvalue)
+		h := hc.HashListBlocks[hashvalue]
+		// hashvalue.Reset()
 		//  bytes[start:blockXsize]
 		// hashvalue.Write(byteblock[])
-		hashvalue.Write(byteblock)
+		//////// hashvalue.Write([]byte(byteblock))
+		h.Write([]byte(byteblock))
+		end = start + hc.hashBlockSizeList[position]
+		// if position > 0 {
+		//	start = hc.hashBlockSizeList[position]
+		//}
+		// end = start + hc.hashBlockSizeList[position]
+		fmt.Println("start end ", start, end)
+		// fmt.Println("start end ", start, end, hc.hashBlockBytes[start:end])
 		// if bytes.Equal(md5.Sum(nil), md.md5byteblock) {
-		
+		/* if bytes.Equal(hashvalue.Sum(nil), hc.hashBlockBytes[start:end])  {
+			fmt.Printf("test bytes true %x %x\n", hashvalue.Sum(nil), hc.hashBlockBytes[start:end])
+		} else {
+			fmt.Printf("test bytes false %x %x\n", hashvalue.Sum(nil), hc.hashBlockBytes[start:end])
+			// return false
+		} */
+		if !bytes.Equal(h.Sum(nil), hc.hashBlockBytes[start:end])  {
+			fmt.Printf("test bytes false %s start %d end %d %x %x\n", hashvalue, start, end, h.Sum(nil), hc.hashBlockBytes[start:end])
+			return false
+		}
+		fmt.Printf("test bytes true %x %x\n", h.Sum(nil), hc.hashBlockBytes[start:end])
 		// fmt.Printf("hash %s bytes hex % x\n", hashkey, hashvalue.Sum(nil))
-		// hashvalue.Reset()
+		h.Reset()
+		start += hc.hashBlockSizeList[position] 
+		// end = start
+		// fmt.Println("next ", start, end)
+		position++
 	}
 
+	fmt.Println("test bytes equals")
 	return true
 
 }
@@ -196,12 +251,17 @@ func (hc *HashContextList) CheckFileHashBlock (byteblock []byte, hashlist string
 //
 // it calculates the total blocksize and a array of the hash signature block sizes
 // this allows mdprint or mdunzip to decode each signature block and calculate their size
-func (hc *HashContextList) CalcHashBlockSize (hashlist string) (uint64, []int) {
+func (hc *HashContextList) CalcHashBlockSize (hashlist string, mdtype int) (uint64, []int) {
 
 	blocksize, blocklistarr := hc.mdBlockSize.CalcHashBlockSize(hashlist)
 
-	hc.hashBlockSize     = blocksize
-	hc.hashBlockSizeList = blocklistarr
+	if mdtype == 0 {
+		hc.hashFileBlockSize     = blocksize
+		hc.hashFileBlockSizeList = blocklistarr
+	} else {
+		hc.hashBlockSize     = blocksize
+		hc.hashBlockSizeList = blocklistarr
+	}
 
 
 	return blocksize, blocklistarr
