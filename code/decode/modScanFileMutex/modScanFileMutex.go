@@ -51,6 +51,8 @@ type DecodeData struct {
 	modulusBigInt          *big.Int
 	modulusBigIntString    string
 	modulusBigIntRemainder *big.Int
+	// blockNumber
+	blockNumber int64
 	// threads
 	threadNumber int64
 	threadCount  int64
@@ -75,6 +77,7 @@ type DecodeData struct {
 	mdDigHex  string
 	mdDig2Hex string
 	// sha1/md5 bytesblock
+	blockHashNameList string
 	sha1byteblock []byte
 	md5byteblock []byte
 	// file mutex
@@ -86,11 +89,12 @@ type DecodeData struct {
 }
 
 // Init returns a new modScan object
-func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes []byte, mux *mdUnzipFileMutex.FileMutex, time string) (md *DecodeData) {
+func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threadCount int64, bytes []byte, mux *mdUnzipFileMutex.FileMutex, time string) (md *DecodeData) {
 	mdata := new(DecodeData)
 	mdata.blocksizeInt = blocksize
 	mdata.modsizeInt = modsize
 	mdata.modExp = 0
+	mdata.blockNumber = blockNumber 
 	mdata.threadNumber = thread
 	mdata.threadCount = threadCount
 	mdata.byteblock = bytes
@@ -176,7 +180,7 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 }
 
 // run a parallel modulus scan on a user defined or random byte block array
-func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, hashlist string, modRemainder string, c *sync.WaitGroup) {
+func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, blocklist string, hashlist string, modRemainder string, c *sync.WaitGroup) {
 
         //runtime.LockOSThread()
 

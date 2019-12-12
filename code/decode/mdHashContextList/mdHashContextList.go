@@ -1,6 +1,7 @@
 package mdHashContextList 
 
 import (
+	"fmt"
 	"strings"
 	"hash"
 	"hash/fnv"
@@ -21,29 +22,50 @@ import (
 	"github.com/dchest/siphash"
 	"github.com/jzelinskie/whirlpool"
 	"github.com/steakknife/keccak"
+	"github.com/singularian/mdencode/code/decode/mdBlockSize"
 )
 
 // BlockSize object stores the file block signature size
 type HashContextList struct {
 	fileHashList string
 	blockHashList string
+	mdBlockSize *mdBlockSize.BlockSize
 	// hash map
 	// 
 	// hash list for files
 	HashList map[string]hash.Hash
-        // hash list for blocks
+        // hash context signature list for files or blocks
         HashListBlocks map[string]hash.Hash
+	// hash context count
+	HashListFileSize  int
+	HashListBlockSize int
+	// hashBlockBytes
+	// this is the current mdzip file signature bytes
+	// it contains the entire byte list
+	hashBlockBytes []byte
+	// 
+	hashBlockSize uint64
+	hashBlockSizeList []int
+
 }
 
 // Init returns a new BlockSize object  
 func Init() (hc *HashContextList) {
-        hcx := new(HashContextList)
-        return hcx
+        hcl := new(HashContextList)
+
+	mdBlock := mdBlockSize.Init()
+	hcl.mdBlockSize       = mdBlock
+	hcl.HashListFileSize  = 0
+	hcl.HashListBlockSize = 0
+
+        return hcl
 }
 
 // createHashListMap
 // create the hash context hash list map
-func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int) {
+// need to incorporate the thread number
+// has to be either a thread list for each or a key_threadnumber
+func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, threadNumber int) {
 
 
 	hb := make(map[string]hash.Hash)
@@ -55,9 +77,12 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int) {
 	var key = []byte("LomaLindaSanSerento9000")
 	// key = defaultkey
 
-        for i := 0; i < len(hashlist); i++ {
+	hashlistsize := len(hashlist)
+
+	for thread := 0; thread < threadNumber; thread++ {
+		for hashnum := 0; hashnum < hashlistsize; hashnum++ {
                 // fmt.Println("hashlist ", st[i])          
-                switch hashlist[i] {
+		switch hashlist[hashnum] {
                         case "blake2":
 				hb["blake2"] = blake2.New(nil)
                         case "blake2b":
@@ -125,14 +150,46 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int) {
 				hb["tiger"] = tiger.New()
                         case "whirlpool":
 				hb["whirlpool"] = whirlpool.New()
-                }
+                	}
+		}
 	}
 
 	if mdtype == 0 {
-		hc.HashList = hb
+		hc.HashList           = hb
+		hc.HashListFileSize   = hashlistsize
 	} else {
-		hc.HashListBlocks = hb
+		hc.HashListBlocks     = hb
+		hc.HashListBlockSize  = hashlistsize
 	}
+}
+
+// sets the current mdzip file hash signature block
+// this is the list of signature bytes
+func (hc *HashContextList) SetFileHashBlock (byteblock []byte) {
+
+	hc.hashBlockBytes = byteblock
+
+}
+
+
+// this compares the current modulus scan byte block with the hash byte block at position start to end
+// the hash byte block is the entire signature block 
+// [0:20]sha1[21:40]ripe160
+func (hc *HashContextList) CheckFileHashBlock (byteblock []byte, hashlist string) (bool) {
+
+	for hashkey, hashvalue := range hc.HashListBlocks {
+		fmt.Println("hash ", hashkey)
+		//  bytes[start:blockXsize]
+		// hashvalue.Write(byteblock[])
+		hashvalue.Write(byteblock)
+		// if bytes.Equal(md5.Sum(nil), md.md5byteblock) {
+		
+		// fmt.Printf("hash %s bytes hex % x\n", hashkey, hashvalue.Sum(nil))
+		// hashvalue.Reset()
+	}
+
+	return true
+
 }
 
 // CalcHashBlockSize takes a hashlist colon separated string of hash names
@@ -140,73 +197,12 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int) {
 // it calculates the total blocksize and a array of the hash signature block sizes
 // this allows mdprint or mdunzip to decode each signature block and calculate their size
 func (hc *HashContextList) CalcHashBlockSize (hashlist string) (uint64, []int) {
-        st := strings.Split(hashlist, ":")
 
-        var blocksize uint64 = 0
-        var s []int
+	blocksize, blocklistarr := hc.mdBlockSize.CalcHashBlockSize(hashlist)
 
-        for i := 0; i < len(st); i++ {
-                // fmt.Println("hashlist ", st[i])
+	hc.hashBlockSize     = blocksize
+	hc.hashBlockSizeList = blocklistarr
 
-                switch st[i] {
-                        case "blake2":
-                        s = append(s, 64)
-                        case "blake2b":
-                        s = append(s, 64)
-                        case "blake2s_128":
-                        s = append(s, 16)
-                        case "blake2_256":
-                        s = append(s, 32)
-                        case "murmur3":
-                        s = append(s, 16)
-                        case "md4":
-                        s = append(s, 16)
-                        case "md5":
-                        s = append(s, 16)
-                        case "ripe160":
-                        s = append(s, 20)
-                        case "sha1":
-                        s = append(s, 20)
-                        case "sha224":
-                        s = append(s, 28)
-                        case "sha256":
-                        s = append(s, 32)
-                        case "sha512":
-                        s = append(s, 64)
-                        case "sha512_224":
-                        s = append(s, 28)
-                        case "sha512_256":
-                        s = append(s, 32)
-                        case "sha512_384":
-                        s = append(s, 48)
-                        case "sha3_224":
-				s = append(s, 28)
-                        case "sha3_256":
-				s = append(s, 32)
-			case "sha3_384":
-                        case "skein_160":
-                        s = append(s, 20)
-                        case "skein_224":
-                        s = append(s, 28)
-                        case "skein_256":
-                        s = append(s, 32)
-                        case "skein_384":
-                        s = append(s, 48)
-                        case "skein_512":
-                        s = append(s, 64)
-                        case "skein_1024":
-                        s = append(s, 128)
-                        case "tiger":
-                        s = append(s, 48)
-                        case "whirlpool":
-                        s = append(s, 64)
-                }
 
-        }
-
-        for i := range s {
-                blocksize += uint64(s[i])
-        }
-
-	return blocksize, s
+	return blocksize, blocklistarr
 }

@@ -47,7 +47,7 @@ func main() {
 
 	// test the md hash context list
 	mdc := mdHashContextList.Init()
-	mdc.CreateHashListMap("blake2:md5:sha1", 1)
+	mdc.CreateHashListMap("blake2:md5:sha1", 1, 1)
 	var defaultkey = []byte("LomaLindaSanSerento9000")
 	// for _, hashvalue := range l.blockHashListNames {
 	// for context, hashvalue := range mdc.HashListBlocks {

@@ -18,7 +18,8 @@ import (
         "math/big"
         "time"
 	"sync"
-        "github.com/singularian/mdencode/code/decode/mdBlockSize"
+        // "github.com/singularian/mdencode/code/decode/mdBlockSize"
+	"github.com/singularian/mdencode/code/decode/mdHashContextList"
 	"github.com/singularian/mdencode/code/decode/mdUnzipFileMutex"
         "github.com/singularian/mdencode/code/decode/modScanFileMutex"
 )
@@ -157,11 +158,12 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
         fmt.Println("hashlist ", filelist, blocklist)
 
 	// initialize the mdBlockSize object
-	mdBlock := mdBlockSize.Init()
+	// mdBlock := mdBlockSize.Init()
+	mdc := mdHashContextList.Init()
 
 	// calculate and return the file signature list byte block size
 	var filelistarr []int
-	_, filelistarr = mdBlock.CalcHashBlockSize(filelist)
+	_, filelistarr = mdc.CalcHashBlockSize(filelist)
 
         // fmt.Println("test array ", filelistarr)
         st := strings.Split(filelist, ":")
@@ -175,8 +177,8 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
         }
 
 	// calculate and return the file signature block byte size list
-	// mdblocksize, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)
-	_, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)
+	mdblocksize, blocklistarr := mdc.CalcHashBlockSize(blocklist)
+	// _, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)
 
 	// calculate the file blocks count and the last file block size
 	// ie if the file size is 100 and block size is 12 calculate the number of blocks and
@@ -201,6 +203,13 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                 // end = end + fileblocksize + modByteSize + 4;
                 // end = end + fileblocksize;
                 // var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
+
+		// create a byteblock array of the file block bytes
+		var blockXsize = start + mdblocksize
+		hashByteBlock := bytes[start:blockXsize]
+		fmt.Printf("Hash ByteBlock %x", hashByteBlock)
+
+		// create a string of the file block bytes
                 for j := 0; j < len(blocklistarr); j++ {
                         start = end
                         end = end + uint64(blocklistarr[j])
@@ -238,7 +247,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                 // var threadCount int64 = 16
                 var emptybytes []byte
                 for thread = 0; thread < int64(threadCount); thread++ {
-                        md := modScanFileMutex.Init(int64(currentBlocksize), int64(modSize), thread, int64(threadCount), emptybytes, mutex, time)
+                        md := modScanFileMutex.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), thread, int64(threadCount), emptybytes, mutex, time)
                         mdp = append(mdp, md)
                 }
 
@@ -251,7 +260,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                 var threadEnd   int64   = int64(threadCount) 
                 for thread = threadStart; thread < threadEnd; thread++ {
                         // fmt.Println("Kicking off thread ", thread, threadStart, threadEnd)
-                        go mdp[thread].ModulusScanFileBytes(currentBlocksize, modExp, hstring, n.String(), &c)
+                        go mdp[thread].ModulusScanFileBytes(currentBlocksize, modExp, blocklist, hstring, n.String(), &c)
                 }
 
 
