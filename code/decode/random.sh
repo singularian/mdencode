@@ -8,15 +8,18 @@ RANDOM_FILE="randomfile"
 # MODBITS="64"
 
 echo "args $#"
-if [ $# -ne 4 ]; then
-	echo "$0 FILESIZE BLOCKSIZE MODBITS THREADS"
+if [ $# -ne 5 ]; then
+	echo "$0 FILESIZE BLOCKHASHLISTBINARY BLOCKSIZE MODBITS THREADS"
 	echo "$0 100 11 64 16"
+	echo "$0 100 101111000111 11 64 16"
+	echo "$0 100 1010111 11 64 16"
 	exit 2
 else
 	FILE_SIZE=$1
-	BLOCK_SIZE=$2
-	MODBITS=$3
-	THREADS=$4
+	BLOCK_BINARY_ARGS=$2
+	BLOCK_SIZE=$3
+	MODBITS=$4
+	THREADS=$5
 	# exit 0
 fi
 
@@ -36,7 +39,7 @@ head -c $FILE_SIZE /dev/urandom > $RANDOM_FILE
 
 echo ""
 echo "Zipping the file $RANDOM_FILE"
-./mdzip -file=randomfile -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz
+./mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz
 
 echo ""
 echo "mdlist $RANDOM_FILE" 

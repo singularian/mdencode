@@ -189,6 +189,21 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 	// create the mutex
 	mutex := mdUnzipFileMutex.Init()
 
+	// create the hash context list for the threads
+	hcListArr := []*mdHashContextList.HashContextList{}
+	var threadNum int64 = 0
+	// var threadCount int64 = 16                                                                                                                        
+	for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
+		threadmdcl := mdHashContextList.Init()
+		hcListArr = append(hcListArr, threadmdcl)
+	}
+	for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
+		_, _ = hcListArr[threadNum].CalcHashBlockSize(filelist, 0) 
+		_, _ = hcListArr[threadNum].CalcHashBlockSize(blocklist, 1) 
+		hcListArr[threadNum].CreateHashListMap(blocklist, 1, 1)
+		// fmt.Println("testing context list ", hcListArr[threadNum].GetBlockHash())
+	}
+
         var blockNumber uint64
         var modByteSize uint64
         modByteSize = modSize / 8
@@ -247,8 +262,12 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                 var thread int64 = 0
                 // var threadCount int64 = 16
                 var emptybytes []byte
+		for thread = 0; thread < int64(threadCount); thread++ {
+			// fmt.Println("testing context list ", hcListArr[thread].GetBlockHash())
+			hcListArr[thread].SetBlockHash(hashByteBlock)
+		}
                 for thread = 0; thread < int64(threadCount); thread++ {
-                        md := modScanFileMutex.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), thread, int64(threadCount), emptybytes, mutex, time)
+                        md := modScanFileMutex.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), thread, int64(threadCount), emptybytes, mutex, hcListArr[thread], time)
                         mdp = append(mdp, md)
                 }
 

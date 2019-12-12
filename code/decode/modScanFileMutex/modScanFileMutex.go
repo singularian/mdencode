@@ -33,6 +33,7 @@ import (
 	"strings"
 	"sync"
 	"github.com/singularian/mdencode/code/decode/mdUnzipFileMutex"
+	"github.com/singularian/mdencode/code/decode/mdHashContextList"
 	//"runtime"
 )
 
@@ -82,6 +83,8 @@ type DecodeData struct {
 	md5byteblock []byte
 	// file mutex
 	mux *mdUnzipFileMutex.FileMutex
+	// hash context list
+	hashContexList *mdHashContextList.HashContextList
 	// log writer
 	islogging bool
 	Stop bool
@@ -89,7 +92,7 @@ type DecodeData struct {
 }
 
 // Init returns a new modScan object
-func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threadCount int64, bytes []byte, mux *mdUnzipFileMutex.FileMutex, time string) (md *DecodeData) {
+func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threadCount int64, bytes []byte, mux *mdUnzipFileMutex.FileMutex, hcl *mdHashContextList.HashContextList, time string) (md *DecodeData) {
 	mdata := new(DecodeData)
 	mdata.blocksizeInt = blocksize
 	mdata.modsizeInt = modsize
@@ -105,6 +108,7 @@ func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threa
 	mdata.islogging = false
 	mdata.Stop      = false
 	mdata.mux = mux
+	mdata.hashContexList = hcl
 	return mdata
 }
 
@@ -321,8 +325,8 @@ func (md *DecodeData) decode() (int, string) {
 	md.Printlog("thread ", md.threadNumber, " ", md.threadCount, " modstart test result floor ", fmt.Sprint(md.modulusStart), " initial remainder ", fmt.Sprint(modremainder))
 
 	// create the hash contexts
-	md5 := md5.New()
-	sha1 := sha1.New()
+	// md5 := md5.New()
+	// sha1 := sha1.New()
 
 	md.Printlog("starting modulus byteblock ", md.modulusStart.Bytes())
 
@@ -357,12 +361,12 @@ func (md *DecodeData) decode() (int, string) {
 		}
 		// fmt.Println("bigint ", buf, " modulus start bytes ", md.modulusStart.Bytes())
 
-		md5.Write([]byte(buf))
+		// md5.Write([]byte(buf))
 
 		// byte comparison is faster than string comparison
 		/// if bytes.Equal(md5.Sum(nil), md.md5hash.Sum(nil)) {
 		// if bytes.Equal(md5.Sum(nil), md.md5byteblock) {
-		md5string := hex.EncodeToString(md5.Sum(nil))
+		/* md5string := hex.EncodeToString(md5.Sum(nil))
 		if md5string == md.md5hex {
 			sha1.Write([]byte(buf))
 			// sha1string := hex.EncodeToString(sha1.Sum(nil))
@@ -384,6 +388,15 @@ func (md *DecodeData) decode() (int, string) {
 			sha1.Reset()
 		}
 		md5.Reset()
+		// */
+		if md.hashContexList.CheckFileHashBlock([]byte(buf)) {
+		// if md.hashContexList.CheckFileHashBlock(buf)  {
+			md.Println("Found Block buffer ", buf, " thread ", md.threadNumber)
+			md.byteblock = buf
+			md.matchFound = true
+			break
+
+		} // */
 
 		// increment the modulus bigint by the modulus * thread count
 		md.modulusStart = md.modulusStart.Add(md.modulusStart, md.modulusThreadCount)

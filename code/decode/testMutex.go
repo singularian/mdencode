@@ -15,7 +15,8 @@ import (
 func main() {
 
 	// test the file mutex
-	b := []byte{1, 2, 3, 0, 0, 0}
+	b := []byte{1, 2, 3, 0, 10, 0, 11, 22}
+	c := []byte{1, 2, 3, 0, 10, 0, 11, 22, 1, 1, 1}
 	mutex := mdUnzipFileMutex.Init()
 	mutex.SetFileBuffer(1, b)
 	fmt.Println("mutex ", mutex.GetMatchStatus(), " ", mutex.GetFileBuffer())
@@ -29,8 +30,10 @@ func main() {
 
 	// test the md hash context list
 	mdc := mdHashContextList.Init()
-	mdc.CreateHashListMap("blake2:md5:sha1", 1, 1)
-	mdc.CalcHashBlockSize("blake2:md5:sha1", 1)
+	// mdc.CreateHashListMap("blake2:md5:sha1", 1, 1)
+	// mdc.CalcHashBlockSize("blake2:md5:sha1", 1)
+	mdc.CreateHashListMap("md4:md5:sha1", 1, 1)
+	mdc.CalcHashBlockSize("md4:md5:sha1", 1)
 	// var defaultkey = []byte("LomaLindaSanSerento9000")
 	// for _, hashvalue := range l.blockHashListNames {
 	// for context, hashvalue := range mdc.HashListBlocks {
@@ -51,12 +54,20 @@ func main() {
 */
 	}
 
-	for hashkey, hashvalue := range mdc.HashListBlocks {
-		fmt.Println("hash ", hashkey)
-		hashvalue.Write([]byte(b))
-		bytestring += fmt.Sprintf("%x", hashvalue.Sum(nil))
-		fmt.Printf("hash %s %x\n", hashkey, hashvalue.Sum(nil))
-		hashvalue.Reset()
+	// for hashkey, hashvalue := range mdc.HashListBlocks {
+	mm  := mdc.GetBlockHash()
+	fmt.Println("sssss ", mm)
+	// for _, hashvalue := range mdc.blockHashListNames {
+	for _, hashvalue := range mm {
+		fmt.Println("hash ", hashvalue)
+		h := mdc.HashListBlocks[hashvalue]
+		// h := [hashvalue]
+		// ===========================
+		h.Write([]byte(c))
+		// ===========================
+		bytestring += fmt.Sprintf("%x", h.Sum(nil))
+		fmt.Printf("hash %s %x\n", hashvalue, h.Sum(nil))
+		h.Reset()
 	}
 	// os.Exit(0)
 
@@ -83,6 +94,9 @@ func main() {
 	mdc.CheckFileHashBlock(b)
 
 	fmt.Println("\ntest defaultkey")
-	mdc.CheckFileHashBlock(b)
+	if mdc.CheckFileHashBlock(b) {
+		fmt.Println("\nResult = true")
+	}
+	fmt.Println("")
 
 }
