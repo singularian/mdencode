@@ -7,10 +7,10 @@ package main
 //
 // decoderRandom creates the byte block randomly with n-bytes and creates an n-bit modular floor
 // decoderRandom will then run a parallel modulus scan to find the original n-byte block with a matching signature
-// decoderRandom uses goroutines to run the scans in sequence
+// decoderRandom uses goroutines to run the scans in sequence and channels to communicate 
 //
 // This currently uses md5 and SHA-1 as the signature tests
-// It stores the random byte separately from the modulus scan bytes. If the match the test is a success
+// It stores the random byte separately from the modulus scan bytes. If they match the test is a success
 //
 // This is the test case for mdzip and mdunzip which can use multiple signatures
 //
