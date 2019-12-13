@@ -13,6 +13,7 @@ import (
 	// "github.com/singularian/mdencode/code/mdencode/mdRand"
 	"os"
 //	"strconv"
+	"regexp"
 )
 
 var (
@@ -29,6 +30,7 @@ type FlagData struct {
         modsize string
         fhashlist string
         bhashlist string
+	uhashlist string
         key string
         appendfile bool
         byteblock bool
@@ -73,6 +75,7 @@ func argsSimple(argsNumber int) int {
 	flag.IntVar(&fd.defaultFormat, "format", 10, "Output Format")
 	flag.StringVar(&fd.fhashlist, "fh", "01001", "File Hash Bit String List")
 	flag.StringVar(&fd.bhashlist, "bh", "01001", "Block Hash Bit String List")
+	flag.StringVar(&fd.uhashlist, "uh", "", "Quaternian Hash String List")
 	// flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate A Random File Hash Bit String List")
 	//flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random Block Hash Bit String List")
 	//flag.BoolVar(&fd.randomfileblockhash, "fbr", false, "Generate A Random File and Block Hash Bit String List")
@@ -112,6 +115,39 @@ func argsSimple(argsNumber int) int {
 	// set the current working directory
 	fd.getCWD()
 
+        // initial implimentation of the quaternian file or block hashlist arguments
+        // this could eventually have blockgroups which makes it have another 4 states 0-7
+	if fd.uhashlist != "" {
+                var quaternianHashListArray  []string
+                var fhashlist string
+                var bhashlist string
+                re := regexp.MustCompile("[0123]")
+                quaternianHashListArray = re.FindAllString(fd.uhashlist, -1)
+                for _, element := range quaternianHashListArray {
+                        // if it is zero then no hash for that signature
+                        if element == "0" {
+                                fhashlist += "0"
+                                bhashlist += "0"
+                        // if it is one than add the file hash list
+                        } else if element == "1" {
+                                fhashlist += "1"
+                                bhashlist += "0"
+                        // if it is two add the block hash list
+                        } else if element == "2" {
+                                fhashlist += "0"
+                                bhashlist += "1"
+                        // if it is three add file and block hash list
+                        } else if element == "3" {
+                                fhashlist += "1"
+                                bhashlist += "1"
+                        }
+                }
+                fd.fhashlist = fhashlist
+                fd.bhashlist = bhashlist
+                // fmt.Println("Quarternian Hashlist ", fd.uhashlist)
+                // fmt.Println("Quarternian File Hashlist ", fd.fhashlist)
+                // fmt.Println("Quarternian Block Hashlist ", fd.bhashlist)
+        }
 
 	// need to add the block group which is a hash of groups of blocks
 	// blockgroup option and number etc
@@ -166,7 +202,9 @@ func printUsage() {
   -fh string
         File Hash Bit String List (default "011")
   -bh string
-        Block Hash Bit String List (default "011")
+        Block Hash Bit String List (default "01001")
+  -uh string
+        Quarternian Hash String List 
   -mod string
         Modulus Size in Bits (default "32")
   -format int

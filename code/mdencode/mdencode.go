@@ -230,7 +230,7 @@ func printUsage() {
   -bh string
         Block Hash Bit String List (default "01001")
   -uh string
-        Quarternian Hash String List (Default "033")
+        Quarternian Hash String List
   -mod string
         Modulus Size in Bits (default "32")
   -format int
