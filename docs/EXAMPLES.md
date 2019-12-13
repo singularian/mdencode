@@ -183,9 +183,15 @@ This is a test modulus scan on a 1000 byte block with a 7968 byte modulus
 
 # Mdzip and Mdunzip Example
 
+mdzip and mdunzip examples
+
+### Example 1
+
 This next example shows the mdzip and mdlist and mdunzip used in sequence on a 100 byte file.
 A script random.sh has been created to randomly generate a n-byte file and mdzip and mdunzip it.
 Two different signatures are used for the blocks sha1 and sha_1284 a modified sliced 128-bit SHA-1 signature.
+
+
 ```
 morpheus:~/projects/src/github.com/singularian/mdencode/code/decode$ ./random.sh 100 00011 13 64 16
 args 5
@@ -336,6 +342,70 @@ Found block modscan  7  thread  5  block  d5 c0 00 6c 13 3c c4 bf 02
 Found block Mutex  7  thread  5  block  d5 c0 00 6c 13 3c c4 bf 02
 end testing mutex  true
 morpheus:~/projects/src/github.com/singularian/mdencode/code/decode$
+```
+
+### Example 2
+
+This is another mdzip example with the sha512_224. mdzip and mdunzip can use different signatures for encoding and decoding.  
+
+```
+trinity@zion:~/projects/src/github.com/singularian/mdencode/code/decode$ ./random.sh 13 00000001 13 64 16
+args 5
+File Size 13
+Block Size 13
+Modulus Bit Size 64
+Thread Size 16
+Creating a random file randomfile
+
+Zipping the file randomfile
+filename length  10   10
+file Hashlist size  19   md5:sha1-sha512_224  attribute 5  [13 13 64 10 70 19]
+block number  1 13 [14b92b0de0af9c5470fad339ae5c47388230f8247ac25892f284a329] 103 6367675679344471848 64
+
+mdlist randomfile
+fileSize  13
+blockSize  13
+modSize  64
+fileNameLength  10
+filePathLength  70
+fileHashLength  19
+filePath  /home/nsross/projects/src/github.com/singularian/mdencode/code/decode/ 48 118
+filePath  /home/nsross/projects/src/github.com/singularian/mdencode/code/decode/
+filename:  randomfile
+hashlistname    md5:sha1-sha512_224
+hashlist        md5:sha1 sha512_224
+file hashlist   md5:sha1
+block hashlist  sha512_224
+
+file hashlistname  md5  hex  8e7dd4616a0d4023f30e44cd3c8e8379
+file hashlistname  sha1  hex  da39a3ee5e6b4b0d3255bfef95601890afd80709
+block hash 0 13 [14b92b0de0af9c5470fad339ae5c47388230f8247ac25892f284a329] 103 6367675679344471848
+
+mdunzip randomfile
+fileSize  13
+blockSize  13
+modSize  64
+fileNameLength  10
+filePathLength  70
+fileHashLength  19
+filePath  /home/nsross/projects/src/github.com/singularian/mdencode/code/decode/ 48 118
+filePath  /home/nsross/projects/src/github.com/singularian/mdencode/code/decode/
+filename:  randomfile
+hashlistname  md5:sha1-sha512_224
+hashlist  md5:sha1 sha512_224
+file hashlistname  md5  hex  8e7dd4616a0d4023f30e44cd3c8e8379
+file hashlistname  sha1  hex  da39a3ee5e6b4b0d3255bfef95601890afd80709
+Hash ByteBlock 14b92b0de0af9c5470fad339ae5c47388230f8247ac25892f284a329
+Proccesing block hash  0  blocksize  13 [14b92b0de0af9c5470fad339ae5c47388230f8247ac25892f284a329] 103 6367675679344471848
+Found Block sha512_224 14b92b0de0af9c5470fad339ae5c47388230f8247ac25892f284a329  result = 14b92b0de0af9c5470fad339ae5c47388230f8247ac25892f284a329 Found Block buffer  [169 121 64 171 108 88 94 135 75 0 56 175 40]  thread  12
+Total time  3h40m41.3315434s
+buffer  [169 121 64 171 108 88 94 135 75 0 56 175 40]
+Found Thread 12 Block a9 79 40 ab 6c 58 5e 87 4b 00 38 af 28
+testing mutex
+Processing  true
+Found block modscan  0  thread  12  block  a9 79 40 ab 6c 58 5e 87 4b 00 38 af 28
+Found block Mutex  0  thread  12  block  a9 79 40 ab 6c 58 5e 87 4b 00 38 af 28
+end testing mutex  true
 ```
 
 
