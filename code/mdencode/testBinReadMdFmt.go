@@ -138,6 +138,10 @@ func main() {
 		mdfmt.EncodeFileHash(format, st[i], hexstring)
 	}
 
+	if blocklist == "" {
+		os.Exit(0)
+	}
+
 	// calculate and return the file signature block byte size list
 	// mdblocksize, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)
 	_, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)
