@@ -38,7 +38,7 @@ func (bl *BlockSize) CalcHashBlockSize (hashlist string) (uint64, []int) {
 				s = append(s, 64)
                         case "blake2s_128":
 				s = append(s, 16)
-                        case "blake2_256":
+                        case "blake2s_256":
 				s = append(s, 32)
 			case "fnv":
 				s = append(s, 8)
@@ -97,7 +97,7 @@ func (bl *BlockSize) CalcHashBlockSize (hashlist string) (uint64, []int) {
                         case "skein_1024":
 				s = append(s, 128)
                         case "tiger":
-				s = append(s, 48)
+				s = append(s, 24)
                         case "whirlpool":
 				s = append(s, 64)
                 }

@@ -157,6 +157,13 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
         blocklist := hashlist[1]
         fmt.Println("hashlist ", filelist, blocklist)
 
+	// check if the block list is specified
+	// exit if it is not specified
+	if blocklist == "" {
+		fmt.Println("No file block specified")
+		os.Exit(0)
+	}
+
 	// initialize the mdBlockSize object
 	// mdBlock := mdBlockSize.Init()
 	mdc := mdHashContextList.Init()

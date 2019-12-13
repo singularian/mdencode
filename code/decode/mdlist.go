@@ -125,6 +125,13 @@ func main() {
 		fmt.Println("file hashlistname ", st[i], " hex ", hexstring)
 	}
 
+	// check if the block list is specified
+	// exit if it is not specified
+	if blocklist == "" {
+		fmt.Println("No file block specified")
+		os.Exit(0)
+	}
+
 
 	// calculate and return the file signature block byte size list
         // mdblocksize, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)

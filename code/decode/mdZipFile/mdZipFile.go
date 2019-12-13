@@ -531,15 +531,15 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 		case 211:
 			hb["kekkak"] = keccak.New256()
 		case 221:
-			hb["skein160"] = skein.New(20, nil)
+			hb["skein_160"] = skein.New(20, nil)
 		case 231:
-			hb["skein256"] = skein.New256(key)
+			hb["skein_256"] = skein.New256(key)
 		case 241:
-			hb["skein384"] = skein.New(48, nil)
+			hb["skein_384"] = skein.New(48, nil)
 		case 251:
-			hb["skein512"] = skein.New512(key)
+			hb["skein_512"] = skein.New512(key)
 		case 261:
-			hb["skein1024"] = skein.New(128, nil)
+			hb["skein_1024"] = skein.New(128, nil)
 		case 271:
 			hb["tiger"] = tiger.New()
 		// siphash has to have a key 8 or 16 bytes

@@ -97,7 +97,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["blake2b"] = blake2.NewBlake2B()
                         case "blake2s_128":
 				hb["blake2s_128"], _ = blake2s.New128(key)
-                        case "blake2_256":
+                        case "blake2s_256":
 				hb["blake2s_256"], _ = blake2s.New256(key)
 			case "fnv":
 				hb["fnv"] = fnv.New64a()
@@ -144,16 +144,16 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 			case "siphash":
 				hb["siphash"] = siphash.New128(key)
                         case "skein_160":
-				hb["skein160"] = skein.New(20, nil)
+				hb["skein_160"] = skein.New(20, nil)
                         // case "skein_224":
                         case "skein_256":
-				hb["skein256"] = skein.New256(key)
+				hb["skein_256"] = skein.New256(key)
                         case "skein_384":
-				hb["skein384"] = skein.New(48, nil)
+				hb["skein_384"] = skein.New(48, nil)
                         case "skein_512":
-				hb["skein512"] = skein.New512(key)
+				hb["skein_512"] = skein.New512(key)
                         case "skein_1024":
-				hb["skein1024"] = skein.New(128, nil)
+				hb["skein_1024"] = skein.New(128, nil)
                         case "tiger":
 				hb["tiger"] = tiger.New()
                         case "whirlpool":
