@@ -59,10 +59,23 @@ mdzip and mdunzip and mdlist are the three main components for mdzip.
 mdzip creates a binary signature file with a modulus or modular floor.
 mdunzip will decode and mdzip file and write the output to a destination file.
 
+
+### Path
+
+$GOPATH/github.com/singularian/mdencode/code/decode
+
+### Make all
+
 This is the build steps with the Makefile on Linux.
 
 $GOPATH/github.com/singularian/mdencode/code/decode $ make getlibs 
 $GOPATH/github.com/singularian/mdencode/code/decode $ make all 
+
+### Build
+
+Make build installs mdzip and mdunzip and mdlist to the binary directory
+
+$GOPATH/github.com/singularian/mdencode/code/decode $ make build 
 
 # Build decoderRandom
 
