@@ -26,10 +26,12 @@ go get -u github.com/fogleman/gg
 
 # Build mdencode
 
-## Path
+Steps to build mdencode on Linux
+
+### Path
 $GOPATH/github.com/singularian/mdencode/code/mdencode  
 
-## Build Mdencode
+### Build Mdencode
 
 A Makefile was provided for building Mdencode on Linux
 
@@ -64,15 +66,16 @@ $GOPATH/github.com/singularian/mdencode/code/decode $ make all
 
 # Build decoderRandom
 
-decoderRandom is a test command line program which creates a random byte block. It uses
-a signature pair md5 and sha1 and then creates a modulus floor and then runs a modulus scan.
-It will then try to find the corresponding byte block.
+decoderRandom is a test command line program which creates a random byte block. It uses  
+a signature pair MD5 and SHA-1 and then creates a modulus floor and then runs a modulus scan.  
+It will then try to find the corresponding byte block and check if the modulus scan found the correct byte block.  
 
-## Path
+### Path
 
 $GOPATH/github.com/singularian/mdencode/code/testdecode  
 
-## Build 
+### Build 
 
 This example builds the mdencode decoderRandom files  
-$GOPATH/github.com/singularian/mdencode/code/decode $ make all  
+
+$GOPATH/github.com/singularian/mdencode/code/testdecode $ make all  
