@@ -347,6 +347,7 @@ morpheus:~/projects/src/github.com/singularian/mdencode/code/decode$
 ### Example 2
 
 This is another mdzip example with the sha512_224. mdzip and mdunzip can use different signatures for encoding and decoding.  
+This decodes a 13 byte file with a 13 byte block.
 
 ```
 trinity@zion:~/projects/src/github.com/singularian/mdencode/code/decode$ ./random.sh 13 00000001 13 64 16
@@ -406,6 +407,9 @@ Processing  true
 Found block modscan  0  thread  12  block  a9 79 40 ab 6c 58 5e 87 4b 00 38 af 28
 Found block Mutex  0  thread  12  block  a9 79 40 ab 6c 58 5e 87 4b 00 38 af 28
 end testing mutex  true
+
+trinity@zion:~/projects/src/github.com/singularian/mdencode/code/decode$ diff randomfile randomfile.out
+trinity@zion:~/projects/src/github.com/singularian/mdencode/code/decode$
 ```
 
 
