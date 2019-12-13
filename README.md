@@ -314,11 +314,11 @@ mdunzip has a context hash list for each decode thread. mdzip can use multiple b
 
 Proccessing power limits the size of the input block.  
 
-./mdzip -file=decoderRandom4.go -block=40 fh=11111 bh=01001 -mod=64 -out=decoderRandom4.go.mdz  
-./mdzip -file=decoderRandom4.go -block=41 fh=101111111 bh=0101 -mod=64 -out=decoderRandom4.go.mdz  
-./mdzip -file=decoderRandom4.go -block=41 uh=3333 -mod=64 -out=decoderRandom4.go.mdz  
+./mdzip -file=decoderRandom.go -block=40 fh=11111 bh=01001 -mod=64 -out=decoderRandom.go.mdz  
+./mdzip -file=decoderRandom.go -block=41 fh=101111111 bh=0101 -mod=64 -out=decoderRandom.go.mdz  
+./mdzip -file=decoderRandom.go -block=41 uh=3333 -mod=64 -out=decoderRandom.go.mdz  
 
-./mdunzip -file=decoderRandom4.go.mdz -out=decoderRandom4.go.mdz.uncompressed -thread=16
+./mdunzip -file=decoderRandom.go.mdz -out=decoderRandom.go.mdz.uncompressed -thread=16
 
 TODO: Change the mod exponent size in the output block from int32 to int16.  
 
