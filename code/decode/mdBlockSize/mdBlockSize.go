@@ -47,7 +47,7 @@ func (bl *BlockSize) CalcHashBlockSize (hashlist string) (uint64, []int) {
 			case "hmac512":
 				s = append(s, 64)
 			case "kekkak":
-				s = append(s, )
+				s = append(s, 32)
                         case "murmur3":
 				s = append(s, 16)
                         case "md4":
