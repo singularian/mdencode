@@ -538,8 +538,8 @@ func (md *DecodeData) modScanData() {
 	// md.Printlog("shasum ", md.sha1hex)
         // md.Printlog("md5sum ", md.md5hex)
 
-	md.Printlog("md5sum ", fmt.Sprintf("%x", md.md5byteblock))
-	md.Printlog("shasum ", fmt.Sprintf("%x", md.sha1byteblock))
+	// md.Printlog("md5sum ", fmt.Sprintf("%x", md.md5byteblock))
+	// md.Printlog("shasum ", fmt.Sprintf("%x", md.sha1byteblock))
 
 	md.Printlog("threadnumber ", md.threadNumber)
 	md.Printlog("thread count ", md.threadCount)

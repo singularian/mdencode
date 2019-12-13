@@ -180,6 +180,163 @@ Found block  thread 6 random bytestring and modulusscan bytestring match [114 24
 This is a test modulus scan on a 1000 byte block with a 7968 byte modulus  
 [mddecode1000.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/mddecode1000.txt)
 
+
+This next example shows the mdzip and mdlist and mdunzip used in sequence on a 100 byte file.
+A script random.sh has been created to randomly generate a n-byte file and mdzip and mdunzip it.
+Two different signatures are used for the blocks sha1 and sha_1284 a modified sliced 128-bit SHA-1 signature.
+```
+morpheus:~/projects/src/github.com/singularian/mdencode/code/decode$ ./random.sh 100 00011 13 64 16
+args 5
+File Size 100
+Block Size 13
+Modulus Bit Size 64
+Thread Size 16
+Creating a random file randomfile
+
+Zipping the file randomfile
+filename length  10   10
+file Hashlist size  23   md5:sha1-sha1:sha1_1284  attribute 5  [100 13 64 10 70 23]
+block number  1 13 [8c8b79d61c8887d59080f9d432bd19d0e76b3a2a 1c8887d59080f9d432bd19d0e76b3a2a] 98 11096481055620584782 64
+block number  2 13 [8f759778d907750abf104172a758d76832030059 d907750abf104172a758d76832030059] 99 8330882157427409141 64
+block number  3 13 [fa403764b69a3933afd0a4eb9d9460c556d8b975 b69a3933afd0a4eb9d9460c556d8b975] 103 482012241523938924 64
+block number  4 13 [f7d5654759fd6b9eb77262e7c25b2fdd48beb7fc 59fd6b9eb77262e7c25b2fdd48beb7fc] 102 15706132613119944451 64
+block number  5 13 [49704901b24a15954264337428a16d9b60882a70 b24a15954264337428a16d9b60882a70] 102 2632971523708479270 64
+block number  6 13 [bb3bd84d1346b192c76a7dfd1250ee7dbb9f2807 1346b192c76a7dfd1250ee7dbb9f2807] 101 6687011917356290731 64
+block number  7 13 [62c8c40821420d274d2a6deafad8889d433eb9b2 21420d274d2a6deafad8889d433eb9b2] 103 13679595928796667994 64
+block number  8 9 [39732ba47d3043158b43d33d87ac2014a5d337ec 7d3043158b43d33d87ac2014a5d337ec] 71 13835176885161869058 64
+
+mdlist randomfile
+fileSize  100
+blockSize  13
+modSize  64
+fileNameLength  10
+filePathLength  70
+fileHashLength  23
+filePath  /home/nsross/projects/src/github.com/singularian/mdencode/code/decode/ 48 118
+filePath  /home/nsross/projects/src/github.com/singularian/mdencode/code/decode/
+filename:  randomfile
+hashlistname    md5:sha1-sha1:sha1_1284
+hashlist        md5:sha1 sha1:sha1_1284
+file hashlist   md5:sha1
+block hashlist  sha1:sha1_1284
+
+file hashlistname  md5  hex  34bdefc2bae31ee077c350881381aa46
+file hashlistname  sha1  hex  da39a3ee5e6b4b0d3255bfef95601890afd80709
+block hash 0 13 [8c8b79d61c8887d59080f9d432bd19d0e76b3a2a 1c8887d59080f9d432bd19d0e76b3a2a] 98 11096481055620584782
+block hash 1 13 [8f759778d907750abf104172a758d76832030059 d907750abf104172a758d76832030059] 99 8330882157427409141
+block hash 2 13 [fa403764b69a3933afd0a4eb9d9460c556d8b975 b69a3933afd0a4eb9d9460c556d8b975] 103 482012241523938924
+block hash 3 13 [f7d5654759fd6b9eb77262e7c25b2fdd48beb7fc 59fd6b9eb77262e7c25b2fdd48beb7fc] 102 15706132613119944451
+block hash 4 13 [49704901b24a15954264337428a16d9b60882a70 b24a15954264337428a16d9b60882a70] 102 2632971523708479270
+block hash 5 13 [bb3bd84d1346b192c76a7dfd1250ee7dbb9f2807 1346b192c76a7dfd1250ee7dbb9f2807] 101 6687011917356290731
+block hash 6 13 [62c8c40821420d274d2a6deafad8889d433eb9b2 21420d274d2a6deafad8889d433eb9b2] 103 13679595928796667994
+block hash 7 9 [39732ba47d3043158b43d33d87ac2014a5d337ec 7d3043158b43d33d87ac2014a5d337ec] 71 13835176885161869058
+
+mdunzip randomfile
+fileSize  100
+blockSize  13
+modSize  64
+fileNameLength  10
+filePathLength  70
+fileHashLength  23
+filePath  /home/nsross/projects/src/github.com/singularian/mdencode/code/decode/ 48 118
+filePath  /home/nsross/projects/src/github.com/singularian/mdencode/code/decode/
+filename:  randomfile
+hashlistname  md5:sha1-sha1:sha1_1284
+hashlist  md5:sha1 sha1:sha1_1284
+file hashlistname  md5  hex  34bdefc2bae31ee077c350881381aa46
+file hashlistname  sha1  hex  da39a3ee5e6b4b0d3255bfef95601890afd80709
+Hash ByteBlock 8c8b79d61c8887d59080f9d432bd19d0e76b3a2a1c8887d59080f9d432bd19d0e76b3a2a
+Processing block hash  0  blocksize  13 [8c8b79d61c8887d59080f9d432bd19d0e76b3a2a 1c8887d59080f9d432bd19d0e76b3a2a] 98 11096481055620584782
+Found Block buffer  [6 132 247 148 178 153 254 158 186 121 29 213 78]  thread  2
+Total time  9m40.8054422s
+buffer  [6 132 247 148 178 153 254 158 186 121 29 213 78]
+Found Thread 2 Block 06 84 f7 94 b2 99 fe 9e ba 79 1d d5 4e
+testing mutex
+Processing  true
+Found block modscan  0  thread  2  block  06 84 f7 94 b2 99 fe 9e ba 79 1d d5 4e
+Found block Mutex  0  thread  2  block  06 84 f7 94 b2 99 fe 9e ba 79 1d d5 4e
+end testing mutex  true
+Hash ByteBlock 8f759778d907750abf104172a758d76832030059d907750abf104172a758d76832030059
+Processing block hash  1  blocksize  13 [8f759778d907750abf104172a758d76832030059 d907750abf104172a758d76832030059] 99 8330882157427409141
+Found Block buffer  [13 98 8 71 127 115 157 61 46 235 25 192 245]  thread  15
+Total time  21m15.1774166s
+buffer  [13 98 8 71 127 115 157 61 46 235 25 192 245]
+Found Thread 15 Block 0d 62 08 47 7f 73 9d 3d 2e eb 19 c0 f5
+testing mutex
+Processing  true
+Found block modscan  1  thread  15  block  0d 62 08 47 7f 73 9d 3d 2e eb 19 c0 f5
+Found block Mutex  1  thread  15  block  0d 62 08 47 7f 73 9d 3d 2e eb 19 c0 f5
+end testing mutex  true
+Hash ByteBlock fa403764b69a3933afd0a4eb9d9460c556d8b975b69a3933afd0a4eb9d9460c556d8b975
+Processing block hash  2  blocksize  13 [fa403764b69a3933afd0a4eb9d9460c556d8b975 b69a3933afd0a4eb9d9460c556d8b975] 103 482012241523938924
+Found Block buffer  [229 228 206 4 200 6 176 115 148 113 108 150 108]  thread  8
+Total time  6h39m44.4062959s
+buffer  [229 228 206 4 200 6 176 115 148 113 108 150 108]
+Found Thread 8 Block e5 e4 ce 04 c8 06 b0 73 94 71 6c 96 6c
+testing mutex
+Processing  true
+Found block modscan  2  thread  8  block  e5 e4 ce 04 c8 06 b0 73 94 71 6c 96 6c
+Found block Mutex  2  thread  8  block  e5 e4 ce 04 c8 06 b0 73 94 71 6c 96 6c
+end testing mutex  true
+Hash ByteBlock f7d5654759fd6b9eb77262e7c25b2fdd48beb7fc59fd6b9eb77262e7c25b2fdd48beb7fc
+Processing block hash  3  blocksize  13 [f7d5654759fd6b9eb77262e7c25b2fdd48beb7fc 59fd6b9eb77262e7c25b2fdd48beb7fc] 102 15706132613119944451
+Found Block buffer  [82 203 203 128 180 217 247 100 101 160 49 39 3]  thread  4
+Total time  1h13m34.251126s
+buffer  [82 203 203 128 180 217 247 100 101 160 49 39 3]
+Found Thread 4 Block 52 cb cb 80 b4 d9 f7 64 65 a0 31 27 03
+testing mutex
+Processing  true
+Found block modscan  3  thread  4  block  52 cb cb 80 b4 d9 f7 64 65 a0 31 27 03
+Found block Mutex  3  thread  4  block  52 cb cb 80 b4 d9 f7 64 65 a0 31 27 03
+end testing mutex  true
+Hash ByteBlock 49704901b24a15954264337428a16d9b60882a70b24a15954264337428a16d9b60882a70
+Processing block hash  4  blocksize  13 [49704901b24a15954264337428a16d9b60882a70 b24a15954264337428a16d9b60882a70] 102 2632971523708479270
+Found Block buffer  [120 151 45 76 75 36 138 49 166 150 92 231 38]  thread  11
+Total time  3h38m0.523192s
+buffer  [120 151 45 76 75 36 138 49 166 150 92 231 38]
+Found Thread 11 Block 78 97 2d 4c 4b 24 8a 31 a6 96 5c e7 26
+testing mutex
+Processing  true
+Found block modscan  4  thread  11  block  78 97 2d 4c 4b 24 8a 31 a6 96 5c e7 26
+Found block Mutex  4  thread  11  block  78 97 2d 4c 4b 24 8a 31 a6 96 5c e7 26
+end testing mutex  true
+Hash ByteBlock bb3bd84d1346b192c76a7dfd1250ee7dbb9f28071346b192c76a7dfd1250ee7dbb9f2807
+Processing block hash  5  blocksize  13 [bb3bd84d1346b192c76a7dfd1250ee7dbb9f2807 1346b192c76a7dfd1250ee7dbb9f2807] 101 6687011917356290731
+Found Block buffer  [34 99 247 82 83 92 205 9 232 214 211 82 171]  thread  3
+Total time  9m16.1408615s
+buffer  [34 99 247 82 83 92 205 9 232 214 211 82 171]
+Found Thread 3 Block 22 63 f7 52 53 5c cd 09 e8 d6 d3 52 ab
+testing mutex
+Processing  true
+Found block modscan  5  thread  3  block  22 63 f7 52 53 5c cd 09 e8 d6 d3 52 ab
+Found block Mutex  5  thread  3  block  22 63 f7 52 53 5c cd 09 e8 d6 d3 52 ab
+end testing mutex  true
+Hash ByteBlock 62c8c40821420d274d2a6deafad8889d433eb9b221420d274d2a6deafad8889d433eb9b2
+Processing block hash  6  blocksize  13 [62c8c40821420d274d2a6deafad8889d433eb9b2 21420d274d2a6deafad8889d433eb9b2] 103 13679595928796667994
+Found Block buffer  [155 63 100 48 124 189 215 176 5 6 206 32 90]  thread  12
+Total time  1h46m11.7865889s
+buffer  [155 63 100 48 124 189 215 176 5 6 206 32 90]
+Found Thread 12 Block 9b 3f 64 30 7c bd d7 b0 05 06 ce 20 5a
+testing mutex
+Processing  true
+Found block modscan  6  thread  12  block  9b 3f 64 30 7c bd d7 b0 05 06 ce 20 5a
+Found block Mutex  6  thread  12  block  9b 3f 64 30 7c bd d7 b0 05 06 ce 20 5a
+end testing mutex  true
+Hash ByteBlock 39732ba47d3043158b43d33d87ac2014a5d337ec7d3043158b43d33d87ac2014a5d337ec
+Proccesing block hash  7  blocksize  9 [39732ba47d3043158b43d33d87ac2014a5d337ec 7d3043158b43d33d87ac2014a5d337ec] 71 13835176885161869058
+Found Block buffer  [213 192 0 108 19 60 196 191 2]  thread  5
+Total time  1.2902ms
+buffer  [213 192 0 108 19 60 196 191 2]
+Found Thread 5 Block d5 c0 00 6c 13 3c c4 bf 02
+testing mutex
+Processing  true
+Found block modscan  7  thread  5  block  d5 c0 00 6c 13 3c c4 bf 02
+Found block Mutex  7  thread  5  block  d5 c0 00 6c 13 3c c4 bf 02
+end testing mutex  true
+morpheus:~/projects/src/github.com/singularian/mdencode/code/decode$
+```
+
+
 # Donations
 
 * BTC: `32L3gyJdkiFwgJ72rsSzbCBjTjVFxJLHPm`
