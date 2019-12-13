@@ -326,7 +326,8 @@ TODO: Change the mod exponent size in the output block from int32 to int16.
 
 These are a brief list of collision management in mdzip and mdunzip.
 
-- Using File level Signatures to validate Block Level Signatures
+- Using File Level Signatures to validate Block Level Signatures
+- Using File Level Signatures to differentiate between Block Signature Collisions
 - Signature Switching. If one signature or signature group has a collsion switch to another signature
 - Use Block Groups as a bandaid around signature blocks
 - Use Block Signature Pairs with Modulus / Modular Floors

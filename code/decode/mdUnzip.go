@@ -1,6 +1,5 @@
 package main
 
-
 // mdencode project
 //
 // mdUnzip.go
@@ -84,6 +83,6 @@ func printUsage() {
         Go Routine Threadsize
     `)
 
-        fmt.Println()
+	fmt.Println()
 
 }
