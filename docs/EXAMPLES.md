@@ -181,6 +181,8 @@ This is a test modulus scan on a 1000 byte block with a 7968 byte modulus
 [mddecode1000.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/mddecode1000.txt)
 
 
+# Mdzip and Mdunzip Example
+
 This next example shows the mdzip and mdlist and mdunzip used in sequence on a 100 byte file.
 A script random.sh has been created to randomly generate a n-byte file and mdzip and mdunzip it.
 Two different signatures are used for the blocks sha1 and sha_1284 a modified sliced 128-bit SHA-1 signature.
