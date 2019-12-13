@@ -19,6 +19,7 @@ package main
 // 
 // License
 // https://github.com/singularian/mdencode/blob/master/LICENSE
+// TODO Add a hex option
 
 import (
 	"crypto/rand"
