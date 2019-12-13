@@ -455,7 +455,7 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 		hlistarray = l.blockHashListArray
 	}
 	var length = len(hlistarray)
-	var last = 31
+	var last = 32
 	if length < last {
 		last = length
 	}

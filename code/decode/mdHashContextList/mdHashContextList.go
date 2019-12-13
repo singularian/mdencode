@@ -260,7 +260,7 @@ func (hc *HashContextList) CheckFileHashBlock (byteblock []byte) (bool) {
 	}
 	
 
-	//////////////////////// fmt.Printf("test bytes equals xxxxxxxxxxxxxxxxxxxxxxx %s result = %x ", result, hc.hashBlockBytes)
+	fmt.Printf("Found Block %s result = %x ", result, hc.hashBlockBytes)
 	return true
 	// return false
 

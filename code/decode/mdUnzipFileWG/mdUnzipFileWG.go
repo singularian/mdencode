@@ -279,7 +279,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                 var threadStart int64   = 0
                 var threadEnd   int64   = int64(threadCount) 
                 for thread = threadStart; thread < threadEnd; thread++ {
-                        // fmt.Println("Kicking off thread ", thread, threadStart, threadEnd)
+                        // fmt.Println("Kicking off thread ", thread, threadStart, threadEnd, blocklist)
                         go mdp[thread].ModulusScanFileBytes(currentBlocksize, modExp, blocklist, hstring, n.String(), &c)
                 }
 

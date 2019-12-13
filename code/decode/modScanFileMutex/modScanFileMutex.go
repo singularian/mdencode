@@ -30,7 +30,7 @@ import (
 	"log"
 	"os"
 	"time"
-	"strings"
+	// "strings"
 	"sync"
 	"github.com/singularian/mdencode/code/decode/mdUnzipFileMutex"
 	"github.com/singularian/mdencode/code/decode/mdHashContextList"
@@ -243,8 +243,8 @@ func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, blo
         // create a sha1 hash of the bytes
         // create an md5 hash of the bytes
  	// convert the string hash list block to an array
-        hs := strings.Split(hashlist, ":")
-        md5 := hs[0]
+        // hs := strings.Split(hashlist, ":")
+        /* md5 := hs[0]
         a, err := hex.DecodeString(md5)
         if err != nil {
                 panic(err)
@@ -258,6 +258,7 @@ func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, blo
         }
         md.sha1byteblock = b
         md.setFileSignature()
+	*/
 
         // log the starting modScan data
         md.modScanData()
