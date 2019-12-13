@@ -12,6 +12,6 @@ all:
 	go build -o decoderRandom decoderRandom.go
 	go build -o decoderRandomTest decoderRandomTest.go 
 clean:
-	rm -r decoderRandom decoderRandomTest
+	rm -r decoderRandom decoderRandomTest *.log
 list:
 	echo "all"
