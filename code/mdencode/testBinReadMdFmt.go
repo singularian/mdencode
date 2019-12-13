@@ -138,6 +138,8 @@ func main() {
 		mdfmt.EncodeFileHash(format, st[i], hexstring)
 	}
 
+	// check if the blocklist is specified
+	// so it doesn't try to check the blocks if they don't exist
 	if blocklist == "" {
 		os.Exit(0)
 	}
