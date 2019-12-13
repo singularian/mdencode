@@ -31,9 +31,21 @@ $GOPATH/github.com/singularian/mdencode/code/mdencode
 
 ## Build Mdencode
 
+A Makefile was provided for building Mdencode on Linux
+
+### Make getlibs
+
+make getlibs pulls the mdencode library dependencies
+
+$GOPATH/github.com/singularian/mdencode/code/mdencode $ make getlibs
+
+### Make all
+
 make all builds mdencode to gobin by default  
 
 $GOPATH/github.com/singularian/mdencode/code/mdencode $ make all  
+
+### Make build
 
 make build builds the mdencode to the mdBuild directory  
 
@@ -41,9 +53,20 @@ $GOPATH/github.com/singularian/mdencode/code/mdencode $ make build
 
 # Build mdZip and mdUnzip
 
-$GOPATH/github.com/singularian/mdencode/code/decode  
+mdzip and mdunzip and mdlist are the three main components for mdzip.
+mdzip creates a binary signature file with a modulus or modular floor.
+mdunzip will decode and mdzip file and write the output to a destination file.
+
+This is the build steps with the Makefile on Linux.
+
+$GOPATH/github.com/singularian/mdencode/code/decode $ make getlibs 
+$GOPATH/github.com/singularian/mdencode/code/decode $ make all 
 
 # Build decoderRandom
+
+decoderRandom is a test command line program which creates a random byte block. It uses
+a signature pair md5 and sha1 and then creates a modulus floor and then runs a modulus scan.
+It will then try to find the corresponding byte block.
 
 ## Path
 
