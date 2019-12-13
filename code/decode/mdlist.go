@@ -1,10 +1,17 @@
 package main
 
+// mdencode project
+// 
+// mdlist.go
+// 
 // mdencode mdzip mdlist block dumper
 // this displays the mdzip binary data in a simplified text format
 //
-// this is a cleaned up version of testBinReadMdFmt.go
+// this is a cleaned up simplified version of testBinReadMdFmt.go
 // https://github.com/singularian/mdencode
+// copyright (C) Scott Ross 2019
+//
+// License
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (

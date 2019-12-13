@@ -1,7 +1,12 @@
 package main
 
-// mdencode
-// copyright (C) Scott Ross 2017
+// mdencode project 
+//
+// mdzip.go
+// https://github.com/singularian/mdencode/
+// copyright (C) Scott Ross 2019
+//
+// License
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
