@@ -65,7 +65,7 @@ mdencode has three main golang programs.
 - mdnewdb        - creates new sqlite3 mdencode signatures
 - mdbinlist      - displays a binary file signature in the integer parameter format (xml or text or JSON etc).
 - mdzip          - creates a binary signature file with file signatures or block signatures and a modular floor
-- mdunzip        - uses a modulus scan to permutate over the binary signature blocks and find a corresponding signature block
+- mdunzip        - uses a modulus scan to permute over the mdzip file binary signature blocks and find a corresponding byte block
 
 mdencode or md can generate a signature for a file or directory and a modular floor
 
