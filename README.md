@@ -60,7 +60,7 @@ These are the types of file signatures that mdencode will implement.
 This is the mdencode usage.
 mdencode has three main golang programs. 
 
-- md or mdencode - generates file signatures
+- md or mdencode - generates file signatures with optional modular floors
 - mddbreport     - generates formatted signatures dumps of file signatures stored in a mdencode sqlite3 db
 - mdnewdb        - creates new sqlite3 mdencode signatures
 - mdbinlist      - displays a binary file signature in the integer parameter format (xml or text or JSON etc).
@@ -114,7 +114,7 @@ md -file=Makefile -block=100 -mod=64 -fh=1011111 -bh=100111 -format=5000 -append
 md -file=Makefile -block=100 -mod=128 -fh=1011111 -bh=100111  -format=5000 -append=true -line=true -out=outputfile.xml
 md -file=Makefile -block=350 -mod=32 -fh=101011 -br
 md -file=Makefile -block=300 -mod=32 -fr -br
-md -uh=1122 -block=100 -mod=64 -file=Makefile
+md -uh=112203300111022033333 -block=100 -mod=64 -file=Makefile
 ```
 
 # Example usage
