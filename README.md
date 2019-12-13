@@ -152,7 +152,7 @@ md -file=america.txt -block=300 -mod=32 -format=4300 -fh=10000111 -bh=10001111 -
 [Image Examples](https://raw.githubusercontent.com/singularian/mdencode/master/examples/america.txt_b300_mod32.png)
 
 ```
-md -file=america.txt -block=300 -mod=32 -format=8000 -fh=10000111 -bh=10001111 -out=america.txt_b300_mod32_MD.md
+md -file=america.txt -block=300 -mod=32 -format=8000 -fh=10000111 -bh=10001111 -out=hashImage.png
 ```
 
 ![hashImage.png](https://github.com/singularian/mdencode/blob/master/examples/hashImage.png "hashImage.png")
