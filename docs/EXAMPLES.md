@@ -408,7 +408,7 @@ Found block modscan  0  thread  12  block  a9 79 40 ab 6c 58 5e 87 4b 00 38 af 2
 Found block Mutex  0  thread  12  block  a9 79 40 ab 6c 58 5e 87 4b 00 38 af 28
 end testing mutex  true
 
-trinity@zion:~/projects/src/github.com/singularian/mdencode/code/decode$ diff randomfile randomfile.out
+trinity@zion:~/projects/src/github.com/singularian/mdencode/code/decode$ diff randomfile randomfile.mdz.out
 trinity@zion:~/projects/src/github.com/singularian/mdencode/code/decode$
 ```
 
