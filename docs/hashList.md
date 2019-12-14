@@ -55,7 +55,7 @@ One list is used for the file and block hash lists and possibly block group hash
 0 - No Hash  
 1 - File Hash used  
 2 - Block Hash used  
-3 - File and block hash used  
+3 - File and Block Hash used  
 
 
 # Quaterniary Mdencode Examples
@@ -147,3 +147,17 @@ Makefile
 - Modulus Exponent 2334
 - Modulus 1819025930
 ```
+
+# Octal Signature Arguments
+
+Octal signature parameters for mdencode include 8 states.  
+One list is used for the file and block hash lists and possibly block group hash lists.  
+
+0 - No Hash
+1 - File Hash used
+2 - Block Group used
+3 - Block Hash used
+4 - File and Block Hash used
+5 - Block Group and Block Hash used
+6 - File and Block Group Used
+7 - File and Block Group and Block Hash used
