@@ -150,7 +150,7 @@ Makefile
 
 # Octal Signature Arguments
 
-Octal signature parameters for mdencode include 8 states.  
+Octal signature parameters for mdencode include 8 states. This is a future enhancement.   
 One list is used for the file and block hash lists and possibly block group hash lists.  
 
 0 - No Hash  
