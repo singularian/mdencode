@@ -17,12 +17,8 @@ package modScanFile
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
-	"crypto/md5"
-	"crypto/sha1"
-	"encoding/hex"
 	"fmt"
 	"math/big"
-	"hash"
 	"log"
 	"os"
 	"time"
@@ -64,20 +60,10 @@ type DecodeData struct {
 	collisionCnt int64
 	// time
 	timeStarted string
-	// signatures
-	md5hash  hash.Hash
-	sha1hash hash.Hash
 	// signatures results
-	sha1hex   string
-	md5hex    string
-	mdDigHex  string
-	mdDig2Hex string
-	// sha1/md5 bytesblock
-	blockHashNameList string
-	sha1byteblock []byte
-	md5byteblock []byte
+	// blockHashNameList string
 	// file mutex
-	mux *mdUnzipFileMutex.FileMutex
+	mux *mdUnzipMutex.FileMutex
 	// hash context list
 	hashContexList *mdHashContextList.HashContextList
 	// log writer
@@ -87,7 +73,7 @@ type DecodeData struct {
 }
 
 // Init returns a new modScan object
-func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threadCount int64, mux *mdUnzipFileMutex.FileMutex, hcl *mdHashContextList.HashContextList) (md *DecodeData) {
+func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threadCount int64, mux *mdUnzipMutex.FileMutex, hcl *mdHashContextList.HashContextList) (md *DecodeData) {
 	mdata := new(DecodeData)
 	mdata.blocksizeInt = blocksize
 	mdata.modsizeInt = modsize
@@ -115,13 +101,6 @@ func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, blo
         // process the modulus bitsize argument
         bitsize := md.modsizeInt
 	// md.blocksizeInt = int64(blockSize)
-
-        // convert the bytes to a string
-        // bytestring := fmt.Sprintf("%v", md.byteblock)
-
-        // create the biginteger representation of the bytes
-        // blockBigInt := new(big.Int)
-        //md.blockBigInt = blockBigInt.SetBytes(md.byteblock)
 
         // create the modulus bigint 2 to the bitsize exponent
         // ie if it is 8 then it is 2 to the bitsize nth
@@ -228,10 +207,6 @@ func (md *DecodeData) decode() (int, string) {
 
 	md.Printlog("starting modulus byteblock after remainder added ", md.modulusStart.Bytes(), " bigint ", md.modulusStart, " ", md.blockBigInt)
 	md.Printlog("thread ", md.threadNumber, " ", md.threadCount, " modstart test result floor ", fmt.Sprint(md.modulusStart), " initial remainder ", fmt.Sprint(modremainder))
-
-	// create the hash contexts
-	// md5 := md5.New()
-	// sha1 := sha1.New()
 
 	md.Printlog("starting modulus byteblock ", md.modulusStart.Bytes())
 
@@ -365,37 +340,6 @@ func (md *DecodeData) convertFloorBase2(modfloor *big.Int, modi *big.Int) *big.I
 	md.Printlog("modremainder ", modremainder, " ", remstring)
 
 	return modremainder
-}
-
-// set the signature of the byte block
-func (md *DecodeData) setSignature() {
-
-	bytes := md.byteblock
-
-	// create an sha1 hash of the bytes
-	h := sha1.New()
-	h.Write([]byte(bytes))
-	var shasum = hex.EncodeToString(h.Sum(nil))
-	md.sha1hex = shasum
-	// store context
-	md.sha1hash = h
-
-	// create an md5 hash of the bytes
-	md5hash := md5.New()
-	md5hash.Write([]byte(bytes))
-	var md5sum = hex.EncodeToString(md5hash.Sum(nil))
-	md.md5hex = md5sum
-	// store context
-	md.md5hash = md5hash
-
-}
-
-// set the signature of the byte block
-func (md *DecodeData) setFileSignature() {
-
-        // these are just strings
-        md.md5hex  = fmt.Sprintf("%x", md.md5byteblock)
-        md.sha1hex = fmt.Sprintf("%x", md.sha1byteblock)
 }
 
 // display the modScan data
