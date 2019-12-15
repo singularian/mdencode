@@ -167,6 +167,8 @@ One list is used for the file and block hash lists and possibly block group hash
 
 Each parameter has a hex code. The first Hex Byte Nibble Half-Byte [0-F] delineates the hash type and the 
 second Nibble Half-Byte [0-F] delineates the signature number 0 to 15 for the first byte.  
+Each successive HEX byte increments the signature count by multiplying the 15 times the byte position.
+
 
 Each byte increments the signature number in the second nibble.  
 In this way 20 characters can encode (10 * 15) 150 signatures.  
@@ -186,7 +188,7 @@ A 200 character HEX Signature could encode 1500 signatures.
 ## Hex Encoding
 
 The first Half-Byte is the Type [0-F]  
-The second Half-Byte is the Number [0-F] or [0-Z]  
+The second Half-Byte is the Number [0-F] or [0-Z] if there was a need for more signatures. 
 
 [TYPE][NUMBER]  
 [0-F Type][0-F Number]  
