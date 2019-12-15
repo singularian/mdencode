@@ -338,7 +338,7 @@ These are a brief list of collision management in mdzip and mdunzip.
 
 # Build
 
-##### Basic Linux / Unix Go Build
+This is a guide for building MDencode on Linux.
 
 [Example Build](https://github.com/singularian/mdencode/blob/master/docs/Build.md)
 
