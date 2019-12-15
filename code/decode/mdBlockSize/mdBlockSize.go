@@ -1,5 +1,19 @@
 package mdBlockSize 
 
+// mdencode project
+//
+// mdBlockSize.go
+//
+// mdencode mdunzip signature block size calculator
+// this package calculates a signature block size so it can be decrypted by mdunzip
+// it creates a blockSize sum and a list of the signature block sizes
+//
+// https://github.com/singularian/mdencode
+// copyright (C) Scott Ross 2019
+//
+// License
+// https://github.com/singularian/mdencode/blob/master/LICENSE
+
 import (
 	"strings"
 //	"fmt"
