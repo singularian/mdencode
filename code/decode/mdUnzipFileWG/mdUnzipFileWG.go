@@ -269,13 +269,12 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                 mdp := []*modScanFileMutex.DecodeData{}
                 var thread int64 = 0
                 // var threadCount int64 = 16
-                var emptybytes []byte
 		for thread = 0; thread < int64(threadCount); thread++ {
 			// fmt.Println("testing context list ", hcListArr[thread].GetBlockHash())
 			hcListArr[thread].SetBlockHash(hashByteBlock)
 		}
                 for thread = 0; thread < int64(threadCount); thread++ {
-                        md := modScanFileMutex.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), thread, int64(threadCount), emptybytes, mutex, hcListArr[thread])
+                        md := modScanFileMutex.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), thread, int64(threadCount), mutex, hcListArr[thread])
                         mdp = append(mdp, md)
                 }
 
