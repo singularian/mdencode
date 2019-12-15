@@ -191,6 +191,7 @@ func (hc *HashContextList) SetBlockHash (byteblock []byte) {
 
 }
 
+// Get the current Block Hash List Names
 func (hc *HashContextList) GetBlockHash () ([]string) {
 
         // return hc.hashBlockBytes
@@ -207,49 +208,20 @@ func (hc *HashContextList) CheckFileHashBlock (byteblock []byte) (bool) {
 	var position int = 0
 	var start    int = 0
 	var end      int = 0
-	// hc.hashBlockBytes[start:end]
 
-	// fmt.Println("******************* hashlist check ", hc.hashBlockSizeList, byteblock)
 	end = hc.hashBlockSizeList[0]
-	// for hashkey, hashvalue := range hc.HashListBlocks {
-	// for _, hashvalue := range l.blockHashListNames {
+
 	for _, hashvalue := range hc.blockHashListNames {
-		// fmt.Println("hash ", hashkey)
-		//////////////// fmt.Println("hash ", hashvalue)
 		h := hc.HashListBlocks[hashvalue]
 		h.Reset()
-		// hashvalue.Reset()
-		//  bytes[start:blockXsize]
-		// hashvalue.Write(byteblock[])
-		//////// hashvalue.Write([]byte(byteblock))
-		// h.Reset()
 		h.Write([]byte(byteblock))
+
 		end = start + hc.hashBlockSizeList[position]
-		// if position > 0 {
-		//	start = hc.hashBlockSizeList[position]
-		//}
-		// end = start + hc.hashBlockSizeList[position]
-		///////////////////////////////////////////////////// fmt.Println("start end ", start, end)
-		// fmt.Println("start end ", start, end, hc.hashBlockBytes[start:end])
-		// if bytes.Equal(md5.Sum(nil), md.md5byteblock) {
-		/* if bytes.Equal(hashvalue.Sum(nil), hc.hashBlockBytes[start:end])  {
-			fmt.Printf("test bytes true %x %x\n", hashvalue.Sum(nil), hc.hashBlockBytes[start:end])
-		} else {
-			fmt.Printf("test bytes false %x %x\n", hashvalue.Sum(nil), hc.hashBlockBytes[start:end])
-			// return false
-		} */
+
 		if !bytes.Equal(h.Sum(nil), hc.hashBlockBytes[start:end])  {
-	//		fmt.Printf("FALSE -- test bytes false %s start %d end %d %x %x\n", hashvalue, start, end, h.Sum(nil), hc.hashBlockBytes[start:end])
-			// h.Reset()
 			return false
-		} else {
-	//		fmt.Printf("TRUE ---- test bytes true %s %d %d %x %x\n", hashvalue, start, end, h.Sum(nil), hc.hashBlockBytes[start:end])
 		}
-		// fmt.Printf("hash %s bytes hex % x\n", hashkey, hashvalue.Sum(nil))
-		// h.Reset()
 		start += hc.hashBlockSizeList[position] 
-		// end = start
-		// fmt.Println("next ", start, end)
 		position++
 	}
 
@@ -258,12 +230,9 @@ func (hc *HashContextList) CheckFileHashBlock (byteblock []byte) (bool) {
 		h := hc.HashListBlocks[hashvalues]
 		result += fmt.Sprintf("%s %x ", hashvalues, h.Sum(nil))
 	}
-	
 
 	fmt.Printf("Found Block %s result = %x ", result, hc.hashBlockBytes)
 	return true
-	// return false
-
 }
 
 // CalcHashBlockSize takes a hashlist colon separated string of hash names

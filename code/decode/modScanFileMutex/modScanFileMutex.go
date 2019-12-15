@@ -390,8 +390,10 @@ func (md *DecodeData) decode() (int, string) {
 		}
 		md5.Reset()
 		// */
-		if md.hashContexList.CheckFileHashBlock([]byte(buf)) {
-		// if md.hashContexList.CheckFileHashBlock(buf)  {
+
+//////		if md.hashContexList.CheckFileHashBlock([]byte(buf)) {
+//////		if md.hashContexList.CheckFileHashBlock([]byte(buf)) {
+		if md.hashContexList.CheckFileHashBlock(buf)  {
 			md.Println("Found Block buffer ", buf, " thread ", md.threadNumber)
 			md.byteblock = buf
 			md.matchFound = true

@@ -220,6 +220,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 
 	// set the start time
 	startTime := time.Now()
+	// var time = fmt.Sprintf("%d%d%d%d%d", now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
 
         // var hlistarray = strings.Split(hashhex, ":")
         var hlistarray []string
@@ -263,9 +264,6 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                         fmt.Println("Proccesing block hash ", blockNumber, " blocksize ", remainder, hlistarray, int(modExp), n.String())
                         currentBlocksize = remainder
                 }
-
-                // now := time.Now()
-                // var time = fmt.Sprintf("%d%d%d%d%d", now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
 
                 // set up the thread list of go routine objects
                 mdp := []*modScanFileMutex.DecodeData{}
