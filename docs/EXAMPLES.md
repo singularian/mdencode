@@ -17,6 +17,9 @@ A modulus should be considered part of the file signature subset. A modulus is a
 # Modular Floor Examples
   
 This is an example of the modular floor.  
+
+### Example 1
+
 The program `decoderRandom` is creating a random 6 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
 It creates a random 10 byte array and a 64 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
 A modulus scan can use any number of signatures including ripe160 or sha3.
@@ -53,6 +56,8 @@ Found block  thread 7 random bytestring and modulusscan bytestring match [36 228
 
 ```
 
+### Example 2
+
 This is a modulus scan on a 8 byte random block [53 132 218 83 11 69 48 238] with a 32-bit modulus and 16 goroutine threads.
 
 ```
@@ -63,6 +68,8 @@ Total time  27.344133s
 random bytestring and modulusscan bytestring match  [53 132 218 83 11 69 48 238]   [53 132 218 83 11 69 48 238]
 Found block  thread 3 random bytestring and modulusscan bytestring match [53 132 218 83 11 69 48 238] [53 132 218 83 11 69 48 238]
 ```
+
+### Example 3
 
 This is a modulus scan test run with an 9-byte block with a 48-bit modulus.
 Total computation time was 149 ms.
@@ -77,6 +84,8 @@ Found block  thread 2 random bytestring and modulusscan bytestring match [86 70 
 
 ```
 
+### Example 4
+
 This is a modulus scan on a 24 byte random block with a 160-bit modulus.
 Total computation time was 13.48 seconds.
 ```
@@ -88,6 +97,8 @@ random bytestring and modulusscan bytestring match  [136 153 119 145 195 82 220 
 Found block  thread 1 random bytestring and modulusscan bytestring match [136 153 119 145 195 82 220 142 182 125 229 102 13 132 97 240 51 1 248 203 77 213 29 61] [136 153 119 145 195 82 220 142 182 125 229 102 13 132 97 240 51 1 248 203 77 213 29 61]
 
 ```
+
+### Example 5
 
 This is a test modulus scan on a 30 byte random block and a 208-bit modulus. It computed the file block in 30 minutes on a Pentium 3700 and in 3 minutes on a Ryzen 2700x with 16 threads.
 It compares the parallel modulus scan with the single thread modulus scan.
@@ -122,8 +133,11 @@ Found block  thread 6 random bytestring and modulusscan bytestring match [253 21
 
 ```
 
+### Example 6
+
 The first test is a modulus scan on a 40 byte random block and a 288-bit modulus. It computed the file block in under 2 minutes.
 The second test is a parallel modulus scan in decoderRandom ran in 38.3 seconds with a Ryzen 2700x with a larger byte block and 16 threads.
+
 ```
 $ ./decoderRandom 40 288 
 random  40  bytes  [36 70 9 158 250 39 41 175 153 109 249 79 24 40 173 31 178 205 163 246 213 57 62 47 80 202 73 3 115 151 222 203 79 64 44 122 214 8 239 55]   302655882115645057855398278526862402649221125066903900403798877130708027364550200878646484856631
@@ -156,6 +170,8 @@ Found block  thread 3 random bytestring and modulusscan bytestring match [149 24
 
 ```
 
+### Example 7
+
 This is a 55 byte block example of the modulus scan with a 64 bit modulus. Total execution time was 4.3 seconds.
 ```
 $ ./decoderRandom -mod=64 -thread=16 -bytes=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,1,20,0,0,0,0,0,0,0,0,0,2]
@@ -167,6 +183,7 @@ random bytestring and modulusscan bytestring match  [0 0 0 0 0 0 0 0 0 0 0 0 0 0
 Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2] [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 1 20 0 0 0 0 0 0 0 0 0 2]
 ```
 
+### Example 8
 
 ```
 user@serverx:~/go/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom -block=13 -mod=64 -thread=24
@@ -176,6 +193,8 @@ Total time  2h43m5.46892182s
 random bytestring and modulusscan bytestring match  [114 245 178 128 14 118 213 7 141 176 89 26 79]   [114 245 178 128 14 118 213 7 141 176 89 26 79]
 Found block  thread 6 random bytestring and modulusscan bytestring match [114 245 178 128 14 118 213 7 141 176 89 26 79] [114 245 178 128 14 118 213 7 141 176 89 26 79]
 ```
+
+### Large Example 
 
 This is a test modulus scan on a 1000 byte block with a 7968 byte modulus  
 [mddecode1000.txt](https://raw.githubusercontent.com/singularian/mdencode/master/examples/mddecode1000.txt)
