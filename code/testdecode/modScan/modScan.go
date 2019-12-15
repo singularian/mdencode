@@ -103,7 +103,8 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 	bitsize := md.modsizeInt
 
 	// convert the bytes to a string
-	bytestring := fmt.Sprintf("%v", md.byteblock)
+	bytestring    := fmt.Sprintf("%v", md.byteblock)
+	bytestringhex := fmt.Sprintf("%X", md.byteblock)
 
 	// create the biginteger representation of the bytes
 	blockBigInt := new(big.Int)
@@ -153,8 +154,8 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 	_, buffer := md.decode()
 
 	if bytestring == buffer {
-		md.Println("random bytestring and modulusscan bytestring match ", bytestring, " ", buffer)
-		s := "thread " + fmt.Sprint(md.threadNumber) + " random bytestring and modulusscan bytestring match " + bytestring + " " + buffer
+		md.Println("random bytestring and modulusscan bytestring match ", bytestring, " ", buffer, " hex bytes ", bytestringhex )
+		s := "thread " + fmt.Sprint(md.threadNumber) + " random bytestring and modulusscan bytestring match " + bytestring + " = " + buffer 
 		c <- s
 	}
 
