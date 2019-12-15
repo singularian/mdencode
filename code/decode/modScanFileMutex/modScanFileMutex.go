@@ -17,21 +17,11 @@ package modScanFileMutex
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
-	// "bytes"
-	// "crypto/rand"
-	"crypto/md5"
-	"crypto/sha1"
-	// "golang.org/x/crypto/ripemd160"
-	"encoding/hex"
 	"fmt"
 	"math/big"
-	// "strconv"
-	// "bytes"
-	"hash"
 	"log"
 	"os"
 	"time"
-	// "strings"
 	"sync"
 	"github.com/singularian/mdencode/code/decode/mdUnzipMutex"
 	"github.com/singularian/mdencode/code/decode/mdHashContextList"
@@ -70,18 +60,8 @@ type DecodeData struct {
 	collisionCnt int64
 	// time
 	timeStarted string
-	// signatures
-	md5hash  hash.Hash
-	sha1hash hash.Hash
 	// signatures results
-	sha1hex   string
-	md5hex    string
-	mdDigHex  string
-	mdDig2Hex string
-	// sha1/md5 bytesblock
-	blockHashNameList string
-	sha1byteblock []byte
-	md5byteblock []byte
+	// blockHashNameList string
 	// file mutex
 	mux *mdUnzipMutex.FileMutex
 	// hash context list
@@ -121,13 +101,6 @@ func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, blo
         // process the modulus bitsize argument
         bitsize := md.modsizeInt
 	// md.blocksizeInt = int64(blockSize)
-
-        // convert the bytes to a string
-        // bytestring := fmt.Sprintf("%v", md.byteblock)
-
-        // create the biginteger representation of the bytes
-        // blockBigInt := new(big.Int)
-        //md.blockBigInt = blockBigInt.SetBytes(md.byteblock)
 
         // create the modulus bigint 2 to the bitsize exponent
         // ie if it is 8 then it is 2 to the bitsize nth
@@ -374,7 +347,7 @@ func (md *DecodeData) convertFloorBase2(modfloor *big.Int, modi *big.Int) *big.I
 }
 
 // set the signature of the byte block
-func (md *DecodeData) setSignature() {
+/*func (md *DecodeData) setSignature() {
 
 	bytes := md.byteblock
 
@@ -402,7 +375,7 @@ func (md *DecodeData) setFileSignature() {
         // these are just strings
         md.md5hex  = fmt.Sprintf("%x", md.md5byteblock)
         md.sha1hex = fmt.Sprintf("%x", md.sha1byteblock)
-}
+} */
 
 // display the modScan data
 func (md *DecodeData) modScanData() {
