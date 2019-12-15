@@ -1,7 +1,12 @@
 package mdUnzipFileWG
 
-// mdUnzipFileWG
+// project mdencode
+//
+// mdUnzipFileWG.go 
+//
 // this package unzips and decodes mdzip files with block signatures and modular floors
+// It calls the generate hash context list and creates the modulus scan decoder objects
+// This will unzip a mdzip file and write the bytes to an output file
 //
 // copyright (C) Scott Ross 2017
 // 
@@ -25,7 +30,7 @@ import (
 )
 
 
-// mdencode struct
+// mdencode mdUnzipFile struct
 type FileData struct {
 	commandArgs    int
 	fileName       string
@@ -73,7 +78,7 @@ type FileData struct {
 	islogging bool
 }
 
-// Init returns a new mdEncode object
+// Init returns a new mdUnzipFile object
 func Init() (md *FileData) {
 
 	mdata := new(FileData)
@@ -83,8 +88,8 @@ func Init() (md *FileData) {
 	return mdata
 }
 
-// DecodeFile decodes and mdzip file and writes the decoded blocks to an output file
-// it runs a modulus scan on the signature group
+// DecodeFile decodes an mdzip file and writes the decoded blocks to an output file
+// it runs a parallel modulus scan on the signature group
 func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount uint64) int {
 
 	file, err := os.Open(inputFile)

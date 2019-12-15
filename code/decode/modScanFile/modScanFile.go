@@ -1,4 +1,4 @@
-package modScanFileMutex
+package modScanFile
 
 // project mdencode
 //
