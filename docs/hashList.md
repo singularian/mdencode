@@ -153,6 +153,7 @@ Makefile
 Octal signature parameters for mdencode include 8 states. This is a future enhancement.   
 One list is used for the file and block hash lists and possibly block group hash lists.  
 
+## States 
 0 - No Hash  
 1 - File Hash used  
 2 - Block Group used  
@@ -161,3 +162,27 @@ One list is used for the file and block hash lists and possibly block group hash
 5 - Block Group and Block Hash used  
 6 - File and Block Group Used  
 7 - File and Block Group and Block Hash used  
+
+# HEX Encode Signature Arguments
+
+Each parameter has a hex code. The first [0-F] delineates the type and the second [0-F] delineates the signature number 0 to 15 for the first byte.
+
+
+## States
+0 - No Hash
+1 - File Hash used
+2 - Block Group used
+3 - Block Hash used
+4 - File and Block Hash used
+5 - Block Group and Block Hash used
+6 - File and Block Group Used
+7 - File and Block Group and Block Hash used
+
+
+## Example
+1F227C42 
+
+1F = File Hash Signature 15
+22 = Block Group Hash Signature 18
+7C = File and Block Group and Block Hash Signature 30
+42 = File and Block Hash Signature 33
