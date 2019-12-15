@@ -174,19 +174,19 @@ A 100 character HEX Signature could encode 1500 signatures.
 
 
 ## States
-0 - No Hash
-1 - File Hash used
-2 - Block Group used
-3 - Block Hash used
-4 - File and Block Hash used
-5 - Block Group and Block Hash used
-6 - File and Block Group Used
-7 - File and Block Group and Block Hash used
+0 - No Hash  
+1 - File Hash used  
+2 - Block Group used  
+3 - Block Hash used  
+4 - File and Block Hash used  
+5 - Block Group and Block Hash used  
+6 - File and Block Group Used  
+7 - File and Block Group and Block Hash used  
 
 ## Hex Encoding
 
-The first Half-Byte is the Type [0-F]
-The second Half-Byte is the Number [0-F] or [0-Z]
+The first Half-Byte is the Type [0-F]  
+The second Half-Byte is the Number [0-F] or [0-Z]  
 
 [TYPE][NUMBER]  
 [0-F Type][0-F Number]  
