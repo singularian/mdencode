@@ -1,5 +1,21 @@
 package mdHashContextList 
 
+// mdencode project
+//
+// mdHashContextList.go
+//
+// This package creates a mdencode signature block hash context list
+// The modulus scan calls the check routine with the block bytes and compares
+// them against the hashcontext list and tests to see if a signature match is found 
+//
+// It also provides a wrapper to mdBlockSize.go for simplicity
+//
+// https://github.com/singularian/mdencode
+// copyright (C) Scott Ross 2019
+//
+// License
+// https://github.com/singularian/mdencode/blob/master/LICENSE
+
 import (
 	"bytes"
 	"fmt"
