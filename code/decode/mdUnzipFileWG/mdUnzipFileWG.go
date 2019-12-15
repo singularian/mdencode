@@ -218,6 +218,9 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                 modByteSize = 1
         }
 
+	// set the start time
+	startTime := time.Now()
+
         // var hlistarray = strings.Split(hashhex, ":")
         var hlistarray []string
         for blockNumber = 0; blockNumber < blocks; blockNumber++ {
@@ -261,8 +264,8 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                         currentBlocksize = remainder
                 }
 
-                now := time.Now()
-                var time = fmt.Sprintf("%d%d%d%d%d", now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
+                // now := time.Now()
+                // var time = fmt.Sprintf("%d%d%d%d%d", now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
 
                 // set up the thread list of go routine objects
                 mdp := []*modScanFileMutex.DecodeData{}
@@ -274,7 +277,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 			hcListArr[thread].SetBlockHash(hashByteBlock)
 		}
                 for thread = 0; thread < int64(threadCount); thread++ {
-                        md := modScanFileMutex.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), thread, int64(threadCount), emptybytes, mutex, hcListArr[thread], time)
+                        md := modScanFileMutex.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), thread, int64(threadCount), emptybytes, mutex, hcListArr[thread])
                         mdp = append(mdp, md)
                 }
 
@@ -304,6 +307,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 		}
 		fmt.Println("end testing mutex ", mutex.GetMatchStatus())
 
+
 		for thread = threadStart; thread < threadEnd; thread++ {
 			mdp[thread].Stop = true
 
@@ -313,6 +317,11 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 
 		hlistarray = hlistarray[:0]
 	}
+
+	t := time.Now()
+        elapsed := t.Sub(startTime)
+	fmt.Println("Total time ", elapsed)
+
 	return 0
 
 }

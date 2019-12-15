@@ -92,7 +92,7 @@ type DecodeData struct {
 }
 
 // Init returns a new modScan object
-func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threadCount int64, bytes []byte, mux *mdUnzipFileMutex.FileMutex, hcl *mdHashContextList.HashContextList, time string) (md *DecodeData) {
+func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threadCount int64, bytes []byte, mux *mdUnzipFileMutex.FileMutex, hcl *mdHashContextList.HashContextList) (md *DecodeData) {
 	mdata := new(DecodeData)
 	mdata.blocksizeInt = blocksize
 	mdata.modsizeInt = modsize
@@ -103,7 +103,7 @@ func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threa
 	mdata.byteblock = bytes
 	mdata.matchFound = false
 	mdata.collisionCnt = 0
-	mdata.timeStarted = time
+	// mdata.timeStarted = time.Now()
 	mdata.initLog()
 	mdata.islogging = false
 	mdata.Stop      = false
