@@ -33,7 +33,7 @@ import (
 	"time"
 	// "strings"
 	"sync"
-	"github.com/singularian/mdencode/code/decode/mdUnzipFileMutex"
+	"github.com/singularian/mdencode/code/decode/mdUnzipMutex"
 	"github.com/singularian/mdencode/code/decode/mdHashContextList"
 	//"runtime"
 )
@@ -83,7 +83,7 @@ type DecodeData struct {
 	sha1byteblock []byte
 	md5byteblock []byte
 	// file mutex
-	mux *mdUnzipFileMutex.FileMutex
+	mux *mdUnzipMutex.FileMutex
 	// hash context list
 	hashContexList *mdHashContextList.HashContextList
 	// log writer
@@ -93,7 +93,7 @@ type DecodeData struct {
 }
 
 // Init returns a new modScan object
-func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threadCount int64, mux *mdUnzipFileMutex.FileMutex, hcl *mdHashContextList.HashContextList) (md *DecodeData) {
+func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threadCount int64, mux *mdUnzipMutex.FileMutex, hcl *mdHashContextList.HashContextList) (md *DecodeData) {
 	mdata := new(DecodeData)
 	mdata.blocksizeInt = blocksize
 	mdata.modsizeInt = modsize

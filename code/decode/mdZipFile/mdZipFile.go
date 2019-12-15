@@ -1,4 +1,4 @@
-package mdEncodeALL
+package mdZipFile
 
 // mdencode
 // copyright (C) Scott Ross 2017
@@ -116,7 +116,7 @@ type FileData struct {
 	islogging bool
 }
 
-// Init returns a new mdEncode object
+// Init returns a new mdEncode mdZipFile object
 func Init() (md *FileData) {
 
 	mdata := new(FileData)

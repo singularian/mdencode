@@ -59,8 +59,8 @@ type FlagData struct {
         outputfilename string
         // logfilename
         logfilename string
-	// mdEncodeAll variable
-	md *mdEncodeALL.FileData
+	// mdEncodeAll mdZipFile variable
+	md *mdZipFile.FileData
 }
 
 func main() {
@@ -161,7 +161,7 @@ func argsSimple(argsNumber int) int {
 
 	// initialize the mdencode file object
 	// var md = mdEncodeALL.Init()
-	fd.md = mdEncodeALL.Init()
+	fd.md = mdZipFile.Init()
 	fd.md.SetByteBlock(fd.byteblock)
 	fd.md.SetByteBlockBigInt(fd.byteblockint)
 	// fd.md.SetAppendFile(fd.appendfile)
