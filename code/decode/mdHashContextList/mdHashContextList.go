@@ -42,7 +42,7 @@ import (
 	"github.com/singularian/mdencode/code/decode/mdBlockSize"
 )
 
-// BlockSize object stores the file block signature size
+// HashContextList object stores the file signature hash context list
 type HashContextList struct {
 	fileHashList string
 	blockHashList string
@@ -72,7 +72,7 @@ type HashContextList struct {
 
 }
 
-// Init returns a new BlockSize object  
+// Init returns a new HashContextList object  
 func Init() (hc *HashContextList) {
         hcl := new(HashContextList)
 
