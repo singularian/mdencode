@@ -94,13 +94,12 @@ func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threa
 }
 
 // run a parallel modulus scan on a mdzip file block
-func (md *DecodeData) ModulusScanFileBytes(blockSize uint64, modSize uint32, blocklist string, hashlist string, modRemainder string, c *sync.WaitGroup) {
+func (md *DecodeData) ModulusScanFileBytes(modSize uint32, blocklist string, hashlist string, modRemainder string, c *sync.WaitGroup) {
 
         //runtime.LockOSThread()
 
         // process the modulus bitsize argument
         bitsize := md.modsizeInt
-	// md.blocksizeInt = int64(blockSize)
 
         // create the modulus bigint 2 to the bitsize exponent
         // ie if it is 8 then it is 2 to the bitsize nth
