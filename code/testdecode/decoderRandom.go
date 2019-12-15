@@ -7,7 +7,7 @@ package main
 //
 // decoderRandom creates the byte block randomly with n-bytes and creates an n-bit modular floor
 // decoderRandom will then run a parallel modulus scan to find the original n-byte block with a matching signature
-// decoderRandom uses goroutines to run the scans in sequence and channels to communicate 
+// decoderRandom uses goroutines to run the scans in sequence and channels to communicate
 //
 // This currently uses md5 and SHA-1 as the signature tests
 // It stores the random byte separately from the modulus scan bytes. If they match the test is a success
@@ -16,10 +16,9 @@ package main
 //
 // https://github.com/singularian/mdencode
 // copyright (C) Scott Ross 2019
-// 
+//
 // License
 // https://github.com/singularian/mdencode/blob/master/LICENSE
-// TODO Add a hex option
 
 import (
 	"crypto/rand"
@@ -27,11 +26,10 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	// "log"
 	"strings"
 	"time"
-	// "encoding/binary"
 	"encoding/json"
+	"encoding/hex"
 	"github.com/singularian/mdencode/code/decode/modScan"
 	"runtime"
 )
@@ -52,6 +50,8 @@ type FlagData struct {
 	// bytes
 	bytes      []byte
 	bytestring string
+	// hex string
+	hexstring string
 }
 
 // generates a random n byte array and then hashes it
@@ -68,24 +68,27 @@ func main() {
 	flag.Int64Var(&fd.threadStart, "start", 0, "Thread Start (Allows threads to be skipped for multiple computers)")
 	flag.Int64Var(&fd.threadEnd, "end", 0, "Thread End (Allows threads to be skipped for multiple computers)")
 	flag.StringVar(&fd.bytestring, "bytes", "", "Specify a byte string")
+	flag.StringVar(&fd.hexstring, "hex", "", "Specify a HEX byte string")
 
 	flag.Parse()
 
 	if argsNumber == 1 {
-		fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]")
+		fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] hex=[OPTIONAL HEX BYTESTRING]")
 		fmt.Println("Usage ", os.Args[0], " -block=12 -mod=64 -thread=16")
 		fmt.Println("Usage ", os.Args[0], " -block=9 -mod=64 -thread=10 -bytes=[1,2,3,4,5]")
 		fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]")
+		fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -hex=FF0C3FDDAF")
 		fmt.Println("Usage ", os.Args[0], " -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]")
+		fmt.Println("Usage ", os.Args[0], " -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF")
 		os.Exit(1)
 	}
 
-	fd.mddecode(fd.blocksize, fd.modsize, fd.threadsize, fd.threadlist, fd.bytestring)
+	fd.mddecode(fd.blocksize, fd.modsize, fd.threadsize, fd.threadlist, fd.bytestring, fd.hexstring)
 	os.Exit(0)
 }
 
 // mdecode file
-func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string, threadlist string, bytestring string) int {
+func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string, threadlist string, bytestring string, hexstring string) int {
 
 	// test a random byte block
 	// arguments:
@@ -129,6 +132,21 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, threadsize string
 			fmt.Println("buffer ", bytes)
 			blockSizeInt = int64(length)
 		}
+	}
+
+	// check if the hex bytes are defined
+	if hexstring != "" {
+		bsrc := []byte(hexstring)
+		bytes = make([]byte, hex.DecodedLen(len(bsrc)))
+		// length := hex.DecodedLen(len(bsrc))
+		// nx, err := hex.Decode(bytes, bsrc)
+		_, err := hex.Decode(bytes, bsrc)
+		if err != nil {
+			fmt.Println("Error encoding hex ",err)
+			os.Exit(1)
+		}
+		blockSizeInt = int64(len(bytes))
+		// fmt.Println("hex ", bytes, length)
 	}
 
 	// example byte slice
