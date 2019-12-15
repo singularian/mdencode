@@ -100,6 +100,7 @@ func (md *DecodeData) ModulusScanFileBytes(modSize uint32, blocklist string, has
 
         // process the modulus bitsize argument
         bitsize := md.modsizeInt
+	// md.blocksizeInt = int64(blockSize)
 
         // create the modulus bigint 2 to the bitsize exponent
         // ie if it is 8 then it is 2 to the bitsize nth
@@ -145,11 +146,13 @@ func (md *DecodeData) ModulusScanFileBytes(modSize uint32, blocklist string, has
         // log the starting modScan data
         md.modScanData()
 
-        _, buffer := md.decode()
+        // result := md.decode()
+        _ = md.decode()
 
 	// if the byte block matches the modscan signature list add it to the Mutex and end the work group
 	if md.matchFound == true {
-		md.Println("buffer ", buffer)
+		bufstring := fmt.Sprintf("%v", md.byteblock)
+		md.Println("buffer ", bufstring)
 		fmt.Printf("Found Thread %d Block % x\n", md.threadNumber, md.byteblock)
 		md.mux.SetFileBuffer(int(md.threadNumber), md.byteblock)
 		c.Done()
@@ -163,7 +166,7 @@ func (md *DecodeData) ModulusScanFileBytes(modSize uint32, blocklist string, has
 
 // calculate the byte block associated with a blocksize and modulus and modulus exponent with a sha1 and md5 hash
 // this will run the modulus scan decode to find a byte block associated with a modulus floor and sinature
-func (md *DecodeData) decode() (int, string) {
+func (md *DecodeData) decode() (int) {
 
 	start := time.Now()
 	md.Printlog("Starting modScan byte decoder ", md.threadNumber)
@@ -281,9 +284,7 @@ func (md *DecodeData) decode() (int, string) {
 		md.Println("Total time ", elapsed)
 	}
 
-	bufstring := fmt.Sprintf("%v", buf)
-
-	return 0, bufstring
+	return 0
 }
 
 // calculate the modulus exponent
