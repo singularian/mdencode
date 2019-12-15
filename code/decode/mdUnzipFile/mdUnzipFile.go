@@ -259,7 +259,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 
                 // fmt.Println("blockhashlist ", fileblocksize, " arr ", blocklistarr, " ", " hex ", hexstring, " modexp ", modSize, " modulus byte size ", modByteSize, " mod size ", modSize, " modulus ", n.String())
                 var currentBlocksize uint64 = 0
-		fmt.Println(" ")
+		fmt.Println("\n")
 
                 if blockNumber + 1 != blocks {
                         fmt.Println("Processing block hash ", blockNumber, " blocksize ", blockSize, hlistarray, int(modExp), n.String())
