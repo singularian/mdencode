@@ -320,7 +320,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 
 	t := time.Now()
         elapsed := t.Sub(startTime)
-	fmt.Println("Total time ", elapsed)
+	fmt.Println("\nTotal execution time ", elapsed)
 
 	return 0
 
