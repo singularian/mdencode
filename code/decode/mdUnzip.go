@@ -14,7 +14,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"github.com/singularian/mdencode/code/decode/mdUnzipFileWG"
+	"github.com/singularian/mdencode/code/decode/mdUnzipFile"
 )
 
 // mdencode flag struct                       
@@ -59,7 +59,7 @@ func argsSimple(argsNumber int) int {
 
 
 	// unzipFile := new(mdUnzipFile)
-	unzipFile := mdUnzipFileWG.Init()
+	unzipFile := mdUnzipFile.Init()
 
 	threads, err := strconv.ParseInt(fd.threadCount, 10, 64)
 	if err != nil {

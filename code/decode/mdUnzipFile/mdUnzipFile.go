@@ -25,7 +25,7 @@ import (
 	"sync"
 	"github.com/singularian/mdencode/code/decode/mdHashContextList"
 	"github.com/singularian/mdencode/code/decode/mdUnzipMutex"
-        "github.com/singularian/mdencode/code/decode/modScanFileMutex"
+        "github.com/singularian/mdencode/code/decode/modScanFile"
 )
 
 
@@ -270,7 +270,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
                 }
 
                 // set up the thread list of go routine objects
-                mdp := []*modScanFileMutex.DecodeData{}
+                mdp := []*modScanFile.DecodeData{}
                 var thread int64 = 0
                 // var threadCount int64 = 16
 		for thread = 0; thread < int64(threadCount); thread++ {
@@ -278,7 +278,7 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 			hcListArr[thread].SetBlockHash(hashByteBlock)
 		}
                 for thread = 0; thread < int64(threadCount); thread++ {
-                        md := modScanFileMutex.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), thread, int64(threadCount), mutex, hcListArr[thread])
+                        md := modScanFile.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), thread, int64(threadCount), mutex, hcListArr[thread])
                         mdp = append(mdp, md)
                 }
 
