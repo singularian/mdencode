@@ -170,7 +170,7 @@ second Nibble Half-Byte [0-F] delineates the signature number 0 to 15 for the fi
 
 Each byte increments the signature number in the second nibble.  
 In this way 20 characters can encode (10 * 15) 150 signatures.  
-A 100 character HEX Signature could encode 1500 signatures.  
+A 200 character HEX Signature could encode 1500 signatures.  
 
 
 ## States
