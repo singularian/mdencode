@@ -18,7 +18,6 @@ all:
 	go build -o mdlistTest testBinReadMdFmt.go 
 build: 
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip mdUnzip.go
-#	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzipwg mdUnzipMutex.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip mdzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist mdlist.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest testBinReadMdFmt.go
@@ -42,7 +41,7 @@ goget:
 getlibs:
 	make getlibs
 clean:
-	rm -r mdzip mdunzip mdunzipwg mdlist mdlistTest *.log
+	rm -r mdzip mdunzip mdlist mdlistTest *.log
 cleanlog:
 	rm -r *.log
 list:
