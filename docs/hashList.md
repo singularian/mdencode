@@ -165,7 +165,12 @@ One list is used for the file and block hash lists and possibly block group hash
 
 # HEX Encode Signature Arguments
 
-Each parameter has a hex code. The first [0-F] delineates the type and the second [0-F] delineates the signature number 0 to 15 for the first byte.
+Each parameter has a hex code. The first Hex Byte Nibble Half-Byte [0-F] delineates the hash type and the 
+second Nibble Half-Byte [0-F] delineates the signature number 0 to 15 for the first byte.  
+
+Each byte increments the signature number in the second nibble.  
+In this way 20 characters can encode (10 * 15) 150 signatures.  
+A 100 character HEX Signature could encode 1500 signatures.  
 
 
 ## States
@@ -178,11 +183,20 @@ Each parameter has a hex code. The first [0-F] delineates the type and the secon
 6 - File and Block Group Used
 7 - File and Block Group and Block Hash used
 
+## Hex Encoding
 
-## Example
-1F227C42 
+The first Half-Byte is the Type [0-F]
+The second Half-Byte is the Number [0-F] or [0-Z]
 
-1F = File Hash Signature 15
-22 = Block Group Hash Signature 18
-7C = File and Block Group and Block Hash Signature 30
+[TYPE][NUMBER]  
+[0-F Type][0-F Number]  
+
+Alternatively, it can be 0-Z or 35 signatures per byte for the number.  
+
+## Econding Example
+1F227C42  
+
+1F = File Hash Signature 15  
+22 = Block Group Hash Signature 18  
+7C = File and Block Group and Block Hash Signature 30  
 42 = File and Block Hash Signature 33
