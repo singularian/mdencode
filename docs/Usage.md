@@ -117,7 +117,7 @@ mddbreport -file=md.db -fileid=1 -format=5000 -out=outputfile.xml -append=false
 ```
 user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode
 $ ./decoderRandom
-Usage  ./decoderRandom  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] hex=[OPTIONAL HEX BYTESTRING]
+Usage  ./decoderRandom  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] -hex=[OPTIONAL HEX BYTESTRING]
 
 Usage  ./decoderRandom  -block=12 -mod=64 -thread=16
 Usage  ./decoderRandom  -block=9 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
