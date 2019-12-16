@@ -202,3 +202,36 @@ Alternatively, it can be 0-Z or 35 signatures per byte for the number.
 22 = Block Group Hash Signature 18  
 7C = File and Block Group and Block Hash Signature 30  
 42 = File and Block Hash Signature 33
+
+
+# Hex Encoding 2
+
+This format uses 3 to 5 bytes. One byte is the Signature type and the 2 to 4 following bytes are the signature number. Either 65k or 4 Billion in a 32 bit number.  
+
+[0-255] - Signature Type Byte. There can be 255 Signature types in this example although it could use the 8 state model.
+[0-255][0-255] - A 16 bit double byte that represents the signature number. This means you can reference 65+ k signatures in each group
+[0-255][0-255][0-255][0-255] - A alternative 32-bit integer that represents the signature number. This means you can reference 65+ k signatures
+
+## States
+0 - No Hash
+1 - File Hash used
+2 - Block Group used
+3 - Block Hash used
+4 - File and Block Hash used
+5 - Block Group and Block Hash used
+6 - File and Block Group Used
+7 - File and Block Group and Block Hash used
+
+
+# 16-bit Encoding Example
+
+070E11020203031111
+
+## Group 1
+
+070E11 -  File and Block Group and Block Hash used - 0E11 - The 3601 Number
+020203 -  Block Group used - 0203 - The 515 Signature Number
+031111 -  Block Hash Used - 1111 - The 4369 Signature Number
+
+
+
