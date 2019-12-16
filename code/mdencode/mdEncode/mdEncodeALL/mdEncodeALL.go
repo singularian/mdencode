@@ -44,6 +44,7 @@ import (
 	"github.com/steakknife/keccak"
 	_ "github.com/twmb/murmur3"
 	"golang.org/x/crypto/blake2s"
+	"github.com/maoxs2/go-ripemd"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
 	"io"
@@ -478,7 +479,7 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 		hlistarray = l.blockHashListArray
 	}
 	var length = len(hlistarray)
-	var last = 31
+	var last = 34
 	if length < last {
 		last = length
 	}
@@ -540,40 +541,44 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 			hb["blake2b"] = blake2.NewBlake2B()
 		case 151:
 			hb["fnv"] = fnv.New64a()
-		case 161:
-			hb["ripe160"] = ripemd160.New()
+                case 161:
+			hb["ripe128"] = ripemd.New128()
 		case 171:
+			hb["ripe160"] = ripemd160.New()
+		case 181:
+			hb["ripe256"] = ripemd.New256()
+		case 191:
 			var seed uint64 = 1120322
 			hb["murmur3"] = murmur3.New128(seed)
-		case 181:
-			hb["whirlpool"] = whirlpool.New()
-		case 191:
-			hb["hmac256"] = hmac.New(sha256.New, key)
 		case 201:
-			hb["hmac512"] = hmac.New(sha512.New, key)
+			hb["whirlpool"] = whirlpool.New()
 		case 211:
-			hb["kekkak"] = keccak.New256()
+			hb["hmac256"] = hmac.New(sha256.New, key)
 		case 221:
-			hb["skein_160"] = skein.New(20, nil)
+			hb["hmac512"] = hmac.New(sha512.New, key)
 		case 231:
-			hb["skein_256"] = skein.New256(key)
+			hb["kekkak"] = keccak.New256()
 		case 241:
-			hb["skein_384"] = skein.New(48, nil)
+			hb["skein_160"] = skein.New(20, nil)
 		case 251:
-			hb["skein_512"] = skein.New512(key)
+			hb["skein_256"] = skein.New256(key)
 		case 261:
-			hb["skein_1024"] = skein.New(128, nil)
+			hb["skein_384"] = skein.New(48, nil)
 		case 271:
+			hb["skein_512"] = skein.New512(key)
+		case 281:
+			hb["skein_1024"] = skein.New(128, nil)
+		case 291:
 			hb["tiger"] = tiger.New()
 		// siphash has to have a key 8 or 16 bytes
-		case 281:
+		case 301:
 			hb["siphash"] = siphash.New128(key)
 		// blake2s needs two values since it has a multiple return
-		case 291:
-			hb["blake2s_128"], _ = blake2s.New128(key)
-		case 301:
-			hb["blake2s_256"], _ = blake2s.New256(key)
 		case 311:
+			hb["blake2s_128"], _ = blake2s.New128(key)
+		case 321:
+			hb["blake2s_256"], _ = blake2s.New256(key)
+		case 331:
 			hb["blake2"] = blake2.New(nil)
 		// case 321:
 		// hb["block"] = fnv.New64a()

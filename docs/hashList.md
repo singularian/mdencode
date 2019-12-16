@@ -19,22 +19,24 @@ It corresponds to the binary or quaterniary argument position.
 14. sha3_512
 15. black2b
 16. fnv
-17. ripe160
-18. murmur3
-19. whirlpool
-20. hmac256
-21. hmac512
-22. kekkak
-23. skein160
-24. skein256
-25. skein384
-26. skein512
-27. skein1024
-28. tiger
-29. siphash
-30. black2s_128
-31. black2s_256
-32. blake2
+17. ripe128
+18. ripe160
+19. ripe256
+20. murmur3
+21. whirlpool
+22. hmac256
+23. hmac512
+24. kekkak
+25. skein160
+26. skein256
+27. skein384
+28. skein512
+29. skein1024
+30. tiger
+31. siphash
+32. black2s_128
+33. black2s_256
+34. blake2
 
 
 # Binary Signature Arguments

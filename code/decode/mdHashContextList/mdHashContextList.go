@@ -31,6 +31,7 @@ import (
         "crypto/sha512"
         "github.com/codahale/blake2"
 	"golang.org/x/crypto/blake2s"
+	"github.com/maoxs2/go-ripemd"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
 	"github.com/aead/skein"
@@ -130,8 +131,12 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["md4"] = md4.New()
                         case "md5":
 				hb["md5"] = md5.New()
+			case "ripe128":
+				hb["ripe128"] = ripemd.New128()
                         case "ripe160":
 				hb["ripe160"] = ripemd160.New()
+			case "ripe256":
+				 hb["ripe256"] = ripemd.New256()
                         case "sha1":
 				hb["sha1"] = sha1.New()
 			case "sha1_128":
