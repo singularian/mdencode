@@ -102,9 +102,10 @@ func main() {
 
 	// convert binary list to a name list
 	mdl := mdBinaryList.Init()
-	_  = mdl.CreateHashBlockList("11111111111111111111111111111111111111111111")
-	list  := mdl.CreateHashBlockList("111")
+	l  := mdl.CreateHashBlockList("11111111111111111111111111111111111111111111")
+	fmt.Println("hash list ", l)
 
+	list  := mdl.CreateHashBlockList("111")
 	fmt.Println("hash list ", list)
 
 	// _,_  = mdBlock.CreateHashBlockList("00110001110011")

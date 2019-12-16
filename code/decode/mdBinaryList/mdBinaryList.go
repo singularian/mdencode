@@ -51,7 +51,7 @@ func (bl *BlockList) CreateHashBlockList(hashlistBoolean string) ([]string) {
 				"skein_160", "skein_256", "skein_384", "skein_512", "skein_1024", "tiger", "whirlpool" }
 
 
-	var length = len(hashNames) - 1
+	var length = len(hashNames)
 
 	fmt.Println("hash Name", hashNames,  len(hashNames))
 
