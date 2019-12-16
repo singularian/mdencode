@@ -32,6 +32,7 @@ getlibs:
 	go get -u golang.org/x/crypto/md4
 	go get -u golang.org/x/crypto/sha3
 	go get -u golang.org/x/crypto/ripemd160
+	go get -u github.com/maoxs2/go-ripemd
 	go get -u github.com/steakknife/keccak
 	go get -u github.com/asadmshah/murmur3
 	go get -u github.com/dchest/siphash
