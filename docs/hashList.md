@@ -213,14 +213,14 @@ This format uses 3 to 5 bytes. One byte is the Signature type and the 2 to 4 fol
 [0-255][0-255][0-255][0-255] - A alternative 32-bit integer that represents the signature number. This means you can reference 65+ k signatures
 
 ## States
-0 - No Hash
-1 - File Hash used
-2 - Block Group used
-3 - Block Hash used
-4 - File and Block Hash used
-5 - Block Group and Block Hash used
-6 - File and Block Group Used
-7 - File and Block Group and Block Hash used
+0 - No Hash  
+1 - File Hash used  
+2 - Block Group used  
+3 - Block Hash used  
+4 - File and Block Hash used  
+5 - Block Group and Block Hash used  
+6 - File and Block Group Used  
+7 - File and Block Group and Block Hash used  
 
 
 # 16-bit Encoding Example
@@ -229,9 +229,9 @@ This format uses 3 to 5 bytes. One byte is the Signature type and the 2 to 4 fol
 
 ## Group 1
 
-070E11 -  File and Block Group and Block Hash used - 0E11 - The 3601 Number
-020203 -  Block Group used - 0203 - The 515 Signature Number
-031111 -  Block Hash Used - 1111 - The 4369 Signature Number
+- 070E11 -  File and Block Group and Block Hash used - 0E11 - The 3601 Number  
+- 020203 -  Block Group used - 0203 - The 515 Signature Number  
+- 031111 -  Block Hash Used - 1111 - The 4369 Signature Number  
 
 
 
