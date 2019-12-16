@@ -5,7 +5,7 @@ package mdBinaryList
 // mdBinaryList.go
 //
 // mdencode mdunzip signature binary list converter
-// this package converts a bitstring list to a binary string list
+// this package converts a bitstring list to a name string list
 //
 // https://github.com/singularian/mdencode
 // copyright (C) Scott Ross 2019
