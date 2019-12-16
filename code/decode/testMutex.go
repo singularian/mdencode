@@ -8,8 +8,9 @@ import (
 //	"sync"
 //    "sync/atomic"
 //	"time"
-	"github.com/singularian/mdencode/code/decode/mdUnzipFileMutex"
+	"github.com/singularian/mdencode/code/decode/mdUnzipMutex"
 	"github.com/singularian/mdencode/code/decode/mdBlockSize"
+	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 	"github.com/singularian/mdencode/code/decode/mdHashContextList"
 )
 func main() {
@@ -17,7 +18,7 @@ func main() {
 	// test the file mutex
 	b := []byte{1, 2, 3, 0, 10, 0, 11, 22}
 	c := []byte{1, 2, 3, 0, 10, 0, 11, 22, 1, 1, 1}
-	mutex := mdUnzipFileMutex.Init()
+	mutex := mdUnzipMutex.Init()
 	mutex.SetFileBuffer(1, b)
 	fmt.Println("mutex ", mutex.GetMatchStatus(), " ", mutex.GetFileBuffer())
 
@@ -98,5 +99,14 @@ func main() {
 		fmt.Println("\nResult = true")
 	}
 	fmt.Println("")
+
+	// convert binary list to a name list
+	mdl := mdBinaryList.Init()
+	_  = mdl.CreateHashBlockList("11111111111111111111111111111111111111111111")
+	list  := mdl.CreateHashBlockList("111")
+
+	fmt.Println("hash list ", list)
+
+	// _,_  = mdBlock.CreateHashBlockList("00110001110011")
 
 }
