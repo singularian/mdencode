@@ -12,16 +12,16 @@ BUILD_DIR=${GOBIN}
 LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X github.com/nsross/mdencode/core.BuildTime=${BUILD_TIME}"
 
 all:
-	go build -o mdunzip mdUnzip.go 
-	go build -o mdzip mdzip.go 
-	go build -o mdlist mdlist.go 
-	go build -o mdlistTest testBinReadMdFmt.go 
+	go build -o mdunzip main/mdUnzip.go 
+	go build -o mdzip main/mdzip.go 
+	go build -o mdlist main/mdlist.go 
+	go build -o mdlistTest main/testBinReadMdFmt.go 
 	go build -o mdsig main/mdsig.go 
 build: 
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip mdUnzip.go
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip mdzip.go
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist mdlist.go
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest testBinReadMdFmt.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip main/mdUnzip.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip main/mdzip.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist main/mdlist.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest main/testBinReadMdFmt.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig main/mdsig.go
 goget:
 	go get -u golang.org/x/crypto/blake2s
