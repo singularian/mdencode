@@ -108,6 +108,12 @@ func main() {
 	list  := mdl.CreateHashBlockList("111")
 	fmt.Println("hash list ", list)
 
+	hlist := mdl.GetHashList()
+
+	for i := 0; i < len(hlist); i++ {
+		fmt.Printf("%3d: %s\n", i+1, hlist[i])
+	}
+
 	// _,_  = mdBlock.CreateHashBlockList("00110001110011")
 
 }
