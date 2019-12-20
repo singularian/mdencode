@@ -3,41 +3,42 @@
 This is the current numerical signature hash list.  
 It corresponds to the binary or quaterniary argument position.
 
-1. md4
-2. md5
-3. sha1_128
-4. sha1_1284
-5. sha1
-6. sha224
-7. sha256
-8. sha512_224
-9. sha512_256
-10. sha512
-11. sha3_224
-12. sha3_256
-13. sha3_384
-14. sha3_512
-15. black2b
-16. fnv
-17. ripe128
-18. ripe160
-19. ripe256
-20. murmur3
-21. whirlpool
-22. hmac256
-23. hmac512
-24. kekkak
-25. skein160
-26. skein256
-27. skein384
-28. skein512
-29. skein1024
-30. tiger
-31. siphash
-32. black2s_128
-33. black2s_256
-34. blake2
-
+  1: blake2     
+  2: blake2b    
+  3: blake2s_128  
+  4: blake2s_256  
+  5: fnv         
+  6: fnv128     
+  7: fnv128a    
+  8: hmac256    
+  9: hmac512    
+ 10: kekkak     
+ 11: murmur3    
+ 12: md4        
+ 13: md5        
+ 14: ripe128    
+ 15: ripe160    
+ 16: ripe256    
+ 17: sha1_128   
+ 18: sha1_1284   
+ 19: sha1       
+ 20: sha224     
+ 21: sha256     
+ 22: sha512     
+ 23: sha512_224  
+ 24: sha512_256  
+ 25: sha3_224   
+ 26: sha3_256   
+ 27: sha3_384   
+ 28: sha3_512   
+ 29: siphash    
+ 30: skein_160  
+ 31: skein_256  
+ 32: skein_384  
+ 33: skein_512  
+ 34: skein_1024  
+ 35: tiger      
+ 36: whirlpool  
 
 # Binary Signature Arguments
 

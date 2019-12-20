@@ -47,6 +47,8 @@ import (
 	"github.com/maoxs2/go-ripemd"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
+	"github.com/singularian/mdencode/code/decode/mdBinaryList"
+        "github.com/singularian/mdencode/code/decode/mdHashContextList"
 	"io"
 	"log"
 	"math/big"
@@ -459,9 +461,77 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 
 }
 
+
+// new method
+func (l *FileData) createHashListMap(fileBlockflag int) {
+
+        // file signature variables
+        var hlistarray []string
+        if fileBlockflag == 0 {
+                hlistarray = l.fileHashListArray
+
+        } else if fileBlockflag == 1 {
+                hlistarray = l.blockHashListArray
+        }
+        var length = len(hlistarray)
+        var last = 34
+        if length < last {
+                last = length
+        }
+
+
+        // hb := make(map[string]hash.Hash)
+
+        mdc := mdHashContextList.Init()
+        mdl := mdBinaryList.Init()
+
+        x := strings.Join(hlistarray, "")
+        // list  := mdl.CreateHashBlockList(hlistarray)
+        list  := mdl.CreateHashBlockList(x)
+        result := strings.Join(list, ":")
+
+        fmt.Println("new list ", list)
+        fmt.Println("new list ", result)
+
+        // func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, threadNumber int) {
+        //// mdc.CreateHashListMap(list, fileBlockflag, 1)
+        // these are the reverse
+        // 0 is file one is block
+        if fileBlockflag == 1 {
+                mdc.CreateHashListMap(result, 0, 1)
+        } else {
+                mdc.CreateHashListMap(result, 1, 1)
+        }
+        // mdc.CreateHashListMap(result, fileBlockflag, 1)
+
+        for k, _ := range  mdc.HashListBlocks {
+                hashname := k
+                // list = append(list, hashname)
+                fmt.Println("hash list contexts ", hashname)
+        }
+
+        // mm  := mdc.GetBlockHash()
+
+        // sort.Strings(list)
+
+        // hc.HashList
+        // hc.HashListBlocks
+
+        if fileBlockflag == 1 {
+                l.blockHashListNames = list
+                // l.hashListBlocks = hb
+                l.hashListBlocks = mdc.HashList
+        } else {
+                l.fileHashListNames = list
+                // l.hashList = hb
+                l.hashList = mdc.HashListBlocks
+        }
+
+}
+
 // createHashListMap
 // create the hash context hash list map
-func (l *FileData) createHashListMap(fileBlockflag int) {
+func (l *FileData) createHashListMapOld(fileBlockflag int) {
 
 	var defaultkey = []byte("LomaLindaSanSerento9000")
 	var keystring = l.key

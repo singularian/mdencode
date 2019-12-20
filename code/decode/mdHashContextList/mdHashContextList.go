@@ -118,6 +118,12 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["blake2s_256"], _ = blake2s.New256(key)
 			case "fnv":
 				hb["fnv"] = fnv.New64a()
+			// these are new
+			case "fnv128":
+				hb["fnv128"] = fnv.New128()
+			case "fnv128a":
+				hb["fnv128a"] = fnv.New128a()
+			// ==================
 			case "hmac256":
 				hb["hmac256"] = hmac.New(sha256.New, key)
 			case "hmac512":
@@ -182,6 +188,11 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
                 	}
 		}
 	// }
+
+	// 0 is file
+	// 1 is block
+	// need to switch these 
+	// they are different from mdencode
 
 	if mdtype == 0 {
 		hc.fileHashListNames  = hashlistArr
