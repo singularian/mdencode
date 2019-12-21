@@ -5,46 +5,19 @@ package mdZipFile
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
-	"crypto/hmac"
-	"crypto/md5"
-	"crypto/sha1"
-	"crypto/sha256"
-	"crypto/sha512"
-	"github.com/codahale/blake2"
-	"golang.org/x/crypto/md4"
 	"hash"
-	"hash/fnv"
 	"regexp"
-	// "golang.org/x/crypto/blake2b"
 	"encoding/hex"
 	"fmt"
-	"github.com/singularian/mdencode/code/hash/sha1_128"
-	_ "github.com/aead/siphash"
-	"github.com/aead/skein"
-	"github.com/asadmshah/murmur3"
-	"github.com/cxmcc/tiger"
-	"github.com/dchest/siphash"
-	_ "github.com/enceve/crypto/skein"
-	"github.com/jzelinskie/whirlpool"
-	_ "github.com/mimoo/GoKangarooTwelve/K12"
-	_ "github.com/spaolacci/murmur3"
-	"github.com/steakknife/keccak"
-	_ "github.com/twmb/murmur3"
-	"golang.org/x/crypto/blake2s"
-	"github.com/maoxs2/go-ripemd"
-	"golang.org/x/crypto/ripemd160"
-	"golang.org/x/crypto/sha3"
-	// ===========================================================
 	"github.com/singularian/mdencode/code/decode/mdFormatBinary"
 	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 	"github.com/singularian/mdencode/code/decode/mdHashContextList"
-	// ===========================================================
 	"io"
 	"log"
 	"math/big"
 	"os"
 	"path/filepath"
-	"sort"
+	_ "sort"
 	"strconv"
 	"strings"
 )
@@ -441,8 +414,8 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 }
 
 
-
-// new method
+// createHashListMap
+// this method converts a binary signature list into a hash context list
 func (l *FileData) createHashListMap(fileBlockflag int) {
 
 	// file signature variables
@@ -460,18 +433,23 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
         }
 
 
-	// hb := make(map[string]hash.Hash)
-
 	mdc := mdHashContextList.Init()
 	mdl := mdBinaryList.Init()
+
+	// ==================================================
+	// set the key
+	// this is for blake2s and siphash
+	// mdc.SetKeyFile(l.key)
+	// TODO
+	// ==================================================
 
  	x := strings.Join(hlistarray, "")
 	// list  := mdl.CreateHashBlockList(hlistarray)
 	list  := mdl.CreateHashBlockList(x)
 	result := strings.Join(list, ":")
 
-	fmt.Println("new list ", list)
-	fmt.Println("new list ", result)
+//	fmt.Println("new list ", list)
+//	fmt.Println("new list ", result)
 
 	// func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, threadNumber int) {
 	//// mdc.CreateHashListMap(list, fileBlockflag, 1)
@@ -484,11 +462,12 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 	}
 	// mdc.CreateHashListMap(result, fileBlockflag, 1)
 
-	for k, _ := range  mdc.HashListBlocks {
+/*	for k, _ := range  mdc.HashListBlocks {
                 hashname := k
 		// list = append(list, hashname)
 		fmt.Println("hash list contexts ", hashname)
-        }		
+	}
+*/
 
 	// mm  := mdc.GetBlockHash()
 
@@ -507,150 +486,6 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
                 l.hashList = mdc.HashListBlocks
         }
 
-}
-
-// createHashListMap
-// create the hash context hash list map
-func (l *FileData) createHashListMap222(fileBlockflag int) {
-
-	var defaultkey = []byte("LomaLindaSanSerento9000")
-	var keystring = l.key
-	key := []byte(keystring)
-	if len(keystring) < 15 {
-		key = defaultkey
-	}
-
-	// file signature variables
-	var hlistarray []string
-	if fileBlockflag == 0 {
-		hlistarray = l.fileHashListArray
-
-	} else if fileBlockflag == 1 {
-		hlistarray = l.blockHashListArray
-	}
-	var length = len(hlistarray)
-	var last = 34
-	if length < last {
-		last = length
-	}
-
-	// file block sig variables
-	// l.blockHashListArray
-	// l.hashListBlocks
-	// l.blockHashListNames
-	hb := make(map[string]hash.Hash)
-
-	var list []string
-	for i := 0; i < last; i++ {
-		var vbool, _ = strconv.Atoi(hlistarray[i])
-		var v = (i * 10) + vbool
-
-		switch v {
-		// md4 file
-		case 1:
-			hb["md4"] = md4.New()
-		// md5 file
-		case 11:
-			hb["md5"] = md5.New()
-		// sha1 128 skip last four bytes
-		case 21:
-			hb["sha1_128"] = sha1_128.New()
-		// sha1 128 skip first four bytes
-		case 31:
-			hb["sha1_1284"] = sha1_128.New(4, 20)
-		// sha1 file
-		case 41:
-			hb["sha1"] = sha1.New()
-		// sha256
-		case 51:
-			hb["sha224"] = sha256.New224()
-		case 61:
-			hb["sha256"] = sha256.New()
-		// sha512_224
-		case 71:
-			hb["sha512_224"] = sha512.New512_224()
-		case 81:
-			hb["sha512_256"] = sha512.New512_256()
-		// sha512
-		case 91:
-			hb["sha512"] = sha512.New()
-		// sha3_224
-		case 101:
-			hb["sha3_224"] = sha3.New224()
-		// sha3_256
-		case 111:
-			hb["sha3_256"] = sha3.New256()
-		// sha_384
-		case 121:
-			hb["sha3_384"] = sha3.New384()
-		// sha3_512
-		case 131:
-			hb["sha3_512"] = sha3.New512()
-		// blake2b.New256
-		case 141:
-			hb["blake2b"] = blake2.NewBlake2B()
-		case 151:
-			hb["fnv"] = fnv.New64a()
-		case 161:
-			hb["ripe128"] = ripemd.New128()
-		case 171:
-			hb["ripe160"] = ripemd160.New()
-		case 181:
-			hb["ripe256"] = ripemd.New256()
-		case 191:
-			var seed uint64 = 1120322
-			hb["murmur3"] = murmur3.New128(seed)
-		case 201:
-			hb["whirlpool"] = whirlpool.New()
-		case 211:
-			hb["hmac256"] = hmac.New(sha256.New, key)
-		case 221:
-			hb["hmac512"] = hmac.New(sha512.New, key)
-		case 231:
-			hb["kekkak"] = keccak.New256()
-		case 241:
-			hb["skein_160"] = skein.New(20, nil)
-		case 251:
-			hb["skein_256"] = skein.New256(key)
-		case 261:
-			hb["skein_384"] = skein.New(48, nil)
-		case 271:
-			hb["skein_512"] = skein.New512(key)
-		case 281:
-			hb["skein_1024"] = skein.New(128, nil)
-		case 291:
-			hb["tiger"] = tiger.New()
-		// siphash has to have a key 8 or 16 bytes
-		case 301:
-			hb["siphash"] = siphash.New128(key)
-		// blake2s needs two values since it has a multiple return
-		case 311:
-			hb["blake2s_128"], _ = blake2s.New128(key)
-		case 321:
-			hb["blake2s_256"], _ = blake2s.New256(key)
-		case 331:
-			hb["blake2"] = blake2.New(nil)
-		// case 321:
-		// hb["block"] = fnv.New64a()
-		// hb["blake2s"], _ =  blake2s.New128(nil)
-
-		}
-	}
-
-	for k, _ := range hb {
-		hashname := k
-		list = append(list, hashname)
-	}
-
-	sort.Strings(list)
-
-	if fileBlockflag == 1 {
-		l.blockHashListNames = list
-		l.hashListBlocks = hb
-	} else {
-		l.fileHashListNames = list
-		l.hashList = hb
-	}
 }
 
 // setmdFormat
