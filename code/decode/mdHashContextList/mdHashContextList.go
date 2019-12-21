@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"fmt"
 	"strings"
+	"encoding/hex"
 	"hash"
 	"hash/fnv"
         "crypto/hmac"
@@ -31,6 +32,7 @@ import (
         "crypto/sha512"
         "github.com/codahale/blake2"
 	"golang.org/x/crypto/blake2s"
+	"github.com/minio/highwayhash"
 	"github.com/maoxs2/go-ripemd"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
@@ -102,6 +104,10 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 	var key = []byte("LomaLindaSanSerento9000")
 	// key = defaultkey
 
+	// highway hash key
+	// key, err := hex.DecodeString("000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f")
+	hwkey, _ := hex.DecodeString("000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f")
+
 	hashlistsize := len(hashlistArr)
 
 	// for thread := 0; thread < threadNumber; thread++ {
@@ -128,6 +134,10 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["hmac256"] = hmac.New(sha256.New, key)
 			case "hmac512":
 				hb["hmac512"] = hmac.New(sha512.New, key)
+			case "hw128":
+				hb["hw128"], _ = highwayhash.New128(hwkey[:])
+			case "hw256":
+				hb["hw256"], _ = highwayhash.New(hwkey[:])
 			case "kekkak":
 				hb["kekkak"] = keccak.New256()
                         case "murmur3":

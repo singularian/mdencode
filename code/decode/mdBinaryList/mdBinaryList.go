@@ -14,7 +14,7 @@ package mdBinaryList
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
-	"fmt"
+//	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -24,6 +24,8 @@ import (
 type BlockList struct {
 	fileHashList string
 	blockHashList string
+	// hashNames
+	hashNames      []string
 	// block names
 	hashList       []string
 	hashListFile   []string
@@ -33,6 +35,7 @@ type BlockList struct {
 // Init returns a new BlockList object  
 func Init() (bl *BlockList) {
         blx := new(BlockList)
+	blx.hashNames = blx.GetHashList()
         return blx
 }
 
@@ -40,7 +43,7 @@ func Init() (bl *BlockList) {
 func (bl *BlockList) GetHashList() ([]string) {
 
 
-	hashNames := []string{"blake2", "blake2b", "blake2s_128", "blake2s_256", "fnv", "fnv128", "fnv128a", "hmac256", "hmac512", "kekkak", "murmur3", "md4", "md5", "ripe128",
+	hashNames := []string{"blake2", "blake2b", "blake2s_128", "blake2s_256", "fnv", "fnv128", "fnv128a", "hmac256", "hmac512", "hw128", "hw256", "kekkak", "murmur3", "md4", "md5", "ripe128",
 		"ripe160", "ripe256", "sha1_128", "sha1_1284", "sha1", "sha224", "sha256", "sha512", "sha512_224", "sha512_256", "sha3_224", "sha3_256", "sha3_384", "sha3_512", "siphash",
 		"skein_160", "skein_256", "skein_384", "skein_512", "skein_1024", "tiger", "whirlpool" }
 
@@ -57,14 +60,11 @@ func (bl *BlockList) CreateHashBlockList(hashlistBoolean string) ([]string) {
 
 	arr := re.FindAllString(hashlistBoolean, -1)
 
-	hashNames := []string{"blake2", "blake2b", "blake2s_128", "blake2s_256", "fnv", "fnv128", "fnv128a", "hmac256", "hmac512", "kekkak", "murmur3", "md4", "md5", "ripe128", 
-				"ripe160", "ripe256", "sha1_128", "sha1_1284", "sha1", "sha224", "sha256", "sha512", "sha512_224", "sha512_256", "sha3_224", "sha3_256", "sha3_384", "sha3_512", "siphash",
-				"skein_160", "skein_256", "skein_384", "skein_512", "skein_1024", "tiger", "whirlpool" }
-
-
+	// set the hashNames array list
+	hashNames := bl.hashNames
 	var length = len(hashNames)
 
-	fmt.Println("hash Name", hashNames,  len(hashNames))
+	// fmt.Println("hash Name", hashNames,  len(hashNames))
 
         for i := 0; i < len(arr); i++ {
                 // fmt.Println("hashlist ", hashName[i])
@@ -82,7 +82,7 @@ func (bl *BlockList) CreateHashBlockList(hashlistBoolean string) ([]string) {
 
 	bl.blockHashList = strings.Join(bl.hashList, ":")
 
-	fmt.Println("hashlist ", bl.blockHashList)
+	// fmt.Println("hashlist ", bl.blockHashList)
 
 	return bl.hashList
 }
@@ -90,7 +90,7 @@ func (bl *BlockList) CreateHashBlockList(hashlistBoolean string) ([]string) {
 // add the hash block the blockSize Array and increment the blockSize count
 func (bl *BlockList) AddHashList (hashName string, number int) {
 
-	fmt.Println("hash ", number, hashName)
+	// fmt.Println("hash ", number, hashName)
 
 	bl.hashList = append(bl.hashList, hashName)
 }

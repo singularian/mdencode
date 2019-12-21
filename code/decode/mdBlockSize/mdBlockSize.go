@@ -70,6 +70,10 @@ func (bl *BlockSize) CalcHashBlockSize (hashlist string) (uint64, []int) {
 				bl.AddBlockSig(32)
 			case "hmac512":
 				bl.AddBlockSig(64)
+			case "hw128":
+				bl.AddBlockSig(16)
+			case "hw256":
+				bl.AddBlockSig(32)
 			case "kekkak":
 				bl.AddBlockSig(32)
                         case "murmur3":
