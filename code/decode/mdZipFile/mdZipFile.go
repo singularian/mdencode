@@ -7,7 +7,6 @@ package mdZipFile
 import (
 	"crypto/hmac"
 	"crypto/md5"
-	"github.com/singularian/mdencode/code/hash/sha1_128"
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
@@ -19,6 +18,7 @@ import (
 	// "golang.org/x/crypto/blake2b"
 	"encoding/hex"
 	"fmt"
+	"github.com/singularian/mdencode/code/hash/sha1_128"
 	_ "github.com/aead/siphash"
 	"github.com/aead/skein"
 	"github.com/asadmshah/murmur3"
@@ -27,7 +27,6 @@ import (
 	_ "github.com/enceve/crypto/skein"
 	"github.com/jzelinskie/whirlpool"
 	_ "github.com/mimoo/GoKangarooTwelve/K12"
-	"github.com/singularian/mdencode/code/decode/mdFormatBinary"
 	_ "github.com/spaolacci/murmur3"
 	"github.com/steakknife/keccak"
 	_ "github.com/twmb/murmur3"
@@ -36,6 +35,7 @@ import (
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
 	// ===========================================================
+	"github.com/singularian/mdencode/code/decode/mdFormatBinary"
 	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 	"github.com/singularian/mdencode/code/decode/mdHashContextList"
 	// ===========================================================

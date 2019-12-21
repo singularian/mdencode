@@ -32,6 +32,7 @@ import (
         "crypto/sha512"
         "github.com/codahale/blake2"
 	"golang.org/x/crypto/blake2s"
+	"github.com/skeeto/cubehash"
 	"github.com/minio/highwayhash"
 	"github.com/maoxs2/go-ripemd"
 	"golang.org/x/crypto/ripemd160"
@@ -110,6 +111,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 
 	hashlistsize := len(hashlistArr)
 
+	// these hash contexts should be in sorted order
 	// for thread := 0; thread < threadNumber; thread++ {
 		for hashnum := 0; hashnum < hashlistsize; hashnum++ {
                 // fmt.Println("hashlist ", st[i])          
@@ -122,6 +124,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["blake2s_128"], _ = blake2s.New128(key)
                         case "blake2s_256":
 				hb["blake2s_256"], _ = blake2s.New256(key)
+			case "cube":
+				hb["cube"] = cubehash.New()
 			case "fnv":
 				hb["fnv"] = fnv.New64a()
 			// these are new

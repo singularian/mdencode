@@ -2,43 +2,49 @@
 
 This is the current numerical signature hash list.  
 It corresponds to the binary or quaterniary argument position.
+These should be in sorted order for the context hashlist.  
 
-  1: blake2     
-  2: blake2b    
-  3: blake2s_128  
-  4: blake2s_256  
-  5: fnv         
-  6: fnv128     
-  7: fnv128a    
-  8: hmac256    
-  9: hmac512    
- 10: kekkak     
- 11: murmur3    
- 12: md4        
- 13: md5        
- 14: ripe128    
- 15: ripe160    
- 16: ripe256    
- 17: sha1_128   
- 18: sha1_1284   
- 19: sha1       
- 20: sha224     
- 21: sha256     
- 22: sha512     
- 23: sha512_224  
- 24: sha512_256  
- 25: sha3_224   
- 26: sha3_256   
- 27: sha3_384   
- 28: sha3_512   
- 29: siphash    
- 30: skein_160  
- 31: skein_256  
- 32: skein_384  
- 33: skein_512  
- 34: skein_1024  
- 35: tiger      
- 36: whirlpool  
+Current mdencode signatures  
+
+  1: blake2                
+  2: blake2b               
+  3: blake2s_128           
+  4: blake2s_256           
+  5: cube                  
+  6: fnv                   
+  7: fnv128                
+  8: fnv128a               
+  9: hmac256               
+ 10: hmac512               
+ 11: hw128 (Highway Hash 128)                
+ 12: hw256 (Highway Hash 256)                
+ 13: kekkak                
+ 14: murmur3               
+ 15: md4                   
+ 16: md5                   
+ 17: ripe128               
+ 18: ripe160               
+ 19: ripe256               
+ 20: sha1_128              
+ 21: sha1_1284             
+ 22: sha1                  
+ 23: sha224                
+ 24: sha256                
+ 25: sha512                
+ 26: sha512_224            
+ 27: sha512_256            
+ 28: sha3_224              
+ 29: sha3_256              
+ 30: sha3_384              
+ 31: sha3_512              
+ 32: siphash               
+ 33: skein_160             
+ 34: skein_256             
+ 35: skein_384             
+ 36: skein_512             
+ 37: skein_1024            
+ 38: tiger                 
+ 39: whirlpool             
 
 # Binary Signature Arguments
 
