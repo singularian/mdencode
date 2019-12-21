@@ -5,42 +5,33 @@ package mdEncode
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
-	"crypto/hmac"
-	"crypto/md5"
-	"crypto/sha1"
-	"crypto/sha256"
-	"crypto/sha512"
-	"github.com/codahale/blake2"
-	"golang.org/x/crypto/md4"
 	"hash"
-	"hash/fnv"
 	"regexp"
-	// "golang.org/x/crypto/blake2b"
 	"encoding/hex"
 	"fmt"
-	_ "github.com/aead/siphash"
-	"github.com/aead/skein"
-	"github.com/asadmshah/murmur3"
-	"github.com/cxmcc/tiger"
-	"github.com/dchest/siphash"
-	_ "github.com/enceve/crypto/skein"
-	"github.com/jzelinskie/whirlpool"
-	_ "github.com/mimoo/GoKangarooTwelve/K12"
-	_ "github.com/spaolacci/murmur3"
-	"github.com/steakknife/keccak"
-	_ "github.com/twmb/murmur3"
-	"golang.org/x/crypto/blake2s"
-	"golang.org/x/crypto/ripemd160"
-	"golang.org/x/crypto/sha3"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatBinary"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatCSV"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatInform"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatJson"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatMD"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatSQL"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatText"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatHtml"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatXML"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatXMLgo"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatLog"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatImg"
+	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatImgFont"
+	"github.com/singularian/mdencode/code/decode/mdBinaryList"
+        "github.com/singularian/mdencode/code/decode/mdHashContextList"
 	"io"
 	"log"
 	"math/big"
 	"os"
 	"path/filepath"
-	"sort"
+	_ "sort"
 	"strconv"
 	"strings"
-	"github.com/singularian/mdencode/code/mdencode/mdFormatsImport/mdFormatImport"
 )
 
 // mdformat interface struct
@@ -48,10 +39,12 @@ type mdformat interface {
 	PrintFormatType()
 	OpenFile(appendfile bool)
 	InitFile()
+	// EncodeDirStart() // for the directory
 	EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64)
 	EncodeFileHash(encodingFormat int, hashName string, hashBytes string)
 	EncodeBlock(encodingFormat int, blockSize uint64, hashList []string, modExp int, mod string)
 	EncodeEndFile(encodingFormat int)
+	// EncodeDirEnd() // for the directory end - has a list of files
 }
 
 // mdencode struct
@@ -156,7 +149,7 @@ func (fdata *FileData) MdencodeDirectory(blockSize string, modSize string, forma
         }
 
         for _, fileName := range fileList {
-                fmt.Println(fileName)
+                ///// fmt.Println(fileName)
                 // skip the output file if it is specified
                 // if ((fileName != outputpath) && (fd.outputfilename != "")) {
                 // might be bug here???
@@ -168,6 +161,21 @@ func (fdata *FileData) MdencodeDirectory(blockSize string, modSize string, forma
 	return 0
 
 }
+
+// test directory hash code recursivelly
+/* func (fd *FileData) hashDirectoryRecursive(directory string) {
+        files, _ := ioutil.ReadDir(directory)
+        for _, file := range files {
+                fileName := directory + string(os.PathSeparator) + file.Name()
+                // todo: need to skip the output file so it doesn't process it in the directory
+                if file.IsDir() {
+                        fd.hashDirectoryRecursive(fileName)
+                } else {
+                        fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fileName, fd.outputfilename)
+                }
+        }
+
+} */
 
 
 // Mdencode
@@ -220,7 +228,8 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 		os.Exit(3)
 	}
 
-	// log the file to the log
+	// log file
+	// should close the log at the end???
 	fdata.Printlog("mdencode file ", fileName, " blocksize ", fdata.blockSize, " modsize ", fdata.modSize)
 
 	// set the file size
@@ -245,16 +254,16 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 		fdata.mdencodeFile(fileName)
 	}
 
-        // encode the file blocks
-        if blocksize > 0 {
-                // set the number of blocks in the file and last block size
-                blocks, remainder := fdata.calculateFileBlocks(uint64(size), uint64(blocksize))
-                fdata.blockCount = uint64(blocks)
-                fdata.blockRemainder = uint64(remainder)
+	// encode the file blocks
+	if blocksize > 0 {
+	        // set the number of blocks in the file and last block size
+		blocks, remainder := fdata.calculateFileBlocks(uint64(size), uint64(blocksize))
+		fdata.blockCount = uint64(blocks)
+		fdata.blockRemainder = uint64(remainder)
 
-                // mdEncode the File Block
-                fdata.mdencodeFileBlock(blockSize, modSize, format, fileName)
-        }
+		// mdEncode the File Block
+		fdata.mdencodeFileBlock(blockSize, modSize, format, fileName)
+	}
 
 	// endcode the end of file formatter
 	fdata.mdfmt.EncodeEndFile(format)
@@ -427,138 +436,76 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 
 }
 
+
 // createHashListMap
-// create the hash context hash list map
+// this method converts a binary signature list into a hash context list
 func (l *FileData) createHashListMap(fileBlockflag int) {
 
-	var defaultkey = []byte("LomaLindaSanSerento9000")
-	var keystring = l.key
-	key := []byte(keystring)
-	if len(keystring) < 15 {
-		key = defaultkey
-	}
+        // file signature variables
+        var hlistarray []string
+        if fileBlockflag == 0 {
+                hlistarray = l.fileHashListArray
 
-	// file signature variables
-	var hlistarray []string
-	if fileBlockflag == 0 {
-		hlistarray = l.fileHashListArray
+        } else if fileBlockflag == 1 {
+                hlistarray = l.blockHashListArray
+        }
+        var length = len(hlistarray)
+        var last = 34
+        if length < last {
+                last = length
+        }
 
-	} else if fileBlockflag == 1 {
-		hlistarray = l.blockHashListArray
-	}
-	var length = len(hlistarray)
-	var last = 30
-	if length < last {
-		last = length
-	}
+	// create the hash context list objects
+        mdc := mdHashContextList.Init()
+        mdl := mdBinaryList.Init()
 
-	// file block sig variables
-	// l.blockHashListArray
-	// l.hashListBlocks
-	// l.blockHashListNames
-	hb := make(map[string]hash.Hash)
+	// set the key
+	mdc.SetKeyFile(l.key)
 
-	var list []string
-	for i := 0; i < last; i++ {
-		var vbool, _ = strconv.Atoi(hlistarray[i])
-		var v = (i * 10) + vbool
+        x := strings.Join(hlistarray, "")
+        // list  := mdl.CreateHashBlockList(hlistarray)
+        list  := mdl.CreateHashBlockList(x)
+        result := strings.Join(list, ":")
 
-		switch v {
-		// md4 file
-		case 1:
-			hb["md4"] = md4.New()
-		// md5 file
-		case 11:
-			hb["md5"] = md5.New()
-		// sha1 file
-		case 21:
-			hb["sha1"] = sha1.New()
-		// sha256
-		case 31:
-			hb["sha224"] = sha256.New224()
-		case 41:
-			hb["sha256"] = sha256.New()
-		// sha512_224
-		case 51:
-			hb["sha512_224"] = sha512.New512_224()
-		case 61:
-			hb["sha512_256"] = sha512.New512_256()
-		// sha512
-		case 71:
-			hb["sha512"] = sha512.New()
-		// sha3_224
-		case 81:
-			hb["sha3_224"] = sha3.New224()
-		// sha3_256
-		case 91:
-			hb["sha3_256"] = sha3.New256()
-		// sha_384
-		case 101:
-			hb["sha3_384"] = sha3.New384()
-		// sha3_512
-		case 111:
-			hb["sha3_512"] = sha3.New512()
-		// blake2b.New256
-		case 121:
-			hb["blake2b"] = blake2.NewBlake2B()
-		case 131:
-			hb["fnv"] = fnv.New64a()
-		case 141:
-			hb["ripe160"] = ripemd160.New()
-		case 151:
-			var seed uint64 = 1120322
-			hb["murmur3"] = murmur3.New128(seed)
-		case 161:
-			hb["whirlpool"] = whirlpool.New()
-		case 171:
-			hb["hmac256"] = hmac.New(sha256.New, key)
-		case 181:
-			hb["hmac512"] = hmac.New(sha512.New, key)
-		case 191:
-			hb["kekkak"] = keccak.New256()
-		case 201:
-			hb["skein160"] = skein.New(20, nil)
-		case 211:
-			hb["skein256"] = skein.New256(key)
-		case 221:
-			hb["skein384"] = skein.New(48, nil)
-		case 231:
-			hb["skein512"] = skein.New512(key)
-		case 241:
-			hb["skein1024"] = skein.New(128, nil)
-		case 251:
-			hb["tiger"] = tiger.New()
-		// siphash has to have a key 8 or 16 bytes
-		case 261:
-			hb["siphash"] = siphash.New128(key)
-		// blake2s needs two values since it has a multiple return
-		case 271:
-			hb["blake2s_128"], _ = blake2s.New128(key)
-		case 281:
-			hb["blake2s_256"], _ = blake2s.New256(key)
-		case 291:
-			hb["blake2"] = blake2.New(nil)
-		// case 301:
-		// hb["block"] = fnv.New64a()
-		// hb["blake2s"], _ =  blake2s.New128(nil)
+        // fmt.Println("new list ", list)
+        /// fmt.Println("new list ", result)
 
-		}
-	}
+        // func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, threadNumber int) {
+        //// mdc.CreateHashListMap(list, fileBlockflag, 1)
+        // these are the reverse
+        // 0 is file one is block
+        if fileBlockflag == 1 {
+                mdc.CreateHashListMap(result, 0, 1)
+        } else {
+                mdc.CreateHashListMap(result, 1, 1)
+        }
+        // mdc.CreateHashListMap(result, fileBlockflag, 1)
 
-	for k, _ := range hb {
-		hashname := k
-		list = append(list, hashname)
-	}
+	// the hash context list should be sorted
+/*      for k, _ := range  mdc.HashListBlocks {
+                hashname := k
+                // list = append(list, hashname)
+        ///        fmt.Println("hash list contexts ", hashname)
+        }
+*/
 
-	sort.Strings(list)
+        // mm  := mdc.GetBlockHash()
 
-	if fileBlockflag == 1 {
-		l.blockHashListNames = list
-		l.hashListBlocks = hb
-	} else {
-		l.fileHashListNames = list
-		l.hashList = hb
-	}
+        // sort.Strings(list)
+
+        // hc.HashList
+        // hc.HashListBlocks
+
+        if fileBlockflag == 1 {
+                l.blockHashListNames = list
+                // l.hashListBlocks = hb
+                l.hashListBlocks = mdc.HashList
+        } else {
+                l.fileHashListNames = list
+                // l.hashList = hb
+                l.hashList = mdc.HashListBlocks
+        }
+
 }
 
 // setmdFormat
@@ -567,17 +514,74 @@ func (l *FileData) setmdFormat(format int) {
 
 	l.mdFormat = format
 
-        mdload := mdFormatImport.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+	// CSV formatter
+	if format == 101 || format == 102 {
+		l.mdfmt = mdFormatCSV.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	// binary Formatter
+	} else if format == 1000 {
+		// l.mdfmt = mdFormatBinary.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		if l.outputFileName == "" {
+			l.outputFileName = "default.mdbin"
+		}
+		l.mdfmt = mdFormatBinary.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(false)
+		l.mdfmt.InitFile()
+		return
+	// SQL Formatter
+	} else if format == 2000 {
+		// set a default filename if none is provided
+		if l.outputFileName == "" {
+			l.outputFileName = "default"
+		}
+		l.outputFileName = l.outputFileName + ".db"
+		l.mdfmt = mdFormatSQL.Init(101, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+	// Inform Formatter
+	} else if format == 3000 {
+		l.mdfmt = mdFormatInform.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	// JSON Formatter
+	} else if format == 4000 {
+		l.mdfmt = mdFormatJson.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	// MD Formatter
+	} else if format == 4300 {
+		l.mdfmt = mdFormatMD.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+                l.mdfmt.OpenFile(l.appendfile)
+	// HTML Formatter
+	} else if format == 4500 {
+               l.mdfmt = mdFormatHtml.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+               l.mdfmt.OpenFile(l.appendfile)
+	// GO XML Formatter
+	} else if format == 5000 {
+		l.mdfmt = mdFormatXMLgo.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	// non GO XML Formatter
+	} else if format == 5001 {
+                l.mdfmt = mdFormatXML.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+                l.mdfmt.OpenFile(l.appendfile)
+	// log Formatter
+	} else if format == 6000 {
+		l.mdfmt = mdFormatLog.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+	// Image Formatter
+	} else if format == 8000 || format == 8001 {
+		l.mdfmt = mdFormatImg.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+		l.mdfmt.InitFile()
+		return
+	        // Image Formatter
+        } else if format == 8002 {
+                l.mdfmt = mdFormatImgFont.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+                l.mdfmt.OpenFile(l.appendfile)
+                l.mdfmt.InitFile()
+                return
+	// Text Formatter
+	} else {
+		l.mdfmt = mdFormatText.Init(format, l.fileName, l.filePath, l.fileSize, l.blockSize, l.modSize, l.fileHashListString, l.blockHashListString, l.outputFileName)
+		l.mdfmt.OpenFile(l.appendfile)
+	}
 
-        // probably aren't needed
-        mdload.SetByteBlock(l.byteblock)
-        mdload.SetFileHashLine(l.filehashline)
-        mdload.SetLogFile(l.logfile)
-        mdload.SetKeyFile(l.key)
-
-        l.mdfmt = mdload.SetmdFormatText(true)
-
-	// l.mdfmt.InitFile()
+	l.mdfmt.InitFile()
 
 }
 
@@ -665,10 +669,17 @@ func (l *FileData) SetLogFile(logfile string) {
         l.setmdFormat(l.mdFormat)
 }
 
+// SetProcessDirectory
+func (l *FileData) SetProcessDir(dir bool) {
+//	l.procDir = dir
+
+}
+
 // SetOutputFile
 func (l *FileData) SetOutputFile(outputfile string) {
 
-        l.outputFileName = outputfile
+	l.outputFileName = outputfile
+
 }
 
 // SetMdFormat
@@ -792,6 +803,6 @@ func (l *FileData) Printlog (v ...interface{}) {
 
 // display the object type
 func (l *FileData) PrintType() {
-	fmt.Println("mdencode")
+	fmt.Println("mdencodeALL")
 
 }

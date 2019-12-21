@@ -73,7 +73,9 @@ type HashContextList struct {
 	hashFileBlockSizeList []int
 	hashBlockSize uint64
 	hashBlockSizeList []int
-
+	// Optional hashContextList keys
+	key string
+	hwkey string
 }
 
 // Init returns a new HashContextList object  
@@ -101,9 +103,27 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 	hashlistArr := strings.Split(hashList, ":")
 
 	// key          := "LomaLindaSanSerento9000"
-	// var defaultkey = []byte("LomaLindaSanSerento9000")
-	var key = []byte("LomaLindaSanSerento9000")
-	// key = defaultkey
+	var defaultkey = []byte("LomaLindaSanSerento9000")
+	var key        = []byte("LomaLindaSanSerento9000")
+
+	// set the siphash key
+	var siphashkey = []byte(hc.key)
+	sipkeysize  := len(siphashkey)
+	key = siphashkey
+	if (sipkeysize < 15 ) {
+		// fmt.Println("setting siphash default ", siphashkey, " ", sipkeysize)
+		// fmt.Println("setting siphash default ", defaultkey, " length ", len(key))
+		key = defaultkey
+	} 
+
+	// set the blake2s key
+	// this has a length limit I think of greater than 16
+	var blakekey = []byte(hc.key)
+	blackkeysize := len(blakekey)
+	if (blackkeysize > 16) {
+		blakekey = defaultkey
+	}
+
 
 	// highway hash key
 	// key, err := hex.DecodeString("000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f")
@@ -121,9 +141,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
                         case "blake2b":
 				hb["blake2b"] = blake2.NewBlake2B()
                         case "blake2s_128":
-				hb["blake2s_128"], _ = blake2s.New128(key)
+				hb["blake2s_128"], _ = blake2s.New128(blakekey)
                         case "blake2s_256":
-				hb["blake2s_256"], _ = blake2s.New256(key)
+				hb["blake2s_256"], _ = blake2s.New256(blakekey)
 			case "cube":
 				hb["cube"] = cubehash.New()
 			case "fnv":
@@ -221,6 +241,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 	}
 }
 
+
+
 // sets the current mdzip file hash signature block bytes
 // this is the list of signature bytes
 func (hc *HashContextList) SetFileHashBlock (byteblock []byte) {
@@ -234,10 +256,10 @@ func (hc *HashContextList) SetFileHashBlock (byteblock []byte) {
 func (hc *HashContextList) SetBlockHash (byteblock []byte) {
 
         hc.hashBlockBytes = byteblock
-
 }
 
 // Get the current Block Hash List Names
+// more of a test function
 func (hc *HashContextList) GetBlockHash () ([]string) {
 
         // return hc.hashBlockBytes
@@ -299,4 +321,26 @@ func (hc *HashContextList) CalcHashBlockSize (hashlist string, mdtype int) (uint
 
 
 	return blocksize, blocklistarr
+}
+
+
+// SetKeyFile
+// from MDEncodeALL
+// set the md key
+// this defaults to a default key if the key is less than 16 bytes
+// one of the hash libs faults if the key is to small
+// some of the signatures use a key
+func (hc *HashContextList) SetKeyFile(key string) {
+//         l.key = key
+	hc.key = key
+}
+
+// SetHighwayKey
+// set the Highway Hash key
+// It is a 128 bit key
+// It allows the hash to be changed with the key
+// TODO 
+func (hc *HashContextList) SetHighwayKey(key string) {
+
+	hc.hwkey = key
 }

@@ -136,7 +136,7 @@ func (bl *BlockSize) CalcHashBlockSize (hashlist string) (uint64, []int) {
 
         }
 
-	// fmt.Println("size 2222 ",  bl.blockSize, bl.blockSizeArr)
+	// fmt.Println("size ",  bl.blockSize, bl.blockSizeArr)
 
 	return bl.blockSize, bl.blockSizeArr
 }
