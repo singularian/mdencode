@@ -46,7 +46,7 @@ Current mdencode signatures
  38: skein_512             
  39: skein_1024            
  40: tiger                 
- 41: whirlpool 
+ 41: whirlpool  
  42: xxhash            
 
 # Binary Signature Arguments
