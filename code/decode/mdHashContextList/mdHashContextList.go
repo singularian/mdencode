@@ -33,6 +33,8 @@ import (
         "github.com/codahale/blake2"
 	"golang.org/x/crypto/blake2s"
 	"github.com/skeeto/cubehash"
+	"github.com/martinlindhe/gogost/gost34112012256"
+	"github.com/martinlindhe/gogost/gost34112012512"
 	"github.com/minio/highwayhash"
 	"github.com/maoxs2/go-ripemd"
 	"golang.org/x/crypto/ripemd160"
@@ -43,6 +45,7 @@ import (
 	"github.com/dchest/siphash"
 	"github.com/jzelinskie/whirlpool"
 	"github.com/steakknife/keccak"
+	"github.com/OneOfOne/xxhash"
 	"github.com/singularian/mdencode/code/decode/mdBlockSize"
 )
 
@@ -148,12 +151,14 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["cube"] = cubehash.New()
 			case "fnv":
 				hb["fnv"] = fnv.New64a()
-			// these are new
 			case "fnv128":
 				hb["fnv128"] = fnv.New128()
 			case "fnv128a":
 				hb["fnv128a"] = fnv.New128a()
-			// ==================
+			case "gost256":
+				hb["gost256"] = gost34112012256.New()
+			case "gost512":
+				hb["gost512"] = gost34112012512.New()
 			case "hmac256":
 				hb["hmac256"] = hmac.New(sha256.New, key)
 			case "hmac512":
@@ -219,6 +224,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["tiger"] = tiger.New()
                         case "whirlpool":
 				hb["whirlpool"] = whirlpool.New()
+			case "xxhash":
+				hb["xxhash"] =  xxhash.New64()
                 	}
 		}
 	// }

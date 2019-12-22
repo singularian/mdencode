@@ -1,7 +1,7 @@
 # Signature list
 
 This is the current numerical signature hash list.  
-It corresponds to the binary or quaterniary argument position.
+It corresponds to the binary or quaterniary argument position.  
 These should be in sorted order for the context hashlist.  
 
 Current mdencode signatures  
@@ -14,37 +14,40 @@ Current mdencode signatures
   6: fnv                   
   7: fnv128                
   8: fnv128a               
-  9: hmac256               
- 10: hmac512               
- 11: hw128 (Highway Hash 128)                
- 12: hw256 (Highway Hash 256)                
- 13: kekkak                
- 14: murmur3               
- 15: md4                   
- 16: md5                   
- 17: ripe128               
- 18: ripe160               
- 19: ripe256               
- 20: sha1_128              
- 21: sha1_1284             
- 22: sha1                  
- 23: sha224                
- 24: sha256                
- 25: sha512                
- 26: sha512_224            
- 27: sha512_256            
- 28: sha3_224              
- 29: sha3_256              
- 30: sha3_384              
- 31: sha3_512              
- 32: siphash               
- 33: skein_160             
- 34: skein_256             
- 35: skein_384             
- 36: skein_512             
- 37: skein_1024            
- 38: tiger                 
- 39: whirlpool             
+  9: gost256               
+ 10: gost512               
+ 11: hmac256               
+ 12: hmac512               
+ 13: hw128                 
+ 14: hw256                 
+ 15: kekkak                
+ 16: murmur3               
+ 17: md4                   
+ 18: md5                   
+ 19: ripe128               
+ 20: ripe160               
+ 21: ripe256               
+ 22: sha1_128              
+ 23: sha1_1284             
+ 24: sha1                  
+ 25: sha224                
+ 26: sha256                
+ 27: sha512                
+ 28: sha512_224            
+ 29: sha512_256            
+ 30: sha3_224              
+ 31: sha3_256              
+ 32: sha3_384              
+ 33: sha3_512              
+ 34: siphash               
+ 35: skein_160             
+ 36: skein_256             
+ 37: skein_384             
+ 38: skein_512             
+ 39: skein_1024            
+ 40: tiger                 
+ 41: whirlpool 
+ 42: xxhash            
 
 # Binary Signature Arguments
 

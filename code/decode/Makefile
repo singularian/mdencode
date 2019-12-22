@@ -29,6 +29,7 @@ goget:
 	go get -u golang.org/x/crypto/sha3
 	go get -u golang.org/x/crypto/ripemd160
 	go get -u github.com/skeeto/cubehash
+	go get -u github.com/martinlindhe/gogost
 	go get -u github.com/minio/highwayhash
 	go get -u github.com/maoxs2/go-ripemd
 	go get -u github.com/steakknife/keccak
@@ -43,6 +44,7 @@ goget:
 	go get -u github.com/codahale/blake2
 	go get -u github.com/enceve/crypto/skein
 	go get -u github.com/mimoo/GoKangarooTwelve/K12
+	go get -u github.com/OneOfOne/xxhash
 getlibs:
 	make getlibs
 clean:
