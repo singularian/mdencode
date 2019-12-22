@@ -713,6 +713,6 @@ func (l *FileData) Printlog (v ...interface{}) {
 
 // display the object type
 func (l *FileData) PrintType() {
-	fmt.Println("mdencodeALL")
+	fmt.Println("mdZip")
 
 }

@@ -163,6 +163,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["hmac256"] = hmac.New(sha256.New, key)
 			case "hmac512":
 				hb["hmac512"] = hmac.New(sha512.New, key)
+			case "hw64":
+				hb["hw64"], _  = highwayhash.New64(hwkey[:])
 			case "hw128":
 				hb["hw128"], _ = highwayhash.New128(hwkey[:])
 			case "hw256":
