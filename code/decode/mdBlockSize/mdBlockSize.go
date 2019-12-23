@@ -52,6 +52,10 @@ func (bl *BlockSize) CalcHashBlockSize (hashlist string) (uint64, []int) {
                 // fmt.Println("hashlist ", hashName[i])
 
                 switch hashName[i] {
+			case "aes8":
+				bl.AddBlockSig(8)
+			case "ax":
+				bl.AddBlockSig(16)
                         case "blake2":
 				bl.AddBlockSig(64)
                         case "blake2b":

@@ -17,30 +17,30 @@ package mdHashContextList
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
+	"os"
 	"bytes"
 	"fmt"
 	"strings"
 	"encoding/hex"
 	"hash"
 	"hash/fnv"
-        "crypto/hmac"
+	"crypto/hmac"
+	"golang.org/x/crypto/blake2s"
 	"golang.org/x/crypto/md4"
         "crypto/md5"
         "github.com/singularian/mdhash/sha1_128"
         "crypto/sha1"
         "crypto/sha256"
         "crypto/sha512"
+	"golang.org/x/crypto/sha3"
+	"github.com/tildeleb/aeshash"
         "github.com/codahale/blake2"
-	"golang.org/x/crypto/blake2s"
 	"github.com/skeeto/cubehash"
 	"github.com/martinlindhe/gogost/gost34112012256"
 	"github.com/martinlindhe/gogost/gost34112012512"
 	"github.com/minio/highwayhash"
 	"github.com/maoxs2/go-ripemd"
-	// "github.com/aead/poly1305"
-	///// "golang.org/x/crypto/poly1305"
 	"golang.org/x/crypto/ripemd160"
-	"golang.org/x/crypto/sha3"
 	"github.com/aead/skein"
 	"github.com/asadmshah/murmur3"
 	"blainsmith.com/go/seahash"
@@ -49,6 +49,7 @@ import (
 	"github.com/jzelinskie/whirlpool"
 	"github.com/steakknife/keccak"
 	"github.com/OneOfOne/xxhash"
+	"github.com/singularian/mdhash/xxhash_128"
 	"github.com/singularian/mdencode/code/decode/mdBlockSize"
 )
 
@@ -126,7 +127,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 	// this has a length limit I think of greater than 16
 	var blakekey = []byte(hc.key)
 	blackkeysize := len(blakekey)
-	if (blackkeysize > 16) {
+	if ((blackkeysize > 16) || (blackkeysize < 1)) {
 		blakekey = defaultkey
 	}
 
@@ -142,14 +143,28 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 		for hashnum := 0; hashnum < hashlistsize; hashnum++ {
                 // fmt.Println("hashlist ", st[i])          
 		switch hashlistArr[hashnum] {
+			case "aes8":
+				hb["aes8"] = aeshash.NewAES(99123312)
+			case "ax":
+				hb["ax"] = xxhash_128.New()
                         case "blake2":
 				hb["blake2"] = blake2.New(nil)
                         case "blake2b":
 				hb["blake2b"] = blake2.NewBlake2B()
                         case "blake2s_128":
-				hb["blake2s_128"], _ = blake2s.New128(blakekey)
+				b, err := blake2s.New128(blakekey)
+				if err != nil {
+                                        fmt.Println("#Blake2s_128 error from New128: %v", err, blakekey)
+					os.Exit(1)
+                                }
+				hb["blake2s_128"] = b
                         case "blake2s_256":
-				hb["blake2s_256"], _ = blake2s.New256(blakekey)
+				b, err := blake2s.New256(blakekey)
+				if err != nil {
+					fmt.Println("#Blake2s_256 set error from New256: %v", err, blakekey)
+					os.Exit(1)
+				}
+                                hb["blake2s_256"] = b
 			case "cube":
 				hb["cube"] = cubehash.New()
 			case "fnv":

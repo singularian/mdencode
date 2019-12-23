@@ -11,54 +11,59 @@ This is the step to add a new signature. It should be in sorted order
 1: Add the signature name to mdBinaryList/mdBinaryList.go  
 2: Add the signature block size to code/decode/mdBlockSize/mdBlockSize.go  
 3: Add the hash import to the hash context list decode/mdHashContextList/mdHashContextList.go  
-4: Add the hash context new initialize function to CreateHashListMap() in decode/mdHashContextList/mdHashContextList.go  
+4: Add the hash context new initialize function to CreateHashListMap()  
+   in decode/mdHashContextList/mdHashContextList.go  
 
 ### Current mdencode signatures  
 
-  1: blake2              
-  2: blake2b             
-  3: blake2s_128         
-  4: blake2s_256         
-  5: cube                
-  6: fnv                 
-  7: fnv128              
-  8: fnv128a             
-  9: gost256             
- 10: gost512             
- 11: hmac256             
- 12: hmac512             
- 13: hw64                
- 14: hw128               
- 15: hw256               
- 16: kekkak              
- 17: murmur3             
- 18: md4                 
- 19: md5                 
- 20: ripe128             
- 21: ripe160             
- 22: ripe256             
- 23: sea                 
- 24: sha1_128            
- 25: sha1_1284           
- 26: sha1                
- 27: sha224              
- 28: sha256              
- 29: sha512              
- 30: sha512_224          
- 31: sha512_256          
- 32: sha3_224            
- 33: sha3_256            
- 34: sha3_384            
- 35: sha3_512            
- 36: siphash             
- 37: skein_160           
- 38: skein_256           
- 39: skein_384           
- 40: skein_512           
- 41: skein_1024          
- 42: tiger               
- 43: whirlpool           
- 44: xxhash              
+Current mdencode signatures      
+ 
+  1: aes8                         
+  2: ax                           
+  3: blake2                       
+  4: blake2b                      
+  5: blake2s_128                  
+  6: blake2s_256                  
+  7: cube                         
+  8: fnv                          
+  9: fnv128                       
+ 10: fnv128a                      
+ 11: gost256                      
+ 12: gost512                      
+ 13: hmac256                      
+ 14: hmac512                      
+ 15: hw64       (Highway Hash)                  
+ 16: hw128                        
+ 17: hw256                        
+ 18: kekkak                       
+ 19: murmur3                      
+ 20: md4                          
+ 21: md5                          
+ 22: ripe128                      
+ 23: ripe160                      
+ 24: ripe256                      
+ 25: sea                          
+ 26: sha1_128                     
+ 27: sha1_1284                    
+ 28: sha1                         
+ 29: sha224                       
+ 30: sha256                       
+ 31: sha512                       
+ 32: sha512_224                   
+ 33: sha512_256                   
+ 34: sha3_224                     
+ 35: sha3_256                     
+ 36: sha3_384                     
+ 37: sha3_512                     
+ 38: siphash                      
+ 39: skein_160                    
+ 40: skein_256                    
+ 41: skein_384                    
+ 42: skein_512                    
+ 43: skein_1024                   
+ 44: tiger                        
+ 45: whirlpool                    
+ 46: xxhash                       
 
 # Binary Signature Arguments
 
