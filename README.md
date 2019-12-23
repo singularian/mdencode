@@ -331,6 +331,7 @@ These are a brief list of collision management in mdzip and mdunzip.
 - Using File Level Signatures to validate Block Level Signatures
 - Using File Level Signatures to differentiate between Block Signature Collisions
 - Signature Switching. If one signature or signature group has a collsion switch to another signature
+- Change the signature key. An example is Highway Hash with a 128-bit key which can be changed
 - Use Block Groups as a bandaid around signature blocks
 - Use Block Signature Pairs with Modulus / Modular Floors
 - Use Optional Collision Numbers

@@ -26,7 +26,7 @@ import (
         "crypto/hmac"
 	"golang.org/x/crypto/md4"
         "crypto/md5"
-        "github.com/singularian/mdencode/code/hash/sha1_128"
+        "github.com/singularian/mdhash/sha1_128"
         "crypto/sha1"
         "crypto/sha256"
         "crypto/sha512"
@@ -37,6 +37,8 @@ import (
 	"github.com/martinlindhe/gogost/gost34112012512"
 	"github.com/minio/highwayhash"
 	"github.com/maoxs2/go-ripemd"
+	// "github.com/aead/poly1305"
+	///// "golang.org/x/crypto/poly1305"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
 	"github.com/aead/skein"
@@ -178,6 +180,10 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["md4"] = md4.New()
                         case "md5":
 				hb["md5"] = md5.New()
+			// Returns a MAC Object
+			// poly1305 is a one time hash not usable
+			// case "poly1305":
+			//	hb["poly1305"] = poly1305.New(polykey)
 			case "ripe128":
 				hb["ripe128"] = ripemd.New128()
                         case "ripe160":
