@@ -98,6 +98,8 @@ func (bl *BlockSize) CalcHashBlockSize (hashlist string) (uint64, []int) {
 				bl.AddBlockSig(20)
 			case "ripe256":
 				bl.AddBlockSig(32)
+			case "sea":
+				bl.AddBlockSig(8)
 			case "sha1_128":
 				bl.AddBlockSig(16)
 			case "sha1_1284":

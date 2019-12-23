@@ -4,51 +4,61 @@ This is the current numerical signature hash list.
 It corresponds to the binary or quaterniary argument position.  
 These should be in sorted order for the context hashlist.  
 
+# Adding New Signatures
+
+This is the step to add a new signature. It should be in sorted order  
+
+1: Add the signature name to mdBinaryList/mdBinaryList.go  
+2: Add the signature block size to code/decode/mdBlockSize/mdBlockSize.go  
+3: Add the hash import to the hash context list decode/mdHashContextList/mdHashContextList.go  
+4: Add the hash context new initialize function to CreateHashListMap() in decode/mdHashContextList/mdHashContextList.go  
+
 ### Current mdencode signatures  
 
-  1: blake2           
-  2: blake2b          
-  3: blake2s_128      
-  4: blake2s_256      
-  5: cube             
-  6: fnv              
-  7: fnv128           
-  8: fnv128a          
-  9: gost256          
- 10: gost512          
- 11: hmac256          
- 12: hmac512          
- 13: hw64             
- 14: hw128            
- 15: hw256            
- 16: kekkak           
- 17: murmur3          
- 18: md4              
- 19: md5              
- 20: ripe128          
- 21: ripe160          
- 22: ripe256          
- 23: sha1_128         
- 24: sha1_1284        
- 25: sha1             
- 26: sha224           
- 27: sha256           
- 28: sha512           
- 29: sha512_224       
- 30: sha512_256       
- 31: sha3_224         
- 32: sha3_256         
- 33: sha3_384         
- 34: sha3_512         
- 35: siphash          
- 36: skein_160        
- 37: skein_256        
- 38: skein_384        
- 39: skein_512        
- 40: skein_1024       
- 41: tiger            
- 42: whirlpool        
- 43: xxhash           
+  1: blake2              
+  2: blake2b             
+  3: blake2s_128         
+  4: blake2s_256         
+  5: cube                
+  6: fnv                 
+  7: fnv128              
+  8: fnv128a             
+  9: gost256             
+ 10: gost512             
+ 11: hmac256             
+ 12: hmac512             
+ 13: hw64                
+ 14: hw128               
+ 15: hw256               
+ 16: kekkak              
+ 17: murmur3             
+ 18: md4                 
+ 19: md5                 
+ 20: ripe128             
+ 21: ripe160             
+ 22: ripe256             
+ 23: sea                 
+ 24: sha1_128            
+ 25: sha1_1284           
+ 26: sha1                
+ 27: sha224              
+ 28: sha256              
+ 29: sha512              
+ 30: sha512_224          
+ 31: sha512_256          
+ 32: sha3_224            
+ 33: sha3_256            
+ 34: sha3_384            
+ 35: sha3_512            
+ 36: siphash             
+ 37: skein_160           
+ 38: skein_256           
+ 39: skein_384           
+ 40: skein_512           
+ 41: skein_1024          
+ 42: tiger               
+ 43: whirlpool           
+ 44: xxhash              
 
 # Binary Signature Arguments
 

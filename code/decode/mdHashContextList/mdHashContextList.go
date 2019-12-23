@@ -43,6 +43,7 @@ import (
 	"golang.org/x/crypto/sha3"
 	"github.com/aead/skein"
 	"github.com/asadmshah/murmur3"
+	"blainsmith.com/go/seahash"
 	"github.com/cxmcc/tiger"
 	"github.com/dchest/siphash"
 	"github.com/jzelinskie/whirlpool"
@@ -190,6 +191,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["ripe160"] = ripemd160.New()
 			case "ripe256":
 				 hb["ripe256"] = ripemd.New256()
+			case "sea":
+				hb["sea"] = seahash.New()
                         case "sha1":
 				hb["sha1"] = sha1.New()
 			case "sha1_128":
