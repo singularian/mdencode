@@ -35,6 +35,7 @@ import (
 	"golang.org/x/crypto/sha3"
 	"github.com/tildeleb/aeshash"
         "github.com/codahale/blake2"
+	"github.com/minio/blake2b-simd"
 	"github.com/skeeto/cubehash"
 	"github.com/martinlindhe/gogost/gost34112012256"
 	"github.com/martinlindhe/gogost/gost34112012512"
@@ -151,7 +152,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["blake2"] = blake2.New(nil)
 			// blake2b is similar to blake2 I think it is broken
                         case "blake2b":
-				hb["blake2b"] = blake2.NewBlake2B()
+				// this NewBlake2b was producing the same hash as blake2.New()
+				// hb["blake2b"] = blake2.NewBlake2B() 
+				hb["blake2b"] = blake2b.New256()
                         case "blake2s_128":
 				b, err := blake2s.New128(blakekey)
 				if err != nil {
@@ -300,19 +303,44 @@ func (hc *HashContextList) GetBlockHash () ([]string) {
 
 }
 
+// GetFileHashBlockSigBytes creates a list with the signature name and hash block signature bytes 
+// Example: [aes8 80696185b5b00db8 blake2s_128 d26d0d2d40f394e279ab14f6f1bb4dde]
+func (hc *HashContextList) GetFileHashBlockSigBytes (byteblock []byte) ([]string) {
+	var strArray []string	
+	//fmt.Println("hashlist ", hc.blockHashListNames)
 
-// this compares the current modulus scan byte block with the hash byte block at position start to end
+	var start    int = 0
+	var end      int = 0
+	// for position, bs := range hc.hashFileBlockSizeList {
+	for position, bs := range hc.hashBlockSizeList {
+		// end = start + hc.hashBlockSizeList[position]
+		end = start + bs
+
+		hex := fmt.Sprintf("%s %x",  hc.blockHashListNames[position], hc.hashBlockBytes[start:end])
+
+		// fmt.Println("GetFileHashBlockSigBytes ", position, start, end, " size ", bs, " hex ", hex)
+
+		strArray = append(strArray, hex)
+		start += hc.hashBlockSizeList[position]
+
+	}
+
+	// fmt.Println("block bytes ", strArray)
+	return strArray
+}
+
+
+// CheckFileHashBlock compares the current modulus scan byte block with the hash byte block at position start to end
 // the hash byte block is the entire signature block 
 // [0:20]sha1[21:40]ripe160
 func (hc *HashContextList) CheckFileHashBlock (byteblock []byte) (bool) {
 
-	var position int = 0
 	var start    int = 0
 	var end      int = 0
 
 	end = hc.hashBlockSizeList[0]
 
-	for _, hashvalue := range hc.blockHashListNames {
+	for position, hashvalue := range hc.blockHashListNames {
 		h := hc.HashListBlocks[hashvalue]
 		h.Reset()
 		h.Write([]byte(byteblock))
@@ -323,14 +351,9 @@ func (hc *HashContextList) CheckFileHashBlock (byteblock []byte) (bool) {
 			return false
 		}
 		start += hc.hashBlockSizeList[position] 
-		position++
 	}
 
-	var result = ""
-	for _, hashvalues := range hc.blockHashListNames {
-		h := hc.HashListBlocks[hashvalues]
-		result += fmt.Sprintf("%s %x ", hashvalues, h.Sum(nil))
-	}
+	result := hc.GetFileHashBlockSigBytes(byteblock)
 
 	fmt.Printf("Found Block %s result = %x ", result, hc.hashBlockBytes)
 	return true
