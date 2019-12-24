@@ -34,6 +34,7 @@ goget:
 	go get -u github.com/tildeleb/aeshash
 	go get -u github.com/skeeto/cubehash
 	go get -u github.com/martinlindhe/gogost
+	go get -u github.com/minio/blake2b-simd
 	go get -u github.com/minio/highwayhash
 	go get -u github.com/maoxs2/go-ripemd
 	go get -u github.com/steakknife/keccak
