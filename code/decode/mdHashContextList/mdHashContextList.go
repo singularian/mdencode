@@ -149,6 +149,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["ax"] = xxhash_128.New()
                         case "blake2":
 				hb["blake2"] = blake2.New(nil)
+			// blake2b is similar to blake2 I think it is broken
                         case "blake2b":
 				hb["blake2b"] = blake2.NewBlake2B()
                         case "blake2s_128":
@@ -258,8 +259,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 
 	// 0 is file
 	// 1 is block
-	// need to switch these 
-	// they are different from mdencode
+	// need to add block groups
 
 	if mdtype == 0 {
 		hc.fileHashListNames  = hashlistArr
