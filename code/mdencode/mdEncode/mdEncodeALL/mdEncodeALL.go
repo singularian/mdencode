@@ -85,7 +85,7 @@ type FileData struct {
 	// dictionary
 	dictionary map[string]string
 	// hash list for files
-	hashList map[string]hash.Hash
+	hashListFile map[string]hash.Hash
 	// hash list for blocks
 	hashListBlocks map[string]hash.Hash
 	// byte buffer
@@ -295,7 +295,7 @@ func (l *FileData) mdencodeFile(fileName string) {
 	// this is not in sorted order
 	// hash list
 	for _, hashvalue := range l.fileHashListNames {
-		h := l.hashList[hashvalue]
+		h := l.hashListFile[hashvalue]
 		if _, err := io.Copy(h, f); err != nil {
 			fmt.Println(err)
 		}
@@ -317,7 +317,7 @@ func (l *FileData) mdencodeFileHashLine(fileName string) {
 	// hash list
 	var hlistarray []string
 	for _, hashvalue := range l.fileHashListNames {
-		h := l.hashList[hashvalue]
+		h := l.hashListFile[hashvalue]
 		if _, err := io.Copy(h, f); err != nil {
 			fmt.Println(err)
 		}
@@ -472,13 +472,14 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 
         // func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, threadNumber int) {
         //// mdc.CreateHashListMap(list, fileBlockflag, 1)
-        // these are the reverse
-        // 0 is file one is block
-        if fileBlockflag == 1 {
-                mdc.CreateHashListMap(result, 0, 1)
-        } else {
-                mdc.CreateHashListMap(result, 1, 1)
-        }
+        // 0 is file 
+	// 1 is block
+	if fileBlockflag == 0 {
+		mdc.CreateHashListMap(result, 0, 1)
+	} else {
+		mdc.CreateHashListMap(result, 1, 1)
+	}
+
         // mdc.CreateHashListMap(result, fileBlockflag, 1)
 
 	// the hash context list should be sorted
@@ -489,23 +490,25 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
         }
 */
 
+	fmt.Println("hashlist ", hlistarray, fileBlockflag)
+
         // mm  := mdc.GetBlockHash()
 
         // sort.Strings(list)
 
-        // hc.HashList
-        // hc.HashListBlocks
+	// file hash list is 0
+	// block hash list is 1
+	// block group 2 ??
 
-        if fileBlockflag == 1 {
-                l.blockHashListNames = list
-                // l.hashListBlocks = hb
-                l.hashListBlocks = mdc.HashList
-        } else {
-                l.fileHashListNames = list
-                // l.hashList = hb
-                l.hashList = mdc.HashListBlocks
-        }
-
+	// 0 is file
+	// 1 is block
+	if fileBlockflag == 0 {
+		l.fileHashListNames = list
+		l.hashListFile = mdc.HashList
+	} else {
+		l.blockHashListNames = list
+		l.hashListBlocks = mdc.HashListBlocks
+	}
 }
 
 // setmdFormat
@@ -706,7 +709,7 @@ func (l *FileData) SetHashLists(fileHashList string, blockHashList string) {
         // initialize the map
         l.dictionary = make(map[string]string)
         // initialize the hash list maps
-        l.hashList = make(map[string]hash.Hash) // this is for the entire file
+        l.hashListFile = make(map[string]hash.Hash) // this is for the entire file
         l.hashListBlocks = make(map[string]hash.Hash)
 
         // create the Hash List Map
