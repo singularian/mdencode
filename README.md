@@ -328,13 +328,13 @@ TODO: Change the mod exponent size in the output block from int32 to int16.
 
 These are a brief list of collision management in mdzip and mdunzip.
 
-- Using File Level Signatures to validate Block Level Signatures
-- Using File Level Signatures to differentiate between Block Signature Collisions
-- Signature Switching. If one signature or signature group has a collsion switch to another signature
-- Change the signature key. An example is Highway Hash with a 256 bit key which can be changed
-- Use Block Groups as a bandaid around signature blocks
-- Use Block Signature Pairs with Modulus / Modular Floors
-- Use Optional Collision Numbers
+- Using File Level Signatures to validate Block Level Signatures.
+- **Using File Level Signatures** to differentiate between File Block Signature Collisions.
+- **Signature Switching.** If one signature or signature group has a collsion switch to another signature or signature group.
+- **Change the signature key.** An example is Highway Hash with a 256 bit key which can be changed to different keys.
+- **Use Optional Block Groups** as a wrapper around signature blocks with collisions or add additional signatures.
+- **Use Optional File Block Collision Numbers**. Collision numbers can designate the correct match.
+- Use Block Signature Pairs with Modulus / Modular Floors.
 - Using Modular floors to skip numbers
 
 # Build
