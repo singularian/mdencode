@@ -74,26 +74,26 @@ var hlist = []HashList{
 		{ HashName: "ripe256",     Description: "Ripe 256",		BlockSize: 32 },
 		{ HashName: "sea",         Description: "Seahash",		BlockSize: 8 },
 		{ HashName: "sha1_128",    Description: "SHA1 128",		BlockSize: 16 },
-		{ HashName: "sha1_1284",   Description: "SHA1 1284",	BlockSize: 16 },
-		{ HashName: "sha1",        Description: "SHA1",		BlockSize: 20 },
-		{ HashName: "sha224",      Description: "SHA224",	BlockSize: 28 },
-		{ HashName: "sha256",      Description: "SHA256",	BlockSize: 32 },
-		{ HashName: "sha512",      Description: "SHA512",	BlockSize: 64 },
-		{ HashName: "sha512_224",  Description: "SHA512 224",	BlockSize: 28 },
-		{ HashName: "sha512_256",  Description: "SHA512 256",	BlockSize: 32 },
-		{ HashName: "sha3_224",    Description: "SHA3 224",	BlockSize: 28 },
-		{ HashName: "sha3_256",    Description: "SHA3 256",	BlockSize: 32 },
-		{ HashName: "sha3_384",    Description: "SHA3 384",	BlockSize: 48 },
-		{ HashName: "sha3_512",    Description: "SHA3 512",	BlockSize: 64 },
-		{ HashName: "siphash",     Description: "Siphash",	BlockSize: 16 },
-		{ HashName: "skein_160",   Description: "Skein 160",	BlockSize: 20 },
-		{ HashName: "skein_256",   Description: "Skein 256",	BlockSize: 32 },
-		{ HashName: "skein_384",   Description: "Skein 384",	BlockSize: 48 },
-		{ HashName: "skein_512",   Description: "Skein 512",	BlockSize: 64 },
-		{ HashName: "skein_1024",  Description: "Skein 1024",	BlockSize: 128 },
-		{ HashName: "tiger",       Description: "Tiger",	BlockSize: 24 },
-		{ HashName: "whirlpool",   Description: "Whirlpool",	BlockSize: 64 },
-		{ HashName: "xxhash",      Description: "XXHash",	BlockSize: 8 },
+		{ HashName: "sha1_1284",   Description: "SHA1 1284",		BlockSize: 16 },
+		{ HashName: "sha1",        Description: "SHA1",			BlockSize: 20 },
+		{ HashName: "sha224",      Description: "SHA224",		BlockSize: 28 },
+		{ HashName: "sha256",      Description: "SHA256",		BlockSize: 32 },
+		{ HashName: "sha512",      Description: "SHA512",		BlockSize: 64 },
+		{ HashName: "sha512_224",  Description: "SHA512 224",		BlockSize: 28 },
+		{ HashName: "sha512_256",  Description: "SHA512 256",		BlockSize: 32 },
+		{ HashName: "sha3_224",    Description: "SHA3 224",		BlockSize: 28 },
+		{ HashName: "sha3_256",    Description: "SHA3 256",		BlockSize: 32 },
+		{ HashName: "sha3_384",    Description: "SHA3 384",		BlockSize: 48 },
+		{ HashName: "sha3_512",    Description: "SHA3 512",		BlockSize: 64 },
+		{ HashName: "siphash",     Description: "Siphash",		BlockSize: 16 },
+		{ HashName: "skein_160",   Description: "Skein 160",		BlockSize: 20 },
+		{ HashName: "skein_256",   Description: "Skein 256",		BlockSize: 32 },
+		{ HashName: "skein_384",   Description: "Skein 384",		BlockSize: 48 },
+		{ HashName: "skein_512",   Description: "Skein 512",		BlockSize: 64 },
+		{ HashName: "skein_1024",  Description: "Skein 1024",		BlockSize: 128 },
+		{ HashName: "tiger",       Description: "Tiger",		BlockSize: 24 },
+		{ HashName: "whirlpool",   Description: "Whirlpool",		BlockSize: 64 },
+		{ HashName: "xxhash",      Description: "XXHash",		BlockSize: 8 },
                 }
 
 // Init returns a new BlockList object  
@@ -198,7 +198,12 @@ func (bl *BlockList) SetHashListBlockSize () {
 	bl.m = blockSizeMap
 }
 
-// calc block size
+// CalcHashBlockSize
+// calculate the block size for a hashlist string
+// this allows mdprint or mdunzip to decode each signature block and calculate their size
+//
+// Example block string: ax:md4:md5:sha1:sea:hw64
+// Example block size  84 block array size [16 16 16 20 8 8]
 func (bl *BlockList) CalcHashBlockSize (hashlist string) (uint64, []int) {
         hashName := strings.Split(hashlist, ":")
 
