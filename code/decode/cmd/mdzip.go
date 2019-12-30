@@ -94,7 +94,7 @@ func argsSimple(argsNumber int) int {
 	// flag.BoolVar(&fd.randomfileblockhash, "fbhr", false, "Generate A Random File and Block Hash Boolean String List")
 
 	// flag.StringVar(&fd.key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
-	flag.StringVar(&fd.key, "hwkey", "", "High Way Hash Signature Key (32 bytes)")
+	flag.StringVar(&fd.hwkey, "hwkey", "", "High Way Hash Signature Key (32 bytes)")
 	flag.StringVar(&fd.filename, "file", "", "Input Filename")
 	// flag.StringVar(&fd.directory, "dir", "", "Input Directory")
 	flag.StringVar(&fd.outputfilename, "out", "", "Output Filename")
@@ -158,9 +158,9 @@ func argsSimple(argsNumber int) int {
 	// initialize the mdencode file object
 	// var md = mdEncodeALL.Init()
 	fd.md = mdZipFile.Init()
-	fd.md.SetByteBlock(false)
-	fd.md.SetByteBlockBigInt(false)
+	/////// fd.md.SetByteBlock(false)
 	//fd.md.SetKeyFile(fd.key)
+	fd.md.SetHWKeyFile(fd.hwkey)
 	////////////////////fd.md.SetLogFile(fd.logfilename)
 	fd.md.SetOutputFile(fd.outputfilename)
 	// set the default format
@@ -168,6 +168,7 @@ func argsSimple(argsNumber int) int {
 	fd.md.SetMdFormat(10)
 	// set the hash lists
 	fd.md.SetHashLists(fd.fhashlist, fd.bhashlist)
+	
 
 	// if the filename is specified
 	// mdencode generate a file signature

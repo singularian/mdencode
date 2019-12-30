@@ -49,16 +49,11 @@ type FileData struct {
 	modExponent    uint64
 	mdFormat       int
 	mdVersion      string
-	// append file
-	appendfile bool
 	// byte block
 	byteblock bool
-	// byte block bigint
-	byteblockint bool
-	// filehashline
-	filehashline bool
 	// key string
 	key string
+	hwkey string
 	// logfile
 	logfile string
 	// argument hash list bits
@@ -98,10 +93,7 @@ type FileData struct {
 func Init() (md *FileData) {
 
 	mdata := new(FileData)
-	mdata.appendfile   = false
 	mdata.byteblock    = false
-	mdata.byteblockint = false
-	mdata.filehashline = false
 	mdata.key          = "LomaLindaSanSerento9000"
 	mdata.logfile      = ""
 	mdata.islogging    = false
@@ -440,6 +432,7 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 	// set the key
 	// this is for blake2s and siphash
 	// mdc.SetKeyFile(l.key)
+	mdc.SetHighwayKey(l.hwkey)
 	// TODO
 	// ==================================================
 
@@ -538,25 +531,6 @@ func (l *FileData) SetByteBlock(byteblock bool) {
 	l.byteblock = byteblock
 }
 
-// SetByteBlockBigInt
-// set the byte block mode
-func (l *FileData) SetByteBlockBigInt(byteblockint bool) {
-	l.byteblockint = byteblockint
-}
-
-// SetAppendFile
-// set the append file mode
-func (l *FileData) SetAppendFile(appendfile bool) {
-	l.appendfile = appendfile
-}
-
-// SetFileHashLine
-// set the file hash format
-// if true it will write or display the file hash list as one line
-func (l *FileData) SetFileHashLine(filehashline bool) {
-	l.filehashline = filehashline
-}
-
 // SetKeyFile
 // set the md key
 // this defaults to a default key if the key is less than 16 bytes
@@ -564,6 +538,13 @@ func (l *FileData) SetFileHashLine(filehashline bool) {
 // some of the signatures use a key
 func (l *FileData) SetKeyFile(key string) {
 	l.key = key
+}
+
+// SetHWKeyFile
+// set the high way hash key
+// need to make these a hash map
+func (l *FileData) SetHWKeyFile(key string) {
+	l.hwkey = key
 }
 
 // SetLogFile

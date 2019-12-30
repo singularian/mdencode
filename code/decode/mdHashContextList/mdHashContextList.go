@@ -135,7 +135,17 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 
 	// highway hash key
 	// key, err := hex.DecodeString("000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f")
-	hwkey, _ := hex.DecodeString("000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f")
+	// hwkey, _ := hex.DecodeString("000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f")
+	var defhwkey = "000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f"
+	if hc.hwkey == "" {
+		hc.hwkey = defhwkey
+	}
+	hwkey, err := hex.DecodeString(hc.hwkey)
+	if err != nil {
+		 fmt.Println("Highway Key error: %v", err, blakekey)
+		 os.Exit(1)
+	}
+	// fmt.Println("hwkey ", hc.hwkey)
 
 	hashlistsize := len(hashlistArr)
 
@@ -387,16 +397,23 @@ func (hc *HashContextList) CalcHashBlockSize (hashlist string, mdtype int) (uint
 // one of the hash libs faults if the key is to small
 // some of the signatures use a key
 func (hc *HashContextList) SetKeyFile(key string) {
-//         l.key = key
 	hc.key = key
 }
 
 // SetHighwayKey
 // set the Highway Hash key
-// It is a 128 bit key
+// It is a 256 bit key
 // It allows the hash to be changed with the key
 // TODO 
 func (hc *HashContextList) SetHighwayKey(key string) {
 
-	hc.hwkey = key
+	var defkey = "000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f"
+	// hwkey, _ := hex.DecodeString("000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f")
+	if key != "" {
+		hc.hwkey = key
+	} else {
+		hc.hwkey = defkey
+	}
+
+	// fmt.Println("hwkey set ", hc.hwkey, key)
 }
