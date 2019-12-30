@@ -119,6 +119,10 @@ func main() {
 		fmt.Printf("%3d: %s\n", i+1, hlist[i])
 	}
 
+	// test of the new calc block size
+	a, bb := mdl.CalcHashBlockSize("ax:md4:md5:sha1:sea:hw64")
+	fmt.Println("new calc block size ", a, bb)
+
 	// _,_  = mdBlock.CreateHashBlockList("00110001110011")
 
 }

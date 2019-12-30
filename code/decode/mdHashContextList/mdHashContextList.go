@@ -51,14 +51,16 @@ import (
 	"github.com/steakknife/keccak"
 	"github.com/OneOfOne/xxhash"
 	"github.com/singularian/mdhash/xxhash_128"
-	"github.com/singularian/mdencode/code/decode/mdBlockSize"
+//	"github.com/singularian/mdencode/code/decode/mdBlockSize"
+	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 )
 
 // HashContextList object stores the file signature hash context list
 type HashContextList struct {
 	fileHashList string
 	blockHashList string
-	mdBlockSize *mdBlockSize.BlockSize
+	// mdBlockSize *mdBlockSize.BlockSize
+	mdBlockSize *mdBinaryList.BlockList
 	// hash map
 	// 
 	// hash list for files
@@ -90,7 +92,7 @@ type HashContextList struct {
 func Init() (hc *HashContextList) {
         hcl := new(HashContextList)
 
-	mdBlock := mdBlockSize.Init()
+	mdBlock := mdBinaryList.Init()
 	hcl.mdBlockSize       = mdBlock
 	hcl.HashListFileSize  = 0
 	hcl.HashListBlockSize = 0
