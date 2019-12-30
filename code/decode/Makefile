@@ -8,24 +8,27 @@ PROJECT="mdencode mdzip"
 VERSION=1.0.0
 BUILD_TIME=`date +%FT%T%z`
 
-
+# build directory
 BUILD_DIR=${GOBIN}
+
+# command path
+CMD=cmd
 
 # Setup the -ldflags option for go build here, interpolate the variable values
 LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X github.com/nsross/mdencode/core.BuildTime=${BUILD_TIME}"
 
 all:
-	go build -o mdunzip main/mdUnzip.go 
-	go build -o mdzip main/mdzip.go 
-	go build -o mdlist main/mdlist.go 
-	go build -o mdlistTest main/testBinReadMdFmt.go 
-	go build -o mdsig main/mdsig.go 
+	go build -o mdunzip ${CMD}/mdUnzip.go 
+	go build -o mdzip ${CMD}/mdzip.go 
+	go build -o mdlist ${CMD}/mdlist.go 
+	go build -o mdlistTest ${CMD}/testBinReadMdFmt.go 
+	go build -o mdsig ${CMD}/mdsig.go 
 build: 
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip main/mdUnzip.go
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip main/mdzip.go
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist main/mdlist.go
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest main/testBinReadMdFmt.go
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig main/mdsig.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip ${CMD}/mdUnzip.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip ${CMD}/mdzip.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist ${CMD}/mdlist.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest ${CMD}/testBinReadMdFmt.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${CMD}/mdsig.go
 goget:
 	go get -u golang.org/x/crypto/blake2s
 	go get -u golang.org/x/crypto/md4

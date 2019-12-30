@@ -3,6 +3,7 @@ package main
 // mdencode project 
 //
 // mdzip.go
+//
 // https://github.com/singularian/mdencode/
 // copyright (C) Scott Ross 2019
 //
@@ -36,11 +37,11 @@ type FlagData struct {
         fhashlist string
         bhashlist string
 	uhashlist string
+	// signature keys 
         key string
-        appendfile bool
-        byteblock bool
-        byteblockint bool
-        filehashline bool
+	hwkey string
+	// boolean arguments
+        // appendfile bool
         // random hashlist booleans
         randomfilehash bool
         randomblockhash bool
@@ -87,20 +88,15 @@ func argsSimple(argsNumber int) int {
 	//flag.BoolVar(&fd.randomfileblocksize, "blockr", false, "Generate A Random File Block Size")
 	//flag.BoolVar(&fd.randomModSize, "modr", false, "Generate A Random File Modulus Size")
 	// flag.BoolVar(&fd.randomEverything, "all", false, "Randomize Everything")
-	// specify a bigint number for the modulus or the bit modulus plus the bigint modulus
-	// flag.StringVar(&fd.bigint, "big", "011", "Bigint Modulus")
 
 	// flag.BoolVar(&fd.randomfilehash, "fhr", false, "Generate A Random File Hash Boolean String List")
 	// flag.BoolVar(&fd.randomblockhash, "bhr", false, "Generate A Random Block Hash Boolean String List")
 	// flag.BoolVar(&fd.randomfileblockhash, "fbhr", false, "Generate A Random File and Block Hash Boolean String List")
 
 	// flag.StringVar(&fd.key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
+	flag.StringVar(&fd.key, "hwkey", "", "High Way Hash Signature Key (32 bytes)")
 	flag.StringVar(&fd.filename, "file", "", "Input Filename")
 	// flag.StringVar(&fd.directory, "dir", "", "Input Directory")
-	// flag.BoolVar(&fd.appendfile, "append", false, "Append To Output File")
-	// flag.BoolVar(&fd.byteblock, "byte", false, "Append the File Byteblock to the Block Hash List")
-	// flag.BoolVar(&fd.byteblockint, "blockint", false, "Append the File Byteblock Bigint to the Block Hash List")
-	// flag.BoolVar(&fd.filehashline, "line", false, "File Hash as one line")
 	flag.StringVar(&fd.outputfilename, "out", "", "Output Filename")
 	flag.StringVar(&fd.outputfilename, "output", "", "Output Filename")
 	flag.StringVar(&fd.logfilename, "log", "", "Log Filename")
@@ -162,10 +158,8 @@ func argsSimple(argsNumber int) int {
 	// initialize the mdencode file object
 	// var md = mdEncodeALL.Init()
 	fd.md = mdZipFile.Init()
-	fd.md.SetByteBlock(fd.byteblock)
-	fd.md.SetByteBlockBigInt(fd.byteblockint)
-	// fd.md.SetAppendFile(fd.appendfile)
-	// fd.md.SetFileHashLine(fd.filehashline)
+	fd.md.SetByteBlock(false)
+	fd.md.SetByteBlockBigInt(false)
 	//fd.md.SetKeyFile(fd.key)
 	////////////////////fd.md.SetLogFile(fd.logfilename)
 	fd.md.SetOutputFile(fd.outputfilename)
@@ -194,9 +188,6 @@ func argsSimple(argsNumber int) int {
 // printUsage 
 func printUsage() {
 	fmt.Printf("USAGE of %s:\n", os.Args[0])
-	// fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
-	// prints the flag arguments in sorted order
-	// flag.PrintDefaults()
 
 	// prints the flag arguments in non sorted order
 	fmt.Println(`
@@ -216,6 +207,8 @@ func printUsage() {
         Output Format (default 10)
   -out string
         Output Filename
+  -hwkey string
+        High Way Hash Signature Key (32 Bytes)    
   -log string
         Log Filename
     `)
