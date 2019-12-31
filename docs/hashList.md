@@ -8,10 +8,9 @@ These should be in sorted order for the context hashlist.
 
 This is the step to add a new signature. It should be in sorted order  
 
-1: Add the signature name to mdBinaryList/mdBinaryList.go  
-2: Add the signature block size to code/decode/mdBlockSize/mdBlockSize.go  
-3: Add the hash import to the hash context list decode/mdHashContextList/mdHashContextList.go  
-4: Add the hash context new initialize function to CreateHashListMap()  
+1: Add the signature name ID and description and block size to $GOPATH/$PROJECT/code/decode/mdBlockSize/mdBinaryList.go  
+2: Add the hash import to the hash context list to $GOPATH/$PROJECT/code/decode/mdHashContextList/mdHashContextList.go  
+3: Add the hash context new initialize function to CreateHashListMap()  
    in decode/mdHashContextList/mdHashContextList.go  
 
 ### Current mdencode signatures  
