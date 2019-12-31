@@ -169,7 +169,6 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 	}
 
 	// initialize the mdBlockSize object
-	// mdBlock := mdBlockSize.Init()
 	mdc := mdHashContextList.Init()
 
 	// calculate and return the file signature list byte block size

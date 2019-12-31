@@ -9,7 +9,7 @@ import (
 	"strings"
 	"math/big"
 	"strconv"
-	"github.com/singularian/mdencode/code/decode/mdBlockSize"
+	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 	"github.com/singularian/mdencode/code/mdencode/mdFormatsImport/mdFormatImport"
 )
 
@@ -115,7 +115,7 @@ func main() {
 	bl :=  strings.Split(hashlist[1], "-")
 
 	// initialize the mdBlockSize object
-	mdBlock := mdBlockSize.Init()
+	mdBlock := mdBinaryList.Init()
 
 	// mdfmt.EncodeFileHeader(format2, filename, filepath, int64(fileSize), int64(blockSize), filelist, blocklist, modSize)
 	mdfmt.EncodeFileHeader(format, filename2, filepath, int64(fileSize), int64(blockSize), fl, bl, int64(modSize))
