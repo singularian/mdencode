@@ -10,7 +10,7 @@ import (
 	"math/big"
 //	"strconv"
 //	"github.com/singularian/mdencode/code/mdencode/mdFormatsImport/mdFormatImport"
-	"github.com/singularian/mdencode/code/decode/mdBlockSize"
+	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 )
 
 
@@ -115,7 +115,7 @@ func main() {
 	/// // mdfmt.EncodeFileHeader(format, filename2, filepath, int64(fileSize), int64(blockSize), fl, bl, int64(modSize))
 
         // initialize the mdBlockSize object
-        mdBlock := mdBlockSize.Init()
+	mdBlock := mdBinaryList.Init()
 
         // calculate and return the file signature list byte block size
         var filelistarr []int
