@@ -193,7 +193,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 			case "echo":
 				hb["echo"] = echo.New()
 			case "fnv":
-				hb["fnv"] = fnv.New64a()
+				hb["fnv"] = fnv.New64()
+			case "fnva":
+				hb["fnva"] = fnv.New64a()
 			case "fnv128":
 				hb["fnv128"] = fnv.New128()
 			case "fnv128a":
