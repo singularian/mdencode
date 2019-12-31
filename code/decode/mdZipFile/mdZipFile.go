@@ -10,7 +10,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"github.com/singularian/mdencode/code/decode/mdFormatBinary"
-	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 	"github.com/singularian/mdencode/code/decode/mdHashContextList"
 	"io"
 	"log"
@@ -424,21 +423,21 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
                 last = length
         }
 
-
+	// initialize the Hash Context List
+	// this also creates the mdBinaryList object
 	mdc := mdHashContextList.Init()
-	mdl := mdBinaryList.Init()
 
 	// ==================================================
 	// set the key
 	// this is for blake2s and siphash
 	// mdc.SetKeyFile(l.key)
 	mdc.SetHighwayKey(l.hwkey)
-	// TODO
 	// ==================================================
 
  	x := strings.Join(hlistarray, "")
-	// list  := mdl.CreateHashBlockList(hlistarray)
-	list  := mdl.CreateHashBlockList(x)
+	// list  := mdc.MdBlockSize.CreateHashBlockList(hlistarray)
+
+	list  := mdc.MdBlockSize.CreateHashBlockList(x)
 	result := strings.Join(list, ":")
 
 //	fmt.Println("new list ", list)

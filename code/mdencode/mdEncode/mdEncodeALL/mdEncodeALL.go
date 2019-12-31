@@ -22,7 +22,6 @@ import (
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatLog"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatImg"
 	"github.com/singularian/mdencode/code/mdencode/mdFormats/mdFormatImgFont"
-	"github.com/singularian/mdencode/code/decode/mdBinaryList"
         "github.com/singularian/mdencode/code/decode/mdHashContextList"
 	"io"
 	"log"
@@ -455,16 +454,18 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
                 last = length
         }
 
-	// create the hash context list objects
+	// Initialize the Hash Context List
+	// this also creates the mdBinaryList object
         mdc := mdHashContextList.Init()
-        mdl := mdBinaryList.Init()
 
 	// set the key
 	mdc.SetKeyFile(l.key)
+	// mdc.SetHighwayKey(l.hwkey)
 
         x := strings.Join(hlistarray, "")
-        // list  := mdl.CreateHashBlockList(hlistarray)
-        list  := mdl.CreateHashBlockList(x)
+        // list  := mdc.MdBlockSize.CreateHashBlockList(hlistarray)
+
+	list := mdc.MdBlockSize.CreateHashBlockList(x)
         result := strings.Join(list, ":")
 
         // fmt.Println("new list ", list)

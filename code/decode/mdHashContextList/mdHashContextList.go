@@ -8,7 +8,7 @@ package mdHashContextList
 // The modulus scan calls the check routine with the block bytes and compares
 // them against the hashcontext list and tests to see if a signature match is found 
 //
-// It also provides a wrapper to mdBlockSize.go for simplicity
+// It also provides a wrapper to mdBinaryList.go for simplicity
 //
 // https://github.com/singularian/mdencode
 // copyright (C) Scott Ross 2019
@@ -51,7 +51,6 @@ import (
 	"github.com/steakknife/keccak"
 	"github.com/OneOfOne/xxhash"
 	"github.com/singularian/mdhash/xxhash_128"
-//	"github.com/singularian/mdencode/code/decode/mdBlockSize"
 	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 )
 
@@ -60,7 +59,7 @@ type HashContextList struct {
 	fileHashList string
 	blockHashList string
 	// mdBlockSize *mdBlockSize.BlockSize
-	mdBlockSize *mdBinaryList.BlockList
+	MdBlockSize *mdBinaryList.BlockList
 	// hash map
 	// 
 	// hash list for files
@@ -93,7 +92,7 @@ func Init() (hc *HashContextList) {
         hcl := new(HashContextList)
 
 	mdBlock := mdBinaryList.Init()
-	hcl.mdBlockSize       = mdBlock
+	hcl.MdBlockSize       = mdBlock
 	hcl.HashListFileSize  = 0
 	hcl.HashListBlockSize = 0
 
@@ -373,11 +372,12 @@ func (hc *HashContextList) CheckFileHashBlock (byteblock []byte) (bool) {
 
 // CalcHashBlockSize takes a hashlist colon separated string of hash names
 //
-// it calculates the total blocksize and a array of the hash signature block sizes
+// It calculates the total blocksize and a array of the hash signature block sizes
 // this allows mdprint or mdunzip to decode each signature block and calculate their size
+// returns blocksize and the blocksize array for each block
 func (hc *HashContextList) CalcHashBlockSize (hashlist string, mdtype int) (uint64, []int) {
 
-	blocksize, blocklistarr := hc.mdBlockSize.CalcHashBlockSize(hashlist)
+	blocksize, blocklistarr := hc.MdBlockSize.CalcHashBlockSize(hashlist)
 
 	if mdtype == 0 {
 		hc.hashFileBlockSize     = blocksize
@@ -404,9 +404,7 @@ func (hc *HashContextList) SetKeyFile(key string) {
 
 // SetHighwayKey
 // set the Highway Hash key
-// It is a 256 bit key
-// It allows the hash to be changed with the key
-// TODO 
+// It assigns the 256 bit key
 func (hc *HashContextList) SetHighwayKey(key string) {
 
 	var defkey = "000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f"

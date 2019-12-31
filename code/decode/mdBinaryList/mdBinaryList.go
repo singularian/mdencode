@@ -5,7 +5,8 @@ package mdBinaryList
 // mdBinaryList.go
 //
 // mdencode mdunzip signature binary list converter
-// this package converts a bitstring list to a name string list
+// This package converts a bitstring list to a name string list
+// It also calculates a signature block size
 //
 // https://github.com/singularian/mdencode
 // copyright (C) Scott Ross 2019
@@ -41,12 +42,15 @@ type BlockList struct {
 	blockSizeArr []int
 }
 
+// HashList Struct
 type HashList struct {
 	HashName    string
 	Description string
 	BlockSize int
 }
 
+// hash list struct variable
+// this should be in sorted order
 var hlist = []HashList{
 		{ HashName: "aes8",        Description: "AES Hash 8",		BlockSize: 8 },
 		{ HashName: "ax",          Description: "XXHash 128",		BlockSize: 16 },
