@@ -55,8 +55,10 @@ goget:
 	go get -u github.com/phoreproject/go-x11
 	go get -u github.com/OneOfOne/xxhash
 	go get -u github.com/singularian/mdhash
+deps:
+	make goget
 getlibs:
-	make getlibs
+	make goget
 clean:
 	rm -r mdzip mdunzip mdlist mdlistTest mdsig *.log
 cleanlog:
