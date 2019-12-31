@@ -194,3 +194,62 @@ USAGE of ./mdlist:
 Examples:  
 ./mdlist  [FILENAME]   
 ```
+
+# Example Usage of mdsig
+
+```
+user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdsig
+
+Current mdencode signatures                
+                                           
+1:  aes8        - AES Hash 8               
+2:  ax          - XXHash 128               
+3:  blake2      - Blake2                   
+4:  blake2b     - Blake2b                  
+5:  blake2s_128 - Blake2s 128              
+6:  blake2s_256 - Blake2s 256              
+7:  bmw         - BMW                      
+8:  cube        - Cubehash                 
+9:  echo        - Echo                     
+10: fnv         - FNV                      
+11: fnv128      - FNV 128                  
+12: fnv128a     - FNV 128a                 
+13: gost256     - Gost 256                 
+14: gost512     - Gost 512                 
+15: groest      - Groest                   
+16: hmac256     - HMAC 256                 
+17: hmac512     - HMAC 512                 
+18: hw64        - Highway Hash 64          
+19: hw128       - Highway Hash 128         
+20: hw256       - Highway Hash 256         
+21: kekkak      - Kekkak                   
+22: luffa       - Luffa                    
+23: murmur3     - Murmur3                  
+24: md4         - MD4                      
+25: md5         - MD5                      
+26: ripe128     - Ripe 128                 
+27: ripe160     - Ripe 160                 
+28: ripe256     - Ripe 256                 
+29: sea         - Seahash                  
+30: sha1_128    - SHA1 128                 
+31: sha1_1284   - SHA1 1284                
+32: sha1        - SHA1                     
+33: sha224      - SHA224                   
+34: sha256      - SHA256                   
+35: sha512      - SHA512                   
+36: sha512_224  - SHA512 224               
+37: sha512_256  - SHA512 256               
+38: sha3_224    - SHA3 224                 
+39: sha3_256    - SHA3 256                 
+40: sha3_384    - SHA3 384                 
+41: sha3_512    - SHA3 512                 
+42: siphash     - Siphash                  
+43: skein_160   - Skein 160                
+44: skein_256   - Skein 256                
+45: skein_384   - Skein 384                
+46: skein_512   - Skein 512                
+47: skein_1024  - Skein 1024               
+48: tiger       - Tiger                    
+49: whirlpool   - Whirlpool                
+50: xxhash      - XXHash                   
+```
