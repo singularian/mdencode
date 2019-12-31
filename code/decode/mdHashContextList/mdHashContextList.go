@@ -58,7 +58,6 @@ import (
 type HashContextList struct {
 	fileHashList string
 	blockHashList string
-	// mdBlockSize *mdBlockSize.BlockSize
 	MdBlockSize *mdBinaryList.BlockList
 	// hash map
 	// 
@@ -77,9 +76,11 @@ type HashContextList struct {
         // argument signature hash list names
         fileHashListNames  []string
         blockHashListNames []string
-	// file and block signature size
+	// file signature size lists
+	// should rename this
 	hashFileBlockSize uint64
 	hashFileBlockSizeList []int
+	// block signature size list
 	hashBlockSize uint64
 	hashBlockSizeList []int
 	// Optional hashContextList keys
