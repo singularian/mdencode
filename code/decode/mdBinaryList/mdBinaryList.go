@@ -58,18 +58,26 @@ var hlist = []HashList{
 		{ HashName: "blake2b",     Description: "Blake2b",		BlockSize: 32},
 		{ HashName: "blake2s_128", Description: "Blake2s 128",		BlockSize: 16 },
 		{ HashName: "blake2s_256", Description: "Blake2s 256",		BlockSize: 32 },
+		{ HashName: "bmw",         Description: "BMW",			BlockSize: 64 },
+
 		{ HashName: "cube",        Description: "Cubehash",		BlockSize: 64 },
+		{ HashName: "echo",        Description: "Echo",			BlockSize: 64 },
+
 		{ HashName: "fnv",         Description: "FNV",			BlockSize: 8 },
 		{ HashName: "fnv128",      Description: "FNV 128",		BlockSize: 16 },
 		{ HashName: "fnv128a",     Description: "FNV 128a",		BlockSize: 16 },
 		{ HashName: "gost256",     Description: "Gost 256",		BlockSize: 32 },
 		{ HashName: "gost512",     Description: "Gost 512",		BlockSize: 64 },
+		{ HashName: "groest",      Description: "Groest",		BlockSize: 64 },
+
 		{ HashName: "hmac256",     Description: "HMAC 256",		BlockSize: 32 },
 		{ HashName: "hmac512",     Description: "HMAC 512",		BlockSize: 64 },
 		{ HashName: "hw64",        Description: "Highway Hash 64",	BlockSize: 8 },
 		{ HashName: "hw128",       Description: "Highway Hash 128",	BlockSize: 16 },
 		{ HashName: "hw256",       Description: "Highway Hash 256",	BlockSize: 32 },
 		{ HashName: "kekkak",      Description: "Kekkak",		BlockSize: 32 },
+		{ HashName: "luffa",       Description: "Luffa",		BlockSize: 64 },
+
 		{ HashName: "murmur3",     Description: "Murmur3",		BlockSize: 16 },
 		{ HashName: "md4",         Description: "MD4",			BlockSize: 16 },
 		{ HashName: "md5",         Description: "MD5",			BlockSize: 16 },

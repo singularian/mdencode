@@ -40,6 +40,11 @@ import (
 	"github.com/martinlindhe/gogost/gost34112012256"
 	"github.com/martinlindhe/gogost/gost34112012512"
 	"github.com/minio/highwayhash"
+	"github.com/phoreproject/go-x11/bmw"
+	"github.com/phoreproject/go-x11/luffa"
+	"github.com/phoreproject/go-x11/groest"
+	"github.com/phoreproject/go-x11/echo"
+//	"github.com/phoreproject/go-x11/shavite"
 	"github.com/maoxs2/go-ripemd"
 	"golang.org/x/crypto/ripemd160"
 	"github.com/aead/skein"
@@ -181,8 +186,12 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 					os.Exit(1)
 				}
                                 hb["blake2s_256"] = b
+			case "bmw":
+				hb["bmw"] = bmw.New()
 			case "cube":
 				hb["cube"] = cubehash.New()
+			case "echo":
+				hb["echo"] = echo.New()
 			case "fnv":
 				hb["fnv"] = fnv.New64a()
 			case "fnv128":
@@ -193,6 +202,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["gost256"] = gost34112012256.New()
 			case "gost512":
 				hb["gost512"] = gost34112012512.New()
+			case "groest":
+				hb["groest"] = groest.New()
 			case "hmac256":
 				hb["hmac256"] = hmac.New(sha256.New, key)
 			case "hmac512":
@@ -205,6 +216,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["hw256"], _ = highwayhash.New(hwkey[:])
 			case "kekkak":
 				hb["kekkak"] = keccak.New256()
+			case "luffa":
+				 hb["luffa"] = luffa.New()
                         case "murmur3":
 				var seed uint64 = 1120322
 				hb["murmur3"] = murmur3.New128(seed)

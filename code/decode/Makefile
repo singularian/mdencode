@@ -52,6 +52,7 @@ goget:
 	go get -u github.com/codahale/blake2
 	go get -u github.com/enceve/crypto/skein
 	go get -u github.com/mimoo/GoKangarooTwelve/K12
+	go get -u github.com/phoreproject/go-x11
 	go get -u github.com/OneOfOne/xxhash
 	go get -u github.com/singularian/mdhash
 getlibs:

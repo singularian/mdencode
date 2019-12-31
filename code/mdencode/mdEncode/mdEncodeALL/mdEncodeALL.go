@@ -491,7 +491,7 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
         }
 */
 
-	fmt.Println("hashlist ", hlistarray, fileBlockflag)
+	// fmt.Println("hashlist ", hlistarray, fileBlockflag)
 
         // mm  := mdc.GetBlockHash()
 
