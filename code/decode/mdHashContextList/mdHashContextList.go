@@ -56,6 +56,7 @@ import (
 	"github.com/steakknife/keccak"
 	"github.com/OneOfOne/xxhash"
 	"github.com/singularian/mdhash/xxhash_128"
+	"github.com/singularian/mdhash/poly1305"
 	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 )
 
@@ -229,8 +230,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["md5"] = md5.New()
 			// Returns a MAC Object
 			// poly1305 is a one time hash not usable
-			// case "poly1305":
-			//	hb["poly1305"] = poly1305.New(polykey)
+			case "poly1305":
+				polykey := [32]byte{0xda, 0x84, 0xbc, 0xab, 0x02, 0x67, 0x6c, 0x38, 0xcd, 0xb0, 0x15, 0x60, 0x42, 0x74, 0xc2, 0xaa}
+				hb["poly1305"] = poly1305.New(polykey)
 			case "ripe128":
 				hb["ripe128"] = ripemd.New128()
                         case "ripe160":

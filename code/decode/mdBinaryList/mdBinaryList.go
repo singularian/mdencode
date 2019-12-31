@@ -82,6 +82,8 @@ var hlist = []HashList{
 		{ HashName: "murmur3",     Description: "Murmur3",		BlockSize: 16 },
 		{ HashName: "md4",         Description: "MD4",			BlockSize: 16 },
 		{ HashName: "md5",         Description: "MD5",			BlockSize: 16 },
+		{ HashName: "poly1305",    Description: "Poly1305",		BlockSize: 16 },
+
 		{ HashName: "ripe128",     Description: "Ripe 128",		BlockSize: 16 },
 		{ HashName: "ripe160",     Description: "Ripe 160",		BlockSize: 20 },
 		{ HashName: "ripe256",     Description: "Ripe 256",		BlockSize: 32 },
