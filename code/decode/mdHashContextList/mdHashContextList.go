@@ -44,7 +44,7 @@ import (
 	"github.com/phoreproject/go-x11/luffa"
 	"github.com/phoreproject/go-x11/groest"
 	"github.com/phoreproject/go-x11/echo"
-//	"github.com/phoreproject/go-x11/shavite"
+	"github.com/phoreproject/go-x11/shavite"
 	"github.com/maoxs2/go-ripemd"
 	"golang.org/x/crypto/ripemd160"
 	"github.com/aead/skein"
@@ -262,6 +262,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["sha3_384"] = sha3.New384()
 			case "sha3_512":
 				hb["sha3_512"] = sha3.New512()
+			case "shavite":
+				hb["shavite"] = shavite.New()
 			case "siphash":
 				hb["siphash"] = siphash.New128(key)
                         case "skein_160":
