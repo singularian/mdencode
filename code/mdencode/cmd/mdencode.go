@@ -126,28 +126,7 @@ func argsSimple(argsNumber int) int {
 
 	// need to add a combination of fixed and random file signatures
 	// ie you specify 111 for the filehash and -fbr for random and it appends to the file signature instead of over writing it
-	if fd.randomfilehash {
-		fd.fhashlist = mdRand.GetRandomBits(32)
-	}
-	if fd.randomblockhash {
-		fd.bhashlist = mdRand.GetRandomBits(32)
-	}
-	if fd.randomfileblockhash {
-		fd.fhashlist = mdRand.GetRandomBits(32)
-		fd.bhashlist = mdRand.GetRandomBits(32)
-	}
-	if fd.randomfileblocksize {
-		fd.blocksize = strconv.FormatUint(mdRand.GetRandomBlockSize(), 10)
-	}
-	if fd.randomModSize {
-		fd.modsize = strconv.FormatUint(mdRand.GetRandomModSize(), 10)
-	}
-	if fd.randomEverything {
-		fd.fhashlist = mdRand.GetRandomBits(32)
-		fd.bhashlist = mdRand.GetRandomBits(32)
-		fd.blocksize = strconv.FormatUint(mdRand.GetRandomBlockSize(), 10)
-		fd.modsize = strconv.FormatUint(mdRand.GetRandomModSize(), 10)
-	}
+	fd.randomizeFB()
 
 	// need to add the block group which is a hash of groups of blocks
 	// blockgroup option and number etc
@@ -232,6 +211,48 @@ func (fd *FlagData) SetQuaternian() {
 		// fmt.Println("Quarternian File Hashlist ", fd.fhashlist)
 		// fmt.Println("Quarternian Block Hashlist ", fd.bhashlist)
 	}
+}
+
+// randomize the file or block signature lists
+func (fd *FlagData) randomizeFB() {
+
+	// need to add a combination of fixed and random file signatures
+	// ie you specify 111 for the filehash and -fbr for random and it appends to the file signature instead of over writing it
+
+	// randomize the file hash list
+	if fd.randomfilehash {
+		fd.fhashlist = mdRand.GetRandomBits(32)
+	}
+
+	// randomize the blockhash 
+	if fd.randomblockhash {
+		fd.bhashlist = mdRand.GetRandomBits(32)
+	}
+
+	// randomize the file and block hash
+	if fd.randomfileblockhash {
+		fd.fhashlist = mdRand.GetRandomBits(32)
+		fd.bhashlist = mdRand.GetRandomBits(32)
+	}
+
+	// randomize the file block size
+	if fd.randomfileblocksize {
+		fd.blocksize = strconv.FormatUint(mdRand.GetRandomBlockSize(), 10)
+	}
+
+	// randomize the modulus size
+	if fd.randomModSize {
+		fd.modsize = strconv.FormatUint(mdRand.GetRandomModSize(), 10)
+	}
+
+	// randomize everything
+	if fd.randomEverything {
+		fd.fhashlist = mdRand.GetRandomBits(32)
+		fd.bhashlist = mdRand.GetRandomBits(32)
+		fd.blocksize = strconv.FormatUint(mdRand.GetRandomBlockSize(), 10)
+		fd.modsize = strconv.FormatUint(mdRand.GetRandomModSize(), 10)
+	}
+
 }
 
 // printUsage 
