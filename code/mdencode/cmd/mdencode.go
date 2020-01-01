@@ -220,20 +220,22 @@ func (fd *FlagData) randomizeFB() {
 	// need to add a combination of fixed and random file signatures
 	// ie you specify 111 for the filehash and -fbr for random and it appends to the file signature instead of over writing it
 
+	var signatureSize int = 54
+
 	// randomize the file hash list
 	if fd.randomfilehash {
-		fd.fhashlist = mdRand.GetRandomBits(32)
+		fd.fhashlist = mdRand.GetRandomBits(signatureSize)
 	}
 
 	// randomize the blockhash 
 	if fd.randomblockhash {
-		fd.bhashlist = mdRand.GetRandomBits(32)
+		fd.bhashlist = mdRand.GetRandomBits(signatureSize)
 	}
 
 	// randomize the file and block hash
 	if fd.randomfileblockhash {
-		fd.fhashlist = mdRand.GetRandomBits(32)
-		fd.bhashlist = mdRand.GetRandomBits(32)
+		fd.fhashlist = mdRand.GetRandomBits(signatureSize)
+		fd.bhashlist = mdRand.GetRandomBits(signatureSize)
 	}
 
 	// randomize the file block size
@@ -248,8 +250,8 @@ func (fd *FlagData) randomizeFB() {
 
 	// randomize everything
 	if fd.randomEverything {
-		fd.fhashlist = mdRand.GetRandomBits(32)
-		fd.bhashlist = mdRand.GetRandomBits(32)
+		fd.fhashlist = mdRand.GetRandomBits(signatureSize)
+		fd.bhashlist = mdRand.GetRandomBits(signatureSize)
 		fd.blocksize = strconv.FormatUint(mdRand.GetRandomBlockSize(), 10)
 		fd.modsize = strconv.FormatUint(mdRand.GetRandomModSize(), 10)
 	}
