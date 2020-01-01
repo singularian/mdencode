@@ -31,15 +31,16 @@ type FlagData struct {
 
 func main() {
 
-	var argsNumber int = len(os.Args)
-        argsSimple(argsNumber)
+	md()
         os.Exit(0)
 
 }
 
 
-// mdencode file
-func argsSimple(argsNumber int) int {
+// mdunzip file
+func md() int {
+
+	var argsNumber int = len(os.Args)
 
 	fd := new(FlagData)
 
