@@ -122,37 +122,7 @@ func argsSimple(argsNumber int) int {
 
 	// initial implimentation of the quaternian file or block hashlist arguments
 	// this could eventually have blockgroups which makes it have another 4 states 0-7
-	if fd.uhashlist != "" {
-		var quaternianHashListArray  []string
-		var fhashlist string
-		var bhashlist string
-		re := regexp.MustCompile("[0123]")
-		quaternianHashListArray = re.FindAllString(fd.uhashlist, -1)
-		for _, element := range quaternianHashListArray {
-			// if it is zero then no hash for that signature
-			if element == "0" {
-				fhashlist += "0"
-				bhashlist += "0"
-			// if it is one than add the file hash list
-			} else if element == "1" {
-				fhashlist += "1"
-				bhashlist += "0"
-			// if it is two add the block hash list
-			} else if element == "2" {
-				fhashlist += "0"
-				bhashlist += "1"
-			// if it is three add file and block hash list
-			} else if element == "3" {
-				fhashlist += "1"
-				bhashlist += "1"
-			}
-		}
-		fd.fhashlist = fhashlist
-		fd.bhashlist = bhashlist
-		// fmt.Println("Quarternian Hashlist ", fd.uhashlist)
-		// fmt.Println("Quarternian File Hashlist ", fd.fhashlist)
-		// fmt.Println("Quarternian Block Hashlist ", fd.bhashlist)
-	}
+	fd.SetQuaternian()
 
 	// need to add a combination of fixed and random file signatures
 	// ie you specify 111 for the filehash and -fbr for random and it appends to the file signature instead of over writing it
@@ -183,21 +153,29 @@ func argsSimple(argsNumber int) int {
 	// blockgroup option and number etc
 	// ie bg=10 or blockgroups are 10 times the block size
 	// this eliminates or is one way to address collsions on a block level
+	fd.Encode()
+
+	return 0
+}
+
+// mdEncode the file
+func (fd *FlagData) Encode() {
 
 	// initialize the mdencode file object
-	// var md = mdEncodeALL.Init()
 	fd.md = mdEncodeALL.Init()
+
+	// set the mdEncode Parameters
 	fd.md.SetByteBlock(fd.byteblock)
-	fd.md.SetByteBlockBigInt(fd.byteblockint)
-	fd.md.SetAppendFile(fd.appendfile)
-	fd.md.SetFileHashLine(fd.filehashline)
-	fd.md.SetKeyFile(fd.key)
-	fd.md.SetLogFile(fd.logfilename)
-	fd.md.SetOutputFile(fd.outputfilename)
-	// set the default format
-	fd.md.SetMdFormat(fd.defaultFormat)
-	// set the hash lists
-	fd.md.SetHashLists(fd.fhashlist, fd.bhashlist)
+        fd.md.SetByteBlockBigInt(fd.byteblockint)
+        fd.md.SetAppendFile(fd.appendfile)
+        fd.md.SetFileHashLine(fd.filehashline)
+        fd.md.SetKeyFile(fd.key)
+        fd.md.SetLogFile(fd.logfilename)
+        fd.md.SetOutputFile(fd.outputfilename)
+        // set the default format
+        fd.md.SetMdFormat(fd.defaultFormat)
+        // set the hash lists
+        fd.md.SetHashLists(fd.fhashlist, fd.bhashlist)
 
 	// if the filename is specified
 	// mdencode generate a file signature
@@ -214,7 +192,46 @@ func argsSimple(argsNumber int) int {
 
 	// initialize an empty sqlite3 signature db if specified
 	fd.md.InitDB(fd.initdb)
-	return 0
+
+}
+
+
+// set the Quaternian
+// initial implimentation of the quaternian file or block hashlist arguments
+// this could eventually have blockgroups which makes it have another 4 states 0-7
+func (fd *FlagData) SetQuaternian() {
+	if fd.uhashlist != "" {
+		var quaternianHashListArray  []string
+		var fhashlist string
+		var bhashlist string
+		re := regexp.MustCompile("[0123]")
+		quaternianHashListArray = re.FindAllString(fd.uhashlist, -1)
+		for _, element := range quaternianHashListArray {
+		switch element {
+			// if it is zero then no hash for that signature
+			case "0":
+				fhashlist += "0"
+				bhashlist += "0"
+			// if it is one than add the file hash list
+			case "1":
+				fhashlist += "1"
+				bhashlist += "0"
+			// if it is two add the block hash list
+			case "2":
+				fhashlist += "0"
+				bhashlist += "1"
+			// if it is three add file and block hash list
+			case "3":
+				fhashlist += "1"
+				bhashlist += "1"
+			}
+		}
+		fd.fhashlist = fhashlist
+		fd.bhashlist = bhashlist
+		// fmt.Println("Quarternian Hashlist ", fd.uhashlist)
+		// fmt.Println("Quarternian File Hashlist ", fd.fhashlist)
+		// fmt.Println("Quarternian Block Hashlist ", fd.bhashlist)
+	}
 }
 
 // printUsage 

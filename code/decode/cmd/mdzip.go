@@ -78,7 +78,7 @@ func argsSimple(argsNumber int) int {
 	fd := new(FlagData)
 	flag.StringVar(&fd.blocksize, "block", "40", "File Block Size Bytes")
 	flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
-	flag.IntVar(&fd.defaultFormat, "format", 10, "Output Format")
+	flag.IntVar(&fd.defaultFormat, "format", 1000, "Output Format")
 	flag.StringVar(&fd.fhashlist, "fh", "01001", "File Hash Bit String List")
 	flag.StringVar(&fd.bhashlist, "bh", "01001", "Block Hash Bit String List")
 	flag.StringVar(&fd.uhashlist, "uh", "", "Quaternian Hash String List")
@@ -118,46 +118,26 @@ func argsSimple(argsNumber int) int {
 
         // initial implimentation of the quaternian file or block hashlist arguments
         // this could eventually have blockgroups which makes it have another 4 states 0-7
-	if fd.uhashlist != "" {
-                var quaternianHashListArray  []string
-                var fhashlist string
-                var bhashlist string
-                re := regexp.MustCompile("[0123]")
-                quaternianHashListArray = re.FindAllString(fd.uhashlist, -1)
-                for _, element := range quaternianHashListArray {
-                        // if it is zero then no hash for that signature
-                        if element == "0" {
-                                fhashlist += "0"
-                                bhashlist += "0"
-                        // if it is one than add the file hash list
-                        } else if element == "1" {
-                                fhashlist += "1"
-                                bhashlist += "0"
-                        // if it is two add the block hash list
-                        } else if element == "2" {
-                                fhashlist += "0"
-                                bhashlist += "1"
-                        // if it is three add file and block hash list
-                        } else if element == "3" {
-                                fhashlist += "1"
-                                bhashlist += "1"
-                        }
-                }
-                fd.fhashlist = fhashlist
-                fd.bhashlist = bhashlist
-                // fmt.Println("Quarternian Hashlist ", fd.uhashlist)
-                // fmt.Println("Quarternian File Hashlist ", fd.fhashlist)
-                // fmt.Println("Quarternian Block Hashlist ", fd.bhashlist)
-        }
+	fd.SetQuaternian()
 
 	// need to add the block group which is a hash of groups of blocks
 	// blockgroup option and number etc
 	// ie bg=10 or blockgroups are 10 times the block size
 	// this eliminates or is one way to address collsions on a block level
 
-	// initialize the mdencode file object
-	// var md = mdEncodeALL.Init()
+	fd.mdzip()
+
+	return 0
+}
+
+
+// mdzip file
+func (fd *FlagData) mdzip() {
+
+	// initialize the mdencode mdzip file object
 	fd.md = mdZipFile.Init()
+	
+	// Set the mdzip parameters
 	/////// fd.md.SetByteBlock(false)
 	//fd.md.SetKeyFile(fd.key)
 	fd.md.SetHWKeyFile(fd.hwkey)
@@ -168,22 +148,61 @@ func argsSimple(argsNumber int) int {
 	fd.md.SetMdFormat(10)
 	// set the hash lists
 	fd.md.SetHashLists(fd.fhashlist, fd.bhashlist)
-	
+
 
 	// if the filename is specified
-	// mdencode generate a file signature
-	if fd.filename != "" {
-		fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.filename, fd.outputfilename)
-	}
+        // mdzip
+        if fd.filename != "" {
+                fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.filename, fd.outputfilename)
+        }
 
 	// if the drectory is specified
-	// mdencode generate a directory signature of all the files
-	// if fd.directory != "" {
-		// fd.md.hashDirectory(fd.directory)
-	//	fd.md.MdencodeDirectory(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.directory, fd.outputfilename)
-	//}
+        // mdencode generate a directory signature of all the files
+        // if fd.directory != "" {
+                // fd.md.hashDirectory(fd.directory)
+        //      fd.md.MdencodeDirectory(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.directory, fd.outputfilename)
+        //}
 
-	return 0
+
+}
+
+// set the Quaternian 
+// initial implimentation of the quaternian file or block hashlist arguments
+// this could eventually have blockgroups which makes it have another 4 states 0-7
+func (fd *FlagData) SetQuaternian() {
+	if fd.uhashlist != "" {
+		var quaternianHashListArray  []string
+		var fhashlist string
+		var bhashlist string
+		re := regexp.MustCompile("[0123]")
+		quaternianHashListArray = re.FindAllString(fd.uhashlist, -1)
+		for _, element := range quaternianHashListArray {
+			switch element {
+			// if it is zero then no hash for that signature
+			case "0":
+				fhashlist += "0"
+				bhashlist += "0"
+			// if it is one than add the file hash list
+			case "1":
+				fhashlist += "1"
+				bhashlist += "0"
+			// if it is two add the block hash list
+			case "2":
+				fhashlist += "0"
+				bhashlist += "1"
+			// if it is three add file and block hash list
+			case "3":
+				fhashlist += "1"
+				bhashlist += "1"
+			}
+		}
+		fd.fhashlist = fhashlist
+		fd.bhashlist = bhashlist
+		// fmt.Println("Quarternian Hashlist ", fd.uhashlist)
+		// fmt.Println("Quarternian File Hashlist ", fd.fhashlist)
+		// fmt.Println("Quarternian Block Hashlist ", fd.bhashlist)
+	}
+
 }
 
 // printUsage 
