@@ -66,14 +66,15 @@ type FlagData struct {
 
 func main() {
 
-	var argsNumber int = len(os.Args)
-	argsSimple(argsNumber)
+	md()
 	os.Exit(0)
 
 }
 
 // mdencode file
-func argsSimple(argsNumber int) int {
+func md() int {
+
+	var argsNumber int = len(os.Args)
 
 	fd := new(FlagData)
 	flag.StringVar(&fd.blocksize, "block", "40", "File Block Size Bytes")
