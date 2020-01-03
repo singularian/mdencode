@@ -215,14 +215,14 @@ func (fd *FlagData) SetQuaternian() {
 	}
 }
 
+// randomizeFB
 // randomize the file or block signature lists
 func (fd *FlagData) randomizeFB() {
 
-	// need to add a combination of fixed and random file signatures
-	// ie you specify 111 for the filehash and -fbr for random and it appends to the file signature instead of over writing it
-
 	// var signatureSize int = BlockSize + 1 
 	var signatureSize int = fd.md.HclistSizeInt + 1 
+
+	// fmt.Println("hash list size ", signatureSize)
 
 	// randomize the file hash list
 	if fd.randomfilehash {
