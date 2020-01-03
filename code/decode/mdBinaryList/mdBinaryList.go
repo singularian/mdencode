@@ -27,7 +27,7 @@ type BlockList struct {
 	blockHashList string
 	// hashNames
 	hashNames      []string
-	hashNamesSize  int
+	HashNamesSize  int
 	// hash Block size map
 	m map[string]int
 	// block names
@@ -117,7 +117,7 @@ var hlist = []HashList{
 func Init() (bl *BlockList) {
         blx := new(BlockList)
 	blx.hashNames = blx.GetHashList()
-	blx.hashNamesSize = len(blx.hashNames)
+	blx.HashNamesSize = len(blx.hashNames)
 
 	blx.SetHashListBlockSize()
         return blx

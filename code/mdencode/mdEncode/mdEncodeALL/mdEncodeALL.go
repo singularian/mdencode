@@ -92,6 +92,9 @@ type FileData struct {
 	// modulus
 	modExp                 int
 	fileblockmodulusString string
+	// hash context list
+        hclist *mdHashContextList.HashContextList
+        HclistSizeInt int
 	// modulus
 	// N *big.Int // modulus
 	// https://stackoverflow.com/questions/37502134/declaring-type-big-int-overflowing-constant-golang
@@ -120,6 +123,12 @@ func Init() (md *FileData) {
 	// there are advantage to not have mdencode init everything
         // setup the file md formatter
         // fdata.setmdFormat(format)
+
+        // Initialize the Hash Context List
+        // this also creates the mdBinaryList object
+        hclist := mdHashContextList.Init()
+        mdata.hclist = hclist
+	mdata.HclistSizeInt = hclist.MdBlockSize.HashNamesSize
 
 	return mdata
 }
@@ -456,7 +465,8 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 
 	// Initialize the Hash Context List
 	// this also creates the mdBinaryList object
-        mdc := mdHashContextList.Init()
+        // mdc := mdHashContextList.Init()
+        mdc := l.hclist
 
 	// set the key
 	mdc.SetKeyFile(l.key)
