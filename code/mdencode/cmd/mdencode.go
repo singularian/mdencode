@@ -125,10 +125,7 @@ func md() int {
 	// this could eventually have blockgroups which makes it have another 4 states 0-7
 	fd.SetQuaternian()
 
-	// need to add a combination of fixed and random file signatures
-	// ie you specify 111 for the filehash and -fbr for random and it appends to the file signature instead of over writing it
-	// fd.randomizeFB()
-
+	// create a signature of the file
 	// need to add the block group which is a hash of groups of blocks
 	// blockgroup option and number etc
 	// ie bg=10 or blockgroups are 10 times the block size
@@ -146,7 +143,7 @@ func (fd *FlagData) Encode() {
 
 	// need to add a combination of fixed and random file signatures
 	// ie you specify 111 for the filehash and -fbr for random and it appends to the file signature instead of over writing it
-	fd.randomizeFB(fd.md.HclistSizeInt)
+	fd.randomizeFB()
 
 	// set the mdEncode Parameters
 	fd.md.SetByteBlock(fd.byteblock)
@@ -219,12 +216,13 @@ func (fd *FlagData) SetQuaternian() {
 }
 
 // randomize the file or block signature lists
-func (fd *FlagData) randomizeFB(BlockSize int) {
+func (fd *FlagData) randomizeFB() {
 
 	// need to add a combination of fixed and random file signatures
 	// ie you specify 111 for the filehash and -fbr for random and it appends to the file signature instead of over writing it
 
-	var signatureSize int = BlockSize + 1 
+	// var signatureSize int = BlockSize + 1 
+	var signatureSize int = fd.md.HclistSizeInt + 1 
 
 	// randomize the file hash list
 	if fd.randomfilehash {
