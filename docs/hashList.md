@@ -20,59 +20,61 @@ This is the step to add a new signature. It should be in sorted order
 These are the current mdencode signatures
 
 ```
-1:  aes8        - AES Hash 8            
-2:  ax          - XXHash 128            
-3:  blake2      - Blake2                
-4:  blake2b     - Blake2b               
-5:  blake2s_128 - Blake2s 128           
-6:  blake2s_256 - Blake2s 256           
-7:  bmw         - BMW                   
-8:  cube        - Cubehash              
-9:  echo        - Echo                  
-10: fnv         - FNV 64                
-11: fnva        - FNV 64a               
-12: fnv128      - FNV 128               
-13: fnv128a     - FNV 128a              
-14: gost256     - Gost 256              
-15: gost512     - Gost 512              
-16: groest      - Groest                
-17: hmac256     - HMAC 256              
-18: hmac512     - HMAC 512              
-19: hw64        - Highway Hash 64       
-20: hw128       - Highway Hash 128      
-21: hw256       - Highway Hash 256      
-22: kekkak      - Kekkak                
-23: luffa       - Luffa                 
-24: murmur3     - Murmur3               
-25: md4         - MD4                   
-26: md5         - MD5                   
-27: poly1305    - Poly1305              
-28: ripe128     - Ripe 128              
-29: ripe160     - Ripe 160              
-30: ripe256     - Ripe 256              
-31: sea         - Seahash               
-32: sha1_128    - SHA1 128              
-33: sha1_1284   - SHA1 1284             
-34: sha1        - SHA1                  
-35: sha224      - SHA224                
-36: sha256      - SHA256                
-37: sha512      - SHA512                
-38: sha512_224  - SHA512 224            
-39: sha512_256  - SHA512 256            
-40: sha3_224    - SHA3 224              
-41: sha3_256    - SHA3 256              
-42: sha3_384    - SHA3 384              
-43: sha3_512    - SHA3 512              
-44: shavite     - X11 SHAvite           
-45: siphash     - Siphash               
-46: skein_160   - Skein 160             
-47: skein_256   - Skein 256             
-48: skein_384   - Skein 384             
-49: skein_512   - Skein 512             
-50: skein_1024  - Skein 1024            
-51: tiger       - Tiger                 
-52: whirlpool   - Whirlpool             
-53: xxhash      - XXHash                
+1:  aes8        - AES Hash 8           
+2:  ax          - XXHash 128           
+3:  blake2      - Blake2               
+4:  blake2b     - Blake2b              
+5:  blake2s_128 - Blake2s 128          
+6:  blake2s_256 - Blake2s 256          
+7:  bmw         - BMW                  
+8:  cube        - Cubehash             
+9:  echo        - Echo                 
+10: fnv         - FNV 64               
+11: fnva        - FNV 64a              
+12: fnv128      - FNV 128              
+13: fnv128a     - FNV 128a             
+14: gost256     - Gost 256             
+15: gost512     - Gost 512             
+16: groest      - Groest               
+17: hmac256     - HMAC 256             
+18: hmac512     - HMAC 512             
+19: hw64        - Highway Hash 64      
+20: hw128       - Highway Hash 128     
+21: hw256       - Highway Hash 256     
+22: kekkak      - Kekkak               
+23: luffa       - Luffa                
+24: murmur3     - Murmur3              
+25: md2         - MD2                  
+26: md4         - MD4                  
+27: md5         - MD5                  
+28: poly1305    - Poly1305             
+29: ripe128     - Ripe 128             
+30: ripe160     - Ripe 160             
+31: ripe256     - Ripe 256             
+32: ripe320     - Ripe 320             
+33: sea         - Seahash              
+34: sha1_128    - SHA1 128             
+35: sha1_1284   - SHA1 1284            
+36: sha1        - SHA1                 
+37: sha224      - SHA224               
+38: sha256      - SHA256               
+39: sha512      - SHA512               
+40: sha512_224  - SHA512 224           
+41: sha512_256  - SHA512 256           
+42: sha3_224    - SHA3 224             
+43: sha3_256    - SHA3 256             
+44: sha3_384    - SHA3 384             
+45: sha3_512    - SHA3 512             
+46: shavite     - X11 SHAvite          
+47: siphash     - Siphash              
+48: skein_160   - Skein 160            
+49: skein_256   - Skein 256            
+50: skein_384   - Skein 384            
+51: skein_512   - Skein 512            
+52: skein_1024  - Skein 1024           
+53: tiger       - Tiger                
+54: whirlpool   - Whirlpool            
+55: xxhash      - XXHash               
 ``` 
 
 # Binary Signature Arguments

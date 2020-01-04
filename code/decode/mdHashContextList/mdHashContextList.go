@@ -26,6 +26,7 @@ import (
 	"hash/fnv"
 	"crypto/hmac"
 	"golang.org/x/crypto/blake2s"
+	"github.com/htruong/go-md2"
 	"golang.org/x/crypto/md4"
         "crypto/md5"
         "github.com/singularian/mdhash/sha1_128"
@@ -224,6 +225,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
                         case "murmur3":
 				var seed uint64 = 1120322
 				hb["murmur3"] = murmur3.New128(seed)
+			case "md2":
+				hb["md2"] = md2.New()
                         case "md4":
 				hb["md4"] = md4.New()
                         case "md5":
@@ -239,6 +242,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["ripe160"] = ripemd160.New()
 			case "ripe256":
 				 hb["ripe256"] = ripemd.New256()
+			case "ripe320":
+				hb["ripe320"] = ripemd.New320()
 			case "sea":
 				hb["sea"] = seahash.New()
                         case "sha1":

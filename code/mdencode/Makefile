@@ -35,6 +35,7 @@ build:
 # retrieve the go libraries
 getlibs:
 	go get -u golang.org/x/crypto/blake2s
+	go get -u github.com/htruong/go-md2
 	go get -u golang.org/x/crypto/md4
 	go get -u golang.org/x/crypto/sha3
 	go get -u golang.org/x/crypto/ripemd160
