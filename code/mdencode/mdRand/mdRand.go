@@ -18,7 +18,7 @@ func GetRandomBits(length int) string {
 
         var n int32
         binary.Read(rand.Reader, binary.LittleEndian, &n)
-        c := n % 50
+        c := n % int32(length)
         if c < 0 {
                 c = 5
         }
