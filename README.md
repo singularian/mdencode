@@ -349,6 +349,9 @@ This is a guide for building MDencode on Linux.
 * ETH: `0x137eB09cF2e199dA2Aa79607f96719be1491a312`
 * LTC: `MJh8XpUQ5wm8x1HCoQ7dewNqhrLfZZc31x`
 
+# Author
+MDEncode was developed by Scott Ross on a Ryzen CPU.
+
 # License 
 
 [GNU General Public License v3.0](https://github.com/singularian/mdencode/blob/master/LICENSE)
