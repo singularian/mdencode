@@ -11,7 +11,7 @@ RANDOM_FILE_MDZ="randomfile.mdz"
 echo "args $#"
 if [ $# -ne 5 ]; then
 	echo "$0 FILESIZE BLOCKHASHLISTBINARY BLOCKSIZE MODBITS THREADS"
-	echo "$0 100 33 64 16"
+	echo "$0 100 33 11 64 16"
 	echo "$0 100 303033020333 11 64 16"
 	echo "$0 100 303 11 64 16"
 	exit 2

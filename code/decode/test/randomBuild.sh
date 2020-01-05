@@ -10,7 +10,7 @@ RANDOM_FILE="randomfile"
 echo "args $#"
 if [ $# -ne 5 ]; then
 	echo "$0 FILESIZE BLOCKHASHLISTBINARY BLOCKSIZE MODBITS THREADS"
-	echo "$0 100 11 64 16"
+	echo "$0 100 11 11 64 16"
 	echo "$0 100 101111000111 11 64 16"
 	echo "$0 100 1010111 11 64 16"
 	exit 2
