@@ -322,9 +322,9 @@ Proccessing power limits the size of the input block.
 
 TODO: Change the mod exponent size in the output block from int32 to int16.  
 
-- [Youtube Example](https://youtu.be/F5Y5ibIJ-9Q)
-
 - [Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
+
+- [Youtube Video Example](https://youtu.be/9qqr7ICPpSA)
 
 # Collision Handling
 
