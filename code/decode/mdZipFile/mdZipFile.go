@@ -27,7 +27,7 @@ type mdformat interface {
 	OpenFile(appendfile bool)
 	InitFile()
 	// EncodeDirStart() // for the directory
-	EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64)
+	EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, keylist string, modulusSize int64)
 	EncodeFileHash(encodingFormat int, hashName string, hashBytes string)
 	EncodeBlock(encodingFormat int, blockSize uint64, hashList []string, modExp int, mod *big.Int)
 	EncodeEndFile(encodingFormat int)
@@ -53,6 +53,7 @@ type FileData struct {
 	// key string
 	key string
 	hwkey string
+	keylist string
 	// logfile
 	logfile string
 	// argument hash list bits
@@ -217,7 +218,7 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 	fdata.fileSize = uint64(size)
 
 	// encode the File Header
-	fdata.mdfmt.EncodeFileHeader(format, fileBaseName, fdata.filePath, size, blocksize, fdata.fileHashListNames, fdata.blockHashListNames, bitsize)
+	fdata.mdfmt.EncodeFileHeader(format, fileBaseName, fdata.filePath, size, blocksize, fdata.fileHashListNames, fdata.blockHashListNames, fdata.keylist, bitsize)
 
 	// create a function to hash the entire file as one signature or multiple digital hash signatures
 	// then collisions between the blocks can be resolved because the correct ones will fit together and be verified by the top level signature or signature group
@@ -432,6 +433,7 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 	// this is for blake2s and siphash
 	// mdc.SetKeyFile(l.key)
 	mdc.SetHighwayKey(l.hwkey)
+	mdc.SetHashListKey(l.keylist)
 	// ==================================================
 
  	x := strings.Join(hlistarray, "")
@@ -545,6 +547,37 @@ func (l *FileData) SetKeyFile(key string) {
 func (l *FileData) SetHWKeyFile(key string) {
 	l.hwkey = key
 }
+
+// SetKeyList
+// Set the Signature List
+// keylist=aeshash:083948304830948302332,ax1:0284923402934,ax2:03809903
+// ax:blake2s_128-aes8:ax
+// ax:blake2s_128-aes8:ax-key
+// ax:blake2s_128-aes8:ax-key-bg
+func (l *FileData) SetKeyList(keylist string) {
+
+
+	re1 := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+)+$")
+	re2 := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+[,])+$")
+        matched := re1.MatchString(keylist)
+        matched2 := re2.MatchString(keylist)
+
+	if matched {
+                l.keylist = keylist
+		return
+	} else if matched2 {
+		l.keylist = keylist
+		return
+        } else {
+		if keylist != "" {
+			fmt.Println("Invalid Keylist ", keylist)
+			os.Exit(1)
+		}
+
+	}
+
+}
+
 
 // SetLogFile
 // set the optional logfile

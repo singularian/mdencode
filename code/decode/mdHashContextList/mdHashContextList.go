@@ -93,6 +93,7 @@ type HashContextList struct {
 	// Optional hashContextList keys
 	key string
 	hwkey string
+	keylist map[string]string
 }
 
 // Init returns a new HashContextList object  
@@ -164,6 +165,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
                 // fmt.Println("hashlist ", st[i])          
 		switch hashlistArr[hashnum] {
 			case "aes8":
+				// seed is a uint64
 				hb["aes8"] = aeshash.NewAES(99123312)
 			case "ax":
 				hb["ax"] = xxhash_128.New()
@@ -291,6 +293,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
                         case "whirlpool":
 				hb["whirlpool"] = whirlpool.New()
 			case "xxhash":
+				// seed uint64
 				hb["xxhash"] =  xxhash.New64()
                 	}
 		}
@@ -441,4 +444,36 @@ func (hc *HashContextList) SetHighwayKey(key string) {
 	}
 
 	// fmt.Println("hwkey set ", hc.hwkey, key)
+}
+
+// Set the Hash List Key
+func (hc *HashContextList) SetHashListKey(keylist string) {
+
+	// var m map[string]string
+	hc.keylist = make(map[string]string)
+
+	s := strings.Split(keylist, ",")
+
+	// for index, val := range s {
+	for _, val := range s {
+		res := strings.Split(val, ":")
+		if len(res) == 2 {
+			var sig    = res[0]
+			var sigkey = res[1]
+			switch sig {
+                                case "ax1":
+                                        hc.keylist[sig] = sigkey
+                                case "ax2":
+                                        hc.keylist[sig] = sigkey
+                                case "hw64":
+                                        hc.keylist[sig] = sigkey
+                                case "hw128":
+                                        hc.keylist[sig] = sigkey
+                                case "hw256":
+                                        hc.keylist[sig] = sigkey
+			}
+		}
+	}
+
+	fmt.Println("map:", hc.keylist)
 }

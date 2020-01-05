@@ -64,6 +64,8 @@ clean:
 	rm -r mdzip mdunzip mdlist mdlistTest mdsig *.log
 cleanlog:
 	rm -r *.log
+cleanrand:
+	rm -r test/randomfile* randomfile*
 # Display general help about this command
 help:
 	@echo ""
@@ -72,7 +74,10 @@ help:
 	@echo "The following commands are available:"
 	@echo "    make all         : Build the mdencode files"
 	@echo "    make build       : Build the mdencode files to the build directory"
+	@echo "    make deps        : Get the Golang $(PROJECT) dependencies"
 	@echo "    make getlibs     : Get the Golang $(PROJECT) dependencies"
 	@echo "    make clean       : Remove any build artifact"
+	@echo "    make cleanlog    : Remove any log files"
+	@echo "    make cleanrand   : Remove any random files"
 list:
 	echo "all build clean cleanlog list"

@@ -1,15 +1,10 @@
 package main
 
 import (
-//	"os"
 	"fmt"
 	"encoding/hex"
-//    "math/rand"
-//	"sync"
-//    "sync/atomic"
-//	"time"
 	"github.com/singularian/mdencode/code/decode/mdUnzipMutex"
-	"github.com/singularian/mdencode/code/decode/mdBlockSize"
+	// "github.com/singularian/mdencode/code/decode/mdBlockSize"
 	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 	"github.com/singularian/mdencode/code/decode/mdHashContextList"
 )
@@ -23,11 +18,11 @@ func main() {
 	fmt.Println("mutex ", mutex.GetMatchStatus(), " ", mutex.GetFileBuffer())
 
 	// test the block size calculator
-	mdBlock := mdBlockSize.Init()
-	var blocksize uint64 = 0
-        var s []int
-	blocksize, s = mdBlock.CalcHashBlockSize("blake2:md5:sha1")
-	fmt.Println("mdBlocksize ", s, blocksize)
+	// mdBlock := mdBlockSize.Init()
+	// var blocksize uint64 = 0
+        // var s []int
+	// blocksize, s = mdBlock.CalcHashBlockSize("blake2:md5:sha1")
+	// fmt.Println("mdBlocksize ", s, blocksize)
 
 	// test the md hash context list
 	mdc := mdHashContextList.Init()

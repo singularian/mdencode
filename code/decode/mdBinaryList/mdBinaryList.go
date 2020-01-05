@@ -128,7 +128,7 @@ func Init() (bl *BlockList) {
 }
 
 // GetHashList
-// returns the signature hash list ID list
+// returns the signature hashList Struct HashName ID list
 func (bl *BlockList) GetHashList() ([]string) {
 
 	var hashNames []string
@@ -142,13 +142,15 @@ func (bl *BlockList) GetHashList() ([]string) {
 	return hashNames
 }
 
-// returns the signature hash list
+// GetHashListObject
+// returns the signature hash list Struct
 func (bl *BlockList) GetHashListObject() ([]HashList) {
 
 	return hlist
 }
 
-// CreateHashBlockList takes a hashlist integer list and converts it to a name list
+// CreateHashBlockList
+// CreateHashBlockList takes a hashlist boolean and converts it to a name list
 // ie converts the boolean string to a hash name string
 func (bl *BlockList) CreateHashBlockList(hashlistBoolean string) ([]string) {
 
@@ -187,7 +189,8 @@ func (bl *BlockList) CreateHashBlockList(hashlistBoolean string) ([]string) {
 	return bl.hashList
 }
 
-// add the hash block the blockSize Array and increment the blockSize count
+// AddHashList
+// add the hash name to the blockList hashList Array 
 func (bl *BlockList) AddHashList (hashName string, number int) {
 
 	// fmt.Println("hash ", number, hashName)
@@ -209,8 +212,11 @@ Block Calculator Size Methods
 ***************************************/
 
 
+// SetHashListBlockSize
 // set the block size map
-func (bl *BlockList) SetHashListBlockSize () {
+// This function returns a hash map of signatures strings with their hash block size
+// This allows a hash signature to lookup it's block size by name 
+func (bl *BlockList) SetHashListBlockSize() {
 
 	blockSizeMap := make(map[string]int)
 	var length = len(hlist)
@@ -225,7 +231,9 @@ func (bl *BlockList) SetHashListBlockSize () {
 
 // CalcHashBlockSize
 // calculate the block size for a hashlist string
-// this allows mdprint or mdunzip to decode each signature block and calculate their size
+// This allows mdprint or mdunzip to decode each signature block and calculate their size
+//
+// It returns the blocksize sum and the array of signature block sizes
 //
 // Example block string: ax:md4:md5:sha1:sea:hw64
 // Example block size  84 block array size [16 16 16 20 8 8]
@@ -253,7 +261,7 @@ func (bl *BlockList) CalcHashBlockSize (hashlist string) (uint64, []int) {
 }
 
 
-
+// AddBlockSig
 // add the hash block the blockSize Array and increment the blockSize count
 func (bl *BlockList) AddBlockSig (hashSize int) {
 

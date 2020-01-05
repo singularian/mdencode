@@ -16,9 +16,7 @@ import (
 	"path/filepath"
         _ "io/ioutil"
 	"github.com/singularian/mdencode/code/decode/mdZipFile"
-	// "github.com/singularian/mdencode/code/mdencode/mdRand"
 	"os"
-//	"strconv"
 	"regexp"
 )
 
@@ -40,6 +38,7 @@ type FlagData struct {
 	// signature keys 
         key string
 	hwkey string
+	keylist string
 	// boolean arguments
         // appendfile bool
         // random hashlist booleans
@@ -96,6 +95,7 @@ func md() int {
 
 	// flag.StringVar(&fd.key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
 	flag.StringVar(&fd.hwkey, "hwkey", "", "High Way Hash Signature Key (32 bytes)")
+	flag.StringVar(&fd.keylist, "keylist", "", "Signature Key List")
 	flag.StringVar(&fd.filename, "file", "", "Input Filename")
 	// flag.StringVar(&fd.directory, "dir", "", "Input Directory")
 	flag.StringVar(&fd.outputfilename, "out", "", "Output Filename")
@@ -137,17 +137,20 @@ func (fd *FlagData) mdzip() {
 
 	// initialize the mdencode mdzip file object
 	fd.md = mdZipFile.Init()
-	
+
 	// Set the mdzip parameters
 	/////// fd.md.SetByteBlock(false)
 	//fd.md.SetKeyFile(fd.key)
 	fd.md.SetHWKeyFile(fd.hwkey)
+	fd.md.SetKeyList(fd.keylist)
+	fmt.Println("keylist ", fd.keylist)
 	////////////////////fd.md.SetLogFile(fd.logfilename)
 	fd.md.SetOutputFile(fd.outputfilename)
 	// set the default format
 	//fd.md.SetMdFormat(fd.defaultFormat)
 	fd.md.SetMdFormat(10)
 	// set the hash lists
+	// todo add the keylist
 	fd.md.SetHashLists(fd.fhashlist, fd.bhashlist)
 
 
@@ -163,7 +166,6 @@ func (fd *FlagData) mdzip() {
                 // fd.md.hashDirectory(fd.directory)
         //      fd.md.MdencodeDirectory(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.directory, fd.outputfilename)
         //}
-
 
 }
 

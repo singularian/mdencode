@@ -88,7 +88,7 @@ func (md *MdFormat) InitFile() {
 // it contains the file md format type, filename, filepath, filesize, block signature size, file hash signature list, block hash signature list and modulus bit size 
 // it can also add time attribute
 //
-func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64) {
+func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, keylist string, modulusSize int64) {
 
 //	var number uint64 = 10102938
 /*      err = binary.Write(f, binary.LittleEndian, number)
@@ -113,6 +113,12 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 
 	// hashlist size
 	var hashListString = strings.Join(filehashList, ":") + "-" + strings.Join(blockhashList, ":")
+	if keylist != "" {
+		hashListString += "-"
+		hashListString += keylist
+	}
+
+
         // mdata.mdfileHashListString
         // mdata.mdblockHashListString
         length  = len(hashListString)
