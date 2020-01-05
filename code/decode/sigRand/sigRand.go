@@ -36,11 +36,10 @@ func GenerateRandomHex(n int) (string, error) {
 
 
 // GenerateRandomString returns a securely generated random string.
-// It will return an error if the system's secure random
-// number generator fails to function correctly, in which
-// case the caller should not continue.
+// it returns a string and error 
 func GenerateRandomString(n int) (string, error) {
 	const letters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-"
+
 	bytes, err := GenerateRandomBytes(n)
 	if err != nil {
 		return "", err

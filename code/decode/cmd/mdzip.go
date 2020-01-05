@@ -143,7 +143,8 @@ func (fd *FlagData) mdzip() {
 	//fd.md.SetKeyFile(fd.key)
 	fd.md.SetHWKeyFile(fd.hwkey)
 	fd.md.SetKeyList(fd.keylist)
-	fmt.Println("keylist ", fd.keylist)
+	// fmt.Println("keylist ", fd.keylist)
+
 	////////////////////fd.md.SetLogFile(fd.logfilename)
 	fd.md.SetOutputFile(fd.outputfilename)
 	// set the default format
