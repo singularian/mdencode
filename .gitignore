@@ -1,0 +1,8 @@
+# log files
+*.log
+*.mdz
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+*.swp
+
