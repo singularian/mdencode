@@ -557,18 +557,19 @@ func (l *FileData) SetHWKeyFile(key string) {
 func (l *FileData) SetKeyList(keylist string) {
 
 
-	re1 := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+)+$")
-	re2 := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+[,])+$")
-        matched := re1.MatchString(keylist)
-        matched2 := re2.MatchString(keylist)
+	// re1 := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+)+$")
+	// re2 := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+[,])+$")
+	re := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+)?([A-Za-z0-9]+[:][[:xdigit:]]+[,])*$")
+        matched := re.MatchString(keylist)
+        // matched2 := re2.MatchString(keylist)
 
 	if matched {
                 l.keylist = keylist
-		return
-	} else if matched2 {
-		l.keylist = keylist
-		return
-        } else {
+	//	return
+	// } else if matched2 {
+	//	l.keylist = keylist
+	//	return
+        } else if !matched {
 		if keylist != "" {
 			fmt.Println("Invalid Keylist ", keylist)
 			os.Exit(1)
