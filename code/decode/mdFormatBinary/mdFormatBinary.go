@@ -90,41 +90,39 @@ func (md *MdFormat) InitFile() {
 //
 func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, keylist string, modulusSize int64) {
 
-//	var number uint64 = 10102938
-/*      err = binary.Write(f, binary.LittleEndian, number)
-        if err != nil {
-                log.Fatalln(err)
-        }
-*/
 	var fileAttribute [6]int64
 	fileAttribute[0] = fileSize
         fileAttribute[1] = blockSize
         fileAttribute[2] = modulusSize
 	md.modSize = uint64(modulusSize)
-	// filename length
+
+	// set filename length
 	var length int = len(fileName)
 	fileAttribute[3] = int64(length)
 	fmt.Println("filename length ", length, " ", fileAttribute[3])
 
-	// write the filepath uint64 size
+	// set the filepath uint64 size
 	// filepath length
 	length  = len(filePath)
 	fileAttribute[4]  = int64(length)
 
 	// hashlist size
+	// filehashlist:blockhashlist:signaturekeylist
 	var hashListString = strings.Join(filehashList, ":") + "-" + strings.Join(blockhashList, ":")
+
+	// if the keylist is specified add it
 	if keylist != "" {
 		hashListString += "-"
 		hashListString += keylist
 	}
 
 
-        // mdata.mdfileHashListString
-        // mdata.mdblockHashListString
+	// calculate the hashlist string size
         length  = len(hashListString)
         fileAttribute[5]  = int64(length)
-        fmt.Println("file Hashlist size ", length, " ", hashListString, " attribute 5 ", fileAttribute)
+        // fmt.Println("file Hashlist size ", length, " ", hashListString, " attribute 5 ", fileAttribute)
 
+	// write the fileattributes to the binary file
 	err := binary.Write(md.file, binary.BigEndian, &fileAttribute)
         if err != nil {
                 fmt.Println("bad argument ", err)
