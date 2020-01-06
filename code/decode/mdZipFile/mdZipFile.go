@@ -554,12 +554,13 @@ func (l *FileData) SetHWKeyFile(key string) {
 // ax:blake2s_128-aes8:ax
 // ax:blake2s_128-aes8:ax-key
 // ax:blake2s_128-aes8:ax-key-bg
-func (l *FileData) SetKeyList(keylist string) {
+func (l *FileData) SetKeyList(keylist string) bool {
 
 
 	// re1 := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+)+$")
 	// re2 := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+[,])+$")
-	re := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+)?([A-Za-z0-9]+[:][[:xdigit:]]+[,])*$")
+	// re := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+)?([A-Za-z0-9]+[:][[:xdigit:]]+[,])*$")
+	re := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+[,])*([A-Za-z0-9]+[:][[:xdigit:]]+)?$")
         matched := re.MatchString(keylist)
         // matched2 := re2.MatchString(keylist)
 
@@ -576,6 +577,8 @@ func (l *FileData) SetKeyList(keylist string) {
 		}
 
 	}
+
+	return true
 
 }
 
