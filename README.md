@@ -324,7 +324,8 @@ TODO: Change the mod exponent size in the output block from int32 to int16.
 
 - [Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
 
-- [Youtube Video Example](https://youtu.be/9qqr7ICPpSA)
+- [Youtube Video Example](https://youtu.be/YG7r5qyw2MY)
+- [![Youtube MDZip Example](https://img.youtube.com/vi/VID/0.jpg)](https://youtu.be/YG7r5qyw2MY)
 
 # Collision Handling
 
