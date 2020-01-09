@@ -36,7 +36,6 @@ type FileData struct {
 	commandArgs    int
 	fileName       string
 	filePath       string
-	outputFileName string
 	fileSize       uint64
 	blockSize      uint64
 	blockCount     uint64
@@ -77,11 +76,16 @@ type FileData struct {
 	// log writer
 	// log *log.Logger
 	islogging bool
-	// files
+	// input file
 	inputFile string
+	file *os.File
+	// output file
 	outputFile string
+	outf *os.File
 	// post validate
 	postvalidate bool
+	err error
+
 }
 
 // Init returns a new mdUnzipFile object
@@ -91,42 +95,64 @@ func Init(inputFile string, outputFile string, threadCount uint64, postvalidate 
 
 	mdata.logfile      = ""
 	mdata.islogging    = false
-	mdata.postvalidate = postvalidate
 	mdata.inputFile    = inputFile
 	mdata.outputFile   = outputFile
 	mdata.threadCount  = int64(threadCount)
+	mdata.postvalidate = postvalidate
+
+	// mdata.OpenFile()
 
 	return mdata
 }
 
+// Open the input and output files
+func (l *FileData) OpenFile() {
+
+	// open the input file
+	l.file, l.err = os.Open(l.inputFile)
+	if l.err != nil {
+                fmt.Println("Counldn't open input file ", l.err)
+                os.Exit(1)
+        }
+
+	// open the output file
+        l.outf, l.err = os.Create(l.outputFile)
+        if l.err != nil {
+                fmt.Println("Counldn't open output file ", l.err)
+                os.Exit(1)
+        }
+
+}
+
 // DecodeFile decodes an mdzip file and writes the decoded blocks to an output file
 // it runs a parallel modulus scan on the signature group
-//func (l *FileData) DecodeFile(threadCount uint64) int {
 func (l *FileData) DecodeFile() int {
 
 	var threadCount = l.threadCount
 
-	file, err := os.Open(l.inputFile)
-        if err != nil {
-                fmt.Println("counldn't open input file ", err)
-                os.Exit(1)
-        }
-        defer file.Close()
-
-        outf, err := os.Create(l.outputFile)
-        if err != nil {
-                fmt.Println("counldn't open output file ", err)
-                os.Exit(1)
-        }
-        defer outf.Close()
+	l.OpenFile()
+	// the close has to be deferred until the end of the function
+	defer l.file.Close()
+	defer l.outf.Close()
 
 	// read the file into  an array
-	stats, _ := file.Stat()
-        var size int64 = stats.Size()
+	// stats, err := l.file.Stat()
+	stats, _ := l.file.Stat()
+	var size int64 = stats.Size()
         bytes := make([]byte, size)
 
-        bufr := bufio.NewReader(file)
-        _,_ = bufr.Read(bytes)
+	// fmt.Println("size ", size)
+	// os.Exit(1)
+
+	// read the file into  an array
+        bufr := bufio.NewReader(l.file)
+        _, err := bufr.Read(bytes)
+	if err != nil {
+                fmt.Println("buffer creation error", err)
+                os.Exit(3)
+        }
+
+	// fmt.Println("buffer ", bytes)
 
         /////////// fmt.Println("buf ", bytes)
         fileSize      := binary.BigEndian.Uint64(bytes[0:8])
@@ -320,7 +346,7 @@ func (l *FileData) DecodeFile() int {
 				fmt.Println("Found block modscan ", blockNumber, " thread ", mlastThread, " block ", fmt.Sprintf("% x", mdp[mlastThread].GetBytes()))
 				fmt.Println("Found block Mutex ", blockNumber, " thread ", mlastThread, " block ", fmt.Sprintf("% x", mutex.GetFileBuffer()))
 
-				l.WriteFile(outf, mutex.GetFileBuffer())
+				l.WriteFile(l.outf, mutex.GetFileBuffer())
 		}
 		fmt.Println("end testing mutex ", mutex.GetMatchStatus())
 
@@ -339,7 +365,7 @@ func (l *FileData) DecodeFile() int {
         elapsed := t.Sub(startTime)
 	fmt.Println("\nTotal execution time ", elapsed)
 
-	outf.Close()
+	l.outf.Close()
 	// l.PostValidate(outf, mdc, filelist, fhlistarray)
 	l.PostValidate(mdc, filelist, fhlistarray)
 
@@ -392,6 +418,8 @@ func (l *FileData) PostValidate(hcl *mdHashContextList.HashContextList, filelist
 
 	}
 }
+
+
 
 // convert 32
 func (l *FileData) Convert32(data []byte) (uint32, error) {
