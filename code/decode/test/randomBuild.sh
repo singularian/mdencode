@@ -52,6 +52,14 @@ echo ""
 echo "mdlist $RANDOM_FILE" 
 mdlist randomfile.mdz
 
+# check if the zip file exists
+if test -f "$RANDOM_FILE_MDZ"; then
+        echo ""
+else
+        echo "zip file failure"
+        exit 2
+fi
+
 echo ""
 echo "mdunzip $RANDOM_FILE"
-mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -thread=$THREADS
+mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -thread=$THREADS -val

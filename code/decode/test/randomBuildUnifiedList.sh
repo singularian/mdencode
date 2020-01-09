@@ -10,7 +10,7 @@ RANDOM_FILE_MDZ="randomfile.mdz"
 
 echo "args $#"
 if [ $# -ne 5 ]; then
-	echo "$0 FILESIZE BLOCKHASHLISTBINARY BLOCKSIZE MODBITS THREADS"
+	echo "$0 FILESIZE UNIFIEDBLOCKHASHLISTBINARY BLOCKSIZE MODBITS THREADS"
 	echo "$0 100 33 11 64 16"
 	echo "$0 100 303033020333 11 64 16"
 	echo "$0 100 303 11 64 16"
@@ -42,6 +42,7 @@ echo ""
 echo "Zipping the file $RANDOM_FILE"
 mdzip -file=randomfile -uh=$BLOCK_BINARY_ARGS -mod=$MODBITS -block=$BLOCK_SIZE -out=$RANDOM_FILE_MDZ
 
+# check if the zip file exists
 if test -f "$RANDOM_FILE_MDZ"; then
 	echo ""
 else
@@ -54,4 +55,4 @@ mdlist randomfile.mdz
 
 echo ""
 echo "mdunzip $RANDOM_FILE"
-mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -thread=$THREADS
+mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -thread=$THREADS -val
