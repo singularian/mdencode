@@ -3,6 +3,7 @@
 # this is a test file to test the mdzip and mdlist and mdunzip programs
 
 RANDOM_FILE="randomfile"
+RANDOM_FILE_MDZ="randomfile.mdz"
 # FILE_SIZE="26"
 # BLOCK_SIZE="13"
 # MODBITS="64"
@@ -39,7 +40,7 @@ head -c $FILE_SIZE /dev/urandom > $RANDOM_FILE
 
 echo ""
 echo "Zipping the file $RANDOM_FILE"
-mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz 
+mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -fh=001001 -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz 
 # Invalid keylist
 # mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz -keylist=hw256:4334FFFZZZ,
 # valid keylist

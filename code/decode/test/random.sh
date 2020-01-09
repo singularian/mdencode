@@ -55,4 +55,4 @@ echo "mdlist $RANDOM_FILE"
 echo ""
 echo "mdunzip $RANDOM_FILE"
 # ./../mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -thread=$THREADS -val=true
-./../mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -thread=$THREADS -val=false
+./../mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -thread=$THREADS -val=true

@@ -205,6 +205,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 			case "fnv128a":
 				hb["fnv128a"] = fnv.New128a()
 			case "gost256":
+				// I think this hash is slow
 				hb["gost256"] = gost34112012256.New()
 			case "gost512":
 				hb["gost512"] = gost34112012512.New()
