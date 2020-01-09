@@ -63,14 +63,19 @@ func md() int {
 
 
 	// unzipFile := new(mdUnzipFile)
-	unzipFile := mdUnzipFile.Init()
+	// unzipFile := mdUnzipFile.Init(fd.postval)
 
 	threads, err := strconv.ParseInt(fd.threadCount, 10, 64)
 	if err != nil {
 		fmt.Printf("Invalid Threads Argument ", err, threads)
 		os.Exit(0)
 	}
-	unzipFile.DecodeFile(fd.inputFilename, fd.outputFilename, uint64(threads), fd.postval)
+
+	// initialize the unzipFile object
+	unzipFile := mdUnzipFile.Init(fd.inputFilename, fd.outputFilename, uint64(threads), fd.postval)
+
+	// decode the file
+	unzipFile.DecodeFile()
 
 	return 0
 }

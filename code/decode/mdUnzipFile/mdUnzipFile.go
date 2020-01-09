@@ -77,38 +77,44 @@ type FileData struct {
 	// log writer
 	// log *log.Logger
 	islogging bool
-	// post validate
+	// files
+	inputFile string
 	outputFile string
+	// post validate
 	postvalidate bool
 }
 
 // Init returns a new mdUnzipFile object
-func Init() (md *FileData) {
+func Init(inputFile string, outputFile string, threadCount uint64, postvalidate bool) (md *FileData) {
 
 	mdata := new(FileData)
+
 	mdata.logfile      = ""
 	mdata.islogging    = false
-	mdata.postvalidate = false
+	mdata.postvalidate = postvalidate
+	mdata.inputFile    = inputFile
+	mdata.outputFile   = outputFile
+	mdata.threadCount  = int64(threadCount)
 
 	return mdata
 }
 
 // DecodeFile decodes an mdzip file and writes the decoded blocks to an output file
 // it runs a parallel modulus scan on the signature group
-func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount uint64, postvalidate bool) int {
+//func (l *FileData) DecodeFile(threadCount uint64) int {
+func (l *FileData) DecodeFile() int {
 
-	l.postvalidate = postvalidate
-	l.outputFile   = outputFile
+	var threadCount = l.threadCount
 
-	file, err := os.Open(inputFile)
+	file, err := os.Open(l.inputFile)
         if err != nil {
                 fmt.Println("counldn't open input file ", err)
                 os.Exit(1)
         }
         defer file.Close()
 
-        outf, err := os.Create(outputFile)
-                if err != nil {
+        outf, err := os.Create(l.outputFile)
+        if err != nil {
                 fmt.Println("counldn't open output file ", err)
                 os.Exit(1)
         }
