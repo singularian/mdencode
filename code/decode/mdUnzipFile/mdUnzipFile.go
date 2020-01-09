@@ -339,16 +339,16 @@ func (l *FileData) DecodeFile() int {
 
 		c.Wait()
 
-		fmt.Println("testing mutex")
+		// fmt.Println("testing mutex")
 		if mutex.GetMatchStatus() {
-				var mlastThread = mutex.GetLastThread() - 1
-				fmt.Println("Processing ", mutex.GetMatchStatus())
-				fmt.Println("Found block modscan ", blockNumber, " thread ", mlastThread, " block ", fmt.Sprintf("% x", mdp[mlastThread].GetBytes()))
-				fmt.Println("Found block Mutex ", blockNumber, " thread ", mlastThread, " block ", fmt.Sprintf("% x", mutex.GetFileBuffer()))
+				// var mlastThread = mutex.GetLastThread() - 1
+				// fmt.Println("Processing ", mutex.GetMatchStatus())
+				// fmt.Println("Found block modscan ", blockNumber, " thread ", mlastThread, " block ", fmt.Sprintf("% x", mdp[mlastThread].GetBytes()))
+				// fmt.Println("Found block Mutex ", blockNumber, " thread ", mlastThread, " block ", fmt.Sprintf("% x", mutex.GetFileBuffer()))
 
 				l.WriteFile(l.outf, mutex.GetFileBuffer())
 		}
-		fmt.Println("end testing mutex ", mutex.GetMatchStatus())
+		// fmt.Println("end testing mutex ", mutex.GetMatchStatus())
 
 
 		for thread = threadStart; thread < threadEnd; thread++ {
