@@ -395,7 +395,7 @@ func (l *FileData) PostValidate(hcl *mdHashContextList.HashContextList, filelist
 		hcl.CreateHashListMap(filelist, 0, 1)
 		var hashListFile = hcl.HashList
 
-		// fmt.Println("Validating file signature ", hn)
+		fmt.Println("\nValidating file signature list ", hn)
 		for i, hashvalue := range hn {
 			// h := l.hashListFile[hashvalue]
 			// h := hcl[hashvalue]
