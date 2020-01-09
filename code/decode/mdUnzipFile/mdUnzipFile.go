@@ -279,7 +279,7 @@ func (l *FileData) DecodeFile() int {
 		// create a byteblock array of the file block hash bytes
 		var blockXsize = start + mdblocksize
 		hashByteBlock := bytes[start:blockXsize]
-		fmt.Printf("Hash ByteBlock %x", hashByteBlock)
+		// fmt.Printf("Hash ByteBlock %x\n", hashByteBlock)
 		mdc.SetBlockHash(hashByteBlock)
 
 		// create a string of the file block bytes
