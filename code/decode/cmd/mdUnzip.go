@@ -27,6 +27,8 @@ type FlagData struct {
         thread       int64
         threadStart int64
         threadEnd   int64
+	// file post validation
+	postval bool
 }
 
 func main() {
@@ -46,9 +48,10 @@ func md() int {
 
 	flag.StringVar(&fd.inputFilename, "file", "", "Input Filename")
 	flag.StringVar(&fd.outputFilename, "out", "", "Output Filename")
-        flag.StringVar(&fd.threadCount, "thread", "16", "Go Routine Threadsize")
+	flag.StringVar(&fd.threadCount, "thread", "16", "Go Routine Threadsize")
         // flag.Int64Var(&fd.threadStart, "start", 0, "Thread Start (Allows threads to be skipped for multiple computers)")
         // flag.Int64Var(&fd.threadEnd, "end", 0, "Thread End (Allows threads to be skipped for multiple computers)")
+	flag.BoolVar(&fd.postval, "val", false, "Run the File Hash List Post Validation")
 
 	flag.Usage = printUsage
 	flag.Parse()
@@ -67,7 +70,7 @@ func md() int {
 		fmt.Printf("Invalid Threads Argument ", err, threads)
 		os.Exit(0)
 	}
-	unzipFile.DecodeFile(fd.inputFilename, fd.outputFilename, uint64(threads))
+	unzipFile.DecodeFile(fd.inputFilename, fd.outputFilename, uint64(threads), fd.postval)
 
 	return 0
 }
@@ -82,6 +85,8 @@ func printUsage() {
         Output Filename
   -thread string
         Go Routine Threadsize
+  -val bool
+        Run the File Hash List Post Validation
     `)
 
 	fmt.Println()

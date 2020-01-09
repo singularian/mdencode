@@ -16,6 +16,8 @@ package mdUnzipFile
 import (
         "fmt"
         "encoding/binary"
+	"io"
+	"encoding/hex"
         "os"
         "bufio"
         "bytes"
@@ -75,6 +77,9 @@ type FileData struct {
 	// log writer
 	// log *log.Logger
 	islogging bool
+	// post validate
+	outputFile string
+	postvalidate bool
 }
 
 // Init returns a new mdUnzipFile object
@@ -83,13 +88,17 @@ func Init() (md *FileData) {
 	mdata := new(FileData)
 	mdata.logfile      = ""
 	mdata.islogging    = false
+	mdata.postvalidate = false
 
 	return mdata
 }
 
 // DecodeFile decodes an mdzip file and writes the decoded blocks to an output file
 // it runs a parallel modulus scan on the signature group
-func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount uint64) int {
+func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount uint64, postvalidate bool) int {
+
+	l.postvalidate = postvalidate
+	l.outputFile   = outputFile
 
 	file, err := os.Open(inputFile)
         if err != nil {
@@ -178,12 +187,14 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
         // fmt.Println("test array ", filelistarr)
         st := strings.Split(filelist, ":")
         // get the file hash list
+	var fhlistarray []string
         for i:= 0; i < len(filelistarr); i++ {
                 start = end
                 end = end + uint64(filelistarr[i])
                 var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
                 // filePathLen   := binary.BigEndian.(bytes[:40])
                 fmt.Println("file hashlistname ", st[i], " hex ", hexstring)
+		fhlistarray = append(fhlistarray, hexstring)
         }
 
 	// calculate and return the file signature block byte size list
@@ -322,6 +333,10 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
         elapsed := t.Sub(startTime)
 	fmt.Println("\nTotal execution time ", elapsed)
 
+	outf.Close()
+	// l.PostValidate(outf, mdc, filelist, fhlistarray)
+	l.PostValidate(mdc, filelist, fhlistarray)
+
 	return 0
 
 }
@@ -330,6 +345,46 @@ func (l *FileData) DecodeFile(inputFile string, outputFile string, threadCount u
 func (l *FileData) WriteFile(outf *os.File, bytes []byte) {
 
 	binary.Write(outf,binary.LittleEndian,bytes)
+}
+
+// post validate the output file with the file hash list
+func (l *FileData) PostValidate(hcl *mdHashContextList.HashContextList, filelist string, fhlistarray []string) {
+
+	if l.postvalidate {
+		// this should use os.Open instead of os.Create which seems to change the first signature
+		f, err := os.Open(l.outputFile)
+		if err != nil {
+			fmt.Println("counldn't open output file ", err)
+			os.Exit(1)
+		}
+		defer f.Close()
+
+		hn := strings.Split(filelist, ":")
+		hcl.CreateHashListMap(filelist, 0, 1)
+		var hashListFile = hcl.HashList
+
+		// fmt.Println("Validating file signature ", hn)
+		for i, hashvalue := range hn {
+			// h := l.hashListFile[hashvalue]
+			// h := hcl[hashvalue]
+			h := hashListFile[hashvalue]
+			h.Reset()
+			// fmt.Println("Validating file signature ", hashvalue, i, h, hashListFile)
+			fmt.Println("Validating file signature ", hashvalue, i)
+			if _, err := io.Copy(h, f); err != nil {
+				fmt.Println("file validation error ", err)
+				os.Exit(1)
+			}
+			// fmt.Println("validation sign ", hashvalue, " ", hex.EncodeToString(h.Sum(nil)), fhlistarray[i])
+			if hex.EncodeToString(h.Sum(nil)) != fhlistarray[i] {
+				fmt.Println("File Failed file signature validation ", hashvalue)
+				os.Exit(1)
+			}
+		}
+
+		fmt.Println("File signature validated True")
+
+	}
 }
 
 // convert 32

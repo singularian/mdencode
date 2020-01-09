@@ -183,8 +183,9 @@ user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzi
   -out string                                                                                       
         Output Filename                                                                             
   -thread string                                                                                    
-        Go Routine Threadsize                                                                       
-                                                                                                    
+        Go Routine Threadsize   
+  -val bool
+        Run the File Hash List Post Validation
 ```                                                                                                 
                                                                                                     
 mdlist can display the contents of an mdzip file                                                    
