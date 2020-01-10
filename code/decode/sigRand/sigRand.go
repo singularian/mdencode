@@ -4,9 +4,10 @@ package sigRand
 
 
 import (
-	// "math/rand"
+	"strconv"
+	"regexp"
         "crypto/rand"
-	// "fmt"
+	"fmt"
 	"encoding/binary"
 	"encoding/hex"
 )
@@ -85,4 +86,38 @@ func GenRandomHighwayKey() (string, error) {
 	return m, nil  
 }
 
+// Convert a Hex string to a uint64
+// hexString := "75bcd105"
+// fmt.Println(ConvertHex2Int(hexString))
+func ConvertHex2Int(hexString string) uint64 {
 
+        result, _ := strconv.ParseUint(hexString, 16, 64)
+        return uint64(result)
+}
+
+// Convert a Integer String to a uint64
+// "9893489348439"
+func ConvertString2Int(DecString string) uint64 {
+
+	result, _ := strconv.ParseUint(DecString, 0, 64)
+	return uint64(result)
+}
+
+// Convert a Integer String or Hex String to a Uint64
+func ConvertDecHexString2Int(DecString string) uint64 {
+	isHex, _ := regexp.MatchString("[[:xdigit:]]", DecString)
+	isDec, _ := regexp.MatchString("[[:digit:]]",  DecString)
+
+	fmt.Println("match ", isHex, isDec)
+
+	if isHex {
+		return ConvertHex2Int(DecString)
+	}
+
+	if isDec {
+		return ConvertString2Int(DecString)
+	}
+
+
+	return 0
+}

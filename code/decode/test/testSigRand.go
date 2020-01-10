@@ -16,4 +16,8 @@ func main() {
 	fmt.Println("str ", str)
 	fmt.Println("hw ", hw)
 
+	hexnum := sigRand.ConvertDecHexString2Int("0D0D0D0FFF")
+	decnum := sigRand.ConvertDecHexString2Int("12893712837")
+
+	fmt.Println("hexnum ", hexnum, " decnum ", decnum)
 }
