@@ -1,6 +1,8 @@
 # Command Line Usage of mdencode
 
 
+[![MD Encode File Signature Example](https://asciinema.org/a/14.png)](https://asciinema.org/a/293097)
+
 ``` 
 user@server:~/projects/src/github.com/singularian/mdencode/code/mdencode
 Usage of md:                                                                                                                                     
