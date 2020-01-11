@@ -1,7 +1,7 @@
 # Command Line Usage of mdencode
 
 
-[MD Encode Ascii Art Example]((https://asciinema.org/a/293097)
+[MD Encode Ascii Art Example](https://asciinema.org/a/293097)
 
 ``` 
 user@server:~/projects/src/github.com/singularian/mdencode/code/mdencode
