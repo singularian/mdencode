@@ -13,7 +13,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"strconv"
 	"github.com/singularian/mdencode/code/decode/mdUnzipFile"
 )
 
@@ -22,8 +21,6 @@ type FlagData struct {
 	inputFilename string
 	outputFilename string
 	// thread parameters
-        // threadCount  int64
-        threadCount  string 
         thread       int64
         threadStart int64
         threadEnd   int64
@@ -48,7 +45,7 @@ func md() int {
 
 	flag.StringVar(&fd.inputFilename, "file", "", "Input Filename")
 	flag.StringVar(&fd.outputFilename, "out", "", "Output Filename")
-	flag.StringVar(&fd.threadCount, "thread", "16", "Go Routine Threadsize")
+	flag.Int64Var(&fd.thread, "thread", 16, "Go Routine Threadsize")
         // flag.Int64Var(&fd.threadStart, "start", 0, "Thread Start (Allows threads to be skipped for multiple computers)")
         // flag.Int64Var(&fd.threadEnd, "end", 0, "Thread End (Allows threads to be skipped for multiple computers)")
 	flag.BoolVar(&fd.postval, "val", false, "Run the File Hash List Post Validation")
@@ -61,21 +58,20 @@ func md() int {
                 os.Exit(1)
         }
 
-
-	// unzipFile := new(mdUnzipFile)
-	// unzipFile := mdUnzipFile.Init(fd.postval)
-
-	threads, err := strconv.ParseInt(fd.threadCount, 10, 64)
-	if err != nil {
-		fmt.Printf("Invalid Threads Argument ", err, threads)
-		os.Exit(0)
+	// if the thread is zero set it to the default
+	if fd.thread == 0 {
+		fd.thread = 16
 	}
 
 	// initialize the unzipFile object
-	unzipFile := mdUnzipFile.Init(fd.inputFilename, fd.outputFilename, uint64(threads), fd.postval)
+	// unzipFile := new(mdUnzipFile)
+	unzipFile := mdUnzipFile.Init(fd.inputFilename, fd.outputFilename, uint64(fd.thread), fd.postval)
 
 	// decode the file
 	unzipFile.DecodeFile()
+
+	// validate the output file
+	unzipFile.PostValidate()
 
 	return 0
 }

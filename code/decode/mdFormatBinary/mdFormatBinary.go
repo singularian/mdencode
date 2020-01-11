@@ -193,7 +193,7 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 
 
 	// fmt.Println("testing line ", modremainder.Bytes(), bs, modByteSize, " start end ", start, end, " modsize ", md.modSize)
-	// fmt.Println("fffyyyyyyyyfffffffffffff ", modremainder.Bytes(), bs)
+	// fmt.Println("modremainder ", modremainder.Bytes(), bs)
 	 _ = binary.Write(md.file, binary.BigEndian, padBlock)
 }
 

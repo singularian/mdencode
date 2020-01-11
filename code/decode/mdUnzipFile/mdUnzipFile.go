@@ -48,21 +48,28 @@ type FileData struct {
 	key string
 	// logfile
 	logfile string
-	// argument hash list bits
+	// argument hash list names
+	// ax:sha1:sha256
 	fileHashListString  string
 	blockHashListString string
 	// argument hash list bit arrays
+	// 01010101010101010
+	// not currently used
 	fileHashListArray  []string
 	blockHashListArray []string
 	// argument signature hash list names
+	// ax blake2 sha2
 	fileHashListNames  []string
 	blockHashListNames []string
+	// key list
+	sigKeyHashListNames []string
+	// hex list
+	// 0033CdF0EE
+	fileHashHexListArray []string
 	// dictionary
 	dictionary map[string]string
 	// hash list for files
-	// hashList map[string]hash.Hash
-	// hash list for blocks
-	// hashListBlocks map[string]hash.Hash
+	mdc *mdHashContextList.HashContextList
 	// byte buffer
 	filebuffer []byte
 	// modulus
@@ -87,6 +94,13 @@ type FileData struct {
 	err error
 
 }
+
+type Hashlist struct {
+	HashListString string
+	HashListNames []string
+	HexListNames []string
+}
+
 
 // Init returns a new mdUnzipFile object
 func Init(inputFile string, outputFile string, threadCount uint64, postvalidate bool) (md *FileData) {
@@ -200,6 +214,8 @@ func (l *FileData) DecodeFile() int {
         hashlist := strings.Split(hlist, "-")
         filelist := hashlist[0]
         blocklist := hashlist[1]
+	l.fileHashListString  = filelist
+	l.blockHashListString = blocklist
         fmt.Println("hashlist ", filelist, blocklist)
 
 	// check if the block list is specified
@@ -210,27 +226,28 @@ func (l *FileData) DecodeFile() int {
 	}
 
 	// initialize the mdBlockSize object
-	mdc := mdHashContextList.Init()
+	l.mdc = mdHashContextList.Init()
 
 	// calculate and return the file signature list byte block size
-	var filelistarr []int
-	_, filelistarr = mdc.CalcHashBlockSize(filelist, 0)
+	_, filelistarr := l.mdc.CalcHashBlockSize(filelist, 0)
 
         // fmt.Println("test array ", filelistarr)
-        st := strings.Split(filelist, ":")
-        // get the file hash list
-	var fhlistarray []string
+        // st := strings.Split(filelist, ":")
+	l.fileHashListNames = strings.Split(filelist, ":")
+        // get the file hash hex list
+	// var fhlistarray []string
         for i:= 0; i < len(filelistarr); i++ {
                 start = end
                 end = end + uint64(filelistarr[i])
                 var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
                 // filePathLen   := binary.BigEndian.(bytes[:40])
-                fmt.Println("file hashlistname ", st[i], " hex ", hexstring)
-		fhlistarray = append(fhlistarray, hexstring)
+                fmt.Println("file hashlistname ", l.fileHashListNames[i], " hex ", hexstring)
+		// fhlistarray = append(fhlistarray, hexstring)
+		l.fileHashHexListArray = append(l.fileHashHexListArray, hexstring)
         }
 
 	// calculate and return the file signature block byte size list
-	mdblocksize, blocklistarr := mdc.CalcHashBlockSize(blocklist, 1)
+	mdblocksize, blocklistarr := l.mdc.CalcHashBlockSize(blocklist, 1)
 	// _, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)
 
 	// calculate the file blocks count and the last file block size
@@ -280,7 +297,7 @@ func (l *FileData) DecodeFile() int {
 		var blockXsize = start + mdblocksize
 		hashByteBlock := bytes[start:blockXsize]
 		// fmt.Printf("Hash ByteBlock %x\n", hashByteBlock)
-		mdc.SetBlockHash(hashByteBlock)
+		l.mdc.SetBlockHash(hashByteBlock)
 
 		// create a string of the file block bytes
                 for j := 0; j < len(blocklistarr); j++ {
@@ -366,8 +383,6 @@ func (l *FileData) DecodeFile() int {
 	fmt.Println("\nTotal execution time ", elapsed)
 
 	l.outf.Close()
-	// l.PostValidate(outf, mdc, filelist, fhlistarray)
-	l.PostValidate(mdc, filelist, fhlistarray)
 
 	return 0
 
@@ -379,8 +394,8 @@ func (l *FileData) WriteFile(outf *os.File, bytes []byte) {
 	binary.Write(outf,binary.LittleEndian,bytes)
 }
 
-// post validate the output file with the file hash list
-func (l *FileData) PostValidate(hcl *mdHashContextList.HashContextList, filelist string, fhlistarray []string) {
+// post validate the output mdunzipped file with the file hash signature list
+func (l *FileData) PostValidate() {
 
 	if l.postvalidate {
 		// this should use os.Open instead of os.Create which seems to change the first signature
@@ -391,24 +406,26 @@ func (l *FileData) PostValidate(hcl *mdHashContextList.HashContextList, filelist
 		}
 		defer f.Close()
 
-		hn := strings.Split(filelist, ":")
-		hcl.CreateHashListMap(filelist, 0, 1)
-		var hashListFile = hcl.HashList
+		// create the file hash list map
+		l.mdc.CreateHashListMap(l.fileHashListString, 0, 1)
+		var hashListFile = l.mdc.HashList
 
-		fmt.Println("\nValidating file signature list ", hn)
-		for i, hashvalue := range hn {
-			// h := l.hashListFile[hashvalue]
-			// h := hcl[hashvalue]
+		fmt.Println("\nValidating file signature list ", l.fileHashListNames)
+
+		for i, hashvalue := range l.fileHashListNames {
 			h := hashListFile[hashvalue]
 			h.Reset()
+
 			// fmt.Println("Validating file signature ", hashvalue, i, h, hashListFile)
 			fmt.Println("Validating file signature ", hashvalue, i)
+
 			if _, err := io.Copy(h, f); err != nil {
 				fmt.Println("file validation error ", err)
 				os.Exit(1)
 			}
-			// fmt.Println("validation sign ", hashvalue, " ", hex.EncodeToString(h.Sum(nil)), fhlistarray[i])
-			if hex.EncodeToString(h.Sum(nil)) != fhlistarray[i] {
+
+			// fmt.Println("validation sign ", hashvalue, " ", hex.EncodeToString(h.Sum(nil)), l.fileHashHexListArray[i])
+			if hex.EncodeToString(h.Sum(nil)) != l.fileHashHexListArray[i] {
 				fmt.Println("File Failed file signature validation ", hashvalue)
 				os.Exit(1)
 			}
