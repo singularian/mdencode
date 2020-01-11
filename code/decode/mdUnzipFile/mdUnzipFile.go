@@ -52,6 +52,7 @@ type FileData struct {
 	// ax:sha1:sha256
 	fileHashListString  string
 	blockHashListString string
+	keyListString string
 	// argument hash list bit arrays
 	// 01010101010101010
 	// not currently used
@@ -214,9 +215,15 @@ func (l *FileData) DecodeFile() int {
         hashlist := strings.Split(hlist, "-")
         filelist := hashlist[0]
         blocklist := hashlist[1]
-	l.fileHashListString  = filelist
-	l.blockHashListString = blocklist
-        fmt.Println("hashlist ", filelist, blocklist)
+	l.fileHashListString  = hashlist[0]
+	l.blockHashListString = hashlist[1]
+	if len(hashlist) > 2 {
+		l.keyListString = hashlist[2]
+	}
+
+	// l.fileHashListString  = filelist
+	// l.blockHashListString = blocklist
+        fmt.Println("hashlist ", filelist, blocklist, l.keyListString)
 
 	// check if the block list is specified
 	// exit if it is not specified
@@ -401,7 +408,7 @@ func (l *FileData) PostValidate() {
 		// this should use os.Open instead of os.Create which seems to change the first signature
 		f, err := os.Open(l.outputFile)
 		if err != nil {
-			fmt.Println("counldn't open output file ", err)
+			fmt.Println("Counldn't open output file ", err)
 			os.Exit(1)
 		}
 		defer f.Close()

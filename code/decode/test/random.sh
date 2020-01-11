@@ -2,7 +2,11 @@
 
 # this is a test file to test the mdzip and mdlist and mdunzip programs
 
+# random n byte file
 RANDOM_FILE="randomfile"
+# output mdzip file
+RANDOM_FILE_MDZ="randomfile.mdz"
+
 # FILE_SIZE="26"
 # BLOCK_SIZE="13"
 # MODBITS="64"
@@ -42,10 +46,12 @@ echo "Zipping the file $RANDOM_FILE"
 # the first file signature is not working correctly
 # ./../mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -fh=0000000111 -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz 
 ## ./../mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -fh=0000000111111 -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz 
-./../mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -fh=11 -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz 
+
+##### ./../mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -fh=11 -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz 
+
 # Invalid keylist
 # ./mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz -keylist=hw256:4334FFF,
-# ./mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz -keylist=hw256:4334FFF,hw64:787733777333777333773FF,
+./../mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz -keylist=hw256:4334FFF,hw64:787733777333777333773FF,
 #  ./mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz -keylist=hw256:24334FFF,
 
 echo ""

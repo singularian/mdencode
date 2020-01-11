@@ -143,7 +143,7 @@ func (fd *FlagData) mdzip() {
 	//fd.md.SetKeyFile(fd.key)
 	fd.md.SetHWKeyFile(fd.hwkey)
 	fd.md.SetKeyList(fd.keylist)
-	// fmt.Println("keylist ", fd.keylist)
+	fmt.Println("keylist ", fd.keylist)
 
 	////////////////////fd.md.SetLogFile(fd.logfilename)
 	fd.md.SetOutputFile(fd.outputfilename)
@@ -243,8 +243,6 @@ func printUsage() {
 	fmt.Printf("Version:    %s 復甦 復活\n", Version)
 }
 
-// https://jsonlint.com/
-// probably don't need this
 // get the current working directory for the mdencode
 func (fd *FlagData) getCWD() string {
 	cwddir, err := filepath.Abs(filepath.Dir(os.Args[0]))
