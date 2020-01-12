@@ -78,7 +78,7 @@ func md() int {
 	fd := new(FlagData)
 	flag.StringVar(&fd.blocksize, "block", "40", "File Block Size Bytes")
 	flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
-	flag.IntVar(&fd.defaultFormat, "format", 1000, "Output Format")
+	// flag.IntVar(&fd.defaultFormat, "format", 1000, "Output Format")
 	flag.StringVar(&fd.fhashlist, "fh", "01001", "File Hash Bit String List")
 	flag.StringVar(&fd.bhashlist, "bh", "01001", "Block Hash Bit String List")
 	flag.StringVar(&fd.uhashlist, "uh", "", "Quaternian Hash String List")
@@ -99,11 +99,13 @@ func md() int {
 	flag.StringVar(&fd.filename, "file", "", "Input Filename")
 	// flag.StringVar(&fd.directory, "dir", "", "Input Directory")
 	flag.StringVar(&fd.outputfilename, "out", "", "Output Filename")
-	flag.StringVar(&fd.outputfilename, "output", "", "Output Filename")
+	// flag.StringVar(&fd.outputfilename, "output", "", "Output Filename")
 	flag.StringVar(&fd.logfilename, "log", "", "Log Filename")
 
 	//fmt.Println("block ", fd.bhashlist)
 	//os.Exit(1)
+
+	// fmt.Println("keylist ", fd.keylist, " out ", fd.outputfilename, fd)
 
 	flag.Usage = printUsage
 
@@ -143,7 +145,8 @@ func (fd *FlagData) mdzip() {
 	//fd.md.SetKeyFile(fd.key)
 	fd.md.SetHWKeyFile(fd.hwkey)
 	fd.md.SetKeyList(fd.keylist)
-	fmt.Println("keylist ", fd.keylist)
+	// fmt.Println("keylist ", fd.keylist, " out ", fd.fhashlist, fd.outputfilename)
+	//// fmt.Println("keylist ", fd.keylist)
 
 	////////////////////fd.md.SetLogFile(fd.logfilename)
 	fd.md.SetOutputFile(fd.outputfilename)

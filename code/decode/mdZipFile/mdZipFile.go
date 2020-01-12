@@ -276,9 +276,11 @@ func (l *FileData) mdencodeFile(fileName string) {
 		if _, err := io.Copy(h, f); err != nil {
 			fmt.Println(err)
 		}
+		fmt.Println("File Signature ", hashvalue, hex.EncodeToString(h.Sum(nil)))
 		l.mdfmt.EncodeFileHash(l.mdFormat, hashvalue, hex.EncodeToString(h.Sum(nil)))
 	}
 
+	fmt.Println("")
 }
 
 // mdencodeFileHashLine

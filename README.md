@@ -328,7 +328,7 @@ TODO: Change the mod exponent size in the output block from int32 to int16.
 
 # Video Example 
 
-[Youtube MDZip Example](https://youtu.be/YG7r5qyw2MY)
+[MDZip Example](https://asciinema.org/a/293112)
 
 # Collision Handling
 

@@ -476,5 +476,5 @@ func (hc *HashContextList) SetHashListKey(keylist string) {
 		}
 	}
 
-	fmt.Println("map:", hc.keylist)
+//	fmt.Println("map:", hc.keylist)
 }
