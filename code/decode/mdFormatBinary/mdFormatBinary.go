@@ -99,7 +99,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 	// set filename length
 	var length int = len(fileName)
 	fileAttribute[3] = int64(length)
-	fmt.Println("filename length ", length, " ", fileAttribute[3])
+	// fmt.Println("filename length ", length, " ", fileAttribute[3])
 
 	// set the filepath uint64 size
 	// filepath length

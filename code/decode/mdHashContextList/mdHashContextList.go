@@ -137,8 +137,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 	// set the blake2s key
 	// this has a length limit I think of greater than 16
 	var blakekey = []byte(hc.key)
-	blackkeysize := len(blakekey)
-	if ((blackkeysize > 16) || (blackkeysize < 1)) {
+	blakeKeysize := len(blakekey)
+	if ((blakeKeysize > 16) || (blakeKeysize < 1)) {
 		blakekey = defaultkey
 	}
 
@@ -152,7 +152,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 	}
 	hwkey, err := hex.DecodeString(hc.hwkey)
 	if err != nil {
-		 fmt.Println("Highway Key error: %v", err, blakekey)
+		 fmt.Println("Highway Key error: %v", err, hwkey)
 		 os.Exit(1)
 	}
 	// fmt.Println("hwkey ", hc.hwkey)
@@ -216,10 +216,19 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 			case "hmac512":
 				hb["hmac512"] = hmac.New(sha512.New, key)
 			case "hw64":
+				var key = hc.keylist["hw64"]
+				fmt.Println("Key hw64", key)
+				hwkey, err := hex.DecodeString(key)
+				if err != nil {
+					fmt.Println("Highway Key error: %v", err, hwkey)
+					os.Exit(1)
+				}
+				// hb["hw64"], _  = highwayhash.New64(hwkey[:])
 				hb["hw64"], _  = highwayhash.New64(hwkey[:])
 			case "hw128":
 				hb["hw128"], _ = highwayhash.New128(hwkey[:])
 			case "hw256":
+				// var key = hc.keylist["hw256"]
 				hb["hw256"], _ = highwayhash.New(hwkey[:])
 			case "kekkak":
 				hb["kekkak"] = keccak.New256()
@@ -450,31 +459,66 @@ func (hc *HashContextList) SetHighwayKey(key string) {
 // Set the Hash List Key
 func (hc *HashContextList) SetHashListKey(keylist string) {
 
+	// fmt.Println("Setting Hashlistkey ", keylist)
+
 	// var m map[string]string
 	hc.keylist = make(map[string]string)
 
+	keylist = keylist + ","
 	s := strings.Split(keylist, ",")
+
+	var defaultkey   = "LomaLindaSanSerento9000"
+	var defaulthwkey = "000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f"
+
+	hc.keylist["aes8"]        = "99123312"
+	// hc.keylist["blake"]       = defaultkey
+	hc.keylist["blake2s_128"] = defaultkey
+	hc.keylist["blake2s_256"] = defaultkey
+	hc.keylist["hw64"]        = defaulthwkey 
+	hc.keylist["hw128"]       = defaulthwkey 
+	hc.keylist["hw256"]       = defaulthwkey
+	hc.keylist["murmur3"]     = "1120322"
+	hc.keylist["siphash"]     = "1120322"
 
 	// for index, val := range s {
 	for _, val := range s {
 		res := strings.Split(val, ":")
 		if len(res) == 2 {
-			var sig    = res[0]
-			var sigkey = res[1]
+			var sig        = res[0]
+			var sigkey     = res[1]
+			var sigkeysize = len(res[1])
 			switch sig {
+				case "aes8":
+					hc.keylist[sig] = sigkey
                                 case "ax1":
                                         hc.keylist[sig] = sigkey
                                 case "ax2":
                                         hc.keylist[sig] = sigkey
+				//case "blake2":
+				//	hc.keylist[sig] = sigkey
+				case "blake2s_128":
+					hc.keylist[sig] = sigkey
+				case "blake2s_256":
+				//	if sigkeysize == 64 {
+					hc.keylist[sig] = sigkey
+				//	}
                                 case "hw64":
+					if sigkeysize == 64 {
                                         hc.keylist[sig] = sigkey
+					}
                                 case "hw128":
                                         hc.keylist[sig] = sigkey
                                 case "hw256":
                                         hc.keylist[sig] = sigkey
+				case "murmur3":
+					hc.keylist[sig] = sigkey
+				case "siphash":
+					if sigkeysize > 15 {
+						hc.keylist[sig] = sigkey
+					}
 			}
 		}
 	}
 
-//	fmt.Println("map:", hc.keylist)
+	fmt.Println("keylist map:", hc.keylist)
 }

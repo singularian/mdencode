@@ -235,6 +235,10 @@ func (l *FileData) DecodeFile() int {
 	// initialize the mdBlockSize object
 	l.mdc = mdHashContextList.Init()
 
+	// set the keylist
+	// fmt.Println("Setting keylist ", l.keyListString)
+	l.mdc.SetHashListKey(l.keyListString)
+
 	// calculate and return the file signature list byte block size
 	_, filelistarr := l.mdc.CalcHashBlockSize(filelist, 0)
 
@@ -277,6 +281,7 @@ func (l *FileData) DecodeFile() int {
 	for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
 		_, _ = hcListArr[threadNum].CalcHashBlockSize(filelist, 0) 
 		_, _ = hcListArr[threadNum].CalcHashBlockSize(blocklist, 1) 
+		hcListArr[threadNum].SetHashListKey(l.keyListString)
 		hcListArr[threadNum].CreateHashListMap(blocklist, 1, 1)
 		// fmt.Println("testing context list ", hcListArr[threadNum].GetBlockHash())
 	}

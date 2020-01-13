@@ -92,4 +92,13 @@ func printUsage() {
 
 	fmt.Println()
 
+        fmt.Println("Examples:")
+        fmt.Println("mdzip -mod=64 -block=12 -file=randomfile -out=randomfile.mdz -bh=000000000001001 -fh=111")
+        fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=0000000000000000001 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E")
+
+	fmt.Println("mdunzip -file=randomfile.mdz -out=randomfile.mdz.out")
+	fmt.Println("mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -val")
+
+	fmt.Println()
+
 }

@@ -39,6 +39,8 @@ type FlagData struct {
         key string
 	hwkey string
 	keylist string
+	// randomize the signature keys
+	randKey bool
 	// boolean arguments
         // appendfile bool
         // random hashlist booleans
@@ -143,7 +145,7 @@ func (fd *FlagData) mdzip() {
 	// Set the mdzip parameters
 	/////// fd.md.SetByteBlock(false)
 	//fd.md.SetKeyFile(fd.key)
-	fd.md.SetHWKeyFile(fd.hwkey)
+	// fd.md.SetHWKeyFile(fd.hwkey)
 	fd.md.SetKeyList(fd.keylist)
 	// fmt.Println("keylist ", fd.keylist, " out ", fd.fhashlist, fd.outputfilename)
 	//// fmt.Println("keylist ", fd.keylist)
@@ -234,13 +236,17 @@ func printUsage() {
         Output Format (default 10)
   -out string
         Output Filename
-  -hwkey string
-        High Way Hash Signature Key (32 Bytes)    
+  -keylist string
+        Signature Hash Keylist  
   -log string
         Log Filename
     `)
 
 	fmt.Println()
+
+	fmt.Println("Examples:")
+	fmt.Println("mdzip -mod=64 -block=12 -file=randomfile -out=randomfile.mdz -bh=000000000001001 -fh=111")
+	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=0000000000000000001 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E")
 
 	fmt.Printf("\n\nBuild Time: %s\n", BuildTime)
 	fmt.Printf("Version:    %s 復甦 復活\n", Version)

@@ -562,7 +562,7 @@ func (l *FileData) SetKeyList(keylist string) bool {
 	// re1 := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+)+$")
 	// re2 := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+[,])+$")
 	// re := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+)?([A-Za-z0-9]+[:][[:xdigit:]]+[,])*$")
-	re := regexp.MustCompile("^([A-Za-z0-9]+[:][[:xdigit:]]+[,])*([A-Za-z0-9]+[:][[:xdigit:]]+)?$")
+	re := regexp.MustCompile("^([A-Za-z0-9_]+[:][[:xdigit:]]+[,])*([A-Za-z0-9_]+[:][[:xdigit:]]+)?$")
         matched := re.MatchString(keylist)
         // matched2 := re2.MatchString(keylist)
 

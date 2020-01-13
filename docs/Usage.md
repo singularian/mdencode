@@ -169,16 +169,23 @@ USAGE of ./mdzip:
         Output Format (default 10)                                                                  
   -out string                                                                                       
         Output Filename                                                                             
+  -keylist string
+        Signature Hash Keylist
   -log string                                                                                       
-        Log Filename                                                                                
-                                                                                                    
-                                                                                                    
+        Log Filename  
+
+
+Examples:  
+mdzip -mod=64 -block=12 -file=randomfile -out=randomfile.mdz -bh=000000000001001 -fh=111  
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=0000000000000000001 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E  
+  
 Build Time: 2018-06-16-0431 UTC                                                                     
 Version:    1.0.0 復甦 復活                                                                             
 ```                                                                                                 
                                                                                                     
 ```                                                                                                 
 user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzip                   
+USAGE of mdunzip:
                                                                                                     
   -file string                                                                                      
         Input Filename                                                                              
@@ -188,6 +195,12 @@ user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzi
         Go Routine Threadsize   
   -val bool
         Run the File Hash List Post Validation
+
+Examples:
+mdzip -mod=64 -block=12 -file=randomfile -out=randomfile.mdz -bh=000000000001001 -fh=111
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=0000000000000000001 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E
+mdunzip -file=randomfile.mdz -out=randomfile.mdz.out
+mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -val
 ```                                                                                                 
                                                                                                     
 mdlist can display the contents of an mdzip file                                                    
