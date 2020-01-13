@@ -146,6 +146,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 	// highway hash key
 	// key, err := hex.DecodeString("000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f")
 	// hwkey, _ := hex.DecodeString("000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f")
+	// hwbkey := make([]byte, 32)
 	var defhwkey = "000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f"
 	if hc.hwkey == "" {
 		hc.hwkey = defhwkey
@@ -457,7 +458,8 @@ func (hc *HashContextList) SetHighwayKey(key string) {
 }
 
 // Set the Hash List Key
-func (hc *HashContextList) SetHashListKey(keylist string) {
+// shour return a string
+func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 
 	// fmt.Println("Setting Hashlistkey ", keylist)
 
@@ -480,6 +482,9 @@ func (hc *HashContextList) SetHashListKey(keylist string) {
 	hc.keylist["murmur3"]     = "1120322"
 	hc.keylist["siphash"]     = "1120322"
 
+
+	var result string
+
 	// for index, val := range s {
 	for _, val := range s {
 		res := strings.Split(val, ":")
@@ -490,35 +495,62 @@ func (hc *HashContextList) SetHashListKey(keylist string) {
 			switch sig {
 				case "aes8":
 					hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
                                 case "ax1":
                                         hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
                                 case "ax2":
                                         hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				//case "blake2":
 				//	hc.keylist[sig] = sigkey
 				case "blake2s_128":
 					hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				case "blake2s_256":
 				//	if sigkeysize == 64 {
 					hc.keylist[sig] = sigkey
 				//	}
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
                                 case "hw64":
 					if sigkeysize == 64 {
-                                        hc.keylist[sig] = sigkey
+						hc.keylist[sig] = sigkey
+					} else if sigkeysize > 1 && sigkeysize < 64 {
+						hc.keylist[sig] = fmt.Sprintf("%064s", sigkey) 
 					}
+					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
                                 case "hw128":
+					if sigkeysize == 64 {
                                         hc.keylist[sig] = sigkey
+					} else if sigkeysize > 1 && sigkeysize < 64 {
+						hc.keylist[sig] = fmt.Sprintf("%064s", sigkey)
+					}
+					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
                                 case "hw256":
+					if sigkeysize == 64 {
                                         hc.keylist[sig] = sigkey
+					} else if sigkeysize > 1 && sigkeysize < 64 {
+						hc.keylist[sig] = fmt.Sprintf("%064s", sigkey)
+					}
+					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
 				case "murmur3":
 					hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				case "siphash":
 					if sigkeysize > 15 {
 						hc.keylist[sig] = sigkey
 					}
+					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
 			}
 		}
 	}
 
+	// for k, v := range hc.keylist {
+	// 	result += fmt.Sprintf("%s:%s,", k, v)
+	// }
+
 	fmt.Println("keylist map:", hc.keylist)
+	fmt.Println("keylist result map:", result)
+
+	return result
 }

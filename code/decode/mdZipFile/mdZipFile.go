@@ -435,7 +435,7 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 	// this is for blake2s and siphash
 	// mdc.SetKeyFile(l.key)
 	mdc.SetHighwayKey(l.hwkey)
-	mdc.SetHashListKey(l.keylist)
+	l.keylist = mdc.SetHashListKey(l.keylist)
 	// ==================================================
 
  	x := strings.Join(hlistarray, "")

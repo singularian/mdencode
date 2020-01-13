@@ -248,6 +248,24 @@ func printUsage() {
 	fmt.Println("mdzip -mod=64 -block=12 -file=randomfile -out=randomfile.mdz -bh=000000000001001 -fh=111")
 	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=0000000000000000001 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E")
 
+	fmt.Println("")
+	fmt.Println("Signature Keys Format:")
+	fmt.Println("A signature Key parameter \"-keylist\" is delineatead with a keyname colon hexvalue comma")
+	fmt.Println("keyname:hexvalue")
+	fmt.Println("keyname:hexvalue,key2:hexvalue")
+	fmt.Println("keyname:hexvalue,key2:hexvalue")
+	fmt.Println("keyname:hexvalue,key2:hexvalue,key3:keyvalue,...")
+	fmt.Println("")
+	fmt.Println("Keylist:")
+	fmt.Println("hw64  - 1 to 64 hex characters")
+	fmt.Println("hw128 - 1 to 64 hex characters")
+	fmt.Println("hw256 - 1 to 64 hex characters")
+
+	fmt.Println("")
+	fmt.Println("Keylist Examples:")
+	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=0000000000000000001 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E")
+	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000111 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E,hw128:000FFFFFFF,hw256:0011")
+
 	fmt.Printf("\n\nBuild Time: %s\n", BuildTime)
 	fmt.Printf("Version:    %s 復甦 復活\n", Version)
 }
