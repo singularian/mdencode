@@ -48,10 +48,9 @@ Usage of md:
   -log string                                                                                                                                    
         Log Filename                                                                                                                             
   -initdb string                                                                                                                                 
-        Create SQLite3 Empty DB File                                                                                                             
-  -key string                                                                                                                                    
-        Signature Key (Minimum 16 bytes for siphash) (default "LomaLindaSanSerento9000")                                                         
-                                                                                                                                                 
+        Create SQLite3 Empty DB File
+  -key string  
+        Signature Hash Keylist
 Version: 1.0 復甦 復活                                                                                                                               
                                                                                                                                                  
 Formats:                                                                                                                                         
@@ -84,6 +83,7 @@ md -file=Makefile -block=100 -mod=128 -fh=1011111 -bh=100111  -format=5000 -appe
 md -file=Makefile -block=350 -mod=32 -fh=101011 -br
 md -file=Makefile -block=300 -mod=32 -fr -br
 md -uh=1122 -block=100 -mod=64 -file=Makefile
+md -file=Makefile -block=400 -mod=33 -fh=111 -bh=0000000000000000001 -format=4300 -keylist=hw64:FFFFFCC
 ```
 
 
@@ -178,6 +178,24 @@ USAGE of ./mdzip:
 Examples:  
 mdzip -mod=64 -block=12 -file=randomfile -out=randomfile.mdz -bh=000000000001001 -fh=111  
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=0000000000000000001 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E  
+
+Signature Keys Format:
+A signature Key parameter "-keylist" is delineatead with a keyname colon hexvalue comma
+
+  -keylist=keyname:hexvalue  
+  -keylist=keyname:hexvalue,key2:hexvalue  
+  -keylist=keyname:hexvalue,key2:hexvalue  
+  -keylist=keyname:hexvalue,key2:hexvalue,key3:keyvalue,...  
+
+Keylist:
+hw64  - 1 to 64 hex characters
+hw128 - 1 to 64 hex characters
+hw256 - 1 to 64 hex characters
+
+Keylist Examples:
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=0000000000000000001 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E 
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000111 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E,hw128:000FFFFFFF,hw256:0011  
+
   
 Build Time: 2018-06-16-0431 UTC                                                                     
 Version:    1.0.0 復甦 復活                                                                             

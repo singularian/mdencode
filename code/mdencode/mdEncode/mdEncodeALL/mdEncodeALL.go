@@ -70,6 +70,7 @@ type FileData struct {
 	filehashline bool
 	// key string
 	key string
+	keylist string
 	// logfile
 	logfile string
 	// argument hash list bits
@@ -469,8 +470,9 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
         mdc := l.hclist
 
 	// set the key
-	mdc.SetKeyFile(l.key)
+	// mdc.SetKeyFile(l.key)
 	// mdc.SetHighwayKey(l.hwkey)
+	mdc.SetHashListKey(l.keylist)
 
         x := strings.Join(hlistarray, "")
         // list  := mdc.MdBlockSize.CreateHashBlockList(hlistarray)
@@ -669,6 +671,28 @@ func (l *FileData) SetFileHashLine(filehashline bool) {
 // some of the signatures use a key
 func (l *FileData) SetKeyFile(key string) {
 	l.key = key
+}
+
+// SetKeyList                                                                                              
+// Set the Signature List                                                                                  
+// keylist=aeshash:083948304830948302332,ax1:0284923402934,ax2:03809903                                    
+// ax:blake2s_128-aes8:ax                                                                                  
+// ax:blake2s_128-aes8:ax-key                                                                              
+// ax:blake2s_128-aes8:ax-key-bg                                                                           
+func (l *FileData) SetKeyList(keylist string) bool {
+
+	re := regexp.MustCompile("^([A-Za-z0-9_]+[:][[:xdigit:]]+[,])*([A-Za-z0-9_]+[:][[:xdigit:]]+)?$")  
+	matched := re.MatchString(keylist)
+
+	if matched {
+		l.keylist = keylist
+	} else if !matched {
+		if keylist != "" {
+			fmt.Println("Invalid Keylist ", keylist)
+			os.Exit(1)
+		}
+	}
+	return true
 }
 
 // SetLogFile

@@ -218,7 +218,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["hmac512"] = hmac.New(sha512.New, key)
 			case "hw64":
 				var key = hc.keylist["hw64"]
-				fmt.Println("Key hw64", key)
+				// fmt.Println("Key hw64", key)
 				hwkey, err := hex.DecodeString(key)
 				if err != nil {
 					fmt.Println("Highway Key error: %v", err, hwkey)

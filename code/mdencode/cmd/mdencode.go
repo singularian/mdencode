@@ -37,6 +37,7 @@ type FlagData struct {
         bhashlist string
         uhashlist string
         key string
+	keylist string
         appendfile bool
         byteblock bool
         byteblockint bool
@@ -97,7 +98,8 @@ func md() int {
 	// flag.BoolVar(&fd.randomblockhash, "bhr", false, "Generate A Random Block Hash Boolean String List")
 	// flag.BoolVar(&fd.randomfileblockhash, "fbhr", false, "Generate A Random File and Block Hash Boolean String List")
 
-	flag.StringVar(&fd.key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
+	// flag.StringVar(&fd.key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
+	flag.StringVar(&fd.keylist, "keylist", "", "Signature Key List")
 	flag.StringVar(&fd.filename, "file", "", "Input Filename")
 	flag.StringVar(&fd.directory, "dir", "", "Input Directory")
 	flag.BoolVar(&fd.appendfile, "append", false, "Append To Output File")
@@ -151,6 +153,7 @@ func (fd *FlagData) Encode() {
         fd.md.SetAppendFile(fd.appendfile)
         fd.md.SetFileHashLine(fd.filehashline)
         fd.md.SetKeyFile(fd.key)
+	fd.md.SetKeyList(fd.keylist)
         fd.md.SetLogFile(fd.logfilename)
         fd.md.SetOutputFile(fd.outputfilename)
         // set the default format
@@ -311,8 +314,8 @@ func printUsage() {
         Log Filename
   -initdb string
         Create SQLite3 Empty DB File
-  -key string
-        Signature Key (Minimum 16 bytes for siphash) (default "LomaLindaSanSerento9000")
+  -keylist string
+        Signature Hash Keylist
     `)
 
 	fmt.Println()
