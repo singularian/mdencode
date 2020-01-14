@@ -307,7 +307,7 @@ Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 1 
 This is an example of a parallel modulus scan with 16 threads.
 [Decoder Parallel Examples](https://github.com/singularian/mdencode/blob/master/examples/mdencodeParallelmodscan2.txt)
 
-# mdzip and mdunzip
+# MDzip and MDunzip
 
 mdzip is the golang command line utility can compress a file into a md binary byte block files. 
 mdzip takes an optional input key for the 32 byte Highway Hash 64 and Highway Hash 128 and Highway Hash 256. It can also take input keylist parameters for other signature keys.
@@ -318,12 +318,15 @@ mdunzip has a context hash list for each decode thread. mdzip can use multiple b
 
 Proccessing power limits the size of the input block.  
 
+
+# MDZip Examples
+
 mdzip -file=decoderRandom.go -block=40 fh=11111 bh=01001 -mod=64 -out=decoderRandom.go.mdz  
 mdzip -file=decoderRandom.go -block=41 fh=101111111 bh=0101 -mod=64 -out=decoderRandom.go.mdz  
 mdzip -file=decoderRandom.go -block=41 uh=3333 -mod=64 -out=decoderRandom.go.mdz  
-mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000001 -fh=111110000000011111 -keylist=hw64:FFFF11111201111111111
-mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000001 -fh=111110000000011111 -keylist=hw128:FFFF11111201111111111
-mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000001 -fh=111110000000011111 -keylist=hw256:FFFF11111100DA111CCFF111
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000001 -fh=111110000000011111 -keylist=hw64:FFFF11111201111111111  
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000001 -fh=111110000000011111 -keylist=hw128:FFFF11111201111111111  
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000001 -fh=111110000000011111 -keylist=hw256:FFFF11111100DA111CCFF111  
 
 mdunzip -file=decoderRandom.go.mdz -out=decoderRandom.go.mdz.uncompressed -thread=16
 
