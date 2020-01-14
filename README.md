@@ -321,6 +321,9 @@ Proccessing power limits the size of the input block.
 
 # MDZip Examples
 
+These are mdzip and mdunzip command line examples. They also illustrate setting the Highway Hash 32 byte signature key. MDunzip will use the specified Highway Hash Key.
+
+```bash
 mdzip -file=decoderRandom.go -block=40 fh=11111 bh=01001 -mod=64 -out=decoderRandom.go.mdz  
 mdzip -file=decoderRandom.go -block=41 fh=101111111 bh=0101 -mod=64 -out=decoderRandom.go.mdz  
 mdzip -file=decoderRandom.go -block=41 uh=3333 -mod=64 -out=decoderRandom.go.mdz  
@@ -329,6 +332,7 @@ mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000001 -fh=111110000000011111 -keylist=hw256:FFFF11111100DA111CCFF111  
 
 mdunzip -file=decoderRandom.go.mdz -out=decoderRandom.go.mdz.uncompressed -thread=16
+```
 
 TODO: Change the mod exponent size in the output block from int32 to int16.  
 
