@@ -307,7 +307,7 @@ Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 1 
 This is an example of a parallel modulus scan with 16 threads.
 [Decoder Parallel Examples](https://github.com/singularian/mdencode/blob/master/examples/mdencodeParallelmodscan2.txt)
 
-# MDzip and MDunzip
+# MDzip and MDunzip Overview
 
 mdzip is the golang command line utility can compress a file into a md binary byte block files. 
 mdzip takes an optional input key for the 32 byte Highway Hash 64 and Highway Hash 128 and Highway Hash 256. It can also take input keylist parameters for other signature keys.
@@ -318,10 +318,24 @@ mdunzip has a context hash list for each decode thread. mdzip can use multiple b
 
 Proccessing power limits the size of the input block.  
 
+**MDZip Features**
+- User Specified Modulus Size
+- User Specified Block Size
+- File Hash Signatures
+- Block Hash Signatures
+- Optional Signature Keys 
+- 32 Byte Highway Hash Signature Keys which change the signature
+
+**MDUnzip Features
+- Multithreaded Parallel Modulus Scan
+- Decrypts an MDZip file to an output file 
+- File Signature Post Validation
+- Uses the MDZip Signature Keys to change the output file signature Modulus Scan
+
 
 # MDZip Examples
 
-These are mdzip and mdunzip command line examples. They also illustrate setting the Highway Hash 32 byte signature key. MDunzip will use the specified Highway Hash Key.
+These are mdzip and mdunzip command line examples. They also illustrate setting the Highway Hash 32 byte signature key. MDunzip will use the specified Highway Hash Key.  
 
 ```bash
 mdzip -file=decoderRandom.go -block=40 fh=11111 bh=01001 -mod=64 -out=decoderRandom.go.mdz  
@@ -335,6 +349,8 @@ mdunzip -file=decoderRandom.go.mdz -out=decoderRandom.go.mdz.uncompressed -threa
 ```
 
 TODO: Change the mod exponent size in the output block from int32 to int16.  
+
+# MDZip Usage
 
 - [Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
 
