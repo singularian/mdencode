@@ -227,9 +227,20 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				// hb["hw64"], _  = highwayhash.New64(hwkey[:])
 				hb["hw64"], _  = highwayhash.New64(hwkey[:])
 			case "hw128":
+				var key = hc.keylist["hw128"]
+				hwkey, err := hex.DecodeString(key)
+				if err != nil {
+					fmt.Println("Highway Key error: %v", err, hwkey)
+					os.Exit(1)
+                                }
 				hb["hw128"], _ = highwayhash.New128(hwkey[:])
 			case "hw256":
-				// var key = hc.keylist["hw256"]
+				var key = hc.keylist["hw256"]
+				hwkey, err := hex.DecodeString(key)
+				if err != nil {
+					fmt.Println("Highway Key error: %v", err, hwkey)
+					os.Exit(1)
+				}
 				hb["hw256"], _ = highwayhash.New(hwkey[:])
 			case "kekkak":
 				hb["kekkak"] = keccak.New256()
@@ -549,8 +560,8 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	// 	result += fmt.Sprintf("%s:%s,", k, v)
 	// }
 
-	fmt.Println("keylist map:", hc.keylist)
-	fmt.Println("keylist result map:", result)
+	// fmt.Println("keylist map:", hc.keylist)
+	// fmt.Println("keylist result map:", result)
 
 	return result
 }

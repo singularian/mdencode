@@ -350,6 +350,8 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 
 	var hlistarray []string
 
+	fmt.Println("Block Hash List ", l.blockHashListNames)
+
 	// iterate through the file blocks and generate the hash signature list
 	// append them to the hlistarray
 	for {
