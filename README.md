@@ -326,7 +326,7 @@ Proccessing power limits the size of the input block.
 - Optional Signature Keys 
 - 32 Byte Highway Hash Signature Keys which change the signature
 
-**MDUnzip Features
+**MDUnzip Features**
 - Multithreaded Parallel Modulus Scan
 - Decrypts an MDZip file to an output file 
 - File Signature Post Validation
