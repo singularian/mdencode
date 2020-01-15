@@ -358,8 +358,9 @@ TODO: Change the mod exponent size in the output block from int32 to int16.
 
 These are some Ascii Art Video Examples 
 
-[MDZip Example](https://asciinema.org/a/293112)  
 [MDZip Example](https://asciinema.org/a/293119)
+[MDZip Example](https://asciinema.org/a/293112)
+[MDZip Highway Hash Key Example](https://asciinema.org/a/293740)
 
 # Collision Handling
 

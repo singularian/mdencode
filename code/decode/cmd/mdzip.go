@@ -41,15 +41,6 @@ type FlagData struct {
 	keylist string
 	// randomize the signature keys
 	randKey bool
-	// boolean arguments
-        // appendfile bool
-        // random hashlist booleans
-        randomfilehash bool
-        randomblockhash bool
-        randomfileblockhash bool
-        randomfileblocksize bool
-        randomModSize bool
-        randomEverything bool
 	// current working directory
 	cwd string
 	cwdoutputfile string
@@ -85,18 +76,8 @@ func md() int {
 	flag.StringVar(&fd.bhashlist, "bh", "01001", "Block Hash Bit String List")
 	flag.StringVar(&fd.uhashlist, "uh", "", "Quaternian Hash String List")
 	// flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate A Random File Hash Bit String List")
-	//flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random Block Hash Bit String List")
-	//flag.BoolVar(&fd.randomfileblockhash, "fbr", false, "Generate A Random File and Block Hash Bit String List")
-	//flag.BoolVar(&fd.randomfileblocksize, "blockr", false, "Generate A Random File Block Size")
-	//flag.BoolVar(&fd.randomModSize, "modr", false, "Generate A Random File Modulus Size")
-	// flag.BoolVar(&fd.randomEverything, "all", false, "Randomize Everything")
-
-	// flag.BoolVar(&fd.randomfilehash, "fhr", false, "Generate A Random File Hash Boolean String List")
-	// flag.BoolVar(&fd.randomblockhash, "bhr", false, "Generate A Random Block Hash Boolean String List")
-	// flag.BoolVar(&fd.randomfileblockhash, "fbhr", false, "Generate A Random File and Block Hash Boolean String List")
-
-	// flag.StringVar(&fd.key, "key", "LomaLindaSanSerento9000", "Signature Key (Minimum 16 bytes for siphash)")
-	flag.StringVar(&fd.hwkey, "hwkey", "", "High Way Hash Signature Key (32 bytes)")
+	// flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random Block Hash Bit String List")
+	// flag.StringVar(&fd.hwkey, "hwkey", "", "High Way Hash Signature Key (32 bytes)")
 	flag.StringVar(&fd.keylist, "keylist", "", "Signature Key List")
 	flag.StringVar(&fd.filename, "file", "", "Input Filename")
 	// flag.StringVar(&fd.directory, "dir", "", "Input Directory")
