@@ -189,6 +189,7 @@ A signature Key parameter "-keylist" is delineatead with a keyname colon hexvalu
   -keylist=keyname:hexvalue,key2:hexvalue,key3:keyvalue,...  
 
 Keylist:
+aes8   - uint64 integer 1 to 18 numbers
 hw64   - 1 to 64 hex characters
 hw128  - 1 to 64 hex characters
 hw256  - 1 to 64 hex characters
