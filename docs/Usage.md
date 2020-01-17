@@ -84,6 +84,7 @@ md -file=Makefile -block=350 -mod=32 -fh=101011 -br
 md -file=Makefile -block=300 -mod=32 -fr -br
 md -uh=1122 -block=100 -mod=64 -file=Makefile
 md -file=Makefile -block=400 -mod=33 -fh=111 -bh=0000000000000000001 -format=4300 -keylist=hw64:FFFFFCC
+md -file=randomfile.mdz -block=100 -mod=64 -bh=100000000000000000111 -keylist=aes8:95511,hw64:FF0CC001,hw128:FFCCc00c,hw256:ffcc000 -format=4300
 ```
 
 

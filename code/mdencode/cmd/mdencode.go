@@ -349,6 +349,7 @@ func printUsage() {
 	fmt.Println("md -file=Makefile -block=350 -mod=32 -fh=101011 -br")
 	fmt.Println("md -file=Makefile -block=300 -mod=32 -fr -br")
 	fmt.Println("md -file=Makefile -block=300 -mod=32 -uh=1113")
+	fmt.Println("md -file=randomfile.mdz -block=100 -mod=64 -bh=100000000000000000111 -keylist=aes8:95511,hw64:FF0CC001,hw128:FFCCc00c,hw256:ffcc000 -format=4300")
 
 	fmt.Printf("\n\nBuild Time: %s\n", BuildTime)
 	fmt.Printf("Version:    %s 復甦 復活\n", Version)
