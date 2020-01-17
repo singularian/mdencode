@@ -111,6 +111,9 @@ func md() int {
 	// ie bg=10 or blockgroups are 10 times the block size
 	// this eliminates or is one way to address collsions on a block level
 
+	// add a check for the block size being greater than file size
+	// set the mod exponent to one byte or 4 bytes
+
 	fd.mdzip()
 
 	return 0
@@ -239,14 +242,20 @@ func printUsage() {
 	fmt.Println("  -keylist=keyname:hexvalue,key2:hexvalue,key3:keyvalue,...")
 	fmt.Println("")
 	fmt.Println("Keylist:")
-	fmt.Println("hw64  - 1 to 64 hex characters")
-	fmt.Println("hw128 - 1 to 64 hex characters")
-	fmt.Println("hw256 - 1 to 64 hex characters")
+	fmt.Println("aes8   - uint64 integer 1 to 18 numbers")
+	fmt.Println("hw64   - 1 to 64 hex characters")
+	fmt.Println("hw128  - 1 to 64 hex characters")
+	fmt.Println("hw256  - 1 to 64 hex characters")
+	fmt.Println("sip64  - 1 to 32 hex characters")
+	fmt.Println("sip128 - 1 to 32 hex characters")
 
 	fmt.Println("")
 	fmt.Println("Keylist Examples:")
+	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=1 -fh=110011 -keylist=aes8:12345")
 	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=0000000000000000001 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E")
 	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000111 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E,hw128:000FFFFFFF,hw256:0011")
+	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip64:FFF11CCAA09")
+	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip128:FFF11CCAA09")
 
 	fmt.Printf("\n\nBuild Time: %s\n", BuildTime)
 	fmt.Printf("Version:    %s 復甦 復活\n", Version)

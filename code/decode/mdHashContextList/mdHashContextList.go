@@ -52,6 +52,7 @@ import (
 	"github.com/asadmshah/murmur3"
 	"blainsmith.com/go/seahash"
 	"github.com/cxmcc/tiger"
+	sip "github.com/aead/siphash"
 	"github.com/dchest/siphash"
 	"github.com/jzelinskie/whirlpool"
 	"github.com/steakknife/keccak"
@@ -59,6 +60,7 @@ import (
 	"github.com/singularian/mdhash/xxhash_128"
 	"github.com/singularian/mdhash/poly1305"
 	"github.com/singularian/mdencode/code/decode/mdBinaryList"
+	"github.com/singularian/mdencode/code/decode/sigRand"
 )
 
 // HashContextList object stores the file signature hash context list
@@ -167,7 +169,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 		switch hashlistArr[hashnum] {
 			case "aes8":
 				// seed is a uint64
-				hb["aes8"] = aeshash.NewAES(99123312)
+				var key = hc.keylist["aes8"]
+				hb["aes8"] = aeshash.NewAES(sigRand.ConvertString2Int(key))
 			case "ax":
 				hb["ax"] = xxhash_128.New()
                         case "blake2":
@@ -297,8 +300,28 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["sha3_512"] = sha3.New512()
 			case "shavite":
 				hb["shavite"] = shavite.New()
-			case "siphash":
-				hb["siphash"] = siphash.New128(key)
+			case "sip64":
+				// 16 byte key
+				var key = hc.keylist["sip64"]
+				sipkey, err := hex.DecodeString(key)
+				if err != nil {
+					fmt.Println("Sip Key error: %v", err, sipkey)
+					os.Exit(1)
+				}
+				hb["sip64"], err = sip.New64(sipkey)
+				if err != nil {
+					fmt.Println("Sip Key error: %v", err, sipkey)
+					os.Exit(1)
+				}
+			case "sip128":
+				// 16 byte key
+				var key = hc.keylist["sip128"]
+				sipkey128, err := hex.DecodeString(key)
+                                if err != nil {
+                                        fmt.Println("Highway Key error: %v", err, sipkey128)
+                                        os.Exit(1)
+                                }
+				hb["sip128"] = siphash.New128(sipkey128)
                         case "skein_160":
 				hb["skein_160"] = skein.New(20, nil)
                         // case "skein_224":
@@ -317,7 +340,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 			case "xxhash":
 				// seed uint64
 				hb["xxhash"] =  xxhash.New64()
-                	}
+			}
 		}
 	// }
 
@@ -491,7 +514,8 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	hc.keylist["hw128"]       = defaulthwkey 
 	hc.keylist["hw256"]       = defaulthwkey
 	hc.keylist["murmur3"]     = "1120322"
-	hc.keylist["siphash"]     = "1120322"
+	hc.keylist["sip64"]       = "000102030405060708090a0b0c0d0e0f"
+	hc.keylist["sip128"]      = "000102030405060708090a0b0c0d0e0f"
 
 
 	var result string
@@ -532,7 +556,7 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
                                 case "hw128":
 					if sigkeysize == 64 {
-                                        hc.keylist[sig] = sigkey
+						hc.keylist[sig] = sigkey
 					} else if sigkeysize > 1 && sigkeysize < 64 {
 						hc.keylist[sig] = fmt.Sprintf("%064s", sigkey)
 					}
@@ -547,10 +571,21 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 				case "murmur3":
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)
-				case "siphash":
-					if sigkeysize > 15 {
+				case "sip64":
+					// siphash uses a 16 byte key
+					if sigkeysize == 32 {
 						hc.keylist[sig] = sigkey
+					} else if sigkeysize > 1 && sigkeysize < 32 {
+						hc.keylist[sig] = fmt.Sprintf("%032s", sigkey)
 					}
+					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
+				case "sip128":
+					// siphash uses a 16 byte key 
+					if sigkeysize == 32 {
+						hc.keylist[sig] = sigkey
+					} else if sigkeysize > 1 && sigkeysize < 32 {
+						hc.keylist[sig] = fmt.Sprintf("%032s", sigkey)
+					} 
 					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
 			}
 		}

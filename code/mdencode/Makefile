@@ -46,6 +46,7 @@ getlibs:
 	go get -u github.com/maoxs2/go-ripemd
 	go get -u github.com/steakknife/keccak
 	go get -u github.com/asadmshah/murmur3
+	go get -u github.com/aead/siphash
 	go get -u github.com/dchest/siphash
 	go get -u github.com/aead/skein
 	go get -u github.com/cxmcc/tiger

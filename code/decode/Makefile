@@ -50,6 +50,7 @@ goget:
 	go get -u github.com/mattn/go-sqlite3
 	go get -u github.com/fogleman/gg
 	go get -u github.com/aead/siphash
+	go get -u github.com/dchest/siphash
 	go get -u github.com/codahale/blake2
 	go get -u github.com/enceve/crypto/skein
 	go get -u github.com/mimoo/GoKangarooTwelve/K12

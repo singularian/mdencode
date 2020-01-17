@@ -217,6 +217,14 @@ func (fdata *FileData) MdencodeFile(blockSize string, modSize string, format int
 	size := fi.Size()
 	fdata.fileSize = uint64(size)
 
+	// check if the blockSize is greater than the file size
+	if uint64(size) < fdata.blockSize {
+		// blockSize = size
+		fdata.blockSize = uint64(size)
+		blocksize = size
+		blockSize = strconv.FormatUint(uint64(size), 10)
+	}
+
 	// encode the File Header
 	fdata.mdfmt.EncodeFileHeader(format, fileBaseName, fdata.filePath, size, blocksize, fdata.fileHashListNames, fdata.blockHashListNames, fdata.keylist, bitsize)
 

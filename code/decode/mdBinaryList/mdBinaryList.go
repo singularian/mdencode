@@ -106,7 +106,8 @@ var hlist = []HashList{
 		{ HashName: "sha3_512",    Description: "SHA3 512",		BlockSize: 64,	Key: false },
 		{ HashName: "shavite",     Description: "X11 SHAvite",		BlockSize: 64,	Key: false },
 
-		{ HashName: "siphash",     Description: "Siphash",		BlockSize: 16,	Key: false },
+		{ HashName: "sip64",       Description: "Siphash 64",		BlockSize: 8,	Key: true },
+		{ HashName: "sip128",      Description: "Siphash 128",		BlockSize: 16,	Key: true },
 		{ HashName: "skein_160",   Description: "Skein 160",		BlockSize: 20,	Key: false },
 		{ HashName: "skein_256",   Description: "Skein 256",		BlockSize: 32,	Key: false },
 		{ HashName: "skein_384",   Description: "Skein 384",		BlockSize: 48,	Key: false },

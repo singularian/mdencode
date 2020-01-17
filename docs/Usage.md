@@ -188,14 +188,18 @@ A signature Key parameter "-keylist" is delineatead with a keyname colon hexvalu
   -keylist=keyname:hexvalue,key2:hexvalue,key3:keyvalue,...  
 
 Keylist:
-hw64  - 1 to 64 hex characters
-hw128 - 1 to 64 hex characters
-hw256 - 1 to 64 hex characters
+hw64   - 1 to 64 hex characters
+hw128  - 1 to 64 hex characters
+hw256  - 1 to 64 hex characters
+sip64  - 1 to 32 hex characters
+sip128 - 1 to 32 hex characters
 
 Keylist Examples:
-mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=0000000000000000001 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E 
-mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000111 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E,hw128:000FFFFFFF,hw256:0011  
-
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=1 -fh=110011 -keylist=aes8:12345
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=0000000000000000001 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000111 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E,hw128:000FFFFFFF,hw256:0011
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip64:FFF11CCAA09
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip128:FFF11CCAA09
   
 Build Time: 2018-06-16-0431 UTC                                                                     
 Version:    1.0.0 復甦 復活                                                                             
@@ -235,55 +239,61 @@ Examples:
 user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdsig
 
 Current mdencode signatures                
-                                           
-1:  aes8        - AES Hash 8               
-2:  ax          - XXHash 128               
-3:  blake2      - Blake2                   
-4:  blake2b     - Blake2b                  
-5:  blake2s_128 - Blake2s 128              
-6:  blake2s_256 - Blake2s 256              
-7:  bmw         - BMW                      
-8:  cube        - Cubehash                 
-9:  echo        - Echo                     
-10: fnv         - FNV                      
-11: fnv128      - FNV 128                  
-12: fnv128a     - FNV 128a                 
-13: gost256     - Gost 256                 
-14: gost512     - Gost 512                 
-15: groest      - Groest                   
-16: hmac256     - HMAC 256                 
-17: hmac512     - HMAC 512                 
-18: hw64        - Highway Hash 64          
-19: hw128       - Highway Hash 128         
-20: hw256       - Highway Hash 256         
-21: kekkak      - Kekkak                   
-22: luffa       - Luffa                    
-23: murmur3     - Murmur3                  
-24: md4         - MD4                      
-25: md5         - MD5                      
-26: ripe128     - Ripe 128                 
-27: ripe160     - Ripe 160                 
-28: ripe256     - Ripe 256                 
-29: sea         - Seahash                  
-30: sha1_128    - SHA1 128                 
-31: sha1_1284   - SHA1 1284                
-32: sha1        - SHA1                     
-33: sha224      - SHA224                   
-34: sha256      - SHA256                   
-35: sha512      - SHA512                   
-36: sha512_224  - SHA512 224               
-37: sha512_256  - SHA512 256               
-38: sha3_224    - SHA3 224                 
-39: sha3_256    - SHA3 256                 
-40: sha3_384    - SHA3 384                 
-41: sha3_512    - SHA3 512                 
-42: siphash     - Siphash                  
-43: skein_160   - Skein 160                
-44: skein_256   - Skein 256                
-45: skein_384   - Skein 384                
-46: skein_512   - Skein 512                
-47: skein_1024  - Skein 1024               
-48: tiger       - Tiger                    
-49: whirlpool   - Whirlpool                
-50: xxhash      - XXHash                   
+
+1:  aes8        - AES Hash 8      
+2:  ax          - XXHash 128      
+3:  blake2      - Blake2          
+4:  blake2b     - Blake2b         
+5:  blake2s_128 - Blake2s 128     
+6:  blake2s_256 - Blake2s 256     
+7:  bmw         - BMW             
+8:  cube        - Cubehash        
+9:  echo        - Echo            
+10: fnv         - FNV 64          
+11: fnva        - FNV 64a         
+12: fnv128      - FNV 128         
+13: fnv128a     - FNV 128a        
+14: gost256     - Gost 256        
+15: gost512     - Gost 512        
+16: groest      - Groest          
+17: hmac256     - HMAC 256        
+18: hmac512     - HMAC 512        
+19: hw64        - Highway Hash 64 
+20: hw128       - Highway Hash 128
+21: hw256       - Highway Hash 256
+22: kekkak      - Kekkak          
+23: luffa       - Luffa           
+24: murmur3     - Murmur3         
+25: md2         - MD2             
+26: md4         - MD4             
+27: md5         - MD5             
+28: poly1305    - Poly1305        
+29: ripe128     - Ripe 128        
+30: ripe160     - Ripe 160        
+31: ripe256     - Ripe 256        
+32: ripe320     - Ripe 320        
+33: sea         - Seahash         
+34: sha1_128    - SHA1 128        
+35: sha1_1284   - SHA1 1284       
+36: sha1        - SHA1            
+37: sha224      - SHA224          
+38: sha256      - SHA256          
+39: sha512      - SHA512          
+40: sha512_224  - SHA512 224      
+41: sha512_256  - SHA512 256      
+42: sha3_224    - SHA3 224        
+43: sha3_256    - SHA3 256        
+44: sha3_384    - SHA3 384        
+45: sha3_512    - SHA3 512        
+46: shavite     - X11 SHAvite     
+47: sip64       - Siphash 64      
+48: sip128      - Siphash 128     
+49: skein_160   - Skein 160       
+50: skein_256   - Skein 256       
+51: skein_384   - Skein 384       
+52: skein_512   - Skein 512       
+53: skein_1024  - Skein 1024      
+54: tiger       - Tiger           
+55: whirlpool   - Whirlpool       
+56: xxhash      - XXHash                                                     
 ```
