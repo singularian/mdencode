@@ -189,12 +189,15 @@ A signature Key parameter "-keylist" is delineatead with a keyname colon hexvalu
   -keylist=keyname:hexvalue,key2:hexvalue,key3:keyvalue,...  
 
 Keylist:
-aes8   - uint64 integer 1 to 18 numbers
-hw64   - 1 to 64 hex characters
-hw128  - 1 to 64 hex characters
-hw256  - 1 to 64 hex characters
-sip64  - 1 to 32 hex characters
-sip128 - 1 to 32 hex characters
+aes8        - uint64 integer 1 to 18 numbers
+blake2s_128 - 16+ hex characters
+blake2s_256 - 16+ hex characters
+hw64        - 1 to 64 hex characters
+hw128       - 1 to 64 hex characters
+hw256       - 1 to 64 hex characters
+sip64       - 1 to 32 hex characters
+sip128      - 1 to 32 hex characters
+xxhash      - uint64 integer 1 to 18 numbers
 
 Keylist Examples:
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=1 -fh=110011 -keylist=aes8:12345
@@ -203,6 +206,7 @@ mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip64:FFF11CCAA09
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip128:FFF11CCAA09
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000000000000001 -fh=110011 -keylist=xxhash:112222201
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000011 -fh=110011 -keylist=blake2s_128:123456789012345672222211000,blake2s_256:123456789A12345F
 
 Build Time: 2020-01-18T13:42:02-0500    
 Version:    1.0.0 復甦 復活

@@ -94,7 +94,6 @@ type HashContextList struct {
 	hashBlockSizeList []int
 	// Optional hashContextList keys
 	key string
-	hwkey string
 	keylist map[string]string
 	// error 
 	err error
@@ -119,34 +118,26 @@ func Init() (hc *HashContextList) {
 // create 16 hashlist context objects for each thread once
 func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, threadNumber int) {
 
-
+	// initialize the hash list context map
 	hb := make(map[string]hash.Hash)
 
+	// create the hashlist names array
 	hashlistArr := strings.Split(hashList, ":")
-
-	// key          := "LomaLindaSanSerento9000"
-	var defaultkey = []byte("LomaLindaSanSerento9000")
-	var key        = []byte("LomaLindaSanSerento9000")
-
-	// set the blake2s key
-	// this has a length limit I think of greater than 16
-	var blakekey = []byte(hc.key)
-	blakeKeysize := len(blakekey)
-	if ((blakeKeysize > 16) || (blakeKeysize < 1)) {
-		blakekey = defaultkey
-	}
-
-
 	hashlistsize := len(hashlistArr)
+
+	// set the default key
+	var defkey     = hc.keylist["default"]
+	var defaultkey = []byte(defkey)
 
 	// these hash contexts should be in sorted order
 	// for thread := 0; thread < threadNumber; thread++ {
 		for hashnum := 0; hashnum < hashlistsize; hashnum++ {
-                // fmt.Println("hashlist ", st[i])          
-		switch hashlistArr[hashnum] {
+		var hashname = hashlistArr[hashnum]
+
+		switch hashname {
 			case "aes8":
 				// seed is a uint64
-				var key = hc.keylist["aes8"]
+				var key = hc.keylist[hashname]
 				hb["aes8"] = aeshash.NewAES(sigRand.ConvertString2Int(key))
 			case "ax":
 				hb["ax"] = xxhash_128.New()
@@ -158,12 +149,19 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				// hb["blake2b"] = blake2.NewBlake2B() 
 				hb["blake2b"] = blake2b.New256()
                         case "blake2s_128":
+				var key = hc.keylist[hashname]
+				var blakekey = []byte(key)
+
 				b, err := blake2s.New128(blakekey)
-				hc.CheckKeyError(hashlistArr[hashnum], string(blakekey), err)
+				hc.CheckKeyError(hashname, string(blakekey), err)
 				hb["blake2s_128"] = b
                         case "blake2s_256":
+				// if ((blakeKeysize > 16) || (blakeKeysize < 1)) {
+				var key = hc.keylist[hashname]
+				var blakekey = []byte(key)
+
 				b, err := blake2s.New256(blakekey)
-				hc.CheckKeyError(hashlistArr[hashnum], string(blakekey), err)
+				hc.CheckKeyError(hashname, string(blakekey), err)
                                 hb["blake2s_256"] = b
 			case "bmw":
 				hb["bmw"] = bmw.New()
@@ -186,33 +184,34 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["gost512"] = gost34112012512.New()
 			case "groest":
 				hb["groest"] = groest.New()
+			// these two have a key
 			case "hmac256":
-				hb["hmac256"] = hmac.New(sha256.New, key)
+				hb["hmac256"] = hmac.New(sha256.New, defaultkey)
 			case "hmac512":
-				hb["hmac512"] = hmac.New(sha512.New, key)
+				hb["hmac512"] = hmac.New(sha512.New, defaultkey)
 			case "hw64":
-				var key = hc.keylist["hw64"]
+				var key = hc.keylist[hashname]
 				// fmt.Println("Key hw64", key)
 				hwkey, err := hex.DecodeString(key)
 				// key = "11ZZZ"
 				hc.CheckKeyError(hashlistArr[hashnum], key, err)
 
 				hb["hw64"], hc.err  = highwayhash.New64(hwkey[:])
-				hc.CheckKeyError(hashlistArr[hashnum], key, hc.err)
+				hc.CheckKeyError(hashname, key, hc.err)
 			case "hw128":
-				var key = hc.keylist["hw128"]
+				var key = hc.keylist[hashname]
 				hwkey, err := hex.DecodeString(key)
 				hc.CheckKeyError(hashlistArr[hashnum], key, err)
 
 				hb["hw128"], hc.err = highwayhash.New128(hwkey[:])
-				hc.CheckKeyError(hashlistArr[hashnum], key, hc.err)
+				hc.CheckKeyError(hashname, key, hc.err)
 			case "hw256":
-				var key = hc.keylist["hw256"]
+				var key = hc.keylist[hashname]
 				hwkey, err := hex.DecodeString(key)
 				hc.CheckKeyError(hashlistArr[hashnum], key, err)
 
 				hb["hw256"], hc.err = highwayhash.New(hwkey[:])
-				hc.CheckKeyError(hashlistArr[hashnum], key, hc.err)
+				hc.CheckKeyError(hashname, key, hc.err)
 			case "kekkak":
 				hb["kekkak"] = keccak.New256()
 			case "luffa":
@@ -270,28 +269,28 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["shavite"] = shavite.New()
 			case "sip64":
 				// 16 byte key
-				var key = hc.keylist["sip64"]
+				var key = hc.keylist[hashname]
 				sipkey, err := hex.DecodeString(key)
-				hc.CheckKeyError(hashlistArr[hashnum], key, err)
+				hc.CheckKeyError(hashname, key, err)
 
-				hb["sip64"], hc.err = sip.New64(sipkey)
-				hc.CheckKeyError(hashlistArr[hashnum], key, hc.err)
+				hb[hashname], hc.err = sip.New64(sipkey)
+				hc.CheckKeyError(hashname, key, hc.err)
 			case "sip128":
 				// 16 byte key
-				var key = hc.keylist["sip128"]
+				var key = hc.keylist[hashname]
 				sipkey128, err := hex.DecodeString(key)
-				hc.CheckKeyError(hashlistArr[hashnum], key, err)
+				hc.CheckKeyError(hashname, key, err)
 
-				hb["sip128"] = siphash.New128(sipkey128)
+				hb[hashname] = siphash.New128(sipkey128)
                         case "skein_160":
 				hb["skein_160"] = skein.New(20, nil)
                         // case "skein_224":
                         case "skein_256":
-				hb["skein_256"] = skein.New256(key)
+				hb["skein_256"] = skein.New256(defaultkey)
                         case "skein_384":
 				hb["skein_384"] = skein.New(48, nil)
                         case "skein_512":
-				hb["skein_512"] = skein.New512(key)
+				hb["skein_512"] = skein.New512(defaultkey)
                         case "skein_1024":
 				hb["skein_1024"] = skein.New(128, nil)
                         case "tiger":
@@ -300,9 +299,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["whirlpool"] = whirlpool.New()
 			case "xxhash":
 				// seed uint64
-				// xxhash.NewS64(seed2)
-				var key = hc.keylist["xxhash"]
-				// hb["xxhash"] =  xxhash.New64()
+				// xxhash.NewS64(seed2) // seed key version
+				// xxhash.New64() // non seed key version
+				var key = hc.keylist[hashname]
                                 hb["xxhash"] = xxhash.NewS64(sigRand.ConvertString2Int(key))
 			}
 		}
@@ -444,15 +443,6 @@ func (hc *HashContextList) SetKeyFile(key string) {
 // It assigns the 256 bit key
 func (hc *HashContextList) SetHighwayKey(key string) {
 
-	var defkey = "000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f"
-	// hwkey, _ := hex.DecodeString("000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f")
-	if key != "" {
-		hc.hwkey = key
-	} else {
-		hc.hwkey = defkey
-	}
-
-	// fmt.Println("hwkey set ", hc.hwkey, key)
 }
 
 // Set the Hash List Key
@@ -461,7 +451,6 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 
 	// fmt.Println("Setting Hashlistkey ", keylist)
 
-	// var m map[string]string
 	hc.keylist = make(map[string]string)
 
 	keylist = keylist + ","
@@ -470,8 +459,9 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	var defaultkey   = "LomaLindaSanSerento9000"
 	var defaulthwkey = "000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f"
 
+	hc.keylist["default"]     = defaultkey
 	hc.keylist["aes8"]        = "99123312"
-	// hc.keylist["blake"]       = defaultkey
+	// hc.keylist["blake"]    = defaultkey
 	hc.keylist["blake2s_128"] = defaultkey
 	hc.keylist["blake2s_256"] = defaultkey
 	hc.keylist["hw64"]        = defaulthwkey 
@@ -504,13 +494,18 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 				//case "blake2":
 				//	hc.keylist[sig] = sigkey
 				case "blake2s_128":
-					hc.keylist[sig] = sigkey
-					result += fmt.Sprintf("%s:%s,", sig, sigkey)
+					// fmt.Println("blake2s_128 ", sig, sigkey)
+					// if ((blakeKeysize > 16) || (blakeKeysize < 1)) {
+					if (sigkeysize >= 16) {
+						hc.keylist[sig] = sigkey
+					}
+					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
 				case "blake2s_256":
-				//	if sigkeysize == 64 {
-					hc.keylist[sig] = sigkey
-				//	}
-					result += fmt.Sprintf("%s:%s,", sig, sigkey)
+					// fmt.Println("blake2s_256 ", sig, sigkey)
+					if (sigkeysize >= 16) {
+						hc.keylist[sig] = sigkey
+					}
+					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
                                 case "hw64":
 					if sigkeysize == 64 {
 						hc.keylist[sig] = sigkey

@@ -128,8 +128,6 @@ func (fd *FlagData) mdzip() {
 
 	// Set the mdzip parameters
 	/////// fd.md.SetByteBlock(false)
-	//fd.md.SetKeyFile(fd.key)
-	// fd.md.SetHWKeyFile(fd.hwkey)
 	fd.md.SetKeyList(fd.keylist)
 	// fmt.Println("keylist ", fd.keylist, " out ", fd.fhashlist, fd.outputfilename)
 	//// fmt.Println("keylist ", fd.keylist)
@@ -149,6 +147,9 @@ func (fd *FlagData) mdzip() {
         if fd.filename != "" {
                 fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.filename, fd.outputfilename)
         }
+
+	// if the block size is less than or equal to 32 set tye mod exponent to 1 byte
+	// if the block size is greater than 32 or so set it to 4 bytes
 
 	// if the drectory is specified
         // mdencode generate a directory signature of all the files
@@ -242,13 +243,15 @@ func printUsage() {
 	fmt.Println("  -keylist=keyname:hexvalue,key2:hexvalue,key3:keyvalue,...")
 	fmt.Println("")
 	fmt.Println("Keylist:")
-	fmt.Println("aes8   - uint64 integer 1 to 18 numbers")
-	fmt.Println("hw64   - 1 to 64 hex characters")
-	fmt.Println("hw128  - 1 to 64 hex characters")
-	fmt.Println("hw256  - 1 to 64 hex characters")
-	fmt.Println("sip64  - 1 to 32 hex characters")
-	fmt.Println("sip128 - 1 to 32 hex characters")
-	fmt.Println("xxhash - uint64 integer 1 to 18 numbers")
+	fmt.Println("aes8        - uint64 integer 1 to 18 numbers")
+	fmt.Println("blake2s_128 - 16+ hex characters")
+	fmt.Println("blake2s_256 - 16+ hex characters")
+	fmt.Println("hw64        - 1 to 64 hex characters")
+	fmt.Println("hw128       - 1 to 64 hex characters")
+	fmt.Println("hw256       - 1 to 64 hex characters")
+	fmt.Println("sip64       - 1 to 32 hex characters")
+	fmt.Println("sip128      - 1 to 32 hex characters")
+	fmt.Println("xxhash      - uint64 integer 1 to 18 numbers")
 
 	fmt.Println("")
 	fmt.Println("Keylist Examples:")
@@ -258,6 +261,7 @@ func printUsage() {
 	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip64:FFF11CCAA09")
 	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip128:FFF11CCAA09")
 	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000000000000001 -fh=110011 -keylist=xxhash:112222201")
+	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000011 -fh=110011 -keylist=blake2s_128:123456789012345672222211000,blake2s_256:123456789A12345F")
 
 	fmt.Printf("\n\nBuild Time: %s\n", BuildTime)
 	fmt.Printf("Version:    %s 復甦 復活\n", Version)
