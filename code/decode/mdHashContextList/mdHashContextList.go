@@ -428,25 +428,9 @@ func (hc *HashContextList) CalcHashBlockSize (hashlist string, mdtype int) (uint
 }
 
 
-// SetKeyFile
-// from MDEncodeALL
-// set the md key
-// this defaults to a default key if the key is less than 16 bytes
-// one of the hash libs faults if the key is to small
-// some of the signatures use a key
-func (hc *HashContextList) SetKeyFile(key string) {
-	hc.key = key
-}
-
-// SetHighwayKey
-// set the Highway Hash key
-// It assigns the 256 bit key
-func (hc *HashContextList) SetHighwayKey(key string) {
-
-}
-
 // Set the Hash List Key
-// shour return a string
+// should return a string not sure if I need this
+// it's so that if a default is used it will specify it in the mdunzip key list
 func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 
 	// fmt.Println("Setting Hashlistkey ", keylist)

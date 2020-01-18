@@ -440,15 +440,13 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 	// this also creates the mdBinaryList object
 	mdc := mdHashContextList.Init()
 
-	// ==================================================
-	// set the key
-	// this is for blake2s and siphash
-	// mdc.SetKeyFile(l.key)
-	mdc.SetHighwayKey(l.hwkey)
+	// set the keylist
+	// this is for hw64 and blake2s and siphash and other signature keys
 	l.keylist = mdc.SetHashListKey(l.keylist)
-	// ==================================================
 
- 	x := strings.Join(hlistarray, "")
+	// set the hash list string
+	// CreateHashBlockList currently uses a string instead of an array
+	x := strings.Join(hlistarray, "")
 	// list  := mdc.MdBlockSize.CreateHashBlockList(hlistarray)
 
 	list  := mdc.MdBlockSize.CreateHashBlockList(x)
