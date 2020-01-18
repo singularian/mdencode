@@ -333,10 +333,12 @@ func (l *FileData) DecodeFile() int {
 		fmt.Println("\n")
 
                 if blockNumber + 1 != blocks {
-                        fmt.Println("Processing block hash ", blockNumber, " blocksize ", blockSize, hlistarray, int(modExp), n.String())
+                        // fmt.Println("Processing block hash ", blockNumber, " blocksize ", blockSize, hlistarray, int(modExp), n.String())
+			fmt.Printf("Processing block hash %d blocksize %d hash block %v modulus exponenent %d modulus %s\n", blockNumber, blockSize, hlistarray, int(modExp), n.String())
                         currentBlocksize = blockSize
                 } else {
-                        fmt.Println("Proccesing block hash ", blockNumber, " blocksize ", remainder, hlistarray, int(modExp), n.String())
+                        // fmt.Println("Proccesing block hash ", blockNumber, " blocksize ", remainder, hlistarray, int(modExp), n.String())
+			fmt.Printf("Processing block hash %d blocksize %d hash block %v modulus exponenent %d modulus %s\n", blockNumber, blockSize, hlistarray, int(modExp), n.String())
                         currentBlocksize = remainder
                 }
 

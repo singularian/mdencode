@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"regexp"
         "crypto/rand"
-	"fmt"
+_	"fmt"
 	"encoding/binary"
 	"encoding/hex"
 )
@@ -108,7 +108,7 @@ func ConvertDecHexString2Int(DecString string) uint64 {
 	isHex, _ := regexp.MatchString("[[:xdigit:]]", DecString)
 	isDec, _ := regexp.MatchString("[[:digit:]]",  DecString)
 
-	fmt.Println("match ", isHex, isDec)
+	// fmt.Println("match ", isHex, isDec)
 
 	if isHex {
 		return ConvertHex2Int(DecString)

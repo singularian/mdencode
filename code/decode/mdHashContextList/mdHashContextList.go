@@ -96,6 +96,8 @@ type HashContextList struct {
 	key string
 	hwkey string
 	keylist map[string]string
+	// error 
+	err error
 }
 
 // Init returns a new HashContextList object  
@@ -126,16 +128,6 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 	var defaultkey = []byte("LomaLindaSanSerento9000")
 	var key        = []byte("LomaLindaSanSerento9000")
 
-	// set the siphash key
-	var siphashkey = []byte(hc.key)
-	sipkeysize  := len(siphashkey)
-	key = siphashkey
-	if (sipkeysize < 15 ) {
-		// fmt.Println("setting siphash default ", siphashkey, " ", sipkeysize)
-		// fmt.Println("setting siphash default ", defaultkey, " length ", len(key))
-		key = defaultkey
-	} 
-
 	// set the blake2s key
 	// this has a length limit I think of greater than 16
 	var blakekey = []byte(hc.key)
@@ -144,21 +136,6 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 		blakekey = defaultkey
 	}
 
-
-	// highway hash key
-	// key, err := hex.DecodeString("000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f")
-	// hwkey, _ := hex.DecodeString("000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f")
-	// hwbkey := make([]byte, 32)
-	var defhwkey = "000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f"
-	if hc.hwkey == "" {
-		hc.hwkey = defhwkey
-	}
-	hwkey, err := hex.DecodeString(hc.hwkey)
-	if err != nil {
-		 fmt.Println("Highway Key error: %v", err, hwkey)
-		 os.Exit(1)
-	}
-	// fmt.Println("hwkey ", hc.hwkey)
 
 	hashlistsize := len(hashlistArr)
 
@@ -182,17 +159,11 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["blake2b"] = blake2b.New256()
                         case "blake2s_128":
 				b, err := blake2s.New128(blakekey)
-				if err != nil {
-                                        fmt.Println("#Blake2s_128 error from New128: %v", err, blakekey)
-					os.Exit(1)
-                                }
+				hc.CheckKeyError(hashlistArr[hashnum], string(blakekey), err)
 				hb["blake2s_128"] = b
                         case "blake2s_256":
 				b, err := blake2s.New256(blakekey)
-				if err != nil {
-					fmt.Println("#Blake2s_256 set error from New256: %v", err, blakekey)
-					os.Exit(1)
-				}
+				hc.CheckKeyError(hashlistArr[hashnum], string(blakekey), err)
                                 hb["blake2s_256"] = b
 			case "bmw":
 				hb["bmw"] = bmw.New()
@@ -223,28 +194,25 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				var key = hc.keylist["hw64"]
 				// fmt.Println("Key hw64", key)
 				hwkey, err := hex.DecodeString(key)
-				if err != nil {
-					fmt.Println("Highway Key error: %v", err, hwkey)
-					os.Exit(1)
-				}
-				// hb["hw64"], _  = highwayhash.New64(hwkey[:])
-				hb["hw64"], _  = highwayhash.New64(hwkey[:])
+				// key = "11ZZZ"
+				hc.CheckKeyError(hashlistArr[hashnum], key, err)
+
+				hb["hw64"], hc.err  = highwayhash.New64(hwkey[:])
+				hc.CheckKeyError(hashlistArr[hashnum], key, hc.err)
 			case "hw128":
 				var key = hc.keylist["hw128"]
 				hwkey, err := hex.DecodeString(key)
-				if err != nil {
-					fmt.Println("Highway Key error: %v", err, hwkey)
-					os.Exit(1)
-                                }
-				hb["hw128"], _ = highwayhash.New128(hwkey[:])
+				hc.CheckKeyError(hashlistArr[hashnum], key, err)
+
+				hb["hw128"], hc.err = highwayhash.New128(hwkey[:])
+				hc.CheckKeyError(hashlistArr[hashnum], key, hc.err)
 			case "hw256":
 				var key = hc.keylist["hw256"]
 				hwkey, err := hex.DecodeString(key)
-				if err != nil {
-					fmt.Println("Highway Key error: %v", err, hwkey)
-					os.Exit(1)
-				}
-				hb["hw256"], _ = highwayhash.New(hwkey[:])
+				hc.CheckKeyError(hashlistArr[hashnum], key, err)
+
+				hb["hw256"], hc.err = highwayhash.New(hwkey[:])
+				hc.CheckKeyError(hashlistArr[hashnum], key, hc.err)
 			case "kekkak":
 				hb["kekkak"] = keccak.New256()
 			case "luffa":
@@ -304,23 +272,16 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				// 16 byte key
 				var key = hc.keylist["sip64"]
 				sipkey, err := hex.DecodeString(key)
-				if err != nil {
-					fmt.Println("Sip Key error: %v", err, sipkey)
-					os.Exit(1)
-				}
-				hb["sip64"], err = sip.New64(sipkey)
-				if err != nil {
-					fmt.Println("Sip Key error: %v", err, sipkey)
-					os.Exit(1)
-				}
+				hc.CheckKeyError(hashlistArr[hashnum], key, err)
+
+				hb["sip64"], hc.err = sip.New64(sipkey)
+				hc.CheckKeyError(hashlistArr[hashnum], key, hc.err)
 			case "sip128":
 				// 16 byte key
 				var key = hc.keylist["sip128"]
 				sipkey128, err := hex.DecodeString(key)
-                                if err != nil {
-                                        fmt.Println("Highway Key error: %v", err, sipkey128)
-                                        os.Exit(1)
-                                }
+				hc.CheckKeyError(hashlistArr[hashnum], key, err)
+
 				hb["sip128"] = siphash.New128(sipkey128)
                         case "skein_160":
 				hb["skein_160"] = skein.New(20, nil)
@@ -339,7 +300,10 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["whirlpool"] = whirlpool.New()
 			case "xxhash":
 				// seed uint64
-				hb["xxhash"] =  xxhash.New64()
+				// xxhash.NewS64(seed2)
+				var key = hc.keylist["xxhash"]
+				// hb["xxhash"] =  xxhash.New64()
+                                hb["xxhash"] = xxhash.NewS64(sigRand.ConvertString2Int(key))
 			}
 		}
 	// }
@@ -516,7 +480,7 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	hc.keylist["murmur3"]     = "1120322"
 	hc.keylist["sip64"]       = "000102030405060708090a0b0c0d0e0f"
 	hc.keylist["sip128"]      = "000102030405060708090a0b0c0d0e0f"
-
+	hc.keylist["xxhash"]      = "99123312"
 
 	var result string
 
@@ -587,6 +551,9 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 						hc.keylist[sig] = fmt.Sprintf("%032s", sigkey)
 					} 
 					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
+				case "xxhash":
+					hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 			}
 		}
 	}
@@ -599,4 +566,15 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	// fmt.Println("keylist result map:", result)
 
 	return result
+}
+
+// Check if a Signature Key Returns an error
+func (hc *HashContextList) CheckKeyError(key string, keyval string, err error) { 
+
+	if err != nil {
+	// fmt.Println("#Blake2s_128 error from New128: %v", err, blakekey)
+		fmt.Printf("Context Signature Key error %s keyvalue %s error %v\n", key, keyval, err)
+		os.Exit(1)
+	}
+
 }

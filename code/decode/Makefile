@@ -15,14 +15,14 @@ BUILD_DIR=${GOBIN}
 CMD=cmd
 
 # Setup the -ldflags option for go build here, interpolate the variable values
-LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X github.com/nsross/mdencode/core.BuildTime=${BUILD_TIME}"
+LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
 
 all:
-	go build -o mdunzip ${CMD}/mdUnzip.go 
-	go build -o mdzip ${CMD}/mdzip.go 
-	go build -o mdlist ${CMD}/mdlist.go 
-	go build -o mdlistTest ${CMD}/testBinReadMdFmt.go 
-	go build -o mdsig ${CMD}/mdsig.go 
+	go build $(LDFLAGS) -o mdunzip ${CMD}/mdUnzip.go 
+	go build $(LDFLAGS) -o mdzip ${CMD}/mdzip.go 
+	go build $(LDFLAGS) -o mdlist ${CMD}/mdlist.go 
+	go build $(LDFLAGS) -o mdlistTest ${CMD}/testBinReadMdFmt.go 
+	go build $(LDFLAGS) -o mdsig ${CMD}/mdsig.go 
 build: 
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip ${CMD}/mdUnzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip ${CMD}/mdzip.go

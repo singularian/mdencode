@@ -202,9 +202,10 @@ mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000111 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E,hw128:000FFFFFFF,hw256:0011
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip64:FFF11CCAA09
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip128:FFF11CCAA09
-  
-Build Time: 2018-06-16-0431 UTC                                                                     
-Version:    1.0.0 復甦 復活                                                                             
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000000000000001 -fh=110011 -keylist=xxhash:112222201
+
+Build Time: 2020-01-18T13:42:02-0500    
+Version:    1.0.0 復甦 復活
 ```                                                                                                 
                                                                                                     
 ```                                                                                                 

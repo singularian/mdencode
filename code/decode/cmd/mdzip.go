@@ -248,6 +248,7 @@ func printUsage() {
 	fmt.Println("hw256  - 1 to 64 hex characters")
 	fmt.Println("sip64  - 1 to 32 hex characters")
 	fmt.Println("sip128 - 1 to 32 hex characters")
+	fmt.Println("xxhash - uint64 integer 1 to 18 numbers")
 
 	fmt.Println("")
 	fmt.Println("Keylist Examples:")
@@ -256,6 +257,7 @@ func printUsage() {
 	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000111 -fh=1111111111 -keylist=hw64:11111111111111111111111111111111FC00FD0033FD22FF990F0C0D0F0FF00E,hw128:000FFFFFFF,hw256:0011")
 	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip64:FFF11CCAA09")
 	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip128:FFF11CCAA09")
+	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000000000000001 -fh=110011 -keylist=xxhash:112222201")
 
 	fmt.Printf("\n\nBuild Time: %s\n", BuildTime)
 	fmt.Printf("Version:    %s 復甦 復活\n", Version)
