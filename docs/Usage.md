@@ -190,6 +190,8 @@ A signature Key parameter "-keylist" is delineatead with a keyname colon hexvalu
 
 Keylist:
 aes8        - uint64 integer 1 to 18 numbers
+ax1         - (xxhash128 key 1) uint64 integer 1 to 18 numbers
+ax2         - (xxhash128 key 2) uint64 integer 1 to 18 numbers
 blake2s_128 - 16+ hex characters
 blake2s_256 - 16+ hex characters
 hw64        - 1 to 64 hex characters
@@ -207,6 +209,7 @@ mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000000000000000000000000000000000001 -fh=110011 -keylist=sip128:FFF11CCAA09
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000000000000001 -fh=110011 -keylist=xxhash:112222201
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000011 -fh=110011 -keylist=blake2s_128:123456789012345672222211000,blake2s_256:123456789A12345F
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=01 -fh=110011 -keylist=ax1:123456,ax2:789347
 
 Build Time: 2020-01-18T13:42:02-0500    
 Version:    1.0.0 復甦 復活

@@ -333,14 +333,13 @@ func (l *FileData) DecodeFile() int {
 		fmt.Println("\n")
 
                 if blockNumber + 1 != blocks {
-                        // fmt.Println("Processing block hash ", blockNumber, " blocksize ", blockSize, hlistarray, int(modExp), n.String())
-			fmt.Printf("Processing block hash %d blocksize %d hash block %v modulus exponenent %d modulus %s\n", blockNumber, blockSize, hlistarray, int(modExp), n.String())
                         currentBlocksize = blockSize
                 } else {
-                        // fmt.Println("Proccesing block hash ", blockNumber, " blocksize ", remainder, hlistarray, int(modExp), n.String())
-			fmt.Printf("Processing block hash %d blocksize %d hash block %v modulus exponenent %d modulus %s\n", blockNumber, blockSize, hlistarray, int(modExp), n.String())
                         currentBlocksize = remainder
                 }
+
+		// display the processing block message
+		fmt.Printf("Processing block hash %d currentblocksize %d/%d hash block %v modulus exponenent %d modulus %s\n", blockNumber, currentBlocksize, blockSize, hlistarray, int(modExp), n.String())
 
                 // set up the thread list of go routine objects
                 mdp := []*modScanFile.DecodeData{}

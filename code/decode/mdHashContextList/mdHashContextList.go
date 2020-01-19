@@ -140,7 +140,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				var key = hc.keylist[hashname]
 				hb["aes8"] = aeshash.NewAES(sigRand.ConvertString2Int(key))
 			case "ax":
-				hb["ax"] = xxhash_128.New()
+				var key  = hc.keylist["ax1"]
+				var key2 = hc.keylist["ax2"]
+				hb["ax"] = xxhash_128.New(sigRand.ConvertString2Int(key), sigRand.ConvertString2Int(key2))
                         case "blake2":
 				hb["blake2"] = blake2.New(nil)
 			// blake2b is similar to blake2 I think it is broken
@@ -445,6 +447,8 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 
 	hc.keylist["default"]     = defaultkey
 	hc.keylist["aes8"]        = "99123312"
+	hc.keylist["ax1"]         = "991209123091283"
+	hc.keylist["ax2"]         = "9881223091283"
 	// hc.keylist["blake"]    = defaultkey
 	hc.keylist["blake2s_128"] = defaultkey
 	hc.keylist["blake2s_256"] = defaultkey
