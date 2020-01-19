@@ -200,6 +200,7 @@ blake2s_256 - 16+ hex characters
 hw64        - 1 to 64 hex characters
 hw128       - 1 to 64 hex characters
 hw256       - 1 to 64 hex characters
+murmur3     - uint64 integer 1 to 18 numbers
 sip64       - 1 to 32 hex characters
 sip128      - 1 to 32 hex characters
 xxhash      - uint64 integer 1 to 18 numbers

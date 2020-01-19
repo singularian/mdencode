@@ -254,6 +254,7 @@ func printUsage() {
 	fmt.Println("hw64        - 1 to 64 hex characters")
 	fmt.Println("hw128       - 1 to 64 hex characters")
 	fmt.Println("hw256       - 1 to 64 hex characters")
+	fmt.Println("murmur3     - uint64 integer 1 to 18 numbers")
 	fmt.Println("sip64       - 1 to 32 hex characters")
 	fmt.Println("sip128      - 1 to 32 hex characters")
 	fmt.Println("xxhash      - uint64 integer 1 to 18 numbers")

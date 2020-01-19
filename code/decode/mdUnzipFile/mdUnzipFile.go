@@ -178,12 +178,20 @@ func (l *FileData) DecodeFile() int {
         fileHashLen   := binary.BigEndian.Uint64(bytes[40:48])
 
         // need to add the version
-        fmt.Println("fileSize ", fileSize)
+        /* fmt.Println("fileSize ", fileSize)
         fmt.Println("blockSize ", blockSize)
         fmt.Println("modSize ", modSize)
         fmt.Println("fileNameLength ", fileNameLen)
         fmt.Println("filePathLength ", filePathLen)
         fmt.Println("fileHashLength ", fileHashLen)
+	*/
+
+	fmt.Printf("FileSize %11d\n",  fileSize)
+	fmt.Printf("BlockSize %10d\n", blockSize)
+	fmt.Printf("ModSize %12d\n",   modSize)
+	fmt.Printf("FileNameLength %5d\n", fileNameLen)
+	fmt.Printf("FilePathLength %5d\n", fileNameLen)
+	fmt.Printf("FileHashLength %5d\n", fileNameLen)
 
         // get the filename
         var start uint64
@@ -194,8 +202,8 @@ func (l *FileData) DecodeFile() int {
         start = 48
         end = start + filePathLen
         var filepath = string(bytes[start:end])
-        fmt.Println("filePath ", string(bytes[start:end]), start, end)
-        fmt.Println("filePath ", filepath);
+        // fmt.Println("FilePath ", string(bytes[start:end]), start, end)
+        fmt.Printf("FilePath         %s\n", filepath);
 
         // fileName
         start = end
@@ -204,12 +212,13 @@ func (l *FileData) DecodeFile() int {
 
         var filename2 = string(bytes[start:end])
 
-        fmt.Println("filename: ", filename2);
+        fmt.Printf("Filename         %s\n", filename2);
 
         // get hashlist string
         start = end
         end = end + fileHashLen
-        fmt.Println("hashlistname ", string(bytes[start:end]))
+        // fmt.Println("hashlistname ", string(bytes[start:end]))
+        fmt.Printf("Hashlistname     %s\n", string(bytes[start:end]))
         // split hash list
         hlist := string(bytes[start:end])
         hashlist := strings.Split(hlist, "-")
@@ -223,7 +232,7 @@ func (l *FileData) DecodeFile() int {
 
 	// l.fileHashListString  = filelist
 	// l.blockHashListString = blocklist
-        fmt.Println("hashlist ", filelist, blocklist, l.keyListString)
+        fmt.Println("hashlist        ", filelist, blocklist, l.keyListString)
 
 	// check if the block list is specified
 	// exit if it is not specified
@@ -252,7 +261,7 @@ func (l *FileData) DecodeFile() int {
                 end = end + uint64(filelistarr[i])
                 var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
                 // filePathLen   := binary.BigEndian.(bytes[:40])
-                fmt.Println("file hashlistname ", l.fileHashListNames[i], " hex ", hexstring)
+                fmt.Printf("File hashlistname %-20s %s\n", l.fileHashListNames[i], hexstring)
 		// fhlistarray = append(fhlistarray, hexstring)
 		l.fileHashHexListArray = append(l.fileHashHexListArray, hexstring)
         }

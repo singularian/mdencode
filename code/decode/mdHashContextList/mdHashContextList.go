@@ -131,8 +131,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 
 	// these hash contexts should be in sorted order
 	// for thread := 0; thread < threadNumber; thread++ {
-		for hashnum := 0; hashnum < hashlistsize; hashnum++ {
-		var hashname = hashlistArr[hashnum]
+		for _, hashname := range hashlistArr {
 
 		switch hashname {
 			case "aes8":
@@ -193,24 +192,24 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["hmac512"] = hmac.New(sha512.New, defaultkey)
 			case "hw64":
 				var key = hc.keylist[hashname]
-				// fmt.Println("Key hw64", key)
 				hwkey, err := hex.DecodeString(key)
+				// test
 				// key = "11ZZZ"
-				hc.CheckKeyError(hashlistArr[hashnum], key, err)
+				hc.CheckKeyError(hashname, key, err)
 
 				hb["hw64"], hc.err  = highwayhash.New64(hwkey[:])
 				hc.CheckKeyError(hashname, key, hc.err)
 			case "hw128":
 				var key = hc.keylist[hashname]
 				hwkey, err := hex.DecodeString(key)
-				hc.CheckKeyError(hashlistArr[hashnum], key, err)
+				hc.CheckKeyError(hashname, key, err)
 
 				hb["hw128"], hc.err = highwayhash.New128(hwkey[:])
 				hc.CheckKeyError(hashname, key, hc.err)
 			case "hw256":
 				var key = hc.keylist[hashname]
 				hwkey, err := hex.DecodeString(key)
-				hc.CheckKeyError(hashlistArr[hashnum], key, err)
+				hc.CheckKeyError(hashname, key, err)
 
 				hb["hw256"], hc.err = highwayhash.New(hwkey[:])
 				hc.CheckKeyError(hashname, key, hc.err)
@@ -219,8 +218,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 			case "luffa":
 				 hb["luffa"] = luffa.New()
                         case "murmur3":
-				var seed uint64 = 1120322
-				hb["murmur3"] = murmur3.New128(seed)
+				// var seed uint64 = 1120322
+				var key = hc.keylist[hashname]
+				hb["murmur3"] = murmur3.New128(sigRand.ConvertString2Int(key))
 			case "md2":
 				hb["md2"] = md2.New()
                         case "md4":
@@ -302,7 +302,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 			case "xxhash":
 				// seed uint64
 				// xxhash.NewS64(seed2) // seed key version
-				// xxhash.New64() // non seed key version
+				// xxhash.New64()       // non seed key version
 				var key = hc.keylist[hashname]
                                 hb["xxhash"] = xxhash.NewS64(sigRand.ConvertString2Int(key))
 			}
@@ -440,8 +440,9 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	hc.keylist = make(map[string]string)
 
 	keylist = keylist + ","
-	s := strings.Split(keylist, ",")
+	keys   := strings.Split(keylist, ",")
 
+	// default hash list keys
 	var defaultkey   = "LomaLindaSanSerento9000"
 	var defaulthwkey = "000102030405060708090a0b0cff0e0f101112131415161718191a1b1c1d1e1f"
 
@@ -462,8 +463,8 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 
 	var result string
 
-	// for index, val := range s {
-	for _, val := range s {
+	// iterate over the keylist
+	for _, val := range keys {
 		res := strings.Split(val, ":")
 		if len(res) == 2 {
 			var sig        = res[0]
