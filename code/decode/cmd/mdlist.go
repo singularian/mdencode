@@ -64,14 +64,14 @@ func main() {
 	filePathLen   := binary.BigEndian.Uint64(bytes[32:40])
 	fileHashLen   := binary.BigEndian.Uint64(bytes[40:48])
 
+	// display the current file attributes
 	// need to add the version
-
-	fmt.Println("fileSize ", fileSize)
-	fmt.Println("blockSize ", blockSize)
-	fmt.Println("modSize ", modSize)
-	fmt.Println("fileNameLength ", fileNameLen)
-	fmt.Println("filePathLength ", filePathLen)
-	fmt.Println("fileHashLength ", fileHashLen)
+        fmt.Printf("FileSize %11d\n",  fileSize)
+        fmt.Printf("BlockSize %10d\n", blockSize)
+        fmt.Printf("ModSize %12d\n",   modSize)
+        fmt.Printf("FileNameLength %5d\n", fileNameLen)
+        fmt.Printf("FilePathLength %5d\n", fileNameLen)
+        fmt.Printf("FileHashLength %5d\n", fileNameLen)
 
 	// get the filename
 	var start uint64
@@ -82,8 +82,8 @@ func main() {
 	start = 48 
 	end = start + filePathLen
 	var filepath = string(bytes[start:end])
-	fmt.Println("filePath ", string(bytes[start:end]), start, end)
-	fmt.Println("filePath ", filepath);
+	// fmt.Println("FilePath     ", string(bytes[start:end]), start, end)
+	fmt.Println("FilePath       ", filepath);
 
 	// fileName
         start = end 
@@ -92,21 +92,27 @@ func main() {
 
 	var filename2 = string(bytes[start:end])
 
-	fmt.Println("filename: ", filename2);
+	fmt.Println("Filename:      ", filename2);
 
 	// get hashlist string
 	start = end
 	end = end + fileHashLen
-	fmt.Println("hashlistname   ", string(bytes[start:end]))
+	fmt.Println("Hashlistname   ", string(bytes[start:end]))
 	// split hash list
 	hlist := string(bytes[start:end])
 	hashlist := strings.Split(hlist, "-")
 	filelist := hashlist[0]
 	blocklist := hashlist[1]
-	fmt.Println("hashlist       ", filelist, blocklist)
-	fmt.Println("file hashlist  ", filelist)
-	fmt.Println("block hashlist ", blocklist)
-	fmt.Println("")
+
+	var keylist string
+	if len(hashlist) > 2 {
+                keylist = hashlist[2]
+        }
+
+	// fmt.Println("hashlist       ", filelist, blocklist)
+	fmt.Println("File hashlist  ", filelist)
+	fmt.Println("Block hashlist ", blocklist)
+	fmt.Println("Keylist        ", keylist, "\n")
 
         // initialize the mdBlockSize object
 	mdBlock := mdBinaryList.Init()
@@ -116,13 +122,14 @@ func main() {
         _, filelistarr = mdBlock.CalcHashBlockSize(filelist)
 
 	// fmt.Println("test array ", filelistarr)
-	st := strings.Split(filelist, ":")
+	fileHashListNames := strings.Split(filelist, ":")
 	// get the file hash list
 	for i:= 0; i < len(filelistarr); i++ {
 		start = end
 		end = end + uint64(filelistarr[i])
 		var hexstring = fmt.Sprintf("%x", string(bytes[start:end]))
-		fmt.Println("file hashlistname ", st[i], " hex ", hexstring)
+		// fmt.Println("File hashlistname ", st[i], " hex ", hexstring)
+		fmt.Printf("File hashlistname %-20s %s\n", fileHashListNames[i], hexstring)
 	}
 
 	// check if the block list is specified
@@ -132,6 +139,7 @@ func main() {
 		os.Exit(0)
 	}
 
+	fmt.Println("")
 
 	// calculate and return the file signature block byte size list
         // mdblocksize, blocklistarr := mdBlock.CalcHashBlockSize(blocklist)
