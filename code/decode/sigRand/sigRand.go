@@ -24,6 +24,18 @@ func GenerateRandomBytes(n int) ([]byte, error) {
 	return b, nil
 }
 
+func GenerateRandomBytes64(n uint64) ([]byte, error) {
+        b := make([]byte, n)
+        _, err := rand.Read(b)
+        // Note that err == nil only if we read len(b) bytes.
+        if err != nil {
+                return nil, err
+        }
+
+        return b, nil
+}
+
+
 // GenerateRandomHex
 func GenerateRandomHex(n int) (string, error) {
 	bytes := make([]byte, n)
@@ -33,8 +45,6 @@ func GenerateRandomHex(n int) (string, error) {
 
 	return hex.EncodeToString(bytes), nil
 }
-
-
 
 // GenerateRandomString returns a securely generated random string.
 // it returns a string and error 

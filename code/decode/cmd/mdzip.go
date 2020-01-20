@@ -37,7 +37,6 @@ type FlagData struct {
 	uhashlist string
 	// signature keys 
         key string
-	hwkey string
 	keylist string
 	// randomize the signature keys
 	randKey bool
@@ -70,16 +69,15 @@ func md() int {
 
 	fd := new(FlagData)
 	flag.StringVar(&fd.blocksize, "block", "40", "File Block Size Bytes")
-	flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
+	flag.StringVar(&fd.modsize,   "mod", "32", "Modulus Size in Bits")
 	// flag.IntVar(&fd.defaultFormat, "format", 1000, "Output Format")
 	flag.StringVar(&fd.fhashlist, "fh", "01001", "File Hash Bit String List")
 	flag.StringVar(&fd.bhashlist, "bh", "01001", "Block Hash Bit String List")
 	flag.StringVar(&fd.uhashlist, "uh", "", "Quaternian Hash String List")
 	// flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate A Random File Hash Bit String List")
 	// flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random Block Hash Bit String List")
-	// flag.StringVar(&fd.hwkey, "hwkey", "", "High Way Hash Signature Key (32 bytes)")
-	flag.StringVar(&fd.keylist, "keylist", "", "Signature Key List")
-	flag.StringVar(&fd.filename, "file", "", "Input Filename")
+	flag.StringVar(&fd.keylist,   "keylist", "", "Signature Key List")
+	flag.StringVar(&fd.filename,  "file", "", "Input Filename")
 	// flag.StringVar(&fd.directory, "dir", "", "Input Directory")
 	flag.StringVar(&fd.outputfilename, "out", "", "Output Filename")
 	// flag.StringVar(&fd.outputfilename, "output", "", "Output Filename")
@@ -111,8 +109,7 @@ func md() int {
 	// ie bg=10 or blockgroups are 10 times the block size
 	// this eliminates or is one way to address collsions on a block level
 
-	// add a check for the block size being greater than file size
-	// set the mod exponent to one byte or 4 bytes
+	// TODO set the mod exponent to one byte if the blocksize is less than 32 or 4 bytes if greater
 
 	fd.mdzip()
 
@@ -127,18 +124,14 @@ func (fd *FlagData) mdzip() {
 	fd.md = mdZipFile.Init()
 
 	// Set the mdzip parameters
-	/////// fd.md.SetByteBlock(false)
 	fd.md.SetKeyList(fd.keylist)
-	// fmt.Println("keylist ", fd.keylist, " out ", fd.fhashlist, fd.outputfilename)
-	//// fmt.Println("keylist ", fd.keylist)
 
-	////////////////////fd.md.SetLogFile(fd.logfilename)
+	// fd.md.SetLogFile(fd.logfilename)
 	fd.md.SetOutputFile(fd.outputfilename)
 	// set the default format
-	//fd.md.SetMdFormat(fd.defaultFormat)
+	// fd.md.SetMdFormat(fd.defaultFormat)
 	fd.md.SetMdFormat(10)
 	// set the hash lists
-	// todo add the keylist
 	fd.md.SetHashLists(fd.fhashlist, fd.bhashlist)
 
 
@@ -148,7 +141,7 @@ func (fd *FlagData) mdzip() {
                 fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.filename, fd.outputfilename)
         }
 
-	// if the block size is less than or equal to 32 set tye mod exponent to 1 byte
+	// TODO: if the block size is less than or equal to 32 set tye mod exponent to 1 byte
 	// if the block size is greater than 32 or so set it to 4 bytes
 
 	// if the drectory is specified
