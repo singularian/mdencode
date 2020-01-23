@@ -76,11 +76,11 @@ type DecodeData struct {
 func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threadCount int64, mux *mdUnzipMutex.FileMutex, hcl *mdHashContextList.HashContextList) (md *DecodeData) {
 	mdata := new(DecodeData)
 	mdata.blocksizeInt = blocksize
-	mdata.modsizeInt = modsize
+	mdata.modsizeInt   = modsize
 	mdata.modExp = 0
-	mdata.blockNumber = blockNumber 
+	mdata.blockNumber  = blockNumber 
 	mdata.threadNumber = thread
-	mdata.threadCount = threadCount
+	mdata.threadCount  = threadCount
 	/// mdata.byteblock = bytes // I dont think this is needed it was for the random byteblock modulus scan and not the file modulus scan
 	mdata.matchFound = false
 	mdata.collisionCnt = 0
@@ -94,7 +94,7 @@ func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threa
 }
 
 // run a parallel modulus scan on a mdzip file block
-func (md *DecodeData) ModulusScanFileBytes(modSize uint32, blocklist string, hashlist string, modRemainder string, c *sync.WaitGroup) {
+func (md *DecodeData) ModulusScanFileBytes(modSize uint32, blocklist string, hashlist string, modRemainder string) {
 
         //runtime.LockOSThread()
 
@@ -146,19 +146,32 @@ func (md *DecodeData) ModulusScanFileBytes(modSize uint32, blocklist string, has
         // log the starting modScan data
         md.modScanData()
 
-        // result := md.decode()
+        return
+
+}
+
+func (md *DecodeData) ModulusScanFileBytesRun(blockNumber int64, blocksize int64, c *sync.WaitGroup) {
+
+	// set the stop to false
+	md.Stop = false
+
+	// set the current blocksize
+	md.blocksizeInt = blocksize
+
+	// run the modulus scan decode
         _ = md.decode()
 
-	// if the byte block matches the modscan signature list add it to the Mutex and end the work group
-	if md.matchFound == true {
-		bufstring := fmt.Sprintf("%v", md.byteblock)
-		md.Println("buffer ", bufstring)
-		fmt.Printf("Found Thread %d Block % x\n", md.threadNumber, md.byteblock)
-		md.mux.SetFileBuffer(int(md.threadNumber), md.byteblock)
-		c.Done()
-	} else if md.matchFound == false {
-		//	fmt.Println("Not found ", md.threadNumber, buffer, md.matchFound)
-	}
+        // if the byte block matches the modscan signature list add it to the Mutex and end the work group
+        if md.matchFound == true  {
+                bufstring := fmt.Sprintf("%v", md.byteblock)
+                md.Println("buffer ", bufstring)
+                fmt.Printf("Found Thread %d Block % x blocksize %d\n", md.threadNumber, md.byteblock, blocksize)
+                // fmt.Printf("Found Thread block buf % x number %d\n", md.byteblock, blockNumber)
+                md.mux.SetFileBuffer(int(md.threadNumber), md.byteblock)
+                c.Done()
+        } else if md.matchFound == false {
+                //      fmt.Println("Not found ", md.threadNumber, buffer, md.matchFound)
+        }
         return
 
 }
@@ -168,6 +181,7 @@ func (md *DecodeData) ModulusScanFileBytes(modSize uint32, blocklist string, has
 // this will run the modulus scan decode to find a byte block associated with a modulus floor and sinature
 func (md *DecodeData) decode() (int) {
 
+	// md.matchFound = false
 	start := time.Now()
 	md.Printlog("Starting modScan byte decoder ", md.threadNumber)
 
@@ -272,7 +286,6 @@ func (md *DecodeData) decode() (int) {
 		}
 
 		lineCount++
-
 	}
 
 	t := time.Now()
@@ -375,6 +388,11 @@ func (md *DecodeData) GetBytes() []byte {
 // get the modScan match found
 func (md *DecodeData) MatchFound() bool {
 	return md.matchFound
+}
+
+// reset the modScan match found
+func (md *DecodeData) ResetMatchFound()  {
+        md.matchFound = false
 }
 
 // get the modScan collision count

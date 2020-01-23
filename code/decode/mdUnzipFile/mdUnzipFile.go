@@ -252,7 +252,6 @@ func (l *FileData) DecodeFile() int {
 	_, filelistarr := l.mdc.CalcHashBlockSize(filelist, 0)
 
         // fmt.Println("test array ", filelistarr)
-        // st := strings.Split(filelist, ":")
 	l.fileHashListNames = strings.Split(filelist, ":")
         // get the file hash hex list
 	// var fhlistarray []string
@@ -279,14 +278,16 @@ func (l *FileData) DecodeFile() int {
 	// create the mutex
 	mutex := mdUnzipMutex.Init()
 
-	// create the hash context list for the threads
+	// create the block hash context list for the threads
 	hcListArr := []*mdHashContextList.HashContextList{}
 	var threadNum int64 = 0
-	// var threadCount int64 = 16                                                                                                                        
+
 	for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
 		threadmdcl := mdHashContextList.Init()
 		hcListArr = append(hcListArr, threadmdcl)
 	}
+
+	// initialize the file hash context list
 	for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
 		_, _ = hcListArr[threadNum].CalcHashBlockSize(filelist, 0) 
 		_, _ = hcListArr[threadNum].CalcHashBlockSize(blocklist, 1) 
@@ -302,9 +303,21 @@ func (l *FileData) DecodeFile() int {
                 modByteSize = 1
         }
 
+	// initialize the block hash modulus scan object list
+	blockNumber = 0
+	mdp := []*modScanFile.DecodeData{}
+	for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
+		// md := modScanFile.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), threadNum, int64(threadCount), mutex, hcListArr[thread])
+
+		// to do it is using the file list and not the block hcListArr
+		md := modScanFile.Init(int64(blockSize), int64(modSize), 0, threadNum, int64(threadCount), mutex, hcListArr[threadNum])
+		mdp = append(mdp, md)
+	}
+
+	var c sync.WaitGroup
+
 	// set the start time
 	startTime := time.Now()
-	// var time = fmt.Sprintf("%d%d%d%d%d", now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second())
 
         // var hlistarray = strings.Split(hashhex, ":")
         var hlistarray []string
@@ -327,11 +340,14 @@ func (l *FileData) DecodeFile() int {
                         hlistarray = append(hlistarray, fmt.Sprintf("%x", string(bytes[start:end])))
                 }
                 hstring := strings.Join(hlistarray, ":")
+
+		// calculate the binary modulus exponent
                 // should make modexp an int16
                 start = end
                 end = end + 4
                 modExp    := binary.BigEndian.Uint32(bytes[start:end])
-                // this is the modulus bigint
+
+		// calculate the modulus remainder bigint
                 start = end
                 end = end + modByteSize
                 n := new(big.Int)
@@ -350,49 +366,35 @@ func (l *FileData) DecodeFile() int {
 		// display the processing block message
 		fmt.Printf("Processing block hash %d currentblocksize %d/%d hash block %v modulus exponenent %d modulus %s\n", blockNumber, currentBlocksize, blockSize, hlistarray, int(modExp), n.String())
 
-                // set up the thread list of go routine objects
-                mdp := []*modScanFile.DecodeData{}
-                var thread int64 = 0
-                // var threadCount int64 = 16
-		for thread = 0; thread < int64(threadCount); thread++ {
-			// fmt.Println("testing context list ", hcListArr[thread].GetBlockHash())
-			hcListArr[thread].SetBlockHash(hashByteBlock)
-		}
-                for thread = 0; thread < int64(threadCount); thread++ {
-                        md := modScanFile.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), thread, int64(threadCount), mutex, hcListArr[thread])
-                        mdp = append(mdp, md)
-                }
-
-                // create the wait group
-		var c sync.WaitGroup
+                // add one to the wait group
 		c.Add(1)
 
-                // kick off the go routines
+                // kick off the modulus can go routines
                 var threadStart int64   = 0
                 var threadEnd   int64   = int64(threadCount) 
-                for thread = threadStart; thread < threadEnd; thread++ {
-                        // fmt.Println("Kicking off thread ", thread, threadStart, threadEnd, blocklist)
-                        go mdp[thread].ModulusScanFileBytes(modExp, blocklist, hstring, n.String(), &c)
+                for threadNum = threadStart; threadNum < threadEnd; threadNum++ {
+			// fmt.Println("Kicking off thread ", thread, threadStart, threadEnd, blocklist,  mdp[thread].MatchFound())
+			// update the hash context list hash byte block
+			hcListArr[threadNum].SetBlockHash(hashByteBlock)
+
+			// init the ModulusScanFileBytes
+                        mdp[threadNum].ModulusScanFileBytes(modExp, blocklist, hstring, n.String())
+			// run the ModulusScanFileBytesRun go routine
+			go mdp[threadNum].ModulusScanFileBytesRun(int64(blockNumber), int64(currentBlocksize), &c)
                 }
 
-
+		// wait for the first modulus can result
 		c.Wait()
 
-		// fmt.Println("testing mutex")
+		// if a mutex match is true write the decoded block to the output file
 		if mutex.GetMatchStatus() {
-				// var mlastThread = mutex.GetLastThread() - 1
-				// fmt.Println("Processing ", mutex.GetMatchStatus())
-				// fmt.Println("Found block modscan ", blockNumber, " thread ", mlastThread, " block ", fmt.Sprintf("% x", mdp[mlastThread].GetBytes()))
-				// fmt.Println("Found block Mutex ", blockNumber, " thread ", mlastThread, " block ", fmt.Sprintf("% x", mutex.GetFileBuffer()))
-
-				l.WriteFile(l.outf, mutex.GetFileBuffer())
+			l.WriteFile(l.outf, mutex.GetFileBuffer())
 		}
-		// fmt.Println("end testing mutex ", mutex.GetMatchStatus())
 
-
-		for thread = threadStart; thread < threadEnd; thread++ {
-			mdp[thread].Stop = true
-
+		// stop the modulus scan threads and reset the matchFound to false
+		for threadNum = threadStart; threadNum < threadEnd; threadNum++ {
+			mdp[threadNum].Stop = true
+			mdp[threadNum].ResetMatchFound()
 		}
 
 		mutex.ResetMutex()
