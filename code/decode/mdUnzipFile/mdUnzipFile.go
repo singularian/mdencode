@@ -282,12 +282,13 @@ func (l *FileData) DecodeFile() int {
 	hcListArr := []*mdHashContextList.HashContextList{}
 	var threadNum int64 = 0
 
+	// add the block hash context lists to the array list
 	for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
 		threadmdcl := mdHashContextList.Init()
 		hcListArr = append(hcListArr, threadmdcl)
 	}
 
-	// initialize the file hash context list
+	// initialize the file and block hash context list
 	for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
 		_, _ = hcListArr[threadNum].CalcHashBlockSize(filelist, 0) 
 		_, _ = hcListArr[threadNum].CalcHashBlockSize(blocklist, 1) 
@@ -309,7 +310,7 @@ func (l *FileData) DecodeFile() int {
 	for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
 		// md := modScanFile.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), threadNum, int64(threadCount), mutex, hcListArr[thread])
 
-		// to do it is using the file list and not the block hcListArr
+		// todo rename block hash context list hcListArr
 		md := modScanFile.Init(int64(blockSize), int64(modSize), 0, threadNum, int64(threadCount), mutex, hcListArr[threadNum])
 		mdp = append(mdp, md)
 	}
