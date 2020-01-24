@@ -146,6 +146,83 @@ func (md *DecodeData) ModulusScanFileBytes(modSize uint32, blocklist string, has
         // log the starting modScan data
         md.modScanData()
 
+
+        return
+
+}
+
+// run a parallel modulus scan on a mdzip file block
+// there was a timing issue when I tried to split this into two functions
+func (md *DecodeData) ModulusScanFileBytesOrig(modSize uint32, blocklist string, hashlist string, modRemainder string, blocksize int64, c *sync.WaitGroup) {
+
+        // set the stop to false
+        md.Stop = false
+
+        // set the current blocksize
+        md.blocksizeInt = blocksize
+        //runtime.LockOSThread()
+
+        // process the modulus bitsize argument
+        bitsize := md.modsizeInt
+	// md.blocksizeInt = int64(blockSize)
+
+        // create the modulus bigint 2 to the bitsize exponent
+        // ie if it is 8 then it is 2 to the bitsize nth
+        modulusBigInt := big.NewInt(bitsize)
+        base := big.NewInt(2)
+        md.modulusBigInt = modulusBigInt.Exp(base, modulusBigInt, nil)
+        md.modulusBigIntString = modulusBigInt.String()
+
+        // calculate the modulus remainder
+        // fileblockmodulus := new(big.Int)
+        //fileblockmodulus = fileblockmodulus.Mod(md.blockBigInt, md.modulusBigInt)
+        //md.modulusBigIntRemainder = fileblockmodulus
+	fileblockmodulus := new(big.Int)
+        fileblockmodulus, _ = fileblockmodulus.SetString(modRemainder, 10)
+        md.modulusBigIntRemainder = fileblockmodulus
+
+        // calculate the modulus exponent
+        // two := big.NewInt(2)
+        // var modexp = md.logN(md.blockBigInt, two)
+        md.modExp = int64(modSize)
+
+        // calculate the modulus thread multiple
+        // this code makes the modulus parallel
+        // modulus * threadnumber
+        modthreadNumber := big.NewInt(md.threadNumber)
+        md.modulusThreadNumber = modthreadNumber.Mul(md.modulusBigInt, modthreadNumber)
+
+        // calculate the modulus threadcount
+        // this is the modulus increment value + the modulus threadnumber
+        // modulus * threadcount
+        modthreadCount := big.NewInt(md.threadCount)
+        md.modulusThreadCount = modthreadCount.Mul(md.modulusBigInt, modthreadCount)
+
+        // calculate the modulus start
+        md.modulusStart = md.modulusBigIntRemainder
+        // add the modulusthreadNumber to the modStart
+        md.modulusStart = md.modulusStart.Add(md.modulusStart, md.modulusThreadNumber)
+	md.Printlog("thread ", md.threadNumber)
+	md.Printlog("modulus start ",  md.modulusBigIntRemainder.String())
+	md.Printlog("modulus plus thread number ", md.modulusThreadNumber)
+	md.Printlog("Starting modulus ", md.modulusStart)
+
+        // log the starting modScan data
+        md.modScanData()
+
+        // result := md.decode()
+        _ = md.decode()
+
+	// if the byte block matches the modscan signature list add it to the Mutex and end the work group
+	if md.matchFound == true {
+		bufstring := fmt.Sprintf("%v", md.byteblock)
+		md.Println("buffer ", bufstring)
+		fmt.Printf("Found Thread %d Block % x\n", md.threadNumber, md.byteblock)
+		md.mux.SetFileBuffer(int(md.threadNumber), md.byteblock)
+		c.Done()
+	} else if md.matchFound == false {
+		//	fmt.Println("Not found ", md.threadNumber, buffer, md.matchFound)
+	}
         return
 
 }

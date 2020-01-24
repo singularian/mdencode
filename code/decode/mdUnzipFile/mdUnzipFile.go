@@ -279,6 +279,7 @@ func (l *FileData) DecodeFile() int {
 	mutex := mdUnzipMutex.Init()
 
 	// create the block hash context list for the threads
+	// maybe rename this
 	hcListArr := []*mdHashContextList.HashContextList{}
 	var threadNum int64 = 0
 
@@ -370,6 +371,18 @@ func (l *FileData) DecodeFile() int {
                 // add one to the wait group
 		c.Add(1)
 
+		mdp = []*modScanFile.DecodeData{}
+		for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
+			// md := modScanFile.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), threadNum, int64(threadCount), mutex, hcListArr[thread])
+			// todo rename block hash context list hcListArr
+			md := modScanFile.Init(int64(currentBlocksize), int64(modSize), int64(blockNumber), threadNum, int64(threadCount), mutex, hcListArr[threadNum])
+			mdp = append(mdp, md)
+		}
+
+		// for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
+		//hcListArr[threadNum].SetBlockHash(hashByteBlock)
+		//}
+
                 // kick off the modulus can go routines
                 var threadStart int64   = 0
                 var threadEnd   int64   = int64(threadCount) 
@@ -378,10 +391,13 @@ func (l *FileData) DecodeFile() int {
 			// update the hash context list hash byte block
 			hcListArr[threadNum].SetBlockHash(hashByteBlock)
 
+			go mdp[threadNum].ModulusScanFileBytesOrig(modExp, blocklist, hstring, n.String(), int64(currentBlocksize), &c)
+
+			// timing issue when I tried to split these
 			// init the ModulusScanFileBytes
-                        mdp[threadNum].ModulusScanFileBytes(modExp, blocklist, hstring, n.String())
+                        ///// mdp[threadNum].ModulusScanFileBytes(modExp, blocklist, hstring, n.String())
 			// run the ModulusScanFileBytesRun go routine
-			go mdp[threadNum].ModulusScanFileBytesRun(int64(blockNumber), int64(currentBlocksize), &c)
+			///// go mdp[threadNum].ModulusScanFileBytesRun(int64(blockNumber), int64(currentBlocksize), &c)
                 }
 
 		// wait for the first modulus can result
