@@ -50,9 +50,9 @@ echo "Zipping the file $RANDOM_FILE"
 ##### ./../mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -fh=11 -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz 
 
 # Invalid keylist
-# ./mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz -keylist=hw256:4334FFF,
-./../mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz -keylist=hw256:4334FFF,hw64:787733777333777333773FF,
-#  ./mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz -keylist=hw256:24334FFF,
+# ./mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -fh=000011 -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz -keylist=hw256:4334FFF,
+./../mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -fh=000111 -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz -keylist=hw256:4334FFF,hw64:787733777333777333773FF,
+#  ./mdzip -file=randomfile -bh=$BLOCK_BINARY_ARGS -fh=0011111 -mod=$MODBITS -block=$BLOCK_SIZE -out=randomfile.mdz -keylist=hw256:24334FFF,
 
 echo ""
 echo "mdlist $RANDOM_FILE" 
