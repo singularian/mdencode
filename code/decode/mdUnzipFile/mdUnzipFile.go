@@ -410,7 +410,8 @@ func (l *FileData) DecodeFile() int {
 
 		// stop the modulus scan threads and reset the matchFound to false
 		for threadNum = threadStart; threadNum < threadEnd; threadNum++ {
-			mdp[threadNum].Stop = true
+			// mdp[threadNum].Stop = true
+			mdp[threadNum].StopScan()
 			mdp[threadNum].ResetMatchFound()
 		}
 

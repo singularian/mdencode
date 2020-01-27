@@ -68,27 +68,27 @@ type DecodeData struct {
 	hashContexList *mdHashContextList.HashContextList
 	// log writer
 	islogging bool
-	Stop bool
+	stop bool
 	Logfile   *log.Logger
 }
 
 // Init returns a new modScan object
 func Init(blocksize int64, modsize int64, blockNumber int64, thread int64, threadCount int64, mux *mdUnzipMutex.FileMutex, hcl *mdHashContextList.HashContextList) (md *DecodeData) {
 	mdata := new(DecodeData)
-	mdata.blocksizeInt = blocksize
-	mdata.modsizeInt   = modsize
-	mdata.modExp = 0
-	mdata.blockNumber  = blockNumber 
-	mdata.threadNumber = thread
-	mdata.threadCount  = threadCount
-	/// mdata.byteblock = bytes // I dont think this is needed it was for the random byteblock modulus scan and not the file modulus scan
-	mdata.matchFound = false
-	mdata.collisionCnt = 0
-	// mdata.timeStarted = time.Now()
+
+	mdata.blocksizeInt   = blocksize
+	mdata.modsizeInt     = modsize
+	mdata.modExp         = 0
+	mdata.blockNumber    = blockNumber 
+	mdata.threadNumber   = thread
+	mdata.threadCount    = threadCount
+	// mdata.byteblock   = bytes // initialized in the modulus scan
+	mdata.matchFound     = false
+	mdata.collisionCnt   = 0
 	mdata.initLog()
-	mdata.islogging = false
-	mdata.Stop      = false
-	mdata.mux = mux
+	mdata.islogging      = false
+	mdata.stop           = false
+	mdata.mux            = mux
 	mdata.hashContexList = hcl
 	return mdata
 }
@@ -156,7 +156,7 @@ func (md *DecodeData) ModulusScanFileBytes(modSize uint32, blocklist string, has
 func (md *DecodeData) ModulusScanFileBytesOrig(modSize uint32, blocklist string, hashlist string, modRemainder string, blocksize int64, c *sync.WaitGroup) {
 
         // set the stop to false
-        md.Stop = false
+        md.stop = false
 
         // set the current blocksize
         md.blocksizeInt = blocksize
@@ -230,7 +230,7 @@ func (md *DecodeData) ModulusScanFileBytesOrig(modSize uint32, blocklist string,
 func (md *DecodeData) ModulusScanFileBytesRun(blockNumber int64, blocksize int64, c *sync.WaitGroup) {
 
 	// set the stop to false
-	md.Stop = false
+	md.stop = false
 
 	// set the current blocksize
 	md.blocksizeInt = blocksize
@@ -358,7 +358,7 @@ func (md *DecodeData) decode() (int) {
 			lineCount = 0
 		}
 
-		if md.Stop {
+		if md.stop {
 			break
 		}
 
@@ -469,6 +469,11 @@ func (md *DecodeData) MatchFound() bool {
 // reset the modScan match found
 func (md *DecodeData) ResetMatchFound()  {
         md.matchFound = false
+}
+
+// stop the modScan
+func (md *DecodeData) StopScan()  {
+	md.stop = true
 }
 
 // get the modScan collision count
