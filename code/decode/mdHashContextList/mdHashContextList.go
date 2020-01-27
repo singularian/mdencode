@@ -343,6 +343,14 @@ func (hc *HashContextList) SetBlockHash (byteblock []byte) {
         hc.hashBlockBytes = byteblock
 }
 
+// GetBlockHashBytes
+// return the current mdzip block hash signature block bytes
+func (hc *HashContextList) GetBlockHashBytes () ([]byte) {
+
+	return hc.hashBlockBytes
+
+}
+
 // Get the current Block Hash List Names
 // more of a test function
 func (hc *HashContextList) GetBlockHash () ([]string) {

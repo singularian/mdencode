@@ -445,11 +445,10 @@ func (md *DecodeData) modScanData() {
 	md.Printlog("byte block modulus remainder ", md.modulusBigIntRemainder.String())
 	md.Printlog("modulus exponent ", md.modExp)
 
-	// md.Printlog("shasum ", md.sha1hex)
-        // md.Printlog("md5sum ", md.md5hex)
-
-	// md.Printlog("md5sum ", fmt.Sprintf("%x", md.md5byteblock))
-	// md.Printlog("shasum ", fmt.Sprintf("%x", md.sha1byteblock))
+	// log the block signature list and associated hash list bytes
+	if md.threadNumber == 0 {
+		md.Printlog(md.hashContexList.GetFileHashBlockSigBytes(md.hashContexList.GetBlockHashBytes()))
+	}
 
 	md.Printlog("threadnumber ", md.threadNumber)
 	md.Printlog("thread count ", md.threadCount)
