@@ -37,7 +37,6 @@ import (
 	"github.com/tildeleb/aeshash"
         "github.com/codahale/blake2"
 	"github.com/minio/blake2b-simd"
-	"github.com/skeeto/cubehash"
 	"github.com/martinlindhe/gogost/gost34112012256"
 	"github.com/martinlindhe/gogost/gost34112012512"
 	"github.com/minio/highwayhash"
@@ -59,6 +58,7 @@ import (
 	"github.com/OneOfOne/xxhash"
 	"github.com/singularian/mdhash/xxhash_128"
 	"github.com/singularian/mdhash/poly1305"
+	"github.com/singularian/mdhash/cubehash"
 	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 	"github.com/singularian/mdencode/code/decode/sigRand"
 )
