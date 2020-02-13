@@ -171,9 +171,18 @@ func (md *MdFormat) EncodeBlock(encodingFormat int, blockSize uint64, hashList [
 	_ = binary.Write(md.file, binary.BigEndian, b)
 
 	// write the modulus exponent
-        var number  = uint32(modExp)
-        // err = binary.Write(md.file, binary.BigEndian, &number)
-	_ = binary.Write(md.file, binary.BigEndian, &number)
+	// if the block size is less than or equal to 32 bytes use a single byte to encode the modulus exponent
+	// 2 ^ 256 = 32 bytes = 32 * 8
+	if md.blockSize <= 32 {
+		var number  = byte(modExp)
+		// err = binary.Write(md.file, binary.BigEndian, &number)
+		_ = binary.Write(md.file, binary.BigEndian, &number)
+	// if the block size is greater than 32 bytes use a uint32 to encode the modulus exponent
+	} else {
+		var number  = uint32(modExp)
+		// err = binary.Write(md.file, binary.BigEndian, &number)
+		_ = binary.Write(md.file, binary.BigEndian, &number)
+	}
 
         // this makes sure the modulus bytes are the same size as the modulus bitsize in bytes                                                                                                          
         // so it doesn't get an overflow error on different byte slice sizes 	

@@ -323,6 +323,7 @@ func (l *FileData) DecodeFile() int {
 
         // var hlistarray = strings.Split(hashhex, ":")
         var hlistarray []string
+	var modExp uint32 = 0 // dddddddddddddddd
         for blockNumber = 0; blockNumber < blocks; blockNumber++ {
                 start = end
                 // end = end + fileblocksize + modByteSize + 4;
@@ -344,10 +345,19 @@ func (l *FileData) DecodeFile() int {
                 hstring := strings.Join(hlistarray, ":")
 
 		// calculate the binary modulus exponent
-                // should make modexp an int16
-                start = end
-                end = end + 4
-                modExp    := binary.BigEndian.Uint32(bytes[start:end])
+		// if the block size is less than or equal to 32 bytes use a single byte to decode the modulus exponent
+		// 32 bytes * 8 bits = 256
+		if blockSize <= 32 {
+			start = end
+			end = end + 1
+			//modExp    = binary.BigEndian.Uint32(bytes[start:end])
+			 modExp    = uint32(bytes[start])
+		// if the block size is greater than 32 bytes use a uint32 to encode the modulus exponent
+		} else {
+			start = end
+			end = end + 4
+			modExp    = binary.BigEndian.Uint32(bytes[start:end])
+		}
 
 		// calculate the modulus remainder bigint
                 start = end

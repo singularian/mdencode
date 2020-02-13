@@ -252,13 +252,14 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["sha224"] = sha256.New224()
                         case "sha256":
 				hb["sha256"] = sha256.New()
-                        case "sha512":
-				hb["sha512"] = sha512.New()
                         case "sha512_224":
 				hb["sha512_224"] = sha512.New512_224()
                         case "sha512_256":
 				hb["sha512_256"] = sha512.New512_256()
-                        // case "sha512_384":
+                        case "sha512_384":
+				hb["sha512_384"] = sha512.New384()
+			case "sha512":
+				hb["sha512"] = sha512.New()
                         case "sha3_224":
 				hb["sha3_224"] = sha3.New224()
                         case "sha3_256":

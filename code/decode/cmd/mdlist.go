@@ -161,6 +161,7 @@ func main() {
 
 	// var hlistarray = strings.Split(hashhex, ":")
 	var hlistarray []string
+	var modExp uint32 = 0
 	// fmt.Println("mod byte size ", modSize, " ", modByteSize)
 	for blockNumber = 0; blockNumber < blocks; blockNumber++ {
 		start = end
@@ -173,10 +174,22 @@ func main() {
 			hlistarray = append(hlistarray, fmt.Sprintf("%x", string(bytes[start:end])))
 		}
 
-		// should make modexp an int16
-		start = end
-		end = end + 4 
-		modSize       := binary.BigEndian.Uint32(bytes[start:end])
+		// calculate the binary modulus exponent
+                // if the block size is less than or equal to 32 bytes use a single byte to decode the modulus exponent
+                // 32 bytes * 8 bits = 256
+                if blockSize <= 32 {
+                        start = end
+                        end = end + 1
+                        //modExp    = binary.BigEndian.Uint32(bytes[start:end])
+                        modExp    = uint32(bytes[start])
+                // if the block size is greater than 32 bytes use a uint32 to encode the modulus exponent
+                } else {
+                        start = end
+                        end = end + 4
+                        modExp = binary.BigEndian.Uint32(bytes[start:end])
+                }
+
+		// caldulate the modulus
 		start = end
 		end = end + modByteSize
 		n := new(big.Int)
@@ -186,10 +199,10 @@ func main() {
 		if blockNumber + 1 != blocks {
 			// mdfmt.EncodeBlock(format, blockSize, hlistarray, int(modSize), n.String());
 			// fmt.Println("block hash ", blockSize, hlistarray, int(modSize), n.String());
-			fmt.Printf("block hash %d %d %s %d %s \n", blockNumber, blockSize, hlistarray, int(modSize), n.String());
+			fmt.Printf("block hash %5d %5d/%d bytes block signature %s exponent %5d modulus %50s \n", blockNumber, blockSize, blockSize, hlistarray, modExp, n.String());
 		} else {
 			// mdfmt.EncodeBlock(format, remainder, hlistarray, int(modSize), n.String());
-			fmt.Printf("block hash %d %d %s %d %s \n", blockNumber, remainder, hlistarray, int(modSize), n.String());
+			fmt.Printf("block hash %5d %5d/%d bytes block signature %s exponent %5d modulus %50s \n", blockNumber, remainder, blockSize, hlistarray, modExp, n.String());
 		}
 		hlistarray = hlistarray[:0]
 	}
