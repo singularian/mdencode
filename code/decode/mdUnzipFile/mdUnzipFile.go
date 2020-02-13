@@ -321,9 +321,9 @@ func (l *FileData) DecodeFile() int {
 	// set the start time
 	startTime := time.Now()
 
-        // var hlistarray = strings.Split(hashhex, ":")
         var hlistarray []string
-	var modExp uint32 = 0 // dddddddddddddddd
+	var modExp uint32 = 0
+
         for blockNumber = 0; blockNumber < blocks; blockNumber++ {
                 start = end
                 // end = end + fileblocksize + modByteSize + 4;
