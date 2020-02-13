@@ -199,10 +199,10 @@ func main() {
 		if blockNumber + 1 != blocks {
 			// mdfmt.EncodeBlock(format, blockSize, hlistarray, int(modSize), n.String());
 			// fmt.Println("block hash ", blockSize, hlistarray, int(modSize), n.String());
-			fmt.Printf("block hash %5d %5d/%d bytes block signature %s exponent %5d modulus %50s \n", blockNumber, blockSize, blockSize, hlistarray, modExp, n.String());
+			fmt.Printf("block hash %5d block size %5d/%d signature %s exponent %5d modulus %50s \n", blockNumber, blockSize, blockSize, hlistarray, modExp, n.String());
 		} else {
 			// mdfmt.EncodeBlock(format, remainder, hlistarray, int(modSize), n.String());
-			fmt.Printf("block hash %5d %5d/%d bytes block signature %s exponent %5d modulus %50s \n", blockNumber, remainder, blockSize, hlistarray, modExp, n.String());
+			fmt.Printf("block hash %5d block size %5d/%d signature %s exponent %5d modulus %50s \n", blockNumber, remainder, blockSize, hlistarray, modExp, n.String());
 		}
 		hlistarray = hlistarray[:0]
 	}
