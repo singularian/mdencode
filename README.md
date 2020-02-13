@@ -348,8 +348,6 @@ mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000
 mdunzip -file=decoderRandom.go.mdz -out=decoderRandom.go.mdz.uncompressed -thread=16
 ```
 
-TODO: Change the mod exponent size in the output block from int32 to int16.  
-
 # MDZip Usage
 
 - [Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
