@@ -61,6 +61,8 @@ var hlist = []HashList{
 		{ HashName: "blake2s_256", Description: "Blake2s 256",		BlockSize: 32,	Key: true },
 		{ HashName: "bmw",         Description: "BMW",			BlockSize: 64,	Key: false },
 
+		{ HashName: "crc64ecma",   Description: "CRC64 ECMA",		BlockSize: 8,	Key: false },
+		{ HashName: "crc64iso",    Description: "CRC64 ISO",		BlockSize: 8,	Key: false },
 		{ HashName: "cube",        Description: "Cubehash",		BlockSize: 64,	Key: false },
 		{ HashName: "echo",        Description: "Echo",			BlockSize: 64,	Key: false },
 

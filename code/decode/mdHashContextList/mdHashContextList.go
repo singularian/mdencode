@@ -24,6 +24,7 @@ import (
 	"encoding/hex"
 	"hash"
 	"hash/fnv"
+	"hash/crc64"
 	"crypto/hmac"
 	"golang.org/x/crypto/blake2s"
 	"github.com/htruong/go-md2"
@@ -166,6 +167,14 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
                                 hb["blake2s_256"] = b
 			case "bmw":
 				hb["bmw"] = bmw.New()
+			case "crc64ecma":
+				// crc := crc64.New(crc64.MakeTable(crc64.ECMA))
+				// hb["crc"] = crc64.New(crc64.MakeTable(crc64.ECMA))
+				hb["crc64ecma"] = crc64.New(crc64.MakeTable(crc64.ECMA)) 
+			case "crc64iso":
+				//// crciso := crc64.New(crc64.MakeTable(crc64.ISO))
+				//// hb["crc"] = crc64.New(crc64.MakeTable(crc64.ISO))
+				 hb["crc64iso"] = crc64.New(crc64.MakeTable(crc64.ISO))
 			case "cube":
 				hb["cube"] = cubehash.New()
 			case "echo":
