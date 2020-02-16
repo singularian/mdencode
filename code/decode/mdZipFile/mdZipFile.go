@@ -408,7 +408,7 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 		// changing fileblockmodulusString to bigint
 		/////////l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, l.modExp, l.fileblockmodulusString)
 		l.mdfmt.EncodeBlock(format, bytesRead, hlistarray, l.modExp, l.fileBlockModulus)
-		fmt.Println("block number ", blocksRead, bytesRead, hlistarray, l.modExp, l.fileblockmodulusString, modSize)
+		fmt.Println("block number ", blocksRead, bytesRead, hlistarray, l.modExp, l.fileblockmodulusString)
 		blocksRead++
 		hlistarray = hlistarray[0:0]
 	}

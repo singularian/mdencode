@@ -475,7 +475,7 @@ func (l *FileData) PostValidate() {
 			h.Reset()
 
 			// fmt.Println("Validating file signature ", hashvalue, i, h, hashListFile)
-			fmt.Println("Validating file signature ", hashvalue, i)
+			fmt.Printf("Validating file signature %-20s %d\n", hashvalue, i)
 
 			if _, err := io.Copy(h, f); err != nil {
 				fmt.Println("file validation error ", err)
