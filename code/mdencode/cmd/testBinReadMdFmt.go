@@ -158,7 +158,7 @@ func main() {
 	var modByteSize uint64 
 
 	// calculate the modulus remainder byte block size
-        // also consider odd number modulus sizes ie 33 or 65 bytes
+        // also consider odd number modulus sizes ie 33 or 65 bits
         if modSize % 8 == 0 {
                 modByteSize = modSize / 8
         } else if modSize <= 8 {
@@ -199,13 +199,7 @@ func main() {
 		hlistarray = hlistarray[:0]
 	}
 
-	// fmt.Println("lll ", filesize, fileblocksize)
-	// return bytes, err
-
-	// fmt.Println("test count ", CalcHashSizeFile("sha1:md5"))
-	// fmt.Println("test count ", CalcHashSizeFile("sha1:md5:ripe160:sha224"))
-
-        // endcode the end of file formatter
+        // encode the end of file formatter
         mdfmt.EncodeEndFile(format)
 
 }

@@ -156,7 +156,7 @@ func main() {
 	var modByteSize uint64 
 
 	// calculate the modulus remainder byte block size
-	// also consider odd number modulus sizes ie 33 or 65 bytes	
+	// also consider odd number modulus sizes ie 33 or 65 bits	
         if modSize % 8 == 0 {
                 modByteSize = modSize / 8
         } else if modSize <= 8 {
