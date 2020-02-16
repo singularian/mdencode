@@ -90,12 +90,8 @@ func (md *MdFormat) InitFile() {
 //
 func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePath string, fileSize int64, blockSize int64, filehashList []string, blockhashList []string, modulusSize int64) {
 
-//	var number uint64 = 10102938
-/*      err = binary.Write(f, binary.LittleEndian, number)
-        if err != nil {
-                log.Fatalln(err)
-        }
-*/
+	fmt.Println("Creating Binary File ", fileName)
+
 	var fileAttribute [6]int64
 	fileAttribute[0]   = fileSize
         fileAttribute[1 ] = blockSize
@@ -104,7 +100,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 	// filename length
 	var length int = len(fileName)
 	fileAttribute[3] = int64(length)
-	fmt.Println("filename length ", length, " ", fileAttribute[3])
+	// fmt.Println("filename length ", length, " ", fileAttribute[3])
 
 	// write the filepath uint64 size
 	// filepath length
@@ -117,7 +113,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
         // mdata.mdblockHashListString
         length  = len(hashListString)
         fileAttribute[5]  = int64(length)
-        fmt.Println("file Hashlist size ", length, " ", hashListString, " attribute 5 ", fileAttribute)
+        // fmt.Println("file Hashlist size ", length, " ", hashListString, " attribute 5 ", fileAttribute)
 
 	err := binary.Write(md.file, binary.BigEndian, &fileAttribute)
         if err != nil {

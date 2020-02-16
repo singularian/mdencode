@@ -300,9 +300,15 @@ func (l *FileData) DecodeFile() int {
 
         var blockNumber uint64
         var modByteSize uint64
-        modByteSize = modSize / 8
-        if modByteSize == 0 {
-                modByteSize = 1
+
+	// calculate the modulus remainder byte block size
+        // also consider odd number modulus sizes ie 33 or 65 bytes
+        if modSize % 8 == 0 {
+                modByteSize = modSize / 8
+        } else if modSize <= 8 {
+                modByteSize = 1;
+        } else {
+                modByteSize = (modSize / 8) + 1
         }
 
 	// initialize the block hash modulus scan object list
