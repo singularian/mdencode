@@ -1,12 +1,12 @@
 # Project MDencode MDzip Overview  
   
 
-mdzip is the golang command line utility can compress a file into a md binary byte block files.
-mdzip takes an optional input key for the 32 byte Highway Hash 64 and Highway Hash 128 and Highway Hash 256. It can also take input keylist parameters for other signature keys.
+MDzip is the golang command line utility can compress a file into a md binary byte block files.
+MDzip takes an optional input key for the 32 byte Highway Hash 64 and Highway Hash 128 and Highway Hash 256. It can also take input keylist parameters for other signature keys.
 
-mdunzip will decompress the input signature binary block file to an output file.
+MDunzip will decompress the input signature binary block file to an output file.
 
-mdunzip has a context hash list for each decode thread. mdzip can use multiple block signatures and mdunzip will use the specified signatures to unzip the file.
+MDunzip has a context hash list for each decode thread. mdzip can use multiple block signatures and mdunzip will use the specified signatures to unzip the file.
 
 Proccessing power limits the size of the input block.
 
@@ -85,8 +85,8 @@ mdunzip -file=decoderRandom.go.mdz -out=decoderRandom.go.mdz.uncompressed -threa
 
 These are some Ascii Art Video Examples 
 
+# MDZip Example 1
 
-[MDZip Example](https://asciinema.org/a/293119)  
 [![MDzip Example](https://asciinema.org/a/293119.png)](https://asciinema.org/a/293119)
 
 # MDZip Example 2
@@ -95,9 +95,6 @@ These are some Ascii Art Video Examples
 # MDZip Highway Hash Example  
 [![MDZip Highway Hash Key Example](https://asciinema.org/a/293740.png)](https://asciinema.org/a/293740)   
 
-[![MDZip Highway Hash Key Example](https://asciinema.org/a/293740.png)](https://asciinema.org/a/293740)
-
-[MDZip Highway Hash Key Example](https://asciinema.org/a/293740)  
 
 # Collision Handling
 
