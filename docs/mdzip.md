@@ -91,8 +91,10 @@ These are some Ascii Art Video Examples
 
 # MDZip Example 2
 
-[![MDZip Example 2](https://asciinema.org/a/293112.png)](https://asciinema.org/a/293112) 
-[![MDZip Example 2](https://asciinema.org/a/293112.png)](https://asciinema.org/a/293112)
+[Example 2](https://asciinema.org/a/293112)  
+
+[![MDZip Example 2](https://asciinema.org/a/293112.png)](https://asciinema.org/a/293112)   
+[![MDZip Example 2](https://asciinema.org/a/293112.png)](https://asciinema.org/a/293112)  
 
 # MDZip Highway Hash Example 
 
