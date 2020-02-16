@@ -79,7 +79,7 @@ mdunzip -file=decoderRandom.go.mdz -out=decoderRandom.go.mdz.uncompressed -threa
 
 # MDZip Usage
 
-- [Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
+[Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
 
 # MDZip Video Example 
 
@@ -90,9 +90,12 @@ These are some Ascii Art Video Examples
 [![MDzip Example](https://asciinema.org/a/293119.png)](https://asciinema.org/a/293119)
 
 # MDZip Example 2
-[![MDZip Example 2](https://asciinema.org/a/293112.png)](https://asciinema.org/a/293112) 
 
-# MDZip Highway Hash Example  
+[![MDZip Example 2](https://asciinema.org/a/293112.png)](https://asciinema.org/a/293112) 
+[![MDZip Example 2](https://asciinema.org/a/293112.png)](https://asciinema.org/a/293112)
+
+# MDZip Highway Hash Example 
+
 [![MDZip Highway Hash Key Example](https://asciinema.org/a/293740.png)](https://asciinema.org/a/293740)   
 
 
