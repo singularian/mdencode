@@ -13,6 +13,7 @@ package main
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
+	"flag"
 	"fmt"
 	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 )
@@ -20,16 +21,26 @@ import (
 
 func main() {
 
+	var count int
+	flag.IntVar(&count, "f", 0, "MDSig Format")
+	flag.Parse()
 
-	fmt.Println("Current mdencode signatures\n")
+	fmt.Println("format ", count)
 
-	full()
+	if count == 0 {
+		full()
+	} else {
+		simple()
+	}
+	// add a mark down table option
 
 }
 
 func simple() {
 
         mdl := mdBinaryList.Init()
+
+	fmt.Println("Current mdencode signatures\n")
 
         columns := [5]string{"ID:", "HashName", "Description", "Block Size"}
         fmt.Printf("%-6s %-11s   %-40s\n", columns[0], columns[1], columns[2])
@@ -39,7 +50,7 @@ func simple() {
         for i := 0; i < len(hlistObject); i++ {
                 number := fmt.Sprintf("%d:", i+1)
 
-                fmt.Printf("%-6s %-11s   %-40s %d\n", number, hlistObject[i].HashName,  hlistObject[i].Description)
+                fmt.Printf("%-6s %-11s   %-40s\n", number, hlistObject[i].HashName,  hlistObject[i].Description)
         }
 
 
@@ -49,6 +60,8 @@ func simple() {
 func full() {
 
         mdl := mdBinaryList.Init()
+
+	fmt.Println("Current mdencode signatures\n")
 
         columns := [5]string{"ID:", "HashName", "Description", "Block Size"}
         fmt.Printf("%-6s %-11s   %-40s %s\n", columns[0], columns[1], columns[2], columns[3])
