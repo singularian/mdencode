@@ -443,6 +443,40 @@ func (hc *HashContextList) CalcHashBlockSize (hashlist string, mdtype int) (uint
 	return blocksize, blocklistarr
 }
 
+// CalcHashBlockSizeFileList takes a hashlist colon separated string of hash names
+//
+// It calculates the total blocksize and a array of the hash signature block sizes
+// this allows mdprint or mdunzip to decode each signature block and calculate their size
+// returns blocksize and the blocksize array for each block
+func (hc *HashContextList) CalcHashBlockSizeFileList (hashlist string) (uint64, []int) {
+
+	blocksize, blocklistarr := hc.MdBlockSize.CalcHashBlockSize(hashlist)
+
+	hc.hashFileBlockSize     = blocksize
+	hc.hashFileBlockSizeList = blocklistarr
+
+
+	return blocksize, blocklistarr
+}
+
+
+// CalcHashBlockSizeBlockList takes a hashlist colon separated string of hash names
+//
+// It calculates the total blocksize and a array of the hash signature block sizes
+// this allows mdprint or mdunzip to decode each signature block and calculate their size
+// returns blocksize and the blocksize array for each block
+func (hc *HashContextList) CalcHashBlockSizeBlockList (hashlist string) (uint64, []int) {
+
+        blocksize, blocklistarr := hc.MdBlockSize.CalcHashBlockSize(hashlist)
+
+	hc.hashBlockSize     = blocksize
+	hc.hashBlockSizeList = blocklistarr
+
+
+        return blocksize, blocklistarr
+}
+
+
 
 // Set the Hash List Key
 // should return a string not sure if I need this

@@ -15,10 +15,11 @@ package mdBinaryList
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
-//	"fmt"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
+	"os"
 )
 
 // BlockList object stores the file block signature list
@@ -181,7 +182,11 @@ func (bl *BlockList) CreateHashBlockList(hashlistBoolean string) ([]string) {
 
                 switch vbool {
                         // case 1: bl.AddHashList(hashNames[i], i) 
-                        case 1: bl.AddHashList(hlist[i].HashName, i) 
+			case 0: // do nothing
+                        case 1: bl.AddHashList(hlist[i].HashName, i)
+			default:
+				fmt.Println("unrecognized hashlist boolean")
+				os.Exit(1)
                 }
 
         }
