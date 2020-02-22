@@ -10,7 +10,8 @@ MDunzip will decompress the input signature binary block file to an output file.
 Block size is limited by the number of CPU threads and processors. 
 MZunzip runs a mutlithreaded modulus scan on the MDzip file and writes the results to an unzipped output file.
 
-Parameters:
+Parameters:  
+```
 -file string                                         
       Input Filename                                 
 -block string                                        
@@ -29,7 +30,7 @@ Parameters:
       Output Filename                                
 -keylist string                                      
       Signature Hash Keylist                         
-
+```
 
 **MDZip Features**
 - User Specified Modulus Size
