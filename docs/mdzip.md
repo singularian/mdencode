@@ -254,7 +254,9 @@ This is a guide for building MDencode on Linux.
 
 # MDzip Test
 
-The MDzip modulus provides a commandline modulus scan with the hash context list.
+The MDzip provides a commandline modulus test scan with the hash context list.  It generates a random byte block n-bytes or can use a hex or decimal byte block of n-bytes.  
+It also can use a N-bit modulus and a hash list and signature key as well as the thread number and then runs a modulus scan and compares results.  
+If the byte blocks match the modulus scan result is a success.  
 
 path: github.com/singularian/mdencode/code/testdecode/cmd/decoderRandomTestHC.go
 
