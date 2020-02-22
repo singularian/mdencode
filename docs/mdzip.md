@@ -1,14 +1,13 @@
 # Project MDencode MDzip Overview  
   
-
-MDzip is the golang command line utility can compress a file into a MDzip binary byte block file.
-MDunzip will decompress the input signature binary block file to an output file.  
-MDunzip and MDzip use a Hash Context list to encode and decode a file.
-MDZip uses a Prefix binary file with file and byte signatures with a modular floor. It can also use a signature key.
+MDzip is the golang command line utility can compress a file into a MDzip binary byte block file.  
+MDunzip will decompress the input signature binary block file to an output file.   
+MDunzip and MDzip use a Hash Context list to encode and decode a file.  
+MDZip uses a Prefix binary file with file and byte signatures with a modular floor. It can also use a signature keylist.  
 MDzip takes an optional input key for the 32 byte Highway Hash 64 and Highway Hash 128 and Highway Hash 256. It can also take input keylist parameters for other signature keys.  
-MDunzip will decompress the input signature binary block file to an output file.
-Block size is limited by the number of CPU threads and processors. 
-MZunzip runs a mutlithreaded modulus scan on the MDzip file and writes the results to an unzipped output file.
+MDunzip will decompress the input signature binary block file to an output file.  
+Block size is limited by the number of CPU threads and processors.   
+MZunzip runs a mutlithreaded modulus scan on the MDzip file and writes the results to an unzipped output file.  
 
 Parameters:  
 ```
