@@ -1,14 +1,35 @@
 # Project MDencode MDzip Overview  
   
 
-MDzip is the golang command line utility can compress a file into a md binary byte block files.
-MDzip takes an optional input key for the 32 byte Highway Hash 64 and Highway Hash 128 and Highway Hash 256. It can also take input keylist parameters for other signature keys.
-
+MDzip is the golang command line utility can compress a file into a MDzip binary byte block file.
+MDunzip will decompress the input signature binary block file to an output file.  
+MDunzip and MDzip use a Hash Context list to encode and decode a file.
+MDZip uses a Prefix binary file with file and byte signatures with a modular floor. It can also use a signature key.
+MDzip takes an optional input key for the 32 byte Highway Hash 64 and Highway Hash 128 and Highway Hash 256. It can also take input keylist parameters for other signature keys.  
 MDunzip will decompress the input signature binary block file to an output file.
+Block size is limited by the number of CPU threads and processors. 
+MZunzip runs a mutlithreaded modulus scan on the MDzip file and writes the results to an unzipped output file.
 
-MDunzip has a context hash list for each decode thread. mdzip can use multiple block signatures and mdunzip will use the specified signatures to unzip the file.
+Parameters:
+-file string                                         
+      Input Filename                                 
+-block string                                        
+      File Block Size Bytes (default "40")           
+-fh string                                           
+      File Hash Bit String List (default "011")      
+-bh string                                           
+      Block Hash Bit String List (default "01001")   
+-uh string                                           
+      Quarternian Hash String List                   
+-mod string                                          
+      Modulus Size in Bits (default "32")            
+-format int                                          
+      Output Format (default 10)                     
+-out string                                          
+      Output Filename                                
+-keylist string                                      
+      Signature Hash Keylist                         
 
-Proccessing power limits the size of the input block.
 
 **MDZip Features**
 - User Specified Modulus Size
@@ -24,6 +45,13 @@ Proccessing power limits the size of the input block.
 - File Signature Post Validation
 - Uses the MDZip Signature Keys to change the output file signature Modulus Scan
 
+# MDZip File Format
+
+This is the MDZip file format
+
+[File Prefix]
+[File Signature Blocks]
+[File Block Signature Blocks]
 
 
 # Modular Floor
@@ -199,9 +227,6 @@ These are some Ascii Art Video Examples
 
 [Example 2](https://asciinema.org/a/293112)  
 
-[![MDZip Example 2](https://asciinema.org/a/293112.png)](https://asciinema.org/a/293112)   
-[![MDZip Example 2](https://asciinema.org/a/293112.png)](https://asciinema.org/a/293112)  
-
 # MDZip Highway Hash Example 
 
 [![MDZip Highway Hash Key Example](https://asciinema.org/a/293740.png)](https://asciinema.org/a/293740)   
@@ -219,12 +244,42 @@ These are a brief list of collision management in mdzip and mdunzip.
 - **Use Optional File Block Collision Numbers**. Collision numbers can designate the correct match.
 - Use Block Signature Pairs with Modulus / Modular Floors.
 - Using Modular floors to skip numbers
+- Change the Modulus number
 
 # Build
 
 This is a guide for building MDencode on Linux.
 
 [Example Build](https://github.com/singularian/mdencode/blob/master/docs/Build.md)
+
+# MDzip Test
+
+The MDzip modulus provides a commandline modulus scan with the hash context list.
+
+path: github.com/singularian/mdencode/code/testdecode/cmd/decoderRandomTestHC.go
+
+This is the Usage for decoderRandomTestHC.
+
+```
+Usage  ./decoderRandomTestHC  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] -hex=[OPTIONAL HEX BYTESTRING] keylist=[OPTIONAL HEX BYTESTRING]
+Usage  ./decoderRandomTestHC  -block=12 -mod=64 -thread=16 -bh=1010101
+Usage  ./decoderRandomTestHC  -block=9 -mod=64 -thread=10 -bh=11111 -bytes=[1,2,3,4,5]
+Usage  ./decoderRandomTestHC  -block=8 -mod=64 -thread=10 -bh=1 -bytes=[100,222,30,55,100]
+Usage  ./decoderRandomTestHC  -block=8 -mod=64 -thread=10 -bh=101 -hex=FF0C3FDDAF
+Usage  ./decoderRandomTestHC  -block=20 -mod=128 -thread=16 -bh=0000000000000000001 -keylist=aes8:F01100119900112FF11
+Usage  ./decoderRandomTestHC  -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
+Usage  ./decoderRandomTestHC  -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF
+```
+
+Example decoderRandomTestHC Tests
+```
+ ./decoderRandomTestHC -block=20 -mod=128 -thread=16 -bh=0000000000000000001 -keylist=aes8:F01100119900112FF11
+hashlist  [hmac256] 0000000000000000001
+Found Block [hmac256 baf64c746d51cc640faa447da3a4caecc6f35ca2dc42dd5f22bd94ed96f6697f] result = baf64c746d51cc640faa447da3a4caecc6f35ca2dc42dd5f22bd94ed96f6697f Found Block  [222 251 17 58 253 154 45 2 197 39 85 239 144 178 187 172 171 117 135 51]
+Total time  3m27.7438341s
+random bytestring and modulusscan bytestring match  [222 251 17 58 253 154 45 2 197 39 85 239 144 178 187 172 171 117 135 51]   [222 251 17 58 253 154 45 2 197 39 85 239 144 178 187 172 171 117 135 51]  hex bytes  DEFB113AFD9A2D02C52755EF90B2BBACAB758733
+Found block  thread 10 random bytestring and modulusscan bytestring match [222 251 17 58 253 154 45 2 197 39 85 239 144 178 187 172 171 117 135 51] = [222 251 17 58 253 154 45 2 197 39 85 239 144 178 187 172 171 117 135 51]
+```
 
 # Donations
 
