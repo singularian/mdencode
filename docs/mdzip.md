@@ -49,9 +49,9 @@ Parameters:
 
 This is the MDZip file format
 
-[File Prefix]
-[File Signature Blocks]
-[File Block Signature Blocks]
+[File Prefix]  
+[File Signature Blocks]  
+[File Block Signature Blocks]  
 
 
 # Modular Floor
