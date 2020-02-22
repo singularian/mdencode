@@ -275,6 +275,21 @@ Usage  ./decoderRandomTestHC  -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CD
 
 Example decoderRandomTestHC Tests
 ```
+./decoderRandomTestHC -block=12 -mod=64 -thread=16 -bh=1 -keylist=aes8:F0110033119900112FF11
+hashlist  [aes8] 1
+Found Block [aes8 777f8b3e50699983] result = 777f8b3e50699983 Found Block  [78 185 242 227 135 253 126 154 144 154 16 165]
+Total time  9.5400239s
+random bytestring and modulusscan bytestring match  [78 185 242 227 135 253 126 154 144 154 16 165]   [78 185 242 227 135 253 126 154 144 154 16 165]  hex bytes  4EB9F2E387FD7E9A909A10A5
+Found block  thread 3 random bytestring and modulusscan bytestring match [78 185 242 227 135 253 126 154 144 154 16 165] = [78 185 242 227 135 253 126 154 144 154 16 165]
+
+./decoderRandomTestHC -block=20 -mod=128 -thread=16 -bh=1 -keylist=aes8:F01100119900112FF11
+hashlist  [aes8] 1
+Found Block [aes8 81def47df5b10ba2] result = 81def47df5b10ba2 Found Block  [56 38 203 31 20 151 178 180 58 154 204 245 179 216 147 72 182 117 216 244]
+Total time  29.688835s
+random bytestring and modulusscan bytestring match  [56 38 203 31 20 151 178 180 58 154 204 245 179 216 147 72 182 117 216 244]   [56 38 203 31 20 151 178 180 58 154 204 245 179 216 147 72 182 117 216 244]  hex bytes  3826CB1F1497B2B43A9ACCF5B3D89348B675D8F4
+Found block  thread 15 random bytestring and modulusscan bytestring match [56 38 203 31 20 151 178 180 58 154 204 245 179 216 147 72 182 117 216 244] = [56 38 203 31 20 151 178 180 58 154 204 245 179 216 147 72 182 117 216 244]
+
+
  ./decoderRandomTestHC -block=20 -mod=128 -thread=16 -bh=0000000000000000001 -keylist=aes8:F01100119900112FF11
 hashlist  [hmac256] 0000000000000000001
 Found Block [hmac256 baf64c746d51cc640faa447da3a4caecc6f35ca2dc42dd5f22bd94ed96f6697f] result = baf64c746d51cc640faa447da3a4caecc6f35ca2dc42dd5f22bd94ed96f6697f Found Block  [222 251 17 58 253 154 45 2 197 39 85 239 144 178 187 172 171 117 135 51]
