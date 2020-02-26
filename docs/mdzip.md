@@ -9,28 +9,6 @@ MDunzip will decompress the input signature binary block file to an output file.
 Block size is limited by the number of CPU threads and processors.   
 MZunzip runs a mutlithreaded modulus scan on the MDzip file and writes the results to an unzipped output file.  
 
-Parameters:  
-```
--file string                                         
-      Input Filename                                 
--block string                                        
-      File Block Size Bytes (default "40")           
--fh string                                           
-      File Hash Bit String List (default "011")      
--bh string                                           
-      Block Hash Bit String List (default "01001")   
--uh string                                           
-      Quarternian Hash String List                   
--mod string                                          
-      Modulus Size in Bits (default "32")            
--format int                                          
-      Output Format (default 10)                     
--out string                                          
-      Output Filename                                
--keylist string                                      
-      Signature Hash Keylist                         
-```
-
 **MDZip Features**
 - User Specified Modulus Size
 - User Specified Block Size
