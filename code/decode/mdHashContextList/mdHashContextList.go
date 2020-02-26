@@ -249,6 +249,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["sea"] = seahash.New()
                         case "sha1":
 				hb["sha1"] = sha1.New()
+			case "sha1_64":
+				hb["sha1_64"] = sha1_128.New(0, 8)
 			case "sha1_128":
 				hb["sha1_128"] = sha1_128.New()
 			case "sha1_1284":
