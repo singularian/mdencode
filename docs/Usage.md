@@ -247,6 +247,46 @@ Examples:
 ./mdlist  [FILENAME]   
 ```
 
+mdcmd is a command line version of mdunzip. It is used as a potential distributed worker node for mdunzip.
+```
+USAGE of mdcmd:
+
+  -block string
+        File Block Size Bytes
+  -mod
+        Modulus Size in Bits
+  -h
+        Block Hash String List aes8:sha1
+  -bh
+        Block Hash Bit String List
+  -keylist
+        Signature Key List
+  -hex
+        Specify a Hash Byte Block HEX byte string
+  -exp
+        Modulus Exponent
+  -rem
+        Modulus Remainder
+  -thread string
+        Go Routine Threadsize
+
+
+Examples:
+mdCmd -block=10 -mod=64 -h=sha1_64 -hex=17af4b9d3c68b6bb -exp=79 -rem=5324266269509948425 -thread=16
+
+Starting mddecode
+modsize           64
+hashliststring    sha1_64
+modexponent       79
+modulus remainder 5324266269509948425
+
+Found Block [sha1_64 17af4b9d3c68b6bb] result = 17af4b9d3c68b6bb Found Block buffer  [213 13 73 227 151 246 131 188 20 9]  thread  13
+Total time  2.6133ms
+buffer  [213 13 73 227 151 246 131 188 20 9]
+Found Thread 13 Block d5 0d 49 e3 97 f6 83 bc 14 09
+Found Match D50D49E397F683BC1409
+```
+
 # Example Usage of mdsig
 
 ```

@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	Version   = "1.0.0"
+	Version   = "1.0.3"
 	BuildTime = "2018-06-16-0431 UTC"
 )
 
@@ -109,8 +109,6 @@ func md() int {
 	// ie bg=10 or blockgroups are 10 times the block size
 	// this eliminates or is one way to address collsions on a block level
 
-	// TODO set the mod exponent to one byte if the blocksize is less than 32 or 4 bytes if greater
-
 	fd.mdzip()
 
 	return 0
@@ -140,9 +138,6 @@ func (fd *FlagData) mdzip() {
         if fd.filename != "" {
                 fd.md.MdencodeFile(fd.blocksize, fd.modsize, fd.defaultFormat, fd.fhashlist, fd.bhashlist, fd.filename, fd.outputfilename)
         }
-
-	// TODO: if the block size is less than or equal to 32 set tye mod exponent to 1 byte
-	// if the block size is greater than 32 or so set it to 4 bytes
 
 	// if the drectory is specified
         // mdencode generate a directory signature of all the files

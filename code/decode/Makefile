@@ -5,7 +5,7 @@ BINARY=mdzip
 PROJECT="mdencode mdzip"
 
 # These are the values we want to pass for Version and BuildTime
-VERSION=1.0.0
+VERSION=1.0.3
 BUILD_TIME=`date +%FT%T%z`
 
 # build directory
@@ -21,6 +21,7 @@ all:
 	go build $(LDFLAGS) -o mdunzip ${CMD}/mdUnzip.go 
 	go build $(LDFLAGS) -o mdzip ${CMD}/mdzip.go 
 	go build $(LDFLAGS) -o mdlist ${CMD}/mdlist.go 
+	go build $(LDFLAGS) -o mdcmd ${CMD}/mdCmd.go 
 	go build $(LDFLAGS) -o mdlistTest ${CMD}/testBinReadMdFmt.go 
 	go build $(LDFLAGS) -o mdsig ${CMD}/mdsig.go 
 	go build -o ${BUILD_DIR}/randfile ${CMD}/randomFile.go
@@ -28,6 +29,7 @@ build:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip ${CMD}/mdUnzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip ${CMD}/mdzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist ${CMD}/mdlist.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdcmd ${CMD}/mdCmd.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest ${CMD}/testBinReadMdFmt.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${CMD}/mdsig.go
 	go build -o ${BUILD_DIR}/randfile ${CMD}/randomFile.go
