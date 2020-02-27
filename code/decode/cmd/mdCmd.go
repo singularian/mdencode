@@ -2,7 +2,7 @@ package main
 
 // mdencode project
 //
-// a command line version of a modulus scan decoder
+// This is a command line version of a modulus scan decoder
 // this will eventually allow a parallel distribution of work between nodes
 //
 // mdCmd.go
@@ -15,6 +15,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strconv"
 	"encoding/hex"
@@ -27,7 +28,7 @@ import (
 // mdencode flag struct                       
 type FlagData struct {
 	///// inputFilename string
-	///// outputFilename string
+	outputFilename string
 	blocksize string
 	modsize string
 	hashliststring string
@@ -72,12 +73,12 @@ func md() int {
 	flag.StringVar(&fd.bhashlist, "bh", "01001", "Block Hash Bit String List")
 	flag.StringVar(&fd.keylist,   "keylist", "", "Signature Key List")
 	flag.StringVar(&fd.hexstring, "hex", "", "Specify a Hash Byte Block HEX byte string")
-	/////// flag.StringVar(&fd.outputFilename, "out", "", "Output Filename")
+	flag.StringVar(&fd.outputFilename, "out", "", "Output Filename")
 	flag.StringVar(&fd.modexp, "exp", "", "Modulus Exponent")
 	flag.StringVar(&fd.modremainder, "rem", "", "Modulus Remainder")
 	flag.Int64Var(&fd.thread, "thread", 16, "Go Routine Threadsize")
-        // flag.Int64Var(&fd.threadStart, "start", 0, "Thread Start (Allows threads to be skipped for multiple computers)")
-        // flag.Int64Var(&fd.threadEnd, "end", 0, "Thread End (Allows threads to be skipped for multiple computers)")
+        flag.Int64Var(&fd.threadStart, "start", 0, "Thread Start (Allows threads to be divided between multiple computers)")
+        flag.Int64Var(&fd.threadEnd, "end", 0, "Thread End (Allows threads to be divided between multiple computers)")
 	////////// flag.BoolVar(&fd.postval, "val", false, "Run the File Hash List Post Validation")
 
 	flag.Usage = printUsage
@@ -99,6 +100,7 @@ func md() int {
 	return 0
 }
 
+// mdDecode the input block parameters
 func  (fd *FlagData) mdDecode() {
 	// initialize the mdBlockSize object
 	mdc := mdHashContextList.Init()
@@ -109,7 +111,10 @@ func  (fd *FlagData) mdDecode() {
 	fmt.Printf("modsize           %-30s\n", fd.modsize)
 	fmt.Printf("hashliststring    %-30s\n",  fd.hashliststring)
 	fmt.Printf("modexponent       %-30s\n", fd.modexp)
-	fmt.Printf("modulus remainder %-30s\n\n", fd.modremainder)
+	fmt.Printf("modulus remainder %-30s\n", fd.modremainder)
+	fmt.Printf("Thread Start      %-30d\n", fd.threadStart)
+	fmt.Printf("Thread End        %-30d\n", fd.threadEnd)
+	fmt.Printf("Threads           %-30d\n\n", fd.thread)
 
 	// set modulus scan variables
 	// modexp       := int32(fd.modexp)
@@ -117,16 +122,13 @@ func  (fd *FlagData) mdDecode() {
 	modExp, _    := strconv.ParseInt(fd.modexp, 10, 32)
 	modRemainder := fd.modremainder
 	hstring      := fd.hashliststring
-	// =========================================
 	blocklist := fd.hashliststring
 	hashByteBlock, err := hex.DecodeString(fd.hexstring)
 	if err != nil {
 		panic(err)
 		os.Exit(1)
 	}
-	// =========================================
 
-	// n, err := strconv.ParseInt(s, 10, 64)
 	blockSize, _ := strconv.ParseInt(fd.blocksize, 10, 64)
 	modSize,   _ := strconv.ParseInt(fd.modsize, 10, 64)
 
@@ -138,7 +140,7 @@ func  (fd *FlagData) mdDecode() {
         hcListArr := []*mdHashContextList.HashContextList{}
 
 	var threadNum int64 = 0
-	var threadCount int64 = 16
+	var threadCount int64 = fd.thread 
 	// add the block hash context lists to the array list
         for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
                 threadmdcl := mdHashContextList.Init()
@@ -171,6 +173,16 @@ func  (fd *FlagData) mdDecode() {
 
 	var threadStart int64   = 0
 	var threadEnd   int64   = int64(threadCount)
+
+	// set the threadStart and threadEnd if specified
+	// ie threadStart 3, theadEnd 6 out threadCount 16
+	if fd.threadStart < threadEnd {
+		threadStart = fd.threadStart
+	}
+	if fd.threadEnd > threadStart && fd.threadEnd < threadCount {
+		threadEnd = fd.threadEnd
+	}
+
 	for threadNum = threadStart; threadNum < threadEnd; threadNum++ {
                         // fmt.Println("Kicking off thread ", threadNum, threadStart, threadEnd, blocklist,  mdp[threadNum].MatchFound())
                         // update the hash context list hash byte block
@@ -183,9 +195,12 @@ func  (fd *FlagData) mdDecode() {
        // wait for the first modulus can result
        c.Wait()
 
-       // if a mutex match is true write the decoded block to the output file
+       // if a mutex match is true display the result or write the decoded byte block to the output file
        if mutex.GetMatchStatus() {
 		fmt.Printf("Found Match %X\n", mutex.GetFileBuffer())
+
+		// if the output file is specified write the bytes to a output file
+		fd.writeFile(fmt.Sprintf("%X", mutex.GetFileBuffer()))
        }
 
        // stop the modulus scan threads and reset the matchFound to false
@@ -194,6 +209,21 @@ func  (fd *FlagData) mdDecode() {
                mdp[threadNum].ResetMatchFound()
        }
 
+
+
+}
+
+// write the decoded hex string to an output file if it is specified
+func  (fd *FlagData) writeFile(hexbytestring string) {
+
+
+	if fd.outputFilename != "" {
+		err := ioutil.WriteFile(fd.outputFilename, []byte(hexbytestring), 0644)
+
+		if err != nil {
+			panic(err)
+		}
+	}
 
 
 }
@@ -218,6 +248,12 @@ func printUsage() {
         Modulus Exponent
   -rem
         Modulus Remainder
+  -out
+        Output Filename
+  -start
+        Thread Start (Allows threads to be divided between multiple computers)
+  -end
+        Thread End (Allows threads to be divided between multiple computers)
   -thread string
         Go Routine Threadsize
     `)
