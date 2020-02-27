@@ -272,7 +272,7 @@ USAGE of mdcmd:
 
 
 Examples:
-mdCmd -block=10 -mod=64 -h=sha1_64 -hex=17af4b9d3c68b6bb -exp=79 -rem=5324266269509948425 -thread=16
+$ mdCmd -block=10 -mod=64 -h=sha1_64 -hex=17af4b9d3c68b6bb -exp=79 -rem=5324266269509948425 -thread=16
 
 Starting mddecode
 modsize           64
@@ -285,6 +285,19 @@ Total time  2.6133ms
 buffer  [213 13 73 227 151 246 131 188 20 9]
 Found Thread 13 Block d5 0d 49 e3 97 f6 83 bc 14 09
 Found Match D50D49E397F683BC1409
+
+$ mdcmd -block=11 -mod=64 -h=aes8:ax -hex=d72f0e3e362e899364aa114c88fa69d5bdd40ff776883374 -exp=87 -rem=8990898166113033087 -thread=16
+Starting mddecode
+modsize           64
+hashliststring    aes8:ax
+modexponent       87
+modulus remainder 8990898166113033087
+
+Found Block [aes8 d72f0e3e362e8993 ax 64aa114c88fa69d5bdd40ff776883374] result = d72f0e3e362e899364aa114c88fa69d5bdd40ff776883374 Found Block buffer  [154 141 237 124 198 22 63 10 224 219 127]  thread  13
+Total time  64.9105ms
+buffer  [154 141 237 124 198 22 63 10 224 219 127]
+Found Thread 13 Block 9a 8d ed 7c c6 16 3f 0a e0 db 7f
+Found Match 9A8DED7CC6163F0AE0DB7F
 ```
 
 # Example Usage of mdsig
