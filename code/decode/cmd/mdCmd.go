@@ -29,25 +29,23 @@ import (
 type FlagData struct {
 	///// inputFilename string
 	outputFilename string
-	blocksize string
-	modsize string
+	blocksize      string
+	modsize        string
 	hashliststring string
-	bhashlist string
+	bhashlist      string
 	// bytes
 	bytes      []byte
 	// hex string
-	hexstring string
+	hexstring      string
 	// signature keys
-	keylist string
+	keylist        string
 	// modulus
-	modexp string
-	modremainder string
+	modexp         string
+	modremainder   string
 	// thread parameters
-        thread       int64
-        threadStart int64
-        threadEnd   int64
-	// file post validation
-	postval bool
+        thread          int64
+        threadStart     int64
+        threadEnd       int64
 }
 
 func main() {
@@ -79,7 +77,6 @@ func md() int {
 	flag.Int64Var(&fd.thread, "thread", 16, "Go Routine Threadsize")
         flag.Int64Var(&fd.threadStart, "start", 0, "Thread Start (Allows threads to be divided between multiple computers)")
         flag.Int64Var(&fd.threadEnd, "end", 0, "Thread End (Allows threads to be divided between multiple computers)")
-	////////// flag.BoolVar(&fd.postval, "val", false, "Run the File Hash List Post Validation")
 
 	flag.Usage = printUsage
 	flag.Parse()
@@ -107,14 +104,11 @@ func  (fd *FlagData) mdDecode() {
 	// set the keylist
 	mdc.SetHashListKey(fd.keylist)
 
-	fmt.Println("Starting mddecode")
-	fmt.Printf("modsize           %-30s\n", fd.modsize)
-	fmt.Printf("hashliststring    %-30s\n",  fd.hashliststring)
-	fmt.Printf("modexponent       %-30s\n", fd.modexp)
-	fmt.Printf("modulus remainder %-30s\n", fd.modremainder)
-	fmt.Printf("Thread Start      %-30d\n", fd.threadStart)
-	fmt.Printf("Thread End        %-30d\n", fd.threadEnd)
-	fmt.Printf("Threads           %-30d\n\n", fd.thread)
+	fmt.Println("Starting MDdecode")
+	fmt.Printf("Modulus Size        %-30s\n", fd.modsize)
+	fmt.Printf("Hashlist String     %-30s\n",  fd.hashliststring)
+	fmt.Printf("Modulus Exponent    %-30s\n", fd.modexp)
+	fmt.Printf("Modulus Remainder   %-30s\n", fd.modremainder)
 
 	// set modulus scan variables
 	// modexp       := int32(fd.modexp)
@@ -170,18 +164,15 @@ func  (fd *FlagData) mdDecode() {
 	// add one to the wait group
 	c.Add(1)
 
-
 	var threadStart int64   = 0
 	var threadEnd   int64   = int64(threadCount)
 
 	// set the threadStart and threadEnd if specified
 	// ie threadStart 3, theadEnd 6 out threadCount 16
-	if fd.threadStart < threadEnd {
-		threadStart = fd.threadStart
-	}
-	if fd.threadEnd > threadStart && fd.threadEnd < threadCount {
-		threadEnd = fd.threadEnd
-	}
+	threadStart, threadEnd  = fd.setThread()
+	fmt.Printf("Thread Start        %-30d\n", fd.threadStart)
+        fmt.Printf("Thread End          %-30d\n", fd.threadEnd)
+        fmt.Printf("Threads             %-30d\n\n", fd.thread)
 
 	for threadNum = threadStart; threadNum < threadEnd; threadNum++ {
                         // fmt.Println("Kicking off thread ", threadNum, threadStart, threadEnd, blocklist,  mdp[threadNum].MatchFound())
@@ -226,6 +217,41 @@ func  (fd *FlagData) writeFile(hexbytestring string) {
 	}
 
 
+}
+
+// set the threadStart and threadEnd
+func  (fd *FlagData) setThread() (start, end int64) {
+
+	var threadStart int64 = 0
+        var threadEnd   int64 = 0
+	var threadCount int64 = fd.thread
+
+	if fd.threadStart < threadEnd {
+                threadStart = fd.threadStart
+        }
+        if fd.threadEnd > threadStart && fd.threadEnd < threadCount {
+                threadEnd = fd.threadEnd
+        }
+        if fd.threadStart == fd.threadEnd  && fd.threadEnd < threadCount {
+                threadEnd = fd.threadEnd + 1
+        }
+	if fd.threadStart == 0 && fd.threadEnd == 0 {
+		threadEnd = threadCount
+	}
+	if fd.threadEnd == 0 {
+		fd.threadEnd = threadCount
+	}
+	if fd.threadEnd < fd.threadStart {
+		fd.threadEnd = threadCount
+	}
+	if fd.threadStart > threadCount || fd.threadEnd > threadCount {
+		fmt.Println("ThreadStart or threadEnd can't exceed threadCount")
+		os.Exit(2)
+	}
+
+
+
+	return threadStart, threadEnd
 }
 
 // printUsage
