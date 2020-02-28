@@ -287,7 +287,10 @@ func printUsage() {
 	fmt.Println()
 
         fmt.Println("Examples:")
-        fmt.Println("mdCmd -block=10 -mod=64 -h=sha1_64 -hex=17af4b9d3c68b6bb -exp=79 -rem=5324266269509948425 -thread=16")
+        fmt.Println("mdcmd -block=10 -mod=64 -h=sha1_64 -hex=17af4b9d3c68b6bb -exp=79 -rem=5324266269509948425 -thread=16")
+        fmt.Println("mdcmd -block=10 -mod=64 -h=sha1_64 -hex=17af4b9d3c68b6bb -exp=79 -rem=5324266269509948425 -thread=16 -thread=16 -start=1 -end=14")
+        fmt.Println("mdcmd -block=11 -mod=64 -h=aes8:ax -hex=d72f0e3e362e899364aa114c88fa69d5bdd40ff776883374 -exp=87 -rem=8990898166113033087 -thread=16")
+        fmt.Println("mdcmd -block=11 -mod=64 -h=aes8:ax -hex=d72f0e3e362e899364aa114c88fa69d5bdd40ff776883374 -exp=87 -rem=8990898166113033087 -thread=16 -thread=16 -start=1 -end=16")
 
 
 	fmt.Println()

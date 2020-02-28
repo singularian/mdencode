@@ -161,7 +161,7 @@ mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000011 -fh=1100
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=01 -fh=110011 -keylist=ax1:123456,ax2:789347
 
 Build Time: 2020-01-18T13:42:02-0500    
-Version:    1.0.0 復甦 復活
+Version:    1.0.4 復甦 復活
 ```                                                                                                 
                                                                                                     
 ```                                                                                                 
@@ -192,6 +192,39 @@ Examples:
 ./mdlist  [FILENAME]   
 ```
 
+mdcmd is a command line modulus scan decoder that takes and input signature list and block parameters and runs the modulus scan
+```
+USAGE of mdcmd:
+
+  -block string
+        File Block Size Bytes
+  -mod
+        Modulus Size in Bits
+  -h
+        Block Hash String List aes8:sha1
+  -bh
+        Block Hash Bit String List
+  -keylist
+        Signature Key List
+  -hex
+        Specify a Hash Byte Block HEX byte string
+  -exp
+        Modulus Exponent
+  -rem
+        Modulus Remainder
+  -out
+        Output Filename
+  -start
+        Thread Start (Allows threads to be divided between multiple computers)
+  -end
+        Thread End (Allows threads to be divided between multiple computers)
+  -thread string
+        Go Routine Threadsize
+
+
+Examples:
+mdcmd -block=10 -mod=64 -h=sha1_64 -hex=17af4b9d3c68b6bb -exp=79 -rem=5324266269509948425 -thread=16
+```
 
 # MDZip Video Example 
 
