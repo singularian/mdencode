@@ -54,6 +54,7 @@ type HashList struct {
 // hash list struct variable
 // this should be in sorted order
 var hlist = []HashList{
+		{ HashName: "add32",       Description: "Adler 32",		BlockSize: 4,	Key: true },
 		{ HashName: "aes8",        Description: "AES Hash 8",		BlockSize: 8,	Key: true },
 		{ HashName: "ax",          Description: "XXHash 128",		BlockSize: 16,	Key: true },
 		{ HashName: "blake2",      Description: "Blake2",		BlockSize: 64,	Key: false },
@@ -62,13 +63,18 @@ var hlist = []HashList{
 		{ HashName: "blake2s_256", Description: "Blake2s 256",		BlockSize: 32,	Key: true },
 		{ HashName: "bmw",         Description: "BMW",			BlockSize: 64,	Key: false },
 
-		{ HashName: "crc64ecma",   Description: "CRC64 ECMA",		BlockSize: 8,	Key: false },
-		{ HashName: "crc64iso",    Description: "CRC64 ISO",		BlockSize: 8,	Key: false },
+		{ HashName: "crc32",       Description: "CRC-32 IEEE",		BlockSize: 4,	Key: false },
+		{ HashName: "crc32c",      Description: "CRC-32 Castagnoli",	BlockSize: 4,	Key: false },
+		{ HashName: "crc32k",      Description: "CRC-32 Koopman",	BlockSize: 4,	Key: false },
+		{ HashName: "crc64ecma",   Description: "CRC-64 ECMA",		BlockSize: 8,	Key: false },
+		{ HashName: "crc64iso",    Description: "CRC-64 ISO",		BlockSize: 8,	Key: false },
 		{ HashName: "cube",        Description: "Cubehash",		BlockSize: 64,	Key: false },
 		{ HashName: "echo",        Description: "Echo",			BlockSize: 64,	Key: false },
 
-		{ HashName: "fnv",         Description: "FNV 64",		BlockSize: 8,	Key: false },
-		{ HashName: "fnva",        Description: "FNV 64a",		BlockSize: 8,	Key: false },
+		{ HashName: "fnv32",       Description: "FNV 32",		BlockSize: 4,	Key: false },
+		{ HashName: "fnv32a",      Description: "FNV 32a",		BlockSize: 4,	Key: false },
+		{ HashName: "fnv64",       Description: "FNV 64",		BlockSize: 8,	Key: false },
+		{ HashName: "fnv64a",      Description: "FNV 64a",		BlockSize: 8,	Key: false },
 		{ HashName: "fnv128",      Description: "FNV 128",		BlockSize: 16,	Key: false },
 		{ HashName: "fnv128a",     Description: "FNV 128a",		BlockSize: 16,	Key: false },
 		{ HashName: "gost256",     Description: "Gost 256",		BlockSize: 32,	Key: false },

@@ -23,7 +23,9 @@ import (
 	"strings"
 	"encoding/hex"
 	"hash"
+	"hash/adler32"
 	"hash/fnv"
+	"hash/crc32"
 	"hash/crc64"
 	"crypto/hmac"
 	"golang.org/x/crypto/blake2s"
@@ -135,6 +137,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 		for _, hashname := range hashlistArr {
 
 		switch hashname {
+			case "add32":
+				hb["add32"] = adler32.New()
 			case "aes8":
 				// seed is a uint64
 				var key = hc.keylist[hashname]
@@ -167,6 +171,12 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
                                 hb["blake2s_256"] = b
 			case "bmw":
 				hb["bmw"] = bmw.New()
+			case "crc32":
+				hb["crc32"] = crc32.New(crc32.MakeTable(crc32.IEEE))
+			case "crc32c":
+				hb["crc32c"] = crc32.New(crc32.MakeTable(crc32.Castagnoli))
+			case "crc32k":
+				hb["crc32k"] = crc32.New(crc32.MakeTable(crc32.Koopman))
 			case "crc64ecma":
 				hb["crc64ecma"] = crc64.New(crc64.MakeTable(crc64.ECMA)) 
 			case "crc64iso":
@@ -175,10 +185,14 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["cube"] = cubehash.New()
 			case "echo":
 				hb["echo"] = echo.New()
-			case "fnv":
-				hb["fnv"] = fnv.New64()
-			case "fnva":
-				hb["fnva"] = fnv.New64a()
+			case "fnv32":
+				hb["fnv32"] = fnv.New32()
+			case "fnv32a":
+				hb["fnv32a"] = fnv.New32a()
+			case "fnv64":
+				hb["fnv64"] = fnv.New64()
+			case "fnv64a":
+				hb["fnv64a"] = fnv.New64a()
 			case "fnv128":
 				hb["fnv128"] = fnv.New128()
 			case "fnv128a":
@@ -313,6 +327,8 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				// xxhash.New64()       // non seed key version
 				var key = hc.keylist[hashname]
                                 hb["xxhash"] = xxhash.NewS64(sigRand.ConvertString2Int(key))
+			default:
+				fmt.Println("Unknown Hash Context List Signature ", hashname)
 			}
 		}
 	// }
