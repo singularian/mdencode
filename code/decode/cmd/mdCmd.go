@@ -170,15 +170,13 @@ func  (fd *FlagData) mdDecode() {
 	// set the threadStart and threadEnd if specified
 	// ie threadStart 3, theadEnd 6 out threadCount 16
 	threadStart, threadEnd  = fd.setThread()
-	fmt.Printf("Thread Start        %-30d\n", fd.threadStart)
-        fmt.Printf("Thread End          %-30d\n", fd.threadEnd)
-        fmt.Printf("Threads             %-30d\n\n", fd.thread)
 
 	for threadNum = threadStart; threadNum < threadEnd; threadNum++ {
                         // fmt.Println("Kicking off thread ", threadNum, threadStart, threadEnd, blocklist,  mdp[threadNum].MatchFound())
                         // update the hash context list hash byte block
                         hcListArr[threadNum].SetBlockHash(hashByteBlock)
 
+			// TODO: Need to change the ModulusScanFileBytesOrig modExp argument name since it is referring to the modulus bit size instead of modulus exponent
 			// func (md *DecodeData) ModulusScanFileBytesOrig(modSize uint32, blocklist string, hashlist string, modRemainder string, blocksize int64, c *sync.WaitGroup) {
                         go mdp[threadNum].ModulusScanFileBytesOrig(uint32(modExp), blocklist, hstring, modRemainder, blockSize, &c)
 	}
@@ -241,9 +239,10 @@ func  (fd *FlagData) setThread() (start, end int64) {
 		os.Exit(2)
 	}
 
-	fmt.Println("SetThread ", threadStart, threadEnd, fd.threadStart, fd.threadEnd)
-
-
+	// fmt.Println("SetThread ", threadStart, threadEnd, fd.threadStart, fd.threadEnd)
+	fmt.Printf("Thread Start        %-30d\n", fd.threadStart)
+	fmt.Printf("Thread End          %-30d\n", fd.threadEnd)
+	fmt.Printf("Threads             %-30d\n\n", fd.thread)
 
 	return threadStart, threadEnd
 }
@@ -284,7 +283,7 @@ func printUsage() {
         fmt.Println("mdcmd -block=10 -mod=64 -h=sha1_64 -hex=17af4b9d3c68b6bb -exp=79 -rem=5324266269509948425 -thread=16")
         fmt.Println("mdcmd -block=10 -mod=64 -h=sha1_64 -hex=17af4b9d3c68b6bb -exp=79 -rem=5324266269509948425 -thread=16 -thread=16 -start=1 -end=14")
         fmt.Println("mdcmd -block=11 -mod=64 -h=aes8:ax -hex=d72f0e3e362e899364aa114c88fa69d5bdd40ff776883374 -exp=87 -rem=8990898166113033087 -thread=16")
-        fmt.Println("mdcmd -block=11 -mod=64 -h=aes8:ax -hex=d72f0e3e362e899364aa114c88fa69d5bdd40ff776883374 -exp=87 -rem=8990898166113033087 -thread=16 -thread=16 -start=1 -end=16")
+        fmt.Println("mdcmd -block=11 -mod=64 -h=aes8:ax -hex=d72f0e3e362e899364aa114c88fa69d5bdd40ff776883374 -exp=87 -rem=8990898166113033087 -thread=16 -start=1 -end=16")
 
 
 	fmt.Println()
