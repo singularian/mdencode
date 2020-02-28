@@ -59,6 +59,7 @@ import (
 	"github.com/jzelinskie/whirlpool"
 	"github.com/steakknife/keccak"
 	"github.com/OneOfOne/xxhash"
+	"github.com/singularian/mdhash/hw32"
 	"github.com/singularian/mdhash/xxhash_128"
 	"github.com/singularian/mdhash/poly1305"
 	"github.com/singularian/mdhash/cubehash"
@@ -209,6 +210,13 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["hmac256"] = hmac.New(sha256.New, defaultkey)
 			case "hmac512":
 				hb["hmac512"] = hmac.New(sha512.New, defaultkey)
+			case "hw32":
+				var key = hc.keylist[hashname]
+                                hwkey, err := hex.DecodeString(key)
+				hc.CheckKeyError(hashname, key, err)
+
+				hb["hw32"] = hw32.New(0, 4, hwkey[:])
+				hc.CheckKeyError(hashname, key, hc.err)
 			case "hw64":
 				var key = hc.keylist[hashname]
 				hwkey, err := hex.DecodeString(key)
@@ -520,6 +528,7 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	// hc.keylist["blake"]    = defaultkey
 	hc.keylist["blake2s_128"] = defaultkey
 	hc.keylist["blake2s_256"] = defaultkey
+	hc.keylist["hw32"]        = defaulthwkey 
 	hc.keylist["hw64"]        = defaulthwkey 
 	hc.keylist["hw128"]       = defaulthwkey 
 	hc.keylist["hw256"]       = defaulthwkey
@@ -560,6 +569,13 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 					// fmt.Println("blake2s_256 ", sig, sigkey)
 					if (sigkeysize >= 16) {
 						hc.keylist[sig] = sigkey
+					}
+					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
+				case "hw32":
+					if sigkeysize == 64 {
+						hc.keylist[sig] = sigkey
+					} else if sigkeysize > 1 && sigkeysize < 64 {
+						hc.keylist[sig] = fmt.Sprintf("%064s", sigkey)
 					}
 					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
                                 case "hw64":

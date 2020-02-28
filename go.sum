@@ -36,6 +36,8 @@ github.com/phoreproject/go-x11 v0.0.0-20190107235645-df0f52b15c3a h1:hTWt5IfyljB
 github.com/phoreproject/go-x11 v0.0.0-20190107235645-df0f52b15c3a/go.mod h1:EOg0DZ3I0sFHb1zj8Ygqws+rQizk153X4oJwluRl14A=
 github.com/singularian/mdhash v1.0.3 h1:wM8cek8MgbWUBZJNsXYlouOA2mX3MtpBEpa25ySCRxk=
 github.com/singularian/mdhash v1.0.3/go.mod h1:egDj1LSLLAq/xknQFjwqdpzSD4ekdLKbamxOnrFc9KE=
+github.com/singularian/mdhash v1.0.4 h1:2Xh6BXhF/QtmHK0kS0mm1JP/5e/eu1fp8gGS3X7cCwU=
+github.com/singularian/mdhash v1.0.4/go.mod h1:egDj1LSLLAq/xknQFjwqdpzSD4ekdLKbamxOnrFc9KE=
 github.com/steakknife/keccak v0.0.0-20150202122130-d0dce0d5b080 h1:VgH5VI21ib8sLvBJ1LMe17zjo+zOC15UchIB6Vv64Xo=
 github.com/steakknife/keccak v0.0.0-20150202122130-d0dce0d5b080/go.mod h1:XVAcwiwvJSHP20VqW3saH3KNQaWBprw8oKDZVHFWPL4=
 github.com/tildeleb/aeshash v0.0.0-20190627052759-9e6b40329b3b h1:OqFG3tPrzHKNAy7GP/hku2bv4UWb9qVIbjOb4SLmjGI=

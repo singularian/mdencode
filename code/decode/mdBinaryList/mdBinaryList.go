@@ -83,6 +83,7 @@ var hlist = []HashList{
 
 		{ HashName: "hmac256",     Description: "HMAC 256",		BlockSize: 32,	Key: true },
 		{ HashName: "hmac512",     Description: "HMAC 512",		BlockSize: 64,	Key: true },
+		{ HashName: "hw32",        Description: "Highway Hash 32",	BlockSize: 4,	Key: true },
 		{ HashName: "hw64",        Description: "Highway Hash 64",	BlockSize: 8,	Key: true },
 		{ HashName: "hw128",       Description: "Highway Hash 128",	BlockSize: 16,	Key: true },
 		{ HashName: "hw256",       Description: "Highway Hash 256",	BlockSize: 32,	Key: true },

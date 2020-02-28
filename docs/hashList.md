@@ -13,6 +13,7 @@ This is the step to add a new signature. It should be in sorted order
 2: Add the hash import to the hash context list to $GOPATH/$PROJECT/code/decode/mdHashContextList/mdHashContextList.go  
 3: Add the hash context new initialize function to CreateHashListMap()  
    in decode/mdHashContextList/mdHashContextList.go  
+4: If the signature contains a key add a default key to keylist hash map and a initializer
 ```
 
 ### Current mdencode signatures  
@@ -22,72 +23,73 @@ These are the current mdencode signatures
 ```
 ID:    HashName      Description                              Block Size  
 ========================================================================   
-1:     add32         Adler 32                                 4      
-2:     aes8          AES Hash 8                               8      
-3:     ax            XXHash 128                               16     
-4:     blake2        Blake2                                   64     
-5:     blake2b       Blake2b                                  32     
-6:     blake2s_128   Blake2s 128                              16     
-7:     blake2s_256   Blake2s 256                              32     
-8:     bmw           BMW                                      64     
-9:     crc32         CRC-32 IEEE                              4      
-10:    crc32c        CRC-32 Castagnoli                        4      
-11:    crc32k        CRC-32 Koopman                           4      
-12:    crc64ecma     CRC-64 ECMA                              8      
-13:    crc64iso      CRC-64 ISO                               8      
-14:    cube          Cubehash                                 64     
-15:    echo          Echo                                     64     
-16:    fnv32         FNV 32                                   4      
-17:    fnv32a        FNV 32a                                  4      
-18:    fnv64         FNV 64                                   8      
-19:    fnv64a        FNV 64a                                  8      
-20:    fnv128        FNV 128                                  16     
-21:    fnv128a       FNV 128a                                 16     
-22:    gost256       Gost 256                                 32     
-23:    gost512       Gost 512                                 64     
-24:    groest        Groest                                   64     
-25:    hmac256       HMAC 256                                 32     
-26:    hmac512       HMAC 512                                 64     
-27:    hw64          Highway Hash 64                          8      
-28:    hw128         Highway Hash 128                         16     
-29:    hw256         Highway Hash 256                         32     
-30:    kekkak        Kekkak                                   32     
-31:    luffa         Luffa                                    64     
-32:    murmur3       Murmur3                                  16     
-33:    md2           MD2                                      16     
-34:    md4           MD4                                      16     
-35:    md5           MD5                                      16     
-36:    poly1305      Poly1305                                 16     
-37:    ripe128       Ripe 128                                 16     
-38:    ripe160       Ripe 160                                 20     
-39:    ripe256       Ripe 256                                 32     
-40:    ripe320       Ripe 320                                 40     
-41:    sea           Seahash                                  8      
-42:    sha1_64       SHA1 64                                  8      
-43:    sha1_128      SHA1 128                                 16     
-44:    sha1_1284     SHA1 1284                                16     
-45:    sha1          SHA1                                     20     
-46:    sha224        SHA224                                   28     
-47:    sha256        SHA256                                   32     
-48:    sha512_224    SHA512 224                               28     
-49:    sha512_256    SHA512 256                               32     
-50:    sha512_384    SHA512 384                               48     
-51:    sha512        SHA512                                   64     
-52:    sha3_224      SHA3 224                                 28     
-53:    sha3_256      SHA3 256                                 32     
-54:    sha3_384      SHA3 384                                 48     
-55:    sha3_512      SHA3 512                                 64     
-56:    shavite       X11 SHAvite                              64     
-57:    sip64         Siphash 64                               8      
-58:    sip128        Siphash 128                              16     
-59:    skein_160     Skein 160                                20     
-60:    skein_256     Skein 256                                32     
-61:    skein_384     Skein 384                                48     
-62:    skein_512     Skein 512                                64     
-63:    skein_1024    Skein 1024                               128    
-64:    tiger         Tiger                                    24     
-65:    whirlpool     Whirlpool                                64     
-66:    xxhash        XXHash                                   8      
+1:     add32         Adler 32                                 4   
+2:     aes8          AES Hash 8                               8   
+3:     ax            XXHash 128                               16  
+4:     blake2        Blake2                                   64  
+5:     blake2b       Blake2b                                  32  
+6:     blake2s_128   Blake2s 128                              16  
+7:     blake2s_256   Blake2s 256                              32  
+8:     bmw           BMW                                      64  
+9:     crc32         CRC-32 IEEE                              4   
+10:    crc32c        CRC-32 Castagnoli                        4   
+11:    crc32k        CRC-32 Koopman                           4   
+12:    crc64ecma     CRC-64 ECMA                              8   
+13:    crc64iso      CRC-64 ISO                               8   
+14:    cube          Cubehash                                 64  
+15:    echo          Echo                                     64  
+16:    fnv32         FNV 32                                   4   
+17:    fnv32a        FNV 32a                                  4   
+18:    fnv64         FNV 64                                   8   
+19:    fnv64a        FNV 64a                                  8   
+20:    fnv128        FNV 128                                  16  
+21:    fnv128a       FNV 128a                                 16  
+22:    gost256       Gost 256                                 32  
+23:    gost512       Gost 512                                 64  
+24:    groest        Groest                                   64  
+25:    hmac256       HMAC 256                                 32  
+26:    hmac512       HMAC 512                                 64  
+27:    hw32          Highway Hash 32                          4   
+28:    hw64          Highway Hash 64                          8   
+29:    hw128         Highway Hash 128                         16  
+30:    hw256         Highway Hash 256                         32  
+31:    kekkak        Kekkak                                   32  
+32:    luffa         Luffa                                    64  
+33:    murmur3       Murmur3                                  16  
+34:    md2           MD2                                      16  
+35:    md4           MD4                                      16  
+36:    md5           MD5                                      16  
+37:    poly1305      Poly1305                                 16  
+38:    ripe128       Ripe 128                                 16  
+39:    ripe160       Ripe 160                                 20  
+40:    ripe256       Ripe 256                                 32  
+41:    ripe320       Ripe 320                                 40  
+42:    sea           Seahash                                  8   
+43:    sha1_64       SHA1 64                                  8   
+44:    sha1_128      SHA1 128                                 16  
+45:    sha1_1284     SHA1 1284                                16  
+46:    sha1          SHA1                                     20  
+47:    sha224        SHA224                                   28  
+48:    sha256        SHA256                                   32  
+49:    sha512_224    SHA512 224                               28  
+50:    sha512_256    SHA512 256                               32  
+51:    sha512_384    SHA512 384                               48  
+52:    sha512        SHA512                                   64  
+53:    sha3_224      SHA3 224                                 28  
+54:    sha3_256      SHA3 256                                 32  
+55:    sha3_384      SHA3 384                                 48  
+56:    sha3_512      SHA3 512                                 64  
+57:    shavite       X11 SHAvite                              64  
+58:    sip64         Siphash 64                               8   
+59:    sip128        Siphash 128                              16  
+60:    skein_160     Skein 160                                20  
+61:    skein_256     Skein 256                                32  
+62:    skein_384     Skein 384                                48  
+63:    skein_512     Skein 512                                64  
+64:    skein_1024    Skein 1024                               128 
+65:    tiger         Tiger                                    24  
+66:    whirlpool     Whirlpool                                64  
+67:    xxhash        XXHash                                   8   
 ``` 
 
 # Binary Signature Arguments
