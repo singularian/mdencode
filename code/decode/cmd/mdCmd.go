@@ -226,28 +226,22 @@ func  (fd *FlagData) setThread() (start, end int64) {
         var threadEnd   int64 = 0
 	var threadCount int64 = fd.thread
 
-	if fd.threadStart < threadEnd {
-                threadStart = fd.threadStart
-        }
-        if fd.threadEnd > threadStart && fd.threadEnd < threadCount {
-                threadEnd = fd.threadEnd
-        }
-        if fd.threadStart == fd.threadEnd  && fd.threadEnd < threadCount {
-                threadEnd = fd.threadEnd + 1
-        }
+	threadStart = fd.threadStart
+	threadEnd   = fd.threadEnd
+
 	if fd.threadStart == 0 && fd.threadEnd == 0 {
-		threadEnd = threadCount
-	}
-	if fd.threadEnd == 0 {
+		threadStart = 0 
+		threadEnd   = threadCount
+	} else if fd.threadEnd == 0 {
 		fd.threadEnd = threadCount
-	}
-	if fd.threadEnd < fd.threadStart {
+	} else if fd.threadEnd < fd.threadStart {
 		fd.threadEnd = threadCount
-	}
-	if fd.threadStart > threadCount || fd.threadEnd > threadCount {
+	} else if fd.threadStart > threadCount || fd.threadEnd > threadCount {
 		fmt.Println("ThreadStart or threadEnd can't exceed threadCount")
 		os.Exit(2)
 	}
+
+	fmt.Println("SetThread ", threadStart, threadEnd, fd.threadStart, fd.threadEnd)
 
 
 

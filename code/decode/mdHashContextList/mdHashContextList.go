@@ -329,6 +329,7 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
                                 hb["xxhash"] = xxhash.NewS64(sigRand.ConvertString2Int(key))
 			default:
 				fmt.Println("Unknown Hash Context List Signature ", hashname)
+				os.Exit(2)
 			}
 		}
 	// }
