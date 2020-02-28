@@ -25,7 +25,7 @@ func main() {
 	flag.IntVar(&count, "f", 0, "MDSig Format")
 	flag.Parse()
 
-	fmt.Println("format ", count)
+	// fmt.Println("format ", count)
 
 	if count == 0 {
 		full()
