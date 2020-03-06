@@ -66,7 +66,7 @@ test:
 	go build -o decoderRandomTest ${TEST}/${CMD}/decoderRandomTest.go 
 	go build -o decoderRandomTestHC ${TEST}${CMD}/decoderRandomTestHC.go 
 clean:
-	rm -r decoderRandom decoderRandomTest decoderRandomTestHC *.log
+	rm -r mdzip mdunzip mdcmd mdlist mdlistTest mdsig randfile md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC *.log
 # Display general help about this command
 help:
 	@echo "$(PROJECT) Makefile."
