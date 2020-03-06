@@ -621,6 +621,8 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 				case "xxhash":
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)
+				default:
+					fmt.Println("Unknown key", sig)
 			}
 		}
 	}

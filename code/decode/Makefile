@@ -24,7 +24,7 @@ all:
 	go build $(LDFLAGS) -o mdcmd ${CMD}/mdCmd.go 
 	go build $(LDFLAGS) -o mdlistTest ${CMD}/testBinReadMdFmt.go 
 	go build $(LDFLAGS) -o mdsig ${CMD}/mdsig.go 
-	go build -o ${BUILD_DIR}/randfile ${CMD}/randomFile.go
+	go build $(LDFLAGS) -o rf ${CMD}/randomFile.go
 build: 
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip ${CMD}/mdUnzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip ${CMD}/mdzip.go
@@ -32,7 +32,7 @@ build:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdcmd ${CMD}/mdCmd.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest ${CMD}/testBinReadMdFmt.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${CMD}/mdsig.go
-	go build -o ${BUILD_DIR}/randfile ${CMD}/randomFile.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/rf ${CMD}/randomFile.go
 goget:
 	go get -u golang.org/x/crypto/blake2s
 	go get -u github.com/htruong/go-md2
