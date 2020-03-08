@@ -99,8 +99,8 @@ func Init(blocksize int64, modsize int64, thread int64, threadCount int64, bytes
 	return mdata
 }
 
-// run a parallel modulus scan on a user defined or random byte block array
-func (md *DecodeData) ModulusScanBytes(c chan string) {
+// initialize the parallel modulus scan on a user defined or random byte block array
+func (md *DecodeData) SetModulusScanBytes() {
 
 	//runtime.LockOSThread()
 
@@ -108,8 +108,8 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 	bitsize := md.modsizeInt
 
 	// convert the bytes to a string
-	bytestring    := fmt.Sprintf("%v", md.byteblock)
-	bytestringhex := fmt.Sprintf("%X", md.byteblock)
+	// bytestring    := fmt.Sprintf("%v", md.byteblock)
+	// bytestringhex := fmt.Sprintf("%X", md.byteblock)
 
 	// create the biginteger representation of the bytes
 	blockBigInt := new(big.Int)
@@ -155,17 +155,26 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 	// log the starting modScan data
 	md.modScanData()
 
-	_, buffer := md.decode()
-
-	if bytestring == buffer {
-		md.Println("Random bytestring and modulusscan bytestring match ", bytestring, " ", buffer, " hex bytes ", bytestringhex )
-		s := "thread " + fmt.Sprint(md.threadNumber) + " random bytestring and modulusscan bytestring match " + bytestring + " = " + buffer 
-		c <- s
-	}
-
-	c <- "Not found"
 	return
 
+}
+
+// run the modulus scan decode
+// run a parallel modulus scan on a user defined or random byte block array
+func (md *DecodeData) RunDecode(c chan string) {
+
+	bytestring    := fmt.Sprintf("%v", md.byteblock)
+	bytestringhex := fmt.Sprintf("%X", md.byteblock)
+
+	_, buffer := md.decode()
+	if bytestring == buffer {
+		md.Println("Random bytestring and modulusscan bytestring match ", bytestring, " ", buffer, " hex bytes ", bytestringhex )
+		s := "thread " + fmt.Sprint(md.threadNumber) + " random bytestring and modulusscan bytestring match " + bytestring + " = " + buffer
+		c <- s
+	}
+	c <- "Not found"
+
+	return
 }
 
 // calculate the byte block associated with a blocksize and modulus and modulus exponent with a sha1 and md5 hash
@@ -408,7 +417,7 @@ func (md *DecodeData) GetCollisionCount() int64 {
 
 // get the modScan modulus exponent
 func (md *DecodeData) GetModExponent() int64 {
-        return md.collisionCnt
+        return md.modExp
 }
 
 // get the modScan modulus remainder

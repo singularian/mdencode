@@ -259,7 +259,12 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	// kick off the go routines
 	// for thread = threadStart; thread < threadEnd; thread++ {
 	for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
-		go mdp[threadNum].ModulusScanBytes(c)
+		mdp[threadNum].SetModulusScanBytes()
+		if threadNum == 0 {
+			fmt.Println("Mod Exponent     ", mdp[0].GetModExponent())
+			fmt.Println("Mod Remainder    ", mdp[0].GetModRemainder(), "\n")
+		}
+		go mdp[threadNum].RunDecode(c)
 	}
 
 	var cl int64 = 1
