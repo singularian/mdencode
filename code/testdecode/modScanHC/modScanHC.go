@@ -158,7 +158,7 @@ func (md *DecodeData) ModulusScanBytes(c chan string) {
 	_, buffer := md.decode()
 
 	if bytestring == buffer {
-		md.Println("random bytestring and modulusscan bytestring match ", bytestring, " ", buffer, " hex bytes ", bytestringhex )
+		md.Println("Random bytestring and modulusscan bytestring match ", bytestring, " ", buffer, " hex bytes ", bytestringhex )
 		s := "thread " + fmt.Sprint(md.threadNumber) + " random bytestring and modulusscan bytestring match " + bytestring + " = " + buffer 
 		c <- s
 	}
@@ -404,6 +404,16 @@ func (md *DecodeData) MatchFound() bool {
 // get the modScan collision count
 func (md *DecodeData) GetCollisionCount() int64 {
 	return md.collisionCnt
+}
+
+// get the modScan modulus exponent
+func (md *DecodeData) GetModExponent() int64 {
+        return md.collisionCnt
+}
+
+// get the modScan modulus remainder
+func (md *DecodeData) GetModRemainder() string {
+	return md.modulusBigIntRemainder.String()
 }
 
 // initialize the logfile

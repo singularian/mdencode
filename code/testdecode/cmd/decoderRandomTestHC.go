@@ -201,10 +201,9 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	//***********************************************************
 	fmt.Println("Running Decode")
 	fmt.Println("Block Size       ", blockSizeInt)
-	fmt.Println("Mod Size         ", modSizeInt)
 	fmt.Println("Hashlist         ", blockHlist)
 	fmt.Println("Binary Hashlist  ", blocklist)
-	fmt.Println("Thread Size      ", threadCount, "\n")
+	fmt.Println("Thread Size      ", threadCount)
 
 	// create hash list string from the array
 	var hashListString = strings.Join(blockHlist, ":")
@@ -220,7 +219,6 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
                 // fmt.Println("testing context list ", hcListArr[threadNum].GetBlockHash())
         }
 
-	// =================================================
 
 	// set up the thread list of go routine objects
 	mdp := []*modScanHC.DecodeData{}
@@ -229,6 +227,10 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 		md := modScanHC.Init(blockSizeInt, modSizeInt, threadNum, threadCount, bytes, hashListString, hcListArr[threadNum], time)
 		mdp = append(mdp, md)
 	}
+
+	fmt.Println("Mod Size         ", modSizeInt)
+	// fmt.Println("Mod Exponent     ", mdp[0].GetModExponent())
+	// fmt.Println("Mod Remainder    ", mdp[0].GetModRemainder(), "\n")
 
 	// set the thread start and thread end
 	// var threadStart int64 = 0
