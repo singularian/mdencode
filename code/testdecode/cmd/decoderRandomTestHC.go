@@ -204,7 +204,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	fmt.Println("Mod Size         ", modSizeInt)
 	fmt.Println("Hashlist         ", blockHlist)
 	fmt.Println("Binary Hashlist  ", blocklist)
-	fmt.Println("Theard Size      ", threadCount, "\n")
+	fmt.Println("Thread Size      ", threadCount, "\n")
 
 	// create hash list string from the array
 	var hashListString = strings.Join(blockHlist, ":")
