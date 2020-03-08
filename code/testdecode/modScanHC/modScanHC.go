@@ -68,10 +68,6 @@ type DecodeData struct {
 	md5hash  hash.Hash
 	sha1hash hash.Hash
 	// signatures results
-	sha1hex   string
-	md5hex    string
-	mdDigHex  string
-	mdDig2Hex string
 	hashlist  string // block hashlist
 	// hash context list
         hashContexList *mdHashContextList.HashContextList
@@ -391,8 +387,10 @@ func (md *DecodeData) modScanData() {
 	md.Printlog("byte block modulus remainder ", md.modulusBigIntRemainder.String())
 	md.Printlog("modulus exponent ", md.modExp)
 
-	md.Printlog("shasum ", md.sha1hex)
-	md.Printlog("md5sum ", md.md5hex)
+	// log the block signature list and associated hash list bytes
+	if md.threadNumber == 0 {
+		md.Printlog("Hash context list bytes ", md.hashContexList.GetFileHashBlockSigBytes(md.hashContexList.GetBlockHashBytes()))
+	}
 
 	md.Printlog("threadnumber ", md.threadNumber)
 	md.Printlog("thread count ", md.threadCount)
