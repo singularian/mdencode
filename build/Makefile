@@ -64,7 +64,7 @@ mdzip:
 test:
 	go build -o decoderRandom ${TEST}/${CMD}/decoderRandom.go
 	go build -o decoderRandomTest ${TEST}/${CMD}/decoderRandomTest.go 
-	go build -o decoderRandomTestHC ${TEST}${CMD}/decoderRandomTestHC.go 
+	go build -o decoderRandomTestHC ${TEST}/${CMD}/decoderRandomTestHC.go 
 clean:
 	rm -r mdzip mdunzip mdcmd mdlist mdlistTest mdsig randfile md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC *.log
 # Display general help about this command

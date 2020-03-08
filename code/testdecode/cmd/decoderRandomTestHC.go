@@ -196,8 +196,17 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 		os.Exit(1)
 	}
 
+	//*********************************************************** 
 	// convert the block list hash array to string
-	fmt.Println("hashlist ", blockHlist, blocklist)
+	//***********************************************************
+	fmt.Println("Running Decode")
+	fmt.Println("Block Size       ", blockSizeInt)
+	fmt.Println("Mod Size         ", modSizeInt)
+	fmt.Println("Hashlist         ", blockHlist)
+	fmt.Println("Binary Hashlist  ", blocklist)
+	fmt.Println("Theard Size      ", threadCount, "\n")
+
+	// create hash list string from the array
 	var hashListString = strings.Join(blockHlist, ":")
 	// os.Exit(1)
 
