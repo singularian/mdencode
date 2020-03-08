@@ -26,7 +26,6 @@ import (
 	"math/big"
 	// "strconv"
 	// "bytes"
-	"hash"
 	"log"
 	"os"
 	"time"
@@ -64,9 +63,6 @@ type DecodeData struct {
 	collisionCnt int64
 	// time
 	timeStarted string
-	// signatures
-	md5hash  hash.Hash
-	sha1hash hash.Hash
 	// signatures results
 	hashlist  string // block hashlist
 	// hash context list
@@ -270,9 +266,9 @@ func (md *DecodeData) decode() (int, string) {
 
 	}
 
-	// ==========================================
+	//*********************************************
 	// fmt.Println("Exiting decode")
-	// ==========================================
+	//********************************************* 
 
 	t := time.Now()
 	elapsed := t.Sub(start)
