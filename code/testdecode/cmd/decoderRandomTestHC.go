@@ -229,8 +229,6 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	}
 
 	fmt.Println("Mod Size         ", modSizeInt)
-	// fmt.Println("Mod Exponent     ", mdp[0].GetModExponent())
-	// fmt.Println("Mod Remainder    ", mdp[0].GetModRemainder(), "\n")
 
 	// set the thread start and thread end
 	// var threadStart int64 = 0
@@ -289,3 +287,4 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	return 0
 
 }
+

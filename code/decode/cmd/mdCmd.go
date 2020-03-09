@@ -104,12 +104,6 @@ func  (fd *FlagData) mdDecode() {
 	// set the keylist
 	mdc.SetHashListKey(fd.keylist)
 
-	fmt.Println("Starting MDdecode")
-	fmt.Printf("Modulus Size        %-30s\n", fd.modsize)
-	fmt.Printf("Hashlist String     %-30s\n",  fd.hashliststring)
-	fmt.Printf("Modulus Exponent    %-30s\n", fd.modexp)
-	fmt.Printf("Modulus Remainder   %-30s\n", fd.modremainder)
-
 	// set modulus scan variables
 	// modexp       := int32(fd.modexp)
 	// modSize, _   := strconv.ParseInt(fd.modsize, 10, 64)
@@ -125,6 +119,18 @@ func  (fd *FlagData) mdDecode() {
 
 	blockSize, _ := strconv.ParseInt(fd.blocksize, 10, 64)
 	modSize,   _ := strconv.ParseInt(fd.modsize, 10, 64)
+
+	if blockSize == 0 {
+		fmt.Println("Blocksize can't be zero")
+		os.Exit(1)
+	}
+
+        fmt.Println("Starting MDdecode")
+        fmt.Printf("Block Size          %-30s\n", fd.blocksize)
+        fmt.Printf("Hashlist String     %-30s\n", fd.hashliststring)
+        fmt.Printf("Modulus Size        %-30s\n", fd.modsize)
+        fmt.Printf("Modulus Exponent    %-30s\n", fd.modexp)
+        fmt.Printf("Modulus Remainder   %-30s\n", fd.modremainder)
 
 	// create the mutex
         mutex := mdUnzipMutex.Init()
@@ -246,6 +252,7 @@ func  (fd *FlagData) setThread() (start, end int64) {
 
 	return threadStart, threadEnd
 }
+
 
 // printUsage
 func printUsage() {
