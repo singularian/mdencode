@@ -381,7 +381,9 @@ This is a guide for building MDencode on Linux.
 
 # Docker Image
 
-[Docker Version 1](https://hub.docker.com/repository/docker/annatarsol/mdencode)
+This is a Docker Hub Docker File for MDencode
+
+[Docker Version 1](https://hub.docker.com/r/annatarsol/mdencode)
 
 # Donations
 
