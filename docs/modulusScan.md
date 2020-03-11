@@ -95,5 +95,17 @@ random bytestring and modulusscan bytestring match  [0 0 1 0 0 1 0 2 0 1 255 2 4
 Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10] [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
 ```
 
+This examples shows a 14 byte block encoded in a 13 byte block. This is an example of modulus scan compression where the mdzip byte block is smaller than the input block.
+It uses 2 32-bit signatures CRC-32 and FNV-32 and a 32-bit modulus and 1 byte for the modulus exponent.
+```
+user@server:~/projects/src/github.com/singularian/mdencode/build$ ./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=16 -hex=0000000012002000000000000000
+hashlist  [crc32 fnv32] 0000000010000001
+Found Block [crc32 0b964a44 fnv32 7c87ac27] result = 0b964a447c87ac27 Found Block  [0 0 0 0 18 0 32 0 0 0 0 0 0 0]
+Total time  25h57m30.5502149s
+random bytestring and modulusscan bytestring match  [0 0 0 0 18 0 32 0 0 0 0 0 0 0]   [0 0 0 0 18 0 32 0 0 0 0 0 0 0]  hex bytes  0000000012002000000000000000
+Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 0 0 18 0 32 0 0 0 0 0 0 0] = [0 0 0 0 18 0 32 0 0 0 0 0 0 0]
+
+```
+
 This is an example of a parallel modulus scan with 16 threads.
 [Decoder Parallel Examples](https://github.com/singularian/mdencode/blob/master/examples/mdencodeParallelmodscan2.txt)
