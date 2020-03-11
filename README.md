@@ -379,6 +379,10 @@ This is a guide for building MDencode on Linux.
 
 [Example Build](https://github.com/singularian/mdencode/blob/master/docs/Build.md)
 
+# Docker Image
+
+[Docker Version 1](https://hub.docker.com/repository/docker/annatarsol/mdencode)
+
 # Donations
 
 * BTC: `32L3gyJdkiFwgJ72rsSzbCBjTjVFxJLHPm`
