@@ -19,7 +19,7 @@ MDZIP=../code/decode
 TEST=../code/testdecode
 
 # Setup the -ldflags option for go build here, interpolate the variable values
-LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X github.com/nsross/mdencode/core.BuildTime=${BUILD_TIME}"
+LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
 
 
 all:
@@ -67,6 +67,8 @@ test:
 	go build -o decoderRandomTestHC ${TEST}/${CMD}/decoderRandomTestHC.go 
 clean:
 	rm -r mdzip mdunzip mdcmd mdlist mdlistTest mdsig randfile md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC *.log
+cleanbuild:
+	rm -r ${BUILD_DIR}/mdzip ${BUILD_DIR}/mdunzip ${BUILD_DIR}/mdcmd ${BUILD_DIR}/mdlist ${BUILD_DIR}/mdsig ${BUILD_DIR}/randfile ${BUILD_DIR}/mdencode ${BUILD_DIR}/mdbinlist ${BUILD_DIR}/md ${BUILD_DIR}/mddbreport ${BUILD_DIR}/mdnewdb
 # Display general help about this command
 help:
 	@echo "$(PROJECT) Makefile."
@@ -77,6 +79,7 @@ help:
 	@echo "    make mdencode    : Build the mdencode files"
 	@echo "    make mdzip       : Build the mdzip files"
 	@echo "    make test        : Build the test files"
-	@echo "    make clean       : Remove any build artifact"
+	@echo "    make clean       : Remove any local build artifacts"
+	@echo "    make cleanbuild  : Remove any build artifacts"
 list:
 	echo "all build mdencode mdzip test clean list"
