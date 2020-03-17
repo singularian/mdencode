@@ -203,7 +203,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	fmt.Println("Block Size       ", blockSizeInt)
 	fmt.Println("Hashlist         ", blockHlist)
 	fmt.Println("Binary Hashlist  ", blocklist)
-	fmt.Println("Thread Size      ", threadCount)
+	// fmt.Println("Thread Size      ", threadCount)
 
 	// create hash list string from the array
 	var hashListString = strings.Join(blockHlist, ":")
@@ -228,7 +228,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 		mdp = append(mdp, md)
 	}
 
-	fmt.Println("Mod Size         ", modSizeInt)
+	// fmt.Println("Mod Size         ", modSizeInt)
 
 	// set the thread start and thread end
 	// var threadStart int64 = 0
@@ -254,11 +254,21 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	count = threadCount 
 	// create a channel the size of the thread list
 	var c chan string = make(chan string, count)
+
+	var threadStart int64   = 0
+        var threadEnd   int64   = int64(threadCount)
+
+        // set the threadStart and threadEnd if specified
+        // ie threadStart 3, theadEnd 6 out threadCount 16
+        threadStart, threadEnd  = fd.setThread()
+
 	// kick off the go routines
+	for threadNum = threadStart; threadNum < threadEnd; threadNum++ {
 	// for thread = threadStart; thread < threadEnd; thread++ {
-	for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
+	// for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
 		mdp[threadNum].SetModulusScanBytes()
 		if threadNum == 0 {
+			fmt.Println("Mod Size         ", modSizeInt)
 			fmt.Println("Mod Exponent     ", mdp[0].GetModExponent())
 			fmt.Println("Mod Remainder    ", mdp[0].GetModRemainder(), "\n")
 		}
@@ -286,5 +296,36 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 
 	return 0
 
+}
+
+// set the threadStart and threadEnd                                                              
+func  (fd *FlagData) setThread() (start, end int64) {
+        var threadStart int64 = 0
+        var threadEnd   int64 = 0
+	var threadCount int64 = 0
+        // var threadCount int64 = fd.threadsize
+	threadCount,  _ = strconv.ParseInt(fd.threadsize, 10, 64)
+
+	threadStart = fd.threadStart
+        threadEnd   = fd.threadEnd
+
+        if fd.threadStart == 0 && fd.threadEnd == 0 {                                             
+                threadStart = 0                                                                   
+                threadEnd   = threadCount                                                         
+        } else if fd.threadEnd == 0 {                                                             
+                fd.threadEnd = threadCount                                                        
+        } else if fd.threadEnd < fd.threadStart {                                                 
+                fd.threadEnd = threadCount                                                        
+        } else if fd.threadStart > threadCount || fd.threadEnd > threadCount {                    
+                fmt.Println("ThreadStart or threadEnd can't exceed threadCount")                  
+                os.Exit(2)
+        }
+
+        // fmt.Println("SetThread ", threadStart, threadEnd, fd.threadStart, fd.threadEnd)        
+        fmt.Printf("Thread Start      %-30d\n", fd.threadStart)
+        fmt.Printf("Thread End        %-30d\n", fd.threadEnd)
+        // fmt.Printf("Threads           %-30d\n\n", fd.thread)
+        fmt.Printf("Threads           %-30d\n", threadCount)
+	return threadStart, threadEnd
 }
 
