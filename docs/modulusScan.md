@@ -82,6 +82,8 @@ Usage  ./decoderRandom  -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]
 Usage  ./decoderRandom  -block=8 -mod=64 -thread=10 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
 ```
 
+## Example 1
+
 This is a 17 byte block with a 64 bit modulus.
 The byte block was found in 1.87 seconds.
 
@@ -95,6 +97,8 @@ random bytestring and modulusscan bytestring match  [0 0 1 0 0 1 0 2 0 1 255 2 4
 Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10] [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
 ```
 
+## Example 2
+
 This examples shows a 14 byte block encoded in a 13 byte block. This is an example of modulus scan compression where the mdzip byte block is smaller than the input block.
 It uses 2 32-bit signatures CRC-32 and FNV-32 and a 32-bit modulus and 1 byte for the modulus exponent.
 ```
@@ -106,6 +110,30 @@ random bytestring and modulusscan bytestring match  [0 0 0 0 18 0 32 0 0 0 0 0 0
 Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 0 0 18 0 32 0 0 0 0 0 0 0] = [0 0 0 0 18 0 32 0 0 0 0 0 0 0]
 
 ```
+
+## Example 3
+
+This examples shows a 14 byte block encoded in a 13 byte block. This is an example of modulus scan compression where the mdzip byte block is smaller than the input block.
+It uses 2 32-bit signatures CRC-32 and FNV-32 and a 32-bit modulus and 1 byte for the modulus exponent. It was run on a 60 core server with 120 threads.
+
+```
+user@instance-2:~/mdencode/mdencode-1.0.5/build$ ./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=120 -hex=000000001200200000000000FFFC
+Running Decode
+Block Size        14
+Hashlist          [crc32 fnv32]
+Binary Hashlist   0000000010000001
+Thread Size       120
+Mod Size          32
+Mod Exponent      76
+Mod Remainder     65532
+
+Found Block [crc32 2cb90901 fnv32 41874fba] result = 2cb9090141874fba Found Block  [0 0 0 0 18 0 32 0 0 0 0 0 255 252]
+Total time  17h2m51.520645146s
+Random bytestring and modulusscan bytestring match  [0 0 0 0 18 0 32 0 0 0 0 0 255 252]   [0 0 0 0 18 0 32 0 0 0 0 0 255 252]  hex bytes  000000001200200000000000FFFC
+Found block  thread 64 random bytestring and modulusscan bytestring match [0 0 0 0 18 0 32 0 0 0 0 0 255 252] = [0 0 0 0 18 0 32 0 0 0 0 0 255 252]
+```
+
+## Example 4
 
 This is an example of a parallel modulus scan with 16 threads.
 [Decoder Parallel Examples](https://github.com/singularian/mdencode/blob/master/examples/mdencodeParallelmodscan2.txt)

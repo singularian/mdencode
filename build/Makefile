@@ -5,7 +5,7 @@ BINARY=decoderRandom
 PROJECT="mdencode mdzip testdecode"
 
 # These are the values we want to pass for Version and BuildTime
-VERSION=1.0.5
+VERSION=1.0.6
 BUILD_TIME=`date +%FT%T%z`
 
 # build directory

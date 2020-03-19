@@ -222,36 +222,16 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 
 	// set up the thread list of go routine objects
 	mdp := []*modScanHC.DecodeData{}
-	// for thread = 0; thread < threadCount; thread++ {
 	for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
 		md := modScanHC.Init(blockSizeInt, modSizeInt, threadNum, threadCount, bytes, hashListString, hcListArr[threadNum], time)
 		mdp = append(mdp, md)
 	}
 
-	// fmt.Println("Mod Size         ", modSizeInt)
-
-	// set the thread start and thread end
-	// var threadStart int64 = 0
-	// var threadEnd int64 = threadCount
-	// ====================================================
-	/* if (fd.threadStart > 0) && (fd.threadStart < threadCount) {
-		threadStart = fd.threadStart
-	}
-	if (fd.threadEnd > 0) && (fd.threadEnd < threadCount) {
-		threadEnd = fd.threadEnd
-	} */
-	// =========================================================
-
-	// fmt.Println("start ", threadStart, " ", threadEnd)
-	// fmt.Println("start ", fd.threadStart, " ", fd.threadEnd)
-	// fmt.Println("starting modulus scan threads ", threadCount, " start thread ", threadStart, " end thread ", threadEnd, " byteblock size ", blockSizeInt, " byteblock ", bytes)
-
-	// kick off the thread list go routines
-	// for thread = threadStart; thread < threadCount; thread++ {
 	var count int64
 	// count = threadEnd - threadStart
 	// make sure this is counted correctly
 	count = threadCount 
+
 	// create a channel the size of the thread list
 	var c chan string = make(chan string, count)
 
@@ -264,10 +244,8 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 
 	// kick off the go routines
 	for threadNum = threadStart; threadNum < threadEnd; threadNum++ {
-	// for thread = threadStart; thread < threadEnd; thread++ {
-	// for threadNum = 0; threadNum < int64(threadCount); threadNum++ {
 		mdp[threadNum].SetModulusScanBytes()
-		if threadNum == 0 {
+		if threadNum == threadStart {
 			fmt.Println("Mod Size         ", modSizeInt)
 			fmt.Println("Mod Exponent     ", mdp[0].GetModExponent())
 			fmt.Println("Mod Remainder    ", mdp[0].GetModRemainder(), "\n")

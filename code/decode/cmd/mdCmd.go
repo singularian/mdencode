@@ -110,7 +110,7 @@ func  (fd *FlagData) mdDecode() {
 	modExp, _    := strconv.ParseInt(fd.modexp, 10, 32)
 	modRemainder := fd.modremainder
 	hstring      := fd.hashliststring
-	blocklist := fd.hashliststring
+	blocklist    := fd.hashliststring
 	hashByteBlock, err := hex.DecodeString(fd.hexstring)
 	if err != nil {
 		panic(err)
