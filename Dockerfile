@@ -18,4 +18,4 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY . .
 
-
+CMD ["ls -alt /go/src/app"]
