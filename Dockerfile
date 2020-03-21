@@ -7,7 +7,13 @@ FROM golang:1.14.1 AS builder
 # RUN adduser -S -D -H -h /app appuser
 # USER appuser
 
-WORKDIR /go/src/app
+ENV GOBIN /go/bin
+
+WORKDIR /go/src/app/
+
+RUN mkdir mdencode
+
+WORKDIR /go/src/app/mdencode
 
 # Copy go mod and sum files
 COPY go.mod go.sum ./
@@ -18,4 +24,6 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY . .
 
-RUN ls -lha /go/src/app
+RUN ls -lha /go/src/app/mdencode
+
+WORKDIR /go/src/app/mdencode/
