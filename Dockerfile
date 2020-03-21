@@ -26,4 +26,8 @@ COPY . .
 
 RUN ls -lha /go/src/app/mdencode
 
-WORKDIR /go/src/app/mdencode/
+WORKDIR /go/src/app/mdencode/build
+
+RUN make mdencode
+RUN make mdzip
+
