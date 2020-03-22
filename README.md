@@ -379,11 +379,19 @@ This is a guide for building MDencode on Linux.
 
 [Example Build](https://github.com/singularian/mdencode/blob/master/docs/Build.md)
 
-# Docker Image
+# Docker Container 
 
 This is a Docker Hub Docker File for MDencode
 
-[Docker Version 1](https://hub.docker.com/r/annatarsol/mdencode)
+[Docker Version](https://hub.docker.com/r/annatarsol/mdencode)
+
+### Docker Pull
+
+docker pull annatarsol/mdencode  
+
+### Docker Container Run
+
+docker run -it annatarsol/mdencode/latest /bin/bash  
 
 # Donations
 
