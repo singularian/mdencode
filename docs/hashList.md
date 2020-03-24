@@ -89,7 +89,8 @@ ID:    HashName      Description                              Block Size
 64:    skein_1024    Skein 1024                               128 
 65:    tiger         Tiger                                    24  
 66:    whirlpool     Whirlpool                                64  
-67:    xxhash        XXHash                                   8   
+67:    xxh32         XXHash 32                                4
+68:    xxhash        XXHash                                   8   
 ``` 
 
 # Binary Signature Arguments

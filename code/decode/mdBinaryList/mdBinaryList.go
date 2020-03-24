@@ -127,7 +127,8 @@ var hlist = []HashList{
 		{ HashName: "skein_1024",  Description: "Skein 1024",		BlockSize: 128,	Key: false },
 		{ HashName: "tiger",       Description: "Tiger",		BlockSize: 24,	Key: false },
 		{ HashName: "whirlpool",   Description: "Whirlpool",		BlockSize: 64,	Key: false },
-		{ HashName: "xxhash",      Description: "XXHash",		BlockSize: 8,	Key: false },
+		{ HashName: "xxh32",       Description: "XXHash 32",		BlockSize: 4,	Key: true },
+		{ HashName: "xxhash",      Description: "XXHash 64",		BlockSize: 8,	Key: true },
                 }
 
 // Init returns a new BlockList object  

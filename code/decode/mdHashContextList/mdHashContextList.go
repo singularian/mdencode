@@ -329,6 +329,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["tiger"] = tiger.New()
                         case "whirlpool":
 				hb["whirlpool"] = whirlpool.New()
+			case "xxh32":
+				var key = hc.keylist[hashname]
+				hb["xxh32"] = xxhash.NewS32(sigRand.ConvertString2Int32(key))
 			case "xxhash":
 				// seed uint64
 				// xxhash.NewS64(seed2) // seed key version
@@ -535,6 +538,7 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	hc.keylist["murmur3"]     = "1120322"
 	hc.keylist["sip64"]       = "000102030405060708090a0b0c0d0e0f"
 	hc.keylist["sip128"]      = "000102030405060708090a0b0c0d0e0f"
+	hc.keylist["xxh32"]       = "99123312"
 	hc.keylist["xxhash"]      = "99123312"
 
 	var result string
@@ -618,6 +622,9 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 						hc.keylist[sig] = fmt.Sprintf("%032s", sigkey)
 					} 
 					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
+				case "xxh32":
+					hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				case "xxhash":
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)

@@ -96,6 +96,36 @@ func GenRandomHighwayKey() (string, error) {
 	return m, nil  
 }
 
+// Convert a Hex string to a uint32
+// hexString := "75bcd105"
+// fmt.Println(ConvertHex2Int(hexString))
+func ConvertHex2Int32(hexString string) uint32 {
+
+        result, _ := strconv.ParseUint(hexString, 16, 32)
+        return uint32(result)
+}
+
+// Convert a Integer String to a uint32
+// "9893489348439"
+func ConvertString2Int32(DecString string) uint32 {
+
+        result, _ := strconv.ParseUint(DecString, 0, 64)
+        return uint32(result)
+}
+
+// Convert a Integer String or Hex String to a Uint32
+func ConvertDecHexString2Int32(DecString string) uint32 {
+	isHex, _ := regexp.MatchString("[[:xdigit:]]", DecString)
+	isDec, _ := regexp.MatchString("[[:digit:]]",  DecString)
+	if isHex {
+		return ConvertHex2Int32(DecString)
+	}
+	if isDec {
+		return ConvertString2Int32(DecString)
+	}
+	return 0
+}
+
 // Convert a Hex string to a uint64
 // hexString := "75bcd105"
 // fmt.Println(ConvertHex2Int(hexString))

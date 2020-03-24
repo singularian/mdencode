@@ -51,7 +51,7 @@ Usage of md:
         Create SQLite3 Empty DB File
   -key string  
         Signature Hash Keylist
-Version: 1.0.6 復甦 復活                                                                                                                               
+Version: 1.0.7 復甦 復活                                                                                                                               
                                                                                                                                                  
 Formats:                                                                                                                                         
 0 .. 98 - Text
@@ -106,7 +106,7 @@ Usage of mddbreport:
   -out string
         Output Filename
 
-Version: 1.0.6 復甦 復活
+Version: 1.0.7 復甦 復活
 
 Examples:
 mddbreport -file=md.db -fileid=1 -format=10
@@ -203,6 +203,7 @@ hw256       - 1 to 64 hex characters
 murmur3     - uint64 integer 1 to 18 numbers
 sip64       - 1 to 32 hex characters
 sip128      - 1 to 32 hex characters
+xxh32       - uint64 integer 1 to 9 numbers
 xxhash      - uint64 integer 1 to 18 numbers
 
 Keylist Examples:
@@ -216,7 +217,7 @@ mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000011 -fh=1100
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=01 -fh=110011 -keylist=ax1:123456,ax2:789347
 
 Build Time: 2020-03-10T13:42:02-0500    
-Version:    1.0.6 復甦 復活
+Version:    1.0.7 復甦 復活
 ```                                                                                                 
                                                                                                     
 ```                                                                                                 

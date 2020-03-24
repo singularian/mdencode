@@ -5,7 +5,7 @@ BINARY=decoderRandom
 PROJECT="mdencode mdzip testdecode"
 
 # These are the values we want to pass for Version and BuildTime
-VERSION=1.0.6
+VERSION=1.0.7
 BUILD_TIME=`date +%FT%T%z`
 
 # build directory
@@ -23,37 +23,48 @@ LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
 
 
 all:
-	# mdzip
-	go build $(LDFLAGS) -o mdunzip ${MDZIP}/${CMD}/mdUnzip.go 
-	go build $(LDFLAGS) -o mdzip ${MDZIP}/${CMD}/mdzip.go 
-	go build $(LDFLAGS) -o mdlist ${MDZIP}/${CMD}/mdlist.go 
-	go build $(LDFLAGS) -o mdcmd ${MDZIP}/${CMD}/mdCmd.go 
-	go build $(LDFLAGS) -o mdlistTest ${MDZIP}/${CMD}/testBinReadMdFmt.go 
-	go build $(LDFLAGS) -o mdsig ${MDZIP}/${CMD}/mdsig.go 
-	go build $(LDFLAGS) -o randfile ${MDZIP}/${CMD}/randomFile.go
-	# mdencode 
+	@echo "Building mdencode"
 	go build $(LDFLAGS) -o md ${MDE}/${CMD}/mdencode.go
 	go build $(LDFLAGS) -o mdencode ${MDE}/${CMD}/mdencode.go
 	go build $(LDFLAGS) -o mdnewdb ${MDE}/${CMD}/mdnewdb.go
 	go build $(LDFLAGS) -o mddbreport ${MDE}/${CMD}/mdencodeReport.go
 	go build $(LDFLAGS) -o mdbinlist ${MDE}/${CMD}/testBinReadMdFmt.go
-	# test
+	@echo "Building mdzip"
+	go build $(LDFLAGS) -o mdzip ${MDZIP}/${CMD}/mdUnzip.go 
+	go build $(LDFLAGS) -o mdunzip ${MDZIP}/${CMD}/mdUnzip.go 
+	go build $(LDFLAGS) -o mdlist ${MDZIP}/${CMD}/mdlist.go 
+	go build $(LDFLAGS) -o mdcmd ${MDZIP}/${CMD}/mdCmd.go 
+	go build $(LDFLAGS) -o mdlistTest ${MDZIP}/${CMD}/testBinReadMdFmt.go 
+	go build $(LDFLAGS) -o mdsig ${MDZIP}/${CMD}/mdsig.go 
+	go build $(LDFLAGS) -o randfile ${MDZIP}/${CMD}/randomFile.go
+	@echo "Building mdzip test files"
 	go build $(LDFLAGS) -o decoderRandom ${TEST}/${CMD}/decoderRandom.go
 	go build $(LDFLAGS) -o decoderRandomTest ${TEST}/${CMD}/decoderRandomTest.go
 	go build $(LDFLAGS) -o decoderRandomTestHC ${TEST}/${CMD}/decoderRandomTestHC.go
 build:
+	@echo "Building mdencode"
 	go build $(LDFLAGS) -o ${BUILD_DIR}/md ${MDE}/${CMD}/mdencode.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdencode ${MDE}/${CMD}/mdencode.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdnewdb ${MDE}/${CMD}/mdnewdb.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mddbreport ${MDE}/${CMD}/mdencodeReport.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdbinlist ${MDE}/${CMD}/testBinReadMdFmt.go
+	@echo "Building mdzip"
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip ${MDZIP}/${CMD}/mdUnzip.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip ${MDZIP}/${CMD}/mdUnzip.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist ${MDZIP}/${CMD}/mdlist.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdcmd ${MDZIP}/${CMD}/mdCmd.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest ${MDZIP}/${CMD}/testBinReadMdFmt.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${MDZIP}/${CMD}/mdsig.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile ${MDZIP}/${CMD}/randomFile.go
 mdencode:
+	@echo "Building mdencode"
 	go build $(LDFLAGS) -o ${BUILD_DIR}/md ${MDE}/${CMD}/mdencode.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdencode ${MDE}/${CMD}/mdencode.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdnewdb ${MDE}/${CMD}/mdnewdb.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mddbreport ${MDE}/${CMD}/mdencodeReport.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdbinlist ${MDE}/${CMD}/testBinReadMdFmt.go
 mdzip: 
+	@echo "Building mdzip"
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip ${MDZIP}/${CMD}/mdUnzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip ${MDZIP}/${CMD}/mdzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist ${MDZIP}/${CMD}/mdlist.go
@@ -62,6 +73,7 @@ mdzip:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${MDZIP}/${CMD}/mdsig.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile ${MDZIP}/${CMD}/randomFile.go
 test:
+	@echo "Building mdzip decodeRandom Tests"
 	go build -o decoderRandom ${TEST}/${CMD}/decoderRandom.go
 	go build -o decoderRandomTest ${TEST}/${CMD}/decoderRandomTest.go 
 	go build -o decoderRandomTestHC ${TEST}/${CMD}/decoderRandomTestHC.go 
