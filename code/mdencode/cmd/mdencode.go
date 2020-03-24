@@ -117,7 +117,7 @@ func md() int {
 
 	if argsNumber == 1 {
 		flag.Usage()
-		os.Exit(1)
+		os.Exit(0)
 	}
 
 	// set the current working directory
