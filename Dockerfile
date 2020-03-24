@@ -8,6 +8,8 @@ FROM golang:1.14.1 AS builder
 # USER appuser
 
 ENV GOBIN /go/bin
+ENV PATH="${GOBIN}:${PATH}"
+RUN echo "export PATH=$PATH" > /etc/environment
 
 WORKDIR /go/src/app/
 
