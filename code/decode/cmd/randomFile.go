@@ -54,7 +54,7 @@ func createRandFile() int {
 
 	if argsNumber != 3 {
 		flag.Usage()
-		os.Exit(1)
+		os.Exit(0)
 	}
 
 	bytes, _ := sigRand.GenerateRandomBytes64(fd.filesize)

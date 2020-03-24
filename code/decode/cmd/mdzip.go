@@ -83,10 +83,6 @@ func md() int {
 	// flag.StringVar(&fd.outputfilename, "output", "", "Output Filename")
 	flag.StringVar(&fd.logfilename, "log", "", "Log Filename")
 
-	//fmt.Println("block ", fd.bhashlist)
-	//os.Exit(1)
-
-	// fmt.Println("keylist ", fd.keylist, " out ", fd.outputfilename, fd)
 
 	flag.Usage = printUsage
 
@@ -94,7 +90,7 @@ func md() int {
 
 	if argsNumber == 1 {
 		flag.Usage()
-		os.Exit(1)
+		os.Exit(0)
 	}
 
 	// set the current working directory
