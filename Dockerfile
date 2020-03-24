@@ -31,6 +31,7 @@ WORKDIR /go/src/app/mdencode/build
 RUN make mdencode
 RUN make mdzip
 
+RUN mdsig
 RUN mdencode
-RUN mdlist
 RUN mdzip
+RUN mdunzip
