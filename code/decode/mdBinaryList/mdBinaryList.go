@@ -194,7 +194,7 @@ func (bl *BlockList) CreateHashBlockList(hashlistBoolean string) ([]string) {
 			case 0: // do nothing
                         case 1: bl.AddHashList(hlist[i].HashName, i)
 			default:
-				fmt.Println("unrecognized hashlist boolean")
+				fmt.Println("Unrecognized hashlist boolean")
 				os.Exit(1)
                 }
 
