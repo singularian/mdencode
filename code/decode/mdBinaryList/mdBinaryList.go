@@ -71,6 +71,7 @@ var hlist = []HashList{
 		{ HashName: "cube",        Description: "Cubehash",		BlockSize: 64,	Key: false },
 		{ HashName: "echo",        Description: "Echo",			BlockSize: 64,	Key: false },
 
+		{ HashName: "fh32",        Description: "Farm Hash 32",		BlockSize: 4,	Key: false },
 		{ HashName: "fnv32",       Description: "FNV 32",		BlockSize: 4,	Key: false },
 		{ HashName: "fnv32a",      Description: "FNV 32a",		BlockSize: 4,	Key: false },
 		{ HashName: "fnv64",       Description: "FNV 64",		BlockSize: 8,	Key: false },

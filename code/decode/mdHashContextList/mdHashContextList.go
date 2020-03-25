@@ -63,6 +63,7 @@ import (
 	"github.com/singularian/mdhash/xxhash_128"
 	"github.com/singularian/mdhash/poly1305"
 	"github.com/singularian/mdhash/cubehash"
+	"github.com/singularian/mdhash/farmHash32"
 	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 	"github.com/singularian/mdencode/code/decode/sigRand"
 )
@@ -186,6 +187,10 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["cube"] = cubehash.New()
 			case "echo":
 				hb["echo"] = echo.New()
+			case "fh32":
+				var fhkey = "key"
+				fhbytes := []byte(fhkey)
+				hb["fh32"] = farmHash32.New(0, 4, fhbytes)
 			case "fnv32":
 				hb["fnv32"] = fnv.New32()
 			case "fnv32a":
