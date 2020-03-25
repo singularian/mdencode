@@ -44,7 +44,7 @@ func main() {
 
 	file, err := os.Open(filename)
         if err != nil {
-                fmt.Println("counldn't open file ", err)
+                fmt.Println("Couldn't open file ", err)
                 os.Exit(1)
         }
         defer file.Close()
