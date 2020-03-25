@@ -1,5 +1,6 @@
 FROM golang:1.14.1 AS builder
 
+# optional create user
 # RUN mkdir /app 
 # ADD . /app/
 # WORKDIR /app 
@@ -7,14 +8,18 @@ FROM golang:1.14.1 AS builder
 # RUN adduser -S -D -H -h /app appuser
 # USER appuser
 
+# setup the GOBIN environment
 ENV GOBIN /go/bin
 ENV PATH="${GOBIN}:${PATH}"
 RUN echo "export PATH=$PATH" > /etc/environment
 
+# set the work directory
 WORKDIR /go/src/app/
 
+# make mdencode
 RUN mkdir mdencode
 
+# change to the app directory
 WORKDIR /go/src/app/mdencode
 
 # Copy go mod and sum files
@@ -26,13 +31,17 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY . .
 
+# check the mdencode source directory
 RUN ls -lha /go/src/app/mdencode
 
+# change to the build directory
 WORKDIR /go/src/app/mdencode/build
 
+# run the make build for mdencode and mdzip
 RUN make mdencode
 RUN make mdzip
 
+# check the mdencode and mdzip binary execs
 RUN mdsig
 RUN mdencode
 RUN mdzip
