@@ -192,7 +192,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	blockHlist  := mdc.MdBlockSize.CreateHashBlockList(blocklist)
 
 	if len(blockHlist) < 1 {
-		fmt.Println("unrecognized hashlist boolean")
+		fmt.Println("Unrecognized hashlist boolean")
 		os.Exit(1)
 	}
 
@@ -287,13 +287,13 @@ func  (fd *FlagData) setThread() (start, end int64) {
 	threadStart = fd.threadStart
         threadEnd   = fd.threadEnd
 
-        if fd.threadStart == 0 && fd.threadEnd == 0 {                                             
-                threadStart = 0                                                                   
-                threadEnd   = threadCount                                                         
-        } else if fd.threadEnd == 0 {                                                             
-                fd.threadEnd = threadCount                                                        
-        } else if fd.threadEnd < fd.threadStart {                                                 
-                fd.threadEnd = threadCount                                                        
+        if fd.threadStart == 0 && fd.threadEnd == 0 {
+                threadStart = 0
+                threadEnd   = threadCount
+        } else if fd.threadEnd == 0 {
+                fd.threadEnd = threadCount
+        } else if fd.threadEnd < fd.threadStart {
+                fd.threadEnd = threadCount
         } else if fd.threadStart > threadCount || fd.threadEnd > threadCount {                    
                 fmt.Println("ThreadStart or threadEnd can't exceed threadCount")                  
                 os.Exit(2)
