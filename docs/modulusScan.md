@@ -136,7 +136,8 @@ Found block  thread 64 random bytestring and modulusscan bytestring match [0 0 0
 ## Example 4
 
 This examples shows a 14 byte block encoded in a 13 byte block. This is an example of modulus scan compression where the mdzip byte block is smaller than the input block.  
-It uses 2 32-bit signatures CRC-32 and FNV-32 and a 32-bit modulus and 1 byte for the modulus exponent. It was run on a 9 by 32 core servers with 288 threads.  
+It uses 2 32-bit signatures CRC-32 and FNV-32 and a 32-bit modulus and 1 byte for the modulus exponent.  
+It was run on 9 servers with 32 cores with a total of 288 cpu threads.   
 
 ```
 ./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=0 -end=32  -hex=0000000012002000000011DDFFFC 
