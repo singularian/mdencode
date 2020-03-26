@@ -153,7 +153,7 @@ Thread End        96
 Threads           288
 Mod Size          32
 Mod Exponent      76
-Mod Remainder     382551851004 - I think modremainder is usind mod start modremainder + thread number + mod
+Mod Remainder     382551851004 - TODO: It is currently using mod start modremainder + thread number + mod
 Found Block [crc32 414d9f98 fnv32 06e18008] result = 414d9f9806e18008 Found Block  [0 0 0 0 18 0 32 0 0 0 17 221 255 252]
 Total time  2h24m0.469392664s
 Random bytestring and modulusscan bytestring match  [0 0 0 0 18 0 32 0 0 0 17 221 255 252]   [0 0 0 0 18 0 32 0 0 0 17 221 255 252]  hex bytes  0000000012002000000011DDFFFC
