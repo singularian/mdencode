@@ -300,9 +300,12 @@ func  (fd *FlagData) setThread() (start, end int64) {
                 os.Exit(2)
         }
 
+	fd.threadStart = threadStart
+	fd.threadEnd   = threadEnd
+
         // fmt.Println("SetThread ", threadStart, threadEnd, fd.threadStart, fd.threadEnd)        
-        fmt.Printf("Thread Start      %-30d\n", fd.threadStart)
-        fmt.Printf("Thread End        %-30d\n", fd.threadEnd)
+        fmt.Printf("Thread Start      %-30d\n", threadStart)
+        fmt.Printf("Thread End        %-30d\n", threadEnd)
         // fmt.Printf("Threads           %-30d\n\n", fd.thread)
         fmt.Printf("Threads           %-30d\n", threadCount)
 	return threadStart, threadEnd
