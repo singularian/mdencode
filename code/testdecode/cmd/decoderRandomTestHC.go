@@ -201,6 +201,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	//***********************************************************
 	fmt.Println("Running Decode")
 	fmt.Println("Block Size       ", blockSizeInt)
+	fmt.Printf( "Block Bytes       %X\n", bytes)
 	fmt.Println("Hashlist         ", blockHlist)
 	fmt.Println("Binary Hashlist  ", blocklist)
 	// fmt.Println("Thread Size      ", threadCount)
