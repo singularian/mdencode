@@ -80,7 +80,7 @@ func main() {
 	flag.Parse()
 
 	if argsNumber == 1 {
-		fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] -hex=[OPTIONAL HEX BYTESTRING] keylist=[OPTIONAL HEX BYTESTRING]")
+		fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -bh=[BINARY SIGNATURES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] -hex=[OPTIONAL HEX BYTESTRING] keylist=[OPTIONAL HEX BYTESTRING]")
 		fmt.Println("Usage ", os.Args[0], " -block=12 -mod=64 -thread=16 -bh=1010101")
 		fmt.Println("Usage ", os.Args[0], " -block=9 -mod=64 -thread=10 -bh=11111 -bytes=[1,2,3,4,5]")
 		fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bh=1 -bytes=[100,222,30,55,100]")
