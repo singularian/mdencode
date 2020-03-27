@@ -289,23 +289,32 @@ func  (fd *FlagData) setThread() (start, end int64) {
         threadEnd   = fd.threadEnd
 
         if fd.threadStart == 0 && fd.threadEnd == 0 {
-                threadStart = 0
-                threadEnd   = threadCount
+                threadStart  = 0
+                threadEnd    = threadCount
+		fd.threadEnd = threadCount
+		fmt.Println("blah2")
         } else if fd.threadEnd == 0 {
+		fmt.Println("blah")
+		threadEnd    = threadCount
                 fd.threadEnd = threadCount
-        } else if fd.threadEnd < fd.threadStart {
-                fd.threadEnd = threadCount
-        } else if fd.threadStart > threadCount || fd.threadEnd > threadCount {                    
-                fmt.Println("ThreadStart or threadEnd can't exceed threadCount")                  
+        }
+ 
+	if fd.threadEnd < fd.threadStart {
+		// threadEnd    = threadCount
+                //fd.threadEnd = threadCount
+		fmt.Println("ThreadStart can't exceed threadEnd")
+		os.Exit(2)
+        } else if fd.threadStart > threadCount || fd.threadEnd > threadCount {
+                fmt.Println("ThreadStart or threadEnd can't exceed threadCount")
                 os.Exit(2)
         }
 
-	fd.threadStart = threadStart
-	fd.threadEnd   = threadEnd
+	// fd.threadStart = threadStart
+	// fd.threadEnd   = threadEnd
 
-        // fmt.Println("SetThread ", threadStart, threadEnd, fd.threadStart, fd.threadEnd)        
-        fmt.Printf("Thread Start      %-30d\n", threadStart)
-        fmt.Printf("Thread End        %-30d\n", threadEnd)
+	// fmt.Println("SetThread ", threadStart, threadEnd, fd.threadStart, fd.threadEnd)        
+        fmt.Printf("Thread Start      %-30d\n", fd.threadStart)
+        fmt.Printf("Thread End        %-30d\n", fd.threadEnd)
         // fmt.Printf("Threads           %-30d\n\n", fd.thread)
         fmt.Printf("Threads           %-30d\n", threadCount)
 	return threadStart, threadEnd
