@@ -292,9 +292,7 @@ func  (fd *FlagData) setThread() (start, end int64) {
                 threadStart  = 0
                 threadEnd    = threadCount
 		fd.threadEnd = threadCount
-		fmt.Println("blah2")
         } else if fd.threadEnd == 0 {
-		fmt.Println("blah")
 		threadEnd    = threadCount
                 fd.threadEnd = threadCount
         }
