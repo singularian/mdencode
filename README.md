@@ -230,7 +230,7 @@ It is possible to use a modular scan to find matching byte blocks associated wit
 A digital signature package or group can consist of 1 or more block and file signatures. 
 A modular floor is generaly computed at the block level for a file byte block and utilizes a big integer.
 
-The modulus scan polynomial is calculated as follows.
+The [modulus scan](https://github.com/singularian/mdencode/blob/master/docs/modulusScan.md) polynomial is calculated as follows.
 
 ```
 modremainder    = fileblockbigint % modulus  
