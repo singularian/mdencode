@@ -48,6 +48,8 @@ github.com/singularian/mdhash v1.0.4 h1:2Xh6BXhF/QtmHK0kS0mm1JP/5e/eu1fp8gGS3X7c
 github.com/singularian/mdhash v1.0.4/go.mod h1:egDj1LSLLAq/xknQFjwqdpzSD4ekdLKbamxOnrFc9KE=
 github.com/singularian/mdhash v1.0.5 h1:pqWRQaf2t1cIUX4l/D1IMD09PhEtB1ug1WA4gp0XQSo=
 github.com/singularian/mdhash v1.0.5/go.mod h1:egDj1LSLLAq/xknQFjwqdpzSD4ekdLKbamxOnrFc9KE=
+github.com/singularian/mdhash v1.0.6 h1:bzzAqbGY83d94a2YrcvtXTBFzTtPyQtGishaHjozZjQ=
+github.com/singularian/mdhash v1.0.6/go.mod h1:egDj1LSLLAq/xknQFjwqdpzSD4ekdLKbamxOnrFc9KE=
 github.com/steakknife/keccak v0.0.0-20150202122130-d0dce0d5b080 h1:VgH5VI21ib8sLvBJ1LMe17zjo+zOC15UchIB6Vv64Xo=
 github.com/steakknife/keccak v0.0.0-20150202122130-d0dce0d5b080/go.mod h1:XVAcwiwvJSHP20VqW3saH3KNQaWBprw8oKDZVHFWPL4=
 github.com/tildeleb/aeshash v0.0.0-20190627052759-9e6b40329b3b h1:OqFG3tPrzHKNAy7GP/hku2bv4UWb9qVIbjOb4SLmjGI=

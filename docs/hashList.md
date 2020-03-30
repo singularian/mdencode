@@ -39,59 +39,60 @@ ID:    HashName      Description                              Block Size
 14:    cube          Cubehash                                 64    
 15:    echo          Echo                                     64    
 16:    fh32          Farm Hash 32                             4     
-17:    fnv32         FNV 32                                   4     
-18:    fnv32a        FNV 32a                                  4     
-19:    fnv64         FNV 64                                   8     
-20:    fnv64a        FNV 64a                                  8     
-21:    fnv128        FNV 128                                  16    
-22:    fnv128a       FNV 128a                                 16    
-23:    gost256       Gost 256                                 32    
-24:    gost512       Gost 512                                 64    
-25:    groest        Groest                                   64    
-26:    hmac256       HMAC 256                                 32    
-27:    hmac512       HMAC 512                                 64    
-28:    hw32          Highway Hash 32                          4     
-29:    hw64          Highway Hash 64                          8     
-30:    hw128         Highway Hash 128                         16    
-31:    hw256         Highway Hash 256                         32    
-32:    kekkak        Kekkak                                   32    
-33:    luffa         Luffa                                    64    
-34:    murmur3       Murmur3                                  16    
-35:    md2           MD2                                      16    
-36:    md4           MD4                                      16    
-37:    md5           MD5                                      16    
-38:    poly1305      Poly1305                                 16    
-39:    ripe128       Ripe 128                                 16    
-40:    ripe160       Ripe 160                                 20    
-41:    ripe256       Ripe 256                                 32    
-42:    ripe320       Ripe 320                                 40    
-43:    sea           Seahash                                  8     
-44:    sha1_64       SHA1 64                                  8     
-45:    sha1_128      SHA1 128                                 16    
-46:    sha1_1284     SHA1 1284                                16    
-47:    sha1          SHA1                                     20    
-48:    sha224        SHA224                                   28    
-49:    sha256        SHA256                                   32    
-50:    sha512_224    SHA512 224                               28    
-51:    sha512_256    SHA512 256                               32    
-52:    sha512_384    SHA512 384                               48    
-53:    sha512        SHA512                                   64    
-54:    sha3_224      SHA3 224                                 28    
-55:    sha3_256      SHA3 256                                 32    
-56:    sha3_384      SHA3 384                                 48    
-57:    sha3_512      SHA3 512                                 64    
-58:    shavite       X11 SHAvite                              64    
-59:    sip64         Siphash 64                               8     
-60:    sip128        Siphash 128                              16    
-61:    skein_160     Skein 160                                20    
-62:    skein_256     Skein 256                                32    
-63:    skein_384     Skein 384                                48    
-64:    skein_512     Skein 512                                64    
-65:    skein_1024    Skein 1024                               128   
-66:    tiger         Tiger                                    24    
-67:    whirlpool     Whirlpool                                64    
-68:    xxh32         XXHash 32                                4     
-69:    xxhash        XXHash 64                                8     
+17:    fh64          Farm Hash 64                             8     
+18:    fnv32         FNV 32                                   4     
+19:    fnv32a        FNV 32a                                  4     
+20:    fnv64         FNV 64                                   8     
+21:    fnv64a        FNV 64a                                  8     
+22:    fnv128        FNV 128                                  16    
+23:    fnv128a       FNV 128a                                 16    
+24:    gost256       Gost 256                                 32    
+25:    gost512       Gost 512                                 64    
+26:    groest        Groest                                   64    
+27:    hmac256       HMAC 256                                 32    
+28:    hmac512       HMAC 512                                 64    
+29:    hw32          Highway Hash 32                          4     
+30:    hw64          Highway Hash 64                          8     
+31:    hw128         Highway Hash 128                         16    
+32:    hw256         Highway Hash 256                         32    
+33:    kekkak        Kekkak                                   32    
+34:    luffa         Luffa                                    64    
+35:    murmur3       Murmur3                                  16    
+36:    md2           MD2                                      16    
+37:    md4           MD4                                      16    
+38:    md5           MD5                                      16    
+39:    poly1305      Poly1305                                 16    
+40:    ripe128       Ripe 128                                 16    
+41:    ripe160       Ripe 160                                 20    
+42:    ripe256       Ripe 256                                 32    
+43:    ripe320       Ripe 320                                 40    
+44:    sea           Seahash                                  8     
+45:    sha1_64       SHA1 64                                  8     
+46:    sha1_128      SHA1 128                                 16    
+47:    sha1_1284     SHA1 1284                                16    
+48:    sha1          SHA1                                     20    
+49:    sha224        SHA224                                   28    
+50:    sha256        SHA256                                   32    
+51:    sha512_224    SHA512 224                               28    
+52:    sha512_256    SHA512 256                               32    
+53:    sha512_384    SHA512 384                               48    
+54:    sha512        SHA512                                   64    
+55:    sha3_224      SHA3 224                                 28    
+56:    sha3_256      SHA3 256                                 32    
+57:    sha3_384      SHA3 384                                 48    
+58:    sha3_512      SHA3 512                                 64    
+59:    shavite       X11 SHAvite                              64    
+60:    sip64         Siphash 64                               8     
+61:    sip128        Siphash 128                              16    
+62:    skein_160     Skein 160                                20    
+63:    skein_256     Skein 256                                32    
+64:    skein_384     Skein 384                                48    
+65:    skein_512     Skein 512                                64    
+66:    skein_1024    Skein 1024                               128   
+67:    tiger         Tiger                                    24    
+68:    whirlpool     Whirlpool                                64    
+69:    xxh32         XXHash 32                                4     
+70:    xxhash        XXHash 64                                8     
 ``` 
 
 # Binary Signature Arguments

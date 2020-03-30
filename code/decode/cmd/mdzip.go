@@ -236,6 +236,7 @@ func printUsage() {
 	fmt.Println("blake2s_128 - 16+ hex characters")
 	fmt.Println("blake2s_256 - 16+ hex characters")
 	fmt.Println("hw32        - 1 to 64 hex characters")
+	fmt.Println("fh64        - uint64 integer 1 to 18 numbers")
 	fmt.Println("hw64        - 1 to 64 hex characters")
 	fmt.Println("hw128       - 1 to 64 hex characters")
 	fmt.Println("hw256       - 1 to 64 hex characters")
