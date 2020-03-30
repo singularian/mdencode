@@ -63,7 +63,7 @@ import (
 	"github.com/singularian/mdhash/xxhash_128"
 	"github.com/singularian/mdhash/poly1305"
 	"github.com/singularian/mdhash/cubehash"
-	"github.com/singularian/mdhash/farmHash32"
+	_ "github.com/singularian/mdhash/farmHash32"
 	"github.com/singularian/mdhash/farmHash64"
 	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 	"github.com/singularian/mdencode/code/decode/sigRand"
@@ -189,7 +189,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 			case "echo":
 				hb["echo"] = echo.New()
 			case "fh32":
-				hb["fh32"] = farmHash32.New(0, 4)
+				// hb["fh32"] = farmHash32.New(0, 4)
+				var key = hc.keylist[hashname]
+				hb["fh32"] = farmHash64.New(0, 4, sigRand.ConvertString2Int(key))
 			case "fh64":
 				// seed is a uint64
 				var key = hc.keylist[hashname]
@@ -539,6 +541,7 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	// hc.keylist["blake"]    = defaultkey
 	hc.keylist["blake2s_128"] = defaultkey
 	hc.keylist["blake2s_256"] = defaultkey
+	hc.keylist["fh32"]        = "909921232221" 
 	hc.keylist["fh64"]        = "909921232221" 
 	hc.keylist["hw32"]        = defaulthwkey 
 	hc.keylist["hw64"]        = defaulthwkey 
@@ -584,6 +587,9 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 						hc.keylist[sig] = sigkey
 					}
 					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
+				case "fh32":
+					hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				case "fh64":
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)
