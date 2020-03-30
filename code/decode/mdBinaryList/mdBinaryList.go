@@ -54,7 +54,7 @@ type HashList struct {
 // hash list struct variable
 // this should be in sorted order
 var hlist = []HashList{
-		{ HashName: "add32",       Description: "Adler 32",		BlockSize: 4,	Key: true },
+		{ HashName: "add32",       Description: "Adler 32",		BlockSize: 4,	Key: false },
 		{ HashName: "aes8",        Description: "AES Hash 8",		BlockSize: 8,	Key: true },
 		{ HashName: "ax",          Description: "XXHash 128",		BlockSize: 16,	Key: true },
 		{ HashName: "blake2",      Description: "Blake2",		BlockSize: 64,	Key: false },
@@ -71,7 +71,7 @@ var hlist = []HashList{
 		{ HashName: "cube",        Description: "Cubehash",		BlockSize: 64,	Key: false },
 		{ HashName: "echo",        Description: "Echo",			BlockSize: 64,	Key: false },
 
-		{ HashName: "fh32",        Description: "Farm Hash 32",		BlockSize: 4,	Key: false },
+		{ HashName: "fh32",        Description: "Farm Hash 32",		BlockSize: 4,	Key: true },
 		{ HashName: "fh64",        Description: "Farm Hash 64",		BlockSize: 8,	Key: true },
 		{ HashName: "fnv32",       Description: "FNV 32",		BlockSize: 4,	Key: false },
 		{ HashName: "fnv32a",      Description: "FNV 32a",		BlockSize: 4,	Key: false },
