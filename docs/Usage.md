@@ -192,21 +192,23 @@ A signature Key parameter "-keylist" is delineatead with a keyname colon hexvalu
   -keylist=keyname:hexvalue,key2:hexvalue,key3:keyvalue,...  
 
 Keylist:
-aes8        - uint64 integer 1 to 18 numbers                        
-ax1         - (xxhash128 key 1) uint64 integer 1 to 18 numbers      
-ax2         - (xxhash128 key 2) uint64 integer 1 to 18 numbers      
-blake2s_128 - 16+ hex characters                                    
-blake2s_256 - 16+ hex characters                                    
-hw32        - 1 to 64 hex characters                                
-fh64        - uint64 integer 1 to 18 numbers                        
-hw64        - 1 to 64 hex characters                                
-hw128       - 1 to 64 hex characters                                
-hw256       - 1 to 64 hex characters                                
-murmur3     - uint64 integer 1 to 18 numbers                        
-sip64       - 1 to 32 hex characters                                
-sip128      - 1 to 32 hex characters                                
-xxh32       - uint32 integer 1 to 9 numbers                         
-xxhash64    - uint64 integer 1 to 18 numbers                        
+aes8        - uint64 integer 1 to 18 numbers                       
+ax1         - (xxhash128 key 1) uint64 integer 1 to 18 numbers     
+ax2         - (xxhash128 key 2) uint64 integer 1 to 18 numbers     
+blake2s_128 - 16+ hex characters                                   
+blake2s_256 - 16+ hex characters                                   
+hw32        - 1 to 64 hex characters                               
+fh32        - uint64 integer 1 to 18 numbers                       
+fh64        - uint64 integer 1 to 18 numbers                       
+hw64        - 1 to 64 hex characters                               
+hw128       - 1 to 64 hex characters                               
+hw256       - 1 to 64 hex characters                               
+jn64        - uint64 integer 1 to 18 numbers                       
+murmur3     - uint64 integer 1 to 18 numbers                       
+sip64       - 1 to 32 hex characters                               
+sip128      - 1 to 32 hex characters                               
+xxh32       - uint32 integer 1 to 9 numbers                        
+xxhash64    - uint64 integer 1 to 18 numbers                       
 
 Keylist Examples:
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=1 -fh=110011 -keylist=aes8:12345

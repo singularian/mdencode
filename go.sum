@@ -50,10 +50,14 @@ github.com/singularian/mdhash v1.0.5 h1:pqWRQaf2t1cIUX4l/D1IMD09PhEtB1ug1WA4gp0X
 github.com/singularian/mdhash v1.0.5/go.mod h1:egDj1LSLLAq/xknQFjwqdpzSD4ekdLKbamxOnrFc9KE=
 github.com/singularian/mdhash v1.0.6 h1:bzzAqbGY83d94a2YrcvtXTBFzTtPyQtGishaHjozZjQ=
 github.com/singularian/mdhash v1.0.6/go.mod h1:egDj1LSLLAq/xknQFjwqdpzSD4ekdLKbamxOnrFc9KE=
+github.com/singularian/mdhash v1.0.7 h1:JjvbwBcb5jE5uICkVPnG0IqkMEcw1OUl9gZVn53/jK0=
+github.com/singularian/mdhash v1.0.7/go.mod h1:egDj1LSLLAq/xknQFjwqdpzSD4ekdLKbamxOnrFc9KE=
 github.com/steakknife/keccak v0.0.0-20150202122130-d0dce0d5b080 h1:VgH5VI21ib8sLvBJ1LMe17zjo+zOC15UchIB6Vv64Xo=
 github.com/steakknife/keccak v0.0.0-20150202122130-d0dce0d5b080/go.mod h1:XVAcwiwvJSHP20VqW3saH3KNQaWBprw8oKDZVHFWPL4=
 github.com/tildeleb/aeshash v0.0.0-20190627052759-9e6b40329b3b h1:OqFG3tPrzHKNAy7GP/hku2bv4UWb9qVIbjOb4SLmjGI=
 github.com/tildeleb/aeshash v0.0.0-20190627052759-9e6b40329b3b/go.mod h1:l7Z/PMOs9KRktIz2rDUvdXFFNWsi+D26UyHelxKlWD8=
+github.com/tildeleb/hashland v0.0.0-20171003003232-07375b562dea h1:aE7nkhfs87RPvc+8ISeGEaQSQ8Fze4ZYFMDSuk39bOk=
+github.com/tildeleb/hashland v0.0.0-20171003003232-07375b562dea/go.mod h1:/mp2QpFTFwg918l4vdwufYoHrK8LQrpRjsy3wGdk/6c=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d h1:9FCpayM9Egr1baVnV1SX0H87m+XB0B8S0hAMi99X/3U=
 golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=

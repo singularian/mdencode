@@ -59,12 +59,13 @@ import (
 	"github.com/jzelinskie/whirlpool"
 	"github.com/steakknife/keccak"
 	"github.com/OneOfOne/xxhash"
-	"github.com/singularian/mdhash/hw32"
-	"github.com/singularian/mdhash/xxhash_128"
-	"github.com/singularian/mdhash/poly1305"
 	"github.com/singularian/mdhash/cubehash"
 	_ "github.com/singularian/mdhash/farmHash32"
 	"github.com/singularian/mdhash/farmHash64"
+	"github.com/singularian/mdhash/hw32"
+	"github.com/singularian/mdhash/jenkins64"
+	"github.com/singularian/mdhash/poly1305"
+	"github.com/singularian/mdhash/xxhash_128"
 	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 	"github.com/singularian/mdencode/code/decode/sigRand"
 )
@@ -250,6 +251,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 
 				hb["hw256"], hc.err = highwayhash.New(hwkey[:])
 				hc.CheckKeyError(hashname, key, hc.err)
+			case "jn64":
+				var key = hc.keylist[hashname]
+				hb["jn64"] = jenkins64.New(0, 8, sigRand.ConvertString2Int(key))
 			case "kekkak":
 				hb["kekkak"] = keccak.New256()
 			case "luffa":
@@ -547,6 +551,7 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	hc.keylist["hw64"]        = defaulthwkey 
 	hc.keylist["hw128"]       = defaulthwkey 
 	hc.keylist["hw256"]       = defaulthwkey
+	hc.keylist["jn64"]        = "132200231"
 	hc.keylist["murmur3"]     = "1120322"
 	hc.keylist["sip64"]       = "000102030405060708090a0b0c0d0e0f"
 	hc.keylist["sip128"]      = "000102030405060708090a0b0c0d0e0f"
@@ -621,6 +626,9 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 						hc.keylist[sig] = fmt.Sprintf("%064s", sigkey)
 					}
 					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
+				case "jn64":
+					hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				case "murmur3":
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)
