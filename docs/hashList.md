@@ -4,10 +4,6 @@ This is the current numerical signature hash list.
 It corresponds to the binary or quaterniary argument position.  
 These should be in sorted order for the context hashlist.  
 
-# Current mdencode signatures  
-
-These are the current mdencode signatures
-
 ```
 ID:    HashName      Description                              Block Size  
 ========================================================================   
