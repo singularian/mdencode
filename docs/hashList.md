@@ -4,19 +4,7 @@ This is the current numerical signature hash list.
 It corresponds to the binary or quaterniary argument position.  
 These should be in sorted order for the context hashlist.  
 
-# Adding New Signatures
-
-This is the step to add a new signature. It should be in sorted order  
-
-```
-1: Add the signature name ID and description and block size to $GOPATH/$PROJECT/code/decode/mdBlockSize/mdBinaryList.go  
-2: Add the hash import to the hash context list to $GOPATH/$PROJECT/code/decode/mdHashContextList/mdHashContextList.go  
-3: Add the hash context new initialize function to CreateHashListMap()  
-   in decode/mdHashContextList/mdHashContextList.go  
-4: If the signature contains a key add a default key to keylist hash map and a initializer
-```
-
-### Current mdencode signatures  
+# Current mdencode signatures  
 
 These are the current mdencode signatures
 
@@ -95,6 +83,18 @@ ID:    HashName      Description                              Block Size
 70:    xxh32         XXHash 32                                4        
 71:    xxhash        XXHash 64                                8        
 ``` 
+
+# Adding New Signatures
+
+This is the step to add a new signature. It should be in sorted order
+
+```
+1: Add the signature name ID and description and block size to $GOPATH/$PROJECT/code/decode/mdBlockSize/mdBinaryList.go
+2: Add the hash import to the hash context list to $GOPATH/$PROJECT/code/decode/mdHashContextList/mdHashContextList.go
+3: Add the hash context new initialize function to CreateHashListMap()
+   in decode/mdHashContextList/mdHashContextList.go
+4: If the signature contains a key add a default key to keylist hash map and a initializer
+```
 
 # Binary Signature Arguments
 
