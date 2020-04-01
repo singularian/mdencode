@@ -291,7 +291,10 @@ Usage  ./decoderRandomTestHC  -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222
 Usage  ./decoderRandomTestHC  -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF
 ```
 
-Example 1: decoderRandomTestHC Tests  
+## Example 1: decoderRandomTestHC Tests  
+
+These are some examples for decoderRandomTestHC. The Hashlist Context test program. 
+
 ```
 ./decoderRandomTestHC -block=12 -mod=64 -thread=16 -bh=1 -keylist=aes8:F0110033119900112FF11
 hashlist  [aes8] 1
