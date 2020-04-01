@@ -68,6 +68,7 @@ var hlist = []HashList{
 		{ HashName: "crc32k",      Description: "CRC-32 Koopman",	BlockSize: 4,	Key: false },
 		{ HashName: "crc64ecma",   Description: "CRC-64 ECMA",		BlockSize: 8,	Key: false },
 		{ HashName: "crc64iso",    Description: "CRC-64 ISO",		BlockSize: 8,	Key: false },
+		{ HashName: "ct64",        Description: "Cityhash 64",		BlockSize: 8,	Key: false },
 		{ HashName: "cube",        Description: "Cubehash",		BlockSize: 64,	Key: false },
 		{ HashName: "echo",        Description: "Echo",			BlockSize: 64,	Key: false },
 
@@ -93,6 +94,7 @@ var hlist = []HashList{
 		{ HashName: "luffa",       Description: "Luffa",		BlockSize: 64,	Key: false },
 
 		{ HashName: "jn64",        Description: "Jenkins 64",		BlockSize: 8,	Key: true },
+		{ HashName: "mm32",        Description: "Murmur3 32",		BlockSize: 4,	Key: true },
 		{ HashName: "murmur3",     Description: "Murmur3",		BlockSize: 16,	Key: true },
 		{ HashName: "md2",         Description: "MD2",			BlockSize: 16,	Key: false },
 		{ HashName: "md4",         Description: "MD4",			BlockSize: 16,	Key: false },

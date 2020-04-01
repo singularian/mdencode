@@ -13,6 +13,8 @@ github.com/asadmshah/murmur3 v0.0.0-20140524051746-6b29847b4c78 h1:ZHvuZEw1OfMZL
 github.com/asadmshah/murmur3 v0.0.0-20140524051746-6b29847b4c78/go.mod h1:sSGKytGm28L9qiyor3HovYMLaXG6mrQw3432VKfowzc=
 github.com/codahale/blake2 v0.0.0-20150924215134-8d10d0420cbf h1:5ZeQB3mThuz5C2MSER6T5GdtXTF9CMMk42F9BOyRsEQ=
 github.com/codahale/blake2 v0.0.0-20150924215134-8d10d0420cbf/go.mod h1:BO2rLUAZMrpgh6GBVKi0Gjdqw2MgCtJrtmUdDeZRKjY=
+github.com/creachadair/cityhash v0.1.0 h1:rzSfISre5xT/EgbVvXBmsUJ58Hsrp8ccYMZVvc5uBmk=
+github.com/creachadair/cityhash v0.1.0/go.mod h1:bYNmpea/cMZgL9Rjt+ZfDfjaT0hScMO6SSGV1DN5lEM=
 github.com/cxmcc/tiger v0.0.0-20170524142333-bde35e2713d7 h1:jBEtq1t2gpn2kEzvRlCUxvvrxl5aSWkXNPwe/hwvSNQ=
 github.com/cxmcc/tiger v0.0.0-20170524142333-bde35e2713d7/go.mod h1:ruCYvt9rtYymAr4rNmfYJrl1dz8HSXUFP7cufqKOsDI=
 github.com/dchest/siphash v1.2.1 h1:4cLinnzVJDKxTCl9B01807Yiy+W7ZzVHj/KIroQRvT4=
@@ -54,6 +56,8 @@ github.com/singularian/mdhash v1.0.7 h1:JjvbwBcb5jE5uICkVPnG0IqkMEcw1OUl9gZVn53/
 github.com/singularian/mdhash v1.0.7/go.mod h1:egDj1LSLLAq/xknQFjwqdpzSD4ekdLKbamxOnrFc9KE=
 github.com/singularian/mdhash v1.0.8 h1:90B7lKwoK2FXzgzM2esUizFBgk8Wnh9zSDwnVxaq1no=
 github.com/singularian/mdhash v1.0.8/go.mod h1:egDj1LSLLAq/xknQFjwqdpzSD4ekdLKbamxOnrFc9KE=
+github.com/singularian/mdhash v1.0.9 h1:Ugiu+poXFMbIF1aZLnIfuWVKf69PGLoEplfBN2i358Y=
+github.com/singularian/mdhash v1.0.9/go.mod h1:egDj1LSLLAq/xknQFjwqdpzSD4ekdLKbamxOnrFc9KE=
 github.com/steakknife/keccak v0.0.0-20150202122130-d0dce0d5b080 h1:VgH5VI21ib8sLvBJ1LMe17zjo+zOC15UchIB6Vv64Xo=
 github.com/steakknife/keccak v0.0.0-20150202122130-d0dce0d5b080/go.mod h1:XVAcwiwvJSHP20VqW3saH3KNQaWBprw8oKDZVHFWPL4=
 github.com/tildeleb/aeshash v0.0.0-20190627052759-9e6b40329b3b h1:OqFG3tPrzHKNAy7GP/hku2bv4UWb9qVIbjOb4SLmjGI=

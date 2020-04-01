@@ -59,11 +59,13 @@ import (
 	"github.com/jzelinskie/whirlpool"
 	"github.com/steakknife/keccak"
 	"github.com/OneOfOne/xxhash"
+	"github.com/singularian/mdhash/cityHash64"
 	"github.com/singularian/mdhash/cubehash"
 	_ "github.com/singularian/mdhash/farmHash32"
 	"github.com/singularian/mdhash/farmHash64"
 	"github.com/singularian/mdhash/hw32"
 	"github.com/singularian/mdhash/jenkins64"
+	"github.com/singularian/mdhash/murmur332"
 	"github.com/singularian/mdhash/poly1305"
 	"github.com/singularian/mdhash/spooky64"
 	"github.com/singularian/mdhash/xxhash_128"
@@ -186,6 +188,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["crc64ecma"] = crc64.New(crc64.MakeTable(crc64.ECMA)) 
 			case "crc64iso":
 				 hb["crc64iso"] = crc64.New(crc64.MakeTable(crc64.ISO))
+			case "ct64":
+				var key = hc.keylist[hashname]
+				hb["ct64"] = cityHash64.New(0, 8, sigRand.ConvertString2Int(key))
 			case "cube":
 				hb["cube"] = cubehash.New()
 			case "echo":
@@ -259,6 +264,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["kekkak"] = keccak.New256()
 			case "luffa":
 				 hb["luffa"] = luffa.New()
+			case "mm32":
+				var key = hc.keylist[hashname]
+				hb["mm32"] = murmur332.New(0, 4, sigRand.ConvertString2Int32(key))
                         case "murmur3":
 				// var seed uint64 = 1120322
 				var key = hc.keylist[hashname]
@@ -552,6 +560,7 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	// hc.keylist["blake"]    = defaultkey
 	hc.keylist["blake2s_128"] = defaultkey
 	hc.keylist["blake2s_256"] = defaultkey
+	hc.keylist["ct64"]        = "111111222"
 	hc.keylist["fh32"]        = "909921232221" 
 	hc.keylist["fh64"]        = "909921232221" 
 	hc.keylist["hw32"]        = defaulthwkey 
@@ -559,6 +568,7 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	hc.keylist["hw128"]       = defaulthwkey 
 	hc.keylist["hw256"]       = defaulthwkey
 	hc.keylist["jn64"]        = "132200231"
+	hc.keylist["mm32"]        = "1120322"
 	hc.keylist["murmur3"]     = "1120322"
 	hc.keylist["sip64"]       = "000102030405060708090a0b0c0d0e0f"
 	hc.keylist["sip128"]      = "000102030405060708090a0b0c0d0e0f"
@@ -601,6 +611,9 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 						hc.keylist[sig] = sigkey
 					}
 					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
+				case "ct64":
+					hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				case "fh32":
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)
@@ -636,6 +649,9 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 					}
 					result += fmt.Sprintf("%s:%s,", sig, hc.keylist[sig])
 				case "jn64":
+					hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
+				case "mm32":
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				case "murmur3":
