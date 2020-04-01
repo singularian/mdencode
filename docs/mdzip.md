@@ -137,18 +137,25 @@ A signature Key parameter "-keylist" is delineatead with a keyname colon hexvalu
   -keylist=keyname:hexvalue,key2:hexvalue,key3:keyvalue,...  
 
 Keylist:
-aes8        - uint64 integer 1 to 18 numbers
-ax1         - (xxhash128 key 1) uint64 integer 1 to 18 numbers
-ax2         - (xxhash128 key 2) uint64 integer 1 to 18 numbers
-blake2s_128 - 16+ hex characters
-blake2s_256 - 16+ hex characters
-hw64        - 1 to 64 hex characters
-hw128       - 1 to 64 hex characters
-hw256       - 1 to 64 hex characters
-murmur3     - uint64 integer 1 to 18 numbers
-sip64       - 1 to 32 hex characters
-sip128      - 1 to 32 hex characters
-xxhash      - uint64 integer 1 to 18 numbers
+aes8        - uint64 integer 1 to 18 numbers                       
+ax1         - (xxhash128 key 1) uint64 integer 1 to 18 numbers     
+ax2         - (xxhash128 key 2) uint64 integer 1 to 18 numbers     
+blake2s_128 - 16+ hex characters                                   
+blake2s_256 - 16+ hex characters                                   
+hw32        - 1 to 64 hex characters                               
+fh32        - uint64 integer 1 to 18 numbers                       
+fh64        - uint64 integer 1 to 18 numbers                       
+hw64        - 1 to 64 hex characters                               
+hw128       - 1 to 64 hex characters                               
+hw256       - 1 to 64 hex characters                               
+jn64        - uint64 integer 1 to 18 numbers                       
+murmur3     - uint64 integer 1 to 18 numbers                       
+sip64       - 1 to 32 hex characters                               
+sip128      - 1 to 32 hex characters                               
+spk32       - uint64 integer 1 to 18 numbers                       
+spk64       - uint64 integer 1 to 18 numbers                       
+xxh32       - uint32 integer 1 to 9 numbers                        
+xxhash64    - uint64 integer 1 to 18 numbers                       
 
 Keylist Examples:
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=1 -fh=110011 -keylist=aes8:12345
@@ -161,7 +168,7 @@ mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000011 -fh=1100
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=01 -fh=110011 -keylist=ax1:123456,ax2:789347
 
 Build Time: 2020-01-18T13:42:02-0500    
-Version:    1.0.4 復甦 復活
+Version:    1.0.7 復甦 復活
 ```                                                                                                 
                                                                                                     
 ```                                                                                                 
@@ -284,7 +291,7 @@ Usage  ./decoderRandomTestHC  -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222
 Usage  ./decoderRandomTestHC  -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF
 ```
 
-Example decoderRandomTestHC Tests
+Example 1: decoderRandomTestHC Tests  
 ```
 ./decoderRandomTestHC -block=12 -mod=64 -thread=16 -bh=1 -keylist=aes8:F0110033119900112FF11
 hashlist  [aes8] 1
@@ -307,7 +314,73 @@ Found Block [hmac256 baf64c746d51cc640faa447da3a4caecc6f35ca2dc42dd5f22bd94ed96f
 Total time  3m27.7438341s
 random bytestring and modulusscan bytestring match  [222 251 17 58 253 154 45 2 197 39 85 239 144 178 187 172 171 117 135 51]   [222 251 17 58 253 154 45 2 197 39 85 239 144 178 187 172 171 117 135 51]  hex bytes  DEFB113AFD9A2D02C52755EF90B2BBACAB758733
 Found block  thread 10 random bytestring and modulusscan bytestring match [222 251 17 58 253 154 45 2 197 39 85 239 144 178 187 172 171 117 135 51] = [222 251 17 58 253 154 45 2 197 39 85 239 144 178 187 172 171 117 135 51]
+
 ```
+
+## Example 2                                                                                                                                                                  
+                                                                                                                                                                              
+This examples shows a 14 byte block encoded in a 13 byte block. This is an example of modulus scan compression where the mdzip byte block is smaller than the input block.    
+It uses 2 32-bit signatures CRC-32 and FNV-32 and a 32-bit modulus and 1 byte for the modulus exponent.                                                                       
+```                                                                                                                                                                           
+user@server:~/projects/src/github.com/singularian/mdencode/build$ ./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=16 -hex=0000000012002000000000000000   
+hashlist  [crc32 fnv32] 0000000010000001                                                                                                                                      
+Found Block [crc32 0b964a44 fnv32 7c87ac27] result = 0b964a447c87ac27 Found Block  [0 0 0 0 18 0 32 0 0 0 0 0 0 0]                                                            
+Total time  25h57m30.5502149s                                                                                                                                                 
+random bytestring and modulusscan bytestring match  [0 0 0 0 18 0 32 0 0 0 0 0 0 0]   [0 0 0 0 18 0 32 0 0 0 0 0 0 0]  hex bytes  0000000012002000000000000000                
+Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 0 0 18 0 32 0 0 0 0 0 0 0] = [0 0 0 0 18 0 32 0 0 0 0 0 0 0]                                    
+                                                                                                                                                                              
+```                                                                                                                                                                           
+                                                                                                                                                                              
+## Example 3                                                                                                                                                                  
+                                                                                                                                                                              
+This examples shows a 14 byte block encoded in a 13 byte block. This is an example of modulus scan compression where the mdzip byte block is smaller than the input block.    
+It uses 2 32-bit signatures CRC-32 and FNV-32 and a 32-bit modulus and 1 byte for the modulus exponent. It was run on a 60 core server with 120 threads.                      
+                                                                                                                                                                              
+```                                                                                                                                                                           
+user@instance-2:~/mdencode/mdencode-1.0.5/build$ ./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=120 -hex=000000001200200000000000FFFC                   
+Running Decode                                                                                                                                                                
+Block Size        14                                                                                                                                                          
+Hashlist          [crc32 fnv32]                                                                                                                                               
+Binary Hashlist   0000000010000001                                                                                                                                            
+Thread Size       120                                                                                                                                                         
+Mod Size          32                                                                                                                                                          
+Mod Exponent      76                                                                                                                                                          
+Mod Remainder     65532                                                                                                                                                       
+                                                                                                                                                                              
+Found Block [crc32 2cb90901 fnv32 41874fba] result = 2cb9090141874fba Found Block  [0 0 0 0 18 0 32 0 0 0 0 0 255 252]                                                        
+Total time  17h2m51.520645146s                                                                                                                                                
+Random bytestring and modulusscan bytestring match  [0 0 0 0 18 0 32 0 0 0 0 0 255 252]   [0 0 0 0 18 0 32 0 0 0 0 0 255 252]  hex bytes  000000001200200000000000FFFC        
+Found block  thread 64 random bytestring and modulusscan bytestring match [0 0 0 0 18 0 32 0 0 0 0 0 255 252] = [0 0 0 0 18 0 32 0 0 0 0 0 255 252]                           
+```                                                                                                                                                                           
+                                                                                                                                                                              
+## Example 4                                                                                                                                                                  
+                                                                                                                                                                              
+This examples shows a 14 byte block encoded in a 13 byte block. This is an example of modulus scan compression where the mdzip byte block is smaller than the input block.    
+It uses 2 32-bit signatures CRC-32 and FNV-32 and a 32-bit modulus and 1 byte for the modulus exponent.                                                                       
+It was run on 9 servers with 32 cores with a total of 288 cpu threads.                                                                                                        
+                                                                                                                                                                              
+```                                                                                                                                                                           
+./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=0 -end=32  -hex=0000000012002000000011DDFFFC                                                  
+./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=32 -end=64  -hex=0000000012002000000011DDFFFC                                                 
+./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=64 -end=96  -hex=0000000012002000000011DDFFFC                                                 
+./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=96 -end=128  -hex=0000000012002000000011DDFFFC                                                
+./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=128 -end=160 -hex=0000000012002000000011DDFFFC                                                
+./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=160 -end=192 -hex=0000000012002000000011DDFFFC                                                
+./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=192 -end=224 -hex=0000000012002000000011DDFFFC                                                
+./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=224 -end=256 -hex=0000000012002000000011DDFFFC                                                
+./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=256 -end=288 -hex=0000000012002000000011DDFFFC                                                
+                                                                                                                                                                              
+Thread End        96                                                                                                                                                          
+Threads           288                                                                                                                                                         
+Mod Size          32                                                                                                                                                          
+Mod Exponent      76                                                                                                                                                          
+Mod Remainder     382551851004 - TODO: It is currently using mod start modremainder + thread number + mod                                                                     
+Found Block [crc32 414d9f98 fnv32 06e18008] result = 414d9f9806e18008 Found Block  [0 0 0 0 18 0 32 0 0 0 17 221 255 252]                                                     
+Total time  2h24m0.469392664s                                                                                                                                                 
+Random bytestring and modulusscan bytestring match  [0 0 0 0 18 0 32 0 0 0 17 221 255 252]   [0 0 0 0 18 0 32 0 0 0 17 221 255 252]  hex bytes  0000000012002000000011DDFFFC  
+Found block  thread 64 random bytestring and modulusscan bytestring match [0 0 0 0 18 0 32 0 0 0 17 221 255 252] = [0 0 0 0 18 0 32 0 0 0 17 221 255 252]                     
+```
+
 
 # Donations
 
