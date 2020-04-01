@@ -198,9 +198,9 @@ ax2         - (xxhash128 key 2) uint64 integer 1 to 18 numbers
 blake2s_128 - 16+ hex characters                                     
 blake2s_256 - 16+ hex characters                                     
 ct64        - uint64 integer 1 to 18 numbers                         
-hw32        - 1 to 64 hex characters                                 
 fh32        - uint64 integer 1 to 18 numbers                         
 fh64        - uint64 integer 1 to 18 numbers                         
+hw32        - 1 to 64 hex characters
 hw64        - 1 to 64 hex characters                                 
 hw128       - 1 to 64 hex characters                                 
 hw256       - 1 to 64 hex characters                                 
