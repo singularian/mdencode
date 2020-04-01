@@ -63,15 +63,15 @@ func full() {
 
 	fmt.Println("Current mdencode signatures\n")
 
-        columns := [5]string{"ID:", "HashName", "Description", "Block Size"}
-        fmt.Printf("%-6s %-11s   %-40s %s\n", columns[0], columns[1], columns[2], columns[3])
-        fmt.Printf("=======================================================================\n")
+        columns := [5]string{"ID:", "HashName", "Description", "Block Size", "Hash Key"}
+        fmt.Printf("%-6s %-11s   %-40s %-12s %s\n", columns[0], columns[1], columns[2], columns[3], columns[4])
+        fmt.Printf("=====================================================================================\n")
 
         hlistObject := mdl.GetHashListObject()
         for i := 0; i < len(hlistObject); i++ {
                 number := fmt.Sprintf("%d:", i+1)
 
-                fmt.Printf("%-6s %-11s   %-40s %d\n", number, hlistObject[i].HashName,  hlistObject[i].Description, hlistObject[i].BlockSize)
+                fmt.Printf("%-6s %-11s   %-40s %-12d %t\n", number, hlistObject[i].HashName,  hlistObject[i].Description, hlistObject[i].BlockSize, hlistObject[i].Key)
         }
 
 

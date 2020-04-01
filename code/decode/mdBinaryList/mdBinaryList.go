@@ -128,6 +128,8 @@ var hlist = []HashList{
 		{ HashName: "skein_384",   Description: "Skein 384",		BlockSize: 48,	Key: false },
 		{ HashName: "skein_512",   Description: "Skein 512",		BlockSize: 64,	Key: false },
 		{ HashName: "skein_1024",  Description: "Skein 1024",		BlockSize: 128,	Key: false },
+		{ HashName: "spk32",       Description: "Spooky 32",		BlockSize: 4,	Key: true },
+		{ HashName: "spk64",       Description: "Spooky 64",		BlockSize: 8,	Key: true },
 		{ HashName: "tiger",       Description: "Tiger",		BlockSize: 24,	Key: false },
 		{ HashName: "whirlpool",   Description: "Whirlpool",		BlockSize: 64,	Key: false },
 		{ HashName: "xxh32",       Description: "XXHash 32",		BlockSize: 4,	Key: true },

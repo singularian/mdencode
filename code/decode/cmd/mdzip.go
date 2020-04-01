@@ -245,6 +245,8 @@ func printUsage() {
 	fmt.Println("murmur3     - uint64 integer 1 to 18 numbers")
 	fmt.Println("sip64       - 1 to 32 hex characters")
 	fmt.Println("sip128      - 1 to 32 hex characters")
+	fmt.Println("spk32       - uint64 integer 1 to 18 numbers")
+	fmt.Println("spk64       - uint64 integer 1 to 18 numbers")
 	fmt.Println("xxh32       - uint32 integer 1 to 9 numbers")
 	fmt.Println("xxhash64    - uint64 integer 1 to 18 numbers")
 

@@ -25,7 +25,7 @@ require (
 	github.com/minio/blake2b-simd v0.0.0-20160723061019-3f5f724cb5b1
 	github.com/minio/highwayhash v1.0.0
 	github.com/phoreproject/go-x11 v0.0.0-20190107235645-df0f52b15c3a
-	github.com/singularian/mdhash v1.0.7
+	github.com/singularian/mdhash v1.0.8
 	github.com/steakknife/keccak v0.0.0-20150202122130-d0dce0d5b080
 	github.com/tildeleb/aeshash v0.0.0-20190627052759-9e6b40329b3b
 	github.com/tildeleb/hashland v0.0.0-20171003003232-07375b562dea // indirect
