@@ -20,7 +20,7 @@ ID:    HashName      Description                              Block Size        
 11:    crc32k        CRC-32 Koopman                           4                    false    
 12:    crc64ecma     CRC-64 ECMA                              8                    false    
 13:    crc64iso      CRC-64 ISO                               8                    false    
-14:    ct64          Cityhash 64                              8                    false    
+14:    ct64          Cityhash 64                              8                    true    
 15:    cube          Cubehash                                 64                   false    
 16:    echo          Echo                                     64                   false    
 17:    fh32          Farm Hash 32                             4                    true     
