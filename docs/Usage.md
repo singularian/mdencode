@@ -213,7 +213,7 @@ spk32       - uint64 integer 1 to 18 numbers
 spk64       - uint64 integer 1 to 18 numbers                         
 xxh32       - uint32 integer 1 to 9 numbers                          
 xxhash64    - uint64 integer 1 to 18 numbers                         
-                                                                     
+wy          - uint64 integer 1 to 18 numbers                                                                     
 
 Keylist Examples:
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=1 -fh=110011 -keylist=aes8:12345
@@ -394,4 +394,5 @@ ID:    HashName      Description                              Block Size        
 73:    whirlpool     Whirlpool                                64                   false      
 74:    xxh32         XXHash 32                                4                    true       
 75:    xxhash        XXHash 64                                8                    true       
+76:    wy            WY Hash 64                               8                    true
 ```

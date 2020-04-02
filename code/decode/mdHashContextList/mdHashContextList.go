@@ -69,6 +69,7 @@ import (
 	"github.com/singularian/mdhash/poly1305"
 	"github.com/singularian/mdhash/spooky64"
 	"github.com/singularian/mdhash/xxhash_128"
+	"github.com/orisano/wyhash/v2"
 	"github.com/singularian/mdencode/code/decode/mdBinaryList"
 	"github.com/singularian/mdencode/code/decode/sigRand"
 )
@@ -367,6 +368,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				// xxhash.New64()       // non seed key version
 				var key = hc.keylist[hashname]
                                 hb["xxhash"] = xxhash.NewS64(sigRand.ConvertString2Int(key))
+			case "wy":
+				var key = hc.keylist[hashname]
+				hb["wy"]  = wyhash.New(sigRand.ConvertString2Int(key))
 			default:
 				fmt.Println("Unknown Hash Context List Signature ", hashname)
 				os.Exit(2)
@@ -683,6 +687,9 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				case "xxhash":
+					hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
+				case "wy":
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				default:

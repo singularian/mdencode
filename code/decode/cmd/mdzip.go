@@ -251,6 +251,7 @@ func printUsage() {
 	fmt.Println("spk64       - uint64 integer 1 to 18 numbers")
 	fmt.Println("xxh32       - uint32 integer 1 to 9 numbers")
 	fmt.Println("xxhash64    - uint64 integer 1 to 18 numbers")
+	fmt.Println("wy          - uint64 integer 1 to 18 numbers")
 
 	fmt.Println("")
 	fmt.Println("Keylist Examples:")
