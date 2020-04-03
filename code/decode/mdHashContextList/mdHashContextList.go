@@ -71,7 +71,7 @@ import (
 	"github.com/singularian/mdhash/spooky64"
 	"github.com/singularian/mdhash/xxhash_128"
 	"github.com/orisano/wyhash/v2"
-	"github.com/singularian/mdencode/code/decode/mdBinaryList"
+	"github.com/singularian/mdencode/code/decode/mdSignatureList"
 	"github.com/singularian/mdencode/code/decode/sigRand"
 )
 
@@ -79,7 +79,7 @@ import (
 type HashContextList struct {
 	fileHashList string
 	blockHashList string
-	MdBlockSize *mdBinaryList.BlockList
+	MdBlockSize *mdSignatureList.BlockList
 	// hash map
 	// 
 	// hash list for files
@@ -115,7 +115,7 @@ type HashContextList struct {
 func Init() (hc *HashContextList) {
         hcl := new(HashContextList)
 
-	mdBlock := mdBinaryList.Init()
+	mdBlock := mdSignatureList.Init()
 	hcl.MdBlockSize       = mdBlock
 	hcl.HashListFileSize  = 0
 	hcl.HashListBlockSize = 0
