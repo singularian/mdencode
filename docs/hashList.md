@@ -5,10 +5,6 @@ It corresponds to the binary or quaterniary argument position.
 These should be in sorted order for the context hashlist.  
 
 ```
-Current mdencode signatures                                                                  
-
-Current mdencode signatures                                                                   
-                                                                                              
 ID:    HashName      Description                              Block Size           Hash Key   
 ============================================================================================  
 1:     add32         Adler 32                                 4                    false      
