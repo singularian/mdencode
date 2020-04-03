@@ -317,6 +317,8 @@ user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdsig
 
 Current mdencode signatures                
 
+Current mdencode signatures                                                                   
+                                                                                              
 ID:    HashName      Description                              Block Size           Hash Key   
 ============================================================================================  
 1:     add32         Adler 32                                 4                    false      
@@ -332,7 +334,7 @@ ID:    HashName      Description                              Block Size        
 11:    crc32k        CRC-32 Koopman                           4                    false      
 12:    crc64ecma     CRC-64 ECMA                              8                    false      
 13:    crc64iso      CRC-64 ISO                               8                    false      
-14:    ct64          Cityhash 64                              8                    false      
+14:    ct64          Cityhash 64                              8                    true       
 15:    cube          Cubehash                                 64                   false      
 16:    echo          Echo                                     64                   false      
 17:    fh32          Farm Hash 32                             4                    true       
@@ -355,44 +357,47 @@ ID:    HashName      Description                              Block Size        
 34:    kekkak        Kekkak                                   32                   false      
 35:    luffa         Luffa                                    64                   false      
 36:    jn64          Jenkins 64                               8                    true       
-37:    mm32          Murmur3 32                               4                    true       
-38:    murmur3       Murmur3                                  16                   true       
-39:    md2           MD2                                      16                   false      
-40:    md4           MD4                                      16                   false      
-41:    md5           MD5                                      16                   false      
-42:    poly1305      Poly1305                                 16                   true       
-43:    ripe128       Ripe 128                                 16                   false      
-44:    ripe160       Ripe 160                                 20                   false      
-45:    ripe256       Ripe 256                                 32                   false      
-46:    ripe320       Ripe 320                                 40                   false      
-47:    sea           Seahash                                  8                    false      
-48:    sha1_64       SHA1 64                                  8                    false      
-49:    sha1_128      SHA1 128                                 16                   false      
-50:    sha1_1284     SHA1 1284                                16                   false      
-51:    sha1          SHA1                                     20                   false      
-52:    sha224        SHA224                                   28                   false      
-53:    sha256        SHA256                                   32                   false      
-54:    sha512_224    SHA512 224                               28                   false      
-55:    sha512_256    SHA512 256                               32                   false      
-56:    sha512_384    SHA512 384                               48                   false      
-57:    sha512        SHA512                                   64                   false      
-58:    sha3_224      SHA3 224                                 28                   false      
-59:    sha3_256      SHA3 256                                 32                   false      
-60:    sha3_384      SHA3 384                                 48                   false      
-61:    sha3_512      SHA3 512                                 64                   false      
-62:    shavite       X11 SHAvite                              64                   false      
-63:    sip64         Siphash 64                               8                    true       
-64:    sip128        Siphash 128                              16                   true       
-65:    skein_160     Skein 160                                20                   false      
-66:    skein_256     Skein 256                                32                   false      
-67:    skein_384     Skein 384                                48                   false      
-68:    skein_512     Skein 512                                64                   false      
-69:    skein_1024    Skein 1024                               128                  false      
-70:    spk32         Spooky 32                                4                    true       
-71:    spk64         Spooky 64                                8                    true       
-72:    tiger         Tiger                                    24                   false      
-73:    whirlpool     Whirlpool                                64                   false      
-74:    xxh32         XXHash 32                                4                    true       
-75:    xxhash        XXHash 64                                8                    true       
-76:    wy            WY Hash 64                               8                    true
+37:    me32          Meow 32                                  4                    true       
+38:    me64          Meow 64                                  8                    true       
+39:    me128         Meow 128                                 16                   true       
+40:    mm32          Murmur3 32                               4                    true       
+41:    murmur3       Murmur3                                  16                   true       
+42:    md2           MD2                                      16                   false      
+43:    md4           MD4                                      16                   false      
+44:    md5           MD5                                      16                   false      
+45:    poly1305      Poly1305                                 16                   true       
+46:    ripe128       Ripe 128                                 16                   false      
+47:    ripe160       Ripe 160                                 20                   false      
+48:    ripe256       Ripe 256                                 32                   false      
+49:    ripe320       Ripe 320                                 40                   false      
+50:    sea           Seahash                                  8                    false      
+51:    sha1_64       SHA1 64                                  8                    false      
+52:    sha1_128      SHA1 128                                 16                   false      
+53:    sha1_1284     SHA1 1284                                16                   false      
+54:    sha1          SHA1                                     20                   false      
+55:    sha224        SHA224                                   28                   false      
+56:    sha256        SHA256                                   32                   false      
+57:    sha512_224    SHA512 224                               28                   false      
+58:    sha512_256    SHA512 256                               32                   false      
+59:    sha512_384    SHA512 384                               48                   false      
+60:    sha512        SHA512                                   64                   false      
+61:    sha3_224      SHA3 224                                 28                   false      
+62:    sha3_256      SHA3 256                                 32                   false      
+63:    sha3_384      SHA3 384                                 48                   false      
+64:    sha3_512      SHA3 512                                 64                   false      
+65:    shavite       X11 SHAvite                              64                   false      
+66:    sip64         Siphash 64                               8                    true       
+67:    sip128        Siphash 128                              16                   true       
+68:    skein_160     Skein 160                                20                   false      
+69:    skein_256     Skein 256                                32                   false      
+70:    skein_384     Skein 384                                48                   false      
+71:    skein_512     Skein 512                                64                   false      
+72:    skein_1024    Skein 1024                               128                  false      
+73:    spk32         Spooky 32                                4                    true       
+74:    spk64         Spooky 64                                8                    true       
+75:    tiger         Tiger                                    24                   false      
+76:    whirlpool     Whirlpool                                64                   false      
+77:    xxh32         XXHash 32                                4                    true       
+78:    xxhash        XXHash 64                                8                    true       
+79:    wy            WY Hash 64                               8                    true       
 ```
