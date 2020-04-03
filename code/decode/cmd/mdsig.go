@@ -15,7 +15,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/singularian/mdencode/code/decode/mdBinaryList"
+	"github.com/singularian/mdencode/code/decode/mdSignatureList"
 )
 
 
@@ -38,7 +38,7 @@ func main() {
 
 func simple() {
 
-        mdl := mdBinaryList.Init()
+        mdl := mdSignatureList.Init()
 
 	fmt.Println("Current mdencode signatures\n")
 
@@ -59,7 +59,7 @@ func simple() {
 
 func full() {
 
-        mdl := mdBinaryList.Init()
+        mdl := mdSignatureList.Init()
 
 	fmt.Println("Current mdencode signatures\n")
 

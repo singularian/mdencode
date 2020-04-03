@@ -93,11 +93,12 @@ ID:    HashName      Description                              Block Size        
 This is the step to add a new signature. It should be in sorted order
 
 ```
-1: Add the signature name ID and description and block size to $GOPATH/$PROJECT/code/decode/mdBlockSize/mdBinaryList.go
+1: Add the signature name ID and description and block size to $GOPATH/$PROJECT/code/decode/mdSignatureList/mdSignatureList.go
 2: Add the hash import to the hash context list to $GOPATH/$PROJECT/code/decode/mdHashContextList/mdHashContextList.go
 3: Add the hash context new initialize function to CreateHashListMap()
    in decode/mdHashContextList/mdHashContextList.go
 4: If the signature contains a key add a default key to keylist hash map and a initializer
+5: Add the new signaturelist to docs/hashList.md and docs/usage.md
 ```
 
 # Binary Signature Arguments

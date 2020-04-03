@@ -187,7 +187,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	}
 
         // initialize the Hash Context List
-        // this also creates the mdBinaryList object
+        // this also creates the mdSignatureList object
         mdc := mdHashContextList.Init()
 	blockHlist  := mdc.MdBlockSize.CreateHashBlockList(blocklist)
 

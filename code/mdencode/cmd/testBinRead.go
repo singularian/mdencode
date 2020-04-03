@@ -8,7 +8,7 @@ import (
 	"bytes"
 	"strings"
 	"math/big"
-	"github.com/singularian/mdencode/code/decode/mdBinaryList"
+	"github.com/singularian/mdencode/code/decode/mdSignatureList"
 )
 
 
@@ -73,7 +73,7 @@ func main() {
 	fmt.Println("hashlist ", filelist, blocklist)
 
         // initialize the mdBlockSize object
-	mdBlock := mdBinaryList.Init()
+	mdBlock := mdSignatureList.Init()
 
         // calculate and return the file signature list byte block size
         var filelistarr []int
