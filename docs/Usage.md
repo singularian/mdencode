@@ -205,6 +205,9 @@ hw64        - 1 to 64 hex characters
 hw128       - 1 to 64 hex characters                                 
 hw256       - 1 to 64 hex characters                                 
 jn64        - uint64 integer 1 to 18 numbers                         
+me32        - uint64 integer 1 to 18 numbers
+me64        - uint64 integer 1 to 18 numbers
+me128       - uint64 integer 1 to 18 numbers
 mm32        - uint32 integer 1 to 9 numbers                          
 murmur3     - uint64 integer 1 to 18 numbers                         
 sip64       - 1 to 32 hex characters                                 
@@ -317,8 +320,6 @@ user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdsig
 
 Current mdencode signatures                
 
-Current mdencode signatures                                                                   
-                                                                                              
 ID:    HashName      Description                              Block Size           Hash Key   
 ============================================================================================  
 1:     add32         Adler 32                                 4                    false      
