@@ -43,6 +43,8 @@ github.com/minio/blake2b-simd v0.0.0-20160723061019-3f5f724cb5b1/go.mod h1:pD8Rv
 github.com/minio/highwayhash v1.0.0 h1:iMSDhgUILCr0TNm8LWlSjF8N0ZIj2qbO8WHp6Q/J2BA=
 github.com/minio/highwayhash v1.0.0/go.mod h1:xQboMTeM9nY9v/LlAOxFctujiv5+Aq2hR5dxBpaMbdc=
 github.com/mmcloughlin/avo v0.0.0-20190916180148-c8004ba627ca/go.mod h1:L0u9qfRMLNBO97u6pPukRp6ncoQz0Q25W69fvtht3vA=
+github.com/mmcloughlin/meow v0.0.0-20200201185800-3501c7c05d21 h1:2BIiU0QuELctVxpl6FKAsf68ZZvI89I9c8Kt8Guxba8=
+github.com/mmcloughlin/meow v0.0.0-20200201185800-3501c7c05d21/go.mod h1:uxCZJI8Z1PD2WRnSJtVJGHCyxC5qWhz5lOsx3Bx1NXo=
 github.com/orisano/wyhash v1.1.0 h1:5G0zu/KRhag1ORe+uld7GEc99VlGmhZqaelcqpkU5ZA=
 github.com/orisano/wyhash/v2 v2.0.1 h1:F0zXqmpT8ZO1DzxZE4QM5Dnyn5+N2Kvlh04HvWpA+BA=
 github.com/orisano/wyhash/v2 v2.0.1/go.mod h1:aKF62CWQTXboGWjZQ8Pncl3rg6kXMbi7ZWNsiXHomyk=

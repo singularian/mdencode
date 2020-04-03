@@ -49,9 +49,10 @@ import (
 	"github.com/phoreproject/go-x11/echo"
 	"github.com/phoreproject/go-x11/shavite"
 	"github.com/maoxs2/go-ripemd"
+	"github.com/mmcloughlin/meow"
+	"github.com/asadmshah/murmur3"
 	"golang.org/x/crypto/ripemd160"
 	"github.com/aead/skein"
-	"github.com/asadmshah/murmur3"
 	"blainsmith.com/go/seahash"
 	"github.com/cxmcc/tiger"
 	sip "github.com/aead/siphash"
@@ -265,6 +266,17 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["kekkak"] = keccak.New256()
 			case "luffa":
 				 hb["luffa"] = luffa.New()
+			case "me32":
+				var key = hc.keylist[hashname]
+				// hb["me32"] = meow.New32(sigRand.ConvertString2Int(key), 4)
+				hb["me32"] = meow.New32(sigRand.ConvertString2Int(key))
+			case "me64":
+				var key = hc.keylist[hashname]
+				// hb["me64"] = meow.New64(sigRand.ConvertString2Int(key), 8)
+				hb["me64"] = meow.New64(sigRand.ConvertString2Int(key))
+			case "me128":
+				var key = hc.keylist[hashname]
+				hb["me128"] = meow.New(sigRand.ConvertString2Int(key))
 			case "mm32":
 				var key = hc.keylist[hashname]
 				hb["mm32"] = murmur332.New(0, 4, sigRand.ConvertString2Int32(key))
@@ -572,6 +584,9 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	hc.keylist["hw128"]       = defaulthwkey 
 	hc.keylist["hw256"]       = defaulthwkey
 	hc.keylist["jn64"]        = "132200231"
+	hc.keylist["me32"]        = "11203221"
+	hc.keylist["me64"]        = "6660322"
+	hc.keylist["me128"]       = "9920322"
 	hc.keylist["mm32"]        = "1120322"
 	hc.keylist["murmur3"]     = "1120322"
 	hc.keylist["sip64"]       = "000102030405060708090a0b0c0d0e0f"
@@ -655,6 +670,15 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 				case "jn64":
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)
+				case "me32":
+                                        hc.keylist[sig] = sigkey
+                                        result += fmt.Sprintf("%s:%s,", sig, sigkey)
+				case "me64":
+                                        hc.keylist[sig] = sigkey
+                                        result += fmt.Sprintf("%s:%s,", sig, sigkey)
+				case "me128":
+                                        hc.keylist[sig] = sigkey
+                                        result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				case "mm32":
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)

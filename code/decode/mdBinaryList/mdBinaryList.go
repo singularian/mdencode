@@ -94,6 +94,9 @@ var hlist = []HashList{
 		{ HashName: "luffa",       Description: "Luffa",		BlockSize: 64,	Key: false },
 
 		{ HashName: "jn64",        Description: "Jenkins 64",		BlockSize: 8,	Key: true },
+		{ HashName: "me32",        Description: "Meow 32",		BlockSize: 4,	Key: true },
+		{ HashName: "me64",        Description: "Meow 64",		BlockSize: 8,	Key: true },
+		{ HashName: "me128",       Description: "Meow 128",		BlockSize: 16,	Key: true },
 		{ HashName: "mm32",        Description: "Murmur3 32",		BlockSize: 4,	Key: true },
 		{ HashName: "murmur3",     Description: "Murmur3",		BlockSize: 16,	Key: true },
 		{ HashName: "md2",         Description: "MD2",			BlockSize: 16,	Key: false },

@@ -25,6 +25,7 @@ require (
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 	github.com/minio/blake2b-simd v0.0.0-20160723061019-3f5f724cb5b1
 	github.com/minio/highwayhash v1.0.0
+	github.com/mmcloughlin/meow v0.0.0-20200201185800-3501c7c05d21
 	github.com/orisano/wyhash/v2 v2.0.1
 	github.com/phoreproject/go-x11 v0.0.0-20190107235645-df0f52b15c3a
 	github.com/singularian/mdhash v1.0.9
