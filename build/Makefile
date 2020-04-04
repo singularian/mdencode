@@ -77,8 +77,22 @@ test:
 	go build -o decoderRandom ${TEST}/${CMD}/decoderRandom.go
 	go build -o decoderRandomTest ${TEST}/${CMD}/decoderRandomTest.go 
 	go build -o decoderRandomTestHC ${TEST}/${CMD}/decoderRandomTestHC.go 
+runtest:
+	@echo "Running mdzip Test"
+	@echo ""
+	@echo "Creating randomfile"
+	head -c 100 /dev/urandom > randomfile
+	@echo ""
+	@echo "Zipping the file randomfile"
+	mdzip -file=randomfile -bh=111100111 -fh=000111 -mod=64 -block=11 -out=randomfile.mdz
+	@echo ""
+	@echo "mdlist randomfile.mdz"
+	mdlist randomfile.mdz
+	@echo ""
+	@echo "Unzipping randomfile"
+	mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -thread=16 -val=true
 clean:
-	rm -r mdzip mdunzip mdcmd mdlist mdlistTest mdsig randfile md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC *.log
+	rm -r mdzip mdunzip mdcmd mdlist mdlistTest mdsig randfile md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC randomfile randomfile.mdz randomfile.mdz.out *.log
 cleanbuild:
 	rm -r ${BUILD_DIR}/mdzip ${BUILD_DIR}/mdunzip ${BUILD_DIR}/mdcmd ${BUILD_DIR}/mdlist ${BUILD_DIR}/mdsig ${BUILD_DIR}/randfile ${BUILD_DIR}/mdencode ${BUILD_DIR}/mdbinlist ${BUILD_DIR}/md ${BUILD_DIR}/mddbreport ${BUILD_DIR}/mdnewdb
 # Display general help about this command
@@ -91,6 +105,7 @@ help:
 	@echo "    make mdencode    : Build the mdencode files"
 	@echo "    make mdzip       : Build the mdzip files"
 	@echo "    make test        : Build the test files"
+	@echo "    make runtest     : Run an mdzip/mdunzip test"
 	@echo "    make clean       : Remove any local build artifacts"
 	@echo "    make cleanbuild  : Remove any build artifacts"
 list:
