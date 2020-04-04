@@ -86,7 +86,7 @@ runtest:
 	@echo "Zipping the file randomfile"
 	mdzip -file=randomfile -bh=111100111 -fh=000111 -mod=64 -block=11 -out=randomfile.mdz
 	@echo ""
-	@echo "mdlist randomfile.mdz"
+	@echo "Running mdlist randomfile.mdz"
 	mdlist randomfile.mdz
 	@echo ""
 	@echo "Unzipping randomfile"
