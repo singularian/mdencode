@@ -23,3 +23,5 @@ all:
 #	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip ${CMD}/mdUnzip.go
 test:
 	./random.sh 100 1010101 11 64 16
+clean:
+	rm -r randomfile randomfile.mdz randomfile.mdz.out *.log
