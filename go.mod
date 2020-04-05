@@ -16,6 +16,7 @@ require (
 	github.com/dchest/siphash v1.2.1
 	github.com/dgryski/go-marvin32 v0.0.0-20190318040953-7d18f4c6ea7c // indirect
 	github.com/dgryski/go-metro v0.0.0-20180109044635-280f6062b5bc // indirect
+	github.com/dgryski/go-t1ha v0.0.0-20170624085304-d42c050643ba // indirect
 	github.com/fogleman/gg v1.3.0
 	github.com/gammazero/workerpool v0.0.0-20200311205957-7b00833861c6
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
@@ -30,7 +31,7 @@ require (
 	github.com/mmcloughlin/meow v0.0.0-20200201185800-3501c7c05d21
 	github.com/orisano/wyhash/v2 v2.0.1
 	github.com/phoreproject/go-x11 v0.0.0-20190107235645-df0f52b15c3a
-	github.com/singularian/mdhash v1.1.0
+	github.com/singularian/mdhash v1.1.1
 	github.com/steakknife/keccak v0.0.0-20150202122130-d0dce0d5b080
 	github.com/tildeleb/aeshash v0.0.0-20190627052759-9e6b40329b3b
 	github.com/tildeleb/hashland v0.0.0-20171003003232-07375b562dea // indirect

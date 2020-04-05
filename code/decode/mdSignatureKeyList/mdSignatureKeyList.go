@@ -37,38 +37,40 @@ var keylist = []KeyList{
                 { KeyID: "sip128",	KeyDescription: "sip128      ", KeyType: "1 to 32 hex characters" },
                 { KeyID: "spk32",	KeyDescription: "spk32       ", KeyType: "uint64 integer 1 to 18 numbers" },
                 { KeyID: "spk64",	KeyDescription: "spk64       ", KeyType: "uint64 integer 1 to 18 numbers" },
-                { KeyID: "xxh32",	KeyDescription: "xxh32       ", KeyType: "uint64 integer 1 to 18 numbers" },
+                { KeyID: "t1ha",	KeyDescription: "t1ha        ", KeyType: "uint64 integer 1 to 18 numbers" },
+                { KeyID: "xxh32",	KeyDescription: "xxh32       ", KeyType: "uint32 integer 1 to 9 numbers" },
                 { KeyID: "wy",		KeyDescription: "wy          ", KeyType: "uint64 integer 1 to 18 numbers" },
 }
 
 // GetKeyList
 func GetKeyList() (string) {
-	keys := `Keylist:\n
-        aes8        - uint64 integer 1 to 18 numbers\n
-        ax1         - (xxhash128 key 1) uint64 integer 1 to 18 numbers\n
-        ax2         - (xxhash128 key 2) uint64 integer 1 to 18 numbers\n
-        blake2s_128 - 16+ hex characters\n
-        blake2s_256 - 16+ hex characters\n
-        ct64        - uint64 integer 1 to 18 numbers\n
-        fh32        - uint64 integer 1 to 18 numbers\n
-        fh64        - uint64 integer 1 to 18 numbers\n
-        hw32        - 1 to 64 hex characters\n
-        hw64        - 1 to 64 hex characters\n
-        hw128       - 1 to 64 hex characters\n
-        hw256       - 1 to 64 hex characters\n
-        jn64        - uint64 integer 1 to 18 numbers\n
-        me32        - uint64 integer 1 to 18 numbers\n
-        me64        - uint64 integer 1 to 18 numbers\n
-        me128       - uint64 integer 1 to 18 numbers\n
-        mm32        - uint32 integer 1 to 9 numbers\n
-        murmur3     - uint64 integer 1 to 18 numbers\n
-        sip64       - 1 to 32 hex characters\n
-        sip128      - 1 to 32 hex characters\n
-        spk32       - uint64 integer 1 to 18 numbers\n
-        spk64       - uint64 integer 1 to 18 numbers\n
-        xxh32       - uint32 integer 1 to 9 numbers\n
-        xxhash64    - uint64 integer 1 to 18 numbers\n
-        wy          - uint64 integer 1 to 18 numbers\n
+	keys := `Keylist:
+aes8        - uint64 integer 1 to 18 numbers
+ax1         - (xxhash128 key 1) uint64 integer 1 to 18 numbers
+ax2         - (xxhash128 key 2) uint64 integer 1 to 18 numbers
+blake2s_128 - 16+ hex characters
+blake2s_256 - 16+ hex characters
+ct64        - uint64 integer 1 to 18 numbers
+fh32        - uint64 integer 1 to 18 numbers
+fh64        - uint64 integer 1 to 18 numbers
+hw32        - 1 to 64 hex characters
+hw64        - 1 to 64 hex characters
+hw128       - 1 to 64 hex characters
+hw256       - 1 to 64 hex characters
+jn64        - uint64 integer 1 to 18 numbers
+me32        - uint64 integer 1 to 18 numbers
+me64        - uint64 integer 1 to 18 numbers
+me128       - uint64 integer 1 to 18 numbers
+mm32        - uint32 integer 1 to 9 numbers
+murmur3     - uint64 integer 1 to 18 numbers
+sip64       - 1 to 32 hex characters
+sip128      - 1 to 32 hex characters
+spk32       - uint64 integer 1 to 18 numbers
+spk64       - uint64 integer 1 to 18 numbers
+t1ha        - uint64 integer 1 to 18 numbers
+xxh32       - uint32 integer 1 to 9 numbers
+xxhash64    - uint64 integer 1 to 18 numbers
+wy          - uint64 integer 1 to 18 numbers
 	`
 
 	return keys

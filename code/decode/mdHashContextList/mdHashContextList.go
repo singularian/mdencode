@@ -71,6 +71,7 @@ import (
 	"github.com/singularian/mdhash/murmur332"
 	"github.com/singularian/mdhash/poly1305"
 	"github.com/singularian/mdhash/spooky64"
+	"github.com/singularian/mdhash/t1ha"
 	"github.com/singularian/mdhash/xxhash_128"
 	"github.com/orisano/wyhash/v2"
 	"github.com/singularian/mdencode/code/decode/mdSignatureList"
@@ -379,6 +380,9 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 				hb["spk64"] = spooky64.New(0, 8, sigRand.ConvertString2Int(key))
                         case "tiger":
 				hb["tiger"] = tiger.New()
+			case "t1ha":
+				var key = hc.keylist[hashname]
+				hb["t1ha"] = t1ha.New(0, 8, sigRand.ConvertString2Int(key))
                         case "whirlpool":
 				hb["whirlpool"] = whirlpool.New()
 			case "xxh32":
@@ -605,6 +609,7 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 	hc.keylist["sip128"]      = "000102030405060708090a0b0c0d0e0f"
 	hc.keylist["spk32"]       = "1238821"
 	hc.keylist["spk64"]       = "7072112122"
+	hc.keylist["t1ha"]        = "90112122"
 	hc.keylist["xxh32"]       = "99123312"
 	hc.keylist["xxhash"]      = "99123312"
 
@@ -720,6 +725,9 @@ func (hc *HashContextList) SetHashListKey(keylist string) (string) {
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				case "spk64":
+					hc.keylist[sig] = sigkey
+					result += fmt.Sprintf("%s:%s,", sig, sigkey)
+				case "t1ha":
 					hc.keylist[sig] = sigkey
 					result += fmt.Sprintf("%s:%s,", sig, sigkey)
 				case "xxh32":

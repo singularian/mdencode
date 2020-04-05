@@ -15,6 +15,7 @@ import (
 	"fmt"
 	"path/filepath"
         _ "io/ioutil"
+	"github.com/singularian/mdencode/code/decode/mdSignatureKeyList"
 	"github.com/singularian/mdencode/code/decode/mdZipFile"
 	"os"
 	"regexp"
@@ -187,6 +188,8 @@ func (fd *FlagData) SetQuaternian() {
 func printUsage() {
 	fmt.Printf("USAGE of %s:\n", os.Args[0])
 
+	keylist := mdSignatureKeyList.GetKeyList()
+
 	// prints the flag arguments in non sorted order
 	fmt.Println(`
   -file string
@@ -229,33 +232,7 @@ func printUsage() {
 	fmt.Println("  -keylist=keyname:hexvalue,key2:hexvalue")
 	fmt.Println("  -keylist=keyname:hexvalue,key2:hexvalue,key3:keyvalue,...")
 	fmt.Println("")
-	fmt.Println("Keylist:")
-	fmt.Println("aes8        - uint64 integer 1 to 18 numbers")
-	fmt.Println("ax1         - (xxhash128 key 1) uint64 integer 1 to 18 numbers")
-	fmt.Println("ax2         - (xxhash128 key 2) uint64 integer 1 to 18 numbers")
-	fmt.Println("blake2s_128 - 16+ hex characters")
-	fmt.Println("blake2s_256 - 16+ hex characters")
-	fmt.Println("ct64        - uint64 integer 1 to 18 numbers")
-	fmt.Println("fh32        - uint64 integer 1 to 18 numbers")
-	fmt.Println("fh64        - uint64 integer 1 to 18 numbers")
-	fmt.Println("hw32        - 1 to 64 hex characters")
-	fmt.Println("hw64        - 1 to 64 hex characters")
-	fmt.Println("hw128       - 1 to 64 hex characters")
-	fmt.Println("hw256       - 1 to 64 hex characters")
-	fmt.Println("jn64        - uint64 integer 1 to 18 numbers")
-	fmt.Println("me32        - uint64 integer 1 to 18 numbers")
-	fmt.Println("me64        - uint64 integer 1 to 18 numbers")
-	fmt.Println("me128       - uint64 integer 1 to 18 numbers")
-	fmt.Println("mm32        - uint32 integer 1 to 9 numbers")
-	fmt.Println("murmur3     - uint64 integer 1 to 18 numbers")
-	fmt.Println("sip64       - 1 to 32 hex characters")
-	fmt.Println("sip128      - 1 to 32 hex characters")
-	fmt.Println("spk32       - uint64 integer 1 to 18 numbers")
-	fmt.Println("spk64       - uint64 integer 1 to 18 numbers")
-	fmt.Println("xxh32       - uint32 integer 1 to 9 numbers")
-	fmt.Println("xxhash64    - uint64 integer 1 to 18 numbers")
-	fmt.Println("wy          - uint64 integer 1 to 18 numbers")
-
+	fmt.Println(keylist)
 	fmt.Println("")
 	fmt.Println("Keylist Examples:")
 	fmt.Println("mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=1 -fh=110011 -keylist=aes8:12345")

@@ -139,6 +139,7 @@ var hlist = []HashList{
 		{ HashName: "spk32",       Description: "Spooky 32",		BlockSize: 4,	Key: true },
 		{ HashName: "spk64",       Description: "Spooky 64",		BlockSize: 8,	Key: true },
 		{ HashName: "tiger",       Description: "Tiger",		BlockSize: 24,	Key: false },
+		{ HashName: "t1ha",        Description: "T1ha",			BlockSize: 8,	Key: true },
 		{ HashName: "whirlpool",   Description: "Whirlpool",		BlockSize: 64,	Key: false },
 		{ HashName: "xxh32",       Description: "XXHash 32",		BlockSize: 4,	Key: true },
 		{ HashName: "xxhash",      Description: "XXHash 64",		BlockSize: 8,	Key: true },

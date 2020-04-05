@@ -192,31 +192,32 @@ A signature Key parameter "-keylist" is delineatead with a keyname colon hexvalu
   -keylist=keyname:hexvalue,key2:hexvalue,key3:keyvalue,...  
 
 Keylist:
-aes8        - uint64 integer 1 to 18 numbers                         
-ax1         - (xxhash128 key 1) uint64 integer 1 to 18 numbers       
-ax2         - (xxhash128 key 2) uint64 integer 1 to 18 numbers       
-blake2s_128 - 16+ hex characters                                     
-blake2s_256 - 16+ hex characters                                     
-ct64        - uint64 integer 1 to 18 numbers                         
-fh32        - uint64 integer 1 to 18 numbers                         
-fh64        - uint64 integer 1 to 18 numbers                         
-hw32        - 1 to 64 hex characters
-hw64        - 1 to 64 hex characters                                 
-hw128       - 1 to 64 hex characters                                 
-hw256       - 1 to 64 hex characters                                 
-jn64        - uint64 integer 1 to 18 numbers                         
-me32        - uint64 integer 1 to 18 numbers
-me64        - uint64 integer 1 to 18 numbers
-me128       - uint64 integer 1 to 18 numbers
-mm32        - uint32 integer 1 to 9 numbers                          
-murmur3     - uint64 integer 1 to 18 numbers                         
-sip64       - 1 to 32 hex characters                                 
-sip128      - 1 to 32 hex characters                                 
-spk32       - uint64 integer 1 to 18 numbers                         
-spk64       - uint64 integer 1 to 18 numbers                         
-xxh32       - uint32 integer 1 to 9 numbers                          
-xxhash64    - uint64 integer 1 to 18 numbers                         
-wy          - uint64 integer 1 to 18 numbers                                                                     
+aes8        - uint64 integer 1 to 18 numbers                       
+ax1         - (xxhash128 key 1) uint64 integer 1 to 18 numbers     
+ax2         - (xxhash128 key 2) uint64 integer 1 to 18 numbers     
+blake2s_128 - 16+ hex characters                                   
+blake2s_256 - 16+ hex characters                                   
+ct64        - uint64 integer 1 to 18 numbers                       
+fh32        - uint64 integer 1 to 18 numbers                       
+fh64        - uint64 integer 1 to 18 numbers                       
+hw32        - 1 to 64 hex characters                               
+hw64        - 1 to 64 hex characters                               
+hw128       - 1 to 64 hex characters                               
+hw256       - 1 to 64 hex characters                               
+jn64        - uint64 integer 1 to 18 numbers                       
+me32        - uint64 integer 1 to 18 numbers                       
+me64        - uint64 integer 1 to 18 numbers                       
+me128       - uint64 integer 1 to 18 numbers                       
+mm32        - uint32 integer 1 to 9 numbers                        
+murmur3     - uint64 integer 1 to 18 numbers                       
+sip64       - 1 to 32 hex characters                               
+sip128      - 1 to 32 hex characters                               
+spk32       - uint64 integer 1 to 18 numbers                       
+spk64       - uint64 integer 1 to 18 numbers                       
+t1ha        - uint64 integer 1 to 18 numbers                       
+xxh32       - uint32 integer 1 to 9 numbers                        
+xxhash64    - uint64 integer 1 to 18 numbers                       
+wy          - uint64 integer 1 to 18 numbers                       
 
 Keylist Examples:
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=1 -fh=110011 -keylist=aes8:12345
@@ -320,87 +321,88 @@ user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdsig
 
 Current mdencode signatures                
 
-ID:    HashName      Description                              Block Size           Hash Key
-===========================================================================================
-1:     add32         Adler 32                                 4                    false   
-2:     aes8          AES Hash 8                               8                    true    
-3:     ax            XXHash 128                               16                   true    
-4:     blake2        Blake2                                   64                   false   
-5:     blake2b       Blake2b                                  32                   false   
-6:     blake2s_128   Blake2s 128                              16                   true    
-7:     blake2s_256   Blake2s 256                              32                   true    
-8:     bmw           BMW                                      64                   false   
-9:     crc32         CRC-32 IEEE                              4                    false   
-10:    crc32c        CRC-32 Castagnoli                        4                    false   
-11:    crc32k        CRC-32 Koopman                           4                    false   
-12:    crc64ecma     CRC-64 ECMA                              8                    false   
-13:    crc64iso      CRC-64 ISO                               8                    false   
-14:    ct64          Cityhash 64                              8                    true    
-15:    cube          Cubehash                                 64                   false   
-16:    echo          Echo                                     64                   false   
-17:    fh32          Farm Hash 32                             4                    true    
-18:    fh64          Farm Hash 64                             8                    true    
-19:    fnv32         FNV 32                                   4                    false   
-20:    fnv32a        FNV 32a                                  4                    false   
-21:    fnv64         FNV 64                                   8                    false   
-22:    fnv64a        FNV 64a                                  8                    false   
-23:    fnv128        FNV 128                                  16                   false   
-24:    fnv128a       FNV 128a                                 16                   false   
-25:    gost256       Gost 256                                 32                   false   
-26:    gost512       Gost 512                                 64                   false   
-27:    groest        Groest                                   64                   false   
-28:    hmac256       HMAC 256                                 32                   true    
-29:    hmac512       HMAC 512                                 64                   true    
-30:    hw32          Highway Hash 32                          4                    true    
-31:    hw64          Highway Hash 64                          8                    true    
-32:    hw128         Highway Hash 128                         16                   true    
-33:    hw256         Highway Hash 256                         32                   true    
-34:    kekkak        Kekkak                                   32                   false   
-35:    luffa         Luffa                                    64                   false   
-36:    jn64          Jenkins 64                               8                    true    
-37:    mar32         Marvin 32                                4                    true    
-38:    me32          Meow 32                                  4                    true    
-39:    me64          Meow 64                                  8                    true    
-40:    me128         Meow 128                                 16                   true    
-41:    met64         Metro Hash 64                            8                    true    
-42:    mm32          Murmur3 32                               4                    true    
-43:    murmur3       Murmur3                                  16                   true    
-44:    md2           MD2                                      16                   false   
-45:    md4           MD4                                      16                   false   
-46:    md5           MD5                                      16                   false   
-47:    poly1305      Poly1305                                 16                   true    
-48:    ripe128       Ripe 128                                 16                   false   
-49:    ripe160       Ripe 160                                 20                   false   
-50:    ripe256       Ripe 256                                 32                   false   
-51:    ripe320       Ripe 320                                 40                   false   
-52:    sea           Seahash                                  8                    false   
-53:    sha1_64       SHA1 64                                  8                    false   
-54:    sha1_128      SHA1 128                                 16                   false   
-55:    sha1_1284     SHA1 1284                                16                   false   
-56:    sha1          SHA1                                     20                   false   
-57:    sha224        SHA224                                   28                   false   
-58:    sha256        SHA256                                   32                   false   
-59:    sha512_224    SHA512 224                               28                   false   
-60:    sha512_256    SHA512 256                               32                   false   
-61:    sha512_384    SHA512 384                               48                   false   
-62:    sha512        SHA512                                   64                   false   
-63:    sha3_224      SHA3 224                                 28                   false   
-64:    sha3_256      SHA3 256                                 32                   false   
-65:    sha3_384      SHA3 384                                 48                   false   
-66:    sha3_512      SHA3 512                                 64                   false   
-67:    shavite       X11 SHAvite                              64                   false   
-68:    sip64         Siphash 64                               8                    true    
-69:    sip128        Siphash 128                              16                   true    
-70:    skein_160     Skein 160                                20                   false   
-71:    skein_256     Skein 256                                32                   false   
-72:    skein_384     Skein 384                                48                   false   
-73:    skein_512     Skein 512                                64                   false   
-74:    skein_1024    Skein 1024                               128                  false   
-75:    spk32         Spooky 32                                4                    true    
-76:    spk64         Spooky 64                                8                    true    
-77:    tiger         Tiger                                    24                   false   
-78:    whirlpool     Whirlpool                                64                   false   
-79:    xxh32         XXHash 32                                4                    true    
-80:    xxhash        XXHash 64                                8                    true    
-81:    wy            WY Hash 64                               8                    true    
+ID:    HashName      Description                              Block Size           Hash Key  
+============================================================================================ 
+1:     add32         Adler 32                                 4                    false     
+2:     aes8          AES Hash 8                               8                    true      
+3:     ax            XXHash 128                               16                   true      
+4:     blake2        Blake2                                   64                   false     
+5:     blake2b       Blake2b                                  32                   false     
+6:     blake2s_128   Blake2s 128                              16                   true      
+7:     blake2s_256   Blake2s 256                              32                   true      
+8:     bmw           BMW                                      64                   false     
+9:     crc32         CRC-32 IEEE                              4                    false     
+10:    crc32c        CRC-32 Castagnoli                        4                    false     
+11:    crc32k        CRC-32 Koopman                           4                    false     
+12:    crc64ecma     CRC-64 ECMA                              8                    false     
+13:    crc64iso      CRC-64 ISO                               8                    false     
+14:    ct64          Cityhash 64                              8                    true      
+15:    cube          Cubehash                                 64                   false     
+16:    echo          Echo                                     64                   false     
+17:    fh32          Farm Hash 32                             4                    true      
+18:    fh64          Farm Hash 64                             8                    true      
+19:    fnv32         FNV 32                                   4                    false     
+20:    fnv32a        FNV 32a                                  4                    false     
+21:    fnv64         FNV 64                                   8                    false     
+22:    fnv64a        FNV 64a                                  8                    false     
+23:    fnv128        FNV 128                                  16                   false     
+24:    fnv128a       FNV 128a                                 16                   false     
+25:    gost256       Gost 256                                 32                   false     
+26:    gost512       Gost 512                                 64                   false     
+27:    groest        Groest                                   64                   false     
+28:    hmac256       HMAC 256                                 32                   true      
+29:    hmac512       HMAC 512                                 64                   true      
+30:    hw32          Highway Hash 32                          4                    true      
+31:    hw64          Highway Hash 64                          8                    true      
+32:    hw128         Highway Hash 128                         16                   true      
+33:    hw256         Highway Hash 256                         32                   true      
+34:    kekkak        Kekkak                                   32                   false     
+35:    luffa         Luffa                                    64                   false     
+36:    jn64          Jenkins 64                               8                    true      
+37:    mar32         Marvin 32                                4                    true      
+38:    me32          Meow 32                                  4                    true      
+39:    me64          Meow 64                                  8                    true      
+40:    me128         Meow 128                                 16                   true      
+41:    met64         Metro Hash 64                            8                    true      
+42:    mm32          Murmur3 32                               4                    true      
+43:    murmur3       Murmur3                                  16                   true      
+44:    md2           MD2                                      16                   false     
+45:    md4           MD4                                      16                   false     
+46:    md5           MD5                                      16                   false     
+47:    poly1305      Poly1305                                 16                   true      
+48:    ripe128       Ripe 128                                 16                   false     
+49:    ripe160       Ripe 160                                 20                   false     
+50:    ripe256       Ripe 256                                 32                   false     
+51:    ripe320       Ripe 320                                 40                   false     
+52:    sea           Seahash                                  8                    false     
+53:    sha1_64       SHA1 64                                  8                    false     
+54:    sha1_128      SHA1 128                                 16                   false     
+55:    sha1_1284     SHA1 1284                                16                   false     
+56:    sha1          SHA1                                     20                   false     
+57:    sha224        SHA224                                   28                   false     
+58:    sha256        SHA256                                   32                   false     
+59:    sha512_224    SHA512 224                               28                   false     
+60:    sha512_256    SHA512 256                               32                   false     
+61:    sha512_384    SHA512 384                               48                   false     
+62:    sha512        SHA512                                   64                   false     
+63:    sha3_224      SHA3 224                                 28                   false     
+64:    sha3_256      SHA3 256                                 32                   false     
+65:    sha3_384      SHA3 384                                 48                   false     
+66:    sha3_512      SHA3 512                                 64                   false     
+67:    shavite       X11 SHAvite                              64                   false     
+68:    sip64         Siphash 64                               8                    true      
+69:    sip128        Siphash 128                              16                   true      
+70:    skein_160     Skein 160                                20                   false     
+71:    skein_256     Skein 256                                32                   false     
+72:    skein_384     Skein 384                                48                   false     
+73:    skein_512     Skein 512                                64                   false     
+74:    skein_1024    Skein 1024                               128                  false     
+75:    spk32         Spooky 32                                4                    true      
+76:    spk64         Spooky 64                                8                    true      
+77:    tiger         Tiger                                    24                   false     
+78:    t1ha          T1ha                                     8                    true      
+79:    whirlpool     Whirlpool                                64                   false     
+80:    xxh32         XXHash 32                                4                    true      
+81:    xxhash        XXHash 64                                8                    true      
+82:    wy            WY Hash 64                               8                    true      
 ```

@@ -91,6 +91,9 @@ runtest:
 	@echo ""
 	@echo "Unzipping randomfile"
 	mdunzip -file=randomfile.mdz -out=randomfile.mdz.out -thread=16 -val=true
+hctest:
+	@echo "Running Hash Context List Tests"
+	decoderRandomTestHC -bh=111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 -mod=64 -block=11 -thread=16
 clean:
 	rm -r mdzip mdunzip mdcmd mdlist mdlistTest mdsig randfile md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC randomfile randomfile.mdz randomfile.mdz.out *.log
 cleanbuild:
