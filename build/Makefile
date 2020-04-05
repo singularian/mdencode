@@ -109,6 +109,7 @@ help:
 	@echo "    make mdzip       : Build the mdzip files"
 	@echo "    make test        : Build the test files"
 	@echo "    make runtest     : Run an mdzip/mdunzip test"
+	@echo "    make hctest      : Run the hash context list test"
 	@echo "    make clean       : Remove any local build artifacts"
 	@echo "    make cleanbuild  : Remove any build artifacts"
 list:
