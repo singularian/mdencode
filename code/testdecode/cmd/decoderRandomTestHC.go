@@ -100,7 +100,7 @@ func main() {
 	os.Exit(0)
 }
 
-// mdecode a random byte block or a command line byte block 
+// md decode a random byte block or a command line byte block 
 func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string, threadsize string, threadlist string, bytestring string, hexstring string) int {
 
 	// test a random byte block
