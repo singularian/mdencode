@@ -222,6 +222,19 @@ func (bl *BlockList) CreateHashBlockList(hashlistBoolean string) ([]string) {
 	return bl.hashList
 }
 
+// ==================================================================================================
+// new method 
+// csv string 1,3,4,5,7-100
+// TYPE:SIGNUM,TYPE:SIGNUMSTART-SIDEND, ...
+// 0 file 1 block 2 both
+// block or file list: 0:1,1:5,2:7,2:8-12
+// block list 1,2,3,7-12,15-20
+// file list 5,6,7,8,10-20
+// could just convert it to binary list
+
+
+// ==================================================================================================
+
 // AddHashList
 // add the hash name to the blockList hashList Array 
 func (bl *BlockList) AddHashList (hashName string, number int) {

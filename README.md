@@ -1,7 +1,7 @@
 # Project MDencode :octocat:  
   
-MDencode is a golang command line file digital signature generator with modular floors.  
-This program is written in golang and uses an interface for pluggin formatters.  
+MDencode is a [GO](https://golang.org/) command line file digital signature generator with modular floors.  
+This program is written in GO and uses an interface for programmable formatters.  
 MDencode allows for the creation of sqlite3 db file signatures and the first random file signatures and signature decryption. 
 
 This program can generate a file signature at the file or block level and format and write the output in multiple formats.  
@@ -58,7 +58,7 @@ These are the types of file signatures that mdencode will implement.
 
 # MDencode usage
 This is the mdencode usage.
-mdencode has three main golang programs. 
+mdencode has these main GO subprograms. 
 
 - md or mdencode - generates file signatures with optional modular floors
 - mddbreport     - generates formatted signatures dumps of file signatures stored in a mdencode sqlite3 db
@@ -119,7 +119,7 @@ md -uh=112203300111022033333 -block=100 -mod=64 -file=Makefile
 
 # Example usage
 
-This is a file signature for Makefile with a block size of 100 bytes and a 128 bit modulus and the fileblock signature bit string and file bit string and a format specified by number 10. It is formatted by go flags args.
+This is a file signature for Makefile with a block size of 100 bytes and a 128 bit modulus and the fileblock signature bit string and file bit string and a format specified by number 10. It is formatted by GO flags args.
 
 [Ascii Cast Example](https://asciinema.org/a/293089)
 
@@ -309,7 +309,7 @@ This is an example of a parallel modulus scan with 16 threads.
 
 # MDzip and MDunzip Overview
 
-mdzip is the golang command line utility can compress a file into a md binary byte block files. 
+mdzip is the GO command line utility can compress a file into a md binary byte block files. 
 mdzip takes an optional input key for the 32 byte Highway Hash 64 and Highway Hash 128 and Highway Hash 256. It can also take input keylist parameters for other signature keys.
 
 mdunzip will decompress the input signature binary block file to an output file.  
