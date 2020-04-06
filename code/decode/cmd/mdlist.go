@@ -83,7 +83,7 @@ func main() {
 	end = start + filePathLen
 	var filepath = string(bytes[start:end])
 	// fmt.Println("FilePath     ", string(bytes[start:end]), start, end)
-	fmt.Println("FilePath       ", filepath);
+	fmt.Println("FilePath         ", filepath);
 
 	// fileName
         start = end 
@@ -92,12 +92,12 @@ func main() {
 
 	var filename2 = string(bytes[start:end])
 
-	fmt.Println("Filename:      ", filename2);
+	fmt.Println("Filename         ", filename2);
 
 	// get hashlist string
 	start = end
 	end = end + fileHashLen
-	fmt.Println("Hashlistname   ", string(bytes[start:end]))
+	fmt.Println("Hashlistname     ", string(bytes[start:end]))
 	// split hash list
 	hlist := string(bytes[start:end])
 	hashlist := strings.Split(hlist, "-")
@@ -110,9 +110,9 @@ func main() {
         }
 
 	// fmt.Println("hashlist       ", filelist, blocklist)
-	fmt.Println("File hashlist  ", filelist)
-	fmt.Println("Block hashlist ", blocklist)
-	fmt.Println("Keylist        ", keylist, "\n")
+	fmt.Println("File hashlist    ", filelist)
+	fmt.Println("Block hashlist   ", blocklist)
+	fmt.Println("Keylist          ", keylist, "\n")
 
         // initialize the mdBlockSize object
 	mdBlock := mdSignatureList.Init()
