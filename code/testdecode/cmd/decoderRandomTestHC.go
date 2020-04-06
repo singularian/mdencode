@@ -100,7 +100,7 @@ func main() {
 	os.Exit(0)
 }
 
-// mdecode file
+// mdecode a random byte block or a command line byte block 
 func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string, threadsize string, threadlist string, bytestring string, hexstring string) int {
 
 	// test a random byte block
@@ -322,6 +322,7 @@ func  (fd *FlagData) setThread() (start, end int64) {
 }
 
 
+// display the command line usage
 func printUsage() {
         fmt.Printf("USAGE of %s:\n", os.Args[0])
 //	fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -bh=[BINARY SIGNATURES] -all=[TRUE/FALSE RUN ALL SIGNATURES ] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] -hex=[OPTIONAL HEX BYTESTRING] keylist=[OPTIONAL HEX BYTESTRING]")
