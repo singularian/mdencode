@@ -41,22 +41,25 @@ type FlagData struct {
 	blocksize    string
 	modsize      string
 	bhashlist    string
+	hashall      bool
+	// thread
 	threadsize   string
 	threadlist   string
 	blockSizeInt int64
 	modSizeInt   int64
+	// thread parameters
 	threadCount  int64
 	thread       int64
-	// thread parameters
-	threadStart int64
-	threadEnd   int64
+	// thread start parameters
+	threadStart  int64
+	threadEnd    int64
 	// bytes
-	bytes      []byte
-	bytestring string
+	bytes        []byte
+	bytestring   string
 	// hex string
-	hexstring string
+	hexstring    string
 	// signature keys
-	keylist string
+	keylist      string
 }
 
 // generates a random n byte array and then hashes it
@@ -66,7 +69,7 @@ func main() {
 	var argsNumber int = len(os.Args)
 
 	fd := new(FlagData)
-	// there is a Uint64 setter
+	// Change to a Uint64 variable 
 	flag.StringVar(&fd.blocksize, "block", "8", "File Block Size Bytes")
 	flag.StringVar(&fd.modsize, "mod", "32", "Modulus Size in Bits")
 	flag.StringVar(&fd.bhashlist, "bh", "01001", "Block Hash Bit String List")
@@ -76,11 +79,13 @@ func main() {
 	flag.StringVar(&fd.bytestring, "bytes", "", "Specify a byte string")
 	flag.StringVar(&fd.hexstring, "hex", "", "Specify a HEX byte string")
 	flag.StringVar(&fd.keylist,   "keylist", "", "Signature Key List")
+	flag.BoolVar(&fd.hashall, "all", false, "Run all the signatures")
+
 
 	flag.Parse()
 
 	if argsNumber == 1 {
-		fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -bh=[BINARY SIGNATURES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] -hex=[OPTIONAL HEX BYTESTRING] keylist=[OPTIONAL HEX BYTESTRING]")
+/*		fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -bh=[BINARY SIGNATURES] -all=[TRUE/FALSE RUN ALL SIGNATURES ] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] -hex=[OPTIONAL HEX BYTESTRING] keylist=[OPTIONAL HEX BYTESTRING]")
 		fmt.Println("Usage ", os.Args[0], " -block=12 -mod=64 -thread=16 -bh=1010101")
 		fmt.Println("Usage ", os.Args[0], " -block=9 -mod=64 -thread=10 -bh=11111 -bytes=[1,2,3,4,5]")
 		fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bh=1 -bytes=[100,222,30,55,100]")
@@ -88,10 +93,17 @@ func main() {
 		fmt.Println("Usage ", os.Args[0], " -block=20 -mod=128 -thread=16 -bh=0000000000000000001 -keylist=aes8:F01100119900112FF11")
 		fmt.Println("Usage ", os.Args[0], " -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]")
 		fmt.Println("Usage ", os.Args[0], " -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF")
-		os.Exit(1)
+*/
+		printUsage()
+		os.Exit(0)
 	}
 
 	// fmt.Println("bhashlist ", fd.bhashlist)
+
+	// if the hash all is set to true add all the hash signatures to the list
+	if fd.hashall == true {
+		fd.bhashlist = strings.Repeat("1", 90)
+	}
 
 	fd.mddecode(fd.blocksize, fd.modsize, fd.bhashlist, fd.threadsize, fd.threadlist, fd.bytestring, fd.hexstring)
 	os.Exit(0)
@@ -318,3 +330,40 @@ func  (fd *FlagData) setThread() (start, end int64) {
 	return threadStart, threadEnd
 }
 
+
+func printUsage() {
+        fmt.Printf("USAGE of %s:\n", os.Args[0])
+//	fmt.Println("Usage ", os.Args[0], " -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -bh=[BINARY SIGNATURES] -all=[TRUE/FALSE RUN ALL SIGNATURES ] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] -hex=[OPTIONAL HEX BYTESTRING] keylist=[OPTIONAL HEX BYTESTRING]")
+        fmt.Println(`
+  -block string
+        File Block Size Bytes (default "40")
+  -all
+        Run all the block signatures
+  -bh string
+        Block Hash Bit String List (default "01001")
+  -mod string
+        Modulus Size in Bits (default "32")
+  -thread
+        Thread Number
+  -start
+        Thread Start
+  -end 
+        Thread End
+  -bytes
+        JSON Bytestring
+  -hex
+        Hex Bytestring
+  -keylist string
+        Signature Hash Keylist
+    `)
+
+	fmt.Println("Usage ", os.Args[0], " -block=12 -mod=64 -thread=16 -bh=1010101")
+	fmt.Println("Usage ", os.Args[0], " -block=9 -mod=64 -thread=10 -bh=11111 -bytes=[1,2,3,4,5]")
+	fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bh=1 -bytes=[100,222,30,55,100]")
+	fmt.Println("Usage ", os.Args[0], " -block=8 -mod=64 -thread=10 -bh=101 -hex=FF0C3FDDAF")
+	fmt.Println("Usage ", os.Args[0], " -block=20 -mod=128 -thread=16 -bh=0000000000000000001 -keylist=aes8:F01100119900112FF11")
+	fmt.Println("Usage ", os.Args[0], " -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]")
+	fmt.Println("Usage ", os.Args[0], " -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF")
+
+
+}

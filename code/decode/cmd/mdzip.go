@@ -232,6 +232,7 @@ func printUsage() {
 	fmt.Println("  -keylist=keyname:hexvalue,key2:hexvalue")
 	fmt.Println("  -keylist=keyname:hexvalue,key2:hexvalue,key3:keyvalue,...")
 	fmt.Println("")
+	// add the keylist data
 	fmt.Println(keylist)
 	fmt.Println("")
 	fmt.Println("Keylist Examples:")
