@@ -63,14 +63,14 @@ A modulus should be considered part of the file signature subset. A modulus is a
 
 # Parallel Modulus Scan
 
-The Modulus Scan is run in parallel within MDZip.  The modulus scan with configurable number of goroutine threads.
+The Modulus Scan is run in parallel within MDunzip.  The modulus scan with configurable number of goroutine threads.
 Each of the goroutines runs a modulus scan in sync and when a result is founding matching the original signature block it returns a byteblock.
 
 It allows for the blocksize and modulus bitsize and thread count as well as the bytes either random or specified by the command line argument.
 
 # MDZip Examples
 
-These are mdzip and mdunzip command line examples. They also illustrate setting the Highway Hash 32 byte signature key. MDunzip will use the specified Highway Hash Key.  
+These are MDzip and MDunzip command line examples. They also illustrate setting the Highway Hash 32 byte signature key. MDunzip will use the specified Highway Hash Key.  
 
 ```bash
 mdzip -file=decoderRandom.go -block=40 fh=11111 bh=01001 -mod=64 -out=decoderRandom.go.mdz  
