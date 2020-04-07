@@ -231,8 +231,27 @@ func (bl *BlockList) CreateHashBlockList(hashlistBoolean string) ([]string) {
 // block list 1,2,3,7-12,15-20
 // file list 5,6,7,8,10-20
 // could just convert it to binary list
+func (bl *BlockList) CreateHashBlockListCSV(hashlistCSV string) ([]string) {
 
+	bl.ClearHashLists()
 
+	// var csv = regexp.MustCompile(`(([[:digit:]]+\-[[:digit:]]+,)|[[:digit:]]+,|([[:digit:]]+\-[[:digit:]]+))`)
+
+	arr := strings.Split(hashlistCSV, ",")
+
+	// for index, line := range split {
+	for _, hash := range arr {
+
+		// var hashRange = regexp.MustCompile(`[:digit:]]+\-[[:digit:]]+`)
+		// fmt.Println(hashRange.MatchString("1-2"))
+
+		fmt.Println("hash ", hash)
+
+	}
+
+	return bl.hashList
+
+}
 // ==================================================================================================
 
 // AddHashList
