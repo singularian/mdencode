@@ -20,7 +20,7 @@ MZunzip runs a mutlithreaded modulus scan on the MDzip file and writes the resul
 **MDUnzip Features**
 - Multithreaded Parallel Modulus Scan
 - Decrypts an MDZip file to an output file
-- File Signature Post Validation
+- File Signature List post validation
 - Uses the MDZip Signature Keys to change the output file signature Modulus Scan
 
 # MDZip File Format

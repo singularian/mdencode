@@ -352,7 +352,8 @@ mdunzip -file=decoderRandom.go.mdz -out=decoderRandom.go.mdz.uncompressed -threa
 
 # MDZip Usage
 
-- [Example Usage](https://github.com/singularian/mdencode/blob/master/docs/mdzip.md)
+- [MDZip Usage](https://github.com/singularian/mdencode/blob/master/docs/mdzip.md)
+- [General Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
 
 # MDZip Video Example 
 
@@ -385,7 +386,7 @@ This is a guide for building MDencode on Linux.
 
 This is a Docker Hub Docker File for MDencode
 
-[Docker Version](https://hub.docker.com/r/annatarsol/mdencode)
+[Docker Container](https://hub.docker.com/r/annatarsol/mdencode)
 
 ### Docker Pull
 
