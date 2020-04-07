@@ -352,7 +352,7 @@ mdunzip -file=decoderRandom.go.mdz -out=decoderRandom.go.mdz.uncompressed -threa
 
 # MDZip Usage
 
-- [Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
+- [Example Usage](https://github.com/singularian/mdencode/blob/master/docs/mdzip.md)
 
 # MDZip Video Example 
 
