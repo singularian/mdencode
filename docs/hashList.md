@@ -91,6 +91,28 @@ ID:    HashName      Description                              Block Size        
 82:    wy            WY Hash 64                               8                    true      
 ``` 
 
+# Singature Formats
+
+There are 3 main signature parameters
+1) Binary  
+  
+Binary signature args are 0 for not use a signature or 1 for use a signature
+
+2) CSV  
+  
+CSV Arguments consist of the signature numbers separated by comma (1,3,4,5,6).  
+They can also include csv ranges (1-5 or 10-16 or 1,4,5,6,7-12,17).  
+
+```
+Example: ./decoderRandomTestHC -bh=1-5 -block=12 -mod=64 -thread=16 -hex=E96562A59FF8E25830673485
+Hashlist          [add32 aes8 ax blake2 blake2b]
+Binary Hashlist   1-5
+```
+
+3) Quaternary
+
+Has a 4 state signature argument.
+
 # Adding New Signatures
 
 This is the step to add a new signature. It should be in sorted order
@@ -104,6 +126,7 @@ This is the step to add a new signature. It should be in sorted order
 5: Add the new signaturelist to docs/hashList.md and docs/usage.md
 ```
 
+
 # Binary Signature Arguments
 
 Binary signature parameters for mdencode include the following.  
@@ -112,11 +135,13 @@ Two lists are created for file hash lists and block hash lists.
 0 - Hash is not used  
 1 - Hash is used  
 
+# CSV Signature args
 
+Num,Num2,Num3,NumX-Numy,NumZ....
 
-# Quaterniary Mdencode Arguments
+# Quaternary Mdencode Arguments
 
-Quaterniary signature parameters for mdencode include 4 states.
+Quaternary signature parameters for mdencode include 4 states.
 One list is used for the file and block hash lists and possibly block group hash lists.
 
 0 - No Hash  
@@ -125,7 +150,7 @@ One list is used for the file and block hash lists and possibly block group hash
 3 - File and Block Hash used  
 
 
-# Quaterniary Mdencode Examples
+# Quaternary Mdencode Examples
 
 ```sh
 user@server:~/projects/src/github.com/singularian/mdencode/code/mdencode$ md -file=Makefile -block=300 -mod=32 -uh=11 -format=4300
@@ -229,78 +254,5 @@ One list is used for the file and block hash lists and possibly block group hash
 5 - Block Group and Block Hash used  
 6 - File and Block Group Used  
 7 - File and Block Group and Block Hash used  
-
-# HEX Encode Signature Arguments
-
-Each parameter has a hex code. The first Hex Byte Nibble Half-Byte [0-F] delineates the hash type and the 
-second Nibble Half-Byte [0-F] delineates the signature number 0 to 15 for the first byte.  
-Each successive HEX byte increments the signature count by multiplying the 15 times the byte position.
-
-
-Each byte increments the signature number in the second nibble.  
-In this way 20 characters can encode (10 * 15) 150 signatures.  
-A 200 character HEX Signature could encode 1500 signatures.  
-
-
-## States
-0 - No Hash  
-1 - File Hash used  
-2 - Block Group used  
-3 - Block Hash used  
-4 - File and Block Hash used  
-5 - Block Group and Block Hash used  
-6 - File and Block Group Used  
-7 - File and Block Group and Block Hash used  
-
-## Hex Encoding
-
-The first Half-Byte is the Type [0-F]  
-The second Half-Byte is the Number [0-F] or [0-Z] if there was a need for more signatures. 
-
-[TYPE][NUMBER]  
-[0-F Type][0-F Number]  
-
-Alternatively, it can be 0-Z or 35 signatures per byte for the number.  
-
-## Econding Example
-1F227C42  
-
-1F = File Hash Signature 15  
-22 = Block Group Hash Signature 18  
-7C = File and Block Group and Block Hash Signature 30  
-42 = File and Block Hash Signature 33
-
-
-# Hex Encoding 2
-
-This format uses 3 to 5 bytes. One byte is the Signature type and the 2 to 4 following bytes are the signature number. Either 65k or 4 Billion in a 32 bit number.  
-
-[TYPE][NUMBER][TYPE][NUMBER][TYPE][NUMBER]  
-
-[0-255] - Signature Type Byte. There can be 255 Signature types in this example although it could use the 8 state model.
-[0-255][0-255] - A 16 bit double byte that represents the signature number. This means you can reference 65+ k signatures in each group  
-[0-255][0-255][0-255][0-255] - A alternative 32-bit integer that represents the signature number. This means you can reference 4 billion signatures
-
-## States
-0 - No Hash  
-1 - File Hash used  
-2 - Block Group used  
-3 - Block Hash used  
-4 - File and Block Hash used  
-5 - Block Group and Block Hash used  
-6 - File and Block Group Used  
-7 - File and Block Group and Block Hash used  
-
-
-# 16-bit Encoding Example
-
-070E11020203031111
-
-## Group 1
-
-- 070E11 -  File and Block Group and Block Hash used - 0E11 - The 3601 Number  
-- 020203 -  Block Group used - 0203 - The 515 Signature Number  
-- 031111 -  Block Hash Used - 1111 - The 4369 Signature Number  
-
 
 
