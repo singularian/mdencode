@@ -222,37 +222,82 @@ func (bl *BlockList) CreateHashBlockList(hashlistBoolean string) ([]string) {
 	return bl.hashList
 }
 
-// ==================================================================================================
-// new method 
+// CreateHashBlockListCSV
+// This converts a csv hash number list to a hashlist with the corresponding hash ids 
 // csv string 1,3,4,5,7-100
 // TYPE:SIGNUM,TYPE:SIGNUMSTART-SIDEND, ...
+//
 // 0 file 1 block 2 both
 // block or file list: 0:1,1:5,2:7,2:8-12
 // block list 1,2,3,7-12,15-20
 // file list 5,6,7,8,10-20
-// could just convert it to binary list
+//
+// Current Examples:
+// hash list  1,2,3,4,5-6 [add32 aes8 ax blake2 blake2b blake2s_128] 6
+// 1,11,23,44 [add32 crc32k fnv128 md2] 4
 func (bl *BlockList) CreateHashBlockListCSV(hashlistCSV string) ([]string) {
 
 	bl.ClearHashLists()
 
-	// var csv = regexp.MustCompile(`(([[:digit:]]+\-[[:digit:]]+,)|[[:digit:]]+,|([[:digit:]]+\-[[:digit:]]+))`)
+	hashlistCSV += ","
+	hashlistCSV = strings.Replace(hashlistCSV, ",,", ",", 1)
+
+	// check if the csv hash list is valid
+	// number 1, 2, ...
+	// number range 1-13 or 4-6 ...
+	var csv = regexp.MustCompile(`^(\d+(\-\d+)?[,])+$`)
+	matched := csv.MatchString(hashlistCSV)
+
+	if !matched {
+		fmt.Println("Invalid CSV hashlist ", hashlistCSV)
+		os.Exit(1)
+	}
 
 	arr := strings.Split(hashlistCSV, ",")
+
+	// fmt.Println("processing hashlistCSV ", hashlistCSV)
 
 	// for index, line := range split {
 	for _, hash := range arr {
 
-		// var hashRange = regexp.MustCompile(`[:digit:]]+\-[[:digit:]]+`)
-		// fmt.Println(hashRange.MatchString("1-2"))
+		var hashNum   = regexp.MustCompile(`^[[:digit:]]+$`)
+		var hashRange = regexp.MustCompile(`[[:digit:]]+\-[[:digit:]]+`)
+		if (hashNum.MatchString(hash)) {
+		//	fmt.Println("hash number ", hash)
+			var index, _ = strconv.Atoi(hash)
+			if index > 0 {
+				index = index - 1
+			}
+			bl.AddHashList(hlist[index].HashName, index)
+		}
+		if (hashRange.MatchString(hash)) {
+		//	fmt.Println("hash range number ", hash)
+			hr := strings.Split(hash, "-")
+			var start, _ = strconv.Atoi(hr[0])
+			var end,   _ = strconv.Atoi(hr[1])
+		//	fmt.Println("hash range number ", hash, start, end)
+			if start > 0 {
+			start = start - 1
+			end   = end   - 1
+			}
+			if start <= end {
+				for index := start; index <= end; index++ {
+					if index < bl.HashNamesSize {
+						// fmt.Println("adding randlist ", index, hlist[index].HashName)
+						bl.AddHashList(hlist[index].HashName, index)
+					}
+				}
 
-		fmt.Println("hash ", hash)
+			}
+		}
+
+		// fmt.Println("hash ", hash)
 
 	}
 
 	return bl.hashList
 
 }
-// ==================================================================================================
 
 // AddHashList
 // add the hash name to the blockList hashList Array 
