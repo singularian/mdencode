@@ -422,8 +422,9 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 // this method converts a binary signature list into a hash context list
 func (l *FileData) createHashListMap(fileBlockflag int) {
 
-	// file signature variables
-        var hlistarray []string
+	// binary list file signature variables
+	// not currently used since it can also have a csv list
+        /* var hlistarray []string
         if fileBlockflag == 0 {
                 hlistarray = l.fileHashListArray
 
@@ -434,6 +435,14 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
         var last = 34
         if length < last {
                 last = length
+        } */
+
+	// set the hashlist for csv or binary hashlist arguments
+	var hashliststring string
+        if fileBlockflag == 0 {
+                hashliststring = l.fileHashListString
+        } else if fileBlockflag == 1 {
+                hashliststring = l.blockHashListString
         }
 
 	// initialize the Hash Context List
@@ -444,16 +453,9 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 	// this is for hw64 and blake2s and siphash and other signature keys
 	l.keylist = mdc.SetHashListKey(l.keylist)
 
-	// set the hash list string
-	// CreateHashBlockList currently uses a string instead of an array
-	x := strings.Join(hlistarray, "")
-	// list  := mdc.MdBlockSize.CreateHashBlockList(hlistarray)
-
-	list  := mdc.MdBlockSize.CreateHashBlockList(x)
+	// create the hashlist from the binary or csv hashliststring
+	list  := mdc.MdBlockSize.CreateHashBlockList(hashliststring)
 	result := strings.Join(list, ":")
-
-//	fmt.Println("new list ", list)
-//	fmt.Println("new list ", result)
 
 	// func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, threadNumber int) {
 	//// mdc.CreateHashListMap(list, fileBlockflag, 1)
@@ -624,11 +626,15 @@ func (l *FileData) SetHashLists(fileHashList string, blockHashList string) {
 	// process the hash list arguments
         l.fileHashListString = fileHashList
         l.blockHashListString = blockHashList
+
+	/*===============================================
+	don't need this since I add binary and csv arguments
         // hash list regex
         re := regexp.MustCompile("[01]")
 
         l.fileHashListArray = re.FindAllString(fileHashList, -1)
         l.blockHashListArray = re.FindAllString(blockHashList, -1)
+	*/
 
         // initialize the map
         l.dictionary = make(map[string]string)
