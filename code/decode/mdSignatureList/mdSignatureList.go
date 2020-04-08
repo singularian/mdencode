@@ -180,9 +180,9 @@ func (bl *BlockList) GetHashListObject() ([]HashList) {
 }
 
 // CreateHashBlockList checks the hashlist parameter
-// It calls CreateHashBlockListBinary or CreateHashBlockListCSV
-// If it is Binary use that 
-// If it is CSV use that
+// It calls CreateHashBlockListBinary or CreateHashBlockListCSV based on the hashlist format
+// If it is Binary (010111001111)   call CreateHashBlockListBinary 
+// If it is CSV    (1,2,4,11-15,15) call CreateHashBlockListCSV
 func (bl *BlockList) CreateHashBlockList(hashlist string) ([]string) {
 
 	// binarylist
@@ -262,6 +262,11 @@ func (bl *BlockList) CreateHashBlockListBinary(hashlistBoolean string) ([]string
 // CreateHashBlockListCSV
 // This converts a csv hash number list to a hashlist with the corresponding hash ids 
 // csv string 1,3,4,5,7-100
+//
+// The current format is
+// SIGNUM,SIGNUM2,SIGNUMX,SIGNUMY-SIGNUMZ, ...
+//
+// TODO: It could add an optional Type 
 // TYPE:SIGNUM,TYPE:SIGNUMSTART-SIDEND, ...
 //
 // 0 file 1 block 2 both
@@ -270,8 +275,8 @@ func (bl *BlockList) CreateHashBlockListBinary(hashlistBoolean string) ([]string
 // file list 5,6,7,8,10-20
 //
 // Current Examples:
-// hash list  1,2,3,4,5-6 [add32 aes8 ax blake2 blake2b blake2s_128] 6
-// 1,11,23,44 [add32 crc32k fnv128 md2] 4
+// hash list  1,2,3,4,5-6 [add32 aes8 ax blake2 blake2b blake2s_128] length 6
+// 1,11,23,44 [add32 crc32k fnv128 md2] length 4
 func (bl *BlockList) CreateHashBlockListCSV(hashlistCSV string) ([]string) {
 
 	bl.ClearHashLists()
