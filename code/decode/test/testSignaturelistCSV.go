@@ -52,9 +52,14 @@ func main() {
         fmt.Println("hash list ", csvstring, list3, len(list3))
 
 	var binstring = "110011"
-	list3 = mdl.CreateHashBlockList("11011f")
+	// list3 = mdl.CreateHashBlockList("11011f")
 	list3 = mdl.CreateHashBlockList("110011")
 	fmt.Println("binary hash list ", binstring, list3, len(list3))
+
+	binstring = "111111111111111111111111111111111111999999999999"
+	list3 = mdl.CreateHashBlockList(binstring)
+	fmt.Println("binary hash list ", binstring, list3, len(list3))
+
 	list3 = mdl.CreateHashBlockList("1,2,3,4,5-11,12")
 	fmt.Println("csv aaaa hash list ", "1,2,3,4,5-11,12", list3, len(list3))
 

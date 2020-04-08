@@ -173,6 +173,7 @@ mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000000000000001 -fh=110011 -keylist=xxhash:112222201
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000011 -fh=110011 -keylist=blake2s_128:123456789012345672222211000,blake2s_256:123456789A12345F
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=01 -fh=110011 -keylist=ax1:123456,ax2:789347
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=1-5,6,7,11 -fh=110011 -keylist=ax1:123456,ax2:789347
 
 Build Time: 2020-01-18T13:42:02-0500    
 Version:    1.0.7 復甦 復活
@@ -288,7 +289,31 @@ path: github.com/singularian/mdencode/code/testdecode/cmd/decoderRandomTestHC.go
 This is the Usage for decoderRandomTestHC.
 
 ```
-Usage  ./decoderRandomTestHC  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] -hex=[OPTIONAL HEX BYTESTRING] keylist=[OPTIONAL HEX BYTESTRING]
+USAGE of ./decoderRandomTestHC:
+
+  -block string
+        File Block Size Bytes (default "40")
+  -all
+        Run all the block signatures
+  -bh string
+        Block Hash Bit String List (default "01001")
+  -mod string
+        Modulus Size in Bits (default "32")
+  -thread
+        Thread Number
+  -start
+        Thread Start
+  -end
+        Thread End
+  -bytes
+        JSON Bytestring
+  -hex
+        Hex Bytestring
+  -keylist string
+        Signature Hash Keylist
+
+
+
 Usage  ./decoderRandomTestHC  -block=12 -mod=64 -thread=16 -bh=1010101
 Usage  ./decoderRandomTestHC  -block=9 -mod=64 -thread=10 -bh=11111 -bytes=[1,2,3,4,5]
 Usage  ./decoderRandomTestHC  -block=8 -mod=64 -thread=10 -bh=1 -bytes=[100,222,30,55,100]
@@ -296,6 +321,7 @@ Usage  ./decoderRandomTestHC  -block=8 -mod=64 -thread=10 -bh=101 -hex=FF0C3FDDA
 Usage  ./decoderRandomTestHC  -block=20 -mod=128 -thread=16 -bh=0000000000000000001 -keylist=aes8:F01100119900112FF11
 Usage  ./decoderRandomTestHC  -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
 Usage  ./decoderRandomTestHC  -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF
+Usage  ./decoderRandomTestHC  decoderRandomTestHC -bh=1,5,15,16 -block=11 -mod=64 -thread=16
 ```
 
 ## Example 1: decoderRandomTestHC Tests  

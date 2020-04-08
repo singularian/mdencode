@@ -60,6 +60,7 @@ type FileData struct {
 	fileHashListString  string
 	blockHashListString string
 	// argument hash list bit arrays
+	// not currently used since the hashlist can be csv or boolean
 	fileHashListArray  []string
 	blockHashListArray []string
 	// argument signature hash list names
@@ -422,21 +423,6 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 // this method converts a binary signature list into a hash context list
 func (l *FileData) createHashListMap(fileBlockflag int) {
 
-	// binary list file signature variables
-	// not currently used since it can also have a csv list
-        /* var hlistarray []string
-        if fileBlockflag == 0 {
-                hlistarray = l.fileHashListArray
-
-        } else if fileBlockflag == 1 {
-                hlistarray = l.blockHashListArray
-        }
-        var length = len(hlistarray)
-        var last = 34
-        if length < last {
-                last = length
-        } */
-
 	// set the hashlist for csv or binary hashlist arguments
 	var hashliststring string
         if fileBlockflag == 0 {
@@ -467,8 +453,6 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 	} else {
 		mdc.CreateHashListMap(result, 1, 1)
 	}
-
-	// mdc.CreateHashListMap(result, fileBlockflag, 1)
 
 /*	for k, _ := range  mdc.HashListBlocks {
                 hashname := k
@@ -623,18 +607,9 @@ func (l *FileData) SetMdFormat(format int) {
 // it also set the block hash list contexts and file hash list context maps
 func (l *FileData) SetHashLists(fileHashList string, blockHashList string) {
 
-	// process the hash list arguments
+	// set the hash list arguments
         l.fileHashListString = fileHashList
         l.blockHashListString = blockHashList
-
-	/*===============================================
-	don't need this since I add binary and csv arguments
-        // hash list regex
-        re := regexp.MustCompile("[01]")
-
-        l.fileHashListArray = re.FindAllString(fileHashList, -1)
-        l.blockHashListArray = re.FindAllString(blockHashList, -1)
-	*/
 
         // initialize the map
         l.dictionary = make(map[string]string)

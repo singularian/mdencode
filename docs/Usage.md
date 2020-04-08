@@ -228,6 +228,7 @@ mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000000000000000
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=00000000000000000000000000000000000000000000000000000001 -fh=110011 -keylist=xxhash:112222201
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=000011 -fh=110011 -keylist=blake2s_128:123456789012345672222211000,blake2s_256:123456789A12345F
 mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=01 -fh=110011 -keylist=ax1:123456,ax2:789347
+mdzip -mod=64 -block=11 -file=randomfile -out=randomfile.mdz -bh=1-5,6,7,11 -fh=110011 -keylist=ax1:123456,ax2:789347
 
 Build Time: 2020-03-10T13:42:02-0500    
 Version:    1.0.7 復甦 復活

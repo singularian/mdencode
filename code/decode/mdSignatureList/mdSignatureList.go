@@ -186,7 +186,7 @@ func (bl *BlockList) GetHashListObject() ([]HashList) {
 func (bl *BlockList) CreateHashBlockList(hashlist string) ([]string) {
 
 	// binarylist
-	binre := regexp.MustCompile("^[01]+$")
+	binre := regexp.MustCompile("^([01]+)$")
 	matched := binre.MatchString(hashlist)
 
 	// csv list
