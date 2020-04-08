@@ -179,10 +179,46 @@ func (bl *BlockList) GetHashListObject() ([]HashList) {
 	return hlist
 }
 
+// rename CreateHashBlockList to CreateHashBlockListBinary
+// then two lists CreateHashBlockListBinary and CreateHashBlockListCSV
+// if it is Binary use that. If it is CSV use that
+func (bl *BlockList) CreateHashBlockList(hashlist string) ([]string) {
+
+	// binarylist
+	binre := regexp.MustCompile("^[01]+$")
+	matched := binre.MatchString(hashlist)
+
+	// csv list
+	var csvhashlist = hashlist
+        csvhashlist += ","
+        csvhashlist = strings.Replace(csvhashlist, ",,", ",", 1)
+
+	// fmt.Println("hashlist csv ", csvhashlist)
+
+        // check if the csv hash list is valid
+        // number 1, 2, ...
+        // number range 1-13 or 4-6 ...
+        var csv = regexp.MustCompile(`^(\d+(\-\d+)?[,])+$`)
+        csvmatched := csv.MatchString(csvhashlist)
+
+	if matched {
+		return bl.CreateHashBlockListBinary(hashlist)
+	} else if csvmatched {
+		return bl.CreateHashBlockListCSV(hashlist)
+	} else if !matched && !csvmatched {
+		fmt.Println("Invalid Binary or CSV hashlist ", hashlist)
+		os.Exit(1)
+	}
+
+
+	return bl.hashList
+
+}
+
 // CreateHashBlockList
 // CreateHashBlockList takes a hashlist boolean and converts it to a name list
 // ie converts the boolean string to a hash name string
-func (bl *BlockList) CreateHashBlockList(hashlistBoolean string) ([]string) {
+func (bl *BlockList) CreateHashBlockListBinary(hashlistBoolean string) ([]string) {
 
 	bl.ClearHashLists()
 

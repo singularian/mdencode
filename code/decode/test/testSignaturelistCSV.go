@@ -28,32 +28,39 @@ func main() {
 	mdl := mdSignatureList.Init()
 	// l  := mdl.CreateHashBlockList("11111111111111111111111111111111111111111111")
 	var csvstring = "1,2,3,4,5-6"
-	l  := mdl.CreateHashBlockListCSV(csvstring)
+	l  := mdl.CreateHashBlockList(csvstring)
 	fmt.Println("hash list ", csvstring, l, len(l))
 
 	fmt.Println("test2")
 	csvstring = "1,11,23,44"
-	list  := mdl.CreateHashBlockListCSV(csvstring)
+	list  := mdl.CreateHashBlockList(csvstring)
 	fmt.Println("hash list ", csvstring, list, len(list))
 
 	fmt.Println("test3")
 	csvstring = "1,11"
-	list2 := mdl.CreateHashBlockListCSV(csvstring)
+	list2 := mdl.CreateHashBlockList(csvstring)
 	fmt.Println("hash list ", csvstring, list2, len(list2))
 
 	fmt.Println("test4")
 	csvstring = "1-91"
-	list3 := mdl.CreateHashBlockListCSV(csvstring)
+	list3 := mdl.CreateHashBlockList(csvstring)
 	fmt.Println("hash list ", csvstring, list3, len(list3))
 
         fmt.Println("test4")
         csvstring = "1-91,80,80,4,3"
-        list3 = mdl.CreateHashBlockListCSV(csvstring)
+        list3 = mdl.CreateHashBlockList(csvstring)
         fmt.Println("hash list ", csvstring, list3, len(list3))
+
+	var binstring = "110011"
+	list3 = mdl.CreateHashBlockList("11011f")
+	list3 = mdl.CreateHashBlockList("110011")
+	fmt.Println("binary hash list ", binstring, list3, len(list3))
+	list3 = mdl.CreateHashBlockList("1,2,3,4,5-11,12")
+	fmt.Println("csv aaaa hash list ", "1,2,3,4,5-11,12", list3, len(list3))
 
 	fmt.Println("test4")
 	csvstring = "1,11,aaaa,"
-	list4 := mdl.CreateHashBlockListCSV(csvstring)
+	list4 := mdl.CreateHashBlockList(csvstring)
 	fmt.Println("hash list ", csvstring, list4, len(list4))
 
 
