@@ -179,9 +179,10 @@ func (bl *BlockList) GetHashListObject() ([]HashList) {
 	return hlist
 }
 
-// rename CreateHashBlockList to CreateHashBlockListBinary
-// then two lists CreateHashBlockListBinary and CreateHashBlockListCSV
-// if it is Binary use that. If it is CSV use that
+// CreateHashBlockList checks the hashlist parameter
+// It calls CreateHashBlockListBinary or CreateHashBlockListCSV
+// If it is Binary use that 
+// If it is CSV use that
 func (bl *BlockList) CreateHashBlockList(hashlist string) ([]string) {
 
 	// binarylist
@@ -215,9 +216,10 @@ func (bl *BlockList) CreateHashBlockList(hashlist string) ([]string) {
 
 }
 
-// CreateHashBlockList
-// CreateHashBlockList takes a hashlist boolean and converts it to a name list
+// CreateHashBlockListBinary
+// CreateHashBlockListBinary takes a hashlist boolean and converts it to a name list
 // ie converts the boolean string to a hash name string
+// example binary hash list  110011 is converted to hashlist [add32 aes8 blake2b blake2s_128]
 func (bl *BlockList) CreateHashBlockListBinary(hashlistBoolean string) ([]string) {
 
 	bl.ClearHashLists()
