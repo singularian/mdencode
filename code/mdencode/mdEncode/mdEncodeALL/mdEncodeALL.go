@@ -450,8 +450,12 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 // this method converts a binary signature list into a hash context list
 func (l *FileData) createHashListMap(fileBlockflag int) {
 
+	// this sets the binary digit hashlist array
+	// since it can use a csv list it is not needed
+	// 01010100111111
+	// 
         // file signature variables
-        var hlistarray []string
+        /* var hlistarray []string
         if fileBlockflag == 0 {
                 hlistarray = l.fileHashListArray
 
@@ -462,7 +466,13 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
         var last = 34
         if length < last {
                 last = length
-        }
+        }*/
+	var hashliststring string
+	if fileBlockflag == 0 {
+		hashliststring = l.fileHashListString
+	} else if fileBlockflag == 1 {
+		hashliststring = l.blockHashListString
+	}
 
 	// Initialize the Hash Context List
 	// this also creates the mdBinaryList object
@@ -474,10 +484,10 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 	// mdc.SetHighwayKey(l.hwkey)
 	mdc.SetHashListKey(l.keylist)
 
-        x := strings.Join(hlistarray, "")
+        // x := strings.Join(hlistarray, "")
         // list  := mdc.MdBlockSize.CreateHashBlockList(hlistarray)
 
-	list := mdc.MdBlockSize.CreateHashBlockList(x)
+	list := mdc.MdBlockSize.CreateHashBlockList(hashliststring)
         result := strings.Join(list, ":")
 
         // fmt.Println("new list ", list)
@@ -735,11 +745,17 @@ func (l *FileData) SetHashLists(fileHashList string, blockHashList string) {
 	// process the hash list arguments
         l.fileHashListString = fileHashList
         l.blockHashListString = blockHashList
-        // hash list regex
-        re := regexp.MustCompile("[01]")
 
-        l.fileHashListArray = re.FindAllString(fileHashList, -1)
-        l.blockHashListArray = re.FindAllString(blockHashList, -1)
+	/*=====================================================================
+	// this is the old Binary hash list code
+	// it can also be a csv list
+	// so I don't think I need it or I have to change it
+        // hash list regex
+        // re := regexp.MustCompile("[01]")
+
+        // l.fileHashListArray = re.FindAllString(fileHashList, -1)
+        // l.blockHashListArray = re.FindAllString(blockHashList, -1)
+	======================================================================*/
 
         // initialize the map
         l.dictionary = make(map[string]string)

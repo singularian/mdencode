@@ -194,8 +194,6 @@ func (bl *BlockList) CreateHashBlockList(hashlist string) ([]string) {
         csvhashlist += ","
         csvhashlist = strings.Replace(csvhashlist, ",,", ",", 1)
 
-	// fmt.Println("hashlist csv ", csvhashlist)
-
         // check if the csv hash list is valid
         // number 1, 2, ...
         // number range 1-13 or 4-6 ...
@@ -353,7 +351,9 @@ func (bl *BlockList) CreateHashBlockListCSV(hashlistCSV string) ([]string) {
 
 	// add the hash list names to the hash list
 	for _, index := range s {
-		 bl.AddHashList(hlist[index].HashName, index)
+		if index < bl.HashNamesSize {
+			bl.AddHashList(hlist[index].HashName, index)
+		}
 	}
 
 
