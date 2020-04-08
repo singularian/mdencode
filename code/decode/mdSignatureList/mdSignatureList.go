@@ -20,6 +20,7 @@ import (
 	"strconv"
 	"strings"
 	"os"
+	"sort"
 )
 
 // BlockList object stores the file block signature list
@@ -255,9 +256,11 @@ func (bl *BlockList) CreateHashBlockListCSV(hashlistCSV string) ([]string) {
 
 	arr := strings.Split(hashlistCSV, ",")
 
+	var s []int
 	// fmt.Println("processing hashlistCSV ", hashlistCSV)
 
-	// for index, line := range split {
+	// process the csv hash list and add the hash numbers to the slice
+	// for index, hash := range split {
 	for _, hash := range arr {
 
 		var hashNum   = regexp.MustCompile(`^[[:digit:]]+$`)
@@ -268,7 +271,7 @@ func (bl *BlockList) CreateHashBlockListCSV(hashlistCSV string) ([]string) {
 			if index > 0 {
 				index = index - 1
 			}
-			bl.AddHashList(hlist[index].HashName, index)
+			s = append(s, index)
 		}
 		if (hashRange.MatchString(hash)) {
 		//	fmt.Println("hash range number ", hash)
@@ -283,8 +286,7 @@ func (bl *BlockList) CreateHashBlockListCSV(hashlistCSV string) ([]string) {
 			if start <= end {
 				for index := start; index <= end; index++ {
 					if index < bl.HashNamesSize {
-						// fmt.Println("adding randlist ", index, hlist[index].HashName)
-						bl.AddHashList(hlist[index].HashName, index)
+						s = append(s, index )
 					}
 				}
 
@@ -294,6 +296,28 @@ func (bl *BlockList) CreateHashBlockListCSV(hashlistCSV string) ([]string) {
 		// fmt.Println("hash ", hash)
 
 	}
+
+	// sort the hash list slice
+	sort.Ints(s)
+
+	// unique the hash list slice with the in place deduper
+	j := 0
+	for i := 1; i < len(s); i++ {
+		if s[j] == s[i] {
+		continue
+		}
+		j++
+		// preserve the original data
+		// in[i], in[j] = in[j], in[i]
+		// only set what is required
+		s[j] = s[i]
+	}
+
+	// add the hash list names to the hash list
+	for _, index := range s {
+		 bl.AddHashList(hlist[index].HashName, index)
+	}
+
 
 	return bl.hashList
 

@@ -6,6 +6,15 @@ import (
 	"github.com/singularian/mdencode/code/decode/mdSignatureList"
 	"github.com/singularian/mdencode/code/decode/mdHashContextList"
 )
+
+// HashList Struct         
+type TestList struct {
+        HashName    string
+        Description string
+        BlockSize int
+        Key bool
+}
+
 func main() {
 
 	// test the md hash context list
@@ -36,6 +45,11 @@ func main() {
 	csvstring = "1-91"
 	list3 := mdl.CreateHashBlockListCSV(csvstring)
 	fmt.Println("hash list ", csvstring, list3, len(list3))
+
+        fmt.Println("test4")
+        csvstring = "1-91,80,80,4,3"
+        list3 = mdl.CreateHashBlockListCSV(csvstring)
+        fmt.Println("hash list ", csvstring, list3, len(list3))
 
 	fmt.Println("test4")
 	csvstring = "1,11,aaaa,"
