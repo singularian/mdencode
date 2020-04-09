@@ -104,9 +104,9 @@ USAGE of ./mdzip:
   -block string                                                                                     
         File Block Size Bytes (default "40")                                                        
   -fh string                                                                                        
-        File Hash Bit String List (default "01001")  
+        File Hash List (default "011") CSV or Binary  
   -bh string                                                                                        
-        Block Hash Bit String List (default "01001")  
+        Block Hash List (default "01001") CSV or Binary 
   -uh string
         Quarternian Hash String List
   -mod string                                                                                       
@@ -296,7 +296,7 @@ USAGE of ./decoderRandomTestHC:
   -all
         Run all the block signatures
   -bh string
-        Block Hash Bit String List (default "01001")
+        Block Hash List (default "01001") CSV or Binary
   -mod string
         Modulus Size in Bits (default "32")
   -thread

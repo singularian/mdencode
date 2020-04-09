@@ -72,8 +72,8 @@ func md() int {
 	flag.StringVar(&fd.blocksize, "block", "40", "File Block Size Bytes")
 	flag.StringVar(&fd.modsize,   "mod", "32", "Modulus Size in Bits")
 	// flag.IntVar(&fd.defaultFormat, "format", 1000, "Output Format")
-	flag.StringVar(&fd.fhashlist, "fh", "01001", "File Hash Bit String List")
-	flag.StringVar(&fd.bhashlist, "bh", "01001", "Block Hash Bit String List")
+	flag.StringVar(&fd.fhashlist, "fh", "01001", "File Hash List CSV or Binary")
+	flag.StringVar(&fd.bhashlist, "bh", "01001", "Block Hash List CSV or Binary")
 	flag.StringVar(&fd.uhashlist, "uh", "", "Quaternian Hash String List")
 	// flag.BoolVar(&fd.randomfilehash, "fr", false, "Generate A Random File Hash Bit String List")
 	// flag.BoolVar(&fd.randomblockhash, "br", false, "Generate A Random Block Hash Bit String List")
@@ -197,9 +197,9 @@ func printUsage() {
   -block string
         File Block Size Bytes (default "40")
   -fh string
-        File Hash Bit String List (default "011")
+        File Hash List (default "011") CSV or Binary
   -bh string
-        Block Hash Bit String List (default "01001")
+        Block Hash List (default "01001") CSV or Binary
   -uh string
         Quarternian Hash String List 
   -mod string

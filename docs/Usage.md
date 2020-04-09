@@ -159,9 +159,9 @@ USAGE of ./mdzip:
   -block string                                                                                     
         File Block Size Bytes (default "40")                                                        
   -fh string                                                                                        
-        File Hash Bit String List (default "01001")  
+        File Hash List (default "01001") CSV or Binary 
   -bh string                                                                                        
-        Block Hash Bit String List (default "01001")  
+        Block Hash List (default "01001") CSV or Binary 
   -uh string
         Quarternian Hash String List
   -mod string                                                                                       
