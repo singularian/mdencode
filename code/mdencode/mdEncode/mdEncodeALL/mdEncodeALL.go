@@ -77,6 +77,7 @@ type FileData struct {
 	fileHashListString  string
 	blockHashListString string
 	// argument hash list bit arrays
+	// not currently being used since I added csv and binary hash lists
 	fileHashListArray  []string
 	blockHashListArray []string
 	// argument signature hash list names
@@ -450,23 +451,6 @@ func (l *FileData) mdencodeFileBlock(blockSize string, modSize string, format in
 // this method converts a binary signature list into a hash context list
 func (l *FileData) createHashListMap(fileBlockflag int) {
 
-	// this sets the binary digit hashlist array
-	// since it can use a csv list it is not needed
-	// 01010100111111
-	// 
-        // file signature variables
-        /* var hlistarray []string
-        if fileBlockflag == 0 {
-                hlistarray = l.fileHashListArray
-
-        } else if fileBlockflag == 1 {
-                hlistarray = l.blockHashListArray
-        }
-        var length = len(hlistarray)
-        var last = 34
-        if length < last {
-                last = length
-        }*/
 	var hashliststring string
 	if fileBlockflag == 0 {
 		hashliststring = l.fileHashListString
@@ -481,11 +465,8 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 
 	// set the key
 	// mdc.SetKeyFile(l.key)
-	// mdc.SetHighwayKey(l.hwkey)
 	mdc.SetHashListKey(l.keylist)
 
-        // x := strings.Join(hlistarray, "")
-        // list  := mdc.MdBlockSize.CreateHashBlockList(hlistarray)
 
 	list := mdc.MdBlockSize.CreateHashBlockList(hashliststring)
         result := strings.Join(list, ":")
@@ -493,6 +474,7 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
         // fmt.Println("new list ", list)
         /// fmt.Println("new list ", result)
 
+	// create the hash context list 
         // func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, threadNumber int) {
         //// mdc.CreateHashListMap(list, fileBlockflag, 1)
         // 0 is file 
@@ -502,8 +484,6 @@ func (l *FileData) createHashListMap(fileBlockflag int) {
 	} else {
 		mdc.CreateHashListMap(result, 1, 1)
 	}
-
-        // mdc.CreateHashListMap(result, fileBlockflag, 1)
 
 	// the hash context list should be sorted
 /*      for k, _ := range  mdc.HashListBlocks {
@@ -742,20 +722,9 @@ func (l *FileData) SetMdFormat(format int) {
 // it also set the block hash list contexts and file hash list context maps
 func (l *FileData) SetHashLists(fileHashList string, blockHashList string) {
 
-	// process the hash list arguments
+	//  set the hash list strings
         l.fileHashListString = fileHashList
         l.blockHashListString = blockHashList
-
-	/*=====================================================================
-	// this is the old Binary hash list code
-	// it can also be a csv list
-	// so I don't think I need it or I have to change it
-        // hash list regex
-        // re := regexp.MustCompile("[01]")
-
-        // l.fileHashListArray = re.FindAllString(fileHashList, -1)
-        // l.blockHashListArray = re.FindAllString(blockHashList, -1)
-	======================================================================*/
 
         // initialize the map
         l.dictionary = make(map[string]string)
