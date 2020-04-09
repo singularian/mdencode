@@ -253,7 +253,7 @@ These are some Ascii Art Video Examples
 
 [Example 2](https://asciinema.org/a/293112)  
 
-# MDZip Highway Hash Example 
+# MDZip Highway Hash Example 3
 
 [![MDZip Highway Hash Key Example](https://asciinema.org/a/293740.png)](https://asciinema.org/a/293740)   
 
@@ -321,7 +321,7 @@ Usage  ./decoderRandomTestHC  -block=8 -mod=64 -thread=10 -bh=101 -hex=FF0C3FDDA
 Usage  ./decoderRandomTestHC  -block=20 -mod=128 -thread=16 -bh=0000000000000000001 -keylist=aes8:F01100119900112FF11
 Usage  ./decoderRandomTestHC  -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
 Usage  ./decoderRandomTestHC  -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF
-Usage  ./decoderRandomTestHC  decoderRandomTestHC -bh=1,5,15,16 -block=11 -mod=64 -thread=16
+Usage  ./decoderRandomTestHC  -block=11 -mod=64 -bh=1,5,15,16 -thread=16
 ```
 
 ## Example 1: decoderRandomTestHC Tests  

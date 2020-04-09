@@ -333,7 +333,7 @@ func printUsage() {
   -all
         Run all the block signatures
   -bh string
-        Block Hash Bit String List (default "01001")
+        Block Hash List (default "01001") CSV or Binary
   -mod string
         Modulus Size in Bits (default "32")
   -thread
@@ -357,7 +357,7 @@ func printUsage() {
 	fmt.Println("Usage ", os.Args[0], " -block=20 -mod=128 -thread=16 -bh=0000000000000000001 -keylist=aes8:F01100119900112FF11")
 	fmt.Println("Usage ", os.Args[0], " -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]")
 	fmt.Println("Usage ", os.Args[0], " -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF")
-	fmt.Println("Usage ", os.Args[0], " decoderRandomTestHC -bh=1,5,15,16 -block=11 -mod=64 -thread=16")
+	fmt.Println("Usage ", os.Args[0], " -block=11 -mod=64 -bh=1,5,15,16 -thread=16")
 
 
 }
