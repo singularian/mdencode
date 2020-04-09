@@ -22,7 +22,7 @@ import (
 )
 
 var (
-	Version   = "1.0.3"
+	Version   = "1.0.8"
 	BuildTime = "2018-06-16-0431 UTC"
 )
 

@@ -5,7 +5,7 @@ BINARY=mdzip
 PROJECT="mdencode mdzip"
 
 # These are the values we want to pass for Version and BuildTime
-VERSION=1.0.7
+VERSION=1.0.8
 BUILD_TIME=`date +%FT%T%z`
 
 # build directory
