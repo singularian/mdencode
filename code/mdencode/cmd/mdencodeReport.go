@@ -17,6 +17,11 @@ import (
 	"github.com/singularian/mdencode/code/mdencode/mdReports/mdReportsSQL"
 )
 
+var (
+	Version   = "1.0.8"
+	BuildTime = "2018-06-16-0431 UTC"
+)
+
 func main() {
 
 	// mddbreport [sqllite db] [number] [format]
@@ -60,7 +65,9 @@ func argsReport(argsNumber int) {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
 		flag.PrintDefaults()
 		fmt.Println()
-		fmt.Println("Version: 1.0 復甦 復活\n")
+
+		fmt.Printf("\nBuild Time: %s\n", BuildTime)
+		fmt.Printf("Version:    %s 復甦 復活\n\n", Version)
 	}
 
 	flag.Parse()
