@@ -140,6 +140,11 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
 	hashlistArr := strings.Split(hashList, ":")
 	hashlistsize := len(hashlistArr)
 
+	// if the hashList string is empty or null just return
+	if hashList == "" {
+		return
+	}
+
 	// set the default key
 	var defkey     = hc.keylist["default"]
 	var defaultkey = []byte(defkey)
@@ -335,8 +340,6 @@ func (hc *HashContextList) CreateHashListMap(hashList string, mdtype int, thread
                         case "sha512_384":
 				hb["sha512_384"] = sha512.New384()
 			case "sha512":
-				hb["sha512"] = sha512.New()
-                        case "sha3_224":
 				hb["sha3_224"] = sha3.New224()
                         case "sha3_256":
 				hb["sha3_256"] = sha3.New256()

@@ -342,17 +342,7 @@ func (bl *BlockList) CreateHashBlockListCSV(hashlistCSV string) ([]string) {
 	sort.Ints(s)
 
 	// unique the hash list slice with the in place deduper
-	j := 0
-	for i := 1; i < len(s); i++ {
-		if s[j] == s[i] {
-		continue
-		}
-		j++
-		// preserve the original data
-		// in[i], in[j] = in[j], in[i]
-		// only set what is required
-		s[j] = s[i]
-	}
+	s = bl.Uniques(s)
 
 	// add the hash list names to the hash list
 	for _, index := range s {
@@ -364,6 +354,27 @@ func (bl *BlockList) CreateHashBlockListCSV(hashlistCSV string) ([]string) {
 
 	return bl.hashList
 
+}
+
+func (bl *BlockList) Uniques(s []int) []int {
+	if len(s) == 0 {
+		return s
+	}
+	seen := make([]int, 0, len(s))
+slice:
+	for i, n := range s {
+		if i == 0 {
+			s = s[:0]
+		}
+		for _, t := range seen {
+			if n == t {
+				continue slice
+			}
+		}
+		seen = append(seen, n)
+		s = append(s, n)
+	}
+	return s
 }
 
 // AddHashList

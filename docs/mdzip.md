@@ -312,8 +312,6 @@ USAGE of ./decoderRandomTestHC:
   -keylist string
         Signature Hash Keylist
 
-
-
 Usage  ./decoderRandomTestHC  -block=12 -mod=64 -thread=16 -bh=1010101
 Usage  ./decoderRandomTestHC  -block=9 -mod=64 -thread=10 -bh=11111 -bytes=[1,2,3,4,5]
 Usage  ./decoderRandomTestHC  -block=8 -mod=64 -thread=10 -bh=1 -bytes=[100,222,30,55,100]
@@ -344,7 +342,7 @@ random bytestring and modulusscan bytestring match  [56 38 203 31 20 151 178 180
 Found block  thread 15 random bytestring and modulusscan bytestring match [56 38 203 31 20 151 178 180 58 154 204 245 179 216 147 72 182 117 216 244] = [56 38 203 31 20 151 178 180 58 154 204 245 179 216 147 72 182 117 216 244]
 
 
- ./decoderRandomTestHC -block=20 -mod=128 -thread=16 -bh=0000000000000000001 -keylist=aes8:F01100119900112FF11
+./decoderRandomTestHC -block=20 -mod=128 -thread=16 -bh=0000000000000000001 -keylist=aes8:F01100119900112FF11
 hashlist  [hmac256] 0000000000000000001
 Found Block [hmac256 baf64c746d51cc640faa447da3a4caecc6f35ca2dc42dd5f22bd94ed96f6697f] result = baf64c746d51cc640faa447da3a4caecc6f35ca2dc42dd5f22bd94ed96f6697f Found Block  [222 251 17 58 253 154 45 2 197 39 85 239 144 178 187 172 171 117 135 51]
 Total time  3m27.7438341s
