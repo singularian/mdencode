@@ -116,7 +116,7 @@ var hlist = []HashList{
 		{ HashName: "sea",         Description: "Seahash",		BlockSize: 8,	Key: false },
 		{ HashName: "sha1_64",     Description: "SHA1 64",		BlockSize: 8,	Key: false },
 		{ HashName: "sha1_128",    Description: "SHA1 128",		BlockSize: 16,	Key: false },
-		{ HashName: "sha1_1284",   Description: "SHA1 1284",		BlockSize: 16,	Key: false },
+		{ HashName: "sha1_1284",   Description: "SHA1 128 4-20 Bytes",	BlockSize: 16,	Key: false },
 		{ HashName: "sha1",        Description: "SHA1",			BlockSize: 20,	Key: false },
 		{ HashName: "sha224",      Description: "SHA224",		BlockSize: 28,	Key: false },
 		{ HashName: "sha256",      Description: "SHA256",		BlockSize: 32,	Key: false },

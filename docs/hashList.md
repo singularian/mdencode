@@ -61,7 +61,7 @@ ID:    HashName      Description                              Block Size        
 52:    sea           Seahash                                  8                    false     
 53:    sha1_64       SHA1 64                                  8                    false     
 54:    sha1_128      SHA1 128                                 16                   false     
-55:    sha1_1284     SHA1 1284                                16                   false     
+55:    sha1_1284     SHA1 128 4-20 Bytes                      16                   false     
 56:    sha1          SHA1                                     20                   false     
 57:    sha224        SHA224                                   28                   false     
 58:    sha256        SHA256                                   32                   false     
