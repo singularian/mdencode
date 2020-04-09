@@ -98,15 +98,31 @@ There are 3 main signature parameters
   
 Binary signature args are 0 for not use a signature or 1 for use a signature
 
+```
+$ ./decoderRandomTestHC -bh=1010101 -block=12 -mod=64 -thread=16 -hex=E96562A59FF8E25830673485
+Running Decode
+Block Size        12
+Block Bytes       E96562A59FF8E25830673485
+Hashlist          [add32 ax blake2b blake2s_256]
+Binary Hashlist   1010101
+```
+
 2) CSV  
   
 CSV Arguments consist of the signature numbers separated by comma (1,3,4,5,6).  
 They can also include csv ranges (1-5 or 10-16 or 1,4,5,6,7-12,17).  
 
 ```
-Example: ./decoderRandomTestHC -bh=1-5 -block=12 -mod=64 -thread=16 -hex=E96562A59FF8E25830673485
+$ ./decoderRandomTestHC -bh=1-5 -block=12 -mod=64 -thread=16 -hex=E96562A59FF8E25830673485
 Hashlist          [add32 aes8 ax blake2 blake2b]
 Binary Hashlist   1-5
+
+Example: ./decoderRandomTestHC -bh=1,3-5,6,7,8 -block=12 -mod=64 -thread=16 -hex=E96562A59FF8E25830673485
+Running Decode
+Block Size        12
+Block Bytes       E96562A59FF8E25830673485
+Hashlist          [add32 ax blake2 blake2b blake2s_128 blake2s_256 bmw]
+Binary Hashlist   1,3-5,6,7,8
 ```
 
 3) Quaternary
