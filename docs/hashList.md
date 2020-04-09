@@ -117,7 +117,7 @@ $ ./decoderRandomTestHC -bh=1-5 -block=12 -mod=64 -thread=16 -hex=E96562A59FF8E2
 Hashlist          [add32 aes8 ax blake2 blake2b]
 Binary Hashlist   1-5
 
-Example: ./decoderRandomTestHC -bh=1,3-5,6,7,8 -block=12 -mod=64 -thread=16 -hex=E96562A59FF8E25830673485
+$ ./decoderRandomTestHC -bh=1,3-5,6,7,8 -block=12 -mod=64 -thread=16 -hex=E96562A59FF8E25830673485
 Running Decode
 Block Size        12
 Block Bytes       E96562A59FF8E25830673485
