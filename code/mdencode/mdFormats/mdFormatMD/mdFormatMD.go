@@ -124,7 +124,7 @@ func (md *MdFormat) EncodeFileHeader(encodingFormat int, fileName string, filePa
 	// should have a version
 	// add mdversion
 
-	var mdhead     = fmt.Sprintf("# Filename\n%s\n\n# Filepath\n%s\n\n# File Header\n%v:%v:%v:%v:%s-%s:%v:%v\n\n", fileName, filePath, fileSize, encodingFormat, blockSize, modulusSize, filehashListString, blockhashListString, md.mdVersion, time.Now())
+	var mdhead     = fmt.Sprintf("# Filename\n%s\n\n# Filepath\n%s\n\n# Fullpath\n%s%s\n\n# File Header\n%v:%v:%v:%v:%s-%s:%v:%v\n\n", fileName, filePath, filePath, fileName, fileSize, encodingFormat, blockSize, modulusSize, filehashListString, blockhashListString, md.mdVersion, time.Now())
 	var mdheadlist = fmt.Sprintf("- File Size %v bytes\n- Ecoding Format %v\n- Block Size %v bytes\n- Modulus Size %v bits\n- File Hash List %s\n- Block Hash List %s\n- Version %v\n- Time %v\n", fileSize, encodingFormat, blockSize, modulusSize, filehashListString, blockhashListString, md.mdVersion, time.Now())
 	buffer.WriteString(mdhead)
 	buffer.WriteString(mdheadlist)
@@ -179,7 +179,7 @@ func (md *MdFormat) print(line  ...interface{}) {
         if md.outputFile != "" {
                 fmt.Fprint(md.file, line...)
         } else {
-                fmt.Print(line...); 
+                fmt.Print(line...)
         }
 
 }
@@ -193,7 +193,7 @@ func (md *MdFormat) println(line  ...interface{}) {
 		fmt.Fprint(md.file, line...)
 		fmt.Fprint(md.file, "\n")
 	} else {
-		fmt.Print(line...);
+		fmt.Print(line...)
 		fmt.Print("\n")
 	}
 
@@ -209,7 +209,7 @@ func (md *MdFormat) Println2(line  ...interface{}) {
                 fmt.Fprint(md.file, line...)
                 fmt.Fprint(md.file, "\n")
         } else {
-                fmt.Print(line...);
+                fmt.Print(line...)
                 fmt.Print("\n")
         }
 }

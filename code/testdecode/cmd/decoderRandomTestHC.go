@@ -206,7 +206,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	fmt.Println("Running Decode")
 	fmt.Println("Block Size       ", blockSizeInt)
 	fmt.Printf( "Block Bytes       %X\n", bytes)
-	fmt.Println("Input  Hashlist  ", blocklist)
+	fmt.Println("Input Hashlist   ", blocklist)
 	fmt.Println("Hashlist         ", blockHlist)
 	fmt.Println("Hashlist Size    ", len(blockHlist))
 	// fmt.Println("Thread Size      ", threadCount)
@@ -301,7 +301,7 @@ func  (fd *FlagData) setThread() (start, end int64) {
 		threadEnd    = threadCount
                 fd.threadEnd = threadCount
         }
- 
+
 	if fd.threadEnd < fd.threadStart {
 		// threadEnd    = threadCount
                 //fd.threadEnd = threadCount

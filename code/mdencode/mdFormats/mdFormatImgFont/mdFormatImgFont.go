@@ -268,7 +268,7 @@ func (md *MdFormat) print(line  ...interface{}) {
         if md.outputFile != "" {
                 fmt.Fprint(md.file, line...)
         } else {
-                fmt.Print(line...); 
+                fmt.Print(line...) 
         }
 
 }
@@ -282,7 +282,7 @@ func (md *MdFormat) println(line  ...interface{}) {
 		fmt.Fprint(md.file, line...)
 		fmt.Fprint(md.file, "\n")
 	} else {
-		fmt.Print(line...);
+		fmt.Print(line...)
 		fmt.Print("\n")
 	}
 
@@ -298,7 +298,7 @@ func (md *MdFormat) Println2(line  ...interface{}) {
                 fmt.Fprint(md.file, line...)
                 fmt.Fprint(md.file, "\n")
         } else {
-                fmt.Print(line...);
+                fmt.Print(line...)
                 fmt.Print("\n")
         }
 }

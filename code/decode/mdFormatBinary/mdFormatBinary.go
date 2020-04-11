@@ -234,7 +234,7 @@ func (md *MdFormat) println(line  ...interface{}) {
 		fmt.Fprint(md.file, line...)
 		fmt.Fprint(md.file, "\n")
 	} else {
-		fmt.Print(line...);
+		fmt.Print(line...)
 		fmt.Print("\n")
 	}
 
@@ -243,7 +243,7 @@ func (md *MdFormat) println(line  ...interface{}) {
 
 // test interface method
 func (md *MdFormat) Println2(line  ...interface{}) {
-        fmt.Print(line...);
+        fmt.Print(line...)
         fmt.Print("\n")
 }
 
