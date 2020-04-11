@@ -68,15 +68,15 @@ $GOPATH/github.com/singularian/mdencode/build
 
 This is the build steps with the Makefile on Linux with GO Modules.
 
-$GOPATH/github.com/singularian/mdencode/build $ make all 
-$GOPATH/github.com/singularian/mdencode/build $ make build 
+$GOPATH/github.com/singularian/mdencode/build $ make all  
+$GOPATH/github.com/singularian/mdencode/build $ make build   
 
 ### Build
 
-Make build installs mdzip and mdunzip and mdlist to the binary directory
+Make build installs mdzip and mdunzip and mdlist to the binary directory  
 
-$GOPATH/github.com/singularian/mdencode/build $ make mdzip 
-$GOPATH/github.com/singularian/mdencode/build $ make build 
+$GOPATH/github.com/singularian/mdencode/build $ make mdzip   
+$GOPATH/github.com/singularian/mdencode/build $ make build   
 
 # Build decoderRandom
 
@@ -86,7 +86,7 @@ It will then try to find the corresponding byte block and check if the modulus s
 
 ### Paths
 
-$GOPATH/github.com/singularian/mdencode/build   (main build directory) 
+$GOPATH/github.com/singularian/mdencode/build   (main build directory)  
 
 $GOPATH/github.com/singularian/mdencode/code/testdecode  
 $GOPATH/github.com/singularian/mdencode/code/decode  
@@ -94,16 +94,16 @@ $GOPATH/github.com/singularian/mdencode/code/mdencode
 
 ### Build 
 
-This example builds the mdencode decoderRandom files  
+This example builds the mdencode decoderRandom files   
 
 $GOPATH/github.com/singularian/mdencode/code/testdecode $ make all  
-$GOPATH/github.com/singularian/mdencode/build $ make test 
+$GOPATH/github.com/singularian/mdencode/build $ make test  
 
 
 # Windows Build
 
-1) Download and install git windows
-2) Add git to the windows environment path
-3) Install gcc with mingw (http://mingw-w64.org/) use the windows 64 bit install option
-4) Add mingw-w64 to the windows environment path for gcc.exe
-5) Build the go files
+1) Download and install git windows  
+2) Add git to the windows environment path  
+3) Install gcc with mingw (http://mingw-w64.org/) use the windows 64 bit install option  
+4) Add mingw-w64 to the windows environment path for gcc.exe  
+5) Build the go files  
