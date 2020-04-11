@@ -203,7 +203,8 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	//*********************************************************** 
 	// convert the block list hash array to string
 	//***********************************************************
-	fmt.Println("Running Decode")
+	fmt.Println("Running Decode \n")
+	fmt.Println("Start Time       ", now)
 	fmt.Println("Block Size       ", blockSizeInt)
 	fmt.Printf( "Block Bytes       %X\n", bytes)
 	fmt.Println("Input Hashlist   ", blocklist)
