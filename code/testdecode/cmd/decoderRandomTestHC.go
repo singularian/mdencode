@@ -206,6 +206,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	fmt.Println("Running Decode \n")
 	fmt.Println("Start Time       ", now)
 	fmt.Println("Block Size       ", blockSizeInt)
+	fmt.Printf( "Block Bytes       % X\n", bytes)
 	fmt.Printf( "Block Bytes       %X\n", bytes)
 	fmt.Println("Input Hashlist   ", blocklist)
 	fmt.Println("Hashlist         ", blockHlist)
