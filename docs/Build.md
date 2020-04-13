@@ -73,13 +73,13 @@ Make build installs mdzip and mdunzip and mdlist to the binary directory
 $GOPATH/github.com/singularian/mdencode/build $ make mdzip   
 $GOPATH/github.com/singularian/mdencode/build $ make build   
 
-# Build decoderRandom
+# Build decoderRandom Test
 
-decoderRandom is a test command line program which creates a random byte block. It uses  
-a signature pair MD5 and SHA-1 and then creates a modulus floor and then runs a modulus scan.  
-It will then try to find the corresponding byte block and check if the modulus scan found the correct byte block.  
+decoderRandomTestHC is a test command line program which creates a random byte block or command line byte block. 
+It uses the Hash Context List and creates a modulus floor and then runs a modulus scan.   
+It will then try to find the corresponding byte block and verify if the modulus scan found the correct byte block.  
 
-### Paths
+### Test Paths
 
 $GOPATH/github.com/singularian/mdencode/build   (main build directory)  
 
@@ -87,7 +87,7 @@ $GOPATH/github.com/singularian/mdencode/code/testdecode
 $GOPATH/github.com/singularian/mdencode/code/decode  
 $GOPATH/github.com/singularian/mdencode/code/mdencode  
 
-### Build 
+### Test Build 
 
 This example builds the mdencode decoderRandom files   
 
