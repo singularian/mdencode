@@ -75,8 +75,28 @@ mdzip:
 test:
 	@echo "Building mdzip decodeRandom Tests"
 	go build -o decoderRandom ${TEST}/${CMD}/decoderRandom.go
-	go build -o decoderRandomTest ${TEST}/${CMD}/decoderRandomTest.go 
-	go build -o decoderRandomTestHC ${TEST}/${CMD}/decoderRandomTestHC.go 
+	go build -o decoderRandomTest ${TEST}/${CMD}/decoderRandomTest.go
+	go build -o decoderRandomTestHC ${TEST}/${CMD}/decoderRandomTestHC.go
+# windows build
+windows:
+	@echo "Windows Build"
+	@echo "Building mdencode"
+	go build -o md.exe ${MDE}/${CMD}/mdencode.go
+	go build -o mdencode.exe ${MDE}/${CMD}/mdencode.go
+	go build -o mdnewdb.exe ${MDE}/${CMD}/mdnewdb.go
+	go build -o mddbreport.exe ${MDE}/${CMD}/mdencodeReport.go
+	go build -o mdbinlist.exe ${MDE}/${CMD}/testBinReadMdFmt.go
+	@echo "Building mdzip"
+	go build -o mdzip.exe ${MDZIP}/${CMD}/mdzip.go
+	go build -o mdunzip.exe ${MDZIP}/${CMD}/mdUnzip.go
+	go build -o mdlist.exe ${MDZIP}/${CMD}/mdlist.go
+	go build -o mdcmd.exe ${MDZIP}/${CMD}/mdCmd.go
+	go build -o mdlistTest.exe ${MDZIP}/${CMD}/testBinReadMdFmt.go
+	go build -o mdsig.exe ${MDZIP}/${CMD}/mdsig.go
+	go build -o randfile.exe ${MDZIP}/${CMD}/randomFile.go
+	@echo "Building mdzip decodeRandom Tests"
+	go build -o decoderRandomTestHC.exe ${TEST}/${CMD}/decoderRandomTestHC.go
+# run mdzip test
 runtest:
 	@echo "Running mdzip Test"
 	@echo ""

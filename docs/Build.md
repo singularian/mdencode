@@ -33,13 +33,8 @@ $GOPATH/github.com/singularian/mdencode/build
 
 ### Build Mdencode
 
-A Makefile was provided for building Mdencode on Linux
-
-### Make getlibs
-
-make getlibs pulls the mdencode library dependencies
-
-$GOPATH/github.com/singularian/mdencode/build $ make all
+A Makefile was provided for building Mdencode on Linux and can also build on Windows.  
+It uses the go modules to pull the dependencies.  
 
 ### Make all
 
@@ -106,4 +101,8 @@ $GOPATH/github.com/singularian/mdencode/build $ make test
 2) Add git to the windows environment path  
 3) Install gcc with mingw (http://mingw-w64.org/) use the windows 64 bit install option  
 4) Add mingw-w64 to the windows environment path for gcc.exe  
-5) Build the go files  
+4) Install GNU Windows Make and add to the windows environment path  
+   https://sourceforge.net/projects/gnuwin32/  
+5) Build the go files   
+   cd $GOPATH/github.com/singularian/mdencode/build  
+   make windows  
