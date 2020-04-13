@@ -79,20 +79,12 @@ decoderRandomTestHC is a test command line program which creates a random byte b
 It uses the Hash Context List and creates a modulus floor and then runs a modulus scan.   
 It will then try to find the corresponding byte block and verify if the modulus scan found the correct byte block.  
 
-### Test Paths
-
-$GOPATH/github.com/singularian/mdencode/build   (main build directory)  
-
-$GOPATH/github.com/singularian/mdencode/code/testdecode  
-$GOPATH/github.com/singularian/mdencode/code/decode  
-$GOPATH/github.com/singularian/mdencode/code/mdencode  
-
 ### Test Build 
 
 This example builds the mdencode decoderRandom files   
 
-$GOPATH/github.com/singularian/mdencode/code/testdecode $ make all  
-$GOPATH/github.com/singularian/mdencode/build $ make test  
+$GOPATH/github.com/singularian/mdencode/code/testdecode $ make all      (Build for the local testdecode directory)
+$GOPATH/github.com/singularian/mdencode/build $ make test               (Main build directory) 
 
 
 # Windows Build
@@ -106,3 +98,13 @@ $GOPATH/github.com/singularian/mdencode/build $ make test
 5) Build the go files   
    cd $GOPATH/github.com/singularian/mdencode/build  
    make windows  
+   
+ # Build Paths
+ 
+ These are the main directories for the GO code.
+ 
+ $GOPATH/github.com/singularian/mdencode/build   (main build directory)  
+ 
+ $GOPATH/github.com/singularian/mdencode/code/testdecode  
+ $GOPATH/github.com/singularian/mdencode/code/decode  
+ $GOPATH/github.com/singularian/mdencode/code/mdencode   
