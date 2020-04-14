@@ -415,6 +415,34 @@ Random bytestring and modulusscan bytestring match  [0 0 0 0 18 0 32 0 0 0 17 22
 Found block  thread 64 random bytestring and modulusscan bytestring match [0 0 0 0 18 0 32 0 0 0 17 221 255 252] = [0 0 0 0 18 0 32 0 0 0 17 221 255 252]                     
 ```
 
+## Example 5
+
+This example uses a 13 byte hash block with high way hash 64 (8 bytes) plus a 32-bit modulus + 1 byte for the exponent to encode a  
+14 byte block. Resulting in one byte savings.
+
+```
+./decoderRandomTestHC.exe -block=14 -mod=32 -bh="31," -thread=16 -hex=0000000012002000000211DDFFFC
+Running Decode
+
+Start Time        2020-04-13 12:55:34.1399714 -0400 EDT m=+0.004789501
+Block Size        14
+Block Bytes       00 00 00 00 12 00 20 00 00 02 11 DD FF FC
+Block Bytes       0000000012002000000211DDFFFC
+Input Hashlist    31,
+Hashlist          [hw64]
+Hashlist Size     1
+Thread Start      0
+Thread End        16
+Threads           16
+Mod Size          32
+Mod Exponent      76
+Mod Remainder     299761660
+
+Found Block [hw64 1d6681286cb63ced] result = 1d6681286cb63ced Found Block  [0 0 0 0 18 0 32 0 0 2 17 221 255 252]
+Total time  28h7m5.911036s
+Random bytestring and modulusscan bytestring match  [0 0 0 0 18 0 32 0 0 2 17 221 255 252]   [0 0 0 0 18 0 32 0 0 2 17 221 255 252]  hex bytes  0000000012002000000211DDFFFC
+Found block  thread 2 random bytestring and modulusscan bytestring match [0 0 0 0 18 0 32 0 0 2 17 221 255 252] = [0 0 0 0 18 0 32 0 0 2 17 221 255 252] 
+```
 
 # Donations
 
