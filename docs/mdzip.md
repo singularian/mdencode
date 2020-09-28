@@ -278,6 +278,12 @@ This is a guide for building MDencode on Linux.
 
 [Example Build](https://github.com/singularian/mdencode/blob/master/docs/Build.md)
 
+# Docker Container  
+
+A Docker container was also created in Dockerhub.
+
+[Docker Container](https://hub.docker.com/r/annatarsol/mdencode)
+
 # MDzip Test
 
 The MDzip provides a commandline modulus test scan with the hash context list.  It generates a random byte block n-bytes or can use a hex or decimal byte block of n-bytes.  
