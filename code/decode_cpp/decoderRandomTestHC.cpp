@@ -10,29 +10,29 @@ int calcExponent (mpz_t blockint);
 
 int main (int argc, char **argv) {
 
-    size_t blocksize = 12;
-    int modsize      = 64;
+     size_t blocksize = 12;
+     int modsize      = 64;
 
-    if (argc < 3)  
-    { 
-        printf("Parameters [byteblock size] [mod size]\n"); 
-        printf("Parameters 12 14\n"); 
-        return 0; 
-    } 
+     if (argc < 3)  
+     { 
+         printf("Parameters [byteblock size] [mod size]\n"); 
+         printf("Parameters 12 14\n"); 
+         return 0; 
+     } 
 
-    blocksize = atoi(argv[1]);
-    modsize   = atoi(argv[2]); 
+     blocksize = atoi(argv[1]);
+     modsize   = atoi(argv[2]); 
 
-    unsigned char *byteblock;
-    byteblock = genRandomByteBlock(blocksize);
+     unsigned char *byteblock;
+     byteblock = genRandomByteBlock(blocksize);
 
 
-    cout << "Random array " << endl;
-    for (int f = 0; f < blocksize; f++) {
-        //std::cout << bal[f] << ' ';
-        printf("%d ",byteblock[f]);
-    }
-    cout << endl;
+     cout << "Random array " << endl;
+     for (int f = 0; f < blocksize; f++) {
+         //std::cout << bal[f] << ' ';
+         printf("%d ",byteblock[f]);
+     }
+     cout << endl;
 
 
      mpz_t x,y,z,result;
