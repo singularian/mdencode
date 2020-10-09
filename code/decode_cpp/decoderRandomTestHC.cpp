@@ -7,6 +7,7 @@ using namespace std;
 
 unsigned char *genRandomByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int blocksize );
 
 int main (int argc, char **argv) {
 
@@ -23,58 +24,33 @@ int main (int argc, char **argv) {
      blocksize = atoi(argv[1]);
      modsize   = atoi(argv[2]); 
 
+     // generate a random n byte byteblock
      unsigned char *byteblock;
      byteblock = genRandomByteBlock(blocksize);
-
-
-     cout << "Random array " << endl;
-     for (int f = 0; f < blocksize; f++) {
-         //std::cout << bal[f] << ' ';
-         // printf("%d ",byteblock[f]);
-          printf("%X", byteblock[f]);
-     }
-     cout << endl;
-
 
      mpz_t x, remainder, modulusInt, byteblockInt;
 
      mpz_init_set_str(x, "2", 10);
-     // mpz_init_set_str(remainder, "16", 10);
      mpz_init_set_str(remainder, "0", 10);
      mpz_init_set_str(modulusInt, "1", 10);
      mpz_init_set_str(byteblockInt, "1", 10);
 
+     // create the byteblock bigint
      // void mpz_import (mpz_t rop, size_t count, int order, size_t size, int endian, size_t nails, const void *op) 
      mpz_import (byteblockInt, blocksize, 1, sizeof(byteblock[0]), 0, 0, byteblock);
 
      // void * mpz_export (void *rop, size_t *countp, int order, size_t size, int endian, size_t nails, const mpz_t op)
-
-
-     cout<<"\nThe byteblock bigint result is: ";
-     mpz_out_str(stdout, 10, byteblockInt);
-     cout<<endl;
-
      // calculate the modulus 2 ^ modsize 
      mpz_ui_pow_ui (modulusInt, 2, modsize);
-     // mpz_pow (result, x, y);
-     std::cout << "modulus int 2 ^ " << modsize << " = ";
-     // cout << mpz_out_str(stdout, 10, result);
-     gmp_printf("%Zd", modulusInt);
-     // cout << result;
-     cout << '\n';
 
-     // std::cout << "2 ^ 16 = " << mpz_out_str(stdout, 2, result) << '\n';
-    
-     // mpz_mod (remainder, modulusInt, byteblockInt); 
+     // calculate the modulus remainder 
      mpz_mod (remainder, byteblockInt, modulusInt); 
-     // std::cout << "modulus remainder = " << mpz_out_str(stdout, 10, remainder) << '\n';
-     std::cout << "modulus remainder =  ";
-     gmp_printf("%Zd", remainder);
-     cout << endl;
-     // std::cout << "modulus remainder = " << gmp_printf("%Zd", x) << endl;
 
+     // calculate the modulus exponent
      int exp = calcExponent(byteblockInt);
-     std::cout << "modulus exponent  =  " << exp << '\n';
+
+     // display the current block stats
+     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, blocksize ); 
 
      /* free used memory */
      free (byteblock);
@@ -117,4 +93,31 @@ int calcExponent (mpz_t blockint) {
     mpz_clear(result);
 
     return exponent;
+}
+
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int blocksize ) {
+
+     cout << "Random array " << blocksize << " ";
+     for (int f = 0; f < blocksize; f++) {
+         //std::cout << bal[f] << ' ';
+         // printf("%d ",byteblock[f]);
+          printf("%X", byteblock[f]);
+     }
+     cout << endl;
+
+     cout<<"The byteblock bigint result is: ";
+     mpz_out_str(stdout, 10, blockint);
+     cout<<endl;
+
+     std::cout << "modulus int 2 ^ " << modsize << " = ";
+     gmp_printf("%Zd", modint);
+     // cout << result;
+     cout << '\n';
+
+     std::cout << "modulus remainder =  ";
+     gmp_printf("%Zd", remainder);
+     cout << endl;
+
+     std::cout << "modulus exponent  =  " << exponent << '\n';
+
 }
