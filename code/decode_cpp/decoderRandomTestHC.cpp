@@ -35,16 +35,15 @@ int main (int argc, char **argv) {
      cout << endl;
 
 
-     mpz_t x,y,z,result;
+     mpz_t x, remainder, modulusInt, byteblockInt;
 
      mpz_init_set_str(x, "2", 10);
-     mpz_init_set_str(y, "16", 10);
-     mpz_init(z);
-     mpz_init_set_str(result, "1", 10);
-     // mpz_init(result);
+     mpz_init_set_str(remainder, "16", 10);
+     mpz_init_set_str(modulusInt, "1", 10);
+     mpz_init(byteblockInt);
 
      // void mpz_import (mpz_t rop, size_t count, int order, size_t size, int endian, size_t nails, const void *op) 
-     mpz_import (z, blocksize, 1, sizeof(byteblock[0]), 0, 0, byteblock);
+     mpz_import (byteblockInt, blocksize, 1, sizeof(byteblock[0]), 0, 0, byteblock);
 
      // void * mpz_export (void *rop, size_t *countp, int order, size_t size, int endian, size_t nails, const mpz_t op)
 
@@ -55,31 +54,32 @@ int main (int argc, char **argv) {
      //cout<<endl;
 
      cout<<"\nThe byteblock bigint result is: ";
-     mpz_out_str(stdout, 10, z);
+     mpz_out_str(stdout, 10, byteblockInt);
      cout<<endl;
 
-     mpz_ui_pow_ui (result, 2, modsize);
+     // calculate the modulus 2 ^ modsize 
+     mpz_ui_pow_ui (modulusInt, 2, modsize);
      // mpz_pow (result, x, y);
      std::cout << "2 ^ " << modsize << " = ";
      // cout << mpz_out_str(stdout, 10, result);
-     gmp_printf("%Zd", result);
+     gmp_printf("%Zd", modulusInt);
      // cout << result;
      cout << '\n';
 
      // std::cout << "2 ^ 16 = " << mpz_out_str(stdout, 2, result) << '\n';
     
-     mpz_mod (y, z, result); 
-     std::cout << "modulus = " << mpz_out_str(stdout, 10, y) << '\n';
+     mpz_mod (remainder, byteblockInt, modulusInt); 
+     std::cout << "modulus = " << mpz_out_str(stdout, 10, remainder) << '\n';
 
-     int exp = calcExponent(z);
+     int exp = calcExponent(byteblockInt);
      std::cout << "modulus exponent = " << exp << '\n';
 
      /* free used memory */
      free (byteblock);
      mpz_clear(x);
-     mpz_clear(y);
-     mpz_clear(z);
-     mpz_clear(result);
+     mpz_clear(remainder);
+     mpz_clear(modulusInt);
+     mpz_clear(byteblockInt);
 
 
 
