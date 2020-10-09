@@ -39,7 +39,9 @@ int main (int argc, char **argv) {
      // void mpz_import (mpz_t rop, size_t count, int order, size_t size, int endian, size_t nails, const void *op) 
      mpz_import (byteblockInt, blocksize, 1, sizeof(byteblock[0]), 0, 0, byteblock);
 
+     // export the gmp bigint
      // void * mpz_export (void *rop, size_t *countp, int order, size_t size, int endian, size_t nails, const mpz_t op)
+
      // calculate the modulus 2 ^ modsize 
      mpz_ui_pow_ui (modulusInt, 2, modsize);
 
@@ -64,6 +66,7 @@ int main (int argc, char **argv) {
     return 0;
 }
 
+// returns a random byte sized byteblock
 unsigned char *genRandomByteBlock(size_t num_bytes) {
     unsigned char *stream;
     stream = (unsigned char *) malloc(num_bytes);
@@ -76,6 +79,7 @@ unsigned char *genRandomByteBlock(size_t num_bytes) {
     return stream;
 }
 
+// calculates an exponent of 2 less than the byte block int
 int calcExponent (mpz_t blockint) {
     int exponent = 0;
 
@@ -95,6 +99,7 @@ int calcExponent (mpz_t blockint) {
     return exponent;
 }
 
+// displays the modulus scan information
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int blocksize ) {
 
      cout << "Random array " << blocksize << " ";
