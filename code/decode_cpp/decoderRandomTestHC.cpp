@@ -2,6 +2,7 @@
 #include <iostream>
 #include <gmp.h>
 #include <time.h> 
+#include "modscan.h"
 
 using namespace std;
 
@@ -53,6 +54,10 @@ int main (int argc, char **argv) {
 
      // display the current block stats
      displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, blocksize ); 
+
+     modscan ms;
+     ms.filename = "filename";
+     ms.printname();
 
      /* free used memory */
      free (byteblock);
