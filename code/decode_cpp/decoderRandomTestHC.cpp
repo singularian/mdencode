@@ -11,15 +11,17 @@ int calcExponent (mpz_t blockint);
 int main (int argc, char **argv) {
 
     size_t blocksize = 12;
+    int modsize      = 64;
 
-    if (argc < 2)  
+    if (argc < 3)  
     { 
-        printf("enter the byteblock size!!\n"); 
+        printf("Parameters [byteblock size] [mod size]\n"); 
+        printf("Parameters 12 14\n"); 
         return 0; 
     } 
 
     blocksize = atoi(argv[1]);
-    // modsize = atoi(argv[2]); // need to add the mod size
+    modsize   = atoi(argv[2]); 
 
     unsigned char *byteblock;
     byteblock = genRandomByteBlock(blocksize);
@@ -52,13 +54,13 @@ int main (int argc, char **argv) {
      //mpz_out_str(stdout, 10, result);
      //cout<<endl;
 
-     cout<<"\nThe byteblock bigint result is:";
+     cout<<"\nThe byteblock bigint result is: ";
      mpz_out_str(stdout, 10, z);
      cout<<endl;
 
-     mpz_ui_pow_ui (result, 2, 16);
+     mpz_ui_pow_ui (result, 2, modsize);
      // mpz_pow (result, x, y);
-     std::cout << "2 ^ 16 = ";
+     std::cout << "2 ^ " << modsize << " = ";
      // cout << mpz_out_str(stdout, 10, result);
      gmp_printf("%Zd", result);
      // cout << result;
