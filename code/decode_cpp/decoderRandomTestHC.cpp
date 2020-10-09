@@ -30,7 +30,8 @@ int main (int argc, char **argv) {
      cout << "Random array " << endl;
      for (int f = 0; f < blocksize; f++) {
          //std::cout << bal[f] << ' ';
-         printf("%d ",byteblock[f]);
+         // printf("%d ",byteblock[f]);
+          printf("%X", byteblock[f]);
      }
      cout << endl;
 
@@ -38,20 +39,16 @@ int main (int argc, char **argv) {
      mpz_t x, remainder, modulusInt, byteblockInt;
 
      mpz_init_set_str(x, "2", 10);
-     mpz_init_set_str(remainder, "16", 10);
+     // mpz_init_set_str(remainder, "16", 10);
+     mpz_init_set_str(remainder, "0", 10);
      mpz_init_set_str(modulusInt, "1", 10);
-     mpz_init(byteblockInt);
+     mpz_init_set_str(byteblockInt, "1", 10);
 
      // void mpz_import (mpz_t rop, size_t count, int order, size_t size, int endian, size_t nails, const void *op) 
      mpz_import (byteblockInt, blocksize, 1, sizeof(byteblock[0]), 0, 0, byteblock);
 
      // void * mpz_export (void *rop, size_t *countp, int order, size_t size, int endian, size_t nails, const mpz_t op)
 
-
-     // mpz_mul(result, x, y);
-     //cout<<"\nThe exact result is:";
-     //mpz_out_str(stdout, 10, result);
-     //cout<<endl;
 
      cout<<"\nThe byteblock bigint result is: ";
      mpz_out_str(stdout, 10, byteblockInt);
@@ -60,7 +57,7 @@ int main (int argc, char **argv) {
      // calculate the modulus 2 ^ modsize 
      mpz_ui_pow_ui (modulusInt, 2, modsize);
      // mpz_pow (result, x, y);
-     std::cout << "2 ^ " << modsize << " = ";
+     std::cout << "modulus int 2 ^ " << modsize << " = ";
      // cout << mpz_out_str(stdout, 10, result);
      gmp_printf("%Zd", modulusInt);
      // cout << result;
@@ -68,11 +65,16 @@ int main (int argc, char **argv) {
 
      // std::cout << "2 ^ 16 = " << mpz_out_str(stdout, 2, result) << '\n';
     
+     // mpz_mod (remainder, modulusInt, byteblockInt); 
      mpz_mod (remainder, byteblockInt, modulusInt); 
-     std::cout << "modulus = " << mpz_out_str(stdout, 10, remainder) << '\n';
+     // std::cout << "modulus remainder = " << mpz_out_str(stdout, 10, remainder) << '\n';
+     std::cout << "modulus remainder =  ";
+     gmp_printf("%Zd", remainder);
+     cout << endl;
+     // std::cout << "modulus remainder = " << gmp_printf("%Zd", x) << endl;
 
      int exp = calcExponent(byteblockInt);
-     std::cout << "modulus exponent = " << exp << '\n';
+     std::cout << "modulus exponent  =  " << exp << '\n';
 
      /* free used memory */
      free (byteblock);
