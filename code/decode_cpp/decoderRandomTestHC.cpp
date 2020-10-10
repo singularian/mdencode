@@ -11,6 +11,7 @@ int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize );
 
+// This is a GMP modscan test program 
 int main (int argc, char **argv) {
 
      size_t blocksize = 12;
@@ -18,6 +19,7 @@ int main (int argc, char **argv) {
 
      if (argc < 3)  
      { 
+         printf("MDencode GMP C++ Modulus Scan Test\n"); 
          printf("Parameters [byteblock size] [mod size]\n"); 
          printf("Parameters 12 14\n"); 
          return 0; 
@@ -64,10 +66,12 @@ int main (int argc, char **argv) {
      ms.exponent   = exp;
      // ms.modulusInt = modulusInt;
      // ms.remainder  = remainder;
-     ms.setX(remainder, modulusInt, exp, expmod, blocksize);
+     ms.setModscan(remainder, modulusInt, exp, expmod, blocksize);
 
      ms.printname();
      ms.decode();
+
+     // ms.~modscan();
 
      /* free used memory */
      free (byteblock);
