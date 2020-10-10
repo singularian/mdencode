@@ -8,7 +8,8 @@ using namespace std;
 
 unsigned char *genRandomByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int blocksize );
+int calcExponentModulus (mpz_t modulus, mpz_t blockint);
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize );
 
 int main (int argc, char **argv) {
 
@@ -49,22 +50,32 @@ int main (int argc, char **argv) {
      // calculate the modulus remainder 
      mpz_mod (remainder, byteblockInt, modulusInt); 
 
-     // calculate the modulus exponent
+     // calculate the modulus exponent with two
      int exp = calcExponent(byteblockInt);
+     // calculate the modulus exponent with the modulus
+     int expmod = calcExponentModulus(modulusInt, byteblockInt);
 
      // display the current block stats
-     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, blocksize ); 
+     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize ); 
 
      modscan ms;
-     ms.filename = "filename";
+     ms.filename   = "filename";
+     ms.modsize    = modsize;
+     ms.exponent   = exp;
+     // ms.modulusInt = modulusInt;
+     // ms.remainder  = remainder;
+     ms.setX(remainder, modulusInt, exp, expmod, blocksize);
+
      ms.printname();
+     ms.decode();
 
      /* free used memory */
      free (byteblock);
-     mpz_clear(x);
-     mpz_clear(remainder);
-     mpz_clear(modulusInt);
-     mpz_clear(byteblockInt);
+     //mpz_clear(x);
+     //mpz_clear(remainder);
+     //mpz_clear(modulusInt);
+     //mpz_clear(byteblockInt);
+     mpz_clears(x, remainder, modulusInt, byteblockInt, NULL);
 
 
 
@@ -104,8 +115,27 @@ int calcExponent (mpz_t blockint) {
     return exponent;
 }
 
+// calculates an exponent of the modulus less than the byte block int
+int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
+    int exponent = 0;
+
+    mpz_t result;
+
+    mpz_init_set_str(result, "1", 10);
+
+    do {
+      mpz_mul(result, result, modulus);
+      exponent++;
+    } while(mpz_cmp(result,blockint) < 0);
+
+    mpz_clear(result);
+
+    return exponent;
+}
+
+
 // displays the modulus scan information
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int blocksize ) {
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize ) {
 
      cout << "Random array " << blocksize << " ";
      for (int f = 0; f < blocksize; f++) {
@@ -128,6 +158,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      gmp_printf("%Zd", remainder);
      cout << endl;
 
-     std::cout << "modulus exponent  =  " << exponent << '\n';
+     std::cout << "modulus two exponent  =  " << exponent << endl;
+     std::cout << "modulus exponent  =  " << expmod << endl;
 
 }
