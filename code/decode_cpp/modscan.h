@@ -20,7 +20,6 @@ class modscan
        mpz_t modulusInt; 
        mpz_t modulusExpInt; 
        mpz_t blockInt; 
-       // ~modscan();      // destructor
  
     // Default constructor
     modscan() 
@@ -57,7 +56,7 @@ class modscan
         gmp_printf("modulus int remainder %Zd\n", remainder);
         gmp_printf("starting block int %Zd\n", blockInt);
 
-        // byteblock = new unsigned char[blocksize+100];
+        // byteblock = new unsigned char[blocksize];
         byteblock = (unsigned char *) malloc(blocksize);
         memcpy(sha1,sha1block, sizeof(sha1) / sizeof(sha1[0]));
 
@@ -107,9 +106,6 @@ class modscan
        int n;
        SHA1Init(&sha);
 
-       mpz_t testInt;
-       mpz_init_set_str(testInt, "168873676072691430781078090", 10);
- 
        while (continueFlag == 0)
        {
            // for (int i = 0; i < blocksize; i++) byteblock[i] = 0;
@@ -159,33 +155,10 @@ class modscan
               }
            }
            
-           // test code
-           // to check if a certain bigit is found
-           /* if (mpz_cmp(testInt,blockInt) == 0) {
-               printf("Test block ");
-              gmp_printf("%Zd ", blockInt);
-              gmp_printf("%Zd", testInt);
-              printf(" byteblock ");
-              for (n = 0; n < blocksize; n++) {
-                    printf("%02X", byteblock[n]);
-              }
-              printf(" sha1 ");
-              for (n = 0; n < 20; n++)
-                    printf("%02x", sha1[n]);
-              printf(" results  ");
-              for (n = 0; n < 20; n++)
-                    printf("%02x", results[n]);
-              printf("\n");
-
-           } */
-
 
            mpz_add (blockInt, blockInt, modulusInt);
            lineNum++;
        }
-
-       // testInt
-       mpz_clear(testInt);         
 
     }
 

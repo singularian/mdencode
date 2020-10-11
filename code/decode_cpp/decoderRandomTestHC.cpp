@@ -89,13 +89,13 @@ int main (int argc, char **argv) {
      printf("\n");
 
      modscan ms;
-     ms.filename   = "filename";
+     // ms.filename   = "filename";
      // ms.modsize    = modsize;
      // ms.exponent   = exp;
      // ms.modulusInt = modulusInt;
      // ms.remainder  = remainder;
      ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, sha1);
-     ms.printname();
+     // ms.printname();
      ms.decode();
 
      unsigned char *modbyteblock;
