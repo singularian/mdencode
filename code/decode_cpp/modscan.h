@@ -6,7 +6,7 @@ using namespace std;
 class modscan 
 { 
     private:
-       uint8_t sha1[20];
+       uint8_t sha1[40];
        unsigned char *byteblock; 
     public: 
        string filename; 
@@ -102,7 +102,7 @@ class modscan
        cout << endl;
 
        SHA1_CTX sha;
-       uint8_t results[20]; 
+       uint8_t results[40]; 
        char *buf; 
        int n;
        SHA1Init(&sha);
@@ -188,4 +188,11 @@ class modscan
        mpz_clear(testInt);         
 
     }
+
+    unsigned char* getModscanByteBlock()
+    {
+
+        return byteblock; 
+    }
+
 }; 

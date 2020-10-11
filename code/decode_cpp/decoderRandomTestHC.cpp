@@ -98,6 +98,23 @@ int main (int argc, char **argv) {
      ms.printname();
      ms.decode();
 
+     unsigned char *modbyteblock;
+     modbyteblock = ms.getModscanByteBlock();
+     if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
+         cout << "Modulus Scan and Random byteblock match" << endl;
+          for (int i = 0; i < blocksize; i++) {
+               printf("%d ", byteblock[i]);
+          }
+          printf("\n");
+
+          for (int i = 0; i < blocksize; i++) {
+               printf("%d ", modbyteblock[i]);
+          }
+          printf("\n");
+
+    
+     }
+
      /* free used memory */
      free (byteblock);
      //mpz_clear(remainder);
