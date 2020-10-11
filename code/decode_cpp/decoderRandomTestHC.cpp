@@ -3,10 +3,17 @@
 #include <gmp.h>
 #include <time.h> 
 #include "modscan.h"
+#include "sha1.h"
+#include "string.h"
+#include "stdio.h"
 
 using namespace std;
 
+uint8_t sha1[20];
+
+int genSHA1(unsigned char *byteblock, int blocksize);
 unsigned char *genRandomByteBlock(size_t num_bytes);
+unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize );
@@ -31,20 +38,34 @@ int main (int argc, char **argv) {
      // generate a random n byte byteblock
      unsigned char *byteblock;
      byteblock = genRandomByteBlock(blocksize);
+     // byteblock = setByteBlock(blocksize);
+       
 
-     mpz_t x, remainder, modulusInt, byteblockInt;
+     mpz_t remainder, modulusInt, byteblockInt;
 
-     mpz_init_set_str(x, "2", 10);
      mpz_init_set_str(remainder, "0", 10);
      mpz_init_set_str(modulusInt, "1", 10);
-     mpz_init_set_str(byteblockInt, "1", 10);
+     // mpz_init_set_str(byteblockInt, "0", 10);
+     mpz_init(byteblockInt);
+     // mpz_init_set_str(byteblockInt, "202809938793831860407111198", 10);
+     // mpz_init_set_str(byteblockInt, "168873676072691430781078090", 2);
 
      // create the byteblock bigint
      // void mpz_import (mpz_t rop, size_t count, int order, size_t size, int endian, size_t nails, const void *op) 
-     mpz_import (byteblockInt, blocksize, 1, sizeof(byteblock[0]), 0, 0, byteblock);
+     // order very important
+     // within each word endian can be 1 for most significant byte first, -1 for least significant first, or 0 for the native endianness of the host CPU
+     mpz_import (byteblockInt, blocksize, 0, sizeof(byteblock[0]), 0, 0, byteblock);
 
      // export the gmp bigint
      // void * mpz_export (void *rop, size_t *countp, int order, size_t size, int endian, size_t nails, const mpz_t op)
+     unsigned char test [11];
+     size_t count;
+     printf("test export\n");
+     mpz_export(test, &count, 0, sizeof(byteblock[0]), 0, 0, byteblockInt);
+     for (int i = 0; i < blocksize; i++) {
+           printf("%d ", byteblock[i]);
+     }
+     printf("\n");
 
      // calculate the modulus 2 ^ modsize 
      mpz_ui_pow_ui (modulusInt, 2, modsize);
@@ -60,31 +81,46 @@ int main (int argc, char **argv) {
      // display the current block stats
      displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize ); 
 
+     // cout << "sha1 " <<  genSHA1(byteblock, blocksize) << endl;
+     genSHA1(byteblock, blocksize);
+     cout << "sha1 ";
+     for (int n = 0; n < 20; n++)
+     printf("%02x", sha1[n]);
+     printf("\n");
+
      modscan ms;
      ms.filename   = "filename";
-     ms.modsize    = modsize;
-     ms.exponent   = exp;
+     // ms.modsize    = modsize;
+     // ms.exponent   = exp;
      // ms.modulusInt = modulusInt;
      // ms.remainder  = remainder;
-     ms.setModscan(remainder, modulusInt, exp, expmod, blocksize);
-
+     ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, sha1);
      ms.printname();
      ms.decode();
 
-     // ms.~modscan();
-
      /* free used memory */
      free (byteblock);
-     //mpz_clear(x);
      //mpz_clear(remainder);
      //mpz_clear(modulusInt);
      //mpz_clear(byteblockInt);
-     mpz_clears(x, remainder, modulusInt, byteblockInt, NULL);
+     mpz_clears(remainder, modulusInt, byteblockInt, NULL);
 
 
 
     return 0;
 }
+
+// calculate test signature
+int genSHA1(unsigned char *byteblock, int blocksize) {
+       SHA1_CTX sha; 
+       // uint8_t results[20]; 
+       SHA1Init(&sha);
+       SHA1Update(&sha, (uint8_t *)byteblock, blocksize);
+       SHA1Final(sha1, &sha);
+
+       return 0;
+}
+
 
 // returns a random byte sized byteblock
 unsigned char *genRandomByteBlock(size_t num_bytes) {
@@ -98,6 +134,23 @@ unsigned char *genRandomByteBlock(size_t num_bytes) {
 
     return stream;
 }
+
+unsigned char *setByteBlock(size_t num_bytes) {
+    unsigned char *stream;
+    // stream = (unsigned char *) malloc(num_bytes);
+    stream = (unsigned char *) malloc(11);
+
+    int num [] = { 139, 176, 100, 82, 220, 198, 148, 121, 155, 202, 74 };
+
+	
+
+    for (int f = 0; f < 11; f++) {
+       stream[f] = num[f];
+    }
+
+    return stream;
+}
+
 
 // calculates an exponent of 2 less than the byte block int
 int calcExponent (mpz_t blockint) {
@@ -125,7 +178,9 @@ int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
 
     mpz_t result;
 
-    mpz_init_set_str(result, "1", 10);
+    mpz_init_set_str(result, "", 10);
+    mpz_add (result, result, modulus); 
+
 
     do {
       mpz_mul(result, result, modulus);
@@ -148,6 +203,11 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
           printf("%X", byteblock[f]);
      }
      cout << endl;
+
+     cout << "Random array " << blocksize << " ";
+     for (int f = 0; f < blocksize; f++) {
+          printf("%d ",byteblock[f]);
+     }
 
      cout<<"The byteblock bigint result is: ";
      mpz_out_str(stdout, 10, blockint);
