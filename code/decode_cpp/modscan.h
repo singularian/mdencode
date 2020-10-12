@@ -16,6 +16,8 @@ class modscan
        int blocksize;
        int threadnumber;
        int threadcount;
+       mpz_t two;
+       mpz_t modremainder;
        mpz_t remainder;
        mpz_t modulusInt; 
        mpz_t modulusExpInt; 
@@ -26,6 +28,8 @@ class modscan
     {
        // mpz_init_set_str(remainder,  "0", 10);
        // mpz_init_set_str(modulusInt, "0", 10);
+       mpz_init_set_str(two, "2", 10); // exponent floor
+       mpz_init_set_str(modremainder, "0", 10); // exponent floor
        mpz_init_set_str(blockInt, "0", 10);
        // mpz_inits(remainder, modulusInt, modulusExpInt, blockInt, NULL);
        mpz_inits(remainder, modulusInt, modulusExpInt, NULL);
@@ -36,7 +40,8 @@ class modscan
     ~modscan()
     {
        std::cout << "Destroying modscan" << endl;
-       mpz_clears(remainder, modulusInt, modulusExpInt, blockInt, NULL);
+       mpz_clears(two, modremainder, remainder, modulusInt, modulusExpInt, blockInt, NULL);
+
        if (sizeof(byteblock) / sizeof(byteblock[0]) != 0) {
            cout << "free byteblock" << endl;
            delete []byteblock;
@@ -86,14 +91,17 @@ class modscan
        // need to change this to use the 2^exp 
        // calculate the modulus raised to the exponent
        // mpz_pow_ui (modulusExpInt, 2, modsize);
-       if (modexponent > 1) {
-           mpz_pow_ui (modulusExpInt, modulusInt, modexponent);
+       ///if (modexponent > 1) {
+           //// mpz_pow_ui (modulusExpInt, modulusInt, modexponent);
            // add the modulus ^ modulus exponent to the block int 
-           mpz_add (blockInt, blockInt, modulusExpInt);
-       }
+           //// mpz_add (blockInt, blockInt, modulusExpInt);
+       //}
+       // mpz_pow_ui (modulusExpInt, modulusInt, modexponent);
+       mpz_pow_ui (modulusExpInt, two, exponent);
+       convertFloorBase2(modulusExpInt, modulusInt);
 
        // add the modulus ^ modulus exponent to the block int 
-       // mpz_add (blockInt, blockInt, modulusExpInt);
+       mpz_add (blockInt, blockInt, modremainder);
 
        printf("modulus exponent %d\n",  modexponent);
        gmp_printf("modulus exponent %Zd", modulusExpInt);
@@ -163,6 +171,35 @@ class modscan
            lineNum++;
        }
 
+    }
+
+    // converts 2 ^ exp to the modulus floor ^ exp
+    void convertFloorBase2(mpz_t modfloor, mpz_t modint) {
+        mpz_t mfloor;
+        mpz_t zero;
+        // mpz_t modremainder;
+
+        mpz_init_set_str(mfloor, "0", 10);
+        mpz_init_set_str(zero, "0", 10);
+        mpz_init_set_str(modremainder, "0", 10);
+
+        // mpz_add (modremainder, modremainder, modfloor);
+        mpz_add (mfloor, mfloor, modfloor);
+        mpz_mod (modremainder, modfloor, modint);
+        int cmp = mpz_cmp(modremainder,zero);
+
+        if (cmp == 0) {
+          // modremainder = modremainder.Set(mfloor)
+          mpz_set(modremainder, mfloor);
+        } else {
+          mpz_sub(modremainder, modremainder, modfloor);
+
+        }
+
+        mpz_clear(mfloor);
+        mpz_clear(zero);
+        // clear(modremainder)
+ 
     }
 
     unsigned char* getModscanByteBlock()
