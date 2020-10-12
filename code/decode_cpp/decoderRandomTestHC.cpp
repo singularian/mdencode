@@ -223,8 +223,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 
      cout << "Random byteblock " << " ";
      for (int f = 0; f < blocksize; f++) {
-         //std::cout << bal[f] << ' ';
-         // printf("%d ",byteblock[f]);
+          //std::cout << byteblock[f] << ' ';
           printf("%02X", byteblock[f]);
      }
      cout << endl;
@@ -240,17 +239,16 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 
      cout << "Modulus Size   " << modsize << endl;
 
-     std::cout << "Modulus int 2 ^ " << modsize << " = ";
+     cout << "Modulus int 2 ^ " << modsize << " = ";
      gmp_printf("%Zd", modint);
-     // cout << result;
      cout << '\n';
 
      std::cout << "Modulus remainder =  ";
      gmp_printf("%Zd", remainder);
      cout << endl;
 
-     std::cout << "Modulus two exponent  =  " << exponent << endl;
-     std::cout << "Modulus exponent  =  " << expmod << endl;
+     cout << "Modulus two exponent  =  " << exponent << endl;
+     cout << "Modulus exponent  =  " << expmod << endl;
 
      cout << "Block SHA1 ";
      for (int n = 0; n < 20; n++)
