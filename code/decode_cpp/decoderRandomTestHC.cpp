@@ -219,38 +219,47 @@ int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
 // displays the modulus scan information
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize ) {
 
-     cout << "Block Size " << blocksize << endl;
+     cout << "Block Size               " << blocksize << endl;
 
-     cout << "Random byteblock " << " ";
+     cout << "Random byteblock         ";
      for (int f = 0; f < blocksize; f++) {
           //std::cout << byteblock[f] << ' ';
           printf("%02X", byteblock[f]);
      }
      cout << endl;
 
-     cout << "Random byteblock " << " ";
+     cout << "Random byteblock         ";
+     for (int f = 0; f < blocksize; f++) {
+          //std::cout << byteblock[f] << ' ';
+          printf("%02X ", byteblock[f]);
+     }
+     cout << endl;
+
+
+     cout << "Random byteblock         ";
      for (int f = 0; f < blocksize; f++) {
           printf("%0d ",byteblock[f]);
      }
 
-     cout << endl <<"Random byteblock bigint ";
+     cout << endl;
+     cout << "Random byteblock bigint  ";
      mpz_out_str(stdout, 10, blockint);
      cout<<endl;
 
-     cout << "Modulus Size   " << modsize << endl;
+     cout << "Modulus Size             " << modsize << endl;
 
-     cout << "Modulus int 2 ^ " << modsize << " = ";
+     cout << "Modulus                  ";
      gmp_printf("%Zd", modint);
      cout << '\n';
 
-     std::cout << "Modulus remainder =  ";
+     cout << "Modulus remainder        ";
      gmp_printf("%Zd", remainder);
      cout << endl;
 
-     cout << "Modulus two exponent  =  " << exponent << endl;
-     cout << "Modulus exponent  =  " << expmod << endl;
+     cout << "Modulus two exponent     " << exponent << endl;
+     cout << "Modulus exponent         " << expmod << endl;
 
-     cout << "Block SHA1 ";
+     cout << "Block SHA1               ";
      for (int n = 0; n < 20; n++)
      printf("%02X", sha1[n]);
      printf("\n");
