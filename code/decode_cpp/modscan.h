@@ -6,7 +6,7 @@ using namespace std;
 class modscan 
 { 
     private:
-       uint8_t sha1[40];
+       uint8_t sha1[41];
        unsigned char *byteblock; 
     public: 
        string filename; 
@@ -37,8 +37,11 @@ class modscan
     {
        std::cout << "Destroying modscan" << endl;
        mpz_clears(remainder, modulusInt, modulusExpInt, blockInt, NULL);
-       // delete []byteblock;
-       free (byteblock);
+       if (sizeof(byteblock) / sizeof(byteblock[0]) != 0) {
+           cout << "free byteblock" << endl;
+           delete []byteblock;
+       // free (byteblock);
+       }
     }
 
     void setModscan(mpz_t rem, mpz_t modint, int exp, int modexp, int blocks, uint8_t *sha1block) {
@@ -56,14 +59,14 @@ class modscan
         gmp_printf("modulus int remainder %Zd\n", remainder);
         gmp_printf("starting block int %Zd\n", blockInt);
 
-        // byteblock = new unsigned char[blocksize];
-        byteblock = (unsigned char *) malloc(blocksize);
+        byteblock = new unsigned char[blocksize+1];
+        // byteblock = (unsigned char *) malloc(blocksize);
         memcpy(sha1,sha1block, sizeof(sha1) / sizeof(sha1[0]));
 
-        cout << "sha1 ";
-        for (int n = 0; n < 20; n++)
-             printf("%02x", sha1[n]);
-        printf("\n");
+        //cout << "sha1 ";
+        //for (int n = 0; n < 20; n++)
+        //     printf("%02x", sha1[n]);
+        //printf("\n");
 
     }
  

@@ -9,7 +9,7 @@
 
 using namespace std;
 
-uint8_t sha1[20];
+uint8_t sha1[40];
 
 int genSHA1(unsigned char *byteblock, int blocksize);
 unsigned char *genRandomByteBlock(size_t num_bytes);
@@ -45,8 +45,8 @@ int main (int argc, char **argv) {
 
      mpz_init_set_str(remainder, "0", 10);
      mpz_init_set_str(modulusInt, "1", 10);
-     // mpz_init_set_str(byteblockInt, "0", 10);
-     mpz_init(byteblockInt);
+     mpz_init_set_str(byteblockInt, "0", 10);
+     // mpz_init(byteblockInt);
      // mpz_init_set_str(byteblockInt, "202809938793831860407111198", 10);
      // mpz_init_set_str(byteblockInt, "168873676072691430781078090", 2);
 
@@ -58,7 +58,7 @@ int main (int argc, char **argv) {
 
      // export the gmp bigint
      // void * mpz_export (void *rop, size_t *countp, int order, size_t size, int endian, size_t nails, const mpz_t op)
-     unsigned char test [11];
+     /* unsigned char test [11]; // need to make sure this is the size of the byte block
      size_t count;
      printf("test export\n");
      mpz_export(test, &count, 0, sizeof(byteblock[0]), 0, 0, byteblockInt);
@@ -66,6 +66,7 @@ int main (int argc, char **argv) {
            printf("%d ", byteblock[i]);
      }
      printf("\n");
+     */
 
      // calculate the modulus 2 ^ modsize 
      mpz_ui_pow_ui (modulusInt, 2, modsize);
@@ -98,6 +99,7 @@ int main (int argc, char **argv) {
      // ms.printname();
      ms.decode();
 
+
      unsigned char *modbyteblock;
      modbyteblock = ms.getModscanByteBlock();
      if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
@@ -115,12 +117,13 @@ int main (int argc, char **argv) {
     
      }
 
+
      /* free used memory */
      free (byteblock);
-     //mpz_clear(remainder);
-     //mpz_clear(modulusInt);
-     //mpz_clear(byteblockInt);
-     mpz_clears(remainder, modulusInt, byteblockInt, NULL);
+     mpz_clear(remainder);
+     mpz_clear(modulusInt);
+     mpz_clear(byteblockInt);
+     // mpz_clears(remainder, modulusInt, byteblockInt, NULL);
 
 
 
@@ -213,7 +216,9 @@ int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
 // displays the modulus scan information
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize ) {
 
-     cout << "Random array " << blocksize << " ";
+     cout << "Block Size " << blocksize << endl;
+
+     cout << "Random array " << " ";
      for (int f = 0; f < blocksize; f++) {
          //std::cout << bal[f] << ' ';
          // printf("%d ",byteblock[f]);
