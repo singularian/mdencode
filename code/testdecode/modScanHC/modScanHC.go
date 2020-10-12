@@ -160,7 +160,10 @@ func (md *DecodeData) RunDecode(c chan string) {
 
 	_, buffer := md.decode()
 	if bytestring == buffer {
-		md.Println("Random bytestring and modulusscan bytestring match ", bytestring, " ", buffer, " hex bytes ", bytestringhex )
+		md.Println("Random bytestring and modulusscan bytestring match ")
+                md.Println(bytestring)
+                md.Println(buffer)
+                md.Println("Hex bytes ", bytestringhex )
 		s := "thread " + fmt.Sprint(md.threadNumber) + " random bytestring and modulusscan bytestring match " + bytestring + " = " + buffer
 		c <- s
 	}
