@@ -138,14 +138,14 @@ class modscan
                for (n = 0; n < blocksize; n++) {
                     printf("%02X", byteblock[n]);
                }
-               printf("\n");
+               printf("\nBytes ");
                for (n = 0; n < blocksize; n++) {
                     printf("%02d ", byteblock[n]); 
                }
-               printf("\n");
+               printf("\nSHA1 ");
                for (n = 0; n < 20; n++)
                     printf("%02X", results[n]);
-               printf("\n");
+               printf("\n\n");
                break;
            } else {
               if (lineNum > 10000000) {
