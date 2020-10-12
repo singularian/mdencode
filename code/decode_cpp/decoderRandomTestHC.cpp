@@ -217,12 +217,13 @@ int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize ) {
 
      cout << "Block Size " << blocksize << endl;
+     cout << "Mod   Size " << modsize << endl;
 
      cout << "Random array " << " ";
      for (int f = 0; f < blocksize; f++) {
          //std::cout << bal[f] << ' ';
          // printf("%d ",byteblock[f]);
-          printf("%X", byteblock[f]);
+          printf("%0X", byteblock[f]);
      }
      cout << endl;
 
