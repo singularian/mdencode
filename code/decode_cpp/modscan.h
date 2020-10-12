@@ -43,7 +43,7 @@ class modscan
        mpz_clears(two, modremainder, remainder, modulusInt, modulusExpInt, blockInt, NULL);
 
        if (sizeof(byteblock) / sizeof(byteblock[0]) != 0) {
-           cout << "free byteblock" << endl;
+           cout << "Free byteblock" << endl;
            delete []byteblock;
        // free (byteblock);
        }
