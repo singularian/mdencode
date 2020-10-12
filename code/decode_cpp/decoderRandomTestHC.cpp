@@ -157,6 +157,7 @@ unsigned char *genRandomByteBlock(size_t num_bytes) {
     return stream;
 }
 
+// returns a predefined test byteblock
 unsigned char *setByteBlock(size_t num_bytes) {
     unsigned char *stream;
     // stream = (unsigned char *) malloc(num_bytes);
