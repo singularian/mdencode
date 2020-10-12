@@ -19,7 +19,13 @@ int calcExponentModulus (mpz_t modulus, mpz_t blockint);
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize );
 void usage();
 
-// This is a GMP modscan test program 
+/* 
+   This is a C++ GMP modscan test program 
+   MDencode GMP requires the GMP Library to build https://gmplib.org/
+   It runs with one process and is not currently multithreaded.
+   This program uses one signature SHA1 to bootstrap the testing.
+   In the future it will use a C++ Hash Context list with more than one signature
+*/
 int main (int argc, char **argv) {
 
      size_t blocksize = 12;
@@ -37,6 +43,8 @@ int main (int argc, char **argv) {
      // generate a random n byte byteblock
      unsigned char *byteblock;
      byteblock = genRandomByteBlock(blocksize);
+
+     // set a predefined byte block for testing
      // byteblock = setByteBlock(blocksize);
        
 
@@ -45,14 +53,13 @@ int main (int argc, char **argv) {
      mpz_init_set_str(remainder, "0", 10);
      mpz_init_set_str(modulusInt, "1", 10);
      mpz_init_set_str(byteblockInt, "0", 10);
-     // mpz_init(byteblockInt);
-     // mpz_init_set_str(byteblockInt, "202809938793831860407111198", 10);
      // mpz_init_set_str(byteblockInt, "168873676072691430781078090", 2);
 
      // create the byteblock bigint
      // void mpz_import (mpz_t rop, size_t count, int order, size_t size, int endian, size_t nails, const void *op) 
      // order very important
      // within each word endian can be 1 for most significant byte first, -1 for least significant first, or 0 for the native endianness of the host CPU
+     // order has to match the modulus scan mpz_export
      mpz_import (byteblockInt, blocksize, 0, sizeof(byteblock[0]), 0, 0, byteblock);
 
      // export the gmp bigint
@@ -75,26 +82,26 @@ int main (int argc, char **argv) {
 
      // calculate the modulus exponent with two
      int exp = calcExponent(byteblockInt);
+
      // calculate the modulus exponent with the modulus
      int expmod = calcExponentModulus(modulusInt, byteblockInt);
 
-     // cout << "sha1 " <<  genSHA1(byteblock, blocksize) << endl;
+     // compute the SHA1 hash of the byteblock
+     // this currently uses one signature and not a hash context list
+     // others will be added in the future
      genSHA1(byteblock, blocksize);
 
      // display the current block stats
      displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize );
 
+     // initialize the modulus scan object
      modscan ms;
-     // ms.filename   = "filename";
-     // ms.modsize    = modsize;
-     // ms.exponent   = exp;
-     // ms.modulusInt = modulusInt;
-     // ms.remainder  = remainder;
      ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, sha1);
-     // ms.printname();
+
+     // run the modulus scan
      ms.decode();
 
-
+     // check the modulus scan results
      unsigned char *modbyteblock;
      modbyteblock = ms.getModscanByteBlock();
      if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
