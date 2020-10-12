@@ -111,8 +111,8 @@ int main (int argc, char **argv) {
           }
           printf("\n");
 
-          for (int i = 0; i < blocksize; i++) {
-               printf("%d ", modbyteblock[i]);
+          for (int j = 0; j < blocksize; j++) {
+               printf("%d ", modbyteblock[j]);
           }
           printf("\n");
      } else {
@@ -229,7 +229,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      }
      cout << endl;
 
-     cout << "Random byteblock " << blocksize << " ";
+     cout << "Random byteblock " << " ";
      for (int f = 0; f < blocksize; f++) {
           printf("%d ",byteblock[f]);
      }
@@ -254,7 +254,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 
      cout << "Block SHA1 ";
      for (int n = 0; n < 20; n++)
-     printf("%02x", sha1[n]);
+     printf("%02X", sha1[n]);
      printf("\n");
 
 }

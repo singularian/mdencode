@@ -64,7 +64,7 @@ class modscan
         gmp_printf("modulus int remainder %Zd\n", remainder);
         gmp_printf("starting block int %Zd\n", blockInt);
 */
-        byteblock = new unsigned char[blocksize+1];
+        byteblock = new unsigned char[blocksize];
         // byteblock = (unsigned char *) malloc(blocksize);
         memcpy(sha1,sha1block, sizeof(sha1) / sizeof(sha1[0]));
 
@@ -136,7 +136,7 @@ class modscan
            if (memcmp(results, sha1, 20) == 0) {
                printf("Found block ");
                for (n = 0; n < blocksize; n++) {
-                    printf("%02x", byteblock[n]);
+                    printf("%02X", byteblock[n]);
                }
                printf("\n");
                for (n = 0; n < blocksize; n++) {
@@ -144,7 +144,7 @@ class modscan
                }
                printf("\n");
                for (n = 0; n < 20; n++)
-                    printf("%02x", results[n]);
+                    printf("%02X", results[n]);
                printf("\n");
                break;
            } else {
