@@ -57,13 +57,13 @@ class modscan
         modexponent = modexp;
         blocksize   = blocks;
 
-        printf("modulus blocksize %d \n",  blocksize);
+/*        printf("modulus blocksize %d \n",  blocksize);
         printf("modulus exponent1 %d \n",  exponent);
         printf("modulus exponent2 %d \nmodulus int ",  modexponent);
         gmp_printf("modulus int %Zd\n", modulusInt);
         gmp_printf("modulus int remainder %Zd\n", remainder);
         gmp_printf("starting block int %Zd\n", blockInt);
-
+*/
         byteblock = new unsigned char[blocksize+1];
         // byteblock = (unsigned char *) malloc(blocksize);
         memcpy(sha1,sha1block, sizeof(sha1) / sizeof(sha1[0]));
@@ -82,7 +82,7 @@ class modscan
 
     void decode()
     {
-       std::cout << "Running decode modscan" << endl;
+       std::cout << endl << "Running decode modscan" << endl << endl;
 
        size_t count;
        int continueFlag = 0;
@@ -103,14 +103,14 @@ class modscan
        // add the modulus ^ modulus exponent to the block int 
        mpz_add (blockInt, blockInt, modremainder);
 
-       printf("modulus exponent %d\n",  modexponent);
+/*       printf("modulus exponent %d\n",  modexponent);
        gmp_printf("modulus exponent %Zd", modulusExpInt);
        cout << endl;
        gmp_printf("%Zd", modulusInt);
        cout << endl;
        gmp_printf("%Zd", blockInt);
        cout << endl;
-
+*/
        SHA1_CTX sha;
        uint8_t results[40]; 
        char *buf; 
