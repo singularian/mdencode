@@ -27,8 +27,10 @@ int main (int argc, char **argv) {
      if (argc < 3)  
      { 
          printf("MDencode GMP C++ Modulus Scan Test\n"); 
+         printf("MDencode GMP is not multithreaded currently\n"); 
+         printf("MDencode GMP requires the GMP Library to build https://gmplib.org/\n\n"); 
          printf("Parameters [byteblock size] [mod size]\n"); 
-         printf("Parameters 12 14\n"); 
+         printf("Parameters 12 64\n"); 
          return 0; 
      } 
 
