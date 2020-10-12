@@ -165,8 +165,6 @@ unsigned char *setByteBlock(size_t num_bytes) {
 
     int num [] = { 139, 176, 100, 82, 220, 198, 148, 121, 155, 202, 74 };
 
-	
-
     for (int f = 0; f < 11; f++) {
        stream[f] = num[f];
     }
@@ -223,7 +221,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 
      cout << "Random byteblock         ";
      for (int f = 0; f < blocksize; f++) {
-          //std::cout << byteblock[f] << ' ';
+          // cout << byteblock[f] << ' ';
           printf("%02X", byteblock[f]);
      }
      cout << endl;
@@ -244,13 +242,13 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      cout << endl;
      cout << "Random byteblock bigint  ";
      mpz_out_str(stdout, 10, blockint);
-     cout<<endl;
+     cout << endl;
 
      cout << "Modulus Size             " << modsize << endl;
 
      cout << "Modulus                  ";
      gmp_printf("%Zd", modint);
-     cout << '\n';
+     cout << endl;
 
      cout << "Modulus remainder        ";
      gmp_printf("%Zd", remainder);
@@ -262,7 +260,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      cout << "Block SHA1               ";
      for (int n = 0; n < 20; n++)
      printf("%02X", sha1[n]);
-     printf("\n");
+     cout << endl;
 
 }
 

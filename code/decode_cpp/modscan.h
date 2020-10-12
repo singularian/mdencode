@@ -177,19 +177,16 @@ class modscan
     void convertFloorBase2(mpz_t modfloor, mpz_t modint) {
         mpz_t mfloor;
         mpz_t zero;
-        // mpz_t modremainder;
 
         mpz_init_set_str(mfloor, "0", 10);
         mpz_init_set_str(zero, "0", 10);
         mpz_init_set_str(modremainder, "0", 10);
 
-        // mpz_add (modremainder, modremainder, modfloor);
         mpz_add (mfloor, mfloor, modfloor);
         mpz_mod (modremainder, modfloor, modint);
         int cmp = mpz_cmp(modremainder,zero);
 
         if (cmp == 0) {
-          // modremainder = modremainder.Set(mfloor)
           mpz_set(modremainder, mfloor);
         } else {
           mpz_sub(modremainder, modremainder, modfloor);
@@ -198,13 +195,12 @@ class modscan
 
         mpz_clear(mfloor);
         mpz_clear(zero);
-        // clear(modremainder)
  
     }
 
+    // get the mod scan byte block
     unsigned char* getModscanByteBlock()
     {
-
         return byteblock; 
     }
 
