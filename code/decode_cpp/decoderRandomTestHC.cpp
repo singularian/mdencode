@@ -98,7 +98,7 @@ int main (int argc, char **argv) {
      unsigned char *modbyteblock;
      modbyteblock = ms.getModscanByteBlock();
      if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
-         cout << "Modulus Scan and Random byteblock match" << endl;
+          cout << "Modulus Scan and Random byteblock match" << endl;
           for (int i = 0; i < blocksize; i++) {
                printf("%d ", byteblock[i]);
           }
@@ -108,8 +108,8 @@ int main (int argc, char **argv) {
                printf("%d ", modbyteblock[i]);
           }
           printf("\n");
-
-    
+     } else {
+          cout << "Modulus Scan and Random byteblock don't match" << endl;
      }
 
 
