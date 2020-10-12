@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <iostream>
+#include <ctime>
 #include <gmp.h>
 #include <time.h> 
 #include "modscan.h"
@@ -216,6 +217,14 @@ int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
 
 // displays the modulus scan information
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize ) {
+
+     // current date/time based on current system
+     time_t now = time(0);
+   
+     // convert now to string form
+     char* dt = ctime(&now);
+
+     cout << "Time                     " << dt;
 
      cout << "Block Size               " << blocksize << endl;
 
