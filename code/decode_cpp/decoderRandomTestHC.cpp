@@ -17,6 +17,7 @@ unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize );
+void usage();
 
 // This is a GMP modscan test program 
 int main (int argc, char **argv) {
@@ -26,11 +27,7 @@ int main (int argc, char **argv) {
 
      if (argc < 3)  
      { 
-         printf("MDencode GMP C++ Modulus Scan Test\n"); 
-         printf("MDencode GMP is not multithreaded currently\n"); 
-         printf("MDencode GMP requires the GMP Library to build https://gmplib.org/\n\n"); 
-         printf("Parameters [byteblock size] [mod size]\n"); 
-         printf("Parameters 12 64\n"); 
+         usage();
          return 0; 
      } 
 
@@ -252,4 +249,13 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      printf("%02x", sha1[n]);
      printf("\n");
 
+}
+
+// display the usage
+void usage() {
+     printf("MDencode GMP C++ Modulus Scan Test\n");
+     printf("MDencode GMP is not currently multithreaded and only runs in one process\n");
+     printf("MDencode GMP requires the GMP Library to build https://gmplib.org/\n\n");
+     printf("Parameters [byteblock size] [mod size]\n");
+     printf("Parameters 12 64\n");
 }
