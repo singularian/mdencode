@@ -238,14 +238,14 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      cout << "Random byteblock         ";
      for (int f = 0; f < blocksize; f++) {
           //std::cout << byteblock[f] << ' ';
-          printf("%02X ", byteblock[f]);
+          printf("%02X   ", byteblock[f]);
      }
      cout << endl;
 
 
      cout << "Random byteblock         ";
      for (int f = 0; f < blocksize; f++) {
-          printf("%0d ",byteblock[f]);
+          printf("%-3d  ",byteblock[f]);
      }
 
      cout << endl;
