@@ -108,6 +108,7 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	//   blocksize bytes
 	//   modsize bits
 	//   thread size of goroutines
+	var b int
 	var blockSizeInt int64
 	var modSizeInt int64
 	var threadCount int64
@@ -206,8 +207,19 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	fmt.Println("Running Decode \n")
 	fmt.Println("Start Time       ", now)
 	fmt.Println("Block Size       ", blockSizeInt)
-	fmt.Printf( "Block Bytes       % X\n", bytes)
 	fmt.Printf( "Block Bytes       %X\n", bytes)
+	fmt.Printf( "Block Bytes hex   ")
+	for b = 0; b < len(bytes); b++ {
+                fmt.Printf("%02X   ", bytes[b])
+        } 
+        fmt.Println("")
+
+	fmt.Printf( "Block Bytes int   ")
+	for b = 0; b < len(bytes); b++ {
+		fmt.Printf("%-3d  ", bytes[b])
+	} 
+	fmt.Println("")
+
 	fmt.Println("Input Hashlist   ", blocklist)
 	fmt.Println("Hashlist         ", blockHlist)
 	fmt.Println("Hashlist Size    ", len(blockHlist))
