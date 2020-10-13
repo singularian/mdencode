@@ -210,13 +210,13 @@ func (fd *FlagData) mddecode(blocksize string, modsize string, blocklist string,
 	fmt.Printf( "Block Bytes       %X\n", bytes)
 	fmt.Printf( "Block Bytes Hex   ")
 	for b = 0; b < len(bytes); b++ {
-                fmt.Printf("%02X   ", bytes[b])
+                fmt.Printf("%02X  ", bytes[b])
         } 
         fmt.Println("")
 
 	fmt.Printf( "Block Bytes Int   ")
 	for b = 0; b < len(bytes); b++ {
-		fmt.Printf("%-3d  ", bytes[b])
+		fmt.Printf("%-3d ", bytes[b])
 	} 
 	fmt.Println("")
 
