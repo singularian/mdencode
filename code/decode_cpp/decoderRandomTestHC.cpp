@@ -224,7 +224,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      // convert now to string form
      char* dt = ctime(&now);
 
-     cout << "Time                     " << dt;
+     cout << "Start Time               " << dt;
 
      cout << "Block Size               " << blocksize << endl;
 
