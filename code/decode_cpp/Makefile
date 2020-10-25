@@ -10,7 +10,7 @@ LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X githu
 
 all:
 	g++ sha1.c decoderRandomTestHC.cpp -o decoderRandomTestHC_gmp -lgmp
-	g++ sha1.c decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lgmp
+	g++ sha1.c decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lgmp -std=c++11 -pthread
 test:
 	g++ test_gmp2.cpp -o test_gmp2 -lgmp -lgmpxx
 # 	g++ sha1.c test_gmp3.cpp -o test_gmp3 -lgmp -lgmpxx

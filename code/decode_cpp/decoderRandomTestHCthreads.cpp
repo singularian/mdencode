@@ -1,3 +1,4 @@
+#include <functional>
 #include <stdlib.h>
 #include <iostream>
 #include <ctime>
@@ -103,14 +104,44 @@ int main (int argc, char **argv) {
      mdMutex mutex;
 
      // initialize the modulus scan object
-     modscan ms;
-     ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
+     // modscan ms;
+     // ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
+     // ms.decode();
 
+     modscan* mst = new modscan[threadcount];
+     for(int i = 0; i < threadcount; ++i) {
+         // ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
+         mst[i].setModscan(remainder, modulusInt, exp, expmod, blocksize, i, threadcount, sha1);
+     } 
+
+     // mst[0].decode();
+
+     // greet(mst[0]);
+     // std::thread(greet(mst[0]), modscan);   
+     try {
+       std::thread thread1(&modscan::decode, std::ref(mst[0]));
+       thread1.join(); 
+     } catch (const std::exception& e) {
+         cout << e.what();
+     } catch (const std::runtime_error& e) {
+         cout << e.what();
+     }  
+ 
      // run the modulus scan
-     ms.decode();
+     /* std::vector<std::thread> threads;
+     //////////////////for(int i = 0; i < threadcount; ++i){
 
+        // threads.push_back(std::thread(&modscan::decode, std::ref(mst[i])));
+
+     }
+     for(int i = 0; i < threads.size() ; i++)
+     {
+        // threads.at(i).join();
+        //// threads.at(i).detach();
+     } 
+*/
      // check the modulus scan results
-     unsigned char *modbyteblock;
+/*     unsigned char *modbyteblock;
      modbyteblock = ms.getModscanByteBlock();
      if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
           cout << "Modulus Scan and Random byteblock match" << endl;
@@ -126,7 +157,7 @@ int main (int argc, char **argv) {
      } else {
           cout << "Modulus Scan and Random byteblock don't match" << endl;
      }
-
+*/
 
      /* free used memory */
      free (byteblock);
