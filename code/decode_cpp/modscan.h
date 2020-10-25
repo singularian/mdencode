@@ -113,6 +113,7 @@ class modscan
        mpz_add (blockInt, blockInt, modulusThreadInt); 
           
        // multiply the modulusInt * threadcount
+       // the threadcount must be 1 or greater
        // mpz_mul_si (mpz_t rop, const mpz_t op1, long int op2)
        mpz_mul_si (modulusInt, modulusInt, threadcount);
 
