@@ -23,9 +23,8 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 void usage();
 
 /* 
-   This is a C++ GMP modscan test program 
+   This is a C++ GMP modulus scan multithreaded test program 
    MDencode GMP requires the GMP Library to build https://gmplib.org/
-   This is the multithreaded test program for a C++ modulus scan.
    This program uses one signature SHA1 to bootstrap the testing.
    In the future it will use a C++ Hash Context list with more than one signature
 */
@@ -91,11 +90,6 @@ int main (int argc, char **argv) {
      //  initialize the mutex object
      mdMutex mutex;
 
-     // initialize the modulus scan object
-     // modscan ms;
-     // ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
-     // ms.decode();
-
      // initialize the modulus scan array
      // this currently only runs with one thread
      modscan* mst = new modscan[threadcount];
@@ -104,17 +98,6 @@ int main (int argc, char **argv) {
          mst[tnum].setModscan(remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex, sha1);
      } 
 
-     // mst[0].decode();
-
-/*     try {
-       std::thread thread1(&modscan::decode, std::ref(mst[0]));
-       thread1.join(); 
-     } catch (const std::exception& e) {
-         cout << e.what();
-     } catch (const std::runtime_error& e) {
-         cout << e.what();
-     }  
-*/ 
      // initialize the modulus scan threads vector
      std::vector<std::thread> threads;
      for(int tnum = 0; tnum < threadcount; tnum++){
