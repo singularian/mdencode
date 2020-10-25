@@ -25,7 +25,7 @@ void usage();
 /* 
    This is a C++ GMP modscan test program 
    MDencode GMP requires the GMP Library to build https://gmplib.org/
-   It runs with one process and is not currently multithreaded.
+   This is the multithreaded test program for a C++ modulus scan.
    This program uses one signature SHA1 to bootstrap the testing.
    In the future it will use a C++ Hash Context list with more than one signature
 */
@@ -127,7 +127,6 @@ int main (int argc, char **argv) {
         // threads.at(i).join();
         threads.at(tnum).detach();
      } 
-     //*/
 
      // need to change this to three states
      // found     = 0
@@ -313,8 +312,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 
 // display the usage
 void usage() {
-     printf("MDencode GMP C++ Modulus Scan Test\n");
-     printf("MDencode GMP is not currently multithreaded and only runs in one process\n");
+     printf("MDencode GMP C++ Threaded Modulus Scan Test\n");
      printf("MDencode GMP requires the GMP Library to build https://gmplib.org/\n\n");
      printf("Parameters [byteblock size] [mod size] [threadsize]\n");
      printf("Parameters 12 64 16\n");

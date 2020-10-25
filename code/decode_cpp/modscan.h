@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-// #include "mdMutex.h"
 #include "sha1.h"
 
 using namespace std;
