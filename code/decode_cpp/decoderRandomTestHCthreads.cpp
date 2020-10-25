@@ -99,9 +99,9 @@ int main (int argc, char **argv) {
      // initialize the modulus scan array
      // this currently only runs with one thread
      modscan* mst = new modscan[threadcount];
-     for(int i = 0; i < threadcount; ++i) {
+     for(int tnum = 0; tnum < threadcount; tnum++) {
          // ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
-         mst[i].setModscan(remainder, modulusInt, exp, expmod, blocksize, i, threadcount, sha1);
+         mst[tnum].setModscan(remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, sha1);
      } 
 
      // mst[0].decode();
