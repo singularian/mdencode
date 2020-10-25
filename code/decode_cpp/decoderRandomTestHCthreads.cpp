@@ -68,18 +68,6 @@ int main (int argc, char **argv) {
      // order has to match the modulus scan mpz_export
      mpz_import (byteblockInt, blocksize, 0, sizeof(byteblock[0]), 0, 0, byteblock);
 
-     // export the gmp bigint
-     // void * mpz_export (void *rop, size_t *countp, int order, size_t size, int endian, size_t nails, const mpz_t op)
-     /* unsigned char test [11]; // need to make sure this is the size of the byte block
-     size_t count;
-     printf("test export\n");
-     mpz_export(test, &count, 0, sizeof(byteblock[0]), 0, 0, byteblockInt);
-     for (int i = 0; i < blocksize; i++) {
-           printf("%d ", byteblock[i]);
-     }
-     printf("\n");
-     */
-
      // calculate the modulus 2 ^ modsize 
      mpz_ui_pow_ui (modulusInt, 2, modsize);
 
@@ -108,6 +96,8 @@ int main (int argc, char **argv) {
      // ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
      // ms.decode();
 
+     // initialize the modulus scan array
+     // this currently only runs with one thread
      modscan* mst = new modscan[threadcount];
      for(int i = 0; i < threadcount; ++i) {
          // ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
@@ -116,8 +106,6 @@ int main (int argc, char **argv) {
 
      // mst[0].decode();
 
-     // greet(mst[0]);
-     // std::thread(greet(mst[0]), modscan);   
      try {
        std::thread thread1(&modscan::decode, std::ref(mst[0]));
        thread1.join(); 
@@ -127,19 +115,23 @@ int main (int argc, char **argv) {
          cout << e.what();
      }  
  
-     // run the modulus scan
+     // initialize the modulus scan threads vector
      /* std::vector<std::thread> threads;
      //////////////////for(int i = 0; i < threadcount; ++i){
 
         // threads.push_back(std::thread(&modscan::decode, std::ref(mst[i])));
 
      }
+
+     // execute the threads
      for(int i = 0; i < threads.size() ; i++)
      {
         // threads.at(i).join();
         //// threads.at(i).detach();
      } 
-*/
+     */
+
+
      // check the modulus scan results
 /*     unsigned char *modbyteblock;
      modbyteblock = ms.getModscanByteBlock();
