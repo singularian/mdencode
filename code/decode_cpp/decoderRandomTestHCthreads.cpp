@@ -101,12 +101,12 @@ int main (int argc, char **argv) {
      modscan* mst = new modscan[threadcount];
      for(int tnum = 0; tnum < threadcount; tnum++) {
          // ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
-         mst[tnum].setModscan(remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, sha1);
+         mst[tnum].setModscan(remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex, sha1);
      } 
 
      // mst[0].decode();
 
-     try {
+/*     try {
        std::thread thread1(&modscan::decode, std::ref(mst[0]));
        thread1.join(); 
      } catch (const std::exception& e) {
@@ -114,29 +114,38 @@ int main (int argc, char **argv) {
      } catch (const std::runtime_error& e) {
          cout << e.what();
      }  
- 
+*/ 
      // initialize the modulus scan threads vector
-     /* std::vector<std::thread> threads;
-     //////////////////for(int i = 0; i < threadcount; ++i){
-
-        // threads.push_back(std::thread(&modscan::decode, std::ref(mst[i])));
-
+     std::vector<std::thread> threads;
+     for(int tnum = 0; tnum < threadcount; tnum++){
+        threads.push_back(std::thread(&modscan::decode, std::ref(mst[tnum])));
      }
 
      // execute the threads
-     for(int i = 0; i < threads.size() ; i++)
+     for(int tnum = 0; tnum < threads.size(); tnum++)
      {
         // threads.at(i).join();
-        //// threads.at(i).detach();
+        threads.at(tnum).detach();
      } 
-     */
+     //*/
+
+     // need to change this to three states
+     // found     = 0
+     // not found = 1
+     // found     = 2
+     while (mutex.getIsMatched() == false) {
+
+     }
+
+     int threadMatchNumber = mutex.getMatchThread(); 
 
 
      // check the modulus scan results
-/*     unsigned char *modbyteblock;
-     modbyteblock = ms.getModscanByteBlock();
+     unsigned char *modbyteblock;
+     // modbyteblock = ms.getModscanByteBlock();
+     modbyteblock = mst[threadMatchNumber].getModscanByteBlock();
      if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
-          cout << "Modulus Scan and Random byteblock match" << endl;
+          cout << "Modulus Scan thread " << threadMatchNumber << " and Random byteblock match" << endl;
           for (int i = 0; i < blocksize; i++) {
                printf("%d ", byteblock[i]);
           }
@@ -149,7 +158,6 @@ int main (int argc, char **argv) {
      } else {
           cout << "Modulus Scan and Random byteblock don't match" << endl;
      }
-*/
 
      /* free used memory */
      free (byteblock);

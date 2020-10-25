@@ -40,15 +40,17 @@ public:
     }
 
     // set matched
-    void setMatched() 
+    void setMatched(int thread) 
     {
         mutex.lock();
         isMatched = true;
+        lastThread = thread;
         matchCount++;
         mutex.unlock();
     }
 
     
+    int  getMatchThread() {     return lastThread; }
     int  getNotFound()    {     return notFound; }
     bool getIsMatched()   {     return isMatched; }
 };

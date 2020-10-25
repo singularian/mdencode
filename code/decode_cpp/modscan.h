@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+// #include "mdMutex.h"
 #include "sha1.h"
 
 using namespace std;
@@ -8,6 +9,7 @@ class modscan
     private:
        uint8_t sha1[41];
        unsigned char *byteblock; 
+       mdMutex* mutexref;
     public: 
        string filename; 
        int exponent;
@@ -16,6 +18,7 @@ class modscan
        int blocksize;
        int threadnumber;
        int threadcount;
+       bool isMatched;
        mpz_t two;
        mpz_t modremainder;
        mpz_t remainder;
@@ -27,6 +30,7 @@ class modscan
     // Default constructor
     modscan() 
     {
+       this->isMatched = false;
        // mpz_init_set_str(remainder,  "0", 10);
        // mpz_init_set_str(modulusInt, "0", 10);
        mpz_init_set_str(two, "2", 10); // exponent floor
@@ -50,15 +54,19 @@ class modscan
        }
     }
 
-    void setModscan(mpz_t rem, mpz_t modint, int exp, int modexp, int blocks, int threadnum, int threadcnt, uint8_t *sha1block) {
+    void setModscan(mpz_t rem, mpz_t modint, int exp, int modexp, int blocks, int threadnum, int threadcnt, mdMutex *mdmutex, uint8_t *sha1block) {
+
         mpz_add (remainder, remainder, rem);
         mpz_add (modulusInt, modulusInt, modint);
         mpz_add (blockInt, blockInt, remainder);
+
+        mutexref     = mdmutex;
         exponent     = exp;
         modexponent  = modexp;
         blocksize    = blocks;
         threadnumber = threadnum;
         threadcount  = threadcnt;
+        
 
 /*        printf("modulus blocksize %d \n",  blocksize);
         printf("modulus exponent1 %d \n",  exponent);
@@ -160,6 +168,9 @@ class modscan
                for (n = 0; n < 20; n++)
                     printf("%02X", results[n]);
                printf("\n\n");
+
+               this->isMatched = true;
+               mutexref->mdMutex::setMatched(threadnumber);
                break;
            } else {
               if (lineNum > 10000000) {

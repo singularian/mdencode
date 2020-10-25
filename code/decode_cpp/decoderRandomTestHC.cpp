@@ -103,7 +103,7 @@ int main (int argc, char **argv) {
 
      // initialize the modulus scan object
      modscan ms;
-     ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
+     ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, &mutex, sha1);
 
      // run the modulus scan
      ms.decode();
