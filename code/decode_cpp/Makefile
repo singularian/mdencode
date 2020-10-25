@@ -19,6 +19,6 @@ test:
 	g++ thread.cpp -o test_thread -pthread
 	g++ test_thread2.cpp -o test_thread2 -pthread
 clean:
-	rm -r decoderRandomTestHC_gmp test_gmp2 test_endian test_thread
+	rm -r decoderRandomTestHC_gmp decoderRandomTestHCthreads_gmp test_gmp2 test_endian test_thread
 list:
 	echo "all test clean"
