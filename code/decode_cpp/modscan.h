@@ -20,6 +20,7 @@ class modscan
        mpz_t modremainder;
        mpz_t remainder;
        mpz_t modulusInt; 
+       mpz_t modulusThreadInt; 
        mpz_t modulusExpInt; 
        mpz_t blockInt; 
  
@@ -32,7 +33,7 @@ class modscan
        mpz_init_set_str(modremainder, "0", 10); // exponent floor
        mpz_init_set_str(blockInt, "0", 10);
        // mpz_inits(remainder, modulusInt, modulusExpInt, blockInt, NULL);
-       mpz_inits(remainder, modulusInt, modulusExpInt, NULL);
+       mpz_inits(remainder, modulusInt, modulusThreadInt, modulusExpInt, NULL);
        // mpz_init2 (blockInt, blocksize * 8); // For padding
     }
 
@@ -40,7 +41,7 @@ class modscan
     ~modscan()
     {
        std::cout << "Destroying modscan" << endl;
-       mpz_clears(two, modremainder, remainder, modulusInt, modulusExpInt, blockInt, NULL);
+       mpz_clears(two, modremainder, remainder, modulusInt, modulusThreadInt, modulusExpInt, blockInt, NULL);
 
        if (sizeof(byteblock) / sizeof(byteblock[0]) != 0) {
            cout << "Free byteblock" << endl;
@@ -49,13 +50,15 @@ class modscan
        }
     }
 
-    void setModscan(mpz_t rem, mpz_t modint, int exp, int modexp, int blocks, uint8_t *sha1block) {
+    void setModscan(mpz_t rem, mpz_t modint, int exp, int modexp, int blocks, int threadnum, int threadcnt, uint8_t *sha1block) {
         mpz_add (remainder, remainder, rem);
         mpz_add (modulusInt, modulusInt, modint);
         mpz_add (blockInt, blockInt, remainder);
-        exponent    = exp;
-        modexponent = modexp;
-        blocksize   = blocks;
+        exponent     = exp;
+        modexponent  = modexp;
+        blocksize    = blocks;
+        threadnumber = threadnum;
+        threadcount  = threadcnt;
 
 /*        printf("modulus blocksize %d \n",  blocksize);
         printf("modulus exponent1 %d \n",  exponent);
@@ -102,6 +105,16 @@ class modscan
 
        // add the modulus ^ modulus exponent to the block int 
        mpz_add (blockInt, blockInt, modremainder);
+
+       // add the modulusInt * threadnum
+       mpz_add_ui (modulusThreadInt, modulusThreadInt, threadnumber);
+       mpz_mul (modulusThreadInt, modulusThreadInt, modulusInt);
+       gmp_printf("modulus threadint %Zd\n", modulusThreadInt);
+       mpz_add (blockInt, blockInt, modulusThreadInt); 
+          
+       // multiply the modulusInt * threadcount
+       // mpz_mul_si (mpz_t rop, const mpz_t op1, long int op2)
+       mpz_mul_si (modulusInt, modulusInt, threadcount);
 
 /*       printf("modulus exponent %d\n",  modexponent);
        gmp_printf("modulus exponent %Zd", modulusExpInt);

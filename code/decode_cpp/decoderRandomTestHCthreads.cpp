@@ -35,14 +35,15 @@ int main (int argc, char **argv) {
      int threadnumber = 0;
      int threadcount  = 1;
 
-     if (argc < 3)  
+     if (argc < 4)  
      { 
          usage();
          return 0; 
      } 
 
-     blocksize = atoi(argv[1]);
-     modsize   = atoi(argv[2]); 
+     blocksize   = atoi(argv[1]);
+     modsize     = atoi(argv[2]); 
+     threadcount = atoi(argv[3]); 
 
      // generate a random n byte byteblock
      unsigned char *byteblock;
@@ -284,6 +285,6 @@ void usage() {
      printf("MDencode GMP C++ Modulus Scan Test\n");
      printf("MDencode GMP is not currently multithreaded and only runs in one process\n");
      printf("MDencode GMP requires the GMP Library to build https://gmplib.org/\n\n");
-     printf("Parameters [byteblock size] [mod size]\n");
-     printf("Parameters 12 64\n");
+     printf("Parameters [byteblock size] [mod size] [threadsize]\n");
+     printf("Parameters 12 64 16\n");
 }
