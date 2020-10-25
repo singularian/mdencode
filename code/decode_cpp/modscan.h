@@ -116,7 +116,7 @@ class modscan
        // add the modulusInt * threadnum
        mpz_add_ui (modulusThreadInt, modulusThreadInt, threadnumber);
        mpz_mul (modulusThreadInt, modulusThreadInt, modulusInt);
-       gmp_printf("modulus threadint %Zd\n", modulusThreadInt);
+       gmp_printf("\nmodulus threadint %Zd\n", modulusThreadInt);
        mpz_add (blockInt, blockInt, modulusThreadInt); 
           
        // multiply the modulusInt * threadcount
