@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-// #include "sha1.h"
 #include <openssl/sha.h>
 
 using namespace std;
@@ -133,14 +132,9 @@ class modscan
        gmp_printf("%Zd", blockInt);
        cout << endl;
 */
-uint8_t results[40];
-int n;
-/*       SHA1_CTX sha;
-       uint8_t results[40]; 
-       char *buf; 
+       uint8_t results[40];
        int n;
-       SHA1Init(&sha);
-*/
+
        while (continueFlag == 0)
        {
            // for (int i = 0; i < blocksize; i++) byteblock[i] = 0;
@@ -150,11 +144,7 @@ int n;
            // order has to match the import
            mpz_export(byteblock, &count, 0, sizeof(byteblock[0]), 0, 0, blockInt); 
 
-           // it has to initialize the sha1Init each time so it resets the context
-           // instead of updating it
-           //SHA1Init(&sha);
-           //SHA1Update(&sha, (uint8_t *)byteblock, blocksize); 
-           //SHA1Final(results, &sha);
+           // execute the openssl SHA1 hash on the byteblock 
            SHA1((uint8_t *)byteblock, blocksize, results);
            
            // if (strcmp((char *) results, (char *) sha1) == 0) {

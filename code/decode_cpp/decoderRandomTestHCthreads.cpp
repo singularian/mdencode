@@ -5,7 +5,6 @@
 #include <time.h> 
 #include "mdMutex.h"
 #include "modscan.h"
-// #include "sha1.h"
 #include <openssl/sha.h>
 #include "string.h"
 #include "stdio.h"
@@ -154,12 +153,8 @@ int main (int argc, char **argv) {
 }
 
 // calculate test signature
+// use the openssl SHA1 signature generator on the byteblock
 int genSHA1(unsigned char *byteblock, int blocksize) {
-       ////////SHA1_CTX sha; 
-       // uint8_t results[20]; 
-       ///SHA1Init(&sha);
-       //SHA1Update(&sha, (uint8_t *)byteblock, blocksize);
-       ///SHA1Final(sha1, &sha);
 
        SHA1(byteblock, blocksize, sha1);
 
@@ -299,6 +294,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 void usage() {
      printf("MDencode GMP C++ Threaded Modulus Scan Test\n");
      printf("MDencode GMP requires the GMP Library to build https://gmplib.org/\n\n");
+     printf("MDencode GMP also requires the OpenSSL Library\n\n");
      printf("Parameters [byteblock size] [mod size] [threadsize]\n");
      printf("Parameters 12 64 16\n");
 }
