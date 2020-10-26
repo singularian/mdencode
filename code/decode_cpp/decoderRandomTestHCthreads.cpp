@@ -5,7 +5,8 @@
 #include <time.h> 
 #include "mdMutex.h"
 #include "modscan.h"
-#include "sha1.h"
+// #include "sha1.h"
+#include <openssl/sha.h>
 #include "string.h"
 #include "stdio.h"
 
@@ -154,11 +155,13 @@ int main (int argc, char **argv) {
 
 // calculate test signature
 int genSHA1(unsigned char *byteblock, int blocksize) {
-       SHA1_CTX sha; 
+       ////////SHA1_CTX sha; 
        // uint8_t results[20]; 
-       SHA1Init(&sha);
-       SHA1Update(&sha, (uint8_t *)byteblock, blocksize);
-       SHA1Final(sha1, &sha);
+       ///SHA1Init(&sha);
+       //SHA1Update(&sha, (uint8_t *)byteblock, blocksize);
+       ///SHA1Final(sha1, &sha);
+
+       SHA1(byteblock, blocksize, sha1);
 
        return 0;
 }

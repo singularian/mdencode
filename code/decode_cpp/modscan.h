@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
-#include "sha1.h"
+// #include "sha1.h"
+#include <openssl/sha.h>
 
 using namespace std;
 
@@ -132,12 +133,14 @@ class modscan
        gmp_printf("%Zd", blockInt);
        cout << endl;
 */
-       SHA1_CTX sha;
+uint8_t results[40];
+int n;
+/*       SHA1_CTX sha;
        uint8_t results[40]; 
        char *buf; 
        int n;
        SHA1Init(&sha);
-
+*/
        while (continueFlag == 0)
        {
            // for (int i = 0; i < blocksize; i++) byteblock[i] = 0;
@@ -149,9 +152,10 @@ class modscan
 
            // it has to initialize the sha1Init each time so it resets the context
            // instead of updating it
-           SHA1Init(&sha);
-           SHA1Update(&sha, (uint8_t *)byteblock, blocksize); 
-           SHA1Final(results, &sha);
+           //SHA1Init(&sha);
+           //SHA1Update(&sha, (uint8_t *)byteblock, blocksize); 
+           //SHA1Final(results, &sha);
+           SHA1((uint8_t *)byteblock, blocksize, results);
            
            // if (strcmp((char *) results, (char *) sha1) == 0) {
            if (memcmp(results, sha1, 20) == 0) {
