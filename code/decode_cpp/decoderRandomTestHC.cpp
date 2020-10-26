@@ -5,7 +5,7 @@
 #include <time.h> 
 #include "mdMutex.h"
 #include "modscan.h"
-#include "sha1.h"
+#include <openssl/sha.h>
 #include "string.h"
 #include "stdio.h"
 
@@ -22,9 +22,8 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 void usage();
 
 /* 
-   This is a C++ GMP modscan test program 
+   This is a C++ GMP modulus scan multithreaded test program 
    MDencode GMP requires the GMP Library to build https://gmplib.org/
-   This program only runs with one process thread.
    This program uses one signature SHA1 to bootstrap the testing.
    In the future it will use a C++ Hash Context list with more than one signature
 */
@@ -35,14 +34,15 @@ int main (int argc, char **argv) {
      int threadnumber = 0;
      int threadcount  = 1;
 
-     if (argc < 3)  
+     if (argc < 4)  
      { 
          usage();
          return 0; 
      } 
 
-     blocksize = atoi(argv[1]);
-     modsize   = atoi(argv[2]); 
+     blocksize   = atoi(argv[1]);
+     modsize     = atoi(argv[2]); 
+     threadcount = atoi(argv[3]); 
 
      // generate a random n byte byteblock
      unsigned char *byteblock;
@@ -65,18 +65,6 @@ int main (int argc, char **argv) {
      // within each word endian can be 1 for most significant byte first, -1 for least significant first, or 0 for the native endianness of the host CPU
      // order has to match the modulus scan mpz_export
      mpz_import (byteblockInt, blocksize, 0, sizeof(byteblock[0]), 0, 0, byteblock);
-
-     // export the gmp bigint
-     // void * mpz_export (void *rop, size_t *countp, int order, size_t size, int endian, size_t nails, const mpz_t op)
-     /* unsigned char test [11]; // need to make sure this is the size of the byte block
-     size_t count;
-     printf("test export\n");
-     mpz_export(test, &count, 0, sizeof(byteblock[0]), 0, 0, byteblockInt);
-     for (int i = 0; i < blocksize; i++) {
-           printf("%d ", byteblock[i]);
-     }
-     printf("\n");
-     */
 
      // calculate the modulus 2 ^ modsize 
      mpz_ui_pow_ui (modulusInt, 2, modsize);
@@ -101,18 +89,44 @@ int main (int argc, char **argv) {
      //  initialize the mutex object
      mdMutex mutex;
 
-     // initialize the modulus scan object
-     modscan ms;
-     ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, &mutex, sha1);
+     // initialize the modulus scan array
+     // this currently only runs with one thread
+     modscan* mst = new modscan[threadcount];
+     for(int tnum = 0; tnum < threadcount; tnum++) {
+         // ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
+         mst[tnum].setModscan(remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex, sha1);
+     } 
 
-     // run the modulus scan
-     ms.decode();
+     // initialize the modulus scan threads vector
+     std::vector<std::thread> threads;
+     for(int tnum = 0; tnum < threadcount; tnum++){
+        threads.push_back(std::thread(&modscan::decode, std::ref(mst[tnum])));
+     }
+
+     // execute the threads
+     for(int tnum = 0; tnum < threads.size(); tnum++)
+     {
+        // threads.at(i).join();
+        threads.at(tnum).detach();
+     } 
+
+     // need to change this to three states
+     // found     = 0
+     // not found = 1
+     // found     = 2
+     while (mutex.getIsMatched() == false) {
+
+     }
+
+     int threadMatchNumber = mutex.getMatchThread(); 
+
 
      // check the modulus scan results
      unsigned char *modbyteblock;
-     modbyteblock = ms.getModscanByteBlock();
+     // modbyteblock = ms.getModscanByteBlock();
+     modbyteblock = mst[threadMatchNumber].getModscanByteBlock();
      if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
-          cout << "Modulus Scan and Random byteblock match" << endl;
+          cout << "Modulus Scan thread " << threadMatchNumber << " and Random byteblock match" << endl;
           for (int i = 0; i < blocksize; i++) {
                printf("%d ", byteblock[i]);
           }
@@ -125,7 +139,6 @@ int main (int argc, char **argv) {
      } else {
           cout << "Modulus Scan and Random byteblock don't match" << endl;
      }
-
 
      /* free used memory */
      free (byteblock);
@@ -140,12 +153,10 @@ int main (int argc, char **argv) {
 }
 
 // calculate test signature
+// use the openssl SHA1 signature generator on the byteblock
 int genSHA1(unsigned char *byteblock, int blocksize) {
-       SHA1_CTX sha; 
-       // uint8_t results[20]; 
-       SHA1Init(&sha);
-       SHA1Update(&sha, (uint8_t *)byteblock, blocksize);
-       SHA1Final(sha1, &sha);
+
+       SHA1(byteblock, blocksize, sha1);
 
        return 0;
 }
@@ -281,9 +292,9 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 
 // display the usage
 void usage() {
-     printf("MDencode GMP C++ Unthreaded Modulus Scan Test\n");
-     printf("MDencode GMP runs in one thread process\n");
+     printf("MDencode GMP C++ Threaded Modulus Scan Test\n");
      printf("MDencode GMP requires the GMP Library to build https://gmplib.org/\n\n");
-     printf("Parameters [byteblock size] [mod size]\n");
-     printf("Parameters 12 64\n");
+     printf("MDencode GMP also requires the OpenSSL Library\n\n");
+     printf("Parameters [byteblock size] [mod size] [threadsize]\n");
+     printf("Parameters 12 64 16\n");
 }
