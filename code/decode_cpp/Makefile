@@ -10,12 +10,13 @@ LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X githu
 
 # decoderRandomTestHCthreads.cpp requires the lib gmp and openssl
 all:
+	g++ decoderRandomTestHC.cpp -o decoderRandomTestHC -lssl -lcrypto -lgmp -std=c++11 -pthread
 	g++ decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lssl -lcrypto -lgmp -std=c++11 -pthread
 test:
 	g++ test_gmp2.cpp -o test_gmp2 -lgmp -lgmpxx
 	g++ test_sha1.c -lssl -lcrypto -o test_sha1
 	g++ testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
 clean:
-	rm -r decoderRandomTestHCthreads_gmp test_gmp2 test_sha1 testargs
+	rm -r decoderRandomTestHC decoderRandomTestHCthreads_gmp test_gmp2 test_sha1 testargs
 list:
 	echo "all test clean"
