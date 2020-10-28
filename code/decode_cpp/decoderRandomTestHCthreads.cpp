@@ -37,12 +37,6 @@ int main (int argc, char **argv) {
      int threadnumber = 0;
      int threadcount  = 1;
 
-     if (argc < 2)  
-     { 
-         usage();
-         return 0; 
-     } 
-
      CLI::App app{"MDEncode GMP C++ Test Program"};
      app.add_option("-b,--block", blocksize, "Blocksize number")->check(CLI::Number);
      app.add_option("-m,--mod", modsize, "Modulus size number")->check(CLI::Number);
@@ -62,6 +56,15 @@ int main (int argc, char **argv) {
         return app.exit(e);
      }
 
+     // MDencode GMP requires the GMP Library to build https://gmplib.org/
+     // MDencode GMP also requires the OpenSSL Library
+     if (argc < 2)
+     {
+         cout << app.help() << endl;
+         usage();
+         return 0;
+     }
+    
      unsigned char *byteblock;
      // generate a random n byte byteblock if the hexstring is empty
      if (hexstring.empty()) {
@@ -348,19 +351,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 
 // display the usage
 void usage() {
-std::string usageline = R"(MDencode GMP C++ Threaded Modulus Scan Test
-MDencode GMP requires the GMP Library to build https://gmplib.org/
-MDencode GMP also requires the OpenSSL Library
-
-Usage: ./decoderRandomTestHCthreads_gmp [OPTIONS]
-
-Options:
-  -h,--help                   Print this help message and exit
-  -b,--block UINT             Blocksize number
-  -m,--mod INT                Modulus size number
-  -t,--threads INT            Thread count number
-  -x,--hex TEXT               Hex Byteblock string
-
+std::string usageline = R"(
 Examples:
    ./decoderRandomTestHCthreads_gmp -b 12 -m 64 -t 16
    ./decoderRandomTestHCthreads_gmp --block=12 --mod=128 --threads=16
