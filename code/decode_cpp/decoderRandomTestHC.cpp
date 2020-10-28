@@ -17,6 +17,7 @@ uint8_t sha1[40];
 
 int genSHA1(unsigned char *byteblock, int blocksize);
 unsigned char *genRandomByteBlock(size_t num_bytes);
+unsigned char *convertHexToByteBlock(const std::string & source);
 unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
@@ -32,7 +33,6 @@ void usage();
 int main (int argc, char **argv) {
 
      size_t blocksize = 12;
-     int blocksize2   = 12;
      int modsize      = 64;
      int threadnumber = 0;
      int threadcount  = 1;
@@ -49,13 +49,10 @@ int main (int argc, char **argv) {
      app.add_option("-t,--threads", threadcount, "Thread count number")->check(CLI::Number);
      //app.add_option("-v,--version", version, "Version number");
 
-     //app.add_option("-b,--block", blocksize, "Blocksize number");
-
-     //app.add_option("-m,--mod", modsize, "Modulus size number");
-     //app.add_option("-t,--threads", threadcount, "Thread count number");
-
-
-     std::string hexstring = "00";
+     // I think the modulus scan is not handling the 0022FF or padding the zero correctly for zero byte blocks
+     // need to check the export
+     // std::string hexstring = "2200FF";
+     std::string hexstring; 
      // I think CLI11 uses -h for help so I can't use -h
      app.add_option("-x,--hex", hexstring, "Hex Byteblock string");
 
@@ -65,10 +62,16 @@ int main (int argc, char **argv) {
         return app.exit(e);
      }
 
-
-     // generate a random n byte byteblock
      unsigned char *byteblock;
-     byteblock = genRandomByteBlock(blocksize);
+     // generate a random n byte byteblock if the hexstring is empty
+     if (hexstring.empty()) {
+     // generate a random n byte byteblock
+        byteblock = genRandomByteBlock(blocksize);
+     // process the hex string into a byte block
+     } else {
+        byteblock = convertHexToByteBlock(hexstring);
+        blocksize = hexstring.length() / 2;
+     }
 
      // set a predefined byte block for testing
      // byteblock = setByteBlock(blocksize);
@@ -79,7 +82,6 @@ int main (int argc, char **argv) {
      mpz_init_set_str(remainder, "0", 10);
      mpz_init_set_str(modulusInt, "1", 10);
      mpz_init_set_str(byteblockInt, "0", 10);
-     // mpz_init_set_str(byteblockInt, "168873676072691430781078090", 2);
 
      // create the byteblock bigint
      // void mpz_import (mpz_t rop, size_t count, int order, size_t size, int endian, size_t nails, const void *op) 
@@ -108,7 +110,9 @@ int main (int argc, char **argv) {
      // display the current block stats
      displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount );
 
-     //  initialize the mutex object
+     // initialize the mutex object
+     // I should set a result variable and pass it into the mutex
+     // it result = 0 then the mutex can set it and stop the execution for the mod scan
      mdMutex mutex;
 
      // initialize the modulus scan array
@@ -136,6 +140,7 @@ int main (int argc, char **argv) {
      // found     = 0
      // not found = 1
      // found     = 2
+     // Maybe while (result == 0) {
      while (mutex.getIsMatched() == false) {
 
      }
@@ -195,6 +200,33 @@ unsigned char *genRandomByteBlock(size_t num_bytes) {
     }
 
     return stream;
+}
+
+// convert hex bytes to byte array
+// I don't think the modscan is currently handling 00FF33 or 0000FFFF7873 hex strings
+// need to check the GMP Export
+unsigned char *convertHexToByteBlock(const std::string & source) {
+
+    unsigned char *stream;
+    size_t num_bytes = (source.length() / 2);
+    stream = (unsigned char *) malloc(num_bytes * sizeof(unsigned char));
+
+    std::vector<unsigned char> bytes;
+
+
+    for (unsigned int i = 0; i < source.length(); i += 2) {
+      std::string byteString = source.substr(i, 2);
+      char byte = (char) strtol(byteString.c_str(), NULL, 16);
+      bytes.push_back(byte);
+    }
+
+    for (int f = 0; f < num_bytes; f++) {
+       stream[f] = bytes[f];
+    }
+
+
+    return stream;
+
 }
 
 // returns a predefined test byteblock

@@ -49,11 +49,6 @@ int main (int argc, char **argv) {
      app.add_option("-t,--threads", threadcount, "Thread count number")->check(CLI::Number);
      //app.add_option("-v,--version", version, "Version number");
 
-     //app.add_option("-b,--block", blocksize, "Blocksize number");
-
-     //app.add_option("-m,--mod", modsize, "Modulus size number");
-     //app.add_option("-t,--threads", threadcount, "Thread count number");
-
      // I think the modulus scan is not handling the 0022FF or padding the zero correctly for zero byte blocks
      // need to check the export
      // std::string hexstring = "2200FF";
@@ -87,7 +82,6 @@ int main (int argc, char **argv) {
      mpz_init_set_str(remainder, "0", 10);
      mpz_init_set_str(modulusInt, "1", 10);
      mpz_init_set_str(byteblockInt, "0", 10);
-     // mpz_init_set_str(byteblockInt, "168873676072691430781078090", 2);
 
      // create the byteblock bigint
      // void mpz_import (mpz_t rop, size_t count, int order, size_t size, int endian, size_t nails, const void *op) 
@@ -116,7 +110,9 @@ int main (int argc, char **argv) {
      // display the current block stats
      displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount );
 
-     //  initialize the mutex object
+     // initialize the mutex object
+     // I should set a result variable and pass it into the mutex
+     // it result = 0 then the mutex can set it and stop the execution for the mod scan
      mdMutex mutex;
 
      // initialize the modulus scan array
@@ -144,6 +140,7 @@ int main (int argc, char **argv) {
      // found     = 0
      // not found = 1
      // found     = 2
+     // Maybe while (result == 0) {
      while (mutex.getIsMatched() == false) {
 
      }
