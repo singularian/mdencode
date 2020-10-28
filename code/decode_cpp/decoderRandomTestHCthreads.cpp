@@ -20,7 +20,7 @@ unsigned char *genRandomByteBlock(size_t num_bytes);
 unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize );
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount );
 void usage();
 
 /* 
@@ -106,7 +106,7 @@ int main (int argc, char **argv) {
      genSHA1(byteblock, blocksize);
 
      // display the current block stats
-     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize );
+     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount );
 
      //  initialize the mutex object
      mdMutex mutex;
@@ -255,7 +255,7 @@ int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
 
 
 // displays the modulus scan information
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize ) {
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount ) {
 
      // current date/time based on current system
      time_t now = time(0);
@@ -310,6 +310,8 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      printf("%02X", sha1[n]);
      cout << endl;
 
+     cout << "Thread Count             " << threadcount << endl;
+
 }
 
 // display the usage
@@ -330,6 +332,7 @@ Options:
 
 Examples:
    ./decoderRandomTestHCthreads_gmp -b 12 -m 64 -t 16
+   ./decoderRandomTestHCthreads_gmp --block=12 --mod=128 --threads=16
 )";
 
      cout << usageline << endl; 

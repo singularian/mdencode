@@ -2,10 +2,12 @@
 #include <iostream>
 #include <ctime>
 #include <gmp.h>
-#include <time.h> 
+#include <time.h>
+#include <string>
+#include <openssl/sha.h>
+#include "CLI11.hpp" 
 #include "mdMutex.h"
 #include "modscan.h"
-#include <openssl/sha.h>
 #include "string.h"
 #include "stdio.h"
 
@@ -18,7 +20,7 @@ unsigned char *genRandomByteBlock(size_t num_bytes);
 unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize );
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount );
 void usage();
 
 /* 
@@ -30,19 +32,39 @@ void usage();
 int main (int argc, char **argv) {
 
      size_t blocksize = 12;
+     int blocksize2   = 12;
      int modsize      = 64;
      int threadnumber = 0;
      int threadcount  = 1;
 
-     if (argc < 4)  
+     if (argc < 2)  
      { 
          usage();
          return 0; 
      } 
 
-     blocksize   = atoi(argv[1]);
-     modsize     = atoi(argv[2]); 
-     threadcount = atoi(argv[3]); 
+     CLI::App app{"MDEncode GMP C++ Test Program"};
+     app.add_option("-b,--block", blocksize, "Blocksize number")->check(CLI::Number);
+     app.add_option("-m,--mod", modsize, "Modulus size number")->check(CLI::Number);
+     app.add_option("-t,--threads", threadcount, "Thread count number")->check(CLI::Number);
+     //app.add_option("-v,--version", version, "Version number");
+
+     //app.add_option("-b,--block", blocksize, "Blocksize number");
+
+     //app.add_option("-m,--mod", modsize, "Modulus size number");
+     //app.add_option("-t,--threads", threadcount, "Thread count number");
+
+
+     std::string hexstring = "00";
+     // I think it uses -h for help
+     app.add_option("-x", hexstring, "Hex Byteblock string");
+
+     try {
+        app.parse(argc, argv);
+     } catch(const CLI::ParseError &e) {
+        return app.exit(e);
+     }
+
 
      // generate a random n byte byteblock
      unsigned char *byteblock;
@@ -84,7 +106,7 @@ int main (int argc, char **argv) {
      genSHA1(byteblock, blocksize);
 
      // display the current block stats
-     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize );
+     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount );
 
      //  initialize the mutex object
      mdMutex mutex;
@@ -233,7 +255,7 @@ int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
 
 
 // displays the modulus scan information
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize ) {
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount ) {
 
      // current date/time based on current system
      time_t now = time(0);
@@ -288,6 +310,8 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      printf("%02X", sha1[n]);
      cout << endl;
 
+     cout << "Thread Count             " << threadcount << endl;
+
 }
 
 // display the usage
@@ -295,6 +319,21 @@ void usage() {
      printf("MDencode GMP C++ Threaded Modulus Scan Test\n");
      printf("MDencode GMP requires the GMP Library to build https://gmplib.org/\n\n");
      printf("MDencode GMP also requires the OpenSSL Library\n\n");
-     printf("Parameters [byteblock size] [mod size] [threadsize]\n");
-     printf("Parameters 12 64 16\n");
+
+     std::string usageline = R"(
+Usage: ./decoderRandomTestHCthreads_gmp [OPTIONS]
+
+Options:
+  -h,--help                   Print this help message and exit
+  -b,--block UINT             Blocksize number
+  -m,--mod INT                Modulus size number
+  -t,--threads INT            Thread count number
+  -x TEXT                     Hex Byteblock string
+
+Examples:
+   ./decoderRandomTestHCthreads_gmp -b 12 -m 64 -t 16
+   ./decoderRandomTestHCthreads_gmp --block=12 --mod=128 --threads=16
+)";
+
+     cout << usageline << endl; 
 }
