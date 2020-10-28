@@ -316,11 +316,10 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 
 // display the usage
 void usage() {
-     printf("MDencode GMP C++ Threaded Modulus Scan Test\n");
-     printf("MDencode GMP requires the GMP Library to build https://gmplib.org/\n\n");
-     printf("MDencode GMP also requires the OpenSSL Library\n\n");
+std::string usageline = R"(MDencode GMP C++ Threaded Modulus Scan Test
+MDencode GMP requires the GMP Library to build https://gmplib.org/
+MDencode GMP also requires the OpenSSL Library
 
-     std::string usageline = R"(
 Usage: ./decoderRandomTestHCthreads_gmp [OPTIONS]
 
 Options:
