@@ -16,6 +16,6 @@ test:
 	g++ test_sha1.c -lssl -lcrypto -o test_sha1
 	g++ testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
 clean:
-	rm -r decoderRandomTestHCthreads_gmp test_gmp2 test_sha1
+	rm -r decoderRandomTestHCthreads_gmp test_gmp2 test_sha1 testargs
 list:
 	echo "all test clean"

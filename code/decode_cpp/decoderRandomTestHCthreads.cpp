@@ -56,8 +56,8 @@ int main (int argc, char **argv) {
 
 
      std::string hexstring = "00";
-     // I think it uses -h for help
-     app.add_option("-x", hexstring, "Hex Byteblock string");
+     // I think CLI11 uses -h for help so I can't use -h
+     app.add_option("-x,--hex", hexstring, "Hex Byteblock string");
 
      try {
         app.parse(argc, argv);
@@ -327,7 +327,7 @@ Options:
   -b,--block UINT             Blocksize number
   -m,--mod INT                Modulus size number
   -t,--threads INT            Thread count number
-  -x TEXT                     Hex Byteblock string
+  -x,--hex TEXT               Hex Byteblock string
 
 Examples:
    ./decoderRandomTestHCthreads_gmp -b 12 -m 64 -t 16
