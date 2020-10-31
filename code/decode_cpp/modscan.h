@@ -175,11 +175,11 @@ class modscan
 
            if (count < blocksize) {
                diff = blocksize - count;
-               printf ("count less than blocksize %ld %d diff %d\n", count, blocksize, diff);
+               // printf ("count less than blocksize %ld %d diff %d\n", count, blocksize, diff);
                // for (n = 0; n < blocksize; n++) byteblock[0] = 0;
                for (n = (blocksize - diff); n >= 0; n--) byteblock[n+diff] = byteblock[n];
                for (n = 0; n < diff; n++) byteblock[n] = 0;
-               cout << "byteblock ";
+               /*cout << "byteblock ";
                for (n = 0; n < blocksize; n++) {
                     printf("%02X", byteblock[n]);
                }
@@ -188,9 +188,7 @@ class modscan
                   printf("%d ", byteblock[n]);
                  }
                  printf("\n");
-
-
-
+              */
            }
 
            
