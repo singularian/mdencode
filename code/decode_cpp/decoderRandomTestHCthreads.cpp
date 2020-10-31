@@ -123,7 +123,7 @@ int main (int argc, char **argv) {
      // the modscan has to match the byte order and endian paramters
      int byteorder = 1; // need to set this here and pass it into the modscan object so it matches and can be set once
      int endian    = 0; // need to set this here and pass it into the modscan object so it matches and can be set once
-     mpz_import (byteblockInt, blocksize, byteorder, sizeof(byteblock[0]), 0, 0, byteblock); // testing 
+     mpz_import (byteblockInt, blocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);  
      // mpz_import (byteblockInt, blocksize, 0, sizeof(byteblock[0]), 0, 0, byteblock); // doesn't work with 001111 I think there is a bug with the gmp export for native
      //// mpz_import (byteblockInt, blocksize, -1, sizeof(byteblock[0]), 0, 0, byteblock); // works with padding but slower changes the modulo too I think go uses Most Sig Bit
 
@@ -158,7 +158,7 @@ int main (int argc, char **argv) {
      modscan* mst = new modscan[threadcount];
      for(int tnum = 0; tnum < threadcount; tnum++) {
          // ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
-         mst[tnum].setModscan(&log, byteorder, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex, sha1);
+         mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex, sha1);
      } 
 
      // initialize the modulus scan threads vector

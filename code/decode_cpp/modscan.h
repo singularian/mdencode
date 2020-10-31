@@ -8,6 +8,7 @@ class modscan
     private:
        uint8_t sha1[41];
        int byteorder; 
+       int endian; 
        unsigned char *byteblock; 
        mdMutex* mutexref;
        mdMutexLog* log;
@@ -60,7 +61,7 @@ class modscan
        }
     }
 
-    void setModscan(mdMutexLog *mdmutexlog, int bytesorder, mpz_t rem, mpz_t modint, int exp, int modexp, int blocks, int threadnum, int threadcnt, mdMutex *mdmutex, uint8_t *sha1block) {
+    void setModscan(mdMutexLog *mdmutexlog, int bytesorder, int end, mpz_t rem, mpz_t modint, int exp, int modexp, int blocks, int threadnum, int threadcnt, mdMutex *mdmutex, uint8_t *sha1block) {
 
         log      = mdmutexlog;
         mpz_add (remainder, remainder, rem);
@@ -69,6 +70,7 @@ class modscan
 
         mutexref     = mdmutex;
         byteorder    = bytesorder;
+        endian       = end;
         exponent     = exp;
         modexponent  = modexp;
         blocksize    = blocks;
@@ -162,7 +164,7 @@ class modscan
        {
            // byte order and endian parameters must match the import byte block 
            // currently byte order msb and native endian
-           mpz_export(byteblock, &count, byteorder, sizeof(byteblock[0]), 0, 0, blockInt);
+           mpz_export(byteblock, &count, byteorder, sizeof(byteblock[0]), endian, 0, blockInt);
            // mpz_export(byteblock, &count, 0, sizeof(byteblock[0]), 0, 0, blockInt); // faster and compatable with the go version - I think go uses msb I padded the byte array
            // mpz_export(byteblock, &count, -1, sizeof(byteblock[0]), 0, 0, blockInt); // works with padding 00FFDD but slower 
 
