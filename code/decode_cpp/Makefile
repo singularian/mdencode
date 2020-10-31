@@ -13,8 +13,9 @@ test:
 	g++ tests/test_gmp2.cpp -o test_gmp2 -lgmp -lgmpxx
 	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
 	g++ tests/testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
+	g++ tests/testCSVSplit.cpp  -o testcsv -std=c++11
 #	g++ tests/example_logging_to_file.cpp -o testlog -std=c++11
 clean:
-	rm -r decoderRandomTestHC decoderRandomTestHCthreads_gmp test_gmp2 test_sha1 testargs
+	rm -r decoderRandomTestHC decoderRandomTestHCthreads_gmp test_gmp2 test_sha1 testargs testcsv *.log
 list:
 	echo "all test clean"

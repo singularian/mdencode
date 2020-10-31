@@ -107,14 +107,21 @@ int main (int argc, char **argv) {
 
      // create the byteblock bigint
      // void mpz_import (mpz_t rop, size_t count, int order, size_t size, int endian, size_t nails, const void *op) 
-     // order very important
-     // within each word endian can be 1 for most significant byte first, -1 for least significant first, or 0 for the native endianness of the host CPU
-     // order has to match the modulus scan mpz_export
-     // 1 for most significant byte first, 
-     // -1 for least significant first, 
-     // or 0 for the native endianness of the host CPU
-     // It should be least significant order first
+     // https://machinecognitis.github.io/Math.Gmp.Native/html/8c8c1e55-275f-cff8-2152-883a4eaa163c.htm
+     /*
+        public:
+        static void mpz_import(
+	mpz_t^ rop, 
+	size_t count, 
+	int order, 
+	size_t size, 
+	int endian, 
+	size_t nails, 
+	void_ptr op )
+     */
+     // the import is currently byteorder most significant and native endian 
      int byteorder = 1; // need to set this here and pass it into the modscan object so it matches and can be set once
+     int endian    = 0; // need to set this here and pass it into the modscan object so it matches and can be set once
      mpz_import (byteblockInt, blocksize, byteorder, sizeof(byteblock[0]), 0, 0, byteblock); // testing 
      // mpz_import (byteblockInt, blocksize, 0, sizeof(byteblock[0]), 0, 0, byteblock); // doesn't work with 001111 I think there is a bug with the gmp export for native
      //// mpz_import (byteblockInt, blocksize, -1, sizeof(byteblock[0]), 0, 0, byteblock); // works with padding but slower changes the modulo too I think go uses Most Sig Bit

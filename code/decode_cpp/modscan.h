@@ -160,38 +160,20 @@ class modscan
 
        while (continueFlag == 0)
        {
-           // for (int i = 0; i < blocksize; i++) byteblock[i] = 0;
-           // nails has to be zero for it to update
-           // mpz_export(byteblock, &count, -1, sizeof(byteblock[0]), 0, 0, blockInt); 
-           // mpz_export(byteblock, &count, 1, sizeof(byteblock[0]), 0, 0, blockInt); 
-           // order has to match the import
-           // I think it has to be -1 order to pad 00 00 11 11 byte blocks that start with a zero byte
-           // mpz_export(byteblock, &count, -1, sizeof(byteblock[0]), 0, 0, blockInt); 
-           // for (n = 0; n < blocksize; n++) byteblock[0] = 0;
-           // mpz_export(byteblock, &count, 1, sizeof(byteblock[0]), 0, 0, blockInt); 
-           mpz_export(byteblock, &count, byteorder, sizeof(byteblock[0]), 0, 0, blockInt);  // should be byteorder 1 and match the import
+           // byte order and endian parameters must match the import byte block 
+           // currently byte order msb and native endian
+           mpz_export(byteblock, &count, byteorder, sizeof(byteblock[0]), 0, 0, blockInt);
            // mpz_export(byteblock, &count, 0, sizeof(byteblock[0]), 0, 0, blockInt); // faster and compatable with the go version - I think go uses msb I padded the byte array
            // mpz_export(byteblock, &count, -1, sizeof(byteblock[0]), 0, 0, blockInt); // works with padding 00FFDD but slower 
 
+           // handle blocks that start with a zero byte
+           // pad 00 00 11 11 byte blocks
+           // convert 11110000 to 00001111
            if (count < blocksize) {
                diff = blocksize - count;
-               // printf ("count less than blocksize %ld %d diff %d\n", count, blocksize, diff);
-               // for (n = 0; n < blocksize; n++) byteblock[0] = 0;
                for (n = (blocksize - diff); n >= 0; n--) byteblock[n+diff] = byteblock[n];
                for (n = 0; n < diff; n++) byteblock[n] = 0;
-               /*cout << "byteblock ";
-               for (n = 0; n < blocksize; n++) {
-                    printf("%02X", byteblock[n]);
-               }
-               cout << endl;
-                 for (n = 0; n < 4; n++) {
-                  printf("%d ", byteblock[n]);
-                 }
-                 printf("\n");
-              */
            }
-
-           
 
            // execute the openssl SHA1 hash on the byteblock 
            SHA1((uint8_t *)byteblock, blocksize, results);
