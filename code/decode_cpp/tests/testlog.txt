@@ -1,4 +1,8 @@
-Tests between the go version and the C++ version
+Tests between the GO version and the C++ version
+
+===============================================================================================
+
+This is a ryzen 2700x running with 16 threads with the GO decoder. It takes 8 hours 17 minutes.
 
 ~/projects/src/github.com/singularian/mdencode/build$ time ./decoderRandomTestHC -block=12 -mod=64 -thread=16 -hex=E112C6E489F38DF372EEA26E50 -bh=56
 Running Decode
@@ -26,6 +30,9 @@ real    497m15.110s
 user    3936m28.922s
 sys     330m48.906s
 
+===============================================================================================
+
+This is a Ryzen 3950x running with 32 threads with the C++ decoder. It takes 59 minutes
 
 ~/projects/src/github.com/singularian/mdencode/code/decode_cpp$ time ./decoderRandomTestHCthreads_gmp --block=13 --mod=64 --threads=32 
 Start Time               Fri Oct 30 10:41:07 2020
