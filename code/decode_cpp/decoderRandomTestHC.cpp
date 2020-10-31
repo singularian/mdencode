@@ -57,10 +57,14 @@ int main (int argc, char **argv) {
 
      // add a hashlist parameter
      std::string hashlist;
-     app.add_option("-r,--bh", hashlist, "Block Hashlist string");
+     app.add_option("-r,--bh", hashlist, "Block Hashlist csv string");
 
+     std::vector<int> vals;
+     app.add_option("-v,--hl", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber);
+
+     // add a hash keylist parameter
      std::string keylist;
-     app.add_option("-k,--keylist", hashlist, "Keylist string");
+     app.add_option("-k,--keylist", hashlist, "Keylist csv string");
 
      // process the hex byte arguments
      std::string hexstring; 
@@ -328,7 +332,7 @@ void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {
         for(i=0;i<blocksize;i++)
         {
             if (ishex == false) {
-                printf("%d ",byteblock[i]);
+                printf("%d ",    byteblock[i]);
             } else {
                 printf("%02X  ", byteblock[i]);
             }
@@ -360,7 +364,11 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      cout << endl;
 
      cout << "Random Byteblock Hex     ";
-     printByteblock(byteblock, blocksize, true);
+     for (int f = 0; f < blocksize; f++) {
+          //std::cout << byteblock[f] << ' ';
+          printf("%02X  ", byteblock[f]);
+     }
+     cout << endl;
 
 
      cout << "Random Byteblock Int     ";
@@ -392,7 +400,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      cout << endl;
 
      cout << "Thread Count             " << threadcount << endl;
-
+     cout << endl;
 }
 
 // display the usage
@@ -404,6 +412,8 @@ Examples:
    ./decoderRandomTestHCthreads_gmp --block=12 --mod=128   --threads=16
    ./decoderRandomTestHCthreads_gmp --mod=128 --threads=16 --hex=0011
    ./decoderRandomTestHCthreads_gmp --mod=128 --threads=16 --hex=FFd033FF202020202011
+   ./decoderRandomTestHCthreads_gmp --mod=128 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
+   ./decoderRandomTestHCthreads_gmp --mod=128 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
 )";
 
      cout << usageline << endl; 

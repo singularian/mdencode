@@ -13,8 +13,11 @@ int main(int argc, char** argv)
 
     CLI::App app{"App description"};
 
-    std::string hashlist = "default";
-    app.add_option("-b,--bh", hashlist, "A help string");
+    std::string hashlist = "";
+    app.add_option("-b,--bh", hashlist, "Hashlist string");
+
+    std::vector<int> vals;
+    app.add_option("--vals,-v", vals)->expected(-1); 
 
     char sep = ',';
     // std::vector<std::string> hashlistmap;
@@ -28,9 +31,17 @@ int main(int argc, char** argv)
     std::regex re{"((?:[^\\\\,]|\\\\.)*?)(?:,|$)"};
     std::vector<std::string> m_vecFields {std::sregex_token_iterator(hashlist.begin(), hashlist.end(), re, 1), std::sregex_token_iterator()};
 
-    print(m_vecFields); 
+    std::cout << std::endl << "csv vector ";
+    // print(m_vecFields);
+    for(std::string v : m_vecFields)
+        std::cout << ": " << v << " "; 
  
     // print(hashlistmap);
+
+    std::cout << std::endl << "Prefix";
+    for(int v : vals)
+        std::cout << ": " << v << " ";
+    std::cout << std::endl;
 
     std::vector<std::string> input = { "a", "b", "c" };
     print(input); 
