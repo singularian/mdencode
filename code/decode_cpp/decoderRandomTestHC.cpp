@@ -55,6 +55,11 @@ int main (int argc, char **argv) {
      //app.add_option("-v,--version", version, "Version number");
 
      // add a hashlist parameter
+     std::string hashlist;
+     app.add_option("-r,--bh", hashlist, "Block Hashlist string");
+
+     std::string keylist;
+     app.add_option("-k,--keylist", hashlist, "Keylist string");
 
      // process the hex byte arguments
      std::string hexstring; 
