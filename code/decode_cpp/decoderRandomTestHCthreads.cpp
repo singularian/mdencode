@@ -155,10 +155,9 @@ int main (int argc, char **argv) {
      mdMutexLog log(runlogging);
 
      // initialize the modulus scan array
-     // this currently only runs with one thread
+     // this allows it to run mulithreaded 
      modscan* mst = new modscan[threadcount];
      for(int tnum = 0; tnum < threadcount; tnum++) {
-         // ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
          mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex, sha1);
      } 
 
