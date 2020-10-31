@@ -1,0 +1,51 @@
+Tests between the go version and the C++ version
+
+~/projects/src/github.com/singularian/mdencode/build$ time ./decoderRandomTestHC -block=12 -mod=64 -thread=16 -hex=E112C6E489F38DF372EEA26E50 -bh=56
+Running Decode
+
+Start Time        2020-10-30 11:57:19.8161427 -0400 EDT m=+0.000353301
+Block Size        13
+Block Bytes       E1 12 C6 E4 89 F3 8D F3 72 EE A2 6E 50
+Block Bytes       E112C6E489F38DF372EEA26E50
+Input Hashlist    56
+Hashlist          [sha1]
+Hashlist Size     1
+Thread Start      0
+Thread End        16
+Threads           16
+Mod Size          64
+Mod Exponent      103
+Mod Remainder     17549950997888134736
+
+Found Block [sha1 4dac32950223224e2cfa7ff94c35c6f40935127f] result = 4dac32950223224e2cfa7ff94c35c6f40935127f Found Block  [225 18 198 228 137 243 141 243 114 238 162 110 80]
+Total time  8h17m15.0656983s
+Random bytestring and modulusscan bytestring match  [225 18 198 228 137 243 141 243 114 238 162 110 80]   [225 18 198 228 137 243 141 243 114 238 162 110 80]  hex bytes  E112C6E489F38DF372EEA26E50
+Found block  thread 9 random bytestring and modulusscan bytestring match [225 18 198 228 137 243 141 243 114 238 162 110 80] = [225 18 198 228 137 243 141 243 114 238 162 110 80]
+
+real    497m15.110s
+user    3936m28.922s
+sys     330m48.906s
+
+
+~/projects/src/github.com/singularian/mdencode/code/decode_cpp$ time ./decoderRandomTestHCthreads_gmp --block=13 --mod=64 --threads=32 
+Start Time               Fri Oct 30 10:41:07 2020
+Block Size               13
+Random Byteblock         E112C6E489F38DF372EEA26E50
+Random Byteblock Hex     E1  12  C6  E4  89  F3  8D  F3  72  EE  A2  6E  50  
+Random Byteblock Int     225 18  198 228 137 243 141 243 114 238 162 110 80  
+Random Byteblock Bigint  17832147742442855849736232136272
+Modulus Size             64
+Modulus Bigint           18446744073709551616
+Modulus Remainder        17549950997888134736
+Modulus 2   ^ Exponent   103
+Modulus Mod ^ Exponent   1
+Block SHA1               4DAC32950223224E2CFA7FF94C35C6F40935127F
+Thread Count             32
+Modulus Scan thread 9 and Random byteblock match
+225 18 198 228 137 243 141 243 114 238 162 110 80 
+225 18 198 228 137 243 141 243 114 238 162 110 80 
+
+real	59m52.102s
+user	1850m24.806s
+sys	0m56.329s
+
