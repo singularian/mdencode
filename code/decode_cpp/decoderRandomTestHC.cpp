@@ -31,6 +31,7 @@ unsigned char *convertHexToByteBlock(const std::string & source);
 unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
+void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount );
 void usage();
 
@@ -196,17 +197,12 @@ int main (int argc, char **argv) {
      modbyteblock = mst[threadMatchNumber].getModscanByteBlock();
      if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
           cout << "Modulus Scan thread " << threadMatchNumber << " and Random byteblock match" << endl;
-          for (int i = 0; i < blocksize; i++) {
-               printf("%d ", byteblock[i]);
-          }
-          printf("\n");
-
-          for (int j = 0; j < blocksize; j++) {
-               printf("%d ", modbyteblock[j]);
-          }
-          printf("\n");
+          printByteblock(byteblock, blocksize, false);
+          printByteblock(modbyteblock, blocksize, false);
      } else {
           cout << "Modulus Scan and Random byteblock don't match" << endl;
+          printByteblock(byteblock, blocksize, false);
+          printByteblock(modbyteblock, blocksize, false);
      }
 
      /* free used memory */
@@ -326,6 +322,21 @@ int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
     return exponent;
 }
 
+void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {
+
+        int i;
+        for(i=0;i<blocksize;i++)
+        {
+            if (ishex == false) {
+                printf("%d ",byteblock[i]);
+            } else {
+                printf("%02X  ", byteblock[i]);
+            }
+        }
+
+        printf("\n");
+}
+
 
 // displays the modulus scan information
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount ) {
@@ -345,14 +356,11 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
           // cout << byteblock[f] << ' ';
           printf("%02X", byteblock[f]);
      }
+     // printByteblock(byteblock, blocksize, true);
      cout << endl;
 
      cout << "Random Byteblock Hex     ";
-     for (int f = 0; f < blocksize; f++) {
-          //std::cout << byteblock[f] << ' ';
-          printf("%02X  ", byteblock[f]);
-     }
-     cout << endl;
+     printByteblock(byteblock, blocksize, true);
 
 
      cout << "Random Byteblock Int     ";
