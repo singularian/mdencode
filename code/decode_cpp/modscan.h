@@ -7,8 +7,10 @@ class modscan
 { 
     private:
        uint8_t sha1[41];
+       int byteorder; 
        unsigned char *byteblock; 
        mdMutex* mutexref;
+       mdMutexLog* log;
     public: 
        string filename; 
        int exponent;
@@ -34,10 +36,15 @@ class modscan
        // mpz_init_set_str(modulusInt, "0", 10);
        mpz_init_set_str(two, "2", 10); // exponent floor
        mpz_init_set_str(modremainder, "0", 10); // exponent floor
-       mpz_init_set_str(blockInt, "0", 10);
+       mpz_init_set_str(modulusThreadInt, "0", 10); // exponent floor
+       mpz_init_set_ui(modulusThreadInt, (unsigned long) threadnumber); // exponent floor
+       // mpz_init_set_ui(modulusThreadInt, threadnumber); // exponent floor
        // mpz_inits(remainder, modulusInt, modulusExpInt, blockInt, NULL);
        mpz_inits(remainder, modulusInt, modulusThreadInt, modulusExpInt, NULL);
-       // mpz_init2 (blockInt, blocksize * 8); // For padding
+       // initialize the byte block bigint
+       // mpz_init_set_str(blockInt, "0", 10);
+       // mpz_init2 (blockInt, blocksize * 8); // For preallocating the size and padding
+       mpz_init_set_str(blockInt, "0", 10);
     }
 
     // Destructor
@@ -53,13 +60,15 @@ class modscan
        }
     }
 
-    void setModscan(mpz_t rem, mpz_t modint, int exp, int modexp, int blocks, int threadnum, int threadcnt, mdMutex *mdmutex, uint8_t *sha1block) {
+    void setModscan(mdMutexLog *mdmutexlog, int bytesorder, mpz_t rem, mpz_t modint, int exp, int modexp, int blocks, int threadnum, int threadcnt, mdMutex *mdmutex, uint8_t *sha1block) {
 
+        log      = mdmutexlog;
         mpz_add (remainder, remainder, rem);
         mpz_add (modulusInt, modulusInt, modint);
         mpz_add (blockInt, blockInt, remainder);
 
         mutexref     = mdmutex;
+        byteorder    = bytesorder;
         exponent     = exp;
         modexponent  = modexp;
         blocksize    = blocks;
@@ -92,11 +101,13 @@ class modscan
 
     void decode()
     {
-       std::cout << endl << "Running decode modscan" << endl << endl;
+       // std::cout << endl << "Running decode modscan" << endl << endl;
 
        size_t count;
        int continueFlag = 0;
        int lineNum = 0;
+       int lineCount = 100000000;
+       lineCount = lineCount + (1000000 * (threadnumber + 1));
 
        // need to change this to use the 2^exp 
        // calculate the modulus raised to the exponent
@@ -114,26 +125,38 @@ class modscan
        mpz_add (blockInt, blockInt, modremainder);
 
        // add the modulusInt * threadnum
-       mpz_add_ui (modulusThreadInt, modulusThreadInt, threadnumber);
+       // it expects the threadnumber argument to be an unsigned long int or it doesn't multiply correctly
+       mpz_add_ui (modulusThreadInt, modulusThreadInt, (unsigned long int) threadnumber);
+       //if (threadnumber == 2)
+       //gmp_printf("\n\n\n\n\n\nmodulus modulusthreadint before %d modulus threadint %Zd\n", threadnumber, modulusThreadInt);
        mpz_mul (modulusThreadInt, modulusThreadInt, modulusInt);
-       gmp_printf("\nmodulus threadint %Zd\n", modulusThreadInt);
+       
+       //if (threadnumber == 2)
+       //gmp_printf("\n\n\n\n\n\nmodulus threadint %d modulo %Zd after modulus thread int %Zd)\n", threadnumber, modulusInt, modulusThreadInt);
        mpz_add (blockInt, blockInt, modulusThreadInt); 
+
+       //if (threadnumber == 2)
+       //gmp_printf("\n\n\n\n\n\nmodulus threadnum %d modulusint %Zd modulusThreadInt %Zd blockInt %Zd\n\n\n\n", threadnumber, modulusInt, modulusThreadInt, blockInt);
           
        // multiply the modulusInt * threadcount
        // the threadcount must be 1 or greater
        // mpz_mul_si (mpz_t rop, const mpz_t op1, long int op2)
-       mpz_mul_si (modulusInt, modulusInt, threadcount);
+       mpz_mul_si (modulusInt, modulusInt, (long int) threadcount);
+       // gmp_printf("\n\n\n\n\n\nmodulus * threadcount %Zd\n", modulusInt);
 
 /*       printf("modulus exponent %d\n",  modexponent);
        gmp_printf("modulus exponent %Zd", modulusExpInt);
        cout << endl;
        gmp_printf("%Zd", modulusInt);
        cout << endl;
-       gmp_printf("%Zd", blockInt);
-       cout << endl;
 */
+       // need to check the initial floor for 0011 byte block
+       // gmp_printf("\nmodscan blockint modulus incrementer %Zd", blockInt);
+       // cout << endl;
+
        uint8_t results[40];
        int n;
+       int diff;
 
        while (continueFlag == 0)
        {
@@ -142,14 +165,42 @@ class modscan
            // mpz_export(byteblock, &count, -1, sizeof(byteblock[0]), 0, 0, blockInt); 
            // mpz_export(byteblock, &count, 1, sizeof(byteblock[0]), 0, 0, blockInt); 
            // order has to match the import
-           mpz_export(byteblock, &count, 0, sizeof(byteblock[0]), 0, 0, blockInt); 
+           // I think it has to be -1 order to pad 00 00 11 11 byte blocks that start with a zero byte
+           // mpz_export(byteblock, &count, -1, sizeof(byteblock[0]), 0, 0, blockInt); 
+           // for (n = 0; n < blocksize; n++) byteblock[0] = 0;
+           // mpz_export(byteblock, &count, 1, sizeof(byteblock[0]), 0, 0, blockInt); 
+           mpz_export(byteblock, &count, byteorder, sizeof(byteblock[0]), 0, 0, blockInt);  // should be byteorder 1 and match the import
+           // mpz_export(byteblock, &count, 0, sizeof(byteblock[0]), 0, 0, blockInt); // faster and compatable with the go version - I think go uses msb I padded the byte array
+           // mpz_export(byteblock, &count, -1, sizeof(byteblock[0]), 0, 0, blockInt); // works with padding 00FFDD but slower 
+
+           if (count < blocksize) {
+               diff = blocksize - count;
+               printf ("count less than blocksize %ld %d diff %d\n", count, blocksize, diff);
+               // for (n = 0; n < blocksize; n++) byteblock[0] = 0;
+               for (n = (blocksize - diff); n >= 0; n--) byteblock[n+diff] = byteblock[n];
+               for (n = 0; n < diff; n++) byteblock[n] = 0;
+               cout << "byteblock ";
+               for (n = 0; n < blocksize; n++) {
+                    printf("%02X", byteblock[n]);
+               }
+               cout << endl;
+                 for (n = 0; n < 4; n++) {
+                  printf("%d ", byteblock[n]);
+                 }
+                 printf("\n");
+
+
+
+           }
+
+           
 
            // execute the openssl SHA1 hash on the byteblock 
            SHA1((uint8_t *)byteblock, blocksize, results);
            
            // if (strcmp((char *) results, (char *) sha1) == 0) {
            if (memcmp(results, sha1, 20) == 0) {
-               printf("Found block ");
+/*               printf("\nFound block on thread %d ", threadnumber);
                for (n = 0; n < blocksize; n++) {
                     printf("%02X", byteblock[n]);
                }
@@ -161,13 +212,13 @@ class modscan
                for (n = 0; n < 20; n++)
                     printf("%02X", results[n]);
                printf("\n\n");
-
+*/
                this->isMatched = true;
                mutexref->mdMutex::setMatched(threadnumber);
                break;
            } else {
-              if (lineNum > 10000000) {
-              printf("Searching block ");
+              if (lineNum > lineCount) {
+          /*    printf("Searching block ");
               gmp_printf("%Zd", blockInt);
               printf(" byteblock ");
               for (n = 0; n < blocksize; n++) {
@@ -181,6 +232,11 @@ class modscan
                     printf("%02x", results[n]);
               printf("\n");
                  lineNum = 0;
+              }
+           */
+              // log.writeLogThread(threadnumber, (char *) str.c_str());
+              lineNum = 0;
+              log->mdMutexLog::writeLogThread(threadnumber, blockInt);
               }
            }
            

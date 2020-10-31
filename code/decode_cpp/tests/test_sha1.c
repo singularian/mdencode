@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <string.h>
+#include <string>
+#include <iostream>
+#include <ostream>
 #include <openssl/sha.h>
 
 // https://stackoverflow.com/questions/918676/generate-sha-hash-in-c-using-openssl-library

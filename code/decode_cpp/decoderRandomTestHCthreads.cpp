@@ -1,3 +1,12 @@
+/**
+ *
+ * https://github.com/singularian/mdencode
+ * 
+ * Project MDencode GMP C++ Modulus Scan Test Program
+ * 
+ * 
+ */
+
 #include <stdlib.h>
 #include <iostream>
 #include <ctime>
@@ -7,6 +16,7 @@
 #include <openssl/sha.h>
 #include "CLI11.hpp" 
 #include "mdMutex.h"
+#include "mdMutexLog.h"
 #include "modscan.h"
 #include "string.h"
 #include "stdio.h"
@@ -38,10 +48,12 @@ int main (int argc, char **argv) {
      int threadcount  = 1;
 
      CLI::App app{"MDEncode GMP C++ Test Program"};
-     app.add_option("-b,--block", blocksize, "Blocksize number")->check(CLI::Number);
-     app.add_option("-m,--mod", modsize, "Modulus size number")->check(CLI::Number);
-     app.add_option("-t,--threads", threadcount, "Thread count number")->check(CLI::Number);
+     app.add_option("-b,--block", blocksize, "Blocksize number")->check(CLI::PositiveNumber)->check(CLI::Range(0,100));;
+     app.add_option("-m,--mod", modsize, "Modulus size number")->check(CLI::PositiveNumber);
+     app.add_option("-t,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
      //app.add_option("-v,--version", version, "Version number");
+
+     // add a hashlist parameter
 
      // I think the modulus scan is not handling the 0022FF or padding the zero correctly for zero byte blocks
      // need to check the export
@@ -49,6 +61,9 @@ int main (int argc, char **argv) {
      std::string hexstring; 
      // I think CLI11 uses -h for help so I can't use -h
      app.add_option("-x,--hex", hexstring, "Hex Byteblock string");
+
+     bool runlogging = false;
+     app.add_option("-l,--log", runlogging, "Run Logging");
 
      try {
         app.parse(argc, argv);
@@ -91,7 +106,14 @@ int main (int argc, char **argv) {
      // order very important
      // within each word endian can be 1 for most significant byte first, -1 for least significant first, or 0 for the native endianness of the host CPU
      // order has to match the modulus scan mpz_export
-     mpz_import (byteblockInt, blocksize, 0, sizeof(byteblock[0]), 0, 0, byteblock);
+     // 1 for most significant byte first, 
+     // -1 for least significant first, 
+     // or 0 for the native endianness of the host CPU
+     // It should be least significant order first
+     int byteorder = 1; // need to set this here and pass it into the modscan object so it matches and can be set once
+     mpz_import (byteblockInt, blocksize, byteorder, sizeof(byteblock[0]), 0, 0, byteblock); // testing 
+     // mpz_import (byteblockInt, blocksize, 0, sizeof(byteblock[0]), 0, 0, byteblock); // doesn't work with 001111 I think there is a bug with the gmp export for native
+     //// mpz_import (byteblockInt, blocksize, -1, sizeof(byteblock[0]), 0, 0, byteblock); // works with padding but slower changes the modulo too I think go uses Most Sig Bit
 
      // calculate the modulus 2 ^ modsize 
      mpz_ui_pow_ui (modulusInt, 2, modsize);
@@ -117,13 +139,14 @@ int main (int argc, char **argv) {
      // I should set a result variable and pass it into the mutex
      // it result = 0 then the mutex can set it and stop the execution for the mod scan
      mdMutex mutex;
+     mdMutexLog log(runlogging);
 
      // initialize the modulus scan array
      // this currently only runs with one thread
      modscan* mst = new modscan[threadcount];
      for(int tnum = 0; tnum < threadcount; tnum++) {
          // ms.setModscan(remainder, modulusInt, exp, expmod, blocksize, threadnumber, threadcount, sha1);
-         mst[tnum].setModscan(remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex, sha1);
+         mst[tnum].setModscan(&log, byteorder, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex, sha1);
      } 
 
      // initialize the modulus scan threads vector
@@ -131,6 +154,10 @@ int main (int argc, char **argv) {
      for(int tnum = 0; tnum < threadcount; tnum++){
         threads.push_back(std::thread(&modscan::decode, std::ref(mst[tnum])));
      }
+
+
+     // std::cout << endl << "Running decode modscan" << endl << endl;
+     log.writeLog((char *) "Running decode modscan");
 
      // execute the threads
      for(int tnum = 0; tnum < threads.size(); tnum++)
@@ -206,8 +233,7 @@ unsigned char *genRandomByteBlock(size_t num_bytes) {
 }
 
 // convert hex bytes to byte array
-// I don't think the modscan is currently handling 00FF33 or 0000FFFF7873 hex strings
-// need to check the GMP Export
+// it should also check 00FF33 or 0000FFFF7873 hex strings
 unsigned char *convertHexToByteBlock(const std::string & source) {
 
     unsigned char *stream;
@@ -354,7 +380,10 @@ void usage() {
 std::string usageline = R"(
 Examples:
    ./decoderRandomTestHCthreads_gmp -b 12 -m 64 -t 16
-   ./decoderRandomTestHCthreads_gmp --block=12 --mod=128 --threads=16
+   ./decoderRandomTestHCthreads_gmp --block=12 --mod=64    --threads=16
+   ./decoderRandomTestHCthreads_gmp --block=12 --mod=128   --threads=16
+   ./decoderRandomTestHCthreads_gmp --mod=128 --threads=16 --hex=0011
+   ./decoderRandomTestHCthreads_gmp --mod=128 --threads=16 --hex=FFd033FF202020202011
 )";
 
      cout << usageline << endl; 
