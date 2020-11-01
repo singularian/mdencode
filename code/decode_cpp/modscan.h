@@ -160,6 +160,8 @@ class modscan
        int n;
        int diff;
 
+       // should add some initial logging here for the initial blockInt
+
        while (continueFlag == 0)
        {
            // byte order and endian parameters must match the import byte block 

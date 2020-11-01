@@ -32,7 +32,7 @@ unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount );
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, bool log );
 void usage();
 
 /* 
@@ -151,7 +151,7 @@ int main (int argc, char **argv) {
      genSHA1(byteblock, blocksize);
 
      // display the current block stats
-     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount );
+     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, runlogging );
 
      // initialize the mutex object
      // I should set a result variable and pass it into the mutex
@@ -343,7 +343,7 @@ void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {
 
 
 // displays the modulus scan information
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount ) {
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, bool log ) {
 
      // current date/time based on current system
      time_t now = time(0);
@@ -400,6 +400,8 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      cout << endl;
 
      cout << "Thread Count             " << threadcount << endl;
+
+     cout << "Logging                  " << boolalpha << log << endl;
      cout << endl;
 }
 
