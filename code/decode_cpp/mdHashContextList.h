@@ -31,7 +31,7 @@ private:
 public:
     std::string hash_name;
 
-    // initialize mdMutex
+    // initialize mdHashContextList
     mdHashContextList() {
     }
 
