@@ -14,6 +14,8 @@ test:
 	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
 	g++ tests/testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
 	g++ tests/testCSVSplit.cpp  -o testcsv -std=c++11
+	g++ tests/testSwitch.cpp  -o testswitch -std=c++11
+	g++ tests/testArray.cpp  -o testarray -std=c++11
 logtest:
 #	g++ -I. example_logging_to_file.cpp -o testlog -std=c++11
 #	g++  easylogging++.cc example_logging_to_file.cpp -o testlog -std=c++11

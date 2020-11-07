@@ -13,6 +13,8 @@
 #include <gmp.h>
 #include <time.h>
 #include <string>
+#include <vector>
+#include <algorithm> 
 #include <openssl/sha.h>
 #include "CLI11.hpp" 
 #include "mdMutex.h"
@@ -56,15 +58,20 @@ int main (int argc, char **argv) {
      //app.add_option("-v,--version", version, "Version number");
 
      // add a hashlist parameter
-     std::string hashlist;
-     app.add_option("-r,--bh", hashlist, "Block Hashlist csv string");
-
+     // std::string hashlist;
      std::vector<int> vals;
-     app.add_option("-v,--hl", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber);
+     std::vector<int> csvvals;
+     // std::vector<std::string> csvvals;
+     // app.add_option("-r,--bh", vals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber);
+     app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber);
+     // app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',');
+
+     // std::vector<int> vals;
+     app.add_option("-s,--hl", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber);
 
      // add a hash keylist parameter
      std::string keylist;
-     app.add_option("-k,--keylist", hashlist, "Keylist csv string");
+     app.add_option("-k,--keylist", keylist, "Keylist csv string");
 
      // process the hex byte arguments
      std::string hexstring; 
@@ -79,6 +86,20 @@ int main (int argc, char **argv) {
      } catch(const CLI::ParseError &e) {
         return app.exit(e);
      }
+
+     csvvals.insert(csvvals.end(), vals.begin(), vals.end());
+
+     // for(string v  : csvvals)
+/*     cout << endl << "csv vals1 ";
+     for(int v2  : csvvals)
+     std::cout << ": " << v2 << " ";
+     std::cout << std::endl;
+
+     cout << endl << "csv vals ";
+     for(int v  : vals)
+        std::cout << ": " << v << " ";
+     std::cout << std::endl;
+*/
 
      // MDencode GMP requires the GMP Library to build https://gmplib.org/
      // MDencode GMP also requires the OpenSSL Library

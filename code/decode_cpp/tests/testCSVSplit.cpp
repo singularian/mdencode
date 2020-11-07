@@ -17,11 +17,14 @@ int main(int argc, char** argv)
     app.add_option("-b,--bh", hashlist, "Hashlist string");
 
     std::vector<int> vals;
-    app.add_option("--vals,-v", vals)->expected(-1); 
+    app.add_option("-v,--vals", vals)->expected(-1); 
 
-    char sep = ',';
-    // std::vector<std::string> hashlistmap;
-    { std::vector<std::string> hashlistmap = csv_split(hashlist, sep); }
+    // takess a csv arg and converts it to an int vector
+    std::vector<int> csvvals;
+    app.add_option("-c,--csvi", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber);
+
+    std::vector<int> ivals;
+    app.add_option("-i,--hi", ivals, "Block Hashlist integers list")->check(CLI::PositiveNumber);
 
     CLI11_PARSE(app, argc, argv);
 
@@ -33,60 +36,17 @@ int main(int argc, char** argv)
 
     std::cout << std::endl << "csv vector ";
     // print(m_vecFields);
-    for(std::string v : m_vecFields)
+    // for(std::string v : m_vecFields)
+    for(int v : csvvals)
         std::cout << ": " << v << " "; 
  
-    // print(hashlistmap);
-
     std::cout << std::endl << "Prefix";
-    for(int v : vals)
-        std::cout << ": " << v << " ";
+    for(int v2 : ivals)
+        std::cout << ": " << v2 << " ";
     std::cout << std::endl;
 
-    std::vector<std::string> input = { "a", "b", "c" };
-    print(input); 
-    std::cout << std::endl;
+    
 
     return 0;
 }
-
-void print(std::vector<std::string> const &input)
-{
-	std::copy(input.begin(),
-			input.end(),
-			std::ostream_iterator<std::string>(std::cout, " "));
-}
-
-std::vector<std::string> csv_split(std::string source, char delimeter) {
-    std::vector<std::string> ret;
-    std::string word = "";
-    int start = 0;
-
-    bool inQuote = false;
-    for(int i=0; i<source.size(); ++i){
-        if(inQuote == false && source[i] == '"'){
-            inQuote = true;
-            continue;
-        }
-        if(inQuote == true && source[i] == '"'){
-            if(source.size() > i && source[i+1] == '"'){
-                ++i;
-            } else {
-                inQuote = false;
-                continue;
-            }
-        }
-
-        if(inQuote == false && source[i] == delimeter){
-            ret.push_back(word);
-            word = "";
-        } else {
-            word += source[i];
-        }
-    }
-    ret.push_back(word);
-
-    return ret;
-}
-
 
