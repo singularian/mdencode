@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <array>
+#include <openssl/sha.h>
 #include "../mdHashContextList.h"
 
 int main()

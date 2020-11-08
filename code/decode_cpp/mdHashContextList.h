@@ -34,7 +34,7 @@ private:
     uint8_t sha1o[41];
     uint64_t hw64i;
     uint64_t hw64o;
-    const uint64_t key[4] = {1, 2, 3, 4};
+    const uint64_t hw64key[4] = {1, 2, 3, 4};
 public:
     std::string hash_name;
 
@@ -93,18 +93,13 @@ public:
     // setHashList
     void setBlockHashList(unsigned char *byteblock, int blocksize) {
 
-          //std::pair<int,std::string> hashPair;
           for(auto hash  : blockhlist) {
-              // hashPair.first  = val;
-              // hashPair.second = mdHashlist[val].name;
-              // int hashnum = hash.first; 
               switch(hash.first) {
                   case 1:
                     SHA1(byteblock, blocksize, sha1i);
                     break;
                   case 2:
-                  //  const uint64_t key[4] = {1, 2, 3, 4};
-                    hw64i = HighwayHash64(byteblock, blocksize, key);
+                    hw64i = HighwayHash64(byteblock, blocksize, hw64key);
                     break;
                   default:
                     std::cout << "Invalid hash" << std::endl;
@@ -112,32 +107,31 @@ public:
           }
     }
 
+    // run the hash context list on the current byte block and compare the input hash with the computed output hash
+    // if the comparison is true return true otherwise return false
     bool compareBlockHashList(unsigned char *byteblock, int blocksize) {
          for(auto hash  : blockhlist) {
-              // hashPair.first  = val;
-              // hashPair.second = mdHashlist[val].name;
-              // int hashnum = hash.first; 
               switch(hash.first) {
                   case 1:
                     SHA1(byteblock, blocksize, sha1o);
                     if (memcmp(sha1i, sha1o, 20) != 0) return false;
                     break;
                   case 2:
-                  //  std::cout << "xxhash" << std::endl;
-                  //  const uint64_t key[4] = {1, 2, 3, 4};
-                    hw64o = HighwayHash64(byteblock, blocksize, key);
+                    hw64o = HighwayHash64(byteblock, blocksize, hw64key);
                     if (hw64i != hw64o) return false;
                   break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
-
-
               }
           }
 
           return true;
     }
 
+    // display the vector list
+    // 1) file hashlist
+    // 2) file block group hash list
+    // 3) file block hashlist
     void displayHLvectors() {
          std::cout << "file hashlist " << std::endl;
          for(auto val  : filehlist) 
@@ -157,13 +151,12 @@ public:
     void displayHashList(int format) 
     {
 
-        // int size;
-        // size = sizeof(mdHashlist) / sizeof(struct Hashlist);
+        std::cout << "id" << std::setw(12) << "Hash Name " << std::setw(30) << "Description" << std::setw(12) << "Key" << std::setw(12) << "Blocksize" << std::endl;
 
         for (int i = 0; i < hashlistsize; i++) {
            std::cout << mdHashlist[i].uid;
            std::cout << std::setw(12) << mdHashlist[i].name;
-           std::cout << std::setw(12) << mdHashlist[i].description;
+           std::cout << std::setw(30) << mdHashlist[i].description;
            std::cout << std::setw(12) << std::boolalpha << mdHashlist[i].haskey;
            std::cout << std::setw(12) << mdHashlist[i].blocksize;
            std::cout << std::endl;
