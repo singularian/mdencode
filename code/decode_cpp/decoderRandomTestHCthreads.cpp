@@ -99,7 +99,7 @@ int main (int argc, char **argv) {
 
      // for(string v  : csvvals)
      std::cout << "hash values ";
-     for(int v2  : csvvals)
+     for(int v2  : def)
      std::cout << " " << v2 << " ";
      std::cout << std::endl;
 /*

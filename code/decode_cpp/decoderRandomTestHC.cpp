@@ -89,6 +89,8 @@ int main (int argc, char **argv) {
      }
 
      csvvals.insert(csvvals.end(), vals.begin(), vals.end());
+     auto it = unique(begin(csvvals), end(csvvals));
+     csvvals.erase(it, end(csvvals));
      // need to unique this list for duplicates
      if (csvvals.size() > 0) {
          def.clear();
@@ -96,11 +98,11 @@ int main (int argc, char **argv) {
      }
 
      // for(string v  : csvvals)
-/*     cout << endl << "csv vals1 ";
-     for(int v2  : csvvals)
-     std::cout << ": " << v2 << " ";
+     std::cout << "hash values ";
+     for(int v2  : def)
+     std::cout << " " << v2 << " ";
      std::cout << std::endl;
-
+/*
      cout << endl << "csv vals ";
      for(int v  : vals)
         std::cout << ": " << v << " ";
@@ -208,7 +210,6 @@ int main (int argc, char **argv) {
      // execute the threads
      for(int tnum = 0; tnum < threads.size(); tnum++)
      {
-        // threads.at(i).join();
         threads.at(tnum).detach();
      } 
 
