@@ -1,7 +1,7 @@
 #include <string>
 #include <stdio.h>
 #include <iostream>
-#include "easylogging++.h"
+#include "external/easylogging++.h"
 
 using namespace el;
 

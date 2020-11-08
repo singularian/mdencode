@@ -18,11 +18,11 @@ test:
 testlog:
 #	g++ -I. example_logging_to_file.cpp -o testlog -std=c++11
 #	g++  easylogging++.cc example_logging_to_file.cpp -o testlog -std=c++11
-	g++ -I. easylogging++.cc tests/easylogger.cpp -o testlog -std=c++11
+	g++ -I. external/easylogging++.cc tests/easylogger.cpp -o testlog -std=c++11
 testhash:
 	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
 	g++ external/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11
 clean:
-	rm -r decoderRandomTestHC decoderRandomTestHCthreads_gmp test_gmp2 test_sha1 testhw testargs testhcl testcsv *.log
+	rm -r decoderRandomTestHC decoderRandomTestHCthreads_gmp test_gmp2 test_sha1 testhw testargs testhcl testcsv testlog *.log
 list:
 	echo "all test clean"
