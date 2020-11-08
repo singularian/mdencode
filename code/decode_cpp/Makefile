@@ -15,12 +15,12 @@ test:
 	g++ tests/testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
 	g++ tests/testCSVSplit.cpp  -o testcsv -std=c++11
 	g++ tests/testSwitch.cpp  -o testswitch -std=c++11
-	g++ tests/testArray.cpp  -o testarray -std=c++11
+	g++ tests/testHCL.cpp  -o testhcl -std=c++11
 logtest:
 #	g++ -I. example_logging_to_file.cpp -o testlog -std=c++11
 #	g++  easylogging++.cc example_logging_to_file.cpp -o testlog -std=c++11
 	g++ -I. easylogging++.cc tests/easylogger.cpp -o testlog -std=c++11
 clean:
-	rm -r decoderRandomTestHC decoderRandomTestHCthreads_gmp test_gmp2 test_sha1 testargs testcsv *.log
+	rm -r decoderRandomTestHC decoderRandomTestHCthreads_gmp test_gmp2 test_sha1 testargs testhcl testcsv *.log
 list:
 	echo "all test clean"
