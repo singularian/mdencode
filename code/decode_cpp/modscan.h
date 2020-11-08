@@ -7,7 +7,6 @@ using namespace std;
 class modscan 
 { 
     private:
-       uint8_t sha1[41];
        int byteorder; 
        int endian; 
        unsigned char *byteblock; 
@@ -65,7 +64,7 @@ class modscan
        }
     }
 
-    void setModscan(mdMutexLog *mdmutexlog, int bytesorder, int end, mpz_t rem, mpz_t modint, int exp, int modexp, int blocks, int threadnum, int threadcnt, mdMutex *mdmutex, uint8_t *sha1block) {
+    void setModscan(mdMutexLog *mdmutexlog, int bytesorder, int end, mpz_t rem, mpz_t modint, int exp, int modexp, int blocks, int threadnum, int threadcnt, mdMutex *mdmutex) {
 
         log      = mdmutexlog;
         mpz_add (remainder, remainder, rem);
@@ -91,12 +90,6 @@ class modscan
 */
         byteblock = new unsigned char[blocksize];
         // byteblock = (unsigned char *) malloc(blocksize);
-        memcpy(sha1,sha1block, sizeof(sha1) / sizeof(sha1[0]));
-
-        //cout << "sha1 ";
-        //for (int n = 0; n < 20; n++)
-        //     printf("%02x", sha1[n]);
-        //printf("\n");
 
     }
  
@@ -183,11 +176,7 @@ class modscan
                for (n = 0; n < diff; n++) byteblock[n] = 0;
            }
 
-           // execute the openssl SHA1 hash on the byteblock 
-           // SHA1((uint8_t *)byteblock, blocksize, results);
-           
-           // if (strcmp((char *) results, (char *) sha1) == 0) {
-           // if (memcmp(results, sha1, 20) == 0) {
+           // check the hash context list
            if (hcl.compareBlockHashList(byteblock, blocksize)) {
 /*               printf("\nFound block on thread %d ", threadnumber);
                for (n = 0; n < blocksize; n++) {

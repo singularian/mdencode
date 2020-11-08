@@ -25,9 +25,6 @@
 
 using namespace std;
 
-uint8_t sha1[40];
-
-int genSHA1(unsigned char *byteblock, int blocksize);
 unsigned char *genRandomByteBlock(size_t num_bytes);
 unsigned char *convertHexToByteBlock(const std::string & source);
 unsigned char *setByteBlock(size_t num_bytes);
@@ -40,7 +37,7 @@ void usage();
 /* 
    This is a C++ GMP modulus scan multithreaded test program 
    MDencode GMP requires the GMP Library to build https://gmplib.org/
-   This program uses one signature SHA1 to bootstrap the testing.
+   This program uses SHA1 and highway hash 64
    In the future it will use a C++ Hash Context list with more than one signature
 */
 int main (int argc, char **argv) {
@@ -109,8 +106,8 @@ int main (int argc, char **argv) {
      std::cout << std::endl;
 */
 
-     // MDencode GMP requires the GMP Library to build https://gmplib.org/
-     // MDencode GMP also requires the OpenSSL Library
+     // check if the argument count is less than 2
+     // then display the usage
      if (argc < 2)
      {
          cout << app.help() << endl;
@@ -121,7 +118,6 @@ int main (int argc, char **argv) {
      unsigned char *byteblock;
      // generate a random n byte byteblock if the hexstring is empty
      if (hexstring.empty()) {
-     // generate a random n byte byteblock
         byteblock = genRandomByteBlock(blocksize);
      // process the hex string into a byte block
      } else {
@@ -159,8 +155,6 @@ int main (int argc, char **argv) {
      int byteorder = 1;
      int endian    = 0;
      mpz_import (byteblockInt, blocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);  
-     // mpz_import (byteblockInt, blocksize, 0, sizeof(byteblock[0]), 0, 0, byteblock); // doesn't work with 001111 I think there is a bug with the gmp export for native
-     //// mpz_import (byteblockInt, blocksize, -1, sizeof(byteblock[0]), 0, 0, byteblock); // works with padding but slower changes the modulo too I think go uses Most Sig Bit
 
      // calculate the modulus 2 ^ modsize 
      mpz_ui_pow_ui (modulusInt, 2, modsize);
@@ -173,11 +167,6 @@ int main (int argc, char **argv) {
 
      // calculate the modulus exponent with the modulus
      int expmod = calcExponentModulus(modulusInt, byteblockInt);
-
-     // compute the SHA1 hash of the byteblock
-     // this currently uses one signature and not a hash context list
-     // others will be added in the future
-     genSHA1(byteblock, blocksize);
 
      // display the current block stats
      displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, runlogging );
@@ -192,7 +181,8 @@ int main (int argc, char **argv) {
      // this allows it to run mulithreaded 
      modscan* mst = new modscan[threadcount];
      for(int tnum = 0; tnum < threadcount; tnum++) {
-         mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex, sha1);
+         mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex);
+         // set the hash context list and the signatures based on the current byte block
          mst[tnum].hcl.setBlockHashList(def);
          mst[tnum].hcl.setBlockHashList(byteblock, blocksize);
      } 
@@ -250,16 +240,6 @@ int main (int argc, char **argv) {
 
     return 0;
 }
-
-// calculate test signature
-// use the openssl SHA1 signature generator on the byteblock
-int genSHA1(unsigned char *byteblock, int blocksize) {
-
-       SHA1(byteblock, blocksize, sha1);
-
-       return 0;
-}
-
 
 // returns a random byte sized byteblock
 unsigned char *genRandomByteBlock(size_t num_bytes) {
@@ -356,6 +336,7 @@ int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
     return exponent;
 }
 
+// display the byteblock
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {
 
         int i;
@@ -382,7 +363,6 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      char* dt = ctime(&now);
 
      cout << "Start Time               " << dt;
-
      cout << "Block Size               " << blocksize << endl;
 
      cout << "Random Byteblock         ";
@@ -424,9 +404,10 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      cout << "Modulus 2   ^ Exponent   " << exponent << endl;
      cout << "Modulus Mod ^ Exponent   " << expmod << endl;
 
-     cout << "Block SHA1               ";
-     for (int n = 0; n < 20; n++)
-     printf("%02X", sha1[n]);
+     cout << "Block Signatures         ";
+     // for (int n = 0; n < 20; n++)
+     // printf("%02X", sha1[n]);
+     cout << "TODO";
      cout << endl;
 
      cout << "Thread Count             " << threadcount << endl;
