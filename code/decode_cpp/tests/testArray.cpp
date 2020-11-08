@@ -7,6 +7,11 @@
 
 int main()
 {
-    mdHashContextList mh;
-    mh.displayHashList(0);
+    mdHashContextList hcl;
+    hcl.displayHashList(0);
+  
+    std::vector<int> v = { 1, 2, 3 };
+    hcl.setFileHashList(v);
+
+    hcl.displayHLvectors();
 }
