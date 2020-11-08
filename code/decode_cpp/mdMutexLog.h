@@ -68,9 +68,6 @@ public:
            mutex.lock();
 
            /* Write a message */
-           // clog_info(CLOG(MY_LOGGER), "Hello, %s!", "world");
-           // clog_info(CLOG(MY_LOGGER), "Thread %d %s!", thread, "world");
-           // clog_info(CLOG(MY_LOGGER), "%s", logtext);
            printf("%s", logtext);
            mutex.unlock();
         }
@@ -87,11 +84,7 @@ public:
            lastThread = thread;
 
            /* Write a message */
-           // clog_info(CLOG(MY_LOGGER), "Hello, %s!", "world");
-           // clog_info(CLOG(MY_LOGGER), "Thread %d %s!", thread, "world");
            mpz_get_str (a, 10, blockint);
-           // clog_info(CLOG(MY_LOGGER), "Thread %d %s!", thread, logtext);
-           // clog_info(CLOG(MY_LOGGER), "Thread %d %s!", thread, a);
            // log->warn("test2 ", thread);
            //try {
            // log->warn("test2 ");

@@ -16,7 +16,7 @@
 #include <vector>
 #include <algorithm> 
 #include <openssl/sha.h>
-#include "CLI11.hpp" 
+#include "external/CLI11.hpp" 
 #include "mdMutex.h"
 #include "mdMutexLog.h"
 #include "modscan.h"
@@ -59,6 +59,7 @@ int main (int argc, char **argv) {
 
      // add a hashlist parameter
      // std::string hashlist;
+     std::vector<int> def = { 1 };
      std::vector<int> vals;
      std::vector<int> csvvals;
      // std::vector<std::string> csvvals;
@@ -88,13 +89,20 @@ int main (int argc, char **argv) {
      }
 
      csvvals.insert(csvvals.end(), vals.begin(), vals.end());
+     auto it = unique(begin(csvvals), end(csvvals));
+     csvvals.erase(it, end(csvvals));
+     // need to unique this list for duplicates
+     if (csvvals.size() > 0) {
+         def.clear();
+         def.insert(def.end(), csvvals.begin(), csvvals.end());
+     }
 
      // for(string v  : csvvals)
-/*     cout << endl << "csv vals1 ";
+     std::cout << "hash values ";
      for(int v2  : csvvals)
-     std::cout << ": " << v2 << " ";
+     std::cout << " " << v2 << " ";
      std::cout << std::endl;
-
+/*
      cout << endl << "csv vals ";
      for(int v  : vals)
         std::cout << ": " << v << " ";
@@ -185,6 +193,8 @@ int main (int argc, char **argv) {
      modscan* mst = new modscan[threadcount];
      for(int tnum = 0; tnum < threadcount; tnum++) {
          mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex, sha1);
+         mst[tnum].hcl.setBlockHashList(def);
+         mst[tnum].hcl.setBlockHashList(byteblock, blocksize);
      } 
 
      // initialize the modulus scan threads vector
@@ -200,7 +210,6 @@ int main (int argc, char **argv) {
      // execute the threads
      for(int tnum = 0; tnum < threads.size(); tnum++)
      {
-        // threads.at(i).join();
         threads.at(tnum).detach();
      } 
 

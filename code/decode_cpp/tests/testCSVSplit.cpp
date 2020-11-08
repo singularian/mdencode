@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "../CLI11.hpp"
+#include "../external/CLI11.hpp"
 
 void print(std::vector<std::string> const &input);
 std::vector<std::string> csv_split(std::string source, char delimeter);

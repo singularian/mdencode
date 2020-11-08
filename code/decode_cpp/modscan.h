@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 #include <openssl/sha.h>
+#include "mdHashContextList.h"
 
 using namespace std;
 
@@ -12,6 +13,7 @@ class modscan
        unsigned char *byteblock; 
        mdMutex* mutexref;
        mdMutexLog* log;
+       // mdHashContextList hcl;
     public: 
        string filename; 
        int exponent;
@@ -27,7 +29,9 @@ class modscan
        mpz_t modulusInt; 
        mpz_t modulusThreadInt; 
        mpz_t modulusExpInt; 
-       mpz_t blockInt; 
+       mpz_t blockInt;
+       // hash context list
+       mdHashContextList hcl;
  
     // Default constructor
     modscan() 
@@ -180,10 +184,11 @@ class modscan
            }
 
            // execute the openssl SHA1 hash on the byteblock 
-           SHA1((uint8_t *)byteblock, blocksize, results);
+           // SHA1((uint8_t *)byteblock, blocksize, results);
            
            // if (strcmp((char *) results, (char *) sha1) == 0) {
-           if (memcmp(results, sha1, 20) == 0) {
+           // if (memcmp(results, sha1, 20) == 0) {
+           if (hcl.compareBlockHashList(byteblock, blocksize)) {
 /*               printf("\nFound block on thread %d ", threadnumber);
                for (n = 0; n < blocksize; n++) {
                     printf("%02X", byteblock[n]);

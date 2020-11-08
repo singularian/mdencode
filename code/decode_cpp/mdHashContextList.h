@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
-
+#include "external/highwayhash.h"
 
 struct Hashlist {
     int uid;
@@ -12,7 +12,7 @@ struct Hashlist {
 };
 
 Hashlist mdHashlist[5] = {{1, "sha1", "SHA1", false, 20},
-                          {2, "sha1", "desc", false, 8},
+                          {2, "hw",   "Highway Hash 64", false, 8},
                           {3, "sha1", "desc", false, 8},
                           {4, "sha1", "desc", false, 8},
                           {5, "sha2", "desc", false, 8}};
@@ -29,6 +29,12 @@ private:
     std::vector<std::pair<int,std::string>> filehlist;
     std::vector<std::pair<int,std::string>> blockgrouphlist;
     std::vector<std::pair<int,std::string>> blockhlist;
+    // hash results
+    uint8_t sha1i[41];
+    uint8_t sha1o[41];
+    uint64_t hw64i;
+    uint64_t hw64o;
+    const uint64_t key[4] = {1, 2, 3, 4};
 public:
     std::string hash_name;
 
@@ -82,6 +88,54 @@ public:
               }
           }
 
+    }
+
+    // setHashList
+    void setBlockHashList(unsigned char *byteblock, int blocksize) {
+
+          //std::pair<int,std::string> hashPair;
+          for(auto hash  : blockhlist) {
+              // hashPair.first  = val;
+              // hashPair.second = mdHashlist[val].name;
+              // int hashnum = hash.first; 
+              switch(hash.first) {
+                  case 1:
+                    SHA1(byteblock, blocksize, sha1i);
+                    break;
+                  case 2:
+                  //  const uint64_t key[4] = {1, 2, 3, 4};
+                    hw64i = HighwayHash64(byteblock, blocksize, key);
+                    break;
+                  default:
+                    std::cout << "Invalid hash" << std::endl;
+              }
+          }
+    }
+
+    bool compareBlockHashList(unsigned char *byteblock, int blocksize) {
+         for(auto hash  : blockhlist) {
+              // hashPair.first  = val;
+              // hashPair.second = mdHashlist[val].name;
+              // int hashnum = hash.first; 
+              switch(hash.first) {
+                  case 1:
+                    SHA1(byteblock, blocksize, sha1o);
+                    if (memcmp(sha1i, sha1o, 20) != 0) return false;
+                    break;
+                  case 2:
+                  //  std::cout << "xxhash" << std::endl;
+                  //  const uint64_t key[4] = {1, 2, 3, 4};
+                    hw64o = HighwayHash64(byteblock, blocksize, key);
+                    if (hw64i != hw64o) return false;
+                  break;
+                  // default:
+                  //  std::cout << "Invalid hash" << std::endl;
+
+
+              }
+          }
+
+          return true;
     }
 
     void displayHLvectors() {
