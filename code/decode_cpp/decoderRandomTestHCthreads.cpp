@@ -37,8 +37,8 @@ void usage();
 /* 
    This is a C++ GMP modulus scan multithreaded test program 
    MDencode GMP requires the GMP Library to build https://gmplib.org/
-   This program uses SHA1 and highway hash 64
-   In the future it will use a C++ Hash Context list with more than one signature
+   This program uses a Hash Context List with SHA1 and highway hash 64
+   In the future the Hash Context list will include more signatures
 */
 int main (int argc, char **argv) {
 
@@ -46,10 +46,12 @@ int main (int argc, char **argv) {
      int modsize      = 64;
      int threadnumber = 0;
      int threadcount  = 1;
+     // current signature number handled in the hash context list
+     int signum       = 2;
 
      // process the command line argument with the CLI11 command line parser
      CLI::App app{"MDEncode GMP C++ Test Program"};
-     app.add_option("-b,--block", blocksize, "Blocksize number")->check(CLI::PositiveNumber)->check(CLI::Range(1,100));;
+     app.add_option("-b,--block", blocksize, "Blocksize number")->check(CLI::PositiveNumber)->check(CLI::Range(1,100));
      app.add_option("-m,--mod", modsize, "Modulus size number")->check(CLI::PositiveNumber);
      app.add_option("-t,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
      //app.add_option("-v,--version", version, "Version number");
@@ -61,11 +63,11 @@ int main (int argc, char **argv) {
      std::vector<int> csvvals;
      // std::vector<std::string> csvvals;
      // app.add_option("-r,--bh", vals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber);
-     app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber);
+     app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
      // app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',');
 
      // std::vector<int> vals;
-     app.add_option("-s,--hl", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber);
+     app.add_option("-s,--hl", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
      // add a hash keylist parameter
      std::string keylist;
@@ -408,8 +410,6 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      cout << "Modulus Mod ^ Exponent   " << expmod << endl;
 
      cout << "Block Signatures         ";
-     // for (int n = 0; n < 20; n++)
-     // printf("%02X", sha1[n]);
      cout << hashlist;
      cout << endl;
 
