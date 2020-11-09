@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
+#include <sstream>
 #include "external/highwayhash.h"
 
 struct Hashlist {
@@ -37,6 +38,7 @@ private:
     const uint64_t hw64key[4] = {1, 2, 3, 4};
 public:
     std::string hash_name;
+    std::stringstream ss;
 
     // initialize mdHashContextList
     mdHashContextList() {
@@ -53,9 +55,9 @@ public:
     {  
           std::pair<int,std::string> hashPair;
           for(int val  : v) {
-              if (val < hashlistsize) {
+              if (val < hashlistsize && val > 0) {
                 hashPair.first  = val;
-                hashPair.second = mdHashlist[val].name;
+                hashPair.second = mdHashlist[val-1].name;
                 filehlist.push_back(hashPair);
               }
           }
@@ -67,9 +69,9 @@ public:
     {  
           std::pair<int,std::string> hashPair; 
           for(int val  : v) {
-              if (val < hashlistsize) {
+              if (val < hashlistsize && val > 0) {
                 hashPair.first  = val;
-                hashPair.second = mdHashlist[val].name;
+                hashPair.second = mdHashlist[val-1].name;
                 blockgrouphlist.push_back(hashPair);
               }
           }
@@ -81,9 +83,9 @@ public:
     {
           std::pair<int,std::string> hashPair;
           for(int val  : v) {
-              if (val < hashlistsize) {
+              if (val < hashlistsize && val > 0) {
                 hashPair.first  = val;
-                hashPair.second = mdHashlist[val].name;
+                hashPair.second = mdHashlist[val-1].name;
                 blockhlist.push_back(hashPair);
               }
           }
@@ -126,6 +128,29 @@ public:
           }
 
           return true;
+    }
+
+    // display the hash list
+    // const std::string& displayHLhashes() {
+    std::string displayHLhashes() {
+        std::string hashlist;
+        for(auto hash  : blockhlist) {
+              switch(hash.first) {
+                  case 1:
+                     ss << hash.second << " ";
+                     for(int i=0; i<20; ++i)
+                           ss << std::uppercase << std::hex << (int)sha1i[i];
+                     ss << " ";
+                     break;
+                  case 2:
+                    ss << hash.second << " " << std::to_string(hw64i) << " ";
+                  break;
+                  // default:
+                  //  std::cout << "Invalid hash" << std::endl;
+              }
+         }
+         hashlist = ss.str();
+         return hashlist;         
     }
 
     // display the vector list

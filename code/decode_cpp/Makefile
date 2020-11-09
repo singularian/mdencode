@@ -14,7 +14,7 @@ test:
 	g++ tests/testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
 	g++ tests/testCSVSplit.cpp  -o testcsv -std=c++11
 	g++ tests/testSwitch.cpp  -o testswitch -std=c++11
-	g++ tests/testHCL.cpp  -o testhcl -std=c++11
+	g++ -I. external/highwayhash.c tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -std=c++11
 testlog:
 #	g++ -I. example_logging_to_file.cpp -o testlog -std=c++11
 #	g++  easylogging++.cc example_logging_to_file.cpp -o testlog -std=c++11

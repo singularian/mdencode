@@ -31,7 +31,7 @@ unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, bool log );
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& displayHLhashes, bool log );
 void usage();
 
 /* 
@@ -169,7 +169,7 @@ int main (int argc, char **argv) {
      int expmod = calcExponentModulus(modulusInt, byteblockInt);
 
      // display the current block stats
-     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, runlogging );
+     // displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, runlogging );
 
      // initialize the mutex object
      // I should set a result variable and pass it into the mutex
@@ -193,6 +193,9 @@ int main (int argc, char **argv) {
         threads.push_back(std::thread(&modscan::decode, std::ref(mst[tnum])));
      }
 
+     // display the current block stats
+     std::string hashlist = mst[0].hcl.displayHLhashes();
+     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, hashlist, runlogging );
 
      // std::cout << endl << "Running decode modscan" << endl << endl;
      log.writeLog((char *) "Running decode modscan");
@@ -354,7 +357,7 @@ void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {
 
 
 // displays the modulus scan information
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, bool log ) {
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& hashlist, bool log ) {
 
      // current date/time based on current system
      time_t now = time(0);
@@ -407,7 +410,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      cout << "Block Signatures         ";
      // for (int n = 0; n < 20; n++)
      // printf("%02X", sha1[n]);
-     cout << "TODO";
+     cout << hashlist;
      cout << endl;
 
      cout << "Thread Count             " << threadcount << endl;
