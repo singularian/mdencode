@@ -31,5 +31,5 @@ int main()
  
     std::cout << "test " << mystr << std::endl;
     */
-    std::cout << hcl.displayHLhashes();
+    std::cout << hcl.displayHLhashes() << std::endl;
 }

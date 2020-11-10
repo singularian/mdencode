@@ -37,7 +37,7 @@ void usage();
 /* 
    This is a C++ GMP modulus scan multithreaded test program 
    MDencode GMP requires the GMP Library to build https://gmplib.org/
-   This program uses a Hash Context List with SHA1 and highway hash 64
+   This program uses a Hash Context List with SHA1-64, SHA1-128 and SHA1 and Highway Hash 64
    In the future the Hash Context list will include more signatures
 */
 int main (int argc, char **argv) {
@@ -47,7 +47,7 @@ int main (int argc, char **argv) {
      int threadnumber = 0;
      int threadcount  = 1;
      // current signature number handled in the hash context list
-     int signum       = 2;
+     int signum       = 4;
 
      // process the command line argument with the CLI11 command line parser
      CLI::App app{"MDEncode GMP C++ Test Program"};

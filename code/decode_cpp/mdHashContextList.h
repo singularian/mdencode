@@ -12,11 +12,11 @@ struct Hashlist {
     int blocksize;
 };
 
-Hashlist mdHashlist[5] = {{1, "sha1", "SHA1", false, 20},
-                          {2, "hw",   "Highway Hash 64", false, 8},
-                          {3, "sha1", "desc", false, 8},
-                          {4, "sha1", "desc", false, 8},
-                          {5, "sha2", "desc", false, 8}};
+Hashlist mdHashlist[5] = {{1, "hw64",     "Highway Hash 64",       true, 8},
+                          {2, "sha1_64",  "SHA1 64",               false, 8},
+                          {3, "sha1_128", "SHA1 128",              false, 16},
+                          {4, "sha1",     "SHA1",                  false, 20},
+                          {5, "sha2",     "SHA1 Unused Signature", false, 8}};
 
 
 class mdHashContextList 
@@ -98,13 +98,19 @@ public:
           for(auto hash  : blockhlist) {
               switch(hash.first) {
                   case 1:
-                    SHA1(byteblock, blocksize, sha1i);
-                    break;
-                  case 2:
                     hw64i = HighwayHash64(byteblock, blocksize, hw64key);
                     break;
-                  default:
-                    std::cout << "Invalid hash" << std::endl;
+                  case 2:
+                    SHA1(byteblock, blocksize, sha1i);
+                    break;
+                  case 3:
+                    SHA1(byteblock, blocksize, sha1i);
+                    break;
+                  case 4:
+                    SHA1(byteblock, blocksize, sha1i);
+                    break;
+                  // default:
+                  //  std::cout << "Invalid hash" << std::endl;
               }
           }
     }
@@ -115,13 +121,21 @@ public:
          for(auto hash  : blockhlist) {
               switch(hash.first) {
                   case 1:
-                    SHA1(byteblock, blocksize, sha1o);
-                    if (memcmp(sha1i, sha1o, 20) != 0) return false;
-                    break;
-                  case 2:
                     hw64o = HighwayHash64(byteblock, blocksize, hw64key);
                     if (hw64i != hw64o) return false;
                   break;
+                  case 2:
+                    SHA1(byteblock, blocksize, sha1o);
+                    if (memcmp(sha1i, sha1o, 8) != 0) return false;
+                    break;
+                  case 3:
+                    SHA1(byteblock, blocksize, sha1o);
+                    if (memcmp(sha1i, sha1o, 16) != 0) return false;
+                    break;
+                  case 4:
+                    SHA1(byteblock, blocksize, sha1o);
+                    if (memcmp(sha1i, sha1o, 20) != 0) return false;
+                    break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
               }
@@ -137,14 +151,26 @@ public:
         for(auto hash  : blockhlist) {
               switch(hash.first) {
                   case 1:
+                     ss << hash.second << " " << std::to_string(hw64i) << " ";
+                     break;
+                  case 2:
+                     ss << hash.second << " ";
+                     for(int i=0; i<8; ++i)
+                           ss << std::uppercase << std::hex << (int)sha1i[i];
+                     ss << " ";
+                     break;
+                  case 3:
+                     ss << hash.second << " ";
+                     for(int i=0; i<16; ++i)
+                           ss << std::uppercase << std::hex << (int)sha1i[i];
+                     ss << " ";
+                     break;
+                  case 4:
                      ss << hash.second << " ";
                      for(int i=0; i<20; ++i)
                            ss << std::uppercase << std::hex << (int)sha1i[i];
                      ss << " ";
                      break;
-                  case 2:
-                    ss << hash.second << " " << std::to_string(hw64i) << " ";
-                  break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
               }
@@ -176,7 +202,7 @@ public:
     void displayHashList(int format) 
     {
 
-        std::cout << "id" << std::setw(12) << "Hash Name " << std::setw(30) << "Description" << std::setw(12) << "Key" << std::setw(12) << "Blocksize" << std::endl;
+        std::cout << "ID" << std::setw(12) << "Hash Name " << std::setw(30) << "Description" << std::setw(12) << "Key" << std::setw(12) << "Blocksize" << std::endl;
 
         for (int i = 0; i < hashlistsize; i++) {
            std::cout << mdHashlist[i].uid;
