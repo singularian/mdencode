@@ -7,21 +7,24 @@
 #include <openssl/sha.h>
 #include "external/csiphash.c"
 
+// should add a speed column to show which signatures are fastest
 struct Hashlist {
-    int uid;
+    int id;
     std::string name;
     std::string description;
     bool haskey;
     int blocksize;
 };
 
-Hashlist mdHashlist[8] = {{1, "hw64",     "Highway Hash 64",       true, 8},
-                          {2, "md5",      "MD5",                   false, 16},
-                          {3, "sip64",    "Siphash 64",            true, 8},
-                          {4, "sha1_64",  "SHA1 64",               false, 8},
-                          {5, "sha1_128", "SHA1 128",              false, 16},
-                          {6, "sha1",     "SHA1",                  false, 20},
-                          {7, "sha2",     "SHA1 Unused Signature", false, 8}};
+Hashlist mdHashlist[8] = {
+    {1, "hw64",     "Highway Hash 64",       true,  8},
+    {2, "md5",      "MD5",                   false, 16},
+    {3, "sip64",    "Siphash 64",            true,  8},
+    {4, "sha1_64",  "SHA1 64",               false, 8},
+    {5, "sha1_128", "SHA1 128",              false, 16},
+    {6, "sha1",     "SHA1",                  false, 20},
+    {7, "sha2",     "SHA1 Unused Signature", false, 8}
+};
 
 
 class mdHashContextList 
@@ -32,6 +35,8 @@ private:
     int threadcount;
     int blocksize;
     int hashlistsize;
+    // should make this a tuple and add the block size
+    // https://www.geeksforgeeks.org/tuples-in-c/
     std::vector<std::pair<int,std::string>> filehlist;
     std::vector<std::pair<int,std::string>> blockgrouphlist;
     std::vector<std::pair<int,std::string>> blockhlist;
@@ -239,7 +244,7 @@ public:
         std::cout << "ID" << std::setw(12) << "Hash Name " << std::setw(30) << "Description" << std::setw(12) << "Key" << std::setw(12) << "Blocksize" << std::endl;
 
         for (int i = 0; i < hashlistsize; i++) {
-           std::cout << mdHashlist[i].uid;
+           std::cout << i; 
            std::cout << std::setw(12) << mdHashlist[i].name;
            std::cout << std::setw(30) << mdHashlist[i].description;
            std::cout << std::setw(12) << std::boolalpha << mdHashlist[i].haskey;
