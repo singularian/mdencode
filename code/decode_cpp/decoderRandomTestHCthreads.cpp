@@ -434,7 +434,7 @@ Examples:
     cout << usageline << endl;
     cout << endl; 
 
-    cout << "Hashlist" << endl;
+    cout << "Hashlist" << endl << endl;
 
     mdHashContextList hcl;
     hcl.displayHashList(0);
