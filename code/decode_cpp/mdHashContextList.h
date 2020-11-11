@@ -3,6 +3,9 @@
 #include <iomanip>
 #include <sstream>
 #include "external/highwayhash.h"
+#include <openssl/md5.h>
+#include <openssl/sha.h>
+#include "external/csiphash.c"
 
 struct Hashlist {
     int uid;
@@ -12,11 +15,13 @@ struct Hashlist {
     int blocksize;
 };
 
-Hashlist mdHashlist[5] = {{1, "hw64",     "Highway Hash 64",       true, 8},
-                          {2, "sha1_64",  "SHA1 64",               false, 8},
-                          {3, "sha1_128", "SHA1 128",              false, 16},
-                          {4, "sha1",     "SHA1",                  false, 20},
-                          {5, "sha2",     "SHA1 Unused Signature", false, 8}};
+Hashlist mdHashlist[8] = {{1, "hw64",     "Highway Hash 64",       true, 8},
+                          {2, "md5",      "MD5",                   false, 16},
+                          {3, "sip64",    "Siphash 64",            true, 8},
+                          {4, "sha1_64",  "SHA1 64",               false, 8},
+                          {5, "sha1_128", "SHA1 128",              false, 16},
+                          {6, "sha1",     "SHA1",                  false, 20},
+                          {7, "sha2",     "SHA1 Unused Signature", false, 8}};
 
 
 class mdHashContextList 
@@ -31,11 +36,17 @@ private:
     std::vector<std::pair<int,std::string>> blockgrouphlist;
     std::vector<std::pair<int,std::string>> blockhlist;
     // hash results
-    uint8_t sha1i[41];
-    uint8_t sha1o[41];
+    // need to make these an array sized 6 for files and bg and block hash results
     uint64_t hw64i;
     uint64_t hw64o;
     const uint64_t hw64key[4] = {1, 2, 3, 4};
+    uint8_t md5i[41];
+    uint8_t md5o[41];
+    uint8_t sha1i[41];
+    uint8_t sha1o[41];
+    uint64_t siphash64i;
+    uint64_t siphash64o;
+    char sipkey[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
 public:
     std::string hash_name;
     std::stringstream ss;
@@ -101,12 +112,18 @@ public:
                     hw64i = HighwayHash64(byteblock, blocksize, hw64key);
                     break;
                   case 2:
-                    SHA1(byteblock, blocksize, sha1i);
+                    MD5(byteblock,(long)blocksize,md5i);
                     break;
                   case 3:
-                    SHA1(byteblock, blocksize, sha1i);
+                    siphash64i = siphash24(byteblock, blocksize, sipkey);
                     break;
                   case 4:
+                    SHA1(byteblock, blocksize, sha1i);
+                    break;
+                  case 5:
+                    SHA1(byteblock, blocksize, sha1i);
+                    break;
+                  case 6:
                     SHA1(byteblock, blocksize, sha1i);
                     break;
                   // default:
@@ -125,14 +142,22 @@ public:
                     if (hw64i != hw64o) return false;
                   break;
                   case 2:
+                    MD5(byteblock,(long)blocksize,md5o);
+                    if (memcmp(md5i, md5o, 16) != 0) return false;
+                  break;
+                  case 3:
+                    siphash64o = siphash24(byteblock, blocksize, sipkey);
+                    if (siphash64i != siphash64o) return false;
+                    break;
+                  case 4:
                     SHA1(byteblock, blocksize, sha1o);
                     if (memcmp(sha1i, sha1o, 8) != 0) return false;
                     break;
-                  case 3:
+                  case 5:
                     SHA1(byteblock, blocksize, sha1o);
                     if (memcmp(sha1i, sha1o, 16) != 0) return false;
                     break;
-                  case 4:
+                  case 6:
                     SHA1(byteblock, blocksize, sha1o);
                     if (memcmp(sha1i, sha1o, 20) != 0) return false;
                     break;
@@ -155,17 +180,26 @@ public:
                      break;
                   case 2:
                      ss << hash.second << " ";
+                     for(int i=0; i<16; ++i)
+                           ss << std::uppercase << std::hex << (int)md5i[i];
+                     ss << " ";
+                     break;
+                  case 3:
+                     ss << hash.second << " " << std::to_string(siphash64i) << " ";
+                     break;
+                  case 4:
+                     ss << hash.second << " ";
                      for(int i=0; i<8; ++i)
                            ss << std::uppercase << std::hex << (int)sha1i[i];
                      ss << " ";
                      break;
-                  case 3:
+                  case 5:
                      ss << hash.second << " ";
                      for(int i=0; i<16; ++i)
                            ss << std::uppercase << std::hex << (int)sha1i[i];
                      ss << " ";
                      break;
-                  case 4:
+                  case 6:
                      ss << hash.second << " ";
                      for(int i=0; i<20; ++i)
                            ss << std::uppercase << std::hex << (int)sha1i[i];
