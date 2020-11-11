@@ -26,7 +26,7 @@ struct Hashlist {
 };
 
 Hashlist mdHashlist[13] = {
-    {0, "crc32",    "CRC 32",                false, 8},
+    {0, "crc32",    "CRC 32",                false, 4},
     {1, "hw64",     "Highway Hash 64",       true,  8},
     {2, "md2",      "MD2",                   false, 16},
     {3, "md4",      "MD4",                   false, 16},
@@ -37,8 +37,8 @@ Hashlist mdHashlist[13] = {
     {7, "sha1_128", "SHA1 128",              false, 16},
     {8, "sha1",     "SHA1",                  false, 20},
     {9, "xxh32",    "xxHash32",              true,  4},
-    {10, "xxh64",    "xxHash64",              true,  8},
-    {11, "sha2",     "SHA1 Unused Signature", false, 8}
+    {10, "xxh64",   "xxHash64",              true,  8},
+    {11, "sha2",    "SHA1 Unused Signature", false, 8}
 };
 
 
@@ -339,14 +339,18 @@ public:
     void displayHashList(int format) 
     {
 
-        std::cout << "ID" << std::setw(12) << "Hash Name " << std::setw(30) << "Description" << std::setw(12) << "Key" << std::setw(12) << "Blocksize" << std::endl;
+        std::cout << std::left << std::setw(12) << "ID";
+        std::cout << std::left << std::setw(12) << "Hash Name ";
+        std::cout << std::left << std::setw(30) << "Description";
+        std::cout << std::left << std::setw(12) << "Key";
+        std::cout << std::left << std::setw(12) << "Blocksize" << std::endl;
 
         for (int i = 0; i < hashlistsize; i++) {
-           std::cout << i; 
-           std::cout << std::setw(12) << mdHashlist[i].name;
-           std::cout << std::setw(30) << mdHashlist[i].description;
-           std::cout << std::setw(12) << std::boolalpha << mdHashlist[i].haskey;
-           std::cout << std::setw(12) << mdHashlist[i].blocksize;
+           std::cout << std::left << std::setw(12) << i; 
+           std::cout << std::left << std::setw(12) << mdHashlist[i].name;
+           std::cout << std::left << std::setw(30) << mdHashlist[i].description;
+           std::cout << std::left << std::setw(12) << std::boolalpha << mdHashlist[i].haskey;
+           std::cout << std::left << std::setw(12) << mdHashlist[i].blocksize;
            std::cout << std::endl;
         }
     }

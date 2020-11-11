@@ -431,5 +431,12 @@ Examples:
    ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
 )";
 
-     cout << usageline << endl; 
+    cout << usageline << endl;
+    cout << endl; 
+
+    cout << "Hashlist" << endl;
+
+    mdHashContextList hcl;
+    hcl.displayHashList(0);
+
 }

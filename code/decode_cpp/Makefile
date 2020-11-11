@@ -16,7 +16,8 @@ all:
 #	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC $(OBJ) -lssl -lcrypto -lgmp -std=c++11 -pthread
 	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC_gmp -lssl -lcrypto -lgmp -Xlinker -zmuldefs  -std=c++11 -pthread
 	g++ -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11 -pthread
-
+opt:
+	g++ -O3 -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11 -pthread
 test:
 	g++ tests/test_gmp2.cpp -o test_gmp2 -lgmp -lgmpxx
 	g++ tests/testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
