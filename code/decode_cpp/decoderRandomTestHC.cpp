@@ -44,7 +44,7 @@ int main (int argc, char **argv) {
      size_t blocksize = 13;
      int modsize      = 64;
      int threadnumber = 0;
-     int threadcount  = 1;
+     int threadcount  = 8;
      // current signature number handled in the hash context list
      int signum       = 11;
 
@@ -425,10 +425,10 @@ Examples:
    ./decoderRandomTestHCthreads_gmp -b 12 -m 64 -t 16
    ./decoderRandomTestHCthreads_gmp --block=12 --mod=64    --threads=16
    ./decoderRandomTestHCthreads_gmp --block=12 --mod=128   --threads=16
-   ./decoderRandomTestHCthreads_gmp --mod=128 --threads=16 --hex=0011
-   ./decoderRandomTestHCthreads_gmp --mod=128 --threads=16 --hex=FFd033FF202020202011
-   ./decoderRandomTestHCthreads_gmp --mod=128 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
-   ./decoderRandomTestHCthreads_gmp --mod=128 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
+   ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=0011
+   ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=FFd033FF202020202011
+   ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
+   ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
 )";
 
      cout << usageline << endl; 

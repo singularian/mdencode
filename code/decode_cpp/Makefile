@@ -31,6 +31,8 @@ testhash:
 	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
 	g++ external/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11
 clean:
-	rm -r decoderRandomTestHC decoderRandomTestHCthreads_gmp test_gmp2 test_sha1 testhw testargs testhcl testcsv testlog *.log
+	rm -r decoderRandomTestHC decoderRandomTestHCthreads_gmp 
+cleantest:
+	rm test_gmp2 test_sha1 testhw testargs testhcl testcsv testlog testswitch *.log
 list:
-	echo "all test clean"
+	echo "all test testlog clean test"
