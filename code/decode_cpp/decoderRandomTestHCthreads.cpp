@@ -41,12 +41,12 @@ void usage();
 */
 int main (int argc, char **argv) {
 
-     size_t blocksize = 12;
+     size_t blocksize = 13;
      int modsize      = 64;
      int threadnumber = 0;
      int threadcount  = 1;
      // current signature number handled in the hash context list
-     int signum       = 10;
+     int signum       = 11;
 
      // process the command line argument with the CLI11 command line parser
      CLI::App app{"MDEncode GMP C++ Test Program"};

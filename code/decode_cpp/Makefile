@@ -1,14 +1,22 @@
 # This is how we want to name the binary output
 BINARY=decoderRandom
 
+CC=g++
+DEPS=external/md6.h external/md6_mode.c external/md6_compress.c external/highwayhash.c
+# DEPS=external/highwayhash.c
+# CFLAGS=-O2 -I/usr/local/include
+
 # These are the values we want to pass for Version and BuildTime
 VERSION=1.0.0
 BUILD_TIME=`date +%FT%T%z`
 
 # decoderRandomTestHCthreads.cpp requires the lib gmp and openssl
 all:
-	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC -lssl -lcrypto -lgmp -std=c++11 -pthread
-	g++ -I. external/highwayhash.c decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lssl -lcrypto -lgmp -std=c++11 -pthread
+#	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC -lssl -lcrypto -lgmp -std=c++11 -pthread
+#	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC $(OBJ) -lssl -lcrypto -lgmp -std=c++11 -pthread
+	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC_gmp -lssl -lcrypto -lgmp -Xlinker -zmuldefs  -std=c++11 -pthread
+	g++ -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11 -pthread
+
 test:
 	g++ tests/test_gmp2.cpp -o test_gmp2 -lgmp -lgmpxx
 	g++ tests/testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
