@@ -1,3 +1,13 @@
+/**
+ *
+ * https://github.com/singularian/mdencode
+ * 
+ * Project MDencode GMP C++ Modulus Scan Test Program
+ * 
+ * modscan.h is the modulus scan class
+ * 
+ * 
+ */
 #include <bits/stdc++.h>
 #include <openssl/sha.h>
 #include "mdHashContextList.h"
