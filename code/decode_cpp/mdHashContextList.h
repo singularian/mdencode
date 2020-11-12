@@ -27,6 +27,7 @@
 #include "external/md6.h"
 
 // should add a speed column to show which signatures are fastest
+// maybe add an enabled/disabled option
 struct Hashlist {
     int id;
     std::string name;

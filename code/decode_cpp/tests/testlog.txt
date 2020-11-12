@@ -59,7 +59,6 @@ sys	0m56.329s
 ===============================================================================================
 
 time ./decoderRandomTestHCthreads_gmp --mod=32 --threads=32 --block=14 --log=true --hex=000000001200200000000000FFFC
-hash64 16447183102165687811
 Start Time               Sun Nov  1 21:49:04 2020
 Block Size               14
 Random Byteblock         000000001200200000000000FFFC
@@ -71,12 +70,12 @@ Modulus Bigint           4294967296
 Modulus Remainder        65532
 Modulus 2   ^ Exponent   76
 Modulus Mod ^ Exponent   2
-Block SHA1               0000000000000000000000000000000000000000
+Block Signature          hw64  16447183102165687811
 Thread Count             32
 Logging                  true
 
 Running decode modscan
-xxhash64 16447183102165687811
+hw64 16447183102165687811
 Modulus Scan thread 0 and Random byteblock match
 0 0 0 0 18 0 32 0 0 0 0 0 255 252 
 0 0 0 0 18 0 32 0 0 0 0 0 255 252 
