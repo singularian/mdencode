@@ -2,7 +2,7 @@
 BINARY=decoderRandom
 
 CC=g++
-DEPS=external/md6.h external/md6_mode.c external/md6_compress.c external/highwayhash.c
+DEPS=external/md6.h external/md6_mode.c external/md6_compress.c external/highwayhash.c fnv/hash_32.c fnv/hash_32a.c fnv/hash_64.c fnv/hash_64a.c
 # DEPS=external/highwayhash.c
 # CFLAGS=-O2 -I/usr/local/include
 
@@ -11,11 +11,13 @@ VERSION=1.0.0
 BUILD_TIME=`date +%FT%T%z`
 
 # decoderRandomTestHCthreads.cpp requires the lib gmp and openssl
+# you also need to install the libfnv library in the fnv subdirectory
+#  it is included with -lfnv
 all:
-#	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC -lssl -lcrypto -lgmp -std=c++11 -pthread
-#	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC $(OBJ) -lssl -lcrypto -lgmp -std=c++11 -pthread
-	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC_gmp -lssl -lcrypto -lgmp -Xlinker -zmuldefs  -std=c++11 -pthread
-	g++ -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11 -pthread
+#	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC -lssl -lcrypto -lgmp -pthread -std=c++11
+#	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC $(OBJ) -lssl -lcrypto -lgmp -pthread -std=c++11
+	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC_gmp -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11 
+	g++ -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 # opt:
 # doesn't work
 #	g++ -O3 -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11 -pthread
@@ -24,7 +26,7 @@ test:
 	g++ tests/testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
 	g++ tests/testCSVSplit.cpp  -o testcsv -std=c++11
 	g++ tests/testSwitch.cpp  -o testswitch -std=c++11
-	g++ -I. external/highwayhash.c tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -std=c++11
+	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 testlog:
 #	g++ -I. example_logging_to_file.cpp -o testlog -std=c++11
 #	g++  easylogging++.cc example_logging_to_file.cpp -o testlog -std=c++11

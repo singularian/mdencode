@@ -19,12 +19,15 @@
 #include <openssl/md5.h>
 #include <openssl/sha.h>
 #include "external/csiphash.c"
+#include "fnv/fnv.h"
 #include "external/xxhash32.h"
 #include "external/xxhash64.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "external/md6.h"
+
+enum signatures {FIRST, CRC32, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, XXH32, XXH64};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -36,20 +39,23 @@ struct Hashlist {
     int blocksize;
 };
 
-Hashlist mdHashlist[13] = {
-    {0, "crc32",    "CRC 32",                false, 4},
-    {1, "hw64",     "Highway Hash 64",       true,  8},
-    {2, "md2",      "MD2",                   false, 16},
-    {3, "md4",      "MD4",                   false, 16},
-    {4, "md5",      "MD5",                   false, 16},
-    {5, "md6",      "MD6",                   false, 20},
-    {6, "sip64",    "Siphash 64",            true,  8},
-    {7, "sha1_64",  "SHA1 64",               false, 8},
-    {7, "sha1_128", "SHA1 128",              false, 16},
-    {8, "sha1",     "SHA1",                  false, 20},
-    {9, "xxh32",    "xxHash32",              true,  4},
-    {10, "xxh64",   "xxHash64",              true,  8},
-    {11, "sha2",    "SHA1 Unused Signature", false, 8}
+Hashlist mdHashlist[18] = {
+    {1,  "crc32",    "CRC 32",                false, 4},
+    {1,  "fnv64",    "FNV-1 64",              false, 8},
+    {1,  "fnv64a",   "FNV-1a 64",             false, 8},
+    {2,  "hw64",     "Highway Hash 64",       true,  8},
+    {3,  "md2",      "MD2",                   false, 16},
+    {4,  "md4",      "MD4",                   false, 16},
+    {5,  "md5",      "MD5",                   false, 16},
+    {6,  "md6",      "MD6",                   false, 20},
+    {7,  "md62",     "MD6 Quicker",           true,  20},
+    {8,  "sip64",    "Siphash 64",            true,  8},
+    {9,  "sha1_64",  "SHA1 64",               false, 8},
+    {10, "sha1_128", "SHA1 128",              false, 16},
+    {11, "sha1",     "SHA1",                  false, 20},
+    {12, "xxh32",    "xxHash32",              true,  4},
+    {13, "xxh64",    "xxHash64",              true,  8},
+    {14, "last",     "Unused Signature",      false, 8}
 };
 
 
@@ -70,6 +76,10 @@ private:
     // need to make these an array sized 6 for files and bg and block hash results
     uint64_t crc64i;
     uint64_t crc64o;
+    Fnv64_t fnv64_1i; 
+    Fnv64_t fnv64_1o; 
+    Fnv64_t fnv64a_1i; 
+    Fnv64_t fnv64a_1o; 
     uint64_t hw64i;
     uint64_t hw64o;
     const uint64_t hw64key[4] = {1, 2, 3, 4};
@@ -81,6 +91,9 @@ private:
     uint8_t md5o[41];
     uint8_t md6i[41];
     uint8_t md6o[41];
+    uint8_t md62i[41];
+    uint8_t md62o[41];
+    unsigned char md62key[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
     uint8_t sha1i[41];
     uint8_t sha1o[41];
     uint32_t siphash64i;
@@ -93,8 +106,8 @@ private:
     uint64_t xxhash64o;
     uint64_t xxseed64 = 0;
 public:
-    std::string hash_name;
     std::stringstream ss;
+    std::string hashlist;
 
     // initialize mdHashContextList
     mdHashContextList() {
@@ -153,40 +166,49 @@ public:
 
           for(auto hash  : blockhlist) {
               switch(hash.first) {
-                  case 1:
+                  case CRC32:
                     crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
                     break;
-                  case 2:
+                  case FNV64:
+                    fnv64_1i = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
+                    break;
+                  case FNV64A:
+                    fnv64a_1i = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
+                    break;
+                  case HW64:
                     hw64i = HighwayHash64(byteblock, blocksize, hw64key);
                     break;
-                  case 3:
+                  case MD2s:
                     md2(byteblock,(size_t)blocksize,md2i);
                     break;
-                  case 4:
+                  case MD4s:
                     MD4(byteblock,(long)blocksize,md4i);
                     break;
-                  case 5:
+                  case MD5s:
                     MD5(byteblock,(long)blocksize,md5i);
                     break;
-                  case 6:
+                  case MD6:
                     md6_hash(160, byteblock,(uint64_t)(blocksize*8),md6i);
                     break;
-                  case 7: 
+                  case MD62:
+                    md6_full_hash(160, byteblock,(uint64_t)(blocksize*8),md62key,16,md6_default_L, 4, md62i);
+                    break;
+                  case SIP64: 
                     siphash64i = siphash24(byteblock, blocksize, sipkey);
                     break;
-                  case 8:
+                  case SHA164:
                     SHA1(byteblock, blocksize, sha1i);
                     break;
-                  case 9:
+                  case SHA1128:
                     SHA1(byteblock, blocksize, sha1i);
                     break;
-                  case 10:
+                  case SHA1s:
                     SHA1(byteblock, blocksize, sha1i);
                     break;
-                  case 11:
+                  case XXH32:
                     xxhash32i = XXHash32::hash(byteblock, blocksize, xxseed32);
                     break;
-                  case 12:
+                  case XXH64:
                     xxhash64i = XXHash64::hash(byteblock, blocksize, xxseed64);
                     break;
                   // default:
@@ -200,51 +222,63 @@ public:
     bool compareBlockHashList(unsigned char *byteblock, int blocksize) {
          for(auto hash  : blockhlist) {
               switch(hash.first) {
-                  case 1:
+                  case CRC32:
                     crc64o = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
                     if (crc64i != crc64o) return false;
                     break;
-                  case 2:
+                  case FNV64:
+                    fnv64_1o = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
+                    if (fnv64_1i != fnv64_1o) return false;
+                    break;
+                  case FNV64A:
+                    fnv64a_1o = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
+                    if (fnv64a_1i != fnv64a_1o) return false;
+                    break;
+                  case HW64:
                     hw64o = HighwayHash64(byteblock, blocksize, hw64key);
                     if (hw64i != hw64o) return false;
                     break;
-                 case 3:
+                  case MD2s:
                     md2(byteblock,(size_t)blocksize,md2o);
                     if (memcmp(md2i, md2o, 16) != 0) return false;
                     break;
-                  case 4:
+                  case MD4s:
                     MD4(byteblock,(long)blocksize,md4o);
                     if (memcmp(md4i, md4o, 16) != 0) return false;
                     break;
-                  case 5:
+                  case MD5s:
                     MD5(byteblock,(long)blocksize,md5o);
                     if (memcmp(md5i, md5o, 16) != 0) return false;
                     break;
-                  case 6:
+                  case MD6:
                     md6_hash(160, byteblock,(uint64_t)(blocksize*8),md6o);
                     if (memcmp(md6i, md6o, 20) != 0) return false;
                     break;
-                  case 7:
+                  case MD62:
+                    md6_full_hash(160, byteblock,(uint64_t)(blocksize*8),md62key,16,md6_default_L, 4, md62o);
+                    if (memcmp(md62i, md62o, 20) != 0) return false;
+                    break;
+                  case SIP64:
                     siphash64o = siphash24(byteblock, blocksize, sipkey);
                     if (siphash64i != siphash64o) return false;
                     break;
-                  case 8:
+                  case SHA164:
                     SHA1(byteblock, blocksize, sha1o);
                     if (memcmp(sha1i, sha1o, 8) != 0) return false;
                     break;
-                  case 9:
+                  case SHA1128:
                     SHA1(byteblock, blocksize, sha1o);
                     if (memcmp(sha1i, sha1o, 16) != 0) return false;
                     break;
-                  case 10:
+                  case SHA1s:
                     SHA1(byteblock, blocksize, sha1o);
                     if (memcmp(sha1i, sha1o, 20) != 0) return false;
                     break;
-                  case 11:
+                  case XXH32:
                     xxhash32o = XXHash32::hash(byteblock, blocksize, xxseed32);
                     if (xxhash32i != xxhash32o) return false;
                     break;
-                  case 12:
+                  case XXH64:
                     xxhash64o = XXHash64::hash(byteblock, blocksize, xxseed64);
                     if (xxhash64i != xxhash64o) return false;
                     break;
@@ -259,64 +293,75 @@ public:
     // display the hash list
     // const std::string& displayHLhashes() {
     std::string displayHLhashes() {
-        std::string hashlist;
         for(auto hash  : blockhlist) {
               switch(hash.first) {
-                  case 1:
+                  case CRC32:
                      ss << hash.second << " " << std::to_string(crc64i) << " ";
                      break;
-                  case 2:
+                  case FNV64:
+                     ss << hash.second << " " << std::to_string(fnv64_1i) << " ";
+                     break;
+                  case FNV64A:
+                     ss << hash.second << " " << std::to_string(fnv64a_1i) << " ";
+                     break;
+                  case HW64:
                      ss << hash.second << " " << std::to_string(hw64i) << " ";
                      break;
-                  case 3:
+                  case MD2s:
                      ss << hash.second << " ";
                      for(int i=0; i<16; ++i)
                            ss << std::uppercase << std::hex << (int)md2i[i];
                      ss << " ";
                      break;
-                  case 4:
+                  case MD4s:
                      ss << hash.second << " ";
                      for(int i=0; i<16; ++i)
                            ss << std::uppercase << std::hex << (int)md4i[i];
                      ss << " ";
                      break;
-                  case 5:
+                  case MD5s:
                      ss << hash.second << " ";
                      for(int i=0; i<16; ++i)
                            ss << std::uppercase << std::hex << (int)md5i[i];
                      ss << " ";
                      break;
-                  case 6:
+                  case MD6:
                      ss << hash.second << " ";
                      for(int i=0; i<20; ++i)
                            ss << std::uppercase << std::hex << (int)md6i[i];
                      ss << " ";
                      break;
-                  case 7:
+                  case MD62:
+                     ss << hash.second << " ";
+                     for(int i=0; i<20; ++i)
+                           ss << std::uppercase << std::hex << (int)md62i[i];
+                     ss << " ";
+                     break;
+                  case SIP64:
                      ss << hash.second << " " << std::to_string(siphash64i) << " ";
                      break;
-                  case 8:
+                  case SHA164:
                      ss << hash.second << " ";
                      for(int i=0; i<8; ++i)
                            ss << std::uppercase << std::hex << (int)sha1i[i];
                      ss << " ";
                      break;
-                  case 9:
+                  case SHA1128:
                      ss << hash.second << " ";
                      for(int i=0; i<16; ++i)
                            ss << std::uppercase << std::hex << (int)sha1i[i];
                      ss << " ";
                      break;
-                  case 10:
+                  case SHA1s:
                      ss << hash.second << " ";
                      for(int i=0; i<20; ++i)
                            ss << std::uppercase << std::hex << (int)sha1i[i];
                      ss << " ";
                      break;
-                  case 11:
+                  case XXH32:
                     ss << hash.second << " " << std::to_string(xxhash32i) << " ";
                     break;
-                  case 12:
+                  case XXH64:
                     ss << hash.second << " " << std::to_string(xxhash64i) << " ";
                     break;
                   // default:
