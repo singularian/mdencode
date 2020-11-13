@@ -428,6 +428,7 @@ public:
         std::cout << std::left << std::setw(12) << "Blocksize" << std::endl;
 
         for (int i = 0; i < hashlistsize; i++) {
+           if (mdHashlist[i].name == "last") break;
            std::cout << std::left << std::setw(12) << i + 1; 
            std::cout << std::left << std::setw(12) << mdHashlist[i].name;
            std::cout << std::left << std::setw(30) << mdHashlist[i].description;
