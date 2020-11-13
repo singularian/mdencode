@@ -11,7 +11,7 @@
  *
  * This includes the MD2 and MD4 and MD5 and MD6 signatures in the hash context list.
  *
- * Paramters: modulus size, threadnumber, blocksize and hashlists and keysize, hexbytes, runlogging
+ * Paramters: modulus size, threadnumber, blocksize and hashlists and hashlist keys (TODO), hexbytes, enable logging
  * 
  */
 
