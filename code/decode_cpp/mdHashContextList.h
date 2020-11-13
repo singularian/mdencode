@@ -117,7 +117,8 @@ public:
 
     // initialize mdHashContextList
     mdHashContextList() {
-        // hashlistsize = sizeof(mdHashlist) / sizeof(struct Hashlist);
+
+        // set the hashlistsize to the last signatures enum value - 1
         hashlistsize = LAST - 1;
     }
 
