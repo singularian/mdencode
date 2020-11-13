@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include "external/md6.h"
 
-enum signatures {FIRST, CRC32, FNV32, FNV32A, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, XXH32, XXH64};
+enum signatures {FIRST, CRC32, FNV32, FNV32A, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, XXH32, XXH64, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -117,7 +117,8 @@ public:
 
     // initialize mdHashContextList
     mdHashContextList() {
-        hashlistsize = sizeof(mdHashlist) / sizeof(struct Hashlist);
+        // hashlistsize = sizeof(mdHashlist) / sizeof(struct Hashlist);
+        hashlistsize = LAST - 1;
     }
 
     // Destructor
