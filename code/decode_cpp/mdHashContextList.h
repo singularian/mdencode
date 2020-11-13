@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include "external/md6.h"
 
-enum signatures {FIRST, CRC32, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, XXH32, XXH64};
+enum signatures {FIRST, CRC32, FNV32, FNV32A, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, XXH32, XXH64};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -41,6 +41,8 @@ struct Hashlist {
 
 Hashlist mdHashlist[18] = {
     {1,  "crc32",    "CRC 32",                false, 4},
+    {1,  "fnv32",    "FNV-1 32",              false, 4},
+    {1,  "fnv32a",   "FNV-1a 32",             false, 4},
     {1,  "fnv64",    "FNV-1 64",              false, 8},
     {1,  "fnv64a",   "FNV-1a 64",             false, 8},
     {2,  "hw64",     "Highway Hash 64",       true,  8},
@@ -76,6 +78,10 @@ private:
     // need to make these an array sized 6 for files and bg and block hash results
     uint64_t crc64i;
     uint64_t crc64o;
+    Fnv32_t fnv32_1i; 
+    Fnv32_t fnv32_1o;
+    Fnv32_t fnv32a_1i;
+    Fnv32_t fnv32a_1o;
     Fnv64_t fnv64_1i; 
     Fnv64_t fnv64_1o; 
     Fnv64_t fnv64a_1i; 
@@ -169,6 +175,12 @@ public:
                   case CRC32:
                     crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
                     break;
+                  case FNV32:
+                    fnv32_1i = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
+                    break;
+                  case FNV32A:
+                    fnv32a_1i = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
+                    break;
                   case FNV64:
                     fnv64_1i = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
                     break;
@@ -225,6 +237,14 @@ public:
                   case CRC32:
                     crc64o = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
                     if (crc64i != crc64o) return false;
+                    break;
+                  case FNV32:
+                    fnv32_1o = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
+                    if (fnv32_1i != fnv32_1o) return false;
+                    break;
+                  case FNV32A:
+                    fnv32a_1o = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
+                    if (fnv32a_1i != fnv32a_1o) return false;
                     break;
                   case FNV64:
                     fnv64_1o = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
@@ -297,6 +317,12 @@ public:
               switch(hash.first) {
                   case CRC32:
                      ss << hash.second << " " << std::to_string(crc64i) << " ";
+                     break;
+                  case FNV32:
+                     ss << hash.second << " " << std::to_string(fnv32_1i) << " ";
+                     break;
+                  case FNV32A:
+                     ss << hash.second << " " << std::to_string(fnv32a_1i) << " ";
                      break;
                   case FNV64:
                      ss << hash.second << " " << std::to_string(fnv64_1i) << " ";
