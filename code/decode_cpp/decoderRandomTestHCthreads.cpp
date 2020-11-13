@@ -3,7 +3,15 @@
  * https://github.com/singularian/mdencode
  * 
  * Project MDencode GMP C++ Modulus Scan Test Program
- * 
+ *
+ * This is a C++ GMP modulus scan multithreaded test program 
+ * MDencode GMP requires the GMP Library to build https://gmplib.org/ and the openssl library
+ * It also requires the libfnv library to be built and installed for the FNV1 signature
+ * MDencode uses a hash context list configured with the command arguments to run against a modulus scan 
+ *
+ * This includes the MD2 and MD4 and MD5 and MD6 signatures in the hash context list.
+ *
+ * Paramters: modulus size, threadnumber, blocksize and hashlists and keysize, hexbytes, runlogging
  * 
  */
 
@@ -33,12 +41,7 @@ void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& displayHLhashes, bool log );
 void usage();
 
-/* 
-   This is a C++ GMP modulus scan multithreaded test program 
-   MDencode GMP requires the GMP Library to build https://gmplib.org/
-   This program uses a Hash Context List with SHA1-64, SHA1-128 and SHA1 and Highway Hash 64
-   In the future the Hash Context list will include more signatures
-*/
+// main
 int main (int argc, char **argv) {
 
      size_t blocksize = 12;
