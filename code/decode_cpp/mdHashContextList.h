@@ -132,7 +132,7 @@ public:
     {  
           std::pair<int,std::string> hashPair;
           for(int val  : v) {
-              if (val < hashlistsize && val > 0) {
+              if (val <= hashlistsize && val > 0) {
                 hashPair.first  = val;
                 hashPair.second = mdHashlist[val-1].name;
                 filehlist.push_back(hashPair);
@@ -146,7 +146,7 @@ public:
     {  
           std::pair<int,std::string> hashPair; 
           for(int val  : v) {
-              if (val < hashlistsize && val > 0) {
+              if (val <= hashlistsize && val > 0) {
                 hashPair.first  = val;
                 hashPair.second = mdHashlist[val-1].name;
                 blockgrouphlist.push_back(hashPair);
@@ -160,7 +160,7 @@ public:
     {
           std::pair<int,std::string> hashPair;
           for(int val  : v) {
-              if (val < hashlistsize && val > 0) {
+              if (val <= hashlistsize && val > 0) {
                 hashPair.first  = val;
                 hashPair.second = mdHashlist[val-1].name;
                 blockhlist.push_back(hashPair);
