@@ -41,23 +41,23 @@ struct Hashlist {
 
 Hashlist mdHashlist[18] = {
     {1,  "crc32",    "CRC 32",                false, 4},
-    {1,  "fnv32",    "FNV-1 32",              false, 4},
-    {1,  "fnv32a",   "FNV-1a 32",             false, 4},
-    {1,  "fnv64",    "FNV-1 64",              false, 8},
-    {1,  "fnv64a",   "FNV-1a 64",             false, 8},
-    {2,  "hw64",     "Highway Hash 64",       true,  8},
-    {3,  "md2",      "MD2",                   false, 16},
-    {4,  "md4",      "MD4",                   false, 16},
-    {5,  "md5",      "MD5",                   false, 16},
-    {6,  "md6",      "MD6",                   false, 20},
-    {7,  "md62",     "MD6 Quicker",           true,  20},
-    {8,  "sip64",    "Siphash 64",            true,  8},
-    {9,  "sha1_64",  "SHA1 64",               false, 8},
-    {10, "sha1_128", "SHA1 128",              false, 16},
-    {11, "sha1",     "SHA1",                  false, 20},
-    {12, "xxh32",    "xxHash32",              true,  4},
-    {13, "xxh64",    "xxHash64",              true,  8},
-    {14, "last",     "Unused Signature",      false, 8}
+    {2,  "fnv32",    "FNV-1 32",              false, 4},
+    {3,  "fnv32a",   "FNV-1a 32",             false, 4},
+    {4,  "fnv64",    "FNV-1 64",              false, 8},
+    {5,  "fnv64a",   "FNV-1a 64",             false, 8},
+    {6,  "hw64",     "Highway Hash 64",       true,  8},
+    {7,  "md2",      "MD2",                   false, 16},
+    {8,  "md4",      "MD4",                   false, 16},
+    {9,  "md5",      "MD5",                   false, 16},
+    {10, "md6",      "MD6",                   false, 20},
+    {11, "md62",     "MD6 Quicker",           true,  20},
+    {12, "sip64",    "Siphash 64",            true,  8},
+    {13, "sha1_64",  "SHA1 64",               false, 8},
+    {14, "sha1_128", "SHA1 128",              false, 16},
+    {15, "sha1",     "SHA1",                  false, 20},
+    {16, "xxh32",    "xxHash32",              true,  4},
+    {17, "xxh64",    "xxHash64",              true,  8},
+    {18, "last",     "Unused Signature",      false, 8}
 };
 
 
