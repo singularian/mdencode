@@ -188,41 +188,13 @@ class modscan
 
            // check the hash context list
            if (hcl.compareBlockHashList(byteblock, blocksize)) {
-/*               printf("\nFound block on thread %d ", threadnumber);
-               for (n = 0; n < blocksize; n++) {
-                    printf("%02X", byteblock[n]);
-               }
-               printf("\nBytes ");
-               for (n = 0; n < blocksize; n++) {
-                    printf("%02d ", byteblock[n]); 
-               }
-               printf("\nSHA1 ");
-               for (n = 0; n < 20; n++)
-                    printf("%02X", results[n]);
-               printf("\n\n");
-*/
                this->isMatched = true;
                mutexref->mdMutex::setMatched(threadnumber);
                break;
            } else {
               if (lineNum > lineCount) {
-          /*    printf("Searching block ");
-              gmp_printf("%Zd", blockInt);
-              printf(" byteblock ");
-              for (n = 0; n < blocksize; n++) {
-                    printf("%02x", byteblock[n]);
-              }
-              printf(" sha1 ");
-              for (n = 0; n < 20; n++)
-                    printf("%02x", sha1[n]);
-              printf(" results  ");
-              for (n = 0; n < 20; n++)
-                    printf("%02x", results[n]);
-              printf("\n");
-                 lineNum = 0;
-              }
-           */
-              // log.writeLogThread(threadnumber, (char *) str.c_str());
+              // TODO Add a greater than the exponent check
+              // If it is greater than the mod ^ exp + 1 (the ceil) break
               lineNum = 0;
               log->mdMutexLog::writeLogThread(threadnumber, blockInt);
               }
