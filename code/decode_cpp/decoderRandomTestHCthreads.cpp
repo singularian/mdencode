@@ -16,13 +16,14 @@
  */
 
 #include <stdlib.h>
-#include <iostream>
+#include <algorithm>
+#include <chrono> 
 #include <ctime>
+#include <iostream>
 #include <gmp.h>
-#include <time.h>
 #include <string>
+#include <time.h>
 #include <vector>
-#include <algorithm> 
 #include "external/CLI11.hpp" 
 #include "mdMutex.h"
 #include "mdMutexLog.h"
@@ -204,6 +205,9 @@ int main (int argc, char **argv) {
      // std::cout << endl << "Running decode modscan" << endl << endl;
      log.writeLog((char *) "Running decode modscan");
 
+     // start the count
+     auto start = std::chrono::high_resolution_clock::now();
+
      // execute the threads
      for(int tnum = 0; tnum < threads.size(); tnum++)
      {
@@ -221,12 +225,22 @@ int main (int argc, char **argv) {
 
      int threadMatchNumber = mutex.getMatchThread(); 
 
+     // calculate the duration time
+     auto stop = std::chrono::high_resolution_clock::now(); 
+     auto hours = std::chrono::duration_cast<std::chrono::hours>(stop - start); 
+     auto min = std::chrono::duration_cast<std::chrono::minutes>(stop - start); 
+     auto sec = std::chrono::duration_cast<std::chrono::seconds>(stop - start); 
+     auto diff = stop - start;
 
      // check the modulus scan results
      unsigned char *modbyteblock;
      // modbyteblock = ms.getModscanByteBlock();
      modbyteblock = mst[threadMatchNumber].getModscanByteBlock();
      if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
+          cout << "Found Match" << endl << endl;
+          cout << "Total Time " << hours.count() << " hours " << min.count() << " minutes ";
+          cout << chrono::duration <double, milli> (diff).count() / 1000 << " seconds " << endl;
+
           cout << "Modulus Scan thread " << threadMatchNumber << " and Random byteblock match" << endl;
           printByteblock(byteblock, blocksize, false);
           printByteblock(modbyteblock, blocksize, false);
