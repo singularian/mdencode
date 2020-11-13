@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include "external/md6.h"
 
-enum signatures {FIRST, CRC32, FNV32, FNV32A, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, XXH32, XXH64, LAST};
+enum signatures {FIRST, CRC32, FNV32, FNV32A, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, SHA256s, XXH32, XXH64, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -39,11 +39,11 @@ struct Hashlist {
     int blocksize;
 };
 
-Hashlist mdHashlist[18] = {
+Hashlist mdHashlist[28] = {
     {1,  "crc32",    "CRC 32",                false, 4},
-    {2,  "fnv32",    "FNV-1 32",              false, 4},
+    {2,  "fnv32",    "FNV-1  32",             false, 4},
     {3,  "fnv32a",   "FNV-1a 32",             false, 4},
-    {4,  "fnv64",    "FNV-1 64",              false, 8},
+    {4,  "fnv64",    "FNV-1  64",             false, 8},
     {5,  "fnv64a",   "FNV-1a 64",             false, 8},
     {6,  "hw64",     "Highway Hash 64",       true,  8},
     {7,  "md2",      "MD2",                   false, 16},
@@ -55,6 +55,7 @@ Hashlist mdHashlist[18] = {
     {13, "sha1_64",  "SHA1 64",               false, 8},
     {14, "sha1_128", "SHA1 128",              false, 16},
     {15, "sha1",     "SHA1",                  false, 20},
+    {15, "sha256",   "SHA 256",               false, 32},
     {16, "xxh32",    "xxHash32",              true,  4},
     {17, "xxh64",    "xxHash64",              true,  8},
     {18, "last",     "Unused Signature",      false, 8}
@@ -102,6 +103,8 @@ private:
     unsigned char md62key[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
     uint8_t sha1i[41];
     uint8_t sha1o[41];
+    uint8_t sha256i[32];
+    uint8_t sha256o[32];
     uint32_t siphash64i;
     uint32_t siphash64o;
     char sipkey[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
@@ -219,6 +222,9 @@ public:
                   case SHA1s:
                     SHA1(byteblock, blocksize, sha1i);
                     break;
+                  case SHA256s:
+                    SHA256(byteblock, blocksize, sha256i);
+                    break;
                   case XXH32:
                     xxhash32i = XXHash32::hash(byteblock, blocksize, xxseed32);
                     break;
@@ -295,6 +301,10 @@ public:
                   case SHA1s:
                     SHA1(byteblock, blocksize, sha1o);
                     if (memcmp(sha1i, sha1o, 20) != 0) return false;
+                    break;
+                  case SHA256s:
+                    SHA256(byteblock, blocksize, sha256o);
+                    if (memcmp(sha256i, sha256o, 20) != 0) return false;
                     break;
                   case XXH32:
                     xxhash32o = XXHash32::hash(byteblock, blocksize, xxseed32);
@@ -384,6 +394,12 @@ public:
                      ss << hash.second << " ";
                      for(int i=0; i<20; ++i)
                            ss << std::uppercase << std::hex << (int)sha1i[i];
+                     ss << " ";
+                     break;
+                  case SHA256s:
+                     ss << hash.second << " ";
+                     for(int i=0; i<32; ++i)
+                           ss << std::uppercase << std::hex << (int)sha256i[i];
                      ss << " ";
                      break;
                   case XXH32:
