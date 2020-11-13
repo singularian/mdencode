@@ -46,7 +46,6 @@ int main (int argc, char **argv) {
      int threadnumber = 0;
      int threadcount  = 8;
      // current signature number handled in the hash context list
-     // int signum    = 17;
      int signum       = LAST - 1;
 
      // process the command line argument with the CLI11 command line parser
