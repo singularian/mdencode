@@ -10,8 +10,8 @@ FROM golang:1.15 AS builder
 
 # install openssl
 RUN apt update
-RUN apt-get install openssl libssl-dev 
-RUN apt-get install libgmp3-dev
+RUN apt-get install openssl libssl-dev -y
+RUN apt-get install libgmp3-dev -y
 
 # setup the GOBIN environment
 ENV GOBIN /go/bin
