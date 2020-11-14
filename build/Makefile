@@ -17,6 +17,10 @@ MDE=../code/mdencode
 MDZ=../code/mdzip
 MDZIP=../code/decode
 TEST=../code/testdecode
+CPPTEST=../code/decode_cpp
+
+CC=g++
+DEPS=$(CPPTEST)/external/md6.h $(CPPTEST)/external/md6_mode.c $(CPPTEST)/external/md6_compress.c $(CPPTEST)/external/highwayhash.c $(CPPTEST)/fnv/hash_32.c $(CPPTEST)/fnv/hash_32a.c $(CPPTEST)/fnv/hash_64.c $(CPPTEST)/fnv/hash_64a.c $(CPPTEST)/plog/Log.h
 
 # Setup the -ldflags option for go build here, interpolate the variable values
 LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
@@ -56,6 +60,8 @@ build:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest ${MDZIP}/${CMD}/testBinReadMdFmt.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${MDZIP}/${CMD}/mdsig.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile ${MDZIP}/${CMD}/randomFile.go
+buildcpp:
+	g++ -I$(CPPTEST) $(DEPS) $(CPPTEST)/decoderRandomTestHCthreads.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 mdencode:
 	@echo "Building mdencode"
 	go build $(LDFLAGS) -o ${BUILD_DIR}/md ${MDE}/${CMD}/mdencode.go
@@ -115,7 +121,7 @@ hctest:
 	@echo "Running Hash Context List Tests"
 	./decoderRandomTestHC -all -mod=64 -block=11 -thread=16
 clean:
-	rm -r mdzip mdunzip mdcmd mdlist mdlistTest mdsig randfile md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC randomfile randomfile.mdz randomfile.mdz.out *.log
+	rm -r mdzip mdunzip mdcmd mdlist mdlistTest mdsig randfile md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC decoderRandomTestHC2 randomfile randomfile.mdz randomfile.mdz.out *.log
 cleanbuild:
 	rm -r ${BUILD_DIR}/mdzip ${BUILD_DIR}/mdunzip ${BUILD_DIR}/mdcmd ${BUILD_DIR}/mdlist ${BUILD_DIR}/mdsig ${BUILD_DIR}/randfile ${BUILD_DIR}/mdencode ${BUILD_DIR}/mdbinlist ${BUILD_DIR}/md ${BUILD_DIR}/mddbreport ${BUILD_DIR}/mdnewdb
 # Display general help about this command

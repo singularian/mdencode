@@ -8,6 +8,10 @@ FROM golang:1.14.1 AS builder
 # RUN adduser -S -D -H -h /app appuser
 # USER appuser
 
+# install openssl
+RUN apt-get install openssl openssl-dev
+RUN apt-get install libgmp3-dev
+
 # setup the GOBIN environment
 ENV GOBIN /go/bin
 ENV PATH="${GOBIN}:${PATH}"
@@ -34,15 +38,23 @@ COPY . .
 # check the mdencode source directory
 RUN ls -lha /go/src/app/mdencode
 
+# change to the build /go/src/app/mdencode/code
+WORKDIR /go/src/app/mdencode/code/decode_cpp/fnv
+RUN make install
+
 # change to the build directory
 WORKDIR /go/src/app/mdencode/build
 
 # run the make build for mdencode and mdzip
 RUN make mdencode
 RUN make mdzip
+RUN make buildcpp
 
 # check the mdencode and mdzip binary execs
 RUN mdsig
 RUN mdencode
 RUN mdzip
 RUN mdunzip
+
+# check the cpp binary
+RUN decoderRandomTestHC2
