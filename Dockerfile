@@ -9,7 +9,7 @@ FROM golang:1.14.1 AS builder
 # USER appuser
 
 # install openssl
-RUN apt-get install openssl openssl-dev
+RUN apt-get install openssl libssl1.0-dev 
 RUN apt-get install libgmp3-dev
 
 # setup the GOBIN environment
