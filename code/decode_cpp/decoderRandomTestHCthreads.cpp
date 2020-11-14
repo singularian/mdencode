@@ -227,19 +227,16 @@ int main (int argc, char **argv) {
 
      // calculate the duration time
      auto stop = std::chrono::high_resolution_clock::now(); 
-     auto hours = std::chrono::duration_cast<std::chrono::hours>(stop - start); 
-     auto min = std::chrono::duration_cast<std::chrono::minutes>(stop - start); 
-     auto sec = std::chrono::duration_cast<std::chrono::seconds>(stop - start); 
-     auto diff = stop - start;
+     // auto hours = std::chrono::duration_cast<std::chrono::hours>(stop - start); 
+     // auto min = std::chrono::duration_cast<std::chrono::minutes>(stop - start); 
+     double elapsed_time = double(std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count());
 
      // check the modulus scan results
      unsigned char *modbyteblock;
-     // modbyteblock = ms.getModscanByteBlock();
      modbyteblock = mst[threadMatchNumber].getModscanByteBlock();
      if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
           cout << "Found Match" << endl << endl;
-          cout << "Total Time " << hours.count() << " hours " << min.count() << " minutes ";
-          cout << chrono::duration <double, milli> (diff).count() / 1000 << " seconds " << endl;
+          cout << "Elapsed Time (s) " << elapsed_time/1e9 << endl;
 
           cout << "Modulus Scan thread " << threadMatchNumber << " and Random byteblock match" << endl;
           printByteblock(byteblock, blocksize, false);
