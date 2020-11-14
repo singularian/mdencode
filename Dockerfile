@@ -58,4 +58,5 @@ RUN mdzip
 RUN mdunzip
 
 # check the cpp binary
+RUN ls -lha decoderRandomTestHC2
 RUN decoderRandomTestHC2
