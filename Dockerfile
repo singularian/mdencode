@@ -8,10 +8,12 @@ FROM golang:1.15 AS builder
 # RUN adduser -S -D -H -h /app appuser
 # USER appuser
 
-# install openssl
-RUN apt update
-RUN apt-get install openssl libssl-dev -y
-RUN apt-get install libgmp3-dev -y
+# install openssl and libgmp
+RUN apt update && apt-get install -y \
+    openssl \
+    libssl-dev \
+    libgmp3-dev \
+&& rm -rf /var/lib/apt/lists/*
 
 # setup the GOBIN environment
 ENV GOBIN /go/bin
@@ -58,5 +60,5 @@ RUN mdzip
 RUN mdunzip
 
 # check the cpp binary
-RUN ls -lha decoderRandomTestHC2
-RUN decoderRandomTestHC2
+RUN ls -lha
+CMD decoderRandomTestHC2
