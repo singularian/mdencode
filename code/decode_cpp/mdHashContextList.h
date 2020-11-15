@@ -28,7 +28,7 @@
 #include <openssl/sha.h>
 #include "external/md6/md6.h"
 
-enum signatures {FIRST, CRC32, FNV32, FNV32A, FNV64, FNV64A, HW64, MET64, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, SHA256s, XXH32, XXH64, LAST};
+enum signatures {FIRST, CRC32, FNV32, FNV32A, FNV64, FNV64A, HW64, MET64, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA512s, XXH32, XXH64, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -58,6 +58,7 @@ Hashlist mdHashlist[28] = {
     {14, "sha1_128", "SHA1 128",              false, 16},
     {15, "sha1",     "SHA1",                  false, 20},
     {15, "sha256",   "SHA 256",               false, 32},
+    {15, "sha512",   "SHA 512",               false, 64},
     {16, "xxh32",    "xxHash32",              true,  4},
     {17, "xxh64",    "xxHash64",              true,  8},
     {18, "last",     "Unused Signature",      false, 8}
@@ -79,8 +80,10 @@ private:
     std::vector<std::pair<int,std::string>> blockhlist;
     // hash results
     // need to make these an array sized 6 for files and bg and block hash results
+    // crc64
     uint64_t crc64i;
     uint64_t crc64o;
+    // fnv1
     Fnv32_t fnv32_1i; 
     Fnv32_t fnv32_1o;
     Fnv32_t fnv32a_1i;
@@ -88,7 +91,8 @@ private:
     Fnv64_t fnv64_1i; 
     Fnv64_t fnv64_1o; 
     Fnv64_t fnv64a_1i; 
-    Fnv64_t fnv64a_1o; 
+    Fnv64_t fnv64a_1o;
+    // highway hash
     uint64_t hw64i;
     uint64_t hw64o;
     const uint64_t hw64key[4] = {1, 2, 3, 4};
@@ -108,13 +112,18 @@ private:
     uint8_t md62i[41];
     uint8_t md62o[41];
     unsigned char md62key[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
+    // sha1 family
     uint8_t sha1i[41];
     uint8_t sha1o[41];
     uint8_t sha256i[32];
     uint8_t sha256o[32];
+    uint8_t sha512i[64];
+    uint8_t sha512o[64];
+    // siphash
     uint32_t siphash64i;
     uint32_t siphash64o;
     char sipkey[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
+    // xxhash
     uint32_t xxhash32i;
     uint32_t xxhash32o;
     uint32_t xxseed32 = 0;
@@ -235,6 +244,9 @@ public:
                   case SHA256s:
                     SHA256(byteblock, blocksize, sha256i);
                     break;
+                  case SHA512s:
+                    SHA512(byteblock, blocksize, sha512i);
+                    break;
                   case XXH32:
                     xxhash32i = XXHash32::hash(byteblock, blocksize, xxseed32);
                     break;
@@ -318,7 +330,11 @@ public:
                     break;
                   case SHA256s:
                     SHA256(byteblock, blocksize, sha256o);
-                    if (memcmp(sha256i, sha256o, 20) != 0) return false;
+                    if (memcmp(sha256i, sha256o, 32) != 0) return false;
+                    break;
+                  case SHA512s:
+                    SHA512(byteblock, blocksize, sha512o);
+                    if (memcmp(sha512i, sha512o, 64) != 0) return false;
                     break;
                   case XXH32:
                     xxhash32o = XXHash32::hash(byteblock, blocksize, xxseed32);
@@ -420,6 +436,12 @@ public:
                      ss << hash.second << " ";
                      for(int i=0; i<32; ++i)
                            ss << std::uppercase << std::hex << (int)sha256i[i];
+                     ss << " ";
+                     break;
+                  case SHA512s:
+                     ss << hash.second << " ";
+                     for(int i=0; i<64; ++i)
+                           ss << std::uppercase << std::hex << (int)sha512i[i];
                      ss << " ";
                      break;
                   case XXH32:
