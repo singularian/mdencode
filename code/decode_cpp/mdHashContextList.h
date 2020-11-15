@@ -28,7 +28,7 @@
 #include <openssl/sha.h>
 #include "external/md6/md6.h"
 
-enum signatures {FIRST, CRC32, FNV32, FNV32A, FNV64, FNV64A, HW64, MET64, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA512s, XXH32, XXH64, LAST};
+enum signatures {FIRST, CRC32, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA512s, XXH32, XXH64, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -47,7 +47,8 @@ Hashlist mdHashlist[28] = {
     {4,  "fnv64",    "FNV-1  64",             false, 8},
     {5,  "fnv64a",   "FNV-1a 64",             false, 8},
     {6,  "hw64",     "Highway Hash 64",       true,  8},
-    {6,  "met64",    "Metro Hash 64",         true,  8},
+    {6,  "met641",   "Metro Hash 64 v1",      true,  8},
+    {6,  "met642",   "Metro Hash 64 v2",      true,  8},
     {7,  "md2",      "MD2",                   false, 16},
     {8,  "md4",      "MD4",                   false, 16},
     {9,  "md5",      "MD5",                   false, 16},
@@ -97,9 +98,12 @@ private:
     uint64_t hw64o;
     const uint64_t hw64key[4] = {1, 2, 3, 4};
     // metro64hash
-    uint8_t met64i[8];
-    uint8_t met64o[8];
-    uint32_t met64seed = 1237789;
+    uint8_t met641i[8];
+    uint8_t met641o[8];
+    uint32_t met641seed = 1237789;
+    uint8_t met642i[8];
+    uint8_t met642o[8];
+    uint32_t met642seed = 1237789;
     // md2 to md6
     uint8_t md2i[41];
     uint8_t md2o[41];
@@ -211,8 +215,11 @@ public:
                   case HW64:
                     hw64i = HighwayHash64(byteblock, blocksize, hw64key);
                     break;
-                  case MET64:
-                    metrohash64_2(byteblock, (uint64_t) blocksize, met64seed, met64i);
+                  case MET641:
+                    metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641i);
+                    break;
+                  case MET642:
+                    metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642i);
                     break;
                   case MD2s:
                     md2(byteblock,(size_t)blocksize,md2i);
@@ -288,9 +295,13 @@ public:
                     hw64o = HighwayHash64(byteblock, blocksize, hw64key);
                     if (hw64i != hw64o) return false;
                     break;
-                  case MET64:
-                    metrohash64_2(byteblock, (uint64_t) blocksize, met64seed, met64o);
-                    if (memcmp(met64i, met64o, 8) != 0) return false;
+                  case MET641:
+                    metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641o);
+                    if (memcmp(met641i, met641o, 8) != 0) return false;
+                    break;
+                  case MET642:
+                    metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642o);
+                    if (memcmp(met642i, met642o, 8) != 0) return false;
                     break;
                   case MD2s:
                     md2(byteblock,(size_t)blocksize,md2o);
@@ -355,100 +366,102 @@ public:
     // display the hash list
     // const std::string& displayHLhashes() {
     std::string displayHLhashes() {
+
+        int i = 0;
+        int hashblocksize = 0;
         for(auto hash  : blockhlist) {
+              // mdHashlist starts at index 0
+              hashblocksize = mdHashlist[hash.first-1].blocksize;
+              ss << hash.second << " ";
+              // ss << "hash id " << std::to_string(hash.first) << " " << " name " << hash.second << " hashblocksize " << std::to_string(hashblocksize) << " ";
+
               switch(hash.first) {
                   case CRC32:
-                     ss << hash.second << " " << std::to_string(crc64i) << " ";
+                     ss << std::to_string(crc64i) << " ";
                      break;
                   case FNV32:
-                     ss << hash.second << " " << std::to_string(fnv32_1i) << " ";
+                     ss << std::to_string(fnv32_1i) << " ";
                      break;
                   case FNV32A:
-                     ss << hash.second << " " << std::to_string(fnv32a_1i) << " ";
+                     ss << std::to_string(fnv32a_1i) << " ";
                      break;
                   case FNV64:
-                     ss << hash.second << " " << std::to_string(fnv64_1i) << " ";
+                     ss << std::to_string(fnv64_1i) << " ";
                      break;
                   case FNV64A:
-                     ss << hash.second << " " << std::to_string(fnv64a_1i) << " ";
+                     ss << std::to_string(fnv64a_1i) << " ";
                      break;
                   case HW64:
-                     ss << hash.second << " " << std::to_string(hw64i) << " ";
+                     ss << std::to_string(hw64i) << " ";
                      break;
-                  case MET64:
-                     ss << hash.second << " "; 
-                     for(int i=0; i<8; ++i)
-                           ss << std::uppercase << std::hex << (unsigned int)met64i[i];
+                  case MET641:
+                     for(i=0; i < hashblocksize; ++i)
+                           ss << std::uppercase << std::hex << (unsigned int)met641i[i];
+                     ss << " ";
+                     break;
+                  case MET642:
+                     for(i=0; i < hashblocksize; ++i)
+                           ss << std::uppercase << std::hex << (unsigned int)met642i[i];
                      ss << " ";
                      break;
                   case MD2s:
-                     ss << hash.second << " ";
-                     for(int i=0; i<16; ++i)
+                     for(i=0; i < hashblocksize; ++i)
                            ss << std::uppercase << std::hex << (int)md2i[i];
                      ss << " ";
                      break;
                   case MD4s:
-                     ss << hash.second << " ";
-                     for(int i=0; i<16; ++i)
+                     for(i=0; i < hashblocksize; ++i)
                            ss << std::uppercase << std::hex << (int)md4i[i];
                      ss << " ";
                      break;
                   case MD5s:
-                     ss << hash.second << " ";
-                     for(int i=0; i<16; ++i)
+                     for(i=0; i < hashblocksize; ++i)
                            ss << std::uppercase << std::hex << (int)md5i[i];
                      ss << " ";
                      break;
                   case MD6:
-                     ss << hash.second << " ";
-                     for(int i=0; i<20; ++i)
+                     for(i=0; i<hashblocksize; ++i)
                            ss << std::uppercase << std::hex << (int)md6i[i];
                      ss << " ";
                      break;
                   case MD62:
-                     ss << hash.second << " ";
-                     for(int i=0; i<20; ++i)
+                     for(i=0; i < hashblocksize; ++i)
                            ss << std::uppercase << std::hex << (int)md62i[i];
                      ss << " ";
                      break;
                   case SIP64:
-                     ss << hash.second << " " << std::to_string(siphash64i) << " ";
+                     ss << std::to_string(siphash64i) << " ";
                      break;
                   case SHA164:
-                     ss << hash.second << " ";
-                     for(int i=0; i<8; ++i)
+                     for(i=0; i < hashblocksize; ++i)
                            ss << std::uppercase << std::hex << (int)sha1i[i];
                      ss << " ";
                      break;
                   case SHA1128:
-                     ss << hash.second << " ";
-                     for(int i=0; i<16; ++i)
+                     for(i=0; i < hashblocksize; ++i)
                            ss << std::uppercase << std::hex << (int)sha1i[i];
                      ss << " ";
                      break;
                   case SHA1s:
-                     ss << hash.second << " ";
-                     for(int i=0; i<20; ++i)
+                     for(i=0; i < hashblocksize; ++i)
                            ss << std::uppercase << std::hex << (int)sha1i[i];
                      ss << " ";
                      break;
                   case SHA256s:
-                     ss << hash.second << " ";
-                     for(int i=0; i<32; ++i)
+                     for(i=0; i < hashblocksize; ++i)
                            ss << std::uppercase << std::hex << (int)sha256i[i];
                      ss << " ";
                      break;
                   case SHA512s:
-                     ss << hash.second << " ";
-                     for(int i=0; i<64; ++i)
+                     for(i=0; i < hashblocksize; ++i)
                            ss << std::uppercase << std::hex << (int)sha512i[i];
                      ss << " ";
                      break;
                   case XXH32:
-                    ss << hash.second << " " << std::to_string(xxhash32i) << " ";
+                    ss << std::to_string(xxhash32i) << " ";
                     break;
                   case XXH64:
-                    ss << hash.second << " " << std::to_string(xxhash64i) << " ";
+                    ss << std::to_string(xxhash64i) << " ";
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
