@@ -13,22 +13,25 @@
 #include <iomanip>
 #include <sstream>
 #include "external/crc/CRC.h"
-#include "external/highwayhash/highwayhash.h"
-#include "external/md2.c"
 #include "external/csiphash.c"
+#include "external/fasthash/fasthash.h"
 #include "external/fnv/fnv.h"
+#include "external/highwayhash/highwayhash.h"
 #include "external/xxhash/xxhash32.h"
 #include "external/xxhash/xxhash64.h"
 #include "external/metro64/metrohash64.h"
+#include "external/pengyhash/pengyhash.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "external/md2.c"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
 #include <openssl/sha.h>
 #include "external/md6/md6.h"
+#include "external/wyhash/wyhash.h"
 
-enum signatures {FIRST, CRC32, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA512s, XXH32, XXH64, LAST};
+enum signatures {FIRST, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, XXH32, XXH64, WYH, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -40,8 +43,12 @@ struct Hashlist {
     int blocksize;
 };
 
+// could add a zero / non used signature and a last non used
+// so it starts at index 1
 Hashlist mdHashlist[28] = {
     {1,  "crc32",    "CRC 32",                false, 4},
+    {1,  "fast32",   "Fasthash 32",           true,  4},
+    {1,  "fast64",   "Fasthash 64",           true,  8},
     {2,  "fnv32",    "FNV-1  32",             false, 4},
     {3,  "fnv32a",   "FNV-1a 32",             false, 4},
     {4,  "fnv64",    "FNV-1  64",             false, 8},
@@ -54,14 +61,17 @@ Hashlist mdHashlist[28] = {
     {9,  "md5",      "MD5",                   false, 16},
     {10, "md6",      "MD6",                   false, 20},
     {11, "md62",     "MD6 Quicker",           true,  20},
+    {11, "png",      "Pengyhash 64",          true,  8},
     {12, "sip64",    "Siphash 64",            true,  8},
     {13, "sha1_64",  "SHA1 64",               false, 8},
     {14, "sha1_128", "SHA1 128",              false, 16},
     {15, "sha1",     "SHA1",                  false, 20},
     {15, "sha256",   "SHA 256",               false, 32},
+    {15, "sha384",   "SHA 384",               false, 48},
     {15, "sha512",   "SHA 512",               false, 64},
     {16, "xxh32",    "xxHash32",              true,  4},
     {17, "xxh64",    "xxHash64",              true,  8},
+    {17, "wy64",     "WYhash 64",             true,  8},
     {18, "last",     "Unused Signature",      false, 8}
 };
 
@@ -84,6 +94,13 @@ private:
     // crc64
     uint64_t crc64i;
     uint64_t crc64o;
+    // fasthash
+    uint32_t fast32i;
+    uint32_t fast32o;
+    uint32_t fast32seed = 0;
+    uint64_t fast64i;
+    uint64_t fast64o;
+    uint64_t fast64seed = 1;
     // fnv1
     Fnv32_t fnv32_1i; 
     Fnv32_t fnv32_1o;
@@ -116,11 +133,17 @@ private:
     uint8_t md62i[41];
     uint8_t md62o[41];
     unsigned char md62key[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
+    // pengyhash
+    uint64_t png64i;
+    uint64_t png64o;
+    uint32_t png64seed = 127982;
     // sha1 family
     uint8_t sha1i[41];
     uint8_t sha1o[41];
     uint8_t sha256i[32];
     uint8_t sha256o[32];
+    uint8_t sha384i[64];
+    uint8_t sha384o[64];
     uint8_t sha512i[64];
     uint8_t sha512o[64];
     // siphash
@@ -134,6 +157,11 @@ private:
     uint64_t xxhash64i;
     uint64_t xxhash64o;
     uint64_t xxseed64 = 0;
+    // wyhash
+    uint64_t wyhash64i;
+    uint64_t wyhash64o;
+    uint64_t wyseed64 = 10232123120;
+    uint64_t wysecret64[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
 public:
     std::stringstream ss;
     std::string hashlist;
@@ -200,6 +228,12 @@ public:
                   case CRC32:
                     crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
                     break;
+                  case FAST32:
+                    fast32i = fasthash32(byteblock, blocksize, fast32seed);
+                    break;
+                  case FAST64:
+                    fast64i = fasthash64(byteblock, blocksize, fast64seed);
+                    break;
                   case FNV32:
                     fnv32_1i = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
                     break;
@@ -236,6 +270,9 @@ public:
                   case MD62:
                     md6_full_hash(160, byteblock,(uint64_t)(blocksize*8),md62key,16,md6_default_L, 4, md62i);
                     break;
+                  case PNG:
+                    png64i = pengyhash(byteblock, (size_t) blocksize, png64seed);
+                    break;
                   case SIP64: 
                     siphash64i = siphash24(byteblock, blocksize, sipkey);
                     break;
@@ -251,6 +288,9 @@ public:
                   case SHA256s:
                     SHA256(byteblock, blocksize, sha256i);
                     break;
+                  case SHA384s:
+                    SHA384(byteblock, blocksize, sha384i);
+                    break;
                   case SHA512s:
                     SHA512(byteblock, blocksize, sha512i);
                     break;
@@ -259,6 +299,9 @@ public:
                     break;
                   case XXH64:
                     xxhash64i = XXHash64::hash(byteblock, blocksize, xxseed64);
+                    break;
+                  case WYH:
+                    wyhash64i = wyhash(byteblock, blocksize, wyseed64, (const uint64_t*) wysecret64);
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
@@ -269,11 +312,23 @@ public:
     // run the hash context list on the current byte block and compare the input hash with the computed output hash
     // if the comparison is true return true otherwise return false
     bool compareBlockHashList(unsigned char *byteblock, int blocksize) {
+
+         int hashblocksize = 0;
          for(auto hash  : blockhlist) {
+              hashblocksize = mdHashlist[hash.first-1].blocksize;
+
               switch(hash.first) {
                   case CRC32:
                     crc64o = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
                     if (crc64i != crc64o) return false;
+                    break;
+                  case FAST32:
+                    fast32o = fasthash32(byteblock, blocksize, fast32seed);
+                    if (fast32i != fast32o) return false;
+                    break;
+                  case FAST64:
+                    fast64o = fasthash64(byteblock, blocksize, fast64seed);
+                    if (fast64i != fast64o) return false;
                     break;
                   case FNV32:
                     fnv32_1o = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
@@ -323,6 +378,10 @@ public:
                     md6_full_hash(160, byteblock,(uint64_t)(blocksize*8),md62key,16,md6_default_L, 4, md62o);
                     if (memcmp(md62i, md62o, 20) != 0) return false;
                     break;
+                  case PNG:
+                    png64o = pengyhash(byteblock, (size_t) blocksize, png64seed);
+                    if (png64i != png64o) return false;
+                    break;
                   case SIP64:
                     siphash64o = siphash24(byteblock, blocksize, sipkey);
                     if (siphash64i != siphash64o) return false;
@@ -343,6 +402,10 @@ public:
                     SHA256(byteblock, blocksize, sha256o);
                     if (memcmp(sha256i, sha256o, 32) != 0) return false;
                     break;
+                  case SHA384s:
+                    SHA384(byteblock, blocksize, sha384o);
+                    if (memcmp(sha384i, sha384o, 48) != 0) return false;
+                    break;
                   case SHA512s:
                     SHA512(byteblock, blocksize, sha512o);
                     if (memcmp(sha512i, sha512o, 64) != 0) return false;
@@ -354,6 +417,10 @@ public:
                   case XXH64:
                     xxhash64o = XXHash64::hash(byteblock, blocksize, xxseed64);
                     if (xxhash64i != xxhash64o) return false;
+                    break;
+                  case WYH:
+                    wyhash64o = wyhash(byteblock, blocksize, wyseed64, (const uint64_t*) wysecret64);
+                    if (wyhash64i != wyhash64o) return false;
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
@@ -378,6 +445,12 @@ public:
               switch(hash.first) {
                   case CRC32:
                      ss << std::to_string(crc64i) << " ";
+                     break;
+                  case FAST32:
+                     ss << std::to_string(fast32i) << " ";
+                     break;
+                 case FAST64:
+                     ss << std::to_string(fast64i) << " ";
                      break;
                   case FNV32:
                      ss << std::to_string(fnv32_1i) << " ";
@@ -429,6 +502,9 @@ public:
                            ss << std::uppercase << std::hex << (int)md62i[i];
                      ss << " ";
                      break;
+                  case PNG:
+                     ss << std::to_string(png64i) << " ";
+                     break;
                   case SIP64:
                      ss << std::to_string(siphash64i) << " ";
                      break;
@@ -462,6 +538,9 @@ public:
                     break;
                   case XXH64:
                     ss << std::to_string(xxhash64i) << " ";
+                    break;
+                  case WYH:
+                    ss << std::to_string(wyhash64i) << " ";
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
