@@ -17,10 +17,11 @@ MDE=../code/mdencode
 MDZ=../code/mdzip
 MDZIP=../code/decode
 TEST=../code/testdecode
-CPPTEST=../code/decode_cpp
+CPP=../code/decode_cpp/
+CPPTEST=../code/decode_cpp/external/
 
 CC=g++
-DEPS=$(CPPTEST)/external/md6.h $(CPPTEST)/external/md6_mode.c $(CPPTEST)/external/md6_compress.c $(CPPTEST)/external/highwayhash.c $(CPPTEST)/fnv/hash_32.c $(CPPTEST)/fnv/hash_32a.c $(CPPTEST)/fnv/hash_64.c $(CPPTEST)/fnv/hash_64a.c $(CPPTEST)/plog/Log.h
+DEPS=$(CPPTEST)/md6/md6.h $(CPPTEST)/md6/md6_mode.c $(CPPTEST)/md6/md6_compress.c $(CPPTEST)/highwayhash/highwayhash.c $(CPPTEST)/metro64/metrohash64.cpp $(CPPTEST)/fnv/hash_32.c $(CPPTEST)/fnv/hash_32a.c $(CPPTEST)/fnv/hash_64.c $(CPPTEST)/fnv/hash_64a.c $(CPP)/plog/Log.h
 
 # Setup the -ldflags option for go build here, interpolate the variable values
 LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
@@ -61,7 +62,7 @@ build:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${MDZIP}/${CMD}/mdsig.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile ${MDZIP}/${CMD}/randomFile.go
 buildcpp:
-	g++ -I$(CPPTEST) $(DEPS) $(CPPTEST)/decoderRandomTestHCthreads.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	g++ -I$(CPP) $(DEPS) $(CPP)/decoderRandomTestHCthreads.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 mdencode:
 	@echo "Building mdencode"
 	go build $(LDFLAGS) -o ${BUILD_DIR}/md ${MDE}/${CMD}/mdencode.go

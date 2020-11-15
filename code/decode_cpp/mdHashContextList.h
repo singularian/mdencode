@@ -12,22 +12,23 @@
 #include <vector>
 #include <iomanip>
 #include <sstream>
-#include "external/CRC.h"
-#include "external/highwayhash.h"
+#include "external/crc/CRC.h"
+#include "external/highwayhash/highwayhash.h"
 #include "external/md2.c"
-#include <openssl/md4.h>
-#include <openssl/md5.h>
-#include <openssl/sha.h>
 #include "external/csiphash.c"
-#include "fnv/fnv.h"
-#include "external/xxhash32.h"
-#include "external/xxhash64.h"
+#include "external/fnv/fnv.h"
+#include "external/xxhash/xxhash32.h"
+#include "external/xxhash/xxhash64.h"
+#include "external/metro64/metrohash64.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "external/md6.h"
+#include <openssl/md4.h>
+#include <openssl/md5.h>
+#include <openssl/sha.h>
+#include "external/md6/md6.h"
 
-enum signatures {FIRST, CRC32, FNV32, FNV32A, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, SHA256s, XXH32, XXH64, LAST};
+enum signatures {FIRST, CRC32, FNV32, FNV32A, FNV64, FNV64A, HW64, MET64, MD2s, MD4s, MD5s, MD6, MD62, SIP64, SHA164, SHA1128, SHA1s, SHA256s, XXH32, XXH64, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -46,6 +47,7 @@ Hashlist mdHashlist[28] = {
     {4,  "fnv64",    "FNV-1  64",             false, 8},
     {5,  "fnv64a",   "FNV-1a 64",             false, 8},
     {6,  "hw64",     "Highway Hash 64",       true,  8},
+    {6,  "met64",    "Metro Hash 64",         true,  8},
     {7,  "md2",      "MD2",                   false, 16},
     {8,  "md4",      "MD4",                   false, 16},
     {9,  "md5",      "MD5",                   false, 16},
@@ -90,6 +92,11 @@ private:
     uint64_t hw64i;
     uint64_t hw64o;
     const uint64_t hw64key[4] = {1, 2, 3, 4};
+    // metro64hash
+    uint8_t met64i[8];
+    uint8_t met64o[8];
+    uint32_t met64seed = 1237789;
+    // md2 to md6
     uint8_t md2i[41];
     uint8_t md2o[41];
     uint8_t md4i[41];
@@ -195,6 +202,9 @@ public:
                   case HW64:
                     hw64i = HighwayHash64(byteblock, blocksize, hw64key);
                     break;
+                  case MET64:
+                    metrohash64_2(byteblock, (uint64_t) blocksize, met64seed, met64i);
+                    break;
                   case MD2s:
                     md2(byteblock,(size_t)blocksize,md2i);
                     break;
@@ -265,6 +275,10 @@ public:
                   case HW64:
                     hw64o = HighwayHash64(byteblock, blocksize, hw64key);
                     if (hw64i != hw64o) return false;
+                    break;
+                  case MET64:
+                    metrohash64_2(byteblock, (uint64_t) blocksize, met64seed, met64o);
+                    if (memcmp(met64i, met64o, 8) != 0) return false;
                     break;
                   case MD2s:
                     md2(byteblock,(size_t)blocksize,md2o);
@@ -344,6 +358,12 @@ public:
                      break;
                   case HW64:
                      ss << hash.second << " " << std::to_string(hw64i) << " ";
+                     break;
+                  case MET64:
+                     ss << hash.second << " "; 
+                     for(int i=0; i<8; ++i)
+                           ss << std::uppercase << std::hex << (unsigned int)met64i[i];
+                     ss << " ";
                      break;
                   case MD2s:
                      ss << hash.second << " ";

@@ -2,7 +2,7 @@
 BINARY=decoderRandom
 
 CC=g++
-DEPS=external/md6.h external/md6_mode.c external/md6_compress.c external/highwayhash.c fnv/hash_32.c fnv/hash_32a.c fnv/hash_64.c fnv/hash_64a.c
+DEPS=external/md6/md6.h external/md6/md6_mode.c external/md6/md6_compress.c external/highwayhash/highwayhash.c external/metro64/metrohash64.cpp external/fnv/hash_32.c external/fnv/hash_32a.c external/fnv/hash_64.c external/fnv/hash_64a.c
 # DEPS=external/highwayhash.c
 # CFLAGS=-O2 -I/usr/local/include
 
