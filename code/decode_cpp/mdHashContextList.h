@@ -12,6 +12,7 @@
 #include <vector>
 #include <iomanip>
 #include <sstream>
+#include "external/cityhash/cityhash.h"
 #include "external/crc/CRC.h"
 #include "external/csiphash.c"
 #include "external/fasthash/fasthash.h"
@@ -32,7 +33,7 @@
 #include "external/md6/md6.h"
 #include "external/wyhash/wyhash.h"
 
-enum signatures {FIRST, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, XXH32, XXH64, WYH, LAST};
+enum signatures {FIRST, CIT64, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, XXH32, XXH64, WYH, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -46,7 +47,8 @@ struct Hashlist {
 
 // could add a zero / non used signature and a last non used
 // so it starts at index 1
-Hashlist mdHashlist[28] = {
+Hashlist mdHashlist[40] = {
+    {1,  "cit64",    "Cityhash 64",           false, 8},
     {1,  "crc32",    "CRC 32",                false, 4},
     {1,  "fast32",   "Fasthash 32",           true,  4},
     {1,  "fast64",   "Fasthash 64",           true,  8},
@@ -92,14 +94,17 @@ private:
     std::vector<std::pair<int,std::string>> blockgrouphlist;
     std::vector<std::pair<int,std::string>> blockhlist;
     // hash results
-    // need to make these an array sized 6 for files and bg and block hash results
+    // need to make these an array sized 3 for files and bg and block hash results
+    uint64_t city64i;
+    uint64_t city64o;
+    uint64_t city64seed = 102922;
     // crc64
     uint64_t crc64i;
     uint64_t crc64o;
     // fasthash
     uint32_t fast32i;
     uint32_t fast32o;
-    uint32_t fast32seed = 0;
+    uint32_t fast32seed = 200;
     uint64_t fast64i;
     uint64_t fast64o;
     uint64_t fast64seed = 1;
@@ -232,6 +237,9 @@ public:
 
           for(auto hash  : blockhlist) {
               switch(hash.first) {
+                  case CIT64:
+                    city64i = cityhash64_with_seed(byteblock, blocksize, city64seed);
+                    break;
                   case CRC32:
                     crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
                     break;
@@ -328,6 +336,10 @@ public:
               hashblocksize = mdHashlist[hash.first-1].blocksize;
 
               switch(hash.first) {
+                  case CIT64:
+                    city64o = cityhash64_with_seed(byteblock, blocksize, city64seed);
+                    if (city64i != city64o) return false;
+                    break;
                   case CRC32:
                     crc64o = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
                     if (crc64i != crc64o) return false;
@@ -457,6 +469,9 @@ public:
               // ss << "hash id " << std::to_string(hash.first) << " " << " name " << hash.second << " hashblocksize " << std::to_string(hashblocksize) << " ";
 
               switch(hash.first) {
+                  case CIT64:
+                     ss << std::to_string(city64i) << " ";
+                     break;
                   case CRC32:
                      ss << std::to_string(crc64i) << " ";
                      break;
