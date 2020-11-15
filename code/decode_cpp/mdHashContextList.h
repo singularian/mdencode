@@ -22,6 +22,7 @@
 #include "external/xxhash/xxhash64.h"
 #include "external/metro64/metrohash64.h"
 #include "external/pengyhash/pengyhash.h"
+#include "external/seahash/seahash.c"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,7 +34,7 @@
 #include "external/md6/md6.h"
 #include "external/wyhash/wyhash.h"
 
-enum signatures {FIRST, CIT64, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, XXH32, XXH64, WYH, LAST};
+enum signatures {FIRST, CIT64, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, XXH32, XXH64, WYH, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -66,6 +67,7 @@ Hashlist mdHashlist[40] = {
     {11, "md62",     "MD6 Quicker",           true,  20},
     {11, "png",      "Pengyhash 64",          true,  8},
     {12, "ripe160",  "Ripe MD 160",           false, 20},
+    {12, "sea64",    "Seahash 64",            true,  8},
     {12, "sip64",    "Siphash 64",            true,  8},
     {13, "sha1_64",  "SHA1 64",               false, 8},
     {14, "sha1_128", "SHA1 128",              false, 16},
@@ -147,6 +149,10 @@ private:
     // ripe 160
     uint8_t ripe160i[41];
     uint8_t ripe160o[41];
+    // seahash
+    uint64_t sea64i;
+    uint64_t sea64o;
+    uint64_t sea64seed = 12312;
     // sha1 family
     uint8_t sha1i[41];
     uint8_t sha1o[41];
@@ -291,6 +297,9 @@ public:
                   case RIPE160:
                     RIPEMD160(byteblock, blocksize, ripe160i);
                     break;
+                  case SEA:
+                    sea64i = seahash((const char*)byteblock, blocksize, sea64seed);
+                    break;
                   case SIP64: 
                     siphash64i = siphash24(byteblock, blocksize, sipkey);
                     break;
@@ -407,6 +416,10 @@ public:
                   case RIPE160:
                     RIPEMD160(byteblock, blocksize, ripe160o);
                     if (memcmp(ripe160i, ripe160o, 20) != 0) return false;
+                    break;
+                  case SEA:
+                    sea64o = seahash((const char*) byteblock, blocksize, sea64seed);
+                    if (sea64i != sea64o) return false;
                     break;
                   case SIP64:
                     siphash64o = siphash24(byteblock, blocksize, sipkey);
@@ -538,6 +551,9 @@ public:
                     for(i=0; i < hashblocksize; ++i)
                            ss << std::uppercase << std::hex << (int)ripe160i[i];
                     break;
+                  case SEA:
+                     ss << std::to_string(sea64i) << " ";
+                     break;
                   case SIP64:
                      ss << std::to_string(siphash64i) << " ";
                      break;
