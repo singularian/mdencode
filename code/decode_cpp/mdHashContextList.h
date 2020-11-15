@@ -27,6 +27,7 @@
 #include "external/md2.c"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
+#include <openssl/ripemd.h>
 #include <openssl/sha.h>
 #include "external/md6/md6.h"
 #include "external/wyhash/wyhash.h"
@@ -163,6 +164,7 @@ private:
     uint64_t wyseed64 = 10232123120;
     uint64_t wysecret64[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
 public:
+    std::stringstream bhlist;
     std::stringstream ss;
     std::string hashlist;
 
@@ -214,6 +216,7 @@ public:
               if (val <= hashlistsize && val > 0) {
                 hashPair.first  = val;
                 hashPair.second = mdHashlist[val-1].name;
+                // bhlist << hashPair.second << " ";
                 blockhlist.push_back(hashPair);
               }
           }
