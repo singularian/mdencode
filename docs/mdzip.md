@@ -450,6 +450,37 @@ Random bytestring and modulusscan bytestring match  [0 0 0 0 18 0 32 0 0 2 17 22
 Found block  thread 2 random bytestring and modulusscan bytestring match [0 0 0 0 18 0 32 0 0 2 17 221 255 252] = [0 0 0 0 18 0 32 0 0 2 17 221 255 252] 
 ```
 
+## Example 6
+
+This is the run on the new C++ test program with a ryzen 3950x using fasthash 64 and a 14 byte block with a 32 bit modulus.
+It decompressed the 13 byte block to a 14 byte block (8 bytes fasthash 64 + 4 bytes modulus + 1 byte exponent) in 4.05 hours. 
+
+```
+./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=000000001211211111111122FFFC
+hash values  4 
+Start Time               Sun Nov 15 17:52:53 2020
+Block Size               14
+Random Byteblock         000000001211211111111122FFFC
+Random Byteblock Hex     00  00  00  00  12  11  21  11  11  11  11  22  FF  FC  
+Random Byteblock Int     0   0   0   0   18  17  33  17  17  17  17  34  255 252 
+Random Byteblock Bigint  85318574045349531549692
+Modulus Size             32
+Modulus Bigint           4294967296
+Modulus Remainder        287506428
+Modulus 2   ^ Exponent   76
+Modulus Mod ^ Exponent   2
+Block Signatures         fast64 5986481724077706591 
+Thread Count             32
+Logging                  false
+
+Found Match
+
+Elapsed Time (s) 14601.1
+Modulus Scan thread 17 and Random byteblock match
+0 0 0 0 18 17 33 17 17 17 17 34 255 252 
+0 0 0 0 18 17 33 17 17 17 17 34 255 252 
+```
+
 # Donations
 
 * BTC: `32L3gyJdkiFwgJ72rsSzbCBjTjVFxJLHPm`
