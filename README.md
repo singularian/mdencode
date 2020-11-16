@@ -250,9 +250,9 @@ A modulus should be considered part of the file signature subset. A modulus is a
 
 # Modular Floor Examples
   
-This is an example of the modular floor use the C++ test program.  
+This is an example of the modular floor using the C++ test program.  
 The program `decoderRandom2` is using a random 14 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
-It uses a 32 bit modulus and a modulus exponent and then creates a fast64 hash.  
+It uses a 32 bit modulus and calculates modulus exponent floor or ceiling and then creates a fast64 hash. A modulus scan splits up the parallel search on 32 threads. 
 It calculated and found the 14 byte block (13 bytes compressed - 8 bytes for the 64-bit fasthash 64 hash 4-bytes for the 32-bit modulus and 1 for the exponent) in 4 hours on a Ryzen 3950x.
 
 `$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandom2`
