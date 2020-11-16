@@ -290,7 +290,7 @@ Modulus Scan thread 17 and Random byteblock match
 
 There are currently two example modulus scan programs. These include
 
-- GO test modulus scan ``$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandomTestHC``` uses GO routines to run the modulus scan for a signature on a byte block
+- GO test modulus scan ```$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandomTestHC``` uses GO routines to run the modulus scan for a signature on a byte block
 - C++ test modulus scan ```$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandomTestHC2``` uses C++ threads to run the modulus scan
 
 MDZip and MDUnzip also use a parallel modulus scan currently with the GO core. In the future it will include the C++ core.
