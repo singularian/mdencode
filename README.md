@@ -250,29 +250,38 @@ A modulus should be considered part of the file signature subset. A modulus is a
 
 # Modular Floor Examples
   
-This is an example of the modular floor.  
-The program `decoderRandom` is creating a random 11 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
-It creates a random 11 byte array and a 64 bit modulus and a modulus exponent and then creates a sha1 hash and md5 hash.  
-It calculated and found a hashed 11 byte block in 58 ms on a Ryzen 2700x.
+This is an example of the modular floor use the C++ test program.  
+The program `decoderRandom2` is using a random 14 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
+It uses a 32 bit modulus and a modulus exponent and then creates a fast64 hash.  
+It calculated and found the 14 byte block (13 bytes compressed - 8 bytes for the 64-bit fasthash 64 hash 4-bytes for the 32-bit modulus and 1 for the exponent) in 4 hours on a Ryzen 3950x.
 
-`$GOPATH/github.com/singularian/mdencode/code/testdecode/decoderRandom `
+`$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandom2`
 ```
-user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom -block=11 -mod=64 -thread=16
-starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  11  byteblock  [24 218 209 240 42 198 53 218 173 140 180]
-Found Block  [24 218 209 240 42 198 53 218 173 140 180]
-Total time  58.526ms
-random bytestring and modulusscan bytestring match  [24 218 209 240 42 198 53 218 173 140 180]   [24 218 209 240 42 198 53 218 173 140 180]
-Found block  thread 1 random bytestring and modulusscan bytestring match [24 218 209 240 42 198 53 218 173 140 180] [24 218 209 240 42 198 53 218 173 140 180]
-```
-This example of decoderRandom uses a 64-bit modulus to calculate a 12 byte block associated with an sha1 and md5 signature.
-It uses 16 threads and a parallel modulus scan and was run on a Ryzen 2700x. 
-```
-user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom -block=12 -mod=64 -thread=16
-starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  12  byteblock  [165 55 125 101 98 169 203 81 163 83 179 217]
-Found Block  [165 55 125 101 98 169 203 81 163 83 179 217]
-Total time  1m14.791082s
-random bytestring and modulusscan bytestring match  [165 55 125 101 98 169 203 81 163 83 179 217]   [165 55 125 101 98 169 203 81 163 83 179 217]
-Found block  thread 5 random bytestring and modulusscan bytestring match [165 55 125 101 98 169 203 81 163 83 179 217] [165 55 125 101 98 169 203 81 163 83 179 217]
+Run on the ryzen 3950x with 32 threads.
+
+./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=000000001211211111111122FFFC
+hash values  4
+Start Time               Sun Nov 15 17:52:53 2020
+Block Size               14
+Random Byteblock         000000001211211111111122FFFC
+Random Byteblock Hex     00  00  00  00  12  11  21  11  11  11  11  22  FF  FC
+Random Byteblock Int     0   0   0   0   18  17  33  17  17  17  17  34  255 252
+Random Byteblock Bigint  85318574045349531549692
+Modulus Size             32
+Modulus Bigint           4294967296
+Modulus Remainder        287506428
+Modulus 2   ^ Exponent   76
+Modulus Mod ^ Exponent   2
+Block Signatures         fast64 5986481724077706591
+Thread Count             32
+Logging                  false
+
+Found Match
+
+Elapsed Time (s) 14601.1    = 4.05 hours
+Modulus Scan thread 17 and Random byteblock match
+0 0 0 0 18 17 33 17 17 17 17 34 255 252
+0 0 0 0 18 17 33 17 17 17 17 34 255 252
 ```
 
 [Other Decoder Examples](https://github.com/singularian/mdencode/blob/master/docs/EXAMPLES.md)
