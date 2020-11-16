@@ -136,7 +136,7 @@ Logging                  false
 
 Found Match
 
-Elapsed Time (s) 14601.1
+Elapsed Time (s) 14601.1    = 4.05 hours
 Modulus Scan thread 17 and Random byteblock match
 0 0 0 0 18 17 33 17 17 17 17 34 255 252 
 0 0 0 0 18 17 33 17 17 17 17 34 255 252 
