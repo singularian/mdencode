@@ -255,7 +255,7 @@ The program `decoderRandom2` is using a random 14 byte array and then running a 
 It uses a 32 bit modulus and calculates modulus exponent floor or ceiling and then creates a fast64 hash. A modulus scan splits up the parallel search on 32 threads. 
 It calculated and found the 14 byte block (13 bytes compressed - 8 bytes for the 64-bit fasthash 64 hash 4-bytes for the 32-bit modulus and 1 for the exponent) in 4 hours on a Ryzen 3950x.
 
-`$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandom2`
+`$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandomTestHC2`
 ```
 Run on the ryzen 3950x with 32 threads.
 
@@ -288,32 +288,13 @@ Modulus Scan thread 17 and Random byteblock match
 
 # Parallel Modulus Scan
 
-The Modulus Scan can also be run in parallel. An example program decoderRandom shows a modulus scan with configurable number of goroutines.
-Each of the goroutines runs a modulus scan in sync and when a result is founding matching the original signature block it returns a byteblock.
+There are currently two example modulus scan programs. These include
 
-This is the usage of the prototype parallel modulus scan program.
-It allows for the blocksize and modulus bitsize and thread count as well as the bytes either random or specified by the command line argument.
-```
-user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom
-Usage  ./decoderRandom  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING]
-Usage  ./decoderRandom  -block=12 -mod=64 -thread=16
-Usage  ./decoderRandom  -block=8 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
-Usage  ./decoderRandom  -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]
-Usage  ./decoderRandom  -block=8 -mod=64 -thread=10 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
-```
+- GO test modulus scan ``$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandomTestHC``` uses GO routines to run the modulus scan for a signature on a byte block
+- C++ test modulus scan ```$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandomTestHC2``` uses C++ threads to run the modulus scan
 
-This is a 17 byte block with a 64 bit modulus.
-The byte block was found in 1.87 seconds.
+MDZip and MDUnzip also use a parallel modulus scan currently with the GO core. In the future it will include the C++ core.
 
-```
-user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode$ ./decoderRandom -mod=64 -thread=16 -bytes=[0,0,1,0,0,1,0,2,0,1,255,2,4,1,6,8,10]
-buffer  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
-starting modulus scan threads  16  start thread  0  end thread  16  byteblock size  17  byteblock  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
-Found Block  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
-Total time  1.873573s
-random bytestring and modulusscan bytestring match  [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]   [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
-Found block  thread 0 random bytestring and modulusscan bytestring match [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10] [0 0 1 0 0 1 0 2 0 1 255 2 4 1 6 8 10]
-```
 
 This is an example of a parallel modulus scan with 16 threads.
 [Decoder Parallel Examples](https://github.com/singularian/mdencode/blob/master/examples/mdencodeParallelmodscan2.txt)
