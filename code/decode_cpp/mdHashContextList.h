@@ -29,13 +29,14 @@
 #include "external/md2.c"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
+#include "external/md6/md6.h"
 #include <openssl/ripemd.h>
 #include <openssl/sha.h>
-#include "external/md6/md6.h"
+#include "external/spooky/Spooky.h"
 #include "external/wyhash/wyhash.h"
 
 enum hd {HFILE,HBLOCKGRP,HBLOCK,HSALL};
-enum signatures {FIRST, CIT64, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, XXH32, XXH64, WYH, LAST};
+enum signatures {FIRST, CIT64, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, SPK32, SPK64, XXH32, XXH64, WYH, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -76,6 +77,8 @@ Hashlist mdHashlist[40] = {
     {15, "sha256",   "SHA 256",               false, 32},
     {15, "sha384",   "SHA 384",               false, 48},
     {15, "sha512",   "SHA 512",               false, 64},
+    {16, "spk32",    "Spooky 32",             true,  4},
+    {16, "spk64",    "Spooky 64",             true,  8},
     {16, "xxh32",    "xxHash32",              true,  4},
     {17, "xxh64",    "xxHash64",              true,  8},
     {17, "wy64",     "WYhash 64",             true,  8},
@@ -164,9 +167,16 @@ private:
     uint8_t sha512i[64];
     uint8_t sha512o[64];
     // siphash
-    uint32_t siphash64i;
-    uint32_t siphash64o;
+    uint64_t siphash64i;
+    uint64_t siphash64o;
     char sipkey[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
+    // spooky 32 / 64
+    uint32_t spooky32i;
+    uint32_t spooky32o;
+    uint32_t spookyseed32;
+    uint64_t spooky64i;
+    uint64_t spooky64o;
+    uint64_t spookyseed64;
     // xxhash
     uint32_t xxhash32i;
     uint32_t xxhash32o;
@@ -322,6 +332,12 @@ public:
                   case SHA512s:
                     SHA512(byteblock, blocksize, sha512i);
                     break;
+                  case SPK32:
+                    spooky32i = SpookyHash::Hash32(byteblock, blocksize, spookyseed32);
+                    break;
+                  case SPK64:
+                    spooky64i = SpookyHash::Hash64(byteblock, blocksize, spookyseed64);
+                    break;
                   case XXH32:
                     xxhash32i = XXHash32::hash(byteblock, blocksize, xxseed32);
                     break;
@@ -449,6 +465,14 @@ public:
                   case SHA512s:
                     SHA512(byteblock, blocksize, sha512o);
                     if (memcmp(sha512i, sha512o, 64) != 0) return false;
+                    break;
+                  case SPK32:
+                    spooky32o = SpookyHash::Hash32(byteblock, blocksize, spookyseed32);
+                    if (spooky32i != spooky32o) return false;
+                    break;
+                  case SPK64:
+                    spooky64o = SpookyHash::Hash64(byteblock, blocksize, spookyseed64);
+                    if (spooky64i != spooky64o) return false;
                     break;
                   case XXH32:
                     xxhash32o = XXHash32::hash(byteblock, blocksize, xxseed32);
@@ -583,6 +607,12 @@ public:
                            ss << std::uppercase << std::hex << (int)sha512i[i];
                      ss << " ";
                      break;
+                  case SPK32:
+                    ss << std::to_string(spooky32i) << " ";
+                    break;
+                  case SPK64:
+                    ss << std::to_string(spooky64i) << " ";
+                    break;
                   case XXH32:
                     ss << std::to_string(xxhash32i) << " ";
                     break;
