@@ -34,6 +34,7 @@
 #include "external/md6/md6.h"
 #include "external/wyhash/wyhash.h"
 
+enum hd {HFILE,HBLOCKGRP,HBLOCK,HSALL};
 enum signatures {FIRST, CIT64, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, XXH32, XXH64, WYH, LAST};
 
 // should add a speed column to show which signatures are fastest

@@ -374,6 +374,7 @@ void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {
 // displays the modulus scan information
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& hashlist, bool log ) {
 
+     int f = 0;
      // current date/time based on current system
      time_t now = time(0);
    
@@ -391,13 +392,19 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      // printByteblock(byteblock, blocksize, true);
      cout << endl;
 
+     cout << "                         ";
+     for (int f = 0; f < blocksize; f++) {
+          printf("%-3d ", f +  1);
+     }
+
+     cout << endl;
+
      cout << "Random Byteblock Hex     ";
      for (int f = 0; f < blocksize; f++) {
           //std::cout << byteblock[f] << ' ';
           printf("%02X  ", byteblock[f]);
      }
      cout << endl;
-
 
      cout << "Random Byteblock Int     ";
      for (int f = 0; f < blocksize; f++) {
