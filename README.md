@@ -313,7 +313,7 @@ Logging                  true
 Running decode modscan
 Found Match
 
-Elapsed Time (s) 43036
+Elapsed Time (s) 43036 = 12 hours
 Modulus Scan thread 31 and Random byteblock match
 0 0 0 0 22 65 33 97 18 63 24 34 255 252 
 0 0 0 0 22 65 33 97 18 63 24 34 255 252 
