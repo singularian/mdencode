@@ -20,6 +20,7 @@
 #include <chrono> 
 #include <ctime>
 #include <iostream>
+#include <sstream>
 #include <gmp.h>
 #include <string>
 #include <time.h>
@@ -39,7 +40,7 @@ unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& displayHLhashes, bool log );
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& displayHLhashes, mdMutexLog *mdmutexlog, bool log );
 void usage();
 
 // main
@@ -200,10 +201,10 @@ int main (int argc, char **argv) {
 
      // display the current block stats
      std::string hashlist = mst[0].hcl.displayHLhashes();
-     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, hashlist, runlogging );
+     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, hashlist, &log, runlogging );
 
      // std::cout << endl << "Running decode modscan" << endl << endl;
-     log.writeLog((char *) "Running decode modscan");
+     log.writeLog("Running decode modscan");
 
      // start the count
      auto start = std::chrono::high_resolution_clock::now();
@@ -232,19 +233,28 @@ int main (int argc, char **argv) {
      double elapsed_time = double(std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count());
 
      // check the modulus scan results
+     std::ostringstream result; 
      unsigned char *modbyteblock;
      modbyteblock = mst[threadMatchNumber].getModscanByteBlock();
      if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
-          cout << endl << "Found Match" << endl << endl;
-          cout << "Elapsed Time (s) " << elapsed_time/1e9 << endl;
+          result << endl << "Found Match" << endl << endl;
+          result << "Elapsed Time (s) " << std::to_string(elapsed_time/1e9) << endl;
+          result << "Modulus Scan thread " << threadMatchNumber << " and Random byteblock match"; // << endl;
+          log.writeLog(result.str());
 
-          cout << "Modulus Scan thread " << threadMatchNumber << " and Random byteblock match" << endl;
-          printByteblock(byteblock, blocksize, false);
-          printByteblock(modbyteblock, blocksize, false);
+          // log.logMatchByteblock(byteblock, blocksize, true);
+          // log.logMatchByteblock(modbyteblock, blocksize, true);
+
+          log.logMatchByteblock(byteblock, blocksize, false);
+          log.logMatchByteblock(modbyteblock, blocksize, false);
+
      } else {
-          cout << "Modulus Scan and Random byteblock don't match" << endl;
-          printByteblock(byteblock, blocksize, false);
-          printByteblock(modbyteblock, blocksize, false);
+          result << "Modulus Scan and Random byteblock don't match" << endl;
+          log.logMatchByteblock(byteblock, blocksize, true);
+          log.logMatchByteblock(modbyteblock, blocksize, true);
+
+          log.logMatchByteblock(byteblock, blocksize, false);
+          log.logMatchByteblock(modbyteblock, blocksize, false);
      }
 
      /* free used memory */
@@ -372,8 +382,9 @@ void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {
 
 
 // displays the modulus scan information
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& hashlist, bool log ) {
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& hashlist, mdMutexLog *mdmutexlog, bool log ) {
 
+     std::ostringstream result;
      int f = 0;
      // current date/time based on current system
      time_t now = time(0);
@@ -381,62 +392,74 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      // convert now to string form
      char* dt = ctime(&now);
 
-     cout << "Start Time               " << dt;
-     cout << "Block Size               " << blocksize << endl;
+     result << endl;
+     result << "Start Time               " << dt;
+     result << "Block Size               " << blocksize << endl;
 
-     cout << "Random Byteblock         ";
-     for (int f = 0; f < blocksize; f++) {
-          // cout << byteblock[f] << ' ';
-          printf("%02X", byteblock[f]);
+     result << "Random Byteblock         ";
+     for (f = 0; f < blocksize; f++) {
+          result << setw(2) << std::uppercase << std::hex << setfill('0') << (int)byteblock[f];
      }
-     // printByteblock(byteblock, blocksize, true);
-     cout << endl;
+     result << endl;
 
-     cout << "                         ";
-     for (int f = 0; f < blocksize; f++) {
-          printf("%-3d ", f +  1);
-     }
-
-     cout << endl;
-
-     cout << "Random Byteblock Hex     ";
-     for (int f = 0; f < blocksize; f++) {
-          //std::cout << byteblock[f] << ' ';
-          printf("%02X  ", byteblock[f]);
-     }
-     cout << endl;
-
-     cout << "Random Byteblock Int     ";
-     for (int f = 0; f < blocksize; f++) {
-          printf("%-3d ",byteblock[f]);
+     // write the byteblock number header
+     result << "                         ";
+     for (f = 0; f < blocksize; f++) {
+          result << setw(4) <<  std::left << setfill(' ') << std::to_string((f + 1));
      }
 
-     cout << endl;
-     cout << "Random Byteblock Bigint  ";
-     mpz_out_str(stdout, 10, blockint);
-     cout << endl;
+     result << endl;
 
-     cout << "Modulus Size             " << modsize << endl;
+     // write the byteblock hex
+     result << "Random Byteblock Hex     ";
+     for (f = 0; f < blocksize; f++) {
+          result << setw(4) << std::uppercase << std::hex << setfill(' ') << (int)byteblock[f];
+     }
+     result << endl;
 
-     cout << "Modulus Bigint           ";
-     gmp_printf("%Zd", modint);
-     cout << endl;
+     // write the byteblock integer number
+     result << "Random Byteblock Int     ";
+     for (f = 0; f < blocksize; f++) {
+          result << setw(4) <<  std::left << setfill(' ') << std::to_string(byteblock[f]);
+     }
 
-     cout << "Modulus Remainder        ";
-     gmp_printf("%Zd", remainder);
-     cout << endl;
+     result << endl;
+     result << "Random Byteblock Bigint  ";
+     char *data;
+     // mpz_out_str(stdout, 10, blockint);
+     data = mpz_get_str(NULL, 10, blockint);
+     result << data << endl; 
+     // gmp_printf("%Zd\n", blockint);
+     // cout << endl;
+     free(data);
 
-     cout << "Modulus 2   ^ Exponent   " << exponent << endl;
-     cout << "Modulus Mod ^ Exponent   " << expmod << endl;
+     result << "Modulus Size             " << std::to_string(modsize) << endl;
 
-     cout << "Block Signatures         ";
-     cout << hashlist;
-     cout << endl;
+     result << "Modulus Bigint           ";
+     // gmp_printf("%Zd", modint);
+     data = mpz_get_str(NULL, 10, modint);
+     result << data << endl;
+     free(data);
 
-     cout << "Thread Count             " << threadcount << endl;
+     result << "Modulus Remainder        ";
+     // gmp_printf("%Zd", remainder);
+     data = mpz_get_str(NULL, 10, remainder);
+     result << data << endl;
+     free(data);
 
-     cout << "Logging                  " << boolalpha << log << endl;
-     cout << endl;
+     result << "Modulus 2   ^ Exponent   " << std::to_string(exponent) << endl;
+     result << "Modulus Mod ^ Exponent   " << std::to_string(expmod) << endl;
+
+     result << "Block Signatures         ";
+     result << hashlist;
+     result << endl;
+
+     result << "Thread Count             " << std::to_string(threadcount) << endl;
+
+     result << "Logging                  " << boolalpha << log << endl;
+     result << endl;
+
+     mdmutexlog->writeLog(result.str());
 }
 
 // display the usage

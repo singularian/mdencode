@@ -62,15 +62,35 @@ public:
     }
 
     // writeLog and display text 
-    void writeLog(char *logtext)
+    void writeLog(std::string logmessage)
     {
+
+        std::cout << logmessage << std::endl;
         if (islogging) {
            mutex.lock();
 
-           /* Write a message */
-           printf("%s", logtext);
+           /* Write logmessage */
+           PLOGD << logmessage; 
            mutex.unlock();
         }
+    }
+
+    // log the byteblock
+    void logMatchByteblock(unsigned char *byteblock, int blocksize, bool ishex) {
+
+        int i;
+        std::ostringstream result;
+        for(i=0;i<blocksize;i++)
+        {
+            if (ishex == false) {
+                result << std::setw(4) <<  std::left << std::setfill(' ') << std::to_string(byteblock[i]);
+            } else {
+                result << std::setw(4) << std::left << std::uppercase << std::hex << std::setfill(' ') << (int)byteblock[i];
+            }
+        }
+
+        writeLog(result.str());
+
     }
 
 
@@ -78,27 +98,14 @@ public:
     // void writeLogThread(int thread, mpz_t blockint, char *logtext) 
     void writeLogThread(int thread, mpz_t blockint) 
     {
-        char a [1000]; // need to make this fit the byteblock bigint size
+        char blockInt [1000]; // need to make this fit the byteblock bigint size
         if (islogging) {
            mutex.lock();
            lastThread = thread;
 
            /* Write a message */
-           mpz_get_str (a, 10, blockint);
-           // log->warn("test2 ", thread);
-           //try {
-           // log->warn("test2 ");
-            //  auto m_logger = spdlog::get("mdencode_logger");
-            //  m_logger->warn("test 33333333333333");
-              // log->info("slkfjlskdfjskdjfsdfksdfjklsdfjklsdfkjlsfdkjlsdfjkl");
-              // spdlog::get("mdencode_logger")->info("LoggingTest::ctor");
-           //} catch (const spdlog::spdlog_ex &ex) {
-           //   std::cout << ex.what();
-           //}
-           //log->spdlog::logger::warn("test");
-           ////////////////log->warn("lskdfjskdfjsdlkflskdjfsdklf");
-           PLOGD << "thread " << thread << " " << a;
-           // std::cout << "logging thread" << std::endl;
+           mpz_get_str (blockInt, 10, blockint);
+           PLOGD << "thread " << std::to_string(thread) << " " << blockInt;
            mutex.unlock();
         }
     }
