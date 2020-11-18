@@ -61,6 +61,11 @@ public:
         mutex.unlock();
     }
 
+    // check if logging
+    bool checkIfLogging() {
+        return islogging;
+    }
+
     // writeLog and display text 
     void writeLog(std::string logmessage)
     {

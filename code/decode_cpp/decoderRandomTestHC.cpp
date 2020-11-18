@@ -40,7 +40,7 @@ unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& displayHLhashes, mdMutexLog *mdmutexlog, bool log );
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& displayHLhashes, mdMutexLog *log );
 void usage();
 
 // main
@@ -201,7 +201,7 @@ int main (int argc, char **argv) {
 
      // display the current block stats
      std::string hashlist = mst[0].hcl.displayHLhashes();
-     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, hashlist, &log, runlogging );
+     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, hashlist, &log );
 
      // std::cout << endl << "Running decode modscan" << endl << endl;
      log.writeLog("Running decode modscan");
@@ -382,7 +382,7 @@ void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {
 
 
 // displays the modulus scan information
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& hashlist, mdMutexLog *mdmutexlog, bool log ) {
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& hashlist, mdMutexLog *log) {
 
      std::ostringstream result;
      int f = 0;
@@ -456,10 +456,10 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 
      result << "Thread Count             " << std::to_string(threadcount) << endl;
 
-     result << "Logging                  " << boolalpha << log << endl;
+     result << "Logging                  " << boolalpha << log->checkIfLogging() << endl;
      result << endl;
 
-     mdmutexlog->writeLog(result.str());
+     log->writeLog(result.str());
 }
 
 // display the usage
