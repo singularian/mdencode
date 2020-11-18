@@ -256,13 +256,12 @@ It uses a 32 bit modulus and calculates modulus exponent floor or ceiling and th
 It calculated and found the 14 byte block (13 bytes compressed) in 4 hours on a Ryzen 3950x.
 
 13/14 Modulus Encoding
-- 8 bytes for the 64-bit fasthash 64 
+- 8 bytes for the 64-bit fasthash 64 - (It can use any number of 64 bit hashes)
 - 4 bytes for the 32-bit modulus 
 - 1 byte for the modulus exponent 
 
-`$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandomTestHC2`
-```
-Run on the ryzen 3950x with 32 threads.
+C++ Test program
+- ```$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandomTestHC2```
 
 ./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=000000001211211111111122FFFC
 hash values  4
@@ -310,7 +309,8 @@ Block Signatures         fast64 10504795572753995326
 Thread Count             32
 Logging                  true
 
-Running decode modscanFound Match
+Running decode modscan
+Found Match
 
 Elapsed Time (s) 43036
 Modulus Scan thread 31 and Random byteblock match
