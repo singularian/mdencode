@@ -235,7 +235,7 @@ int main (int argc, char **argv) {
      unsigned char *modbyteblock;
      modbyteblock = mst[threadMatchNumber].getModscanByteBlock();
      if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
-          cout << "Found Match" << endl << endl;
+          cout << endl << "Found Match" << endl << endl;
           cout << "Elapsed Time (s) " << elapsed_time/1e9 << endl;
 
           cout << "Modulus Scan thread " << threadMatchNumber << " and Random byteblock match" << endl;

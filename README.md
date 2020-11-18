@@ -253,7 +253,12 @@ A modulus should be considered part of the file signature subset. A modulus is a
 This is an example of the modular floor using the C++ test program.  
 The program `decoderRandom2` is using a random 14 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
 It uses a 32 bit modulus and calculates modulus exponent floor or ceiling and then creates a fast64 hash. A modulus scan splits up the parallel search on 32 threads. 
-It calculated and found the 14 byte block (13 bytes compressed - 8 bytes for the 64-bit fasthash 64 hash 4-bytes for the 32-bit modulus and 1 for the exponent) in 4 hours on a Ryzen 3950x.
+It calculated and found the 14 byte block (13 bytes compressed) in 4 hours on a Ryzen 3950x.
+
+13/14 Modulus Encoding
+- 8 bytes for the 64-bit fasthash 64 
+- 4 bytes for the 32-bit modulus 
+- 1 byte for the modulus exponent 
 
 `$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandomTestHC2`
 ```
@@ -282,6 +287,35 @@ Elapsed Time (s) 14601.1    = 4.05 hours
 Modulus Scan thread 17 and Random byteblock match
 0 0 0 0 18 17 33 17 17 17 17 34 255 252
 0 0 0 0 18 17 33 17 17 17 17 34 255 252
+```
+
+Second example with a larger block running on a ryzen 3950x.
+
+```
+./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=0000000016412161123F1822FFFC --log=true
+hash values  4 
+Start Time               Tue Nov 17 21:44:08 2020
+Block Size               14
+Random Byteblock         0000000016412161123F1822FFFC
+                         1   2   3   4   5   6   7   8   9   10  11  12  13  14  
+Random Byteblock Hex     00  00  00  00  16  41  21  61  12  3F  18  22  FF  FC  
+Random Byteblock Int     0   0   0   0   22  65  33  97  18  63  24  34  255 252 
+Random Byteblock Bigint  105093506211661505298428
+Modulus Size             32
+Modulus Bigint           4294967296
+Modulus Remainder        404946940
+Modulus 2   ^ Exponent   76
+Modulus Mod ^ Exponent   2
+Block Signatures         fast64 10504795572753995326 
+Thread Count             32
+Logging                  true
+
+Running decode modscanFound Match
+
+Elapsed Time (s) 43036
+Modulus Scan thread 31 and Random byteblock match
+0 0 0 0 22 65 33 97 18 63 24 34 255 252 
+0 0 0 0 22 65 33 97 18 63 24 34 255 252 
 ```
 
 [Other Decoder Examples](https://github.com/singularian/mdencode/blob/master/docs/EXAMPLES.md)
