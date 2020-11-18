@@ -32,6 +32,7 @@ public:
        // plog::init(plog::info, (const char*) logfilename);
          plog::init(plog::debug, (const char*) logfilename);
          PLOGD << "starting log!"; 
+      }
     }
 
     // Destructor
