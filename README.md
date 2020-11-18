@@ -263,6 +263,7 @@ It calculated and found the 14 byte block (13 bytes compressed) in 4 hours on a 
 C++ Test program
 - ```$GOPATH/github.com/singularian/mdencode/code/decode_cpp/decoderRandomTestHC2```
 
+```
 ./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=000000001211211111111122FFFC
 hash values  4
 Start Time               Sun Nov 15 17:52:53 2020
