@@ -72,12 +72,15 @@ public:
 
         int i;
         std::ostringstream result;
+        char hex[3]; 
         for(i=0;i<blocksize;i++)
         {
             if (ishex == false) {
-                result << std::setw(4) <<  std::left << std::setfill(' ') << std::to_string(byteblock[i]);
+                result << std::setw(4) << std::left << std::setfill(' ') << std::to_string(byteblock[i]);
             } else {
-                result << std::setw(4) << std::left << std::uppercase << std::hex << std::setfill(' ') << (int)byteblock[i];
+                sprintf(hex, "%02X", byteblock[i]);
+                // result << std::setw(4) << std::left << std::uppercase << std::hex << std::setfill(' ') << (int)byteblock[i];
+                result << std::setw(4) << std::left << std::setfill(' ') << hex;
             }
         }
 
