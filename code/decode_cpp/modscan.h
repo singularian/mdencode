@@ -38,6 +38,7 @@ class modscan
        mpz_t modulusInt; 
        mpz_t modulusThreadInt; 
        mpz_t modulusExpInt; 
+       mpz_t modulusExpIntCeil; 
        mpz_t blockInt;
        // hash context list
        mdHashContextList hcl;
@@ -54,7 +55,7 @@ class modscan
        mpz_init_set_ui(modulusThreadInt, (unsigned long) threadnumber); // exponent floor
        // mpz_init_set_ui(modulusThreadInt, threadnumber); // exponent floor
        // mpz_inits(remainder, modulusInt, modulusExpInt, blockInt, NULL);
-       mpz_inits(remainder, modulusInt, modulusThreadInt, modulusExpInt, NULL);
+       mpz_inits(remainder, modulusInt, modulusThreadInt, modulusExpInt, modulusExpIntCeil, NULL);
        // initialize the byte block bigint
        // mpz_init_set_str(blockInt, "0", 10);
        // mpz_init2 (blockInt, blocksize * 8); // For preallocating the size and padding
@@ -65,7 +66,7 @@ class modscan
     ~modscan()
     {
        std::cout << "Destroying modscan" << endl;
-       mpz_clears(two, modremainder, remainder, modulusInt, modulusThreadInt, modulusExpInt, blockInt, NULL);
+       mpz_clears(two, modremainder, remainder, modulusInt, modulusThreadInt, modulusExpInt, modulusExpIntCeil, blockInt, NULL);
 
        if (sizeof(byteblock) / sizeof(byteblock[0]) != 0) {
            cout << "Free byteblock" << endl;
@@ -130,6 +131,9 @@ class modscan
        mpz_pow_ui (modulusExpInt, two, exponent);
        convertFloorBase2(modulusExpInt, modulusInt);
 
+       // set the exponent ceiling
+       mpz_pow_ui (modulusExpIntCeil, two, exponent + 1);
+
        // add the modulus ^ modulus exponent to the block int 
        mpz_add (blockInt, blockInt, modremainder);
 
@@ -193,10 +197,16 @@ class modscan
                break;
            } else {
               if (lineNum > lineCount) {
-              // TODO Add a greater than the exponent check
-              // If it is greater than the mod ^ exp + 1 (the ceil) break
-              lineNum = 0;
-              log->mdMutexLog::writeLogThread(threadnumber, blockInt);
+                 lineNum = 0;
+                 log->mdMutexLog::writeLogThread(threadnumber, blockInt);
+
+                 // Check the ceiling
+                 // If it is greater than the mod ^ exp + 1 (the ceil) break
+                 // and increment or call the mutex not found 
+                 if (mpz_cmp(modulusExpIntCeil, blockInt) > 0) {
+                    mutexref->mdMutex::incNotFound();
+                    break;
+                 }
               }
            }
            
