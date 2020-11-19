@@ -21,6 +21,8 @@ all:
 # opt:
 # doesn't work
 #	g++ -O3 -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11 -pthread
+sync:
+	cp decoderRandomTestHCthreads.cpp decoderRandomTestHC.cpp
 test:
 	g++ tests/test_gmp2.cpp -o test_gmp2 -lgmp -lgmpxx
 	g++ tests/testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
