@@ -412,8 +412,14 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 
      // write the byteblock hex
      result << "Random Byteblock Hex     ";
+     int pad = 4;
      for (f = 0; f < blocksize; f++) {
-          result << setw(4) << std::uppercase << std::hex << setfill(' ') << (int)byteblock[f];
+          if ((int)byteblock[f] < 16) {
+            result << "0";
+            pad = 3;
+          }
+          result << setw(pad) << std::uppercase << std::hex << setfill(' ') << (int)byteblock[f];
+          pad = 4;
      }
      result << endl;
 
