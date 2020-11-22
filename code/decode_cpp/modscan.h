@@ -203,7 +203,8 @@ class modscan
                  // Check the ceiling
                  // If it is greater than the mod ^ exp + 1 (the ceil) break
                  // and increment or call the mutex not found 
-                 if (mpz_cmp(modulusExpIntCeil, blockInt) > 0) {
+                 // Compare op1 and op2. Return a positive value if op1 > op2, zero if op1 = op2, or a negative value if op1 < op2
+                 if (mpz_cmp(modulusExpIntCeil, blockInt) < 0) {
                     mutexref->mdMutex::incNotFound();
                     break;
                  }
