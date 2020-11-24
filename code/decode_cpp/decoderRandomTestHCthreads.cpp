@@ -35,7 +35,7 @@
 using namespace std;
 
 unsigned char *genRandomByteBlock(size_t num_bytes);
-unsigned char *convertHexToByteBlock(const std::string & source);
+unsigned char *convertHexToByteBlock(std::string & source);
 unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
@@ -284,9 +284,10 @@ unsigned char *genRandomByteBlock(size_t num_bytes) {
 
 // convert hex bytes to byte array
 // it should also check 00FF33 or 0000FFFF7873 hex strings
-unsigned char *convertHexToByteBlock(const std::string & source) {
+unsigned char *convertHexToByteBlock(std::string & source) {
 
     unsigned char *stream;
+    if ((source.length() % 2) == 1) source = source + "0";
     size_t num_bytes = (source.length() / 2);
     stream = (unsigned char *) malloc(num_bytes * sizeof(unsigned char));
 
