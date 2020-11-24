@@ -321,6 +321,7 @@ Modulus Scan thread 31 and Random byteblock match
 
 Another modulus scan decompression example with a larger byte block 
 
+```
 ./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=0000002020412161123F1822FFFC --log=true
 hash values  4
 
@@ -349,7 +350,7 @@ Elapsed Time (s) 220182.811267 - 61.16 hours
 Modulus Scan thread 31 and Random byteblock match
 0   0   0   32  32  65  33  97  18  63  24  34  255 252
 0   0   0   32  32  65  33  97  18  63  24  34  255 252
-
+```
 
 [Other Decoder Examples](https://github.com/singularian/mdencode/blob/master/docs/EXAMPLES.md)
 
