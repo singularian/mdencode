@@ -202,3 +202,34 @@ Modulus Scan thread 31 and Random byteblock match
 0   0   0   32  32  65  33  97  18  63  24  34  255 252 
 0   0   0   32  32  65  33  97  18  63  24  34  255 252 
 
+===============================================================================================
+
+./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4 --block=12 --hex=80000000003C3BC3AED57DDCCC0D --log=true
+hash values  4 
+
+Start Time               Wed Nov 25 16:12:53 2020
+Block Size               14
+Random Byteblock         80000000003C3BC3AED57DDCCC0D
+                         1   2   3   4   5   6   7   8   9   10  11  12  13  14  
+Random Byteblock Hex     80  00  00  00  00  3C  3B  C3  AE  D5  7D  DC  CC  0D  
+Random Byteblock Int     128 0   0   0   0   60  59  195 174 213 125 220 204 13  
+Random Byteblock Bigint  2596148429268524925387571396922381
+Modulus Size             32
+Modulus Bigint           4294967296
+Modulus Remainder        2111622157
+Modulus 2   ^ Exponent   111
+Modulus Mod ^ Exponent   3
+Block Signatures         fast64 70466679490010804 
+Thread Count             32
+Logging                  true
+
+
+Running decode modscan
+
+Found Match
+
+Elapsed Time (s) 1411.041827
+Modulus Scan thread 21 and Random byteblock match
+128 0   0   0   0   60  59  195 174 213 125 220 204 13  
+128 0   0   0   0   60  59  195 174 213 125 220 204 13  
+

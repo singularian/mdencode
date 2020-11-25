@@ -88,5 +88,30 @@ int main() {
   mpz_clear(byteblockInt);
   mpz_clear(modremainder);
 
+  // test exponent test for a 14 byte byteblock
+  mpz_t exponent, addend, result;
+  mpz_init_set_str(exponent, "2", 10);
+  mpz_init_set_str(addend, "1111111122323232312333", 10);
+  mpz_init_set_str(result, "0", 10);
+  mpz_ui_pow_ui(exponent, 2, 111);
+  gmp_printf("output exponent %Zd count\n", exponent);
+  mpz_add(result, exponent, addend);
+  unsigned char byteblock5 [14];
+  mpz_export(byteblock5, &count, 1, sizeof(byteblock5[0]), 0, 0, result); 
+
+  for (i = 0; i < 14; i++) {
+        printf("%d ", byteblock5[i]);
+  }
+  printf("\n");
+
+  for (i = 0; i < 14; i++) {
+        printf("%02X", byteblock5[i]);
+  }
+  printf("\n");
+
+  mpz_clear(exponent);
+  mpz_clear(addend);
+  mpz_clear(result);
+
   return 0;
 }
