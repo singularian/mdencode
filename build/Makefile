@@ -15,13 +15,13 @@ BUILD_DIR=${GOBIN}
 CMD=cmd
 MDE=../code/mdencode
 MDZ=../code/mdzip
-MDZIP=../code/decode
-TEST=../code/testdecode
-CPP=../code/decode_cpp
-CPPEXT=../code/decode_cpp/external
+MDZIP=../code/mdzip_go
+TESTGO=../code/testdecode_go
+TESTCPP=../code/testdecode_cpp
+CPPEXT=../code/testdecode_cpp/external
 
 CC=g++
-DEPS=$(CPPEXT)/cityhash/cityhash.c $(CPPEXT)/fasthash/fasthash.cpp $(CPPEXT)/highwayhash/highwayhash.c $(CPPEXT)/metro64/metrohash64.cpp $(CPPEXT)/pengyhash/pengyhash.c $(CPPEXT)/seahash/seahash.c $(CPPEXT)/spooky/Spooky.cpp $(CPPEXT)/fnv/hash_32.c $(CPPEXT)/fnv/hash_32a.c $(CPPEXT)/fnv/hash_64.c $(CPPEXT)/fnv/hash_64a.c $(CPPEXT)/md6/md6.h $(CPPEXT)/md6/md6_mode.c $(CPPEXT)/md6/md6_compress.c $(CPP)/plog/Log.h
+DEPS=$(CPPEXT)/cityhash/cityhash.c $(CPPEXT)/fasthash/fasthash.cpp $(CPPEXT)/highwayhash/highwayhash.c $(CPPEXT)/metro64/metrohash64.cpp $(CPPEXT)/pengyhash/pengyhash.c $(CPPEXT)/seahash/seahash.c $(CPPEXT)/spooky/Spooky.cpp $(CPPEXT)/fnv/hash_32.c $(CPPEXT)/fnv/hash_32a.c $(CPPEXT)/fnv/hash_64.c $(CPPEXT)/fnv/hash_64a.c $(CPPEXT)/md6/md6.h $(CPPEXT)/md6/md6_mode.c $(CPPEXT)/md6/md6_compress.c $(TESTCPP)/plog/Log.h
 
 # Setup the -ldflags option for go build here, interpolate the variable values
 LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
@@ -43,9 +43,9 @@ all:
 	go build $(LDFLAGS) -o mdsig ${MDZIP}/${CMD}/mdsig.go 
 	go build $(LDFLAGS) -o randfile ${MDZIP}/${CMD}/randomFile.go
 	@echo "Building mdzip test files"
-	go build $(LDFLAGS) -o decoderRandom ${TEST}/${CMD}/decoderRandom.go
-	go build $(LDFLAGS) -o decoderRandomTest ${TEST}/${CMD}/decoderRandomTest.go
-	go build $(LDFLAGS) -o decoderRandomTestHC ${TEST}/${CMD}/decoderRandomTestHC.go
+	go build $(LDFLAGS) -o decoderRandom ${TESTGO}/${CMD}/decoderRandom.go
+	go build $(LDFLAGS) -o decoderRandomTest ${TESTGO}/${CMD}/decoderRandomTest.go
+	go build $(LDFLAGS) -o decoderRandomTestHC ${TESTGO}/${CMD}/decoderRandomTestHC.go
 build:
 	@echo "Building mdencode"
 	go build $(LDFLAGS) -o ${BUILD_DIR}/md ${MDE}/${CMD}/mdencode.go
@@ -62,7 +62,7 @@ build:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${MDZIP}/${CMD}/mdsig.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile ${MDZIP}/${CMD}/randomFile.go
 buildcpp:
-	g++ -I$(CPP) $(DEPS) $(CPP)/decoderRandomTestHCthreads.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	g++ -I$(TESTCPP) $(DEPS) $(TESTCPP)/decoderRandomTestHCthreads.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 mdencode:
 	@echo "Building mdencode"
 	go build $(LDFLAGS) -o ${BUILD_DIR}/md ${MDE}/${CMD}/mdencode.go

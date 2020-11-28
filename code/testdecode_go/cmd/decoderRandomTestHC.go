@@ -32,7 +32,7 @@ import (
 	"encoding/json"
 	"encoding/hex"
 	"github.com/singularian/mdencode/code/decode/mdHashContextList"
-	"github.com/singularian/mdencode/code/testdecode/modScanHC"
+	"github.com/singularian/mdencode/code/testdecode_go/modScanHC"
 	"runtime"
 )
 

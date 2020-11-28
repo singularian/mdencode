@@ -31,7 +31,7 @@ import (
 	"encoding/json"
 	"encoding/hex"
 //	"github.com/singularian/mdencode/code/decode/modScan"
-	"github.com/singularian/mdencode/code/testdecode/modScan"
+	"github.com/singularian/mdencode/code/testdecode_go/modScan"
 	"runtime"
 )
 

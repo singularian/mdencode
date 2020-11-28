@@ -291,7 +291,6 @@ unsigned char *convertHexToByteBlock(std::string & source) {
     size_t num_bytes = (source.length() / 2);
     stream = (unsigned char *) malloc(num_bytes * sizeof(unsigned char));
 
-    // elimnate this vector and just set these
     std::vector<unsigned char> bytes;
 
 
