@@ -14,7 +14,7 @@ BUILD_DIR=${GOBIN}
 # command path
 CMD=cmd
 MDE=../code/mdencode
-MDZ=../code/mdzip
+MDZ=../code/mdzip_go
 MDZIP=../code/mdzip_go
 TESTGO=../code/testdecode_go
 TESTCPP=../code/testdecode_cpp
