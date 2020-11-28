@@ -23,8 +23,8 @@ import (
 	"os"
 	"time"
 	"sync"
-	"github.com/singularian/mdencode/code/decode/mdUnzipMutex"
 	"github.com/singularian/mdencode/code/decode/mdHashContextList"
+	"github.com/singularian/mdencode/code/mdzip_go/mdUnzipMutex"
 	//"runtime"
 )
 

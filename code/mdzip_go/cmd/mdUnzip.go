@@ -13,7 +13,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"github.com/singularian/mdencode/code/decode/mdUnzipFile"
+	"github.com/singularian/mdencode/code/mdzip_go/mdUnzipFile"
 )
 
 // mdencode flag struct                       

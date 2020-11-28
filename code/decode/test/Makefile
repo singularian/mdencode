@@ -19,7 +19,7 @@ LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
 
 all:
 	go build $(LDFLAGS) -o testSigRand testSigRand.go 
-	go build $(LDFLAGS) -o testSignaturelist testSignaturelist.go 
+	go build $(LDFLAGS) -o testSignaturelist testSignaturelistCSV.go 
 # build: 
 #	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip ${CMD}/mdUnzip.go
 test:

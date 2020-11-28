@@ -16,7 +16,7 @@ import (
 	"path/filepath"
         _ "io/ioutil"
 	"github.com/singularian/mdencode/code/decode/mdSignatureKeyList"
-	"github.com/singularian/mdencode/code/decode/mdZipFile"
+	"github.com/singularian/mdencode/code/mdzip_go/mdZipFile"
 	"os"
 	"regexp"
 )

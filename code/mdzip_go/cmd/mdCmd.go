@@ -21,8 +21,8 @@ import (
 	"encoding/hex"
 	"sync"
         "github.com/singularian/mdencode/code/decode/mdHashContextList"
-        "github.com/singularian/mdencode/code/decode/mdUnzipMutex"
-        "github.com/singularian/mdencode/code/decode/modScanFile"
+        "github.com/singularian/mdencode/code/mdzip_go/mdUnzipMutex"
+        "github.com/singularian/mdencode/code/mdzip_go/modScanFile"
 )
 
 // mdencode flag struct                       

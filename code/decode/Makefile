@@ -18,19 +18,11 @@ CMD=cmd
 LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
 
 all:
-	go build $(LDFLAGS) -o mdunzip ${CMD}/mdUnzip.go 
-	go build $(LDFLAGS) -o mdzip ${CMD}/mdzip.go 
 	go build $(LDFLAGS) -o mdlist ${CMD}/mdlist.go 
-	go build $(LDFLAGS) -o mdcmd ${CMD}/mdCmd.go 
-	go build $(LDFLAGS) -o mdlistTest ${CMD}/testBinReadMdFmt.go 
 	go build $(LDFLAGS) -o mdsig ${CMD}/mdsig.go 
 	go build $(LDFLAGS) -o rf ${CMD}/randomFile.go
 build: 
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip ${CMD}/mdUnzip.go
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip ${CMD}/mdzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist ${CMD}/mdlist.go
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdcmd ${CMD}/mdCmd.go
-	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest ${CMD}/testBinReadMdFmt.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${CMD}/mdsig.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/rf ${CMD}/randomFile.go
 goget:
