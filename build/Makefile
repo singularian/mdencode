@@ -81,9 +81,9 @@ mdzip:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile ${MDZIP}/${CMD}/randomFile.go
 test:
 	@echo "Building mdzip decodeRandom Tests"
-	go build -o decoderRandom ${TEST}/${CMD}/decoderRandom.go
-	go build -o decoderRandomTest ${TEST}/${CMD}/decoderRandomTest.go
-	go build -o decoderRandomTestHC ${TEST}/${CMD}/decoderRandomTestHC.go
+	go build -o decoderRandom ${TESTGO}/${CMD}/decoderRandom.go
+	go build -o decoderRandomTest ${TESTGO}/${CMD}/decoderRandomTest.go
+	go build -o decoderRandomTestHC ${TESTGO}/${CMD}/decoderRandomTestHC.go
 # windows build
 windows:
 	@echo "Windows Build"
