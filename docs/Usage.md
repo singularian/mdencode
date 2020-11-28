@@ -154,7 +154,7 @@ mdbinlist  4000 mdbintest.md
 
                                                                                                     
 ```                                                                                                 
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdzip                     
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_go$ ./mdzip                     
 USAGE of ./mdzip:                                                                                   
                                                                                                     
   -file string                                                                                      
@@ -238,7 +238,7 @@ Version:    1.0.8 復甦 復活
 ```                                                                                                 
                                                                                                     
 ```                                                                                                 
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzip                   
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_go$ ./mdunzip                   
 USAGE of mdunzip:
                                                                                                     
   -file string                                                                                      

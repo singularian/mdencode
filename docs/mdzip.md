@@ -96,7 +96,7 @@ These are the 3 main programs.
 - mdlist   - displays the block signatures of an mdzip file
                                                                                                     
 ```                                                                                                 
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdzip                     
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_go$ ./mdzip                     
 USAGE of ./mdzip:                                                                                   
                                                                                                     
   -file string                                                                                      
@@ -180,7 +180,7 @@ Version:    1.0.8 復甦 復活
 ```                                                                                                 
                                                                                                     
 ```                                                                                                 
-user@server:~/projects/src/github.com/singularian/mdencode/code/decode$ ./mdunzip                   
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_go$ ./mdunzip                   
 USAGE of mdunzip:
                                                                                                     
   -file string                                                                                      
@@ -290,7 +290,7 @@ The MDzip provides a commandline modulus test scan with the hash context list.  
 It also can use a N-bit modulus and a hash list and signature key as well as the thread number and then runs a modulus scan and compares results.  
 If the byte blocks match the modulus scan result is a success.  
 
-path: github.com/singularian/mdencode/code/testdecode/cmd/decoderRandomTestHC.go
+path: github.com/singularian/mdencode/code/testdecode_go/cmd/decoderRandomTestHC.go
 
 This is the Usage for decoderRandomTestHC.
 
@@ -377,7 +377,7 @@ This examples shows a 14 byte block encoded in a 13 byte block. This is an examp
 It uses 2 32-bit signatures CRC-32 and FNV-32 and a 32-bit modulus and 1 byte for the modulus exponent. It was run on a 60 core server with 120 threads.                      
                                                                                                                                                                               
 ```                                                                                                                                                                           
-user@instance-2:~/mdencode/mdencode-1.0.5/build$ ./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=120 -hex=000000001200200000000000FFFC                   
+user@instance-2:~/mdencode/build$ ./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=120 -hex=000000001200200000000000FFFC                   
 Running Decode                                                                                                                                                                
 Block Size        14                                                                                                                                                          
 Hashlist          [crc32 fnv32]                                                                                                                                               
