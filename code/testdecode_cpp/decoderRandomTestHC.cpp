@@ -189,7 +189,7 @@ int main (int argc, char **argv) {
      for(int tnum = 0; tnum < threadcount; tnum++) {
          mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex);
          // set the hash context list and the signatures based on the current byte block
-         mst[tnum].hcl.setBlockHashList(def);
+         mst[tnum].hcl.setBlockHashList(def, HASHBLOCK);
          mst[tnum].hcl.setBlockHashList(byteblock, blocksize);
      } 
 
@@ -291,6 +291,7 @@ unsigned char *convertHexToByteBlock(std::string & source) {
     size_t num_bytes = (source.length() / 2);
     stream = (unsigned char *) malloc(num_bytes * sizeof(unsigned char));
 
+    // elimnate this vector and just set these
     std::vector<unsigned char> bytes;
 
 

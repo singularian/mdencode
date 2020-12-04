@@ -16,7 +16,7 @@ BUILD_TIME=`date +%FT%T%z`
 all:
 #	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC -lssl -lcrypto -lgmp -pthread -std=c++11
 #	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC $(OBJ) -lssl -lcrypto -lgmp -pthread -std=c++11
-	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC_gmp -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11 
+	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC1 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11 
 	g++ -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 # opt:
 # doesn't work
@@ -33,6 +33,7 @@ testlog:
 #	g++ -I. example_logging_to_file.cpp -o testlog -std=c++11
 #	g++  easylogging++.cc example_logging_to_file.cpp -o testlog -std=c++11
 	g++ -I. external/easylogging++.cc tests/easylogger.cpp -o testlog -std=c++11
+#	g++ tests/testThreadLocal.cpp -o test -pthread -std=c++11
 testhash:
 	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
 	g++ external/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11

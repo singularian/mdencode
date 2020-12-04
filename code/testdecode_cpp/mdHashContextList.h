@@ -5,13 +5,20 @@
  * Project MDencode GMP C++ Modulus Scan Test Program
  * 
  * mdHashContextList.h is the hash context list class
+ *
+ * A hash context list manages the hash signature list and associated contexts 
+ * A hash context list contains a hash list registry
+ * It also manages the hash list vectors  
+ * and alculates signatures for files and file blockgroups and file blocks
+ * 
  * 
  * 
 */
 #include <iostream>
-#include <vector>
 #include <iomanip>
 #include <sstream>
+#include <tuple>
+#include <vector>
 #include "external/cityhash/cityhash.h"
 #include "external/crc/CRC.h"
 #include "external/csiphash.c"
@@ -35,7 +42,7 @@
 #include "external/spooky/Spooky.h"
 #include "external/wyhash/wyhash.h"
 
-enum htype {HSFILE,HSBLOCKGP,HSBLOCK,HSALL};
+enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
 enum signatures {FIRST, CIT64, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, SPK32, SPK64, XXH32, XXH64, WYH, LAST};
 
 // should add a speed column to show which signatures are fastest
@@ -50,39 +57,39 @@ struct Hashlist {
 
 // could add a zero / non used signature and a last non used
 // so it starts at index 1
-Hashlist mdHashlist[40] = {
+Hashlist mdHashlist[LAST] = {
     {1,  "cit64",    "Cityhash 64",           false, 8},
-    {1,  "crc32",    "CRC 32",                false, 4},
-    {1,  "fast32",   "Fasthash 32",           true,  4},
-    {1,  "fast64",   "Fasthash 64",           true,  8},
-    {2,  "fnv32",    "FNV-1  32",             false, 4},
-    {3,  "fnv32a",   "FNV-1a 32",             false, 4},
-    {4,  "fnv64",    "FNV-1  64",             false, 8},
-    {5,  "fnv64a",   "FNV-1a 64",             false, 8},
-    {6,  "hw64",     "Highway Hash 64",       true,  8},
-    {6,  "met641",   "Metro Hash 64 v1",      true,  8},
-    {6,  "met642",   "Metro Hash 64 v2",      true,  8},
-    {7,  "md2",      "MD2",                   false, 16},
-    {8,  "md4",      "MD4",                   false, 16},
-    {9,  "md5",      "MD5",                   false, 16},
-    {10, "md6",      "MD6",                   false, 20},
-    {11, "md62",     "MD6 Quicker",           true,  20},
-    {11, "png",      "Pengyhash 64",          true,  8},
-    {12, "ripe160",  "Ripe MD 160",           false, 20},
-    {12, "sea64",    "Seahash 64",            true,  8},
-    {12, "sip64",    "Siphash 64",            true,  8},
-    {13, "sha1_64",  "SHA1 64",               false, 8},
-    {14, "sha1_128", "SHA1 128",              false, 16},
-    {15, "sha1",     "SHA1",                  false, 20},
-    {15, "sha256",   "SHA 256",               false, 32},
-    {15, "sha384",   "SHA 384",               false, 48},
-    {15, "sha512",   "SHA 512",               false, 64},
-    {16, "spk32",    "Spooky 32",             true,  4},
-    {16, "spk64",    "Spooky 64",             true,  8},
-    {16, "xxh32",    "xxHash32",              true,  4},
-    {17, "xxh64",    "xxHash64",              true,  8},
-    {17, "wy64",     "WYhash 64",             true,  8},
-    {18, "last",     "Unused Signature",      false, 8}
+    {2,  "crc32",    "CRC 32",                false, 4},
+    {3,  "fast32",   "Fasthash 32",           true,  4},
+    {4,  "fast64",   "Fasthash 64",           true,  8},
+    {5,  "fnv32",    "FNV-1  32",             false, 4},
+    {6,  "fnv32a",   "FNV-1a 32",             false, 4},
+    {7,  "fnv64",    "FNV-1  64",             false, 8},
+    {8,  "fnv64a",   "FNV-1a 64",             false, 8},
+    {9,  "hw64",     "Highway Hash 64",       true,  8},
+    {10, "met641",   "Metro Hash 64 v1",      true,  8},
+    {11, "met642",   "Metro Hash 64 v2",      true,  8},
+    {12, "md2",      "MD2",                   false, 16},
+    {13, "md4",      "MD4",                   false, 16},
+    {14, "md5",      "MD5",                   false, 16},
+    {15, "md6",      "MD6",                   false, 20},
+    {16, "md62",     "MD6 Quicker",           true,  20},
+    {17, "png",      "Pengyhash 64",          true,  8},
+    {18, "ripe160",  "Ripe MD 160",           false, 20},
+    {19, "sea64",    "Seahash 64",            true,  8},
+    {20, "sip64",    "Siphash 64",            true,  8},
+    {21, "sha1_64",  "SHA1 64",               false, 8},
+    {22, "sha1_128", "SHA1 128",              false, 16},
+    {23, "sha1",     "SHA1",                  false, 20},
+    {24, "sha256",   "SHA 256",               false, 32},
+    {25, "sha384",   "SHA 384",               false, 48},
+    {26, "sha512",   "SHA 512",               false, 64},
+    {27, "spk32",    "Spooky 32",             true,  4},
+    {28, "spk64",    "Spooky 64",             true,  8},
+    {29, "xxh32",    "xxHash32",              true,  4},
+    {30, "xxh64",    "xxHash64",              true,  8},
+    {31, "wy64",     "WYhash 64",             true,  8},
+    {32, "last",     "Unused Signature",      false, 8}
 };
 
 
@@ -94,11 +101,9 @@ private:
     int threadcount;
     int blocksize;
     int hashlistsize;
-    // should make this a tuple and add the block size
-    // https://www.geeksforgeeks.org/tuples-in-c/
-    std::vector<std::pair<int,std::string>> filehlist;
-    std::vector<std::pair<int,std::string>> blockgrouphlist;
-    std::vector<std::pair<int,std::string>> blockhlist;
+    // hash list vectors
+    // vector with tuple - hashnumber, hashname, blocksize
+    std::vector<std::tuple<int,std::string,int>> hashlistvt[3];
     // hash results
     // need to make these an array sized 3 for files and bg and block hash results
     uint64_t city64i;
@@ -206,54 +211,36 @@ public:
     {
     } 
 
-    // set the file hash list
-    void setFileHashList(const std::vector<int> &v)
-    {  
-          std::pair<int,std::string> hashPair;
-          for(int val  : v) {
-              if (val <= hashlistsize && val > 0) {
-                hashPair.first  = val;
-                hashPair.second = mdHashlist[val-1].name;
-                filehlist.push_back(hashPair);
-              }
-          }
-
-    }
-
-    // set the block group hash list
-    void setBlockGroupHashList(const std::vector<int> &v)
-    {  
-          std::pair<int,std::string> hashPair; 
-          for(int val  : v) {
-              if (val <= hashlistsize && val > 0) {
-                hashPair.first  = val;
-                hashPair.second = mdHashlist[val-1].name;
-                blockgrouphlist.push_back(hashPair);
-              }
-          }
-
-    }
-
     // set the file block hash list
-    void setBlockHashList(const std::vector<int> &v)
+    // input vector list and hash type
+    //
+    // vector tuple
+    // 1) hashnumber
+    // 2) hashname
+    // 3) hashblocksize
+    void setBlockHashList(const std::vector<int> &v, int type)
     {
-          std::pair<int,std::string> hashPair;
+          std::tuple<int,std::string,int> hashTuple;
           for(int val  : v) {
               if (val <= hashlistsize && val > 0) {
-                hashPair.first  = val;
-                hashPair.second = mdHashlist[val-1].name;
-                // bhlist << hashPair.second << " ";
-                blockhlist.push_back(hashPair);
+                hashTuple = make_tuple(val, mdHashlist[val-1].name, mdHashlist[val-1].blocksize);
+
+                // need to check type size
+                hashlistvt[type].push_back(hashTuple);
               }
           }
 
     }
 
-    // setHashList
+    // setBlockHashList
+    // this sets the block hash list signatures for an input block
     void setBlockHashList(unsigned char *byteblock, int blocksize) {
 
-          for(auto hash  : blockhlist) {
-              switch(hash.first) {
+          int hashblocksize = 0;
+          for(auto hash  : hashlistvt[HASHBLOCK]) {
+              hashblocksize = std::get<2>(hash);
+
+              switch(std::get<0>(hash)) {
                   case CIT64:
                     city64i = cityhash64_with_seed(byteblock, blocksize, city64seed);
                     break;
@@ -358,10 +345,11 @@ public:
     bool compareBlockHashList(unsigned char *byteblock, int blocksize) {
 
          int hashblocksize = 0;
-         for(auto hash  : blockhlist) {
-              hashblocksize = mdHashlist[hash.first-1].blocksize;
+         for(auto hash  : hashlistvt[HASHBLOCK]) {
+              //hashblocksize = mdHashlist[hash.first-1].blocksize;
+              hashblocksize = std::get<2>(hash);
 
-              switch(hash.first) {
+              switch(std::get<0>(hash)) {
                   case CIT64:
                     city64o = cityhash64_with_seed(byteblock, blocksize, city64seed);
                     if (city64i != city64o) return false;
@@ -494,19 +482,32 @@ public:
           return true;
     }
 
+    // calculate the block size for the correct hashlist type
+    int calcBlockSize(int type) {
+
+        int hashblocksize = 0;
+        int sumhashblocksize = 0;
+        for(auto hash  : hashlistvt[type]) {
+              hashblocksize = std::get<2>(hash);
+              sumhashblocksize += hashblocksize;
+        }
+
+        return sumhashblocksize;
+
+    }
+
     // display the hash list
-    // const std::string& displayHLhashes() {
     std::string displayHLhashes() {
 
         int i = 0;
         int hashblocksize = 0;
-        for(auto hash  : blockhlist) {
-              // mdHashlist starts at index 0
-              hashblocksize = mdHashlist[hash.first-1].blocksize;
-              ss << hash.second << " ";
-              // ss << "hash id " << std::to_string(hash.first) << " " << " name " << hash.second << " hashblocksize " << std::to_string(hashblocksize) << " ";
+        for(auto hash  : hashlistvt[HASHBLOCK]) {
 
-              switch(hash.first) {
+              hashblocksize = std::get<2>(hash);
+              ss << std::get<1>(hash) << " ";
+              // ss << "hash id " << std::get<0>(hash) << " " << " name " << std::get<1>(hash) << " hashblocksize " << std::to_string(hashblocksize) << " ";
+
+              switch(std::get<0>(hash)) {
                   case CIT64:
                      ss << std::to_string(city64i) << " ";
                      break;
@@ -635,18 +636,21 @@ public:
     // 2) file block group hash list
     // 3) file block hashlist
     void displayHLvectors() {
-         std::cout << "file hashlist " << std::endl;
-         for(auto val  : filehlist) 
-             std::cout << val.first << " " << val.second << std::endl;
+         int hashblocksize = 0;
 
-         std::cout << "file block group hash list " << std::endl;
-         for(auto val  : blockgrouphlist)  
-             std::cout << val.first << " " << val.second << std::endl;
+         std::cout << "File hashlist " << std::endl;
+         for(auto val  : hashlistvt[HASHFILE]) 
+             std::cout << std::get<0>(val) << " " << std::get<1>(val) << std::endl; 
+         std::cout << std::endl;
 
-         std::cout << "file block hashlist " << std::endl;
-         for(auto val  : blockhlist)  
-             std::cout << val.first << " " << val.second << std::endl;
+         std::cout << "File block group hash list " << std::endl;
+         for(auto val  : hashlistvt[HASHBLOCKGROUP]) 
+             std::cout << std::get<0>(val) << " " << std::get<1>(val) << std::endl;
+         std::cout << std::endl;
 
+         std::cout << "File block hashlist " << std::endl;
+         for(auto val  : hashlistvt[HASHBLOCK])  
+             std::cout << std::get<0>(val) << " " << std::get<1>(val) << std::endl;
     }
 
     // display the current list of signature hashes currently supported
