@@ -29,7 +29,7 @@ int main()
     std::vector<int> blockgroup = { 16, 17, 20, 30 };
     hcl.setBlockHashList(blockgroup, HASHBLOCKGROUP);
 
-    // initialize a block hash list bector
+    // initialize a block hash list vector
     std::vector<int> block = { 1, 2, 3, 15, 16, 17 };
     hcl.setBlockHashList(block, HASHBLOCK);
 
