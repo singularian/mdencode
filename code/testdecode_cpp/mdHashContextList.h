@@ -8,8 +8,9 @@
  *
  * A hash context list manages the hash signature list and associated contexts 
  * A hash context list contains a hash list registry
- * It also manages the hash list vectors  
- * and alculates signatures for files and file blockgroups and file blocks
+ * It also manages the hash list input vectors  
+ * A hash context list calculates signatures for files and file blockgroups and file blocks
+ * This class also manages signature comparisons for the modulus scan
  * 
  * 
  * 
