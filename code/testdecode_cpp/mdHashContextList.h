@@ -627,18 +627,18 @@ public:
          int hashblocksize = 0;
 
          std::cout << "File hashlist " << std::endl;
-         std::cout << displayHLvectors2(HASHFILE);
+         std::cout << getHLvectorsString(HASHFILE);
 
          std::cout << "File block group hash list " << std::endl;
-         std::cout << displayHLvectors2(HASHBLOCKGROUP);
+         std::cout << getHLvectorsString(HASHBLOCKGROUP);
 
          std::cout << "File block hashlist " << std::endl;
-         std::cout << displayHLvectors2(HASHBLOCK);
+         std::cout << getHLvectorsString(HASHBLOCK);
 
     }
 
-    // get the vector list associated with the hash type
-    std::string displayHLvectors2(int type) {
+    // get and create the vector list string associated with the hash type
+    std::string getHLvectorsString(int type) {
          // clear the hlss string stream
          hlss.str(std::string());
 
@@ -680,8 +680,8 @@ public:
          }
     }
 
-    // calculate the hashlist vector length hashlist type
-    int calcHashListVectorLength(int type) {
+    // get the hashlist vector length hashlist based on the input hash type
+    int getHLVectorLength(int type) {
 
         int hashListsize = 0;
         hashListsize = hashlistvt[type].size();

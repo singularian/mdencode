@@ -42,9 +42,9 @@ int main()
     hcl.setByteBlockHashList(byteblock, 11);
 
     // return the vector lengths
-    std::cout << "Hash file block size "  << hcl.calcHashListVectorLength(HASHFILE) << std::endl;
-    std::cout << "Hash block group size " << hcl.calcHashListVectorLength(HASHBLOCKGROUP) << std::endl;
-    std::cout << "Hash block size "       << hcl.calcHashListVectorLength(HASHBLOCK) << std::endl;
+    std::cout << "Hash file block size "  << hcl.getHLVectorLength(HASHFILE) << std::endl;
+    std::cout << "Hash block group size " << hcl.getHLVectorLength(HASHBLOCKGROUP) << std::endl;
+    std::cout << "Hash block size "       << hcl.getHLVectorLength(HASHBLOCK) << std::endl;
     std::cout << std::endl;
 
     // calculate the hash block size
