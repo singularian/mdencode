@@ -38,7 +38,7 @@ int main()
 
     // set the byteblock hashlist
     unsigned char byteblock [] = { 139, 176, 100, 82, 220, 98, 148, 121, 155, 202, 74 };
-    hcl.setBlockHashList(byteblock, 11);
+    hcl.setByteBlockHashList(byteblock, 11);
 
     // calculate the hash block size
     std::cout << "Hash file block size " << hcl.calcBlockSize(HASHFILE) << std::endl;

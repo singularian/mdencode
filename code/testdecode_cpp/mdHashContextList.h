@@ -233,9 +233,9 @@ public:
 
     }
 
-    // setBlockHashList
+    // setByteBlockHashList
     // this sets the block hash list signatures for an input block
-    void setBlockHashList(unsigned char *byteblock, int blocksize) {
+    void setByteBlockHashList(unsigned char *byteblock, int blocksize) {
 
           int hashblocksize = 0;
           for(auto hash  : hashlistvt[HASHBLOCK]) {
