@@ -627,13 +627,13 @@ public:
          int hashblocksize = 0;
 
          std::cout << "File hashlist " << std::endl;
-         std::cout << getHLvectorsString(HASHFILE);
+         std::cout << getHLvectorsString(HASHFILE) << std::endl;
 
          std::cout << "File block group hash list " << std::endl;
-         std::cout << getHLvectorsString(HASHBLOCKGROUP);
+         std::cout << getHLvectorsString(HASHBLOCKGROUP) << std::endl;
 
          std::cout << "File block hashlist " << std::endl;
-         std::cout << getHLvectorsString(HASHBLOCK);
+         std::cout << getHLvectorsString(HASHBLOCK) << std::endl;
 
     }
 
@@ -643,19 +643,18 @@ public:
          hlss.str(std::string());
 
          hlss << std::left << std::setw(12) << "Number";
-         hlss << std::left << std::setw(12) << "Hash ID";
+         hlss << std::left << std::setw(13) << "Hash ID";
          hlss << std::left << std::setw(12) << "Hash Name ";
          hlss << std::left << std::setw(12) << "Blocksize" << std::endl;
 
          int i = 1;
          for(auto val  : hashlistvt[type]) {
              hlss << std::left << std::setw(12) << i;
-             hlss << std::left << std::setw(12) << std::get<0>(val);
+             hlss << std::left << std::setw(13) << std::get<0>(val);
              hlss << std::left << std::setw(12) << std::get<1>(val);
              hlss << std::left << std::setw(12) << std::get<2>(val) << std::endl;
              i++;
          }
-         hlss << std::endl;
          return hlss.str(); 
     }
 

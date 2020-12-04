@@ -40,7 +40,7 @@ unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& displayHLhashes, mdMutexLog *log );
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& vectorlist, std::string& displayHLhashes, mdMutexLog *log );
 void usage();
 
 // main
@@ -101,10 +101,12 @@ int main (int argc, char **argv) {
      }
 
      // for(string v  : csvvals)
-     std::cout << "hash values ";
+/*   std::cout << "hash values ";
      for(int v2  : def)
      std::cout << " " << v2 << " ";
      std::cout << std::endl;
+*/
+
 /*
      cout << endl << "csv vals ";
      for(int v  : vals)
@@ -200,8 +202,9 @@ int main (int argc, char **argv) {
      }
 
      // display the current block stats
-     std::string hashlist = mst[0].hcl.displayHLhashes();
-     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, hashlist, &log );
+     std::string vectorlist = mst[0].hcl.getHLvectorsString(HASHBLOCK);
+     std::string hashlist   = mst[0].hcl.displayHLhashes();
+     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, vectorlist, hashlist, &log );
 
      // std::cout << endl << "Running decode modscan" << endl << endl;
      log.writeLog("Running decode modscan");
@@ -250,6 +253,8 @@ int main (int argc, char **argv) {
 
      } else {
           result << "Modulus Scan and Random byteblock don't match" << endl;
+          log.writeLog(result.str());
+
           log.logMatchByteblock(byteblock, blocksize, true);
           log.logMatchByteblock(modbyteblock, blocksize, true);
 
@@ -384,7 +389,7 @@ void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {
 
 
 // displays the modulus scan information
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& hashlist, mdMutexLog *log) {
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& vectorlist, std::string& hashlist, mdMutexLog *log) {
 
      std::ostringstream result;
      int f = 0;
@@ -457,7 +462,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 
      result << "Modulus 2   ^ Exponent   " << std::to_string(exponent) << endl;
      result << "Modulus Mod ^ Exponent   " << std::to_string(expmod) << endl;
-
+    
      result << "Block Signatures         ";
      result << hashlist;
      result << endl;
@@ -466,6 +471,10 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 
      result << "Logging                  " << boolalpha << log->checkIfLogging() << endl;
      result << endl;
+
+     result << "Hash Block Vector" << endl;
+     result << vectorlist;
+
 
      log->writeLog(result.str());
 }
