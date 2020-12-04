@@ -33,6 +33,7 @@ int main()
     std::vector<int> block = { 1, 2, 3, 15, 16, 17 };
     hcl.setBlockHashList(block, HASHBLOCK);
 
+    // display the file and blockgroup and blockhash list input vectors
     hcl.displayHLvectors();
     std::cout << std::endl;
 

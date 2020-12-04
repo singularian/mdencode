@@ -27,7 +27,6 @@ test:
 	g++ tests/test_gmp2.cpp -o test_gmp2 -lgmp -lgmpxx
 	g++ tests/testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
 	g++ tests/testCSVSplit.cpp  -o testcsv -std=c++11
-	g++ tests/testSwitch.cpp  -o testswitch -std=c++11
 	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 testlog:
 #	g++ -I. example_logging_to_file.cpp -o testlog -std=c++11

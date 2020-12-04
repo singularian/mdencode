@@ -640,39 +640,51 @@ public:
          int hashblocksize = 0;
 
          std::cout << "File hashlist " << std::endl;
-         for(auto val  : hashlistvt[HASHFILE]) 
-             std::cout << std::get<0>(val) << " " << std::get<1>(val) << std::endl; 
-         std::cout << std::endl;
+         displayHLvectors2(HASHFILE);
 
          std::cout << "File block group hash list " << std::endl;
-         for(auto val  : hashlistvt[HASHBLOCKGROUP]) 
-             std::cout << std::get<0>(val) << " " << std::get<1>(val) << std::endl;
-         std::cout << std::endl;
+         displayHLvectors2(HASHBLOCKGROUP);
 
          std::cout << "File block hashlist " << std::endl;
-         for(auto val  : hashlistvt[HASHBLOCK])  
-             std::cout << std::get<0>(val) << " " << std::get<1>(val) << std::endl;
+         displayHLvectors2(HASHBLOCK);
+
+    }
+
+    // display the vector list formatter
+    void displayHLvectors2(int type) {
+         std::cout << std::left << std::setw(12) << "ID";
+         std::cout << std::left << std::setw(12) << "Hash Name ";
+         std::cout << std::left << std::setw(12) << "Blocksize" << std::endl;
+
+         for(auto val  : hashlistvt[type]) {
+             std::cout << std::left << std::setw(12) << std::get<0>(val);
+             std::cout << std::left << std::setw(12) << std::get<1>(val);
+             std::cout << std::left << std::setw(12) << std::get<2>(val) << std::endl;
+         }
+         std::cout << std::endl;
+        
     }
 
     // display the current list of signature hashes currently supported
     void displayHashList(int format) 
     {
 
-        std::cout << std::left << std::setw(12) << "ID";
-        std::cout << std::left << std::setw(12) << "Hash Name ";
-        std::cout << std::left << std::setw(30) << "Description";
-        std::cout << std::left << std::setw(12) << "Key";
-        std::cout << std::left << std::setw(12) << "Blocksize" << std::endl;
+         std::cout << std::left << std::setw(12) << "ID";
+         std::cout << std::left << std::setw(12) << "Hash Name ";
+         std::cout << std::left << std::setw(30) << "Description";
+         std::cout << std::left << std::setw(12) << "Key";
+         std::cout << std::left << std::setw(12) << "Blocksize" << std::endl;
+         std::cout << "==============================================================================" << std::endl;
 
-        for (int i = 0; i < hashlistsize; i++) {
-           if (mdHashlist[i].name == "last") break;
-           std::cout << std::left << std::setw(12) << i + 1; 
-           std::cout << std::left << std::setw(12) << mdHashlist[i].name;
-           std::cout << std::left << std::setw(30) << mdHashlist[i].description;
-           std::cout << std::left << std::setw(12) << std::boolalpha << mdHashlist[i].haskey;
-           std::cout << std::left << std::setw(12) << mdHashlist[i].blocksize;
-           std::cout << std::endl;
-        }
+         for (int i = 0; i < hashlistsize; i++) {
+            if (mdHashlist[i].name == "last") break;
+            std::cout << std::left << std::setw(12) << i + 1; 
+            std::cout << std::left << std::setw(12) << mdHashlist[i].name;
+            std::cout << std::left << std::setw(30) << mdHashlist[i].description;
+            std::cout << std::left << std::setw(12) << std::boolalpha << mdHashlist[i].haskey;
+            std::cout << std::left << std::setw(12) << mdHashlist[i].blocksize;
+            std::cout << std::endl;
+         }
     }
 
     
