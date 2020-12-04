@@ -483,20 +483,6 @@ public:
           return true;
     }
 
-    // calculate the block size for the correct hashlist type
-    int calcBlockSize(int type) {
-
-        int hashblocksize = 0;
-        int sumhashblocksize = 0;
-        for(auto hash  : hashlistvt[type]) {
-              hashblocksize = std::get<2>(hash);
-              sumhashblocksize += hashblocksize;
-        }
-
-        return sumhashblocksize;
-
-    }
-
     // display the hash list
     std::string displayHLhashes() {
 
@@ -652,14 +638,18 @@ public:
 
     // display the vector list formatter
     void displayHLvectors2(int type) {
-         std::cout << std::left << std::setw(12) << "ID";
+         std::cout << std::left << std::setw(12) << "Number";
+         std::cout << std::left << std::setw(12) << "Hash ID";
          std::cout << std::left << std::setw(12) << "Hash Name ";
          std::cout << std::left << std::setw(12) << "Blocksize" << std::endl;
 
+         int i = 1;
          for(auto val  : hashlistvt[type]) {
+             std::cout << std::left << std::setw(12) << i;
              std::cout << std::left << std::setw(12) << std::get<0>(val);
              std::cout << std::left << std::setw(12) << std::get<1>(val);
              std::cout << std::left << std::setw(12) << std::get<2>(val) << std::endl;
+             i++;
          }
          std::cout << std::endl;
         
@@ -687,6 +677,31 @@ public:
          }
     }
 
+    // calculate the hashlist vector length hashlist type
+    int calcHashListVectorLength(int type) {
+
+        int hashListsize = 0;
+        hashListsize = hashlistvt[type].size();
+
+        return hashListsize;
+
+    }
+
+
+    // calculate the block size for the correct hashlist type
+    // this returns the sum of the hash list vector block sizes
+    int calcBlockSize(int type) {
+
+        int hashblocksize = 0;
+        int sumhashblocksize = 0;
+        for(auto hash  : hashlistvt[type]) {
+              hashblocksize = std::get<2>(hash);
+              sumhashblocksize += hashblocksize;
+        }
+
+        return sumhashblocksize;
+
+    }
     
 
 };

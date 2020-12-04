@@ -41,10 +41,17 @@ int main()
     unsigned char byteblock [] = { 139, 176, 100, 82, 220, 98, 148, 121, 155, 202, 74 };
     hcl.setByteBlockHashList(byteblock, 11);
 
+    // return the vector lengths
+    std::cout << "Hash file block size "  << hcl.calcHashListVectorLength(HASHFILE) << std::endl;
+    std::cout << "Hash block group size " << hcl.calcHashListVectorLength(HASHBLOCKGROUP) << std::endl;
+    std::cout << "Hash block size "       << hcl.calcHashListVectorLength(HASHBLOCK) << std::endl;
+    std::cout << std::endl;
+
     // calculate the hash block size
-    std::cout << "Hash file block size " << hcl.calcBlockSize(HASHFILE) << std::endl;
+    std::cout << "Hash file block size "  << hcl.calcBlockSize(HASHFILE) << std::endl;
     std::cout << "Hash block group size " << hcl.calcBlockSize(HASHBLOCKGROUP) << std::endl;
-    std::cout << "Hash block size " << hcl.calcBlockSize(HASHBLOCK) << std::endl;
+    std::cout << "Hash block size "       << hcl.calcBlockSize(HASHBLOCK) << std::endl;
+    std::cout << std::endl;
 
     // display the block hash list
     std::cout << hcl.displayHLhashes() << std::endl;
