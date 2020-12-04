@@ -13,12 +13,12 @@ int main()
     mdHashContextList hcl;
 
     // display the current hash signature list
-    hcl.displayHashList(0);
+    hcl.displayHLRegistry(0);
     std::cout << std::endl;
 
     // initialize a file hash list vector  
     std::vector<int> file = { 1, 2, 3, 15, 16 };
-    hcl.setBlockHashList(file, HASHFILE);
+    hcl.setVectorHL(file, HASHFILE);
 
     // TODO initialize a block group hash list vector
     // maybe make the parameters a double or float
@@ -27,11 +27,11 @@ int main()
     // 1.3 is blocks hash list
     // 1.4 is everything with hash signature 1
     std::vector<int> blockgroup = { 16, 17, 20, 30 };
-    hcl.setBlockHashList(blockgroup, HASHBLOCKGROUP);
+    hcl.setVectorHL(blockgroup, HASHBLOCKGROUP);
 
     // initialize a block hash list vector
     std::vector<int> block = { 1, 2, 3, 15, 16, 17 };
-    hcl.setBlockHashList(block, HASHBLOCK);
+    hcl.setVectorHL(block, HASHBLOCK);
 
     // display the file and blockgroup and blockhash list input vectors
     hcl.displayHLvectors();

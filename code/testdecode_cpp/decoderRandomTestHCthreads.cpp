@@ -189,7 +189,7 @@ int main (int argc, char **argv) {
      for(int tnum = 0; tnum < threadcount; tnum++) {
          mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex);
          // set the hash context list and the signatures based on the current byte block
-         mst[tnum].hcl.setBlockHashList(def, HASHBLOCK);
+         mst[tnum].hcl.setVectorHL(def, HASHBLOCK);
          mst[tnum].hcl.setByteBlockHashList(byteblock, blocksize);
      } 
 
@@ -486,9 +486,10 @@ Examples:
     cout << usageline << endl;
     cout << endl; 
 
+    // Add the current hash list signatures currently supported
+    // to the usage
     cout << "Hashlist" << endl << endl;
-
     mdHashContextList hcl;
-    hcl.displayHashList(0);
+    hcl.displayHLRegistry(0);
 
 }

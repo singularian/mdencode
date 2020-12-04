@@ -198,6 +198,7 @@ private:
 public:
     std::stringstream bhlist;
     std::stringstream ss;
+    std::stringstream hlss;
     std::string hashlist;
 
     // initialize mdHashContextList
@@ -212,14 +213,14 @@ public:
     {
     } 
 
-    // set the file block hash list
+    // set the vector hash list
     // input vector list and hash type
     //
     // vector tuple
     // 1) hashnumber
     // 2) hashname
     // 3) hashblocksize
-    void setBlockHashList(const std::vector<int> &v, int type)
+    void setVectorHL(const std::vector<int> &v, int type)
     {
           std::tuple<int,std::string,int> hashTuple;
           for(int val  : v) {
@@ -626,39 +627,41 @@ public:
          int hashblocksize = 0;
 
          std::cout << "File hashlist " << std::endl;
-         displayHLvectors2(HASHFILE);
+         std::cout << displayHLvectors2(HASHFILE);
 
          std::cout << "File block group hash list " << std::endl;
-         displayHLvectors2(HASHBLOCKGROUP);
+         std::cout << displayHLvectors2(HASHBLOCKGROUP);
 
          std::cout << "File block hashlist " << std::endl;
-         displayHLvectors2(HASHBLOCK);
+         std::cout << displayHLvectors2(HASHBLOCK);
 
     }
 
-    // display the vector list formatter
-    void displayHLvectors2(int type) {
-         std::cout << std::left << std::setw(12) << "Number";
-         std::cout << std::left << std::setw(12) << "Hash ID";
-         std::cout << std::left << std::setw(12) << "Hash Name ";
-         std::cout << std::left << std::setw(12) << "Blocksize" << std::endl;
+    // get the vector list associated with the hash type
+    std::string displayHLvectors2(int type) {
+         // clear the hlss string stream
+         hlss.str(std::string());
+
+         hlss << std::left << std::setw(12) << "Number";
+         hlss << std::left << std::setw(12) << "Hash ID";
+         hlss << std::left << std::setw(12) << "Hash Name ";
+         hlss << std::left << std::setw(12) << "Blocksize" << std::endl;
 
          int i = 1;
          for(auto val  : hashlistvt[type]) {
-             std::cout << std::left << std::setw(12) << i;
-             std::cout << std::left << std::setw(12) << std::get<0>(val);
-             std::cout << std::left << std::setw(12) << std::get<1>(val);
-             std::cout << std::left << std::setw(12) << std::get<2>(val) << std::endl;
+             hlss << std::left << std::setw(12) << i;
+             hlss << std::left << std::setw(12) << std::get<0>(val);
+             hlss << std::left << std::setw(12) << std::get<1>(val);
+             hlss << std::left << std::setw(12) << std::get<2>(val) << std::endl;
              i++;
          }
-         std::cout << std::endl;
-        
+         hlss << std::endl;
+         return hlss.str(); 
     }
 
-    // display the current list of signature hashes currently supported
-    void displayHashList(int format) 
+    // display the current registry hash list struct of signature hashes currently supported
+    void displayHLRegistry(int format) 
     {
-
          std::cout << std::left << std::setw(12) << "ID";
          std::cout << std::left << std::setw(12) << "Hash Name ";
          std::cout << std::left << std::setw(30) << "Description";
