@@ -415,7 +415,7 @@ mdunzip -file=decoderRandom.go.mdz -out=decoderRandom.go.mdz.uncompressed -threa
 
 # MDZip Video Example 
 
-These are some Ascii Art Video Examples 
+These are some Asciinema Video Examples 
 
 [MDZip Example](https://asciinema.org/a/293119)  
 [MDZip Example 2](https://asciinema.org/a/293112)   
