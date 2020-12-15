@@ -21,6 +21,7 @@
 #include <sstream>
 #include <tuple>
 #include <vector>
+#include "filehash.h"
 #include "external/cityhash/cityhash.h"
 #include "external/crc/CRC.h"
 #include "external/csiphash.c"
@@ -118,6 +119,9 @@ private:
     // uint64_t crc64[2][type]
     // uint64_t crc64[in][type]
     // uint64_t crc64[out][type]
+    // crc32
+    uint32_t crc32i;
+    uint32_t crc32o;
     // crc64
     uint64_t crc64i;
     uint64_t crc64o;
@@ -242,7 +246,7 @@ public:
 
     }
 
-    // writeBlockHashList to a file
+    // writeBlockHashList
     void writeBlockHashList(std::ofstream &wf) { 
 
           int hashblocksize = 0;
@@ -254,7 +258,10 @@ public:
                     wf.write(reinterpret_cast<char*>(&city64i), sizeof(long));
                     break;
                   case CRC32:
-                    wf.write(reinterpret_cast<char*>(&crc64i), sizeof(long));
+                    // I think there was an issue with this being 64 bits instead of 32 for this crc implementation
+                    crc32i = (uint32_t) crc64i;
+                    // wf.write(reinterpret_cast<char*>(&crc64i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&crc32i), sizeof(int));
                     break;
                   case FAST32:
                     wf.write(reinterpret_cast<char*>(&fast32i), sizeof(long));
@@ -263,7 +270,7 @@ public:
                     wf.write(reinterpret_cast<char*>(&fast64i), sizeof(long));      
                     break;
                   case FNV32:
-                    wf.write(reinterpret_cast<char*>(&fnv32_1i), sizeof(long));   
+                    wf.write(reinterpret_cast<char*>(&fnv32_1i), sizeof(long)); 
                     break;
                   case FNV32A:
                     wf.write(reinterpret_cast<char*>(&fnv32_1i), sizeof(long)); 
@@ -278,7 +285,7 @@ public:
                     wf.write(reinterpret_cast<char*>(&hw64i), sizeof(long));
                     break;
                   case MET641:
-                    wf.write(reinterpret_cast<char*>(&met641i), sizeof(met641i)); // I think it should be block size
+                    wf.write(reinterpret_cast<char*>(&met641i), sizeof(met641i)); 
                     break;
                   case MET642:
                     wf.write(reinterpret_cast<char*>(&met642i), sizeof(met642i)); 
@@ -608,7 +615,6 @@ public:
     std::string displayHLhashes() {
         // clear the string stream
         ss.str(std::string());
-
 
         int i = 0;
         int hashblocksize = 0;
