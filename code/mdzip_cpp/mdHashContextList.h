@@ -775,6 +775,7 @@ public:
     std::string getHLvectorsString(int type) {
          // clear the hlss string stream
          hlss.str(std::string());
+         int blocksize = 0; 
 
          hlss << std::left << std::setw(12) << "Number";
          hlss << std::left << std::setw(13) << "Hash ID";
@@ -787,8 +788,11 @@ public:
              hlss << std::left << std::setw(13) << std::get<0>(val);
              hlss << std::left << std::setw(12) << std::get<1>(val);
              hlss << std::left << std::setw(12) << std::get<2>(val) << std::endl;
+             blocksize += std::get<2>(val);
              i++;
          }
+         hlss << std::right << std::setw(39) << blocksize << " Total" << std::endl; 
+
          return hlss.str(); 
     }
 
