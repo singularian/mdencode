@@ -359,6 +359,115 @@ public:
               }
           }
     }
+    
+    // setFileHashList
+    // this sets the file hash list signatures for a file
+    void setFileHashList(std::string& filename) {
+          
+          char file[100] = "file.txt";
+          int hashblocksize = 0;
+          for(auto hash  : hashlistvt[HASHBLOCK]) {
+              hashblocksize = std::get<2>(hash);
+
+              switch(std::get<0>(hash)) {
+                  case CIT64:
+                    //city64i = cityhash64_with_seed(byteblock, blocksize, city64seed);
+                    break;
+                  case CRC32:
+                    //crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
+                    break;
+                  case FAST32:
+                    //fast32i = fasthash32(byteblock, blocksize, fast32seed);
+                    break;
+                  case FAST64:
+                    //fast64i = fasthash64(byteblock, blocksize, fast64seed);
+                    break;
+                  case FNV32:
+                    //fnv32_1i = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
+                    break;
+                  case FNV32A:
+                    //fnv32a_1i = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
+                    break;
+                  case FNV64:
+                    //fnv64_1i = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
+                    break;
+                  case FNV64A:
+                    //fnv64a_1i = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
+                    break;
+                  case HW64:
+                    //hw64i = HighwayHash64(byteblock, blocksize, hw64key);
+                    break;
+                  case MET641:
+                    //metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641i);
+                    break;
+                  case MET642:
+                    //metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642i);
+                    break;
+                  case MD2s:
+                    //md2(byteblock,(size_t)blocksize,md2i);
+                    break;
+                  case MD4s:
+                    //MD4(byteblock,(long)blocksize,md4i);
+                    break;
+                  case MD5s:
+                    //MD5(byteblock,(long)blocksize,md5i);
+                    break;
+                  case MD6:
+                    //md6_hash(160, byteblock,(uint64_t)(blocksize*8),md6i);
+                    break;
+                  case MD62:
+                    //md6_full_hash(160, byteblock,(uint64_t)(blocksize*8),md62key,16,md6_default_L, 4, md62i);
+                    break;
+                  case PNG:
+                    //png64i = pengyhash(byteblock, (size_t) blocksize, png64seed);
+                    break;
+                  case RIPE160:
+                    //RIPEMD160(byteblock, blocksize, ripe160i);
+                    break;
+                  case SEA:
+                    //sea64i = seahash((const char*)byteblock, blocksize, sea64seed);
+                    break;
+                  case SIP64: 
+                    //siphash64i = siphash24(byteblock, blocksize, sipkey);
+                    break;
+                  case SHA164:
+                    calculateSHA1((char *) filename.c_str(), sha1i);
+                    break;
+                  case SHA1128:
+                    calculateSHA1((char *) filename.c_str(), sha1i);
+                    break;
+                  case SHA1s:
+                    calculateSHA1((char *) filename.c_str(), sha1i);
+                    break;
+                  case SHA256s:
+                    //SHA256(byteblock, blocksize, sha256i);
+                    break;
+                  case SHA384s:
+                    //SHA384(byteblock, blocksize, sha384i);
+                    break;
+                  case SHA512s:
+                    //SHA512(byteblock, blocksize, sha512i);
+                    break;
+                  case SPK32:
+                    //spooky32i = SpookyHash::Hash32(byteblock, blocksize, spookyseed32);
+                    break;
+                  case SPK64:
+                    //spooky64i = SpookyHash::Hash64(byteblock, blocksize, spookyseed64);
+                    break;
+                  case XXH32:
+                    //xxhash32i = XXHash32::hash(byteblock, blocksize, xxseed32);
+                    break;
+                  case XXH64:
+                    //xxhash64i = XXHash64::hash(byteblock, blocksize, xxseed64);
+                    break;
+                  case WYH:
+                    //wyhash64i = wyhash(byteblock, blocksize, wyseed64, (const uint64_t*) wysecret64);
+                    break;
+                  // default:
+                  //  std::cout << "Invalid hash" << std::endl;
+              }
+          }
+    }
 
 
     // setByteBlockHashList
