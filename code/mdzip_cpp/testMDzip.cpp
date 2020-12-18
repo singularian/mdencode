@@ -1,6 +1,6 @@
 #include <iostream>
 #include <sys/stat.h>
-#include "external/CLI11.hpp"
+#include "../testdecode_cpp/external/CLI11.hpp"
 #include <gmp.h>
 #include "mdHashContextList.h"
 

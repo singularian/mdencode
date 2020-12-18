@@ -22,28 +22,28 @@
 #include <tuple>
 #include <vector>
 #include "filehash.h"
-#include "external/cityhash/cityhash.h"
-#include "external/crc/CRC.h"
-#include "external/csiphash.c"
-#include "external/fasthash/fasthash.h"
-#include "external/fnv/fnv.h"
-#include "external/highwayhash/highwayhash.h"
-#include "external/xxhash/xxhash32.h"
-#include "external/xxhash/xxhash64.h"
-#include "external/metro64/metrohash64.h"
-#include "external/pengyhash/pengyhash.h"
-#include "external/seahash/seahash.c"
+#include "../testdecode_cpp/external/cityhash/cityhash.h"
+#include "../testdecode_cpp/external/crc/CRC.h"
+#include "../testdecode_cpp/external/csiphash.c"
+#include "../testdecode_cpp/external/fasthash/fasthash.h"
+#include "../testdecode_cpp/external/fnv/fnv.h"
+#include "../testdecode_cpp/external/highwayhash/highwayhash.h"
+#include "../testdecode_cpp/external/xxhash/xxhash32.h"
+#include "../testdecode_cpp/external/xxhash/xxhash64.h"
+#include "../testdecode_cpp/external/metro64/metrohash64.h"
+#include "../testdecode_cpp/external/pengyhash/pengyhash.h"
+#include "../testdecode_cpp/external/seahash/seahash.c"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "external/md2.c"
+#include "../testdecode_cpp/external/md2.c"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
-#include "external/md6/md6.h"
+#include "../testdecode_cpp/external/md6/md6.h"
 #include <openssl/ripemd.h>
 #include <openssl/sha.h>
-#include "external/spooky/Spooky.h"
-#include "external/wyhash/wyhash.h"
+#include "../testdecode_cpp/external/spooky/Spooky.h"
+#include "../testdecode_cpp/external/wyhash/wyhash.h"
 
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
 enum signatures {FIRST, CIT64, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, SPK32, SPK64, XXH32, XXH64, WYH, LAST};
