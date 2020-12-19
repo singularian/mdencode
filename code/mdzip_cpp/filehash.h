@@ -6,6 +6,7 @@
 
 static const int K_READ_BUF_SIZE = { 1024 * 16 };
 
+// create a cityhash64 file signature
 // Add each block to the uinti64_t result
 // this is a workaround since I don't think it has a update/finalize method
 // then return the result
@@ -27,11 +28,10 @@ uint64_t calculateCityhashFile(char *filename, uint64_t city64seed)
     }
     fclose(fp);
 
-
-
     return city64i;
 }
 
+// create a openssl ripe160 file signature
 unsigned char* calculateRipe160(char *filename, unsigned char *digest)
 {
     if (!filename) {
@@ -62,11 +62,10 @@ unsigned char* calculateRipe160(char *filename, unsigned char *digest)
     if(!RIPEMD160_Final(digest, &context))
         return NULL;
 
-    // return sha1_digest;
     return NULL;
 }
 
-
+// create a openssl SHA1 file signature
 unsigned char* calculateSHA1(char *filename, unsigned char *sha1_digest)
 {
     if (!filename) {
