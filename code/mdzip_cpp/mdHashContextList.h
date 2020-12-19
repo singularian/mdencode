@@ -372,6 +372,7 @@ public:
               switch(std::get<0>(hash)) {
                   case CIT64:
                     //city64i = cityhash64_with_seed(byteblock, blocksize, city64seed);
+                    city64i = calculateCityhashFile((char *) filename.c_str(), city64seed);
                     break;
                   case CRC32:
                     //crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
@@ -423,6 +424,7 @@ public:
                     break;
                   case RIPE160:
                     //RIPEMD160(byteblock, blocksize, ripe160i);
+                    calculateRipe160((char *) filename.c_str(), ripe160i);
                     break;
                   case SEA:
                     //sea64i = seahash((const char*)byteblock, blocksize, sea64seed);
@@ -802,6 +804,7 @@ public:
                   case RIPE160:
                     for(i=0; i < hashblocksize; ++i)
                            ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)ripe160i[i];
+                    ss << " ";
                     break;
                   case SEA:
                      ss << std::to_string(sea64i) << " ";

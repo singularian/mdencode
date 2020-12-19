@@ -4,10 +4,11 @@
 #include <iostream>
 #include <algorithm>
 #include <array>
+#include <openssl/ripemd.h>
 #include <openssl/sha.h>
 #include <sstream>
-// #include "../mdHashContextList.h"
-#include "../filehash.h"
+#include "../mdHashContextList.h"
+// #include "../filehash.h"
 
 void printByteblock(unsigned char *byteblock, long blocksize, bool ishex);
 
@@ -16,29 +17,40 @@ int main()
 
     std::string filename = "file.txt";
     uint64_t city64i = 0;
-    city64i = calculateCityhash((char *) filename.c_str(), 11111222);
+    city64i = calculateCityhashFile((char *) filename.c_str(), 11111222);
     std::cout << "cityhash64 file " << city64i << std::endl;
 
+    uint8_t ripe160i[21];
+    calculateRipe160((char *) filename.c_str(), ripe160i);
+    std::cout << "openssl ripe160" << std::endl;
+    printByteblock(ripe160i, 20, true);
+
     uint8_t sha1i[21];
-    char file[100] = "file.txt";
-    calculateSHA1(file, sha1i);
+    char filenm[100] = "file.txt";
+    calculateSHA1(filenm, sha1i);
+    std::cout << "openssl sha1" << std::endl; 
     printByteblock(sha1i, 20, true);
 
     calculateSHA1((char *) filename.c_str(), sha1i);
+    std::cout << "openssl sha1" << std::endl;
     printByteblock(sha1i, 20, true);
     
 
     // initialize the hash list object
-//    mdHashContextList hcl;
+    mdHashContextList hclfile;
 
-/*    // display the current hash signature list
-    hcl.displayHLRegistry(0);
-    std::cout << std::endl;
+    // display the current hash signature list
+    // hclfile.displayHLRegistry(0);
+    //std::cout << std::endl;
 
     // initialize a file hash list vector  
-    std::vector<int> file = { 1, 2, 3, 15, 16 };
-    hcl.setVectorHL(file, HASHFILE);
-
+    std::vector<int> file = { 1, 18, 21, 22, 23 };
+    // hclfile.setVectorHL(file, HASHFILE);
+    hclfile.setVectorHL(file, HASHBLOCK);
+    // display the block hash list
+    std::cout << hclfile.displayHLhashes() << std::endl;
+     
+/*
     // TODO initialize a block group hash list vector
     // maybe make the parameters a double or float
     // ie 1.1 is files

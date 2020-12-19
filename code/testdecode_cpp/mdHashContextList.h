@@ -687,6 +687,7 @@ public:
                   case RIPE160:
                     for(i=0; i < hashblocksize; ++i)
                            ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)ripe160i[i];
+                    ss << " ";
                     break;
                   case SEA:
                      ss << std::to_string(sea64i) << " ";
