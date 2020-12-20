@@ -364,7 +364,6 @@ public:
     // this sets the file hash list signatures for a file
     void setFileHashList(std::string& filename) {
           
-          char file[100] = "file.txt";
           int hashblocksize = 0;
           for(auto hash  : hashlistvt[HASHBLOCK]) {
               hashblocksize = std::get<2>(hash);
@@ -443,12 +442,15 @@ public:
                     break;
                   case SHA256s:
                     //SHA256(byteblock, blocksize, sha256i);
+                    calculateSHA256((char *) filename.c_str(), sha256i);
                     break;
                   case SHA384s:
                     //SHA384(byteblock, blocksize, sha384i);
+                    calculateSHA384((char *) filename.c_str(), sha384i);
                     break;
                   case SHA512s:
                     //SHA512(byteblock, blocksize, sha512i);
+                    calculateSHA512((char *) filename.c_str(), sha512i);
                     break;
                   case SPK32:
                     //spooky32i = SpookyHash::Hash32(byteblock, blocksize, spookyseed32);
@@ -815,6 +817,7 @@ public:
                   case SHA164:
                      for(i=0; i < hashblocksize; ++i)
                            ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)sha1i[i];
+                           // ss << std::hex << std::setw(2) << std::setfill('0') << std::uppercase << (int)sha1i[i];
                      ss << " ";
                      break;
                   case SHA1128:

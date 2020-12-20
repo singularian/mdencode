@@ -27,9 +27,9 @@ int main()
 
     uint8_t sha1i[21];
     char filenm[100] = "file.txt";
-    calculateSHA1(filenm, sha1i);
-    std::cout << "openssl sha1" << std::endl; 
-    printByteblock(sha1i, 20, true);
+    // calculateSHA1(filenm, sha1i);
+    // std::cout << "openssl sha1" << std::endl; 
+    // printByteblock(sha1i, 20, true);
 
     calculateSHA1((char *) filename.c_str(), sha1i);
     std::cout << "openssl sha1" << std::endl;
@@ -44,9 +44,11 @@ int main()
     //std::cout << std::endl;
 
     // initialize a file hash list vector  
-    std::vector<int> file = { 1, 18, 21, 22, 23 };
+    std::vector<int> file = { 1, 18, 21, 22, 23, 24, 25, 26 };
     // hclfile.setVectorHL(file, HASHFILE);
     hclfile.setVectorHL(file, HASHBLOCK);
+    hclfile.setFileHashList(filename); // set the file hash list variables
+    
     // display the block hash list
     std::cout << hclfile.displayHLhashes() << std::endl;
      
