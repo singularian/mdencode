@@ -206,8 +206,12 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
            // calculate the modulus exponent with two
            // this should be a byte int if the file block size is less than 32 and an 32-bit int if it is greater than 32 bytes
-           int modexponent = calcExponent(byteblockInt);
-           wf.write(reinterpret_cast<char*>(&modexponent),   sizeof(int));
+           if (blocksize > 32) { 
+               wf.write(reinterpret_cast<char*>(&modexponent),   sizeof(int));
+           } else {
+               uint8_t modexponent2 = modexponent;
+               wf.write(reinterpret_cast<char*>(&modexponent2),   sizeof(uint8_t));
+           }
 
            // write the modulus remainder
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
@@ -249,12 +253,18 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            // calculate the modulus exponent with two
            // this should be a byte int if the file block size is less than 32 and an 32-bit int if it is greater than 32 bytes
            int modexponent = calcExponent(byteblockInt);
-           wf.write(reinterpret_cast<char*>(&modexponent),   sizeof(int));
+           if (blocksize > 32) { 
+               wf.write(reinterpret_cast<char*>(&modexponent),   sizeof(int));
+           } else {
+               uint8_t modexponent2 = modexponent;
+               wf.write(reinterpret_cast<char*>(&modexponent2),   sizeof(uint8_t));
+           }
+
 
            // write the modulus remainder
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
            wf.write(reinterpret_cast<char*>(&modulusint),   sizeof(char) * modsizeBytes);
-        //   break;
+           break;
         }
         blocknumber++;
      }

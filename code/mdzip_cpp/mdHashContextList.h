@@ -408,9 +408,11 @@ public:
                     break;
                   case MD4s:
                     //MD4(byteblock,(long)blocksize,md4i);
+                    calculateMD4((char *) filename.c_str(), md4i);
                     break;
                   case MD5s:
                     //MD5(byteblock,(long)blocksize,md5i);
+                    calculateMD5((char *) filename.c_str(), md5i);
                     break;
                   case MD6:
                     //md6_hash(160, byteblock,(uint64_t)(blocksize*8),md6i);
@@ -817,7 +819,6 @@ public:
                   case SHA164:
                      for(i=0; i < hashblocksize; ++i)
                            ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)sha1i[i];
-                           // ss << std::hex << std::setw(2) << std::setfill('0') << std::uppercase << (int)sha1i[i];
                      ss << " ";
                      break;
                   case SHA1128:

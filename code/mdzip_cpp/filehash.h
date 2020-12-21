@@ -1,6 +1,9 @@
 #include <cstring>
 #include <stdio.h>
 #include "../testdecode_cpp/external/cityhash/cityhash.h"
+#include "../testdecode_cpp/external/md2.c"
+#include <openssl/md4.h>
+#include <openssl/md5.h>
 #include <openssl/ripemd.h>
 #include <openssl/sha.h>
 
@@ -29,6 +32,97 @@ uint64_t calculateCityhashFile(char *filename, uint64_t city64seed)
 
     return city64i;
 }
+
+// create a openssl MD2  file signature
+int calculateMD2(char *filename, unsigned char *digest)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+    MD2_CTX context;
+    md2_init(&context);
+
+    unsigned char buf[K_READ_BUF_SIZE] = { };
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        md2_update(&context, buf, total_read);
+    }
+    fclose(fp);
+
+    md2_final(&context, digest);
+
+    // return true;
+    return 1;
+}
+
+
+// create a openssl MD4  file signature
+int calculateMD4(char *filename, unsigned char *digest)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+    MD4_CTX context;
+
+    if(!MD4_Init(&context))
+        return 0;
+
+    unsigned char buf[K_READ_BUF_SIZE] = { };
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        if(!MD4_Update(&context, buf, total_read))
+        {
+            fclose(fp);
+            return 0;
+        }
+    }
+    fclose(fp);
+
+    if(!MD4_Final(digest, &context))
+        return 0;
+
+    // return true;
+    return 1;
+}
+
+// create a openssl MD5  file signature
+int calculateMD5(char *filename, unsigned char *digest)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+    MD5_CTX context;
+
+    if(!MD5_Init(&context))
+        return 0;
+
+    unsigned char buf[K_READ_BUF_SIZE] = { };
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        if(!MD5_Update(&context, buf, total_read))
+        {
+            fclose(fp);
+            return 0;
+        }
+    }
+    fclose(fp);
+
+    if(!MD5_Final(digest, &context))
+        return 0;
+
+    // return true;
+    return 1;
+}
+
 
 // create a openssl ripe160 file signature
 int calculateRipe160(char *filename, unsigned char *digest)
@@ -64,7 +158,7 @@ int calculateRipe160(char *filename, unsigned char *digest)
 }
 
 // create a openssl SHA1 file signature
-int calculateSHA1(char *filename, unsigned char *sha1_digest)
+int calculateSHA1(char *filename, unsigned char *digest)
 {
     FILE *fp = fopen(filename, "rb");
     if (fp == NULL) {
@@ -89,7 +183,7 @@ int calculateSHA1(char *filename, unsigned char *sha1_digest)
     }
     fclose(fp);
 
-    if(!SHA1_Final(sha1_digest, &context))
+    if(!SHA1_Final(digest, &context))
         return 0;
 
     // return true;
@@ -97,14 +191,13 @@ int calculateSHA1(char *filename, unsigned char *sha1_digest)
 }
 
 // create a openssl SHA256 file signature
-int calculateSHA256(char *filename, unsigned char *sha1_digest)
+int calculateSHA256(char *filename, unsigned char *digest)
 {
     FILE *fp = fopen(filename, "rb");
     if (fp == NULL) {
         return 0;
     }
 
-    // unsigned char* sha1_digest = malloc(sizeof(char)*SHA_DIGEST_LENGTH);
     SHA256_CTX context;
 
     if(!SHA256_Init(&context))
@@ -128,7 +221,7 @@ int calculateSHA256(char *filename, unsigned char *sha1_digest)
     }
     fclose(fp);
 
-    if(!SHA256_Final(sha1_digest, &context))
+    if(!SHA256_Final(digest, &context))
         return 0;
 
     // return true;
