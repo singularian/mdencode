@@ -399,12 +399,15 @@ public:
                     break;
                   case MET641:
                     //metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641i);
+                    calculateMetro64_1((char *) filename.c_str(), met641i);
                     break;
                   case MET642:
                     //metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642i);
+                    calculateMetro64_2((char *) filename.c_str(), met642i);
                     break;
                   case MD2s:
                     //md2(byteblock,(size_t)blocksize,md2i);
+                    calculateMD2((char *) filename.c_str(), md2i);
                     break;
                   case MD4s:
                     //MD4(byteblock,(long)blocksize,md4i);

@@ -44,7 +44,7 @@ int main()
     //std::cout << std::endl;
 
     // initialize a file hash list vector  
-    std::vector<int> file = { 1, 12, 13, 14, 21, 22, 23, 24, 25, 26 };
+    std::vector<int> file = { 1, 10, 11, 12, 13, 14, 21, 22, 23, 24, 25, 26 };
     // hclfile.setVectorHL(file, HASHFILE);
     hclfile.setVectorHL(file, HASHBLOCK);
     hclfile.setFileHashList(filename); // set the file hash list variables

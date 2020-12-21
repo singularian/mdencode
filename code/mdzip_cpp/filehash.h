@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "../testdecode_cpp/external/cityhash/cityhash.h"
 #include "../testdecode_cpp/external/md2.c"
+#include "../testdecode_cpp/external/metro64/metrohash64.h"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
 #include <openssl/ripemd.h>
@@ -32,6 +33,58 @@ uint64_t calculateCityhashFile(char *filename, uint64_t city64seed)
 
     return city64i;
 }
+
+// create a openssl metro64_1 file signature
+int calculateMetro64_1(char *filename, unsigned char *digest)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+    MetroHash64 metro;
+    metro.Initialize(0);
+
+    unsigned char buf[K_READ_BUF_SIZE] = { };
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        metro.Update(reinterpret_cast<const uint8_t *>(buf), total_read);
+    }
+    fclose(fp);
+
+    metro.Finalize(digest);
+
+    // return true;
+    return 1;
+}
+
+// create a openssl metro64_2 file signature
+int calculateMetro64_2(char *filename, unsigned char *digest)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+    MetroHash64 metro;
+    metro.Initialize(1);
+
+    unsigned char buf[K_READ_BUF_SIZE] = { };
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        metro.Update(reinterpret_cast<const uint8_t *>(buf), total_read);
+    }
+    fclose(fp);
+
+    metro.Finalize(digest);
+
+    // return true;
+    return 1;
+}
+
+
 
 // create a openssl MD2  file signature
 int calculateMD2(char *filename, unsigned char *digest)
