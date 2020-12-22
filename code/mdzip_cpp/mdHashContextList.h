@@ -933,6 +933,25 @@ public:
          return hlss.str(); 
     }
 
+    // get the hash vector list string of names
+    std::string getHLvectorsStringNames(int type) {
+         // clear the hlss string stream
+         hlss.str(std::string());
+
+         int block        = 1;
+         int hashListsize = 0;
+         hashListsize = hashlistvt[type].size();
+
+         for(auto val  : hashlistvt[type]) {
+             hlss << std::get<1>(val); 
+             if (block < hashListsize) hlss << ":";
+             block++;
+         }
+
+         return hlss.str();
+
+    }
+
     // display the current registry hash list struct of signature hashes currently supported
     void displayHLRegistry(int format) 
     {

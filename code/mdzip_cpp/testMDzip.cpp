@@ -165,19 +165,25 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
      // TODO need the write the signature list for files and block groups and file blocks and the key list
      // ie aes8:sha1:md5-aes8-keylist 
+     
 
      // TODO need to write the file hash list 
      // TODO need to also write the block group hash list if implemented
 
      // initailize the block hash context list
-     mdHashContextList hcl;
+     mdHashContextList hclblock;
      // set the block hash list with the block hash list vector 
-     hcl.setVectorHL(bhlist, HASHBLOCK);
+     hclblock.setVectorHL(bhlist, HASHBLOCK);
      // display the block hash list vector
-     std::string vectorlist = hcl.getHLvectorsString(HASHBLOCK);
+     std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
      cout << std::endl;
      cout << "Hash Block Vector" << endl;
      cout << vectorlist << std::endl;
+
+     std::string filehashnames  = hclfile.getHLvectorsStringNames(HASHBLOCK);
+     std::string blockhashnames = hclblock.getHLvectorsStringNames(HASHBLOCK);
+     cout << "hash string file " << filehashnames << endl;
+     cout << "hash string block " << blockhashnames << endl;
 
      // constexpr size_t bufferSize = blocksize;
      // unique_ptr<unsigned char[]> byteblock(new unsigned char[blocksize]);
@@ -205,16 +211,16 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
         if (blocknumber < blockcount) {
            std::cout << "Block " << std::to_string(blocknumber) << " " << std::to_string(blocksize) << "/" << std::to_string(blocksize) << endl;
            // nf.read(byteblock.get(), blocksize);
-           // hcl.setByteBlockHashList(byteblock.get(), blocksize);
+           // hclblock.setByteBlockHashList(byteblock.get(), blocksize);
            nf.read(reinterpret_cast<char*>(byteblock), (size_t) blocksize);
-           hcl.setByteBlockHashList((unsigned char*) byteblock, blocksize);
-           hcl.writeBlockHashList(wf);
+           hclblock.setByteBlockHashList((unsigned char*) byteblock, blocksize);
+           hclblock.writeBlockHashList(wf);
            mpz_import (byteblockInt, blocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);
            // display data in the byteblock
            printByteblock(byteblock, blocksize, true);
 
-           std::string vectorlist = hcl.getHLvectorsString(HASHBLOCK);
-           std::cout << hcl.displayHLhashes() << std::endl << std::endl;
+           std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
+           std::cout << hclblock.displayHLhashes() << std::endl << std::endl;
 
 
            // calculate the modulus 2 ^ modsize 
@@ -242,16 +248,16 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            if (blockremainder > 0) {
                std::cout << "Block " << std::to_string(blocknumber) << " " << std::to_string(blockremainder) << "/" << std::to_string(blocksize) << endl;
                nf.read(reinterpret_cast<char*>(lastbyteblock), (size_t) lastbyteblock);
-               hcl.setByteBlockHashList((unsigned char*) lastbyteblock, blockremainder);
-               hcl.writeBlockHashList(wf);
+               hclblock.setByteBlockHashList((unsigned char*) lastbyteblock, blockremainder);
+               hclblock.writeBlockHashList(wf);
                mpz_import (byteblockInt, blockremainder, byteorder, sizeof(lastbyteblock[0]), endian, 0, lastbyteblock);
                // display data in the byteblock
                printByteblock(lastbyteblock, blockremainder, true);
            } else {
               std::cout << "Block " << std::to_string(blocknumber) << " " << std::to_string(blocksize) << "/" << std::to_string(blocksize) << endl;
               nf.read(reinterpret_cast<char*>(byteblock), (size_t) blocksize);
-              hcl.setByteBlockHashList((unsigned char*) byteblock, blocksize);
-              hcl.writeBlockHashList(wf);
+              hclblock.setByteBlockHashList((unsigned char*) byteblock, blocksize);
+              hclblock.writeBlockHashList(wf);
               mpz_import (byteblockInt, blocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);
 
               // display data in the byteblock
@@ -259,8 +265,8 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
            }
 
-           std::string vectorlist = hcl.getHLvectorsString(HASHBLOCK);
-           std::cout << hcl.displayHLhashes() << std::endl << std::endl;
+           std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
+           std::cout << hclblock.displayHLhashes() << std::endl << std::endl;
 
 
            // calculate the modulus 2 ^ modsize 
