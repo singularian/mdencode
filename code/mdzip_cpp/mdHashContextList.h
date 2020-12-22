@@ -933,7 +933,10 @@ public:
          return hlss.str(); 
     }
 
-    // get the hash vector list string of names
+    // get the vector list string of hash names
+    // ie aes8:sha1:md5
+    // it's easier to store the hash list as a string since the id might change
+    // ie aes8:sha1:md5-aes8-keylist
     std::string getHLvectorsStringNames(int type) {
          // clear the hlss string stream
          hlss.str(std::string());
