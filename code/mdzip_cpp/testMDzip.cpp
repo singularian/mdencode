@@ -169,9 +169,11 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      // TODO need to write the file hash list 
      // TODO need to also write the block group hash list if implemented
 
+     // initailize the block hash context list
      mdHashContextList hcl;
-     // display the block hash list vector
+     // set the block hash list with the block hash list vector 
      hcl.setVectorHL(bhlist, HASHBLOCK);
+     // display the block hash list vector
      std::string vectorlist = hcl.getHLvectorsString(HASHBLOCK);
      cout << std::endl;
      cout << "Hash Block Vector" << endl;
