@@ -43,10 +43,11 @@
 #include <openssl/ripemd.h>
 #include <openssl/sha.h>
 #include "../testdecode_cpp/external/spooky/Spooky.h"
+#include <openssl/whrlpool.h>
 #include "../testdecode_cpp/external/wyhash/wyhash.h"
 
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
-enum signatures {FIRST, CIT64, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, SPK32, SPK64, XXH32, XXH64, WYH, LAST};
+enum signatures {FIRST, CIT64, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, SPK32, SPK64, XXH32, XXH64, WYP, WYH, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -91,6 +92,7 @@ Hashlist mdHashlist[LAST] = {
     {28, "spk64",    "Spooky 64",             true,  8},
     {29, "xxh32",    "xxHash32",              true,  4},
     {30, "xxh64",    "xxHash64",              true,  8},
+    {31, "whp",      "Whirlpool",             false, 64},
     {31, "wy64",     "WYhash 64",             true,  8},
     {32, "last",     "Unused Signature",      false, 8}
 };
@@ -198,6 +200,9 @@ private:
     uint64_t xxhash64i;
     uint64_t xxhash64o;
     uint64_t xxseed64 = 0;
+    // Whirlpool
+    uint8_t whp512i[64];
+    uint8_t whp512o[64];
     // wyhash
     uint64_t wyhash64i;
     uint64_t wyhash64o;
@@ -359,6 +364,10 @@ public:
                   case XXH64:
                     wf.write(reinterpret_cast<char*>(&xxhash64i), sizeof(long));
                     break;
+                  case WYP:
+                    // TODO
+                    wf.write(reinterpret_cast<char*>(&whp512i), blocksize);
+                    break;
                   case WYH:
                     wf.write(reinterpret_cast<char*>(&wyhash64i), sizeof(long));
                     break;
@@ -477,6 +486,9 @@ public:
                   case XXH64:
                     //xxhash64i = XXHash64::hash(byteblock, blocksize, xxseed64);
                     break;
+                  case WYP:
+                    // TODO
+                    break;
                   case WYH:
                     //wyhash64i = wyhash(byteblock, blocksize, wyseed64, (const uint64_t*) wysecret64);
                     break;
@@ -585,6 +597,10 @@ public:
                     break;
                   case XXH64:
                     xxhash64i = XXHash64::hash(byteblock, blocksize, xxseed64);
+                    break;
+                  case WYP:
+                    // TODO
+                    WHIRLPOOL(byteblock, blocksize, whp512i);
                     break;
                   case WYH:
                     wyhash64i = wyhash(byteblock, blocksize, wyseed64, (const uint64_t*) wysecret64);
@@ -725,6 +741,10 @@ public:
                     xxhash64o = XXHash64::hash(byteblock, blocksize, xxseed64);
                     if (xxhash64i != xxhash64o) return false;
                     break;
+                  case WYP:
+                    WHIRLPOOL(byteblock, blocksize, whp512o);
+                    if (memcmp(whp512i, whp512o, 64) != 0) return false;
+                    break;
                   case WYH:
                     wyhash64o = wyhash(byteblock, blocksize, wyseed64, (const uint64_t*) wysecret64);
                     if (wyhash64i != wyhash64o) return false;
@@ -779,48 +799,32 @@ public:
                      ss << std::to_string(hw64i) << " ";
                      break;
                   case MET641:
-                     for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (unsigned int)met641i[i];
-                     ss << " ";
+                     addHashToDisplayStream(met641i, hashblocksize);
                      break;
                   case MET642:
-                     for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (unsigned int)met642i[i];
-                     ss << " ";
+                     addHashToDisplayStream(met642i, hashblocksize);
                      break;
                   case MD2s:
-                     for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)md2i[i];
-                     ss << " ";
+                     addHashToDisplayStream(md2i, hashblocksize);
                      break;
                   case MD4s:
-                     for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)md4i[i];
-                     ss << " ";
+                     addHashToDisplayStream(md4i, hashblocksize);
                      break;
                   case MD5s:
-                     for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)md5i[i];
-                     ss << " ";
+                     addHashToDisplayStream(md5i, hashblocksize);
                      break;
                   case MD6:
-                     for(i=0; i<hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)md6i[i];
-                     ss << " ";
+                     addHashToDisplayStream(md6i, hashblocksize);
                      break;
                   case MD62:
-                     for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)md62i[i];
-                     ss << " ";
+                     addHashToDisplayStream(md62i, hashblocksize);
                      break;
                   case PNG:
                      ss << std::to_string(png64i) << " ";
                      break;
                   case RIPE160:
-                    for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)ripe160i[i];
-                    ss << " ";
-                    break;
+                     addHashToDisplayStream(ripe160i, hashblocksize);
+                     break;
                   case SEA:
                      ss << std::to_string(sea64i) << " ";
                      break;
@@ -828,56 +832,55 @@ public:
                      ss << std::to_string(siphash64i) << " ";
                      break;
                   case SHA164:
-                     for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)sha1i[i];
-                     ss << " ";
+                     addHashToDisplayStream(sha1i, hashblocksize);
                      break;
                   case SHA1128:
-                     for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)sha1i[i];
-                     ss << " ";
+                     addHashToDisplayStream(sha1i, hashblocksize);
                      break;
                   case SHA1s:
-                     for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)sha1i[i];
-                     ss << " ";
+                     addHashToDisplayStream(sha1i, hashblocksize);
                      break;
                   case SHA256s:
-                     for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)sha256i[i];
-                     ss << " ";
+                     addHashToDisplayStream(sha256i, hashblocksize); 
                      break;
                   case SHA384s:
-                     for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)sha384i[i];
-                     ss << " ";
-                    break;
+                     addHashToDisplayStream(sha384i, hashblocksize);
+                     break;
                   case SHA512s:
-                     for(i=0; i < hashblocksize; ++i)
-                           ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)sha512i[i];
-                     ss << " ";
+                     addHashToDisplayStream(sha512i, hashblocksize);
                      break;
                   case SPK32:
-                    ss << std::to_string(spooky32i) << " ";
-                    break;
+                     ss << std::to_string(spooky32i) << " ";
+                     break;
                   case SPK64:
-                    ss << std::to_string(spooky64i) << " ";
-                    break;
+                     ss << std::to_string(spooky64i) << " ";
+                     break;
                   case XXH32:
-                    ss << std::to_string(xxhash32i) << " ";
-                    break;
+                     ss << std::to_string(xxhash32i) << " ";
+                     break;
                   case XXH64:
-                    ss << std::to_string(xxhash64i) << " ";
-                    break;
+                     ss << std::to_string(xxhash64i) << " ";
+                     break;
+                  case WYP:
+                     addHashToDisplayStream(whp512i, hashblocksize);
+                     break;
                   case WYH:
-                    ss << std::to_string(wyhash64i) << " ";
-                    break;
+                     ss << std::to_string(wyhash64i) << " ";
+                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
               }
          }
          hashlist = ss.str();
          return hashlist;         
+    }
+
+    // add a hash list to the hash list stream
+    void addHashToDisplayStream(unsigned char *digest, int hashblocksize) {
+         int i = 0;
+         for(i=0; i < hashblocksize; ++i)
+               ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)digest[i];
+         ss << " ";
     }
 
     // display the vector list
