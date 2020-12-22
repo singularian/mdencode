@@ -7,7 +7,7 @@
 int calcExponent (mpz_t blockint);
 long GetFileSize(std::string filename);
 long CalcFileBlocks(long filesize, long blocksize);
-int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &bhlist);
+int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist);
 void printByteblock(unsigned char *byteblock, long blocksize, bool ishex);
 // void printByteblock(char *byteblock, long blocksize, bool ishex);
 void usage();
@@ -28,27 +28,40 @@ int main (int argc, char **argv) {
 
      // process the command line argument with the CLI11 command line parser
      CLI::App app{"MDEncode MDzip C++ Test Program"};
-     app.add_option("-f,--file", filename,    "MDzip filename")->check(CLI::ExistingFile)->required();
+     app.add_option("-f,--file",    filename,    "MDzip filename")->check(CLI::ExistingFile)->required();
      app.add_option("-b,--block",   blocksize,   "Blocksize number")->check(CLI::PositiveNumber)->check(CLI::Range(1,100));
      app.add_option("-m,--mod",     modsize,     "Modulus size number")->check(CLI::PositiveNumber);
      app.add_option("-t,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
 
-     // add a hashlist parameter
+     // add the file hash list parameter
+     std::vector<int> filelist;
+     std::vector<int> flcsvvals;
+     std::vector<int> flvals;
+     app.add_option("--fhs", flcsvvals, "File Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+
+     app.add_option("--fh", flvals, "File Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+
+     // add the block hashlist parameter
      // std::string hashlist;
-     std::vector<int> def = { 1 };
+     std::vector<int> blocklist = { 1 };
      std::vector<int> vals;
      std::vector<int> csvvals;
      // std::vector<std::string> csvvals;
      // app.add_option("-r,--bh", vals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber);
-     app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+     app.add_option("-r,--bhs", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
      // app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',');
 
      // std::vector<int> vals;
-     app.add_option("-s,--hl", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+     app.add_option("-s,--bh", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
      // add a hash keylist parameter
+     bool randkey;
      std::string keylist;
      app.add_option("-k,--keylist", keylist, "Keylist csv string");
+
+     // randomize the keylist for the hashes
+     bool random = false;
+     app.add_option("--rand", random, "Randomize Keylist");
 
      // set list blocks
      bool listzip = false;
@@ -72,24 +85,23 @@ int main (int argc, char **argv) {
         return app.exit(e);
      }
 
-     // process the hashlist
+     // process the file hashlist
+     filelist.insert(flcsvvals.end(), flvals.begin(), flvals.end());
+
+     // process the block hashlist
      csvvals.insert(csvvals.end(), vals.begin(), vals.end());
-     auto it = unique(begin(csvvals), end(csvvals));
-     csvvals.erase(it, end(csvvals));
-     // need to unique this list for duplicates
      if (csvvals.size() > 0) {
-         def.clear();
-         def.insert(def.end(), csvvals.begin(), csvvals.end());
+         blocklist.clear();
+         blocklist.insert(blocklist.end(), csvvals.begin(), csvvals.end());
      }
 
-
-
-     mdzipfile(filename, blocksize, modsize, def);
+     // call mdzipfile
+     mdzipfile(filename, blocksize, modsize, filelist, blocklist);
 
 }
 
 // int mdzipfile(std::string filename, mdheader mdh) {
-int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &bhlist) {
+int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist) {
 
      long blocknumber = 1;
      double mdversion = 1.01;
@@ -105,6 +117,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      for(int i=0; i < bhlist.size(); i++)
          std::cout << bhlist.at(i) << ' ';
      cout << std::endl;
+
      long blockcount = CalcFileBlocks(filesize, blocksize);
      long blockremainder  = filesize % blocksize;
      std::cout << "File block number "    << blockcount << std::endl;
@@ -114,6 +127,11 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
      const char *fname = mdzipfile.c_str();
      std::remove(fname);
+
+     // set the file hash list
+     mdHashContextList hclfile;
+     hclfile.setVectorHL(fhlist, HASHBLOCK);
+     hclfile.setFileHashList(filename);
 
      std::ifstream nf(filename, std::ios::in | std::ios::binary);
      std::ofstream wf(mdzipfile, std::ios::out | std::ios::binary);
@@ -151,7 +169,6 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      // TODO need to write the file hash list 
      // TODO need to also write the block group hash list if implemented
 
-     mdHashContextList hclfile;
      mdHashContextList hcl;
      // display the block hash list vector
      hcl.setVectorHL(bhlist, HASHBLOCK);
@@ -364,8 +381,9 @@ void printByteblock(unsigned char *byteblock, long blocksize, bool ishex) {
 void usage() {
 std::string usageline = R"(
 Examples:
-   ./mdzip --file=test.txt --block=12 --mod=64 --threads=16 --hl 1 2 3 4 
-   ./mdzip --file=test.txt --block=12 --mod=64 --threads=16 --hl 1 2 3 4 
+   ./mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
+   ./mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
+   ./mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4 
 )";
 
     std::cout << usageline << std::endl;

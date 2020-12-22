@@ -111,14 +111,10 @@ private:
     // I think I am going to use a separate object for each and then add the file hash method to 
     // set the file signatures. Then I can use one set of results for the signatures and write them to a file
     // need to make these an array sized 3 for files and bg and block hash results - that doesn't work since hashes normally take one dimensional arrays
+    // could also make this a array struct of hashlist variables 
     uint64_t city64i;
     uint64_t city64o;
     uint64_t city64seed = 102922;
-    // could make this a 2d array
-    // uint64_t crc64[2][3]
-    // uint64_t crc64[2][type]
-    // uint64_t crc64[in][type]
-    // uint64_t crc64[out][type]
     // crc32
     uint32_t crc32i;
     uint32_t crc32o;
@@ -232,8 +228,20 @@ public:
     // 1) hashnumber
     // 2) hashname
     // 3) hashblocksize
-    void setVectorHL(const std::vector<int> &v, int type)
+    // void setVectorHL(const std::vector<int> &v, int type)
+    void setVectorHL(std::vector<int> &v, int type)
     {
+          // Deduplicate or unique the hashlist input vector v and preserve the order
+          // set the iterator  
+          std::vector<int>::iterator ip; 
+  
+          // Use std::unique on the hash list vector
+          ip = std::unique(v.begin(), v.end()); 
+  
+          // Resizing the input vector to remove the undefined terms 
+          v.resize(std::distance(v.begin(), ip)); 
+
+          // create a hashlist tuple vector
           std::tuple<int,std::string,int> hashTuple;
           for(int val  : v) {
               if (val <= hashlistsize && val > 0) {
@@ -910,7 +918,14 @@ public:
              blocksize += std::get<2>(val);
              i++;
          }
-         hlss << std::right << std::setw(39) << blocksize << " Total" << std::endl; 
+         
+         // hlss << std::right << std::setw(12) << " ";
+         // hlss << std::right << std::setw(13) << " ";
+         // hlss << std::left << std::setw(12) << "Total";
+         // hlss << std::endl;
+         hlss << std::right << std::setw(30) << "Total";
+         hlss << "       "  << blocksize << std::endl;
+         // hlss << std::right << std::setw(6) << blocksize << std::endl; 
 
          return hlss.str(); 
     }
