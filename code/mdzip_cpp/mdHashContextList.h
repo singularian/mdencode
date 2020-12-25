@@ -288,6 +288,7 @@ public:
               // check if the hash token is a valid hash signature in the registry hash map
               if ( hclmap.find(token) == hclmap.end() ) {
                  std::cout << "Hash signature " << token << " not found " << std::endl;
+
               // if it is found add it to the integer vector
               } else {
                  hashnum = hclmap[token];
@@ -300,6 +301,7 @@ public:
     }
 
     // writeBlockHashList
+    // write the hash list to a ofstream file object
     void writeBlockHashList(std::ofstream &wf) { 
 
           int hashblocksize = 0;

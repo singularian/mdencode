@@ -55,4 +55,15 @@ int main()
 
     // display the block hash list
     std::cout << hcl.displayHLhashes() << std::endl;
+
+    // initialize the hash list string object
+    // this uses a hash string input and converts it to the hash list vector tuple
+    mdHashContextList hclstr;
+    std::string hclstring = "cit64:crc32:fast32:fast64:fnv32a:fnv64:md2:md4:met641:met642:sha512:whp:zz12:";
+    std::cout << std::endl << "Initializing hclstring " << hclstring << std::endl;
+
+    hclstr.setVectorHLstring(hclstring, HASHBLOCK);
+    hclstr.displayHLvectors();
+    std::cout << std::endl;
+
 }
