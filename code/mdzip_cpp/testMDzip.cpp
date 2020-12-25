@@ -163,10 +163,6 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      // return 0; // test
 
 
-     // TODO need the write the signature list for files and block groups and file blocks and the key list
-     // ie aes8:sha1:md5-aes8-keylist 
-     
-
      // TODO need to write the file hash list 
      // TODO need to also write the block group hash list if implemented
 
@@ -180,11 +176,30 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      cout << "Hash Block Vector" << endl;
      cout << vectorlist << std::endl;
 
+     // write the hash list strings
+     // TODO need to write the keylist as well
+     // ie aes8:sha1:md5-aes8-keylist
+     int hclsize;
      std::string filehashnames  = hclfile.getHLvectorsStringNames(HASHBLOCK);
      std::string blockhashnames = hclblock.getHLvectorsStringNames(HASHBLOCK);
      cout << "hash string file " << filehashnames << endl;
      cout << "hash string block " << blockhashnames << endl;
 
+     hclsize = filehashnames.size();
+     wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
+     // wf.write(reinterpret_cast<char*>(&filehashnames),   hclsize);
+     wf.write(filehashnames.c_str(),   hclsize);
+     cout << "hash size " << hclsize << endl;
+
+     hclsize = blockhashnames.size();
+     wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
+     // wf.write(reinterpret_cast<char*>(&blockhashnames),   hclsize);
+     wf.write(blockhashnames.c_str(),   hclsize);
+     //nf.close();
+     //wf.close();
+     //return 0; // test
+
+ 
      // constexpr size_t bufferSize = blocksize;
      // unique_ptr<unsigned char[]> byteblock(new unsigned char[blocksize]);
      // unique_ptr<char[]> byteblock(new char[blocksize]);
