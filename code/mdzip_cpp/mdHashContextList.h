@@ -19,6 +19,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <map>
 #include <tuple>
 #include <vector>
 #include "filehash.h"
@@ -109,6 +110,8 @@ private:
     // hash list vectors
     // vector with tuple - hashnumber, hashname, blocksize
     std::vector<std::tuple<int,std::string,int>> hashlistvt[3];
+    // hash map
+    std::map<std::string, int> hclmap;
     // hash results
     // I think I am going to use a separate object for each and then add the file hash method to 
     // set the file signatures. Then I can use one set of results for the signatures and write them to a file
@@ -219,6 +222,13 @@ public:
 
         // set the hashlistsize to the last signatures enum value - 1
         hashlistsize = LAST - 1;
+
+        // add the struct hash registry to the hclmap
+        // could move this to a separate function
+        int hsnum = 0;
+        for (hsnum = 0; hsnum < hashlistsize; hsnum++) {
+             hclmap[mdHashlist[hsnum].name] = hsnum;
+        }
     }
 
     // Destructor
@@ -257,6 +267,36 @@ public:
               }
           }
 
+    }
+
+    // setVectorHLstring
+    // converts a string list to a int vector and then to the vector tuple
+    // the delimeter is ':' currently
+    // ie hash string cit64:crc32:fast32
+    // ie hash string cit64:crc32:fast32:fast64:fnv32a:fnv64:md2:md4:met641:met642:sha512:whp
+    void setVectorHLstring(std::string hashlist, int type) {
+          std::vector<int> v;
+
+          int hashnum = 0;
+          char delim = ':';
+          std::stringstream ss(hashlist);
+          std::string token;
+
+          // split the hashlist string by the delimmeter and add the hashmap int to the vector v
+          while (std::getline(ss, token, delim)) {
+
+              // check if the hash token is a valid hash signature in the registry hash map
+              if ( hclmap.find(token) == hclmap.end() ) {
+                 std::cout << "Hash signature " << token << " not found " << std::endl;
+              // if it is found add it to the integer vector
+              } else {
+                 hashnum = hclmap[token];
+                 v.push_back(hashnum+1);
+              }
+          }
+
+          // set the Vector Hash List Tuple
+          setVectorHL(v, type);
     }
 
     // writeBlockHashList

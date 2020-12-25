@@ -48,9 +48,17 @@ int main()
     // hclfile.setVectorHL(file, HASHFILE);
     hclfile.setVectorHL(file, HASHBLOCK);
     hclfile.setFileHashList(filename); // set the file hash list variables
-    
+
     // display the block hash list
     std::cout << hclfile.displayHLhashes() << std::endl;
+
+    // initialize the hash list string object
+    mdHashContextList hclstr;
+    std::string hclstring = "cit64:crc32:fast32:fast64:fnv32a:fnv64:md2:md4:met641:met642:sha512:whp:zz12:";
+    std::cout << "hclstring " << hclstring << std::endl;
+    hclstr.setVectorHLstring(hclstring, HASHBLOCK);
+    hclstr.displayHLvectors();
+    std::cout << std::endl;
      
 /*
     // TODO initialize a block group hash list vector
