@@ -27,7 +27,7 @@ int main (int argc, char **argv) {
      int signum       = LAST - 1;
 
      // process the command line argument with the CLI11 command line parser
-     CLI::App app{"MDEncode MDzip C++ Test Program"};
+     CLI::App app{"MDEncode MDzip C++ Program"};
      app.add_option("-f,--file",    filename,    "MDzip filename")->check(CLI::ExistingFile)->required();
      app.add_option("-b,--block",   blocksize,   "Blocksize number")->check(CLI::PositiveNumber)->check(CLI::Range(1,100));
      app.add_option("-m,--mod",     modsize,     "Modulus size number")->check(CLI::PositiveNumber);
