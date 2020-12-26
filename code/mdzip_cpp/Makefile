@@ -23,7 +23,6 @@ all:
 	g++ -I. $(DEPS) mdZip.cpp  -o testmdzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	g++ -I. $(DEPS) mdUnzip.cpp  -o mdunzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 test:
-	g++ testWrite.cpp -o testwrite -lgmp -lgmpxx -std=c++11
 	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	g++ -I. $(DEPS) tests/testSHA1file.cpp  -o  testSHA1file -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 testhash:
