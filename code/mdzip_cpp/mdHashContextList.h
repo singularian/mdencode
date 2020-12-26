@@ -2,7 +2,7 @@
  *
  * https://github.com/singularian/mdencode
  * 
- * Project MDencode GMP C++ Modulus Scan Test Program
+ * Project MDencode GMP C++ Modulus Scan Hash Context List Program
  * 
  * mdHashContextList.h is the hash context list class
  *

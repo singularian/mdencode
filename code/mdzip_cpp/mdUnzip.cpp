@@ -1,3 +1,14 @@
+/**
+ *
+ * https://github.com/singularian/mdencode
+ * 
+ * Project MDencode GMP C++ Modulus Scan mdunzip Program
+ * 
+ * mdUnzip.cpp unzips a mdzip file or displays the block list
+ *
+ * 
+ * 
+*/
 #include <iostream>
 #include <fstream>
 #include <sys/stat.h>

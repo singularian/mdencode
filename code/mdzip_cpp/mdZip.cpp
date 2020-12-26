@@ -1,3 +1,14 @@
+/**
+ *
+ * https://github.com/singularian/mdencode
+ * 
+ * Project MDencode GMP C++ Modulus Scan mdunzip Program
+ * 
+ * mdZip.cpp zips a file with the mdzip format 
+ *
+ * 
+ * 
+*/
 #include <iostream>
 #include <sys/stat.h>
 #include "../testdecode_cpp/external/CLI11.hpp"
