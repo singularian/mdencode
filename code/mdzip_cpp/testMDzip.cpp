@@ -351,7 +351,7 @@ int calcExponent (mpz_t blockint) {
     return exponent;
 }
 
-
+// calculate the input file size
 long GetFileSize(std::string filename)
 {
     struct stat stat_buf;
@@ -359,6 +359,7 @@ long GetFileSize(std::string filename)
     return rc == 0 ? stat_buf.st_size : -1;
 }
 
+// calculate the file blocks based on the filesize and blocksize
 long CalcFileBlocks(long filesize, long blocksize) {
 
      long remainder;

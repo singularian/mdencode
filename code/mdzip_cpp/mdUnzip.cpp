@@ -64,6 +64,7 @@ int main (int argc, char **argv) {
      // sz = getFilesize(filename);
 
    mdlist(filename, list, runlogging);
+   mdunzipfile(filename, runlogging);
 
    return 0;
 }
@@ -179,13 +180,14 @@ size_t getFilesize(const std::string& filename) {
     return st.st_size;   
 }
 
-long GetFileSize2(std::string filename)
+long GetFileSize(std::string filename)
 {
     struct stat stat_buf;
     int rc = stat(filename.c_str(), &stat_buf);
     return rc == 0 ? stat_buf.st_size : -1;
 }
 
+// calculate the file blocks based on the filesize and blocksize
 long CalcFileBlocks(long filesize, long blocksize) {
 
      long remainder;
