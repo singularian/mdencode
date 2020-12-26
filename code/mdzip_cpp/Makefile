@@ -20,7 +20,7 @@ BUILD_TIME=`date +%FT%T%z`
 all:
 # need to merge these or use lnk
 #	g++ -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
-	g++ -I. $(DEPS) mdZip.cpp  -o dzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
+	g++ -I. $(DEPS) mdZip.cpp  -o mdzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	g++ -I. $(DEPS) mdUnzip.cpp  -o mdunzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 test:
 	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
