@@ -129,8 +129,27 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    cout << "Modsize: "   << modsize << endl;
    // cout << "Filehashlist: "   << hclfilesize << endl;
-   cout << "Filehashlist: "   << filehashnames.c_str() << endl;
-   cout << "Blockhashlist: "  << blockhashnames.c_str() << endl;
+   // cout << "Filehashlist: "   << filehashnames.c_str() << endl;
+   cout << "Filehashlist: "   << filehashnames << endl;
+   // cout << "Blockhashlist: "  << blockhashnames.c_str() << endl;
+   cout << "Blockhashlist: "  << blockhashnames << endl;
+
+   mdHashContextList hclfile;
+   mdHashContextList hclblock;
+
+   hclfile.setVectorHLstring(filehashnames, HASHBLOCK);
+   hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
+
+   std::cout << std::endl;
+   std::cout << "File hashlist " << std::endl;
+   std::cout << hclfile.getHLvectorsString(HASHBLOCK) << std::endl;
+
+   // std::cout << "File block group hash list " << std::endl;
+   // std::cout << getHLvectorsString(HASHBLOCKGROUP) << std::endl;
+
+   std::cout << "File block hashlist " << std::endl;
+   std::cout << hclblock.getHLvectorsString(HASHBLOCK) << std::endl;
+
 
    nf.close();
 
