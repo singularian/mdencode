@@ -152,6 +152,9 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    hclfile.setVectorHLstring(filehashnames, HASHBLOCK);
    hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
 
+   int hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
+   int hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
+
    std::cout << std::endl;
    std::cout << "File hashlist " << std::endl;
    std::cout << hclfile.getHLvectorsString(HASHBLOCK) << std::endl;
@@ -161,6 +164,12 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    std::cout << "File block hashlist " << std::endl;
    std::cout << hclblock.getHLvectorsString(HASHBLOCK) << std::endl;
+
+   std::cout << "File Blocksize " << hclfileblocksize << std::endl;
+   std::cout << "Block Blocksize " << hclblockblocksize << std::endl;
+
+   // file hash block
+   // block signatures / modulus exponent / modulus remainder
 
 
    nf.close();
