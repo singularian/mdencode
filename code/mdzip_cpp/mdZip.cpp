@@ -219,14 +219,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
      // calculate the correct modulus byte size in case of a odd modulus size 33
      // the modulus parameter is in bits and this converts it to bytes 
-     int modsizeBytes = modsize;
-     if ((modsize % 8) == 0) {
-         modsizeBytes = modsize / 8;
-     } else if (modsize < 8) {
-         modsizeBytes = 1;
-     } else {
-         modsizeBytes = (modsize / 8) + 1;
-     }
+     int modsizeBytes = calcModulusBytes(modsize);
      cout << "Modsize bytes " << modsizeBytes << endl;
      unsigned char *modulusint = new unsigned char[modsizeBytes];
 
