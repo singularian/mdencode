@@ -13,11 +13,10 @@
 #include <sys/stat.h>
 #include "../testdecode_cpp/external/CLI11.hpp"
 #include <gmp.h>
+#include "common.h"
 #include "mdHashContextList.h"
 
-int calcExponent (mpz_t blockint);
-long GetFileSize(std::string filename);
-long CalcFileBlocks(long filesize, long blocksize);
+// int calcExponent (mpz_t blockint);
 int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist);
 void printByteblock(unsigned char *byteblock, long blocksize, bool ishex);
 // void printByteblock(char *byteblock, long blocksize, bool ishex);
@@ -246,7 +245,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            printByteblock(byteblock, blocksize, true);
 
            std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
-           std::cout << hclblock.displayHLhashes() << std::endl << std::endl;
+           std::cout << hclblock.displayHLhashes() << std::endl;
 
 
            // calculate the modulus 2 ^ modsize 
@@ -255,6 +254,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            // calculate the modulus remainder 
            mpz_mod (remainder, byteblockInt, modulusInt);
 
+           int modexponent = calcExponent(byteblockInt);
            // calculate the modulus exponent with two
            // this should be a byte int if the file block size is less than 32 and an 32-bit int if it is greater than 32 bytes
            if (blocksize > 32) { 
@@ -263,6 +263,8 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
                uint8_t modexponent2 = modexponent;
                wf.write(reinterpret_cast<char*>(&modexponent2),   sizeof(uint8_t));
            }
+ 
+           std::cout << "Modulus Exponent " << modexponent << std::endl << std::endl;
 
            // write the modulus remainder
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
@@ -292,7 +294,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            }
 
            std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
-           std::cout << hclblock.displayHLhashes() << std::endl << std::endl;
+           std::cout << hclblock.displayHLhashes() << std::endl;
 
 
            // calculate the modulus 2 ^ modsize 
@@ -311,6 +313,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
                wf.write(reinterpret_cast<char*>(&modexponent2),   sizeof(uint8_t));
            }
 
+           std::cout << "Modulus Exponent " << modexponent << std::endl << std::endl;
 
            // write the modulus remainder
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
@@ -343,7 +346,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 }
 
 // calculates an exponent of 2 less than the byte block int
-int calcExponent (mpz_t blockint) {
+/* int calcExponent (mpz_t blockint) {
     int exponent = 0;
 
     mpz_t two, result;
@@ -361,31 +364,7 @@ int calcExponent (mpz_t blockint) {
 
     return exponent;
 }
-
-// calculate the input file size
-long GetFileSize(std::string filename)
-{
-    struct stat stat_buf;
-    int rc = stat(filename.c_str(), &stat_buf);
-    return rc == 0 ? stat_buf.st_size : -1;
-}
-
-// calculate the file blocks based on the filesize and blocksize
-long CalcFileBlocks(long filesize, long blocksize) {
-
-     long remainder;
-     long blocksCount = 0;
-     remainder = filesize % blocksize;
-     if (remainder == 0) {
-         blocksCount = filesize / blocksize;
-         remainder = blocksize;
-     } else {
-         blocksCount = (filesize / blocksize) + 1;
-     }
-
-     return blocksCount;
-
-}
+*/
 
 // display the byteblock
 // void printByteblock(char *byteblock, long blocksize, bool ishex) {

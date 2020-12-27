@@ -14,14 +14,11 @@
 #include <sys/stat.h>
 #include "../testdecode_cpp/external/CLI11.hpp"
 #include <gmp.h>
+#include "common.h"
 #include "mdHashContextList.h"
 
 using namespace std;
 
-
-size_t getFilesize(const std::string& filename);
-long GetFileSize(std::string filename);
-long CalcFileBlocks(long filesize, long blocksize);
 int mdlist(std::string filename, bool listfile, bool runlogging);
 int mdunzipfile(std::string filename, bool runlogging);
 void usage();
@@ -125,26 +122,26 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    delete buf2;
    // nf.read(reinterpret_cast<char*>(&blockhashnames), hclblocksize);
 
-   cout << "Filename Details: " << filename << endl << endl;
-   cout << "Version: "   << mdversion << endl;
-   cout << "Filesize: "  << filesize << endl;
-   cout << "Blocksize: " << blocksize << endl;
+   cout << std::left << std::setw(20) << "Filename Details: " << filename << endl << endl;
+   cout << std::left << std::setw(20) << "Version: "    << mdversion << endl;
+   cout << std::left << std::setw(20) << "Filesize: "   << filesize << endl;
+   cout << std::left << std::setw(20) << "Blocksize: "  << blocksize << endl;
 
    blockcount = CalcFileBlocks(filesize, blocksize);
    blockremainder  = filesize % blocksize;
 
-   cout << "Blockcount: "     << blockcount << endl;
-   cout << "Blockremainder: " << blockremainder << endl;
+   cout << std::left << std::setw(20) << "Blockcount: "     << blockcount << endl;
+   cout << std::left << std::setw(20) << "Blockremainder: " << blockremainder << endl;
    
    // std::cout << "File block number "    << blockcount << std::endl;
    // std::cout << "File last block size " << blockremainder << std::endl;
 
-   cout << "Modsize: "   << modsize << endl;
+   cout << std::left << std::setw(20) << "Modsize: " << modsize << endl;
    // cout << "Filehashlist: "   << hclfilesize << endl;
    // cout << "Filehashlist: "   << filehashnames.c_str() << endl;
-   cout << "Filehashlist: "   << filehashnames << endl;
+   cout << std::left << std::setw(20) << "Filehashlist: "   << filehashnames << endl;
    // cout << "Blockhashlist: "  << blockhashnames.c_str() << endl;
-   cout << "Blockhashlist: "  << blockhashnames << endl;
+   cout << std::left << std::setw(20) << "Blockhashlist: "  << blockhashnames << endl;
 
    mdHashContextList hclfile;
    mdHashContextList hclblock;
@@ -154,6 +151,9 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    int hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
    int hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
+
+   std::cout << std::left << std::setw(20) << "File Blocksize: " << hclfileblocksize << std::endl;
+   std::cout << std::left << std::setw(20) << "Block Blocksize: " << hclblockblocksize << std::endl;
 
    std::cout << std::endl;
    std::cout << "File hashlist " << std::endl;
@@ -165,8 +165,8 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    std::cout << "File block hashlist " << std::endl;
    std::cout << hclblock.getHLvectorsString(HASHBLOCK) << std::endl;
 
-   std::cout << "File Blocksize " << hclfileblocksize << std::endl;
-   std::cout << "Block Blocksize " << hclblockblocksize << std::endl;
+   // std::cout << std::left << std::setw(20) << "File Blocksize: " << hclfileblocksize << std::endl;
+   // std::cout << std::left << std::setw(20) << "Block Blocksize: " << hclblockblocksize << std::endl;
 
    // file hash block
    // block signatures / modulus exponent / modulus remainder
@@ -184,43 +184,6 @@ int mdunzipfile(std::string filename, bool runlogging) {
 
 
    return 0;
-
-}
-
-/**
- * Get the size of a file.
- * @param filename The name of the file to check size for
- * @return The filesize, or 0 if the file does not exist.
- */
-size_t getFilesize(const std::string& filename) {
-    struct stat st;
-    if(stat(filename.c_str(), &st) != 0) {
-        return 0;
-    }
-    return st.st_size;   
-}
-
-long GetFileSize(std::string filename)
-{
-    struct stat stat_buf;
-    int rc = stat(filename.c_str(), &stat_buf);
-    return rc == 0 ? stat_buf.st_size : -1;
-}
-
-// calculate the file blocks based on the filesize and blocksize
-long CalcFileBlocks(long filesize, long blocksize) {
-
-     long remainder;
-     long blocksCount = 0;
-     remainder = filesize % blocksize;
-     if (remainder == 0) {
-         blocksCount = filesize / blocksize;
-         remainder = blocksize;
-     } else {
-         blocksCount = (filesize / blocksize) + 1;
-     }
-
-     return blocksCount;
 
 }
 
