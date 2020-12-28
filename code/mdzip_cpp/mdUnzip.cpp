@@ -187,12 +187,19 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    // display the file block hash block list
    // block signatures / modulus exponent / modulus remainder
    int blk = 0;
+   int lastblk = blockcount - 1;
    // initialize the gmp bigint variables
    int byteorder = 0;
    int endian    = 0;
 
    for (blk = 0; blk < blockcount; blk++) {
-     std::cout << "Reading Block " << (blk + 1) << std::endl;
+     std::cout << "Reading Block " << (blk + 1);
+     if ((blk == lastblk) && (blockremainder != blocksize)) {
+           std::cout << " bytes size " << blockremainder << "/" << blocksize << std::endl;
+     } else {
+           std::cout << " bytes size " << blocksize << "/" << blocksize << std::endl;
+     }
+
      hclblock.readBlockHashList(nf);
      std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
      std::cout << hclblock.displayHLhashes() << std::endl;
