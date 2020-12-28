@@ -263,16 +263,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
            // =========================================================================================
            printByteblock(modulusint, modsizeBytes, true);
-           // int n;
-           // int diff;
            cout << "padding modustint " << endl;
-           /* if (count < modsizeBytes) {
-               cout << "padding modustint " << endl;
-               diff = modsizeBytes - count;
-               for (n = (modsizeBytes - diff); n >= 0; n--) modulusint[n+diff] = modulusint[n];
-               for (n = 0; n < diff; n++) modulusint[n] = 0;
-           }*/
-           // printByteblock(modulusint, modsizeBytes, true);
            padBlockBytes(count, modsizeBytes, modulusint);
            
            printByteblock(modulusint, modsizeBytes, true);
