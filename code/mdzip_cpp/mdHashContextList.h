@@ -19,12 +19,14 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <stdint.h>
 #include <map>
 #include <tuple>
 #include <vector>
 #include "filehash.h"
 #include "../testdecode_cpp/external/cityhash/cityhash.h"
-#include "../testdecode_cpp/external/crc/CRC.h"
+#include "../testdecode_cpp/external/crc32/crc32.h"
+#include "../testdecode_cpp/external/crc64/crc64.h"
 #include "../testdecode_cpp/external/csiphash.c"
 #include "../testdecode_cpp/external/fasthash/fasthash.h"
 #include "../testdecode_cpp/external/fnv/fnv.h"
@@ -48,7 +50,7 @@
 #include "../testdecode_cpp/external/wyhash/wyhash.h"
 
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
-enum signatures {FIRST, CIT64, CRC32, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, SPK32, SPK64, XXH32, XXH64, WYP, WYH, LAST};
+enum signatures {FIRST, CIT64, CRC32, CRC64, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, SPK32, SPK64, XXH32, XXH64, WP, WYH, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -65,6 +67,7 @@ struct Hashlist {
 Hashlist mdHashlist[LAST] = {
     {1,  "cit64",    "Cityhash 64",           false, 8},
     {2,  "crc32",    "CRC 32",                false, 4},
+    {2,  "crc64",    "CRC 64",                false, 8},
     {3,  "fast32",   "Fasthash 32",           true,  4},
     {4,  "fast64",   "Fasthash 64",           true,  8},
     {5,  "fnv32",    "FNV-1  32",             false, 4},
@@ -121,9 +124,11 @@ private:
     uint64_t city64o;
     uint64_t city64seed = 102922;
     // crc32
+    uint64_t crc32seed = 12121221;
     uint32_t crc32i;
     uint32_t crc32o;
     // crc64
+    uint64_t crc64seed = 12121221;
     uint64_t crc64i;
     uint64_t crc64o;
     // fasthash
@@ -300,6 +305,124 @@ public:
           setVectorHL(v, type);
     }
 
+    // readBlockHashList
+    // write the hash list to a ofstream file object
+    void readBlockHashList(std::ifstream &rf) { 
+
+          int hashblocksize = 0;
+          for(auto hash  : hashlistvt[HASHBLOCK]) {
+              hashblocksize = std::get<2>(hash);
+
+              switch(std::get<0>(hash)) {
+                  case CIT64:
+                    rf.read(reinterpret_cast<char*>(&city64i), sizeof(long));
+                    break;
+                  case CRC32:
+                    rf.read(reinterpret_cast<char*>(&crc32i), sizeof(int));
+                    break;
+                  case CRC64:
+                    rf.read(reinterpret_cast<char*>(&crc64i), sizeof(long));
+                    break;
+                  case FAST32:
+                    rf.read(reinterpret_cast<char*>(&fast32i), sizeof(int));
+                    break;
+                  case FAST64:
+                    rf.read(reinterpret_cast<char*>(&fast64i), sizeof(long));      
+                    break;
+                  case FNV32:
+                    rf.read(reinterpret_cast<char*>(&fnv32_1i), sizeof(int)); 
+                    break;
+                  case FNV32A:
+                    rf.read(reinterpret_cast<char*>(&fnv32_1i), sizeof(int)); 
+                    break;
+                  case FNV64:
+                    rf.read(reinterpret_cast<char*>(&fnv64_1i), sizeof(long));
+                    break;
+                  case FNV64A:
+                    rf.read(reinterpret_cast<char*>(&fnv64a_1i), sizeof(long));
+                    break;
+                  case HW64:
+                    rf.read(reinterpret_cast<char*>(&hw64i), sizeof(long));
+                    break;
+                  case MET641:
+                    rf.read(reinterpret_cast<char*>(&met641i), sizeof(met641i)); 
+                    break;
+                  case MET642:
+                    rf.read(reinterpret_cast<char*>(&met642i), sizeof(met642i)); 
+                    break;
+                  case MD2s:
+                    rf.read(reinterpret_cast<char*>(&md2i), blocksize); 
+                    break;
+                  case MD4s:
+                    rf.read(reinterpret_cast<char*>(&md4i), blocksize); 
+                    break;
+                  case MD5s:
+                    rf.read(reinterpret_cast<char*>(&md5i), blocksize);
+                    break;
+                  case MD6:
+                    rf.read(reinterpret_cast<char*>(&md6i), blocksize);
+                    break;
+                  case MD62:
+                    rf.read(reinterpret_cast<char*>(&md62i), blocksize);
+                    break;
+                  case PNG:
+                    rf.read(reinterpret_cast<char*>(&png64i), blocksize);
+                    break;
+                  case RIPE160:
+                    rf.read(reinterpret_cast<char*>(&ripe160i), blocksize);
+                    break;
+                  case SEA:
+                    rf.read(reinterpret_cast<char*>(&sea64i), sizeof(long));
+                    break;
+                  case SIP64: 
+                    rf.read(reinterpret_cast<char*>(&siphash64i), sizeof(long));
+                    break;
+                  case SHA164:
+                    //uint8_t sha164[8];
+                    //memcpy(sha164, sha1i, blocksize);
+                    rf.read(reinterpret_cast<char*>(&sha1i), blocksize);
+                    break;
+                  case SHA1128:
+                    //uint8_t sha1128[16];
+                    //memcpy(sha1128, sha1i, blocksize);
+                    rf.read(reinterpret_cast<char*>(&sha1i), blocksize);
+                    break;
+                  case SHA1s:
+                    rf.read(reinterpret_cast<char*>(&sha1i), blocksize);
+                    break;
+                  case SHA256s:
+                    rf.read(reinterpret_cast<char*>(&sha256i), blocksize);
+                    break;
+                  case SHA384s:
+                    rf.read(reinterpret_cast<char*>(&sha384i), blocksize);
+                    break;
+                  case SHA512s:
+                    rf.read(reinterpret_cast<char*>(&sha512i), blocksize);
+                    break;
+                  case SPK32:
+                    rf.read(reinterpret_cast<char*>(&spooky32i), sizeof(int));
+                    break;
+                  case SPK64:
+                    rf.read(reinterpret_cast<char*>(&spooky64i), sizeof(long));
+                    break;
+                  case XXH32:
+                    rf.read(reinterpret_cast<char*>(&xxhash32i), sizeof(int));
+                    break;
+                  case XXH64:
+                    rf.read(reinterpret_cast<char*>(&xxhash64i), sizeof(long));
+                    break;
+                  case WP:
+                    rf.read(reinterpret_cast<char*>(&whp512i), blocksize);
+                    break;
+                  case WYH:
+                    rf.read(reinterpret_cast<char*>(&wyhash64i), sizeof(long));
+                    break;
+                  // default:
+                  //  std::cout << "Invalid hash" << std::endl;
+              }
+          }
+    }
+
     // writeBlockHashList
     // write the hash list to a ofstream file object
     void writeBlockHashList(std::ofstream &wf) { 
@@ -318,17 +441,20 @@ public:
                     // wf.write(reinterpret_cast<char*>(&crc64i), sizeof(long));
                     wf.write(reinterpret_cast<char*>(&crc32i), sizeof(int));
                     break;
+                  case CRC64:
+                    wf.write(reinterpret_cast<char*>(&crc64i), sizeof(long));
+                    break;
                   case FAST32:
-                    wf.write(reinterpret_cast<char*>(&fast32i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&fast32i), sizeof(int));
                     break;
                   case FAST64:
                     wf.write(reinterpret_cast<char*>(&fast64i), sizeof(long));      
                     break;
                   case FNV32:
-                    wf.write(reinterpret_cast<char*>(&fnv32_1i), sizeof(long)); 
+                    wf.write(reinterpret_cast<char*>(&fnv32_1i), sizeof(int)); 
                     break;
                   case FNV32A:
-                    wf.write(reinterpret_cast<char*>(&fnv32_1i), sizeof(long)); 
+                    wf.write(reinterpret_cast<char*>(&fnv32_1i), sizeof(int)); 
                     break;
                   case FNV64:
                     wf.write(reinterpret_cast<char*>(&fnv64_1i), sizeof(long));
@@ -406,8 +532,7 @@ public:
                   case XXH64:
                     wf.write(reinterpret_cast<char*>(&xxhash64i), sizeof(long));
                     break;
-                  case WYP:
-                    // TODO
+                  case WP:
                     wf.write(reinterpret_cast<char*>(&whp512i), blocksize);
                     break;
                   case WYH:
@@ -435,6 +560,8 @@ public:
                   case CRC32:
                     //crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
                     break;
+                  case CRC64:
+                   //crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
                   case FAST32:
                     //fast32i = fasthash32(byteblock, blocksize, fast32seed);
                     break;
@@ -528,7 +655,7 @@ public:
                   case XXH64:
                     //xxhash64i = XXHash64::hash(byteblock, blocksize, xxseed64);
                     break;
-                  case WYP:
+                  case WP:
                     // TODO
                     break;
                   case WYH:
@@ -554,7 +681,12 @@ public:
                     city64i = cityhash64_with_seed(byteblock, blocksize, city64seed);
                     break;
                   case CRC32:
-                    crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
+                    // crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
+                    crc32i = crc32(crc32seed, byteblock, blocksize);
+                    break;
+                  case CRC64:
+                    //crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_64());
+                    crc64i = crc64(crc64seed, byteblock, blocksize);
                     break;
                   case FAST32:
                     fast32i = fasthash32(byteblock, blocksize, fast32seed);
@@ -640,7 +772,7 @@ public:
                   case XXH64:
                     xxhash64i = XXHash64::hash(byteblock, blocksize, xxseed64);
                     break;
-                  case WYP:
+                  case WP:
                     // TODO
                     WHIRLPOOL(byteblock, blocksize, whp512i);
                     break;
@@ -668,7 +800,13 @@ public:
                     if (city64i != city64o) return false;
                     break;
                   case CRC32:
-                    crc64o = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
+                    // crc64o = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
+                    crc32o = crc32(crc32seed, byteblock, blocksize);
+                    if (crc64i != crc64o) return false;
+                    break;
+                  case CRC64:
+                    // crc64o = CRC::Calculate(byteblock, blocksize, CRC::CRC_64());
+                    crc64o = crc64(crc64seed, byteblock, blocksize);
                     if (crc64i != crc64o) return false;
                     break;
                   case FAST32:
@@ -783,7 +921,7 @@ public:
                     xxhash64o = XXHash64::hash(byteblock, blocksize, xxseed64);
                     if (xxhash64i != xxhash64o) return false;
                     break;
-                  case WYP:
+                  case WP:
                     WHIRLPOOL(byteblock, blocksize, whp512o);
                     if (memcmp(whp512i, whp512o, 64) != 0) return false;
                     break;
@@ -817,6 +955,9 @@ public:
                      ss << std::to_string(city64i) << " ";
                      break;
                   case CRC32:
+                     ss << std::to_string(crc32i) << " ";
+                     break;
+                  case CRC64:
                      ss << std::to_string(crc64i) << " ";
                      break;
                   case FAST32:
@@ -903,7 +1044,7 @@ public:
                   case XXH64:
                      ss << std::to_string(xxhash64i) << " ";
                      break;
-                  case WYP:
+                  case WP:
                      addHashToDisplayStream(whp512i, hashblocksize);
                      break;
                   case WYH:

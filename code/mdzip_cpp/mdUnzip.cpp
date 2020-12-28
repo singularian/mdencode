@@ -106,6 +106,13 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
    nf.read(reinterpret_cast<char*>(&modsize),   sizeof(int));
 
+   int modsizeBytes = calcModulusBytes(modsize);
+   unsigned char *modulusbytes = new unsigned char[modsizeBytes];
+   // char *modulusbytes = new char[modsizeBytes];
+   mpz_t modulusInt;
+   mpz_init_set_str(modulusInt, "1", 10);
+
+
    nf.read(reinterpret_cast<char*>(&hclfilesize),    sizeof(int));
    char* buf = new char[hclfilesize];
    // nf.read(reinterpret_cast<char*>(&filehashnames),  hclfilesize);
@@ -114,6 +121,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
      filehashnames.append(buf, hclfilesize);
      delete buf;
    }
+
 
    nf.read(reinterpret_cast<char*>(&hclblocksize),   sizeof(int));
    char* buf2 = new char[hclblocksize];
@@ -137,6 +145,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    // std::cout << "File last block size " << blockremainder << std::endl;
 
    cout << std::left << std::setw(20) << "Modsize: " << modsize << endl;
+   cout << std::left << std::setw(20) << "Modsize Bytes: " << modsizeBytes << endl;
    // cout << "Filehashlist: "   << hclfilesize << endl;
    // cout << "Filehashlist: "   << filehashnames.c_str() << endl;
    cout << std::left << std::setw(20) << "Filehashlist: "   << filehashnames << endl;
@@ -155,6 +164,11 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    std::cout << std::left << std::setw(20) << "File Blocksize: " << hclfileblocksize << std::endl;
    std::cout << std::left << std::setw(20) << "Block Blocksize: " << hclblockblocksize << std::endl;
 
+   // std::string platform;
+   // platform.append(std::string(" ") + (is_big_endian() ? "Big" : "Litle")); 
+   std::cout << std::left << std::setw(20) << "Platform:" << (is_big_endian()? "Big": "Little") << " Endian" << std::endl;
+   // std::cout << std::left << std::setw(20) << "Platform:" << platform << std::endl;
+
    std::cout << std::endl;
    std::cout << "File hashlist " << std::endl;
    std::cout << hclfile.getHLvectorsString(HASHBLOCK) << std::endl;
@@ -168,10 +182,35 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    // std::cout << std::left << std::setw(20) << "File Blocksize: " << hclfileblocksize << std::endl;
    // std::cout << std::left << std::setw(20) << "Block Blocksize: " << hclblockblocksize << std::endl;
 
-   // file hash block
+   // TODO need to add the file block hash list
+
+   // display the file block hash block list
    // block signatures / modulus exponent / modulus remainder
+   int blk = 0;
+   // initialize the gmp bigint variables
+   int byteorder = 0;
+   int endian    = 0;
 
+   for (blk = 0; blk < blockcount; blk++) {
+     std::cout << "Reading Block " << (blk + 1) << std::endl;
+     hclblock.readBlockHashList(nf);
+     std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
+     std::cout << hclblock.displayHLhashes() << std::endl;
 
+     if (blocksize > 32) {
+       nf.read(reinterpret_cast<char*>(&modexponent),   sizeof(int));
+     } else {
+       nf.read(reinterpret_cast<char*>(&modexponent),   sizeof(uint8_t));
+     }
+
+     std::cout << "Modulus Exponent " << modexponent << std::endl;
+     nf.read(reinterpret_cast<char*>(modulusbytes),   sizeof(char) * modsizeBytes);
+     mpz_import (modulusInt, modsizeBytes, byteorder, sizeof(modulusbytes[0]), endian, 0, modulusbytes);
+     gmp_printf("Modulus Remainder %Zd\n\n", modulusInt);
+   }
+
+   delete modulusbytes;
+   mpz_clear(modulusInt);
    nf.close();
 
    return 0;

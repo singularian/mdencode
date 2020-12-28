@@ -74,6 +74,48 @@ int calcExponent (mpz_t blockint) {
     return exponent;
 }
 
+// display the byteblock
+// void printByteblock(char *byteblock, long blocksize, bool ishex) {
+void printByteblock2(unsigned char *byteblock, long blocksize, bool ishex) {
+        long i;
+        for(i=0; i < blocksize; i++)
+        {
+            if (ishex == false) {
+                printf("%d ",    byteblock[i]);
+            } else {
+                printf("%02X ", byteblock[i]);
+            }
+        }
+
+        printf("\n");
+
+        /* for (int f = 0; f < blocksize; f++) {
+                  // std::cout << setw(2) << std::uppercase << std::hex << setfill('0') << (uint32_t)byteblock[f];
+                  std::cout << " ";
+        }
+        std::cout << std::endl;
+        */
+
+}
+
+// display the byteblock
+// void printByteblock(char *byteblock, long blocksize, bool ishex) {
+void printByteblock3(char *byteblock, long blocksize, bool ishex) {
+        long i;
+        for(i=0; i < blocksize; i++)
+        {
+            if (ishex == false) {
+                printf("%d ",    byteblock[i]);
+            } else {
+                printf("%02X ", byteblock[i]);
+            }
+        }
+
+        printf("\n");
+
+}
+
+
 /**
  * Get the size of a file.
  * @param filename The name of the file to check size for
@@ -103,4 +145,22 @@ int buffToInteger(char* buffer)
     int a;
     memcpy( &a, buffer, sizeof( int ) );
     return a;
+}
+
+// Checks if the platform is big- or little-endian.
+// https://github.com/steinwurf/endian/blob/master/src/endian/is_big_endian.hpp
+//
+// From a test proposed here:
+// http://stackoverflow.com/questions/1001307/
+//
+// @return True if the platform is big endian otherwise false.
+inline bool is_big_endian()
+{
+    union
+    {
+        uint32_t i;
+        uint8_t c[4];
+    } test = {0x01020304};
+
+    return test.c[0] == 1;
 }

@@ -199,12 +199,13 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
      // wf.write(reinterpret_cast<char*>(&filehashnames),   hclsize);
      wf.write(filehashnames.c_str(),   hclsize);
-     cout << "hash size " << hclsize << endl;
+     cout << "hashnames file size " << hclsize << endl;
 
      hclsize = blockhashnames.size();
      wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
      // wf.write(reinterpret_cast<char*>(&blockhashnames),   hclsize);
      wf.write(blockhashnames.c_str(),   hclsize);
+     cout << "hashnames block size " << hclsize << endl;
      //nf.close();
      //wf.close();
      //return 0; // test
@@ -270,7 +271,9 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            // =========================================================================================
 
 
-           wf.write(reinterpret_cast<char*>(&modulusint),   sizeof(char) * modsizeBytes);
+           // wf.write(reinterpret_cast<char*>(&modulusint),   sizeof(char) * modsizeBytes);
+           wf.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
+           // wf.write(modulusint,   sizeof(char) * modsizeBytes);
 
            gmp_printf("Modulus Remainder %Zd\n\n", remainder);
 
@@ -320,7 +323,8 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
            // write the modulus remainder
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
-           wf.write(reinterpret_cast<char*>(&modulusint),   sizeof(char) * modsizeBytes);
+           padBlockBytes(count, modsizeBytes, modulusint);
+           wf.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
 
            gmp_printf("Modulus Remainder %Zd\n\n", remainder);
            break;
