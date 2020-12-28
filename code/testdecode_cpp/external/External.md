@@ -14,6 +14,8 @@ This is a list of the external software included.
 
 [CRC](https://github.com/d-bahr/CRCpp)  
 
+[CRC32/CRC64](https://github.com/maandree/util-linux/blob/master/include/crc64.h)
+
 [xxhash](https://create.stephan-brumme.com/xxhash/)  
 
 [wyhash](https://github.com/wangyi-fudan/wyhash)  
