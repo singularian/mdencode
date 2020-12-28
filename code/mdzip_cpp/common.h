@@ -2,6 +2,25 @@
 #include <gmp.h>
 #include <sys/stat.h>
 
+
+// pad a gmp bigint export byteblock
+// if the count is less than the blocksize move the bytes over by the difference
+// export block 80 00 00 00 00 00 00 00 
+// padded block 00 00 00 00 00 00 00 80 
+int padBlockBytes(size_t count, int blocksize, unsigned char* byteblock) {
+   int n;
+   int diff;
+
+   if (count < blocksize) {
+       diff = blocksize - count;
+       for (n = (blocksize - diff); n >= 0; n--) byteblock[n+diff] = byteblock[n];
+       for (n = 0; n < diff; n++) byteblock[n] = 0;
+   }
+
+   return 0;
+}
+
+
 // converts the modulus bit size to byte size
 int calcModulusBytes (int modsize) {
 
