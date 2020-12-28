@@ -412,7 +412,7 @@ public:
                     rf.read(reinterpret_cast<char*>(&xxhash64i), sizeof(long));
                     break;
                   case WP:
-                    rf.read(reinterpret_cast<char*>(&whp512i), blocksize);
+                    rf.read(reinterpret_cast<char*>(&whp512i), hashblocksize);
                     break;
                   case WYH:
                     rf.read(reinterpret_cast<char*>(&wyhash64i), sizeof(long));
