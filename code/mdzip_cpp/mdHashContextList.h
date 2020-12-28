@@ -333,7 +333,7 @@ public:
                     rf.read(reinterpret_cast<char*>(&fnv32_1i), sizeof(int)); 
                     break;
                   case FNV32A:
-                    rf.read(reinterpret_cast<char*>(&fnv32_1i), sizeof(int)); 
+                    rf.read(reinterpret_cast<char*>(&fnv32a_1i), sizeof(int)); 
                     break;
                   case FNV64:
                     rf.read(reinterpret_cast<char*>(&fnv64_1i), sizeof(long));
@@ -351,25 +351,25 @@ public:
                     rf.read(reinterpret_cast<char*>(&met642i), sizeof(met642i)); 
                     break;
                   case MD2s:
-                    rf.read(reinterpret_cast<char*>(&md2i), blocksize); 
+                    rf.read(reinterpret_cast<char*>(&md2i), hashblocksize); 
                     break;
                   case MD4s:
-                    rf.read(reinterpret_cast<char*>(&md4i), blocksize); 
+                    rf.read(reinterpret_cast<char*>(&md4i), hashblocksize); 
                     break;
                   case MD5s:
-                    rf.read(reinterpret_cast<char*>(&md5i), blocksize);
+                    rf.read(reinterpret_cast<char*>(&md5i), hashblocksize);
                     break;
                   case MD6:
-                    rf.read(reinterpret_cast<char*>(&md6i), blocksize);
+                    rf.read(reinterpret_cast<char*>(&md6i), hashblocksize);
                     break;
                   case MD62:
-                    rf.read(reinterpret_cast<char*>(&md62i), blocksize);
+                    rf.read(reinterpret_cast<char*>(&md62i), hashblocksize);
                     break;
                   case PNG:
-                    rf.read(reinterpret_cast<char*>(&png64i), blocksize);
+                    rf.read(reinterpret_cast<char*>(&png64i), hashblocksize);
                     break;
                   case RIPE160:
-                    rf.read(reinterpret_cast<char*>(&ripe160i), blocksize);
+                    rf.read(reinterpret_cast<char*>(&ripe160i), hashblocksize);
                     break;
                   case SEA:
                     rf.read(reinterpret_cast<char*>(&sea64i), sizeof(long));
@@ -380,24 +380,24 @@ public:
                   case SHA164:
                     //uint8_t sha164[8];
                     //memcpy(sha164, sha1i, blocksize);
-                    rf.read(reinterpret_cast<char*>(&sha1i), blocksize);
+                    rf.read(reinterpret_cast<char*>(&sha1i), hashblocksize);
                     break;
                   case SHA1128:
                     //uint8_t sha1128[16];
                     //memcpy(sha1128, sha1i, blocksize);
-                    rf.read(reinterpret_cast<char*>(&sha1i), blocksize);
+                    rf.read(reinterpret_cast<char*>(&sha1i), hashblocksize);
                     break;
                   case SHA1s:
-                    rf.read(reinterpret_cast<char*>(&sha1i), blocksize);
+                    rf.read(reinterpret_cast<char*>(&sha1i), hashblocksize);
                     break;
                   case SHA256s:
-                    rf.read(reinterpret_cast<char*>(&sha256i), blocksize);
+                    rf.read(reinterpret_cast<char*>(&sha256i), hashblocksize);
                     break;
                   case SHA384s:
-                    rf.read(reinterpret_cast<char*>(&sha384i), blocksize);
+                    rf.read(reinterpret_cast<char*>(&sha384i), hashblocksize);
                     break;
                   case SHA512s:
-                    rf.read(reinterpret_cast<char*>(&sha512i), blocksize);
+                    rf.read(reinterpret_cast<char*>(&sha512i), hashblocksize);
                     break;
                   case SPK32:
                     rf.read(reinterpret_cast<char*>(&spooky32i), sizeof(int));
@@ -454,7 +454,7 @@ public:
                     wf.write(reinterpret_cast<char*>(&fnv32_1i), sizeof(int)); 
                     break;
                   case FNV32A:
-                    wf.write(reinterpret_cast<char*>(&fnv32_1i), sizeof(int)); 
+                    wf.write(reinterpret_cast<char*>(&fnv32a_1i), sizeof(int)); 
                     break;
                   case FNV64:
                     wf.write(reinterpret_cast<char*>(&fnv64_1i), sizeof(long));
@@ -472,25 +472,25 @@ public:
                     wf.write(reinterpret_cast<char*>(&met642i), sizeof(met642i)); 
                     break;
                   case MD2s:
-                    wf.write(reinterpret_cast<char*>(&md2i), blocksize); 
+                    wf.write(reinterpret_cast<char*>(&md2i), hashblocksize); 
                     break;
                   case MD4s:
-                    wf.write(reinterpret_cast<char*>(&md4i), blocksize); 
+                    wf.write(reinterpret_cast<char*>(&md4i), hashblocksize); 
                     break;
                   case MD5s:
-                    wf.write(reinterpret_cast<char*>(&md5i), blocksize);
+                    wf.write(reinterpret_cast<char*>(&md5i), hashblocksize);
                     break;
                   case MD6:
-                    wf.write(reinterpret_cast<char*>(&md6i), blocksize);
+                    wf.write(reinterpret_cast<char*>(&md6i), hashblocksize);
                     break;
                   case MD62:
-                    wf.write(reinterpret_cast<char*>(&md62i), blocksize);
+                    wf.write(reinterpret_cast<char*>(&md62i), hashblocksize);
                     break;
                   case PNG:
-                    wf.write(reinterpret_cast<char*>(&png64i), blocksize);
+                    wf.write(reinterpret_cast<char*>(&png64i), hashblocksize);
                     break;
                   case RIPE160:
-                    wf.write(reinterpret_cast<char*>(&ripe160i), blocksize);
+                    wf.write(reinterpret_cast<char*>(&ripe160i), hashblocksize);
                     break;
                   case SEA:
                     wf.write(reinterpret_cast<char*>(&sea64i), sizeof(long));
@@ -501,24 +501,24 @@ public:
                   case SHA164:
                     uint8_t sha164[8];
                     memcpy(sha164, sha1i, blocksize);
-                    wf.write(reinterpret_cast<char*>(&sha1i), blocksize);
+                    wf.write(reinterpret_cast<char*>(&sha1i), hashblocksize);
                     break;
                   case SHA1128:
                     uint8_t sha1128[16];
                     memcpy(sha1128, sha1i, blocksize);
-                    wf.write(reinterpret_cast<char*>(&sha1128), blocksize);
+                    wf.write(reinterpret_cast<char*>(&sha1128), hashblocksize);
                     break;
                   case SHA1s:
-                    wf.write(reinterpret_cast<char*>(&sha1i), blocksize);
+                    wf.write(reinterpret_cast<char*>(&sha1i), hashblocksize);
                     break;
                   case SHA256s:
-                    wf.write(reinterpret_cast<char*>(&sha256i), blocksize);
+                    wf.write(reinterpret_cast<char*>(&sha256i), hashblocksize);
                     break;
                   case SHA384s:
-                    wf.write(reinterpret_cast<char*>(&sha384i), blocksize);
+                    wf.write(reinterpret_cast<char*>(&sha384i), hashblocksize);
                     break;
                   case SHA512s:
-                    wf.write(reinterpret_cast<char*>(&sha512i), blocksize);
+                    wf.write(reinterpret_cast<char*>(&sha512i), hashblocksize);
                     break;
                   case SPK32:
                     wf.write(reinterpret_cast<char*>(&spooky32i), sizeof(int));
@@ -533,7 +533,7 @@ public:
                     wf.write(reinterpret_cast<char*>(&xxhash64i), sizeof(long));
                     break;
                   case WP:
-                    wf.write(reinterpret_cast<char*>(&whp512i), blocksize);
+                    wf.write(reinterpret_cast<char*>(&whp512i), hashblocksize);
                     break;
                   case WYH:
                     wf.write(reinterpret_cast<char*>(&wyhash64i), sizeof(long));
