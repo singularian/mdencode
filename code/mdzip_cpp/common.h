@@ -18,7 +18,7 @@ int calcModulusBytes (int modsize) {
 
 }
 
-// calculate the file blocks based on the filesize and blocksize
+// calculate the file blocks count based on the filesize and blocksize
 long CalcFileBlocks(long filesize, long blocksize) {
 
      long remainder;

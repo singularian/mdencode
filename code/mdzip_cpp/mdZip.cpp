@@ -220,7 +220,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      // calculate the correct modulus byte size in case of a odd modulus size 33
      // the modulus parameter is in bits and this converts it to bytes 
      int modsizeBytes = calcModulusBytes(modsize);
-     cout << "Modsize bytes " << modsizeBytes << endl;
+     cout << "Modsize bytes " << modsizeBytes << endl << endl;
      unsigned char *modulusint = new unsigned char[modsizeBytes];
 
      while (nf)
@@ -257,12 +257,27 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
                wf.write(reinterpret_cast<char*>(&modexponent2),   sizeof(uint8_t));
            }
  
-           std::cout << "Modulus Exponent " << modexponent << std::endl << std::endl;
+           std::cout << "Modulus Exponent " << modexponent << std::endl;
 
            // write the modulus remainder
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
+           // =========================================================================================
+           printByteblock(modulusint, modsizeBytes, true);
+           int n;
+           int diff;
+           if (count < modsizeBytes) {
+               cout << "padding modustint " << endl;
+               diff = modsizeBytes - count;
+               for (n = (modsizeBytes - diff); n >= 0; n--) modulusint[n+diff] = modulusint[n];
+               for (n = 0; n < diff; n++) modulusint[n] = 0;
+           }
+           printByteblock(modulusint, modsizeBytes, true);
+           // =========================================================================================
+
+
            wf.write(reinterpret_cast<char*>(&modulusint),   sizeof(char) * modsizeBytes);
 
+           gmp_printf("Modulus Remainder %Zd\n\n", remainder);
 
         // } else if ((blocknumber == blockcount) && (blockremainder > 0)) {
         } else if ((blocknumber ) == (blockcount )) {
@@ -306,11 +321,13 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
                wf.write(reinterpret_cast<char*>(&modexponent2),   sizeof(uint8_t));
            }
 
-           std::cout << "Modulus Exponent " << modexponent << std::endl << std::endl;
+           std::cout << "Modulus Exponent " << modexponent << std::endl;
 
            // write the modulus remainder
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
            wf.write(reinterpret_cast<char*>(&modulusint),   sizeof(char) * modsizeBytes);
+
+           gmp_printf("Modulus Remainder %Zd\n\n", remainder);
            break;
         }
         blocknumber++;
