@@ -321,7 +321,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            // write the modulus remainder
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
            // cout << "padding modus int " << endl;
-           // padBlockBytes(count, modsizeBytes, modulusint);
+           padBlockBytes(count, modsizeBytes, modulusint);
            wf.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
 
            gmp_printf("Modulus Remainder %Zd\n\n", remainder);

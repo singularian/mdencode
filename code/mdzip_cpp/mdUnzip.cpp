@@ -221,6 +221,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
         // read the modulus remainder
         nf.read(reinterpret_cast<char*>(modulusbytes),   sizeof(char) * modsizeBytes);
         mpz_import (modulusInt, modsizeBytes, byteorder, sizeof(modulusbytes[0]), endian, 0, modulusbytes);
+        // printByteblock(modulusInt, modsizeBytes, true);
         gmp_printf("Modulus Remainder %Zd\n\n", modulusInt);
    }
 
