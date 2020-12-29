@@ -175,26 +175,20 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    std::cout << std::left << std::setw(20) << "File Blocksize: " << hclfileblocksize << std::endl;
    std::cout << std::left << std::setw(20) << "Block Blocksize: " << hclblockblocksize << std::endl;
-
-   // std::string platform;
-   // platform.append(std::string(" ") + (is_big_endian() ? "Big" : "Litle")); 
    std::cout << std::left << std::setw(20) << "Platform:" << (is_big_endian()? "Big": "Little") << " Endian" << std::endl;
-   // std::cout << std::left << std::setw(20) << "Platform:" << platform << std::endl;
 
+   // display the file hash list parameters and hash block size
    std::cout << std::endl;
    std::cout << "File hashlist " << std::endl;
    std::cout << hclfile.getHLvectorsString(HASHBLOCK) << std::endl;
 
+   // TODO display the hashblockgroup 
    // std::cout << "File block group hash list " << std::endl;
    // std::cout << getHLvectorsString(HASHBLOCKGROUP) << std::endl;
 
+   // display the file block hash list
    std::cout << "File block hashlist " << std::endl;
    std::cout << hclblock.getHLvectorsString(HASHBLOCK) << std::endl;
-
-   // std::cout << std::left << std::setw(20) << "File Blocksize: " << hclfileblocksize << std::endl;
-   // std::cout << std::left << std::setw(20) << "Block Blocksize: " << hclblockblocksize << std::endl;
-
-   // TODO need to add the file block hash list
 
    // display the file block hash block list
    // block signatures / modulus exponent / modulus remainder
@@ -238,7 +232,9 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
 
 // mdunzipfile
-// TODO mdunzip a valid file.mdz file
+// TODO mdunzip a valid mdzip file 
+// ie a file with the *.mdz extension
+// ie file.mdz file
 int mdunzipfile(std::string filename, bool runlogging) {
 
 
