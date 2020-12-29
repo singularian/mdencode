@@ -21,6 +21,6 @@ This is a list of the external software included.
 [CRC32/CRC64](https://github.com/maandree/util-linux/blob/master/include/crc64.h)  
 
 ## Hash Programs
-[mx3](https://github.com/jonmaiga/mx3/)
+[mx3](https://github.com/jonmaiga/mx3/)  
 [xxhash](https://create.stephan-brumme.com/xxhash/)   
 [wyhash](https://github.com/wangyi-fudan/wyhash)   
