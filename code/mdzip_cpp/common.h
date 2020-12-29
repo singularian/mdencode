@@ -5,8 +5,10 @@
 
 // pad a gmp bigint export byteblock
 // if the count is less than the blocksize move the bytes over by the difference
-// export block 80 00 00 00 00 00 00 00 
-// padded block 00 00 00 00 00 00 00 80 
+// between the diff of the blocksize and count zero out the other bytes
+// 
+// gmp export block 80 00 00 00 00 00 00 00 
+//     padded block 00 00 00 00 00 00 00 80 - shifted over 8
 int padBlockBytes(size_t count, int blocksize, unsigned char* byteblock) {
    int n;
    int diff;
@@ -75,8 +77,7 @@ int calcExponent (mpz_t blockint) {
 }
 
 // display the byteblock
-// void printByteblock(char *byteblock, long blocksize, bool ishex) {
-void printByteblock2(unsigned char *byteblock, long blocksize, bool ishex) {
+void printByteblock(unsigned char *byteblock, long blocksize, bool ishex) {
         long i;
         for(i=0; i < blocksize; i++)
         {
@@ -99,8 +100,7 @@ void printByteblock2(unsigned char *byteblock, long blocksize, bool ishex) {
 }
 
 // display the byteblock
-// void printByteblock(char *byteblock, long blocksize, bool ishex) {
-void printByteblock3(char *byteblock, long blocksize, bool ishex) {
+void printByteblock3 (char *byteblock, long blocksize, bool ishex) {
         long i;
         for(i=0; i < blocksize; i++)
         {

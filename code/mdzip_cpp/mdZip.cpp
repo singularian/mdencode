@@ -16,10 +16,7 @@
 #include "common.h"
 #include "mdHashContextList.h"
 
-// int calcExponent (mpz_t blockint);
 int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist);
-void printByteblock(unsigned char *byteblock, long blocksize, bool ishex);
-// void printByteblock(char *byteblock, long blocksize, bool ishex);
 void usage();
 
 using namespace std;
@@ -353,52 +350,6 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      return 0;
 
 }
-
-// calculates an exponent of 2 less than the byte block int
-/* int calcExponent (mpz_t blockint) {
-    int exponent = 0;
-
-    mpz_t two, result;
-
-    mpz_init_set_str(two, "2", 10);
-    mpz_init_set_str(result, "2", 10);
-
-    do {
-      mpz_mul(result, result, two);
-      exponent++;
-    } while(mpz_cmp(result,blockint) < 0);
-
-    mpz_clear(two);
-    mpz_clear(result);
-
-    return exponent;
-}
-*/
-
-// display the byteblock
-// void printByteblock(char *byteblock, long blocksize, bool ishex) {
-void printByteblock(unsigned char *byteblock, long blocksize, bool ishex) {
-        long i;
-        for(i=0; i < blocksize; i++)
-        {
-            if (ishex == false) {
-                printf("%d ",    byteblock[i]);
-            } else {
-                printf("%02X ", byteblock[i]);
-            }
-        }
-
-        printf("\n");
-
-        /* for (int f = 0; f < blocksize; f++) {
-                  // std::cout << setw(2) << std::uppercase << std::hex << setfill('0') << (uint32_t)byteblock[f];
-                  std::cout << " ";
-        }
-        std::cout << std::endl;
-        */
-
-}
-
 
 // display the usage
 void usage() {
