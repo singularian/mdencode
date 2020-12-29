@@ -66,27 +66,29 @@ int main (int argc, char **argv) {
         return app.exit(e);
      }
 
+     // execute the mdlist display mdzip file blocks if list is true
+     // ./mdunzip --file=test.mdz --list=true
+     mdlist(filename, list, runlogging);
+ 
+     // run the mdunzipfile
+     mdunzipfile(filename, runlogging);
 
-     // size_t sz = 0;
-     // string filename = "file.txt";
-     // sz = getFilesize(filename);
-
-   mdlist(filename, list, runlogging);
-   mdunzipfile(filename, runlogging);
-
-   return 0;
+     return 0;
 }
 
 // mdlist
+// display the mdzip block contents of a file
 int mdlist(std::string filename, bool listfile, bool runlogging) {
 
-   double mdversion    = 1.01;
-   long blocksize      = 0;
-   long blockcount     = 0;
-   long blockremainder = 0;
-   long filesize       = 0;
-   int modexponent     = 0;
-   int modsize         = 0;
+   size_t inputfilesize = 0;
+   // mdzip variables
+   double mdversion     = 1.01;
+   long blocksize       = 0;
+   long blockcount      = 0;
+   long blockremainder  = 0;
+   long filesize        = 0;
+   int modexponent      = 0;
+   int modsize          = 0;
    int hclfilesize;
    int hclblocksize;
    std::string filehashnames;   
@@ -95,12 +97,22 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    // if the listfile boolean is false don't run the list mdzip file
    if (!listfile) return 0;
 
+   // check if the input file is below the minimum
+   // the header is about 36 bytes minimum
+   inputfilesize = getFilesize(filename);
+   if (inputfilesize < 48) {
+      std::cout << "Filename size below mdzip minimum!" << std::endl;
+      return 1;
+   }
+
+   // open the mdzip file 
    std::ifstream nf(filename, std::ios::in | std::ios::binary);
    if(!nf) {
       cout << "Cannot open file!" << endl;
       return 1;
    }
 
+   // begin reading in the mdzip file data
    nf.read(reinterpret_cast<char*>(&mdversion), sizeof(double));
    nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
    nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
@@ -226,6 +238,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
 
 // mdunzipfile
+// TODO mdunzip a valid file.mdz file
 int mdunzipfile(std::string filename, bool runlogging) {
 
 
@@ -237,6 +250,7 @@ int mdunzipfile(std::string filename, bool runlogging) {
 void usage() {
 std::string usageline = R"(
 Examples:
+   ./mdunzip --file=filename.mdz --thread=16 
    ./mdunzip --file=test.mdz --thread=16 
    ./mdunzip --file=test.mdz --list=true
 )";
