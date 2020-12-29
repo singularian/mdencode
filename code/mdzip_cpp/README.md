@@ -146,5 +146,7 @@ ID          Hash Name   Description                   Key         Blocksize
 
 [mdencode home](https://github.com/singularian/mdencode)  
 [mdencode code](https://github.com/singularian/mdencode/tree/master/code)  
+[mdencode mdzip cpp test code](https://github.com/singularian/mdencode/tree/master/code/testdecode_cpp)  
+[mdencode mdzip go test code](https://github.com/singularian/mdencode/tree/master/code/testdecode_go)  
 [mdencode mdzip go code](https://github.com/singularian/mdencode/tree/master/code/mdzip_go)  
 
