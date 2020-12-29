@@ -1,4 +1,4 @@
-# MDencode MDZip Decode Test C++
+# MDencode MDZip Decode Test C++ Program
 
 This is the C++ mdzip/mdunzip test program. 
 
@@ -82,6 +82,6 @@ ID          Hash Name   Description                   Key         Blocksize
 
 [mdencode home](https://github.com/singularian/mdencode)  
 [mdencode code](https://github.com/singularian/mdencode/tree/master/code)  
-[mdencode mdzip go code](https://github.com/singularian/mdencode/tree/master/code/mdzip_cpp)  
+[mdencode mdzip cpp code](https://github.com/singularian/mdencode/tree/master/code/mdzip_cpp)  
 [mdencode mdzip go code](https://github.com/singularian/mdencode/tree/master/code/mdzip_go)  
 
