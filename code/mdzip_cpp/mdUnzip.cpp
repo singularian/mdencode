@@ -46,11 +46,23 @@ int main (int argc, char **argv) {
      bool list = false;
      app.add_option("-l,--list", list, "List the mdzip file");
 
+     // Add an mdzip option boolean to just allow mdlist to be specified
+     // if runmdzip is false you don't run it
+     // you can run mdlist or mdunzip or both mdlist and mdunzip
+     bool runmdzip = true;
+     app.add_option("-u,--unzip", runmdzip, "mdunzip a file");
+
+     // overwrite the unzipped output file if it exists
+     // stop and throw an error if it doesn't
+     bool overwrite = true;
+     app.add_option("-o,--over", runmdzip, "Overwriting an existing mdunzip output file");
+
      // set logging
      bool runlogging = false;
      // app.add_option("-l,--log", runlogging, "Run Logging");
      app.add_option("--log", runlogging, "Run Logging");
 
+     
 
      if (argc < 2)
      {
@@ -71,7 +83,9 @@ int main (int argc, char **argv) {
      mdlist(filename, list, runlogging);
  
      // run the mdunzipfile
-     mdunzipfile(filename, runlogging);
+     // should add a block only format with a specified signature and modsize and no header
+     // like highway hash and mod 32 and block 14 and 1 or no signature key
+     if (runmdzip) mdunzipfile(filename, runlogging);
 
      return 0;
 }
@@ -82,7 +96,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    size_t inputfilesize = 0;
    // mdzip variables
-   double mdversion     = 1.01;
+   double mdversion     = 1.0;
    long blocksize       = 0;
    long blockcount      = 0;
    long blockremainder  = 0;
@@ -108,7 +122,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    // open the mdzip file 
    std::ifstream nf(filename, std::ios::in | std::ios::binary);
    if(!nf) {
-      cout << "Cannot open file!" << endl;
+      std::cout << "Cannot open file!" << std::endl;
       return 1;
    }
 
@@ -142,22 +156,22 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    delete buf2;
    // nf.read(reinterpret_cast<char*>(&blockhashnames), hclblocksize);
 
-   cout << std::left << std::setw(20) << "Filename Details: " << filename << endl << endl;
-   cout << std::left << std::setw(20) << "Version: "    << mdversion << endl;
-   cout << std::left << std::setw(20) << "Filesize: "   << filesize << endl;
-   cout << std::left << std::setw(20) << "Blocksize: "  << blocksize << endl;
+   std::cout << std::left << std::setw(20) << "Filename Details: " << filename << std::endl << std::endl;
+   std::cout << std::left << std::setw(20) << "Version: "    << mdversion << std::endl;
+   std::cout << std::left << std::setw(20) << "Filesize: "   << filesize  << std::endl;
+   std::cout << std::left << std::setw(20) << "Blocksize: "  << blocksize << std::endl;
 
    // calculate the file block count and last block size
    blockcount = CalcFileBlocks(filesize, blocksize);
    blockremainder  = filesize % blocksize;
 
-   cout << std::left << std::setw(20) << "Blockcount: "     << blockcount << endl;
-   cout << std::left << std::setw(20) << "Blockremainder: " << blockremainder << endl;
+   std::cout << std::left << std::setw(20) << "Blockcount: "     << blockcount << std::endl;
+   std::cout << std::left << std::setw(20) << "Blockremainder: " << blockremainder << std::endl;
    
-   cout << std::left << std::setw(20) << "Modsize: " << modsize << endl;
-   cout << std::left << std::setw(20) << "Modsize Bytes: " << modsizeBytes << endl;
-   cout << std::left << std::setw(20) << "Filehashlist: "   << filehashnames << endl;
-   cout << std::left << std::setw(20) << "Blockhashlist: "  << blockhashnames << endl;
+   std::cout << std::left << std::setw(20) << "Modsize: " << modsize << endl;
+   std::cout << std::left << std::setw(20) << "Modsize Bytes: "  << modsizeBytes << std::endl;
+   std::cout << std::left << std::setw(20) << "Filehashlist: "   << filehashnames << std::endl;
+   std::cout << std::left << std::setw(20) << "Blockhashlist: "  << blockhashnames << std::endl;
 
    mdHashContextList hclfile;
    mdHashContextList hclblock;
@@ -240,7 +254,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 // ie file.mdz file
 int mdunzipfile(std::string filename, bool runlogging) {
 
-
+   std::cout << "mdunzipping file " << filename << std::endl;
    return 0;
 
 }

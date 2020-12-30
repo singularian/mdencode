@@ -18,11 +18,15 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
+#include <map>
 #include <sstream>
 #include <stdint.h>
-#include <map>
 #include <tuple>
 #include <vector>
+// c inlcudes
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "filehash.h"
 #include "../testdecode_cpp/external/cityhash/cityhash.h"
 #include "../testdecode_cpp/external/crc32/crc32.h"
@@ -34,11 +38,9 @@
 #include "../testdecode_cpp/external/xxhash/xxhash32.h"
 #include "../testdecode_cpp/external/xxhash/xxhash64.h"
 #include "../testdecode_cpp/external/metro64/metrohash64.h"
+#include "../testdecode_cpp/external/mx3/mx3.h"
 #include "../testdecode_cpp/external/pengyhash/pengyhash.h"
 #include "../testdecode_cpp/external/seahash/seahash.c"
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "../testdecode_cpp/external/md2.c"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
@@ -50,7 +52,7 @@
 #include "../testdecode_cpp/external/wyhash/wyhash.h"
 
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
-enum signatures {FIRST, CIT64, CRC32, CRC64, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, SPK32, SPK64, XXH32, XXH64, WP, WYH, LAST};
+enum signatures {FIRST, CIT64, CRC32, CRC64, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, MD62, MET641, MET642, MX3, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, SPK32, SPK64, XXH32, XXH64, WP, WYH, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -75,13 +77,14 @@ Hashlist mdHashlist[LAST] = {
     {7,  "fnv64",    "FNV-1  64",             false, 8},
     {8,  "fnv64a",   "FNV-1a 64",             false, 8},
     {9,  "hw64",     "Highway Hash 64",       true,  8},
-    {10, "met641",   "Metro Hash 64 v1",      true,  8},
-    {11, "met642",   "Metro Hash 64 v2",      true,  8},
     {12, "md2",      "MD2",                   false, 16},
     {13, "md4",      "MD4",                   false, 16},
     {14, "md5",      "MD5",                   false, 16},
     {15, "md6",      "MD6",                   false, 20},
     {16, "md62",     "MD6 Quicker",           true,  20},
+    {10, "met641",   "Metro Hash 64 v1",      true,  8},
+    {11, "met642",   "Metro Hash 64 v2",      true,  8},
+    {16, "mx3",      "MX3",                   true,  8},
     {17, "png",      "Pengyhash 64",          true,  8},
     {18, "ripe160",  "Ripe MD 160",           false, 20},
     {19, "sea64",    "Seahash 64",            true,  8},
@@ -165,11 +168,16 @@ private:
     uint8_t md4o[16];
     uint8_t md5i[16];
     uint8_t md5o[16];
+    // md6
     uint8_t md6i[20];
     uint8_t md6o[20];
     uint8_t md62i[20];
     uint8_t md62o[20];
     unsigned char md62key[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
+    // mx3
+    uint64_t mx3i;
+    uint64_t mx3o;
+    uint64_t mx3seed = 121212;
     // pengyhash
     uint64_t png64i;
     uint64_t png64o;
@@ -344,12 +352,6 @@ public:
                   case HW64:
                     rf.read(reinterpret_cast<char*>(&hw64i), sizeof(long));
                     break;
-                  case MET641:
-                    rf.read(reinterpret_cast<char*>(&met641i), sizeof(met641i)); 
-                    break;
-                  case MET642:
-                    rf.read(reinterpret_cast<char*>(&met642i), sizeof(met642i)); 
-                    break;
                   case MD2s:
                     rf.read(reinterpret_cast<char*>(&md2i), hashblocksize); 
                     break;
@@ -364,6 +366,15 @@ public:
                     break;
                   case MD62:
                     rf.read(reinterpret_cast<char*>(&md62i), hashblocksize);
+                    break;
+                  case MET641:
+                    rf.read(reinterpret_cast<char*>(&met641i), sizeof(met641i));
+                    break;
+                  case MET642:
+                    rf.read(reinterpret_cast<char*>(&met642i), sizeof(met642i));
+                    break;
+                  case MX3:
+                    rf.read(reinterpret_cast<char*>(&mx3i), hashblocksize);
                     break;
                   case PNG:
                     rf.read(reinterpret_cast<char*>(&png64i), hashblocksize);
@@ -465,12 +476,6 @@ public:
                   case HW64:
                     wf.write(reinterpret_cast<char*>(&hw64i), sizeof(long));
                     break;
-                  case MET641:
-                    wf.write(reinterpret_cast<char*>(&met641i), sizeof(met641i)); 
-                    break;
-                  case MET642:
-                    wf.write(reinterpret_cast<char*>(&met642i), sizeof(met642i)); 
-                    break;
                   case MD2s:
                     wf.write(reinterpret_cast<char*>(&md2i), hashblocksize); 
                     break;
@@ -485,6 +490,15 @@ public:
                     break;
                   case MD62:
                     wf.write(reinterpret_cast<char*>(&md62i), hashblocksize);
+                    break;
+                  case MET641:
+                    wf.write(reinterpret_cast<char*>(&met641i), sizeof(met641i));
+                    break;
+                  case MET642:
+                    wf.write(reinterpret_cast<char*>(&met642i), sizeof(met642i));
+                    break;
+                  case MX3:
+                    wf.write(reinterpret_cast<char*>(&mx3i), hashblocksize);
                     break;
                   case PNG:
                     wf.write(reinterpret_cast<char*>(&png64i), hashblocksize);
@@ -583,14 +597,6 @@ public:
                   case HW64:
                     //hw64i = HighwayHash64(byteblock, blocksize, hw64key);
                     break;
-                  case MET641:
-                    //metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641i);
-                    calculateMetro64_1((char *) filename.c_str(), met641i);
-                    break;
-                  case MET642:
-                    //metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642i);
-                    calculateMetro64_2((char *) filename.c_str(), met642i);
-                    break;
                   case MD2s:
                     //md2(byteblock,(size_t)blocksize,md2i);
                     calculateMD2((char *) filename.c_str(), md2i);
@@ -608,6 +614,17 @@ public:
                     break;
                   case MD62:
                     //md6_full_hash(160, byteblock,(uint64_t)(blocksize*8),md62key,16,md6_default_L, 4, md62i);
+                    break;
+                  case MET641:
+                    //metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641i);
+                    calculateMetro64_1((char *) filename.c_str(), met641i);
+                    break;
+                  case MET642:
+                    //metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642i);
+                    calculateMetro64_2((char *) filename.c_str(), met642i);
+                    break;
+                  case MX3:
+                    // hash(reinterpret_cast<char*>(&mx3i), hashblocksize);
                     break;
                   case PNG:
                     //png64i = pengyhash(byteblock, (size_t) blocksize, png64seed);
@@ -709,12 +726,6 @@ public:
                   case HW64:
                     hw64i = HighwayHash64(byteblock, blocksize, hw64key);
                     break;
-                  case MET641:
-                    metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641i);
-                    break;
-                  case MET642:
-                    metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642i);
-                    break;
                   case MD2s:
                     md2(byteblock,(size_t)blocksize,md2i);
                     break;
@@ -729,6 +740,15 @@ public:
                     break;
                   case MD62:
                     md6_full_hash(160, byteblock,(uint64_t)(blocksize*8),md62key,16,md6_default_L, 4, md62i);
+                    break;
+                  case MET641:
+                    metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641i);
+                    break;
+                  case MET642:
+                    metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642i);
+                    break;
+                  case MX3:
+                    mx3i = mx3::hash(byteblock, blocksize, mx3seed);
                     break;
                   case PNG:
                     png64i = pengyhash(byteblock, (size_t) blocksize, png64seed);
@@ -837,14 +857,6 @@ public:
                     hw64o = HighwayHash64(byteblock, blocksize, hw64key);
                     if (hw64i != hw64o) return false;
                     break;
-                  case MET641:
-                    metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641o);
-                    if (memcmp(met641i, met641o, 8) != 0) return false;
-                    break;
-                  case MET642:
-                    metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642o);
-                    if (memcmp(met642i, met642o, 8) != 0) return false;
-                    break;
                   case MD2s:
                     md2(byteblock,(size_t)blocksize,md2o);
                     if (memcmp(md2i, md2o, 16) != 0) return false;
@@ -864,6 +876,18 @@ public:
                   case MD62:
                     md6_full_hash(160, byteblock,(uint64_t)(blocksize*8),md62key,16,md6_default_L, 4, md62o);
                     if (memcmp(md62i, md62o, 20) != 0) return false;
+                    break;
+                  case MET641:
+                    metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641o);
+                    if (memcmp(met641i, met641o, 8) != 0) return false;
+                    break;
+                  case MET642:
+                    metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642o);
+                    if (memcmp(met642i, met642o, 8) != 0) return false;
+                    break;
+                  case MX3:
+                    mx3o = mx3::hash(byteblock, blocksize, mx3seed);
+                    if (mx3i != mx3o) return false;
                     break;
                   case PNG:
                     png64o = pengyhash(byteblock, (size_t) blocksize, png64seed);
@@ -981,12 +1005,6 @@ public:
                   case HW64:
                      ss << std::to_string(hw64i) << " ";
                      break;
-                  case MET641:
-                     addHashToDisplayStream(met641i, hashblocksize);
-                     break;
-                  case MET642:
-                     addHashToDisplayStream(met642i, hashblocksize);
-                     break;
                   case MD2s:
                      addHashToDisplayStream(md2i, hashblocksize);
                      break;
@@ -1001,6 +1019,15 @@ public:
                      break;
                   case MD62:
                      addHashToDisplayStream(md62i, hashblocksize);
+                     break;
+                  case MET641:
+                     addHashToDisplayStream(met641i, hashblocksize);
+                     break;
+                  case MET642:
+                     addHashToDisplayStream(met642i, hashblocksize);
+                     break;
+                  case MX3:
+                     ss << std::to_string(mx3i) << " ";
                      break;
                   case PNG:
                      ss << std::to_string(png64i) << " ";

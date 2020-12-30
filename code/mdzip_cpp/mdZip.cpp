@@ -225,7 +225,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      {
 
         if (blocknumber < blockcount) {
-           std::cout << "Block " << std::to_string(blocknumber) << " " << std::to_string(blocksize) << "/" << std::to_string(blocksize) << endl;
+           std::cout << "Writing Block " << std::to_string(blocknumber) << " " << std::to_string(blocksize) << "/" << std::to_string(blocksize) << endl;
            // nf.read(byteblock.get(), blocksize);
            // hclblock.setByteBlockHashList(byteblock.get(), blocksize);
            nf.read(reinterpret_cast<char*>(byteblock), (size_t) blocksize);
@@ -277,7 +277,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
         // } else if ((blocknumber == blockcount) && (blockremainder > 0)) {
         } else if ((blocknumber ) == (blockcount )) {
            if (blockremainder > 0) {
-               std::cout << "Block " << std::to_string(blocknumber) << " " << std::to_string(blockremainder) << "/" << std::to_string(blocksize) << endl;
+               std::cout << "Writing Block " << std::to_string(blocknumber) << " " << std::to_string(blockremainder) << "/" << std::to_string(blocksize) << endl;
                nf.read(reinterpret_cast<char*>(lastbyteblock), (size_t) lastbyteblock);
                hclblock.setByteBlockHashList((unsigned char*) lastbyteblock, blockremainder);
                hclblock.writeBlockHashList(wf);
@@ -285,7 +285,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
                // display data in the byteblock
                printByteblock(lastbyteblock, blockremainder, true);
            } else {
-              std::cout << "Block " << std::to_string(blocknumber) << " " << std::to_string(blocksize) << "/" << std::to_string(blocksize) << endl;
+              std::cout << "Writing Block " << std::to_string(blocknumber) << " " << std::to_string(blocksize) << "/" << std::to_string(blocksize) << endl;
               nf.read(reinterpret_cast<char*>(byteblock), (size_t) blocksize);
               hclblock.setByteBlockHashList((unsigned char*) byteblock, blocksize);
               hclblock.writeBlockHashList(wf);
