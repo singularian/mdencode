@@ -188,6 +188,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    // set the file block hash list
    std::string blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
 
+   // display the mdzip file info
    displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes, filehashnames, blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector);
 
    // display the file block hash block list
