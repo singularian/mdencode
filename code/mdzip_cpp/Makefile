@@ -19,18 +19,18 @@ BUILD_TIME=`date +%FT%T%z`
 #  it is included with -lfnv
 all:
 # need to merge these or use lnk
-#	g++ -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 	g++ -I. $(DEPS) mdZip.cpp  -o mdzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	g++ -I. $(DEPS) mdUnzip.cpp  -o mdunzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 test:
 	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	g++ -I. $(DEPS) tests/testSHA1file.cpp  -o  testSHA1file -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
+#	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 testhash:
 	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
 	g++ external/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11
 clean:
-	rm -r mdzip mdunzip
+	rm -r mdzip mdunzip *.log *.mdz
 cleantest:
-	rm test_sha1 testhw testhcl *.log
+	rm decoderRandomTestHC2 test_sha1 testhw testhcl *.log *.mdz
 list:
 	echo "all test clean test"
