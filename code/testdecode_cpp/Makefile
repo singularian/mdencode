@@ -30,6 +30,8 @@ test:
 	g++ tests/testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
 	g++ tests/testCSVSplit.cpp  -o testcsv -std=c++11
 	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
+testdecode:
+	./decoderRandomTestHC2 --mod=64 --threads=32 --block=12 --hl 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34
 testlog:
 #	g++ -I. example_logging_to_file.cpp -o testlog -std=c++11
 #	g++  easylogging++.cc example_logging_to_file.cpp -o testlog -std=c++11

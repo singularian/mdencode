@@ -18,12 +18,16 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
+#include <map>
 #include <sstream>
 #include <stdint.h>
-#include <map>
 #include <tuple>
 #include <vector>
-// #include "filehash.h"
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "filehash.h"
+#include "mdRegisters.h"
 #include "../testdecode_cpp/external/cityhash/cityhash.h"
 #include "../testdecode_cpp/external/crc32/crc32.h"
 #include "../testdecode_cpp/external/crc64/crc64.h"
@@ -34,11 +38,9 @@
 #include "../testdecode_cpp/external/xxhash/xxhash32.h"
 #include "../testdecode_cpp/external/xxhash/xxhash64.h"
 #include "../testdecode_cpp/external/metro64/metrohash64.h"
+#include "../testdecode_cpp/external/mx3/mx3.h"
 #include "../testdecode_cpp/external/pengyhash/pengyhash.h"
 #include "../testdecode_cpp/external/seahash/seahash.c"
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "../testdecode_cpp/external/md2.c"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
@@ -50,7 +52,7 @@
 #include "../testdecode_cpp/external/wyhash/wyhash.h"
 
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
-enum signatures {FIRST, CIT64, CRC32, CRC64, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MET641, MET642, MD2s, MD4s, MD5s, MD6, MD62, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, SPK32, SPK64, XXH32, XXH64, WP, WYH, LAST};
+enum signatures {FIRST, CIT64, CRC32, CRC64, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, MD62, MET641, MET642, MX3, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, SPK32, SPK64, XXH32, XXH64, WP, WYH, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -60,45 +62,47 @@ struct Hashlist {
     std::string description;
     bool haskey;
     int blocksize;
+    int keysize;
 };
 
 // could add a zero / non used signature and a last non used
 // so it starts at index 1
 Hashlist mdHashlist[LAST] = {
-    {1,  "cit64",    "Cityhash 64",           false, 8},
-    {2,  "crc32",    "CRC 32",                false, 4},
-    {2,  "crc64",    "CRC 64",                false, 8},
-    {3,  "fast32",   "Fasthash 32",           true,  4},
-    {4,  "fast64",   "Fasthash 64",           true,  8},
-    {5,  "fnv32",    "FNV-1  32",             false, 4},
-    {6,  "fnv32a",   "FNV-1a 32",             false, 4},
-    {7,  "fnv64",    "FNV-1  64",             false, 8},
-    {8,  "fnv64a",   "FNV-1a 64",             false, 8},
-    {9,  "hw64",     "Highway Hash 64",       true,  8},
-    {10, "met641",   "Metro Hash 64 v1",      true,  8},
-    {11, "met642",   "Metro Hash 64 v2",      true,  8},
-    {12, "md2",      "MD2",                   false, 16},
-    {13, "md4",      "MD4",                   false, 16},
-    {14, "md5",      "MD5",                   false, 16},
-    {15, "md6",      "MD6",                   false, 20},
-    {16, "md62",     "MD6 Quicker",           true,  20},
-    {17, "png",      "Pengyhash 64",          true,  8},
-    {18, "ripe160",  "Ripe MD 160",           false, 20},
-    {19, "sea64",    "Seahash 64",            true,  8},
-    {20, "sip64",    "Siphash 64",            true,  8},
-    {21, "sha1_64",  "SHA1 64",               false, 8},
-    {22, "sha1_128", "SHA1 128",              false, 16},
-    {23, "sha1",     "SHA1",                  false, 20},
-    {24, "sha256",   "SHA 256",               false, 32},
-    {25, "sha384",   "SHA 384",               false, 48},
-    {26, "sha512",   "SHA 512",               false, 64},
-    {27, "spk32",    "Spooky 32",             true,  4},
-    {28, "spk64",    "Spooky 64",             true,  8},
-    {29, "xxh32",    "xxHash32",              true,  4},
-    {30, "xxh64",    "xxHash64",              true,  8},
-    {31, "whp",      "Whirlpool",             false, 64},
-    {31, "wy64",     "WYhash 64",             true,  8},
-    {32, "last",     "Unused Signature",      false, 8}
+    {1,  "cit64",    "Cityhash 64",           false, 8,   0},
+    {2,  "crc32",    "CRC 32",                false, 4,   0},
+    {2,  "crc64",    "CRC 64",                false, 8,   0},
+    {3,  "fast32",   "Fasthash 32",           true,  4,   0},
+    {4,  "fast64",   "Fasthash 64",           true,  8,   0},
+    {5,  "fnv32",    "FNV-1  32",             false, 4,   0},
+    {6,  "fnv32a",   "FNV-1a 32",             false, 4,   0},
+    {7,  "fnv64",    "FNV-1  64",             false, 8,   0},
+    {8,  "fnv64a",   "FNV-1a 64",             false, 8,   0},
+    {9,  "hw64",     "Highway Hash 64",       true,  8,   0},
+    {12, "md2",      "MD2",                   false, 16,  0},
+    {13, "md4",      "MD4",                   false, 16,  0},
+    {14, "md5",      "MD5",                   false, 16,  0},
+    {15, "md6",      "MD6",                   false, 20,  0},
+    {16, "md62",     "MD6 Quicker",           true,  20,  0},
+    {10, "met641",   "Metro Hash 64 v1",      true,  8,   0},
+    {11, "met642",   "Metro Hash 64 v2",      true,  8,   0},
+    {16, "mx3",      "MX3",                   true,  8,   0},
+    {17, "png",      "Pengyhash 64",          true,  8,   0},
+    {18, "ripe160",  "Ripe MD 160",           false, 20,  0},
+    {19, "sea64",    "Seahash 64",            true,  8,   0},
+    {20, "sip64",    "Siphash 64",            true,  8,   0},
+    {21, "sha1_64",  "SHA1 64",               false, 8,   0},
+    {22, "sha1_128", "SHA1 128",              false, 16,  0},
+    {23, "sha1",     "SHA1",                  false, 20,  0},
+    {24, "sha256",   "SHA 256",               false, 32,  0},
+    {25, "sha384",   "SHA 384",               false, 48,  0},
+    {26, "sha512",   "SHA 512",               false, 64,  0},
+    {27, "spk32",    "Spooky 32",             true,  4,   0},
+    {28, "spk64",    "Spooky 64",             true,  8,   0},
+    {29, "xxh32",    "xxHash32",              true,  4,   0},
+    {30, "xxh64",    "xxHash64",              true,  8,   0},
+    {31, "whp",      "Whirlpool",             false, 64,  0},
+    {31, "wy64",     "WYhash 64",             true,  8,   0},
+    {32, "last",     "Unused Signature",      false, 8,   0}
 };
 
 
@@ -115,107 +119,10 @@ private:
     std::vector<std::tuple<int,std::string,int>> hashlistvt[3];
     // hash map
     std::map<std::string, int> hclmap;
-    // hash results
-    // I think I am going to use a separate object for each and then add the file hash method to 
-    // set the file signatures. Then I can use one set of results for the signatures and write them to a file
-    // need to make these an array sized 3 for files and bg and block hash results - that doesn't work since hashes normally take one dimensional arrays
-    // could also make this a array struct of hashlist variables 
-    uint64_t city64i;
-    uint64_t city64o;
-    uint64_t city64seed = 102922;
-    // crc32
-    uint64_t crc32seed = 12121221;
-    uint32_t crc32i;
-    uint32_t crc32o;
-    // crc64
-    uint64_t crc64seed = 12121221;
-    uint64_t crc64i;
-    uint64_t crc64o;
-    // fasthash
-    uint32_t fast32i;
-    uint32_t fast32o;
-    uint32_t fast32seed = 200;
-    uint64_t fast64i;
-    uint64_t fast64o;
-    uint64_t fast64seed = 1;
-    // fnv1
-    Fnv32_t fnv32_1i; 
-    Fnv32_t fnv32_1o;
-    Fnv32_t fnv32a_1i;
-    Fnv32_t fnv32a_1o;
-    Fnv64_t fnv64_1i; 
-    Fnv64_t fnv64_1o; 
-    Fnv64_t fnv64a_1i; 
-    Fnv64_t fnv64a_1o;
-    // highway hash
-    uint64_t hw64i;
-    uint64_t hw64o;
-    const uint64_t hw64key[4] = {1, 2, 3, 4};
-    // metro64hash
-    uint8_t met641i[8];
-    uint8_t met641o[8];
-    uint32_t met641seed = 1237789;
-    uint8_t met642i[8];
-    uint8_t met642o[8];
-    uint32_t met642seed = 1237789;
-    // md2 to md6
-    uint8_t md2i[16];
-    uint8_t md2o[16];
-    uint8_t md4i[16];
-    uint8_t md4o[16];
-    uint8_t md5i[16];
-    uint8_t md5o[16];
-    uint8_t md6i[20];
-    uint8_t md6o[20];
-    uint8_t md62i[20];
-    uint8_t md62o[20];
-    unsigned char md62key[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
-    // pengyhash
-    uint64_t png64i;
-    uint64_t png64o;
-    uint32_t png64seed = 127982;
-    // ripe 160
-    uint8_t ripe160i[21];
-    uint8_t ripe160o[21];
-    // seahash
-    uint64_t sea64i;
-    uint64_t sea64o;
-    uint64_t sea64seed = 12312;
-    // sha1 family
-    uint8_t sha1i[21];
-    uint8_t sha1o[21];
-    uint8_t sha256i[32];
-    uint8_t sha256o[32];
-    uint8_t sha384i[64];
-    uint8_t sha384o[64];
-    uint8_t sha512i[64];
-    uint8_t sha512o[64];
-    // siphash
-    uint64_t siphash64i;
-    uint64_t siphash64o;
-    char sipkey[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
-    // spooky 32 / 64
-    uint32_t spooky32i;
-    uint32_t spooky32o;
-    uint32_t spookyseed32;
-    uint64_t spooky64i;
-    uint64_t spooky64o;
-    uint64_t spookyseed64;
-    // xxhash
-    uint32_t xxhash32i;
-    uint32_t xxhash32o;
-    uint32_t xxseed32 = 0;
-    uint64_t xxhash64i;
-    uint64_t xxhash64o;
-    uint64_t xxseed64 = 0;
-    // Whirlpool
-    uint8_t whp512i[64];
-    uint8_t whp512o[64];
-    // wyhash
-    uint64_t wyhash64i;
-    uint64_t wyhash64o;
-    uint64_t wyseed64 = 10232123120;
-    uint64_t wysecret64[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
+    // hash results registers
+    // could make the struct public for copying
+    hash_list hregister [2];
+    hash_key_list keyregister;
 public:
     std::stringstream bhlist;
     std::stringstream ss;
@@ -315,107 +222,106 @@ public:
 
               switch(std::get<0>(hash)) {
                   case CIT64:
-                    rf.read(reinterpret_cast<char*>(&city64i), sizeof(long));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].city64i), sizeof(long));
                     break;
                   case CRC32:
-                    rf.read(reinterpret_cast<char*>(&crc32i), sizeof(int));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].crc32i), sizeof(int));
                     break;
                   case CRC64:
-                    rf.read(reinterpret_cast<char*>(&crc64i), sizeof(long));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].crc64i), sizeof(long));
                     break;
                   case FAST32:
-                    rf.read(reinterpret_cast<char*>(&fast32i), sizeof(int));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].fast32i), sizeof(int));
                     break;
                   case FAST64:
-                    rf.read(reinterpret_cast<char*>(&fast64i), sizeof(long));      
+                    rf.read(reinterpret_cast<char*>(&hregister[0].fast64i), sizeof(long));      
                     break;
                   case FNV32:
-                    rf.read(reinterpret_cast<char*>(&fnv32_1i), sizeof(int)); 
+                    rf.read(reinterpret_cast<char*>(&hregister[0].fnv32_1i), sizeof(int)); 
                     break;
                   case FNV32A:
-                    rf.read(reinterpret_cast<char*>(&fnv32a_1i), sizeof(int)); 
+                    rf.read(reinterpret_cast<char*>(&hregister[0].fnv32a_1i), sizeof(int)); 
                     break;
                   case FNV64:
-                    rf.read(reinterpret_cast<char*>(&fnv64_1i), sizeof(long));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].fnv64_1i), sizeof(long));
                     break;
                   case FNV64A:
-                    rf.read(reinterpret_cast<char*>(&fnv64a_1i), sizeof(long));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].fnv64a_1i), sizeof(long));
                     break;
                   case HW64:
-                    rf.read(reinterpret_cast<char*>(&hw64i), sizeof(long));
-                    break;
-                  case MET641:
-                    rf.read(reinterpret_cast<char*>(&met641i), sizeof(met641i)); 
-                    break;
-                  case MET642:
-                    rf.read(reinterpret_cast<char*>(&met642i), sizeof(met642i)); 
+                    rf.read(reinterpret_cast<char*>(&hregister[0].hw64i), sizeof(long));
                     break;
                   case MD2s:
-                    rf.read(reinterpret_cast<char*>(&md2i), hashblocksize); 
+                    rf.read(reinterpret_cast<char*>(&hregister[0].md2i), hashblocksize); 
                     break;
                   case MD4s:
-                    rf.read(reinterpret_cast<char*>(&md4i), hashblocksize); 
+                    rf.read(reinterpret_cast<char*>(&hregister[0].md4i), hashblocksize); 
                     break;
                   case MD5s:
-                    rf.read(reinterpret_cast<char*>(&md5i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].md5i), hashblocksize);
                     break;
                   case MD6:
-                    rf.read(reinterpret_cast<char*>(&md6i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].md6i), hashblocksize);
                     break;
                   case MD62:
-                    rf.read(reinterpret_cast<char*>(&md62i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].md62i), hashblocksize);
+                    break;
+                  case MET641:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].met641i), sizeof(hregister[0].met641i));
+                    break;
+                  case MET642:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].met642i), sizeof(hregister[0].met642i));
+                    break;
+                  case MX3:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].mx3i), hashblocksize);
                     break;
                   case PNG:
-                    rf.read(reinterpret_cast<char*>(&png64i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].png64i), hashblocksize);
                     break;
                   case RIPE160:
-                    rf.read(reinterpret_cast<char*>(&ripe160i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].ripe160i), hashblocksize);
                     break;
                   case SEA:
-                    rf.read(reinterpret_cast<char*>(&sea64i), sizeof(long));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].sea64i), sizeof(long));
                     break;
                   case SIP64: 
-                    rf.read(reinterpret_cast<char*>(&siphash64i), sizeof(long));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].siphash64i), sizeof(long));
                     break;
                   case SHA164:
-                    //uint8_t sha164[8];
-                    //memcpy(sha164, sha1i, blocksize);
-                    rf.read(reinterpret_cast<char*>(&sha1i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].sha1i), hashblocksize);
                     break;
                   case SHA1128:
-                    //uint8_t sha1128[16];
-                    //memcpy(sha1128, sha1i, blocksize);
-                    rf.read(reinterpret_cast<char*>(&sha1i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].sha1i), hashblocksize);
                     break;
                   case SHA1s:
-                    rf.read(reinterpret_cast<char*>(&sha1i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].sha1i), hashblocksize);
                     break;
                   case SHA256s:
-                    rf.read(reinterpret_cast<char*>(&sha256i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].sha256i), hashblocksize);
                     break;
                   case SHA384s:
-                    rf.read(reinterpret_cast<char*>(&sha384i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].sha384i), hashblocksize);
                     break;
                   case SHA512s:
-                    rf.read(reinterpret_cast<char*>(&sha512i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].sha512i), hashblocksize);
                     break;
                   case SPK32:
-                    rf.read(reinterpret_cast<char*>(&spooky32i), sizeof(int));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].spooky32i), sizeof(int));
                     break;
                   case SPK64:
-                    rf.read(reinterpret_cast<char*>(&spooky64i), sizeof(long));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].spooky64i), sizeof(long));
                     break;
                   case XXH32:
-                    rf.read(reinterpret_cast<char*>(&xxhash32i), sizeof(int));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].xxhash32i), sizeof(int));
                     break;
                   case XXH64:
-                    rf.read(reinterpret_cast<char*>(&xxhash64i), sizeof(long));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].xxhash64i), sizeof(long));
                     break;
                   case WP:
-                    rf.read(reinterpret_cast<char*>(&whp512i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].whp512i), hashblocksize);
                     break;
                   case WYH:
-                    rf.read(reinterpret_cast<char*>(&wyhash64i), sizeof(long));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].wyhash64i), sizeof(long));
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
@@ -433,110 +339,110 @@ public:
 
               switch(std::get<0>(hash)) {
                   case CIT64:
-                    wf.write(reinterpret_cast<char*>(&city64i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].city64i), sizeof(long));
                     break;
                   case CRC32:
-                    // I think there was an issue with this being 64 bits instead of 32 for this crc implementation
-                    crc32i = (uint32_t) crc64i;
-                    // wf.write(reinterpret_cast<char*>(&crc64i), sizeof(long));
-                    wf.write(reinterpret_cast<char*>(&crc32i), sizeof(int));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].crc32i), sizeof(int));
                     break;
                   case CRC64:
-                    wf.write(reinterpret_cast<char*>(&crc64i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].crc64i), sizeof(long));
                     break;
                   case FAST32:
-                    wf.write(reinterpret_cast<char*>(&fast32i), sizeof(int));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].fast32i), sizeof(int));
                     break;
                   case FAST64:
-                    wf.write(reinterpret_cast<char*>(&fast64i), sizeof(long));      
+                    wf.write(reinterpret_cast<char*>(&hregister[0].fast64i), sizeof(long));      
                     break;
                   case FNV32:
-                    wf.write(reinterpret_cast<char*>(&fnv32_1i), sizeof(int)); 
+                    wf.write(reinterpret_cast<char*>(&hregister[0].fnv32_1i), sizeof(int)); 
                     break;
                   case FNV32A:
-                    wf.write(reinterpret_cast<char*>(&fnv32a_1i), sizeof(int)); 
+                    wf.write(reinterpret_cast<char*>(&hregister[0].fnv32a_1i), sizeof(int)); 
                     break;
                   case FNV64:
-                    wf.write(reinterpret_cast<char*>(&fnv64_1i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].fnv64_1i), sizeof(long));
                     break;
                   case FNV64A:
-                    wf.write(reinterpret_cast<char*>(&fnv64a_1i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].fnv64a_1i), sizeof(long));
                     break;
                   case HW64:
-                    wf.write(reinterpret_cast<char*>(&hw64i), sizeof(long));
-                    break;
-                  case MET641:
-                    wf.write(reinterpret_cast<char*>(&met641i), sizeof(met641i)); 
-                    break;
-                  case MET642:
-                    wf.write(reinterpret_cast<char*>(&met642i), sizeof(met642i)); 
+                    wf.write(reinterpret_cast<char*>(&hregister[0].hw64i), sizeof(long));
                     break;
                   case MD2s:
-                    wf.write(reinterpret_cast<char*>(&md2i), hashblocksize); 
+                    wf.write(reinterpret_cast<char*>(&hregister[0].md2i), hashblocksize); 
                     break;
                   case MD4s:
-                    wf.write(reinterpret_cast<char*>(&md4i), hashblocksize); 
+                    wf.write(reinterpret_cast<char*>(&hregister[0].md4i), hashblocksize); 
                     break;
                   case MD5s:
-                    wf.write(reinterpret_cast<char*>(&md5i), hashblocksize);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].md5i), hashblocksize);
                     break;
                   case MD6:
-                    wf.write(reinterpret_cast<char*>(&md6i), hashblocksize);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].md6i), hashblocksize);
                     break;
                   case MD62:
-                    wf.write(reinterpret_cast<char*>(&md62i), hashblocksize);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].md62i), hashblocksize);
+                    break;
+                  case MET641:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].met641i), sizeof(hregister[0].met641i));
+                    break;
+                  case MET642:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].met642i), sizeof(hregister[0].met642i));
+                    break;
+                  case MX3:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].mx3i), hashblocksize);
                     break;
                   case PNG:
-                    wf.write(reinterpret_cast<char*>(&png64i), hashblocksize);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].png64i), hashblocksize);
                     break;
                   case RIPE160:
-                    wf.write(reinterpret_cast<char*>(&ripe160i), hashblocksize);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].ripe160i), hashblocksize);
                     break;
                   case SEA:
-                    wf.write(reinterpret_cast<char*>(&sea64i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].sea64i), sizeof(long));
                     break;
                   case SIP64: 
-                    wf.write(reinterpret_cast<char*>(&siphash64i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].siphash64i), sizeof(long));
                     break;
                   case SHA164:
                     uint8_t sha164[8];
-                    memcpy(sha164, sha1i, blocksize);
-                    wf.write(reinterpret_cast<char*>(&sha1i), hashblocksize);
+                    memcpy(sha164, hregister[0].sha1i, blocksize);
+                    wf.write(reinterpret_cast<char*>(&sha164), hashblocksize);
                     break;
                   case SHA1128:
                     uint8_t sha1128[16];
-                    memcpy(sha1128, sha1i, blocksize);
+                    memcpy(sha1128, hregister[0].sha1i, blocksize);
                     wf.write(reinterpret_cast<char*>(&sha1128), hashblocksize);
                     break;
                   case SHA1s:
-                    wf.write(reinterpret_cast<char*>(&sha1i), hashblocksize);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].sha1i), hashblocksize);
                     break;
                   case SHA256s:
-                    wf.write(reinterpret_cast<char*>(&sha256i), hashblocksize);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].sha256i), hashblocksize);
                     break;
                   case SHA384s:
-                    wf.write(reinterpret_cast<char*>(&sha384i), hashblocksize);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].sha384i), hashblocksize);
                     break;
                   case SHA512s:
-                    wf.write(reinterpret_cast<char*>(&sha512i), hashblocksize);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].sha512i), hashblocksize);
                     break;
                   case SPK32:
-                    wf.write(reinterpret_cast<char*>(&spooky32i), sizeof(int));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].spooky32i), sizeof(int));
                     break;
                   case SPK64:
-                    wf.write(reinterpret_cast<char*>(&spooky64i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].spooky64i), sizeof(long));
                     break;
                   case XXH32:
-                    wf.write(reinterpret_cast<char*>(&xxhash32i), sizeof(int));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].xxhash32i), sizeof(int));
                     break;
                   case XXH64:
-                    wf.write(reinterpret_cast<char*>(&xxhash64i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].xxhash64i), sizeof(long));
                     break;
                   case WP:
-                    wf.write(reinterpret_cast<char*>(&whp512i), hashblocksize);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].whp512i), hashblocksize);
                     break;
                   case WYH:
-                    wf.write(reinterpret_cast<char*>(&wyhash64i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].wyhash64i), sizeof(long));
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
@@ -547,9 +453,127 @@ public:
     // setFileHashList
     // this sets the file hash list signatures for a file
     void setFileHashList(std::string& filename) {
+          
+          int hashblocksize = 0;
+          for(auto hash  : hashlistvt[HASHBLOCK]) {
+              hashblocksize = std::get<2>(hash);
 
-       // not required for the testdecode_cpp
-       // decoderRandomTestHC.cpp
+              switch(std::get<0>(hash)) {
+                  case CIT64:
+                    //city64i = cityhash64_with_seed(byteblock, blocksize, city64seed);
+                    hregister[0].city64i = calculateCityhashFile((char *) filename.c_str(), hregister[0].city64seed);
+                    break;
+                  case CRC32:
+                    //hregister[0].crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
+                    break;
+                  case CRC64:
+                   //crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
+                  case FAST32:
+                    //hregister[0].fast32i = fasthash32(byteblock, blocksize, hregister[0].fast32seed);
+                    break;
+                  case FAST64:
+                    //hregister[0].fast64i = fasthash64(byteblock, blocksize, hregister[0].fast64seed);
+                    break;
+                  case FNV32:
+                    //hregister[0].fnv32_1i = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
+                    break;
+                  case FNV32A:
+                    //hregister[0].fnv32a_1i = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
+                    break;
+                  case FNV64:
+                    //hregister[0].fnv64_1i = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
+                    break;
+                  case FNV64A:
+                    //hregister[0].fnv64a_1i = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
+                    break;
+                  case HW64:
+                    //hregister[0].hw64i = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
+                    break;
+                  case MD2s:
+                    //md2(byteblock,(size_t)blocksize,md2i);
+                    calculateMD2((char *) filename.c_str(), hregister[0].md2i);
+                    break;
+                  case MD4s:
+                    //MD4(byteblock,(long)blocksize,md4i);
+                    calculateMD4((char *) filename.c_str(), hregister[0].md4i);
+                    break;
+                  case MD5s:
+                    //MD5(byteblock,(long)blocksize,md5i);
+                    calculateMD5((char *) filename.c_str(), hregister[0].md5i);
+                    break;
+                  case MD6:
+                    //md6_hash(160, byteblock,(uint64_t)(blocksize*8), hregister[0].md6i);
+                    break;
+                  case MD62:
+                    //md6_full_hash(160, byteblock,(uint64_t)(blocksize*8), hregister[0].md62key,16,md6_default_L, 4, hregister[0].md62i);
+                    break;
+                  case MET641:
+                    //metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641i);
+                    calculateMetro64_1((char *) filename.c_str(), hregister[0].met641i);
+                    break;
+                  case MET642:
+                    //metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642i);
+                    calculateMetro64_2((char *) filename.c_str(), hregister[0].met642i);
+                    break;
+                  case MX3:
+                    // hash(reinterpret_cast<char*>(&mx3i), hashblocksize);
+                    break;
+                  case PNG:
+                    //png64i = pengyhash(byteblock, (size_t) blocksize, hregister[0].png64seed);
+                    break;
+                  case RIPE160:
+                    //RIPEMD160(byteblock, blocksize, ripe160i);
+                    calculateRipe160((char *) filename.c_str(), hregister[0].ripe160i);
+                    break;
+                  case SEA:
+                    //sea64i = seahash((const char*)byteblock, blocksize, hregister[0].sea64seed);
+                    break;
+                  case SIP64: 
+                    //siphash64i = siphash24(byteblock, blocksize, hregister[0].sipkey);
+                    break;
+                  case SHA164:
+                    calculateSHA1((char *) filename.c_str(), hregister[0].sha1i);
+                    break;
+                  case SHA1128:
+                    calculateSHA1((char *) filename.c_str(), hregister[0].sha1i);
+                    break;
+                  case SHA1s:
+                    calculateSHA1((char *) filename.c_str(), hregister[0].sha1i);
+                    break;
+                  case SHA256s:
+                    //SHA256(byteblock, blocksize, sha256i);
+                    calculateSHA256((char *) filename.c_str(), hregister[0].sha256i);
+                    break;
+                  case SHA384s:
+                    //SHA384(byteblock, blocksize, sha384i);
+                    calculateSHA384((char *) filename.c_str(), hregister[0].sha384i);
+                    break;
+                  case SHA512s:
+                    //SHA512(byteblock, blocksize, sha512i);
+                    calculateSHA512((char *) filename.c_str(), hregister[0].sha512i);
+                    break;
+                  case SPK32:
+                    //spooky32i = SpookyHash::Hash32(byteblock, blocksize, hregister[0].spookyseed32);
+                    break;
+                  case SPK64:
+                    //spooky64i = SpookyHash::Hash64(byteblock, blocksize, hregister[0].spookyseed64);
+                    break;
+                  case XXH32:
+                    //xxhash32i = XXHash32::hash(byteblock, blocksize, hregister[0].xxseed32);
+                    break;
+                  case XXH64:
+                    //xxhash64i = XXHash64::hash(byteblock, blocksize, hregister[0].xxseed64);
+                    break;
+                  case WP:
+                    // TODO
+                    break;
+                  case WYH:
+                    //wyhash64i = wyhash(byteblock, blocksize, hregister[0].wyseed64, (const uint64_t*) hregister[0].wysecret64);
+                    break;
+                  // default:
+                  //  std::cout << "Invalid hash" << std::endl;
+              }
+          }
     }
 
 
@@ -563,106 +587,106 @@ public:
 
               switch(std::get<0>(hash)) {
                   case CIT64:
-                    city64i = cityhash64_with_seed(byteblock, blocksize, city64seed);
+                    hregister[0].city64i = cityhash64_with_seed(byteblock, blocksize, hregister[0].city64seed);
                     break;
                   case CRC32:
-                    // crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
-                    crc32i = crc32(crc32seed, byteblock, blocksize);
+                    hregister[0].crc32i = crc32(hregister[0].crc32seed, byteblock, blocksize);
                     break;
                   case CRC64:
-                    //crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_64());
-                    crc64i = crc64(crc64seed, byteblock, blocksize);
+                    hregister[0].crc64i = crc64(hregister[0].crc64seed, byteblock, blocksize);
                     break;
                   case FAST32:
-                    fast32i = fasthash32(byteblock, blocksize, fast32seed);
+                    hregister[0].fast32i = fasthash32(byteblock, blocksize, hregister[0].fast32seed);
                     break;
                   case FAST64:
-                    fast64i = fasthash64(byteblock, blocksize, fast64seed);
+                    hregister[0].fast64i = fasthash64(byteblock, blocksize, hregister[0].fast64seed);
                     break;
                   case FNV32:
-                    fnv32_1i = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
+                    hregister[0].fnv32_1i = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
                     break;
                   case FNV32A:
-                    fnv32a_1i = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
+                    hregister[0].fnv32a_1i = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
                     break;
                   case FNV64:
-                    fnv64_1i = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
+                    hregister[0].fnv64_1i = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
                     break;
                   case FNV64A:
-                    fnv64a_1i = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
+                    hregister[0].fnv64a_1i = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
                     break;
                   case HW64:
-                    hw64i = HighwayHash64(byteblock, blocksize, hw64key);
-                    break;
-                  case MET641:
-                    metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641i);
-                    break;
-                  case MET642:
-                    metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642i);
+                    hregister[0].hw64i = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
                     break;
                   case MD2s:
-                    md2(byteblock,(size_t)blocksize,md2i);
+                    md2(byteblock,( size_t) blocksize, hregister[0].md2i);
                     break;
                   case MD4s:
-                    MD4(byteblock,(long)blocksize,md4i);
+                    MD4(byteblock, (long) blocksize, hregister[0].md4i);
                     break;
                   case MD5s:
-                    MD5(byteblock,(long)blocksize,md5i);
+                    MD5(byteblock, (long) blocksize, hregister[0].md5i);
                     break;
                   case MD6:
-                    md6_hash(160, byteblock,(uint64_t)(blocksize*8),md6i);
+                    md6_hash(160, byteblock, (uint64_t)(blocksize*8),hregister[0].md6i);
                     break;
                   case MD62:
-                    md6_full_hash(160, byteblock,(uint64_t)(blocksize*8),md62key,16,md6_default_L, 4, md62i);
+                    md6_full_hash(160, byteblock, (uint64_t)(blocksize*8), hregister[0].md62key, 16, md6_default_L, 4, hregister[0].md62i);
+                    break;
+                  case MET641:
+                    metrohash64_1(byteblock, (uint64_t) blocksize, hregister[0].met641seed, hregister[0].met641i);
+                    break;
+                  case MET642:
+                    metrohash64_2(byteblock, (uint64_t) blocksize, hregister[0].met642seed, hregister[0].met642i);
+                    break;
+                  case MX3:
+                    hregister[0].mx3i = mx3::hash(byteblock, blocksize, hregister[0].mx3seed);
                     break;
                   case PNG:
-                    png64i = pengyhash(byteblock, (size_t) blocksize, png64seed);
+                    hregister[0].png64i = pengyhash(byteblock, (size_t) blocksize, hregister[0].png64seed);
                     break;
                   case RIPE160:
-                    RIPEMD160(byteblock, blocksize, ripe160i);
+                    RIPEMD160(byteblock, blocksize, hregister[0].ripe160i);
                     break;
                   case SEA:
-                    sea64i = seahash((const char*)byteblock, blocksize, sea64seed);
+                    hregister[0].sea64i = seahash((const char*)byteblock, blocksize, hregister[0].sea64seed);
                     break;
                   case SIP64: 
-                    siphash64i = siphash24(byteblock, blocksize, sipkey);
+                    hregister[0].siphash64i = siphash24(byteblock, blocksize, hregister[0].sipkey);
                     break;
                   case SHA164:
-                    SHA1(byteblock, blocksize, sha1i);
+                    SHA1(byteblock, blocksize, hregister[0].sha1i);
                     break;
                   case SHA1128:
-                    SHA1(byteblock, blocksize, sha1i);
+                    SHA1(byteblock, blocksize, hregister[0].sha1i);
                     break;
                   case SHA1s:
-                    SHA1(byteblock, blocksize, sha1i);
+                    SHA1(byteblock, blocksize, hregister[0].sha1i);
                     break;
                   case SHA256s:
-                    SHA256(byteblock, blocksize, sha256i);
+                    SHA256(byteblock, blocksize, hregister[0].sha256i);
                     break;
                   case SHA384s:
-                    SHA384(byteblock, blocksize, sha384i);
+                    SHA384(byteblock, blocksize, hregister[0].sha384i);
                     break;
                   case SHA512s:
-                    SHA512(byteblock, blocksize, sha512i);
+                    SHA512(byteblock, blocksize, hregister[0].sha512i);
                     break;
                   case SPK32:
-                    spooky32i = SpookyHash::Hash32(byteblock, blocksize, spookyseed32);
+                    hregister[0].spooky32i = SpookyHash::Hash32(byteblock, blocksize, hregister[0].spookyseed32);
                     break;
                   case SPK64:
-                    spooky64i = SpookyHash::Hash64(byteblock, blocksize, spookyseed64);
+                    hregister[0].spooky64i = SpookyHash::Hash64(byteblock, blocksize, hregister[0].spookyseed64);
                     break;
                   case XXH32:
-                    xxhash32i = XXHash32::hash(byteblock, blocksize, xxseed32);
+                    hregister[0].xxhash32i = XXHash32::hash(byteblock, blocksize, hregister[0].xxseed32);
                     break;
                   case XXH64:
-                    xxhash64i = XXHash64::hash(byteblock, blocksize, xxseed64);
+                    hregister[0].xxhash64i = XXHash64::hash(byteblock, blocksize, hregister[0].xxseed64);
                     break;
                   case WP:
-                    // TODO
-                    WHIRLPOOL(byteblock, blocksize, whp512i);
+                    WHIRLPOOL(byteblock, blocksize, hregister[0].whp512i);
                     break;
                   case WYH:
-                    wyhash64i = wyhash(byteblock, blocksize, wyseed64, (const uint64_t*) wysecret64);
+                    hregister[0].wyhash64i = wyhash(byteblock, blocksize, hregister[0].wyseed64, (const uint64_t*) hregister[0].wysecret64);
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
@@ -681,138 +705,140 @@ public:
 
               switch(std::get<0>(hash)) {
                   case CIT64:
-                    city64o = cityhash64_with_seed(byteblock, blocksize, city64seed);
-                    if (city64i != city64o) return false;
+                    hregister[0].city64o = cityhash64_with_seed(byteblock, blocksize, hregister[0].city64seed);
+                    if (hregister[0].city64i != hregister[0].city64o) return false;
                     break;
                   case CRC32:
-                    // crc64o = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
-                    crc32o = crc32(crc32seed, byteblock, blocksize);
-                    if (crc64i != crc64o) return false;
+                    hregister[0].crc32o = crc32(hregister[0].crc32seed, byteblock, blocksize);
+                    if (hregister[0].crc32i != hregister[0].crc32o) return false;
                     break;
                   case CRC64:
-                    // crc64o = CRC::Calculate(byteblock, blocksize, CRC::CRC_64());
-                    crc64o = crc64(crc64seed, byteblock, blocksize);
-                    if (crc64i != crc64o) return false;
+                    hregister[0].crc64o = crc64(hregister[0].crc64seed, byteblock, blocksize);
+                    if (hregister[0].crc64i != hregister[0].crc64o) return false;
                     break;
                   case FAST32:
-                    fast32o = fasthash32(byteblock, blocksize, fast32seed);
-                    if (fast32i != fast32o) return false;
+                    hregister[0].fast32o = fasthash32(byteblock, blocksize, hregister[0].fast32seed);
+                    if (hregister[0].fast32i != hregister[0].fast32o) return false;
                     break;
                   case FAST64:
-                    fast64o = fasthash64(byteblock, blocksize, fast64seed);
-                    if (fast64i != fast64o) return false;
+                    hregister[0].fast64o = fasthash64(byteblock, blocksize, hregister[0].fast64seed);
+                    if (hregister[0].fast64i != hregister[0].fast64o) return false;
                     break;
                   case FNV32:
-                    fnv32_1o = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
-                    if (fnv32_1i != fnv32_1o) return false;
+                    hregister[0].fnv32_1o = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
+                    if (hregister[0].fnv32_1i != hregister[0].fnv32_1o) return false;
                     break;
                   case FNV32A:
-                    fnv32a_1o = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
-                    if (fnv32a_1i != fnv32a_1o) return false;
+                    hregister[0].fnv32a_1o = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
+                    if (hregister[0].fnv32a_1i != hregister[0].fnv32a_1o) return false;
                     break;
                   case FNV64:
-                    fnv64_1o = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
-                    if (fnv64_1i != fnv64_1o) return false;
+                    hregister[0].fnv64_1o = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
+                    if (hregister[0].fnv64_1i != hregister[0].fnv64_1o) return false;
                     break;
                   case FNV64A:
-                    fnv64a_1o = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
-                    if (fnv64a_1i != fnv64a_1o) return false;
+                    hregister[0].fnv64a_1o = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
+                    if (hregister[0].fnv64a_1i != hregister[0].fnv64a_1o) return false;
                     break;
                   case HW64:
-                    hw64o = HighwayHash64(byteblock, blocksize, hw64key);
-                    if (hw64i != hw64o) return false;
-                    break;
-                  case MET641:
-                    metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641o);
-                    if (memcmp(met641i, met641o, 8) != 0) return false;
-                    break;
-                  case MET642:
-                    metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642o);
-                    if (memcmp(met642i, met642o, 8) != 0) return false;
+                    hregister[0].hw64o = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
+                    if (hregister[0].hw64i != hregister[0].hw64o) return false;
                     break;
                   case MD2s:
-                    md2(byteblock,(size_t)blocksize,md2o);
-                    if (memcmp(md2i, md2o, 16) != 0) return false;
+                    md2(byteblock,(size_t)blocksize, hregister[0].md2o);
+                    if (memcmp(hregister[0].md2i, hregister[0].md2o, 16) != 0) return false;
                     break;
                   case MD4s:
-                    MD4(byteblock,(long)blocksize,md4o);
-                    if (memcmp(md4i, md4o, 16) != 0) return false;
+                    MD4(byteblock,(long)blocksize,hregister[0].md4o);
+                    if (memcmp(hregister[0].md4i, hregister[0].md4o, 16) != 0) return false;
                     break;
                   case MD5s:
-                    MD5(byteblock,(long)blocksize,md5o);
-                    if (memcmp(md5i, md5o, 16) != 0) return false;
+                    MD5(byteblock,(long)blocksize,hregister[0].md5o);
+                    if (memcmp(hregister[0].md5i, hregister[0].md5o, 16) != 0) return false;
                     break;
                   case MD6:
-                    md6_hash(160, byteblock,(uint64_t)(blocksize*8),md6o);
-                    if (memcmp(md6i, md6o, 20) != 0) return false;
+                    md6_hash(160, byteblock,(uint64_t)(blocksize*8),hregister[0].md6o);
+                    if (memcmp(hregister[0].md6i, hregister[0].md6o, 20) != 0) return false;
                     break;
                   case MD62:
-                    md6_full_hash(160, byteblock,(uint64_t)(blocksize*8),md62key,16,md6_default_L, 4, md62o);
-                    if (memcmp(md62i, md62o, 20) != 0) return false;
+                    md6_full_hash(160, byteblock,(uint64_t)(blocksize*8), hregister[0].md62key,16,md6_default_L, 4, hregister[0].md62o);
+                    if (memcmp(hregister[0].md62i, hregister[0].md62o, 20) != 0) return false;
+                    break;
+                  case MET641:
+                    metrohash64_1(byteblock, (uint64_t) blocksize, hregister[0].met641seed, hregister[0].met641o);
+                    if (memcmp(hregister[0].met641i, hregister[0].met641o, 8) != 0) return false;
+                    break;
+                  case MET642:
+                    metrohash64_2(byteblock, (uint64_t) blocksize, hregister[0].met642seed, hregister[0].met642o);
+                    if (memcmp(hregister[0].met642i, hregister[0].met642o, 8) != 0) return false;
+                    break;
+                  case MX3:
+                    hregister[0].mx3o = mx3::hash(byteblock, blocksize, hregister[0].mx3seed);
+                    if (hregister[0].mx3i != hregister[0].mx3o) return false;
                     break;
                   case PNG:
-                    png64o = pengyhash(byteblock, (size_t) blocksize, png64seed);
-                    if (png64i != png64o) return false;
+                    hregister[0].png64o = pengyhash(byteblock, (size_t) blocksize, hregister[0].png64seed);
+                    if (hregister[0].png64i != hregister[0].png64o) return false;
                     break;
                   case RIPE160:
-                    RIPEMD160(byteblock, blocksize, ripe160o);
-                    if (memcmp(ripe160i, ripe160o, 20) != 0) return false;
+                    RIPEMD160(byteblock, blocksize, hregister[0].ripe160o);
+                    if (memcmp(hregister[0].ripe160i, hregister[0].ripe160o, 20) != 0) return false;
                     break;
                   case SEA:
-                    sea64o = seahash((const char*) byteblock, blocksize, sea64seed);
-                    if (sea64i != sea64o) return false;
+                    hregister[0].sea64o = seahash((const char*) byteblock, blocksize, hregister[0].sea64seed);
+                    if (hregister[0].sea64i != hregister[0].sea64o) return false;
                     break;
                   case SIP64:
-                    siphash64o = siphash24(byteblock, blocksize, sipkey);
-                    if (siphash64i != siphash64o) return false;
+                    hregister[0].siphash64o = siphash24(byteblock, blocksize, hregister[0].sipkey);
+                    if (hregister[0].siphash64i != hregister[0].siphash64o) return false;
                     break;
                   case SHA164:
-                    SHA1(byteblock, blocksize, sha1o);
-                    if (memcmp(sha1i, sha1o, 8) != 0) return false;
+                    SHA1(byteblock, blocksize, hregister[0].sha1o);
+                    if (memcmp(hregister[0].sha1i, hregister[0].sha1o, 8) != 0) return false;
                     break;
                   case SHA1128:
-                    SHA1(byteblock, blocksize, sha1o);
-                    if (memcmp(sha1i, sha1o, 16) != 0) return false;
+                    SHA1(byteblock, blocksize, hregister[0].sha1o);
+                    if (memcmp(hregister[0].sha1i, hregister[0].sha1o, 16) != 0) return false;
                     break;
                   case SHA1s:
-                    SHA1(byteblock, blocksize, sha1o);
-                    if (memcmp(sha1i, sha1o, 20) != 0) return false;
+                    SHA1(byteblock, blocksize, hregister[0].sha1o);
+                    if (memcmp(hregister[0].sha1i, hregister[0].sha1o, 20) != 0) return false;
                     break;
                   case SHA256s:
-                    SHA256(byteblock, blocksize, sha256o);
-                    if (memcmp(sha256i, sha256o, 32) != 0) return false;
+                    SHA256(byteblock, blocksize, hregister[0].sha256o);
+                    if (memcmp(hregister[0].sha256i, hregister[0].sha256o, 32) != 0) return false;
                     break;
                   case SHA384s:
-                    SHA384(byteblock, blocksize, sha384o);
-                    if (memcmp(sha384i, sha384o, 48) != 0) return false;
+                    SHA384(byteblock, blocksize, hregister[0].sha384o);
+                    if (memcmp(hregister[0].sha384i, hregister[0].sha384o, 48) != 0) return false;
                     break;
                   case SHA512s:
-                    SHA512(byteblock, blocksize, sha512o);
-                    if (memcmp(sha512i, sha512o, 64) != 0) return false;
+                    SHA512(byteblock, blocksize, hregister[0].sha512o);
+                    if (memcmp(hregister[0].sha512i, hregister[0].sha512o, 64) != 0) return false;
                     break;
                   case SPK32:
-                    spooky32o = SpookyHash::Hash32(byteblock, blocksize, spookyseed32);
-                    if (spooky32i != spooky32o) return false;
+                    hregister[0].spooky32o = SpookyHash::Hash32(byteblock, blocksize, hregister[0].spookyseed32);
+                    if (hregister[0].spooky32i != hregister[0].spooky32o) return false;
                     break;
                   case SPK64:
-                    spooky64o = SpookyHash::Hash64(byteblock, blocksize, spookyseed64);
-                    if (spooky64i != spooky64o) return false;
+                    hregister[0].spooky64o = SpookyHash::Hash64(byteblock, blocksize, hregister[0].spookyseed64);
+                    if (hregister[0].spooky64i != hregister[0].spooky64o) return false;
                     break;
                   case XXH32:
-                    xxhash32o = XXHash32::hash(byteblock, blocksize, xxseed32);
-                    if (xxhash32i != xxhash32o) return false;
+                    hregister[0].xxhash32o = XXHash32::hash(byteblock, blocksize, hregister[0].xxseed32);
+                    if (hregister[0].xxhash32i != hregister[0].xxhash32o) return false;
                     break;
                   case XXH64:
-                    xxhash64o = XXHash64::hash(byteblock, blocksize, xxseed64);
-                    if (xxhash64i != xxhash64o) return false;
+                    hregister[0].xxhash64o = XXHash64::hash(byteblock, blocksize, hregister[0].xxseed64);
+                    if (hregister[0].xxhash64i != hregister[0].xxhash64o) return false;
                     break;
                   case WP:
-                    WHIRLPOOL(byteblock, blocksize, whp512o);
-                    if (memcmp(whp512i, whp512o, 64) != 0) return false;
+                    WHIRLPOOL(byteblock, blocksize, hregister[0].whp512o);
+                    if (memcmp(hregister[0].whp512i, hregister[0].whp512o, 64) != 0) return false;
                     break;
                   case WYH:
-                    wyhash64o = wyhash(byteblock, blocksize, wyseed64, (const uint64_t*) wysecret64);
-                    if (wyhash64i != wyhash64o) return false;
+                    hregister[0].wyhash64o = wyhash(byteblock, blocksize, hregister[0].wyseed64, (const uint64_t*) hregister[0].wysecret64);
+                    if (hregister[0].wyhash64i != hregister[0].wyhash64o) return false;
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
@@ -837,103 +863,106 @@ public:
 
               switch(std::get<0>(hash)) {
                   case CIT64:
-                     ss << std::to_string(city64i) << " ";
+                     ss << std::to_string(hregister[0].city64i) << " ";
                      break;
                   case CRC32:
-                     ss << std::to_string(crc32i) << " ";
+                     ss << std::to_string(hregister[0].crc32i) << " ";
                      break;
                   case CRC64:
-                     ss << std::to_string(crc64i) << " ";
+                     ss << std::to_string(hregister[0].crc64i) << " ";
                      break;
                   case FAST32:
-                     ss << std::to_string(fast32i) << " ";
+                     ss << std::to_string(hregister[0].fast32i) << " ";
                      break;
                  case FAST64:
-                     ss << std::to_string(fast64i) << " ";
+                     ss << std::to_string(hregister[0].fast64i) << " ";
                      break;
                   case FNV32:
-                     ss << std::to_string(fnv32_1i) << " ";
+                     ss << std::to_string(hregister[0].fnv32_1i) << " ";
                      break;
                   case FNV32A:
-                     ss << std::to_string(fnv32a_1i) << " ";
+                     ss << std::to_string(hregister[0].fnv32a_1i) << " ";
                      break;
                   case FNV64:
-                     ss << std::to_string(fnv64_1i) << " ";
+                     ss << std::to_string(hregister[0].fnv64_1i) << " ";
                      break;
                   case FNV64A:
-                     ss << std::to_string(fnv64a_1i) << " ";
+                     ss << std::to_string(hregister[0].fnv64a_1i) << " ";
                      break;
                   case HW64:
-                     ss << std::to_string(hw64i) << " ";
-                     break;
-                  case MET641:
-                     addHashToDisplayStream(met641i, hashblocksize);
-                     break;
-                  case MET642:
-                     addHashToDisplayStream(met642i, hashblocksize);
+                     ss << std::to_string(hregister[0].hw64i) << " ";
                      break;
                   case MD2s:
-                     addHashToDisplayStream(md2i, hashblocksize);
+                     addHashToDisplayStream(hregister[0].md2i, hashblocksize);
                      break;
                   case MD4s:
-                     addHashToDisplayStream(md4i, hashblocksize);
+                     addHashToDisplayStream(hregister[0].md4i, hashblocksize);
                      break;
                   case MD5s:
-                     addHashToDisplayStream(md5i, hashblocksize);
+                     addHashToDisplayStream(hregister[0].md5i, hashblocksize);
                      break;
                   case MD6:
-                     addHashToDisplayStream(md6i, hashblocksize);
+                     addHashToDisplayStream(hregister[0].md6i, hashblocksize);
                      break;
                   case MD62:
-                     addHashToDisplayStream(md62i, hashblocksize);
+                     addHashToDisplayStream(hregister[0].md62i, hashblocksize);
+                     break;
+                  case MET641:
+                     addHashToDisplayStream(hregister[0].met641i, hashblocksize);
+                     break;
+                  case MET642:
+                     addHashToDisplayStream(hregister[0].met642i, hashblocksize);
+                     break;
+                  case MX3:
+                     ss << std::to_string(hregister[0].mx3i) << " ";
                      break;
                   case PNG:
-                     ss << std::to_string(png64i) << " ";
+                     ss << std::to_string(hregister[0].png64i) << " ";
                      break;
                   case RIPE160:
-                     addHashToDisplayStream(ripe160i, hashblocksize);
+                     addHashToDisplayStream(hregister[0].ripe160i, hashblocksize);
                      break;
                   case SEA:
-                     ss << std::to_string(sea64i) << " ";
+                     ss << std::to_string(hregister[0].sea64i) << " ";
                      break;
                   case SIP64:
-                     ss << std::to_string(siphash64i) << " ";
+                     ss << std::to_string(hregister[0].siphash64i) << " ";
                      break;
                   case SHA164:
-                     addHashToDisplayStream(sha1i, hashblocksize);
+                     addHashToDisplayStream(hregister[0].sha1i, hashblocksize);
                      break;
                   case SHA1128:
-                     addHashToDisplayStream(sha1i, hashblocksize);
+                     addHashToDisplayStream(hregister[0].sha1i, hashblocksize);
                      break;
                   case SHA1s:
-                     addHashToDisplayStream(sha1i, hashblocksize);
+                     addHashToDisplayStream(hregister[0].sha1i, hashblocksize);
                      break;
                   case SHA256s:
-                     addHashToDisplayStream(sha256i, hashblocksize); 
+                     addHashToDisplayStream(hregister[0].sha256i, hashblocksize); 
                      break;
                   case SHA384s:
-                     addHashToDisplayStream(sha384i, hashblocksize);
+                     addHashToDisplayStream(hregister[0].sha384i, hashblocksize);
                      break;
                   case SHA512s:
-                     addHashToDisplayStream(sha512i, hashblocksize);
+                     addHashToDisplayStream(hregister[0].sha512i, hashblocksize);
                      break;
                   case SPK32:
-                     ss << std::to_string(spooky32i) << " ";
+                     ss << std::to_string(hregister[0].spooky32i) << " ";
                      break;
                   case SPK64:
-                     ss << std::to_string(spooky64i) << " ";
+                     ss << std::to_string(hregister[0].spooky64i) << " ";
                      break;
                   case XXH32:
-                     ss << std::to_string(xxhash32i) << " ";
+                     ss << std::to_string(hregister[0].xxhash32i) << " ";
                      break;
                   case XXH64:
-                     ss << std::to_string(xxhash64i) << " ";
+                     ss << std::to_string(hregister[0].xxhash64i) << " ";
                      break;
                   case WP:
-                     addHashToDisplayStream(whp512i, hashblocksize);
+                     addHashToDisplayStream(hregister[0].whp512i, hashblocksize);
                      break;
                   case WYH:
-                     ss << std::to_string(wyhash64i) << " ";
+                     ss << std::to_string(hregister[0].wyhash64i) << " ";
                      break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;

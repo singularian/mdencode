@@ -156,6 +156,13 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    delete buf2;
    // nf.read(reinterpret_cast<char*>(&blockhashnames), hclblocksize);
 
+   // TODO load the keylist 
+   // create another int size for the keylist and load the keylist into a char array
+   // then set each hashlist object with the keylist
+   // probably should add a key byte size to the registry 
+   // change the hash block list to a struct then have the first hashlist object load it and use it's registry to update the others
+   // the thread_local doesn't work
+
    std::cout << std::left << std::setw(20) << "Filename Details: " << filename << std::endl << std::endl;
    std::cout << std::left << std::setw(20) << "Version: "    << mdversion << std::endl;
    std::cout << std::left << std::setw(20) << "Filesize: "   << filesize  << std::endl;
