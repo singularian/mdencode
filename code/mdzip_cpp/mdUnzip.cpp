@@ -552,6 +552,7 @@ Examples:
    ./mdunzip --file=filename.mdz --thread=16 
    ./mdunzip --file=test.mdz --thread=16 
    ./mdunzip --file=test.mdz --list=true
+   ./mdunzip --file=filename.mdz --list=true --unzip=false
 )";
 
     std::cout << usageline << std::endl;
