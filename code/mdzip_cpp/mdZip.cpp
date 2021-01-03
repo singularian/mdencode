@@ -107,7 +107,9 @@ int main (int argc, char **argv) {
 
 }
 
-// int mdzipfile(std::string filename, mdheader mdh) {
+// mdzip an input file
+// current mdzip extension is .mdz
+// this is currently litte endian and 64 bit for the longs
 int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist) {
 
      long blocknumber = 1;
@@ -203,10 +205,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      // wf.write(reinterpret_cast<char*>(&blockhashnames),   hclsize);
      wf.write(blockhashnames.c_str(),   hclsize);
      cout << "hashnames block size " << hclsize << endl;
-     //nf.close();
-     //wf.close();
-     //return 0; // test
-
+  
  
      // constexpr size_t bufferSize = blocksize;
      // unique_ptr<unsigned char[]> byteblock(new unsigned char[blocksize]);

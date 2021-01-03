@@ -119,15 +119,17 @@ private:
     std::vector<std::tuple<int,std::string,int>> hashlistvt[3];
     // hash map
     std::map<std::string, int> hclmap;
+public:
     // hash results registers
     // could make the struct public for copying
     hash_list hregister [2];
     hash_key_list keyregister;
-public:
+    // string stream variables
     std::stringstream bhlist;
     std::stringstream ss;
     std::stringstream hlss;
     std::string hashlist;
+
 
     // initialize mdHashContextList
     mdHashContextList() {
