@@ -174,7 +174,9 @@ ID          Hash Name   Description                   Key         Blocksize
 33          whp         Whirlpool                     false       64          
 34          wy64        WYhash 64                     true        8       
 ```                                                                                                 
-                                                                                                    
+
+# MDunzip C++ Usage 
+
 ```                                                                                                 
 user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ ./mdunzip                   
 MDEncode MDunzip C++ Program
