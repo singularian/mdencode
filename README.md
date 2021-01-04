@@ -361,7 +361,7 @@ There are currently two example modulus scan programs. These include
 - GO test modulus scan ```$GOPATH/github.com/singularian/mdencode/code/testdecode_go/decoderRandomTestHC``` uses GO routines to run the modulus scan for a signature on a byte block
 - C++ test modulus scan ```$GOPATH/github.com/singularian/mdencode/code/testdecode_cpp/decoderRandomTestHC2``` uses C++ threads to run the modulus scan
 
-MDZip and MDUnzip also use a parallel modulus scan currently with the GO core. In the future it will include the C++ core.
+MDZip and MDUnzip also use a parallel modulus scan currently with the GO core. There is now an alternative [mdzip C++](https://github.com/singularian/mdencode/tree/master/docs/mdzip_cpp.md) engine to the GO program.  
 
 
 This is an example of a parallel modulus scan with 16 threads.
