@@ -23,6 +23,7 @@ class modscan
        mdMutex* mutexref;
        mdMutexLog* log;
        bool stop;
+       bool stopped;
     public: 
        string filename; 
        int exponent;
@@ -90,6 +91,8 @@ class modscan
         blocksize    = blocks;
         threadnumber = threadnum;
         threadcount  = threadcnt;
+        stop         = false;
+        stopped      = false;
         
     // ==================================================================
     // test code
@@ -118,7 +121,6 @@ class modscan
        // std::cout << endl << "Running decode modscan" << endl << endl;
 
        size_t count;
-       int continueFlag = 0;
        int lineNum = 0;
        int lineCount = 100000000;
        lineCount = lineCount + (1000000 * (threadnumber + 1));
@@ -177,7 +179,7 @@ class modscan
 
        // should add some initial logging here for the initial blockInt
 
-       while (continueFlag == 0)
+       while (stop == false)
        {
            // byte order and endian parameters must match the import byte block 
            // currently byte order msb and native endian
@@ -214,14 +216,13 @@ class modscan
                  }
               }
            }
-
-           if (stop == true) break;
-           
+          
 
            mpz_add (blockInt, blockInt, modulusInt);
            lineNum++;
-       }
+        }
 
+       stopped = true; 
        return 0;
 
     }
@@ -257,16 +258,24 @@ class modscan
         return byteblock; 
     }
 
+    // check if the thread is stopped
+    bool isStoppedThread() {
+        
+        return stopped;
+    }
+
+    // Stop the thread
     void stopThread() {
+        // std::cout << "Stopping The thread " << threadnumber << " has stopped..." << std::endl;
         stop = true;
     }
 
     // void resetThread( mpz_t rem, mpz_t modint, int modexp, int blocks) {
     void resetThread( mpz_t rem, mpz_t modint, int modexp, int blocks, int threadnum) {
-        stop = false;
-        exponent     = modexp;
-        modexponent  = 1;
-        //modexponent  = modexp;
+        stop        = false;
+        stopped     = false;
+        exponent    = modexp;
+        modexponent = 1;
 
         // check if this is the last byteblock less than the blocksize
         if (blocks < blocksize) {

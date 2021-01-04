@@ -485,8 +485,10 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
          wf.write(reinterpret_cast<char*>(modbyteblock),   blocksize);
 
          // need to stop the threads
+         // there is a bug somewhere here which is causing it to stop the modulus scan
          for(int tnum = 0; tnum < threadcount; tnum++) {
             mst[tnum].stopThread();
+            while (!mst[tnum].isStoppedThread()) { }
          }
          
          mutex.resetMatched();
