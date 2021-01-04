@@ -96,11 +96,13 @@ mdunzip --file=filename.mdz --list=true --unzip=false
 
 This is the MDZip Example Usage
 
-These are the 3 main programs.
+These are the 2 main programs. 
 
 - mdzip    - creates an mdzip binary file with a modular floor
-- mdunzip  - unzips or displays the byte block and decodes an mdzip file to an output file
-                                                                                                    
+- mdunzip  - unzips or displays the byte block and decodes an mdzip file to an output file. It can also display the block list.
+
+path: [github.com/singularian/mdencode/code/mdzip_cpp/](https://github.com/singularian/mdencode/tree/master/code/mdzip_cpp)                                                                                                  
+
 ```                                                                                                 
 user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ ./mdzip                     
 MDEncode MDzip C++ Program
