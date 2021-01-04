@@ -397,8 +397,8 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
  
    // read each of the mdzip file signature blocks
    for (blk = 0; blk < blockcount; blk++) {
-   //for (blk = 0; blk < 2; blk++) {
-        std::cout << "Unzipping Block " << (blk + 1);
+      
+         std::cout << "Unzipping Block " << (blk + 1);
          if ((blk == lastblk) && (blockremainder != blocksize)) {
            std::cout << " bytes size " << blockremainder << "/" << blocksize << std::endl;
            blocksize = blockremainder;
