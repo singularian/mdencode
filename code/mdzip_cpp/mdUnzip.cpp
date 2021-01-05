@@ -454,7 +454,7 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
          } 
 
          // need to change this to three states
-         // found     = 0
+         // finding   = 0 // searching for the value with the modscan
          // not found = 1
          // found     = 2
          // Maybe while (result == 0) {
