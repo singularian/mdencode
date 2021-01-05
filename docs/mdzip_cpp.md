@@ -465,6 +465,14 @@ Modulus Scan thread 31 and Random byteblock match
 0   0   0   32  32  65  33  97  18  63  24  34  255 252
 ```
 
+# TODO List
+
+- Add the file signature blocks.
+- Add the file signature mdunzip post validation.
+- Add the hash keylist support to change the signature keys in the mdzip/mdunzip file.
+- Make the go and C++ programs use the same format
+- Add more signatures to the signature list
+
 # Donations
 
 * BTC: `32L3gyJdkiFwgJ72rsSzbCBjTjVFxJLHPm`
