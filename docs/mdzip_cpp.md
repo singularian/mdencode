@@ -470,6 +470,7 @@ Modulus Scan thread 31 and Random byteblock match
 - Add the file signature blocks.
 - Add the file signature mdunzip post validation.
 - Add the hash keylist support to change the signature keys in the mdzip/mdunzip file.
+- Add Bigendian / little-endian conversion support. 
 - Make the go and C++ programs use the same format
 - Add more signatures to the signature list
 
