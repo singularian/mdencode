@@ -455,8 +455,8 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
 
          // need to change this to three states
          // finding   = 0 // searching for the value with the modscan
-         // not found = 1
-         // found     = 2
+         // not found = 1 // modscan mutext match result
+         // found     = 2 // modscan mutext match result
          // Maybe while (result == 0) {
          // std::cout << "mutex is matched " <<  mutex.getIsMatched() << std::endl;  
          while (mutex.getIsMatched() == false) {
