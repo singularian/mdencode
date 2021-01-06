@@ -254,7 +254,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 // the output unzipped file is currently file.mdz.out or extension .out
 int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
 
-   std::cout << "mdunzipping file " << filename << std::endl;
+   std::cout << "mdunzipping file " << filename << std::endl; // to output file
 
    size_t inputfilesize = 0;
    std:string mdunzipfile = filename + ".out";
@@ -380,19 +380,16 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
    // initialize the mutex object
    // I should set a result variable and pass it into the mutex
    // it result = 0 then the mutex can set it and stop the execution for the mod scan
-   mdMutex mutex;
+   mdMutex    mutex(threadcount);
    mdMutexLog log(runlogging);
 
    // initialize the modulus scan array
    // this allows it to run mulithreaded 
    modscan* mst = new modscan[threadcount];
 
+   // initialize the modulus scan thread objects with the block hash list string
    for(int tnum = 0; tnum < threadcount; tnum++) {
-         // mst[tnum].setModscan(&log, byteorder, endian, modulusIntRemainder, modulusInt, modexponent, 1, blocksize, tnum, threadcount, &mutex);
-         // set the hash context list and the signatures based on the current byte block
-         // mst[tnum].hcl.setVectorHL(def, HASHBLOCK);
          mst[tnum].hcl.setVectorHLstring(blockhashnames, HASHBLOCK);
-         // mst[tnum].hcl.setByteBlockHashList(byteblock, blocksize);
    }
  
    // read each of the mdzip file signature blocks
@@ -425,7 +422,9 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
          // printByteblock(modulusInt, modsizeBytes, true);
          gmp_printf("Modulus Remainder %Zd\n\n", modulusIntRemainder);
          
+         // set the thread modulus scan objects
          for(int tnum = 0; tnum < threadcount; tnum++) {
+            // if this is the first block run the full initialization
             if (blk < 1) { 
                mst[tnum].setModscan(&log, byteorder, endian, modulusIntRemainder, modulusInt, modexponent, 1, blocksize, tnum, threadcount, &mutex);
             } else {
@@ -453,36 +452,41 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
             threads.at(tnum).detach();
          } 
 
-         // need to change this to three states
-         // finding   = 0 // searching for the value with the modscan
+         // check the mutex ismatched for three states
+         // searching = 0 // searching for the value with the modscan
          // not found = 1 // modscan mutext match result
-         // found     = 2 // modscan mutext match result
-         // Maybe while (result == 0) {
-         // std::cout << "mutex is matched " <<  mutex.getIsMatched() << std::endl;  
-         while (mutex.getIsMatched() == false) {
+         // found     = 2 // modscan mutext match result 
+         while (mutex.getIsMatched() == 0) {
 
          }
 
-         int threadMatchNumber = mutex.getMatchThread(); 
+         // if not found = 1 then no match was found
+         if (mutex.getIsMatched() == 1) {
+            std::cout << "Modulus Scan Match Not Found" << std::endl;
+            // break; // need to check the other blocks
+         // match is found   
+         } else {
 
+            // find the last thread match
+            int threadMatchNumber = mutex.getMatchThread(); 
 
-         // check the modulus scan results
-         std::ostringstream result; 
-         unsigned char *modbyteblock;
-         modbyteblock = mst[threadMatchNumber].getModscanByteBlock();
-         // result << endl << "Found Match" << endl << endl;
-         // result << "Elapsed Time (s) " << std::to_string(elapsed_time/1e9) << endl;
-         result << "Modulus Scan thread " << threadMatchNumber << " Match "; // << endl;
-         log.writeLog(result.str());
-         std::cout <<  std::endl;
+            // check the modulus scan results
+            std::ostringstream result; 
+            unsigned char *modbyteblock;
+            modbyteblock = mst[threadMatchNumber].getModscanByteBlock();
+            // result << endl << "Found Match" << endl << endl;
+            // result << "Elapsed Time (s) " << std::to_string(elapsed_time/1e9) << endl;
+            result << "Modulus Scan thread " << threadMatchNumber << " Match " << std::endl;
+            log.writeLog(result.str());
 
-         log.logMatchByteblock(modbyteblock, blocksize, false);
-         log.logMatchByteblock(modbyteblock, blocksize, true);
+            log.logMatchByteblock(modbyteblock, blocksize, false);
+            log.logMatchByteblock(modbyteblock, blocksize, true);
 
-         std::cout <<  std::endl; // TODO need to add this to the log
+            std::cout <<  std::endl; // TODO need to add this to the log
 
-         // Need to write the modbyteblock to a file
-         wf.write(reinterpret_cast<char*>(modbyteblock),   blocksize);
+            // Write the modulus scan byteblock to a file
+            wf.write(reinterpret_cast<char*>(modbyteblock),   blocksize);
+         }
 
          // stop the threads
          for(int tnum = 0; tnum < threadcount; tnum++) {
@@ -495,7 +499,6 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
 
    }
 
-   delete modulusbytes;
    mpz_clear(modulusInt);
    mpz_clear(modulusIntRemainder);
    
