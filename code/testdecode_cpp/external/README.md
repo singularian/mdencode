@@ -6,6 +6,7 @@ This is a list of the external software included.
 
 [CLI11](https://github.com/CLIUtils/CLI11)  
 [CLI11 Book](https://cliutils.github.io/CLI11/book/)  
+[CLI11 Lobby](https://gitter.im/CLI11gitter/Lobby)
 
 ## C++ logging
 
@@ -24,3 +25,7 @@ This is a list of the external software included.
 [mx3](https://github.com/jonmaiga/mx3/)  
 [xxhash](https://create.stephan-brumme.com/xxhash/)   
 [wyhash](https://github.com/wangyi-fudan/wyhash)   
+
+## Rhash
+
+https://github.com/rhash/RHash/tree/master/librhash
