@@ -39,20 +39,35 @@ int calcModulusBytes (int modsize) {
 
 }
 
-// calculate the file blocks count based on the filesize and blocksize
+// calculate the number of file blocks based on the filesize and blocksize
 long CalcFileBlocks(long filesize, long blocksize) {
 
      long remainder;
      long blocksCount = 0;
      remainder = filesize % blocksize;
+
      if (remainder == 0) {
          blocksCount = filesize / blocksize;
-         remainder = blocksize;
      } else {
          blocksCount = (filesize / blocksize) + 1;
      }
 
      return blocksCount;
+
+}
+
+// calculate the last block size based on the filesize and blocksize
+// C doesn't have multiple returns so I had to split them
+long CalcFileBlocksRemainder(long filesize, long blocksize) {
+
+     long remainder;
+     remainder = filesize % blocksize;
+
+     if (remainder == 0) {
+         remainder = blocksize;
+     } 
+
+     return remainder;
 
 }
 

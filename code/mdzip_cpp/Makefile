@@ -25,6 +25,8 @@ test:
 	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	g++ -I. $(DEPS) tests/testSHA1file.cpp  -o  testSHA1file -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+#	g++ -I. $(DEPS) mdZipNH.cpp -o mdZipNH  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+#	g++ -I. $(DEPS) mdUnzipNH.cpp -o mdunzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 testhash:
 	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
 	g++ external/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11

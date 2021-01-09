@@ -48,7 +48,7 @@ int main (int argc, char **argv) {
      app.add_option("-f,--file",    filename,    "MDunzip filename")->check(CLI::ExistingFile)->required();
      // app.add_option("-b,--block",   blocksize,   "Blocksize number")->check(CLI::PositiveNumber)->check(CLI::Range(1,100));
      // app.add_option("-m,--mod",     modsize,     "Modulus size number")->check(CLI::PositiveNumber);
-     app.add_option("-t,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
+     app.add_option("-t,--thread,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
 
      // display the block hash list 
      bool list = false;
@@ -175,7 +175,8 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    // calculate the file block count and last block size
    blockcount = CalcFileBlocks(filesize, blocksize);
-   blockremainder  = filesize % blocksize;
+   blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
+   
 
    mdHashContextList hclfile;
    mdHashContextList hclblock;
@@ -212,10 +213,12 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    // read each of the mdzip file signature blocks
    for (blk = 0; blk < blockcount; blk++) {
-        std::cout << "Reading Block " << (blk + 1);
         if ((blk == lastblk) && (blockremainder != blocksize)) {
+           if (blocksize == 0) break;
+           std::cout << "Reading Block " << (blk + 1);
            std::cout << " bytes size " << blockremainder << "/" << blocksize << std::endl;
         } else {
+           std::cout << "Reading Block " << (blk + 1);
            std::cout << " bytes size " << blocksize << "/" << blocksize << std::endl;
         }
 
@@ -254,7 +257,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 // the output unzipped file is currently file.mdz.out or extension .out
 int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
 
-   std::cout << "mdunzipping file " << filename << std::endl; // to output file
+   // std::cout << "mdunzipping file " << filename << std::endl; // to output file
 
    size_t inputfilesize = 0;
    std:string mdunzipfile = filename + ".out";
@@ -342,7 +345,8 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
 
    // calculate the file block count and last block size
    blockcount = CalcFileBlocks(filesize, blocksize);
-   blockremainder  = filesize % blocksize;
+   // calculate the last block size
+   blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
 
    mdHashContextList hclfile;
    mdHashContextList hclblock;
@@ -395,11 +399,14 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
    // read each of the mdzip file signature blocks
    for (blk = 0; blk < blockcount; blk++) {
 
-         std::cout << "Unzipping Block " << (blk + 1);
          if ((blk == lastblk) && (blockremainder != blocksize)) {
+           if (blocksize == 0) break;
+           std::cout << "Unzipping Block " << (blk + 1);
            std::cout << " bytes size " << blockremainder << "/" << blocksize << std::endl;
            blocksize = blockremainder;
+           
          } else {
+           std::cout << "Unzipping Block " << (blk + 1); 
            std::cout << " bytes size " << blocksize << "/" << blocksize << std::endl;
          }
 
@@ -514,7 +521,8 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
                  std::string& filehashvector,  std::string& blockhashvector, bool mdlist, int threadcount ) {
 
 
-   std::cout << std::left << std::setw(20) << "Filename Details: " << filename << std::endl;
+   std::cout << std::left << std::setw(20) << "Zip Filename: " << filename << std::endl;
+   std::cout << std::left << std::setw(20) << "Unzip Filename: " << filename << ".out" << std::endl;
    std::cout << std::endl;
 
    std::cout << std::left << std::setw(20) << "Version: "    << mdversion << std::endl;
