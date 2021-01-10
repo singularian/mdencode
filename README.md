@@ -270,7 +270,7 @@ docker run -it annatarsol/mdencode/latest /bin/bash
 * LTC: `MJh8XpUQ5wm8x1HCoQ7dewNqhrLfZZc31x`
 
 # Author
-MDEncode was developed by Scott Ross on a Ryzen CPU.
+MDEncode was developed by Scott Ross on a Ryzen 2700x and Ryzen 3950x CPU.
 
 # License 
 
