@@ -178,7 +178,7 @@ This is an example of a parallel modulus scan with 16 threads.
 
 # MDzip and MDunzip Overview
 
-mdzip is the GO command line utility can compress a file into a md binary byte block files. 
+mdzip is the C++ and GO command line utility can compress a file into a md binary byte block files. 
 mdzip takes an optional input key for the 32 byte Highway Hash 64 and Highway Hash 128 and Highway Hash 256. It can also take input keylist parameters for other signature keys.
 
 mdunzip will decompress the input signature binary block file to an output file.  

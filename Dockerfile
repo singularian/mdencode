@@ -62,6 +62,6 @@ RUN mdunzip
 
 # check the cpp binary
 RUN ls -lha
-RUN /go/src/app/mdencode/build/decoderRandomTestHC2
 RUN /go/src/app/mdencode/build/mdzipcpp
 RUN /go/src/app/mdencode/build/mdunzipcpp
+RUN /go/src/app/mdencode/build/decoderRandomTestHC2
