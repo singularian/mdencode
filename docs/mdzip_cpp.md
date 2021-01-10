@@ -118,7 +118,7 @@ Options:
   -b,--block INT:POSITIVE:INT in [1 - 100]
                               Blocksize number
   -m,--mod INT:POSITIVE       Modulus size number
-  -t,--threads INT:POSITIVE   Thread count number
+  -t,--thread,--threads INT:POSITIVE   Thread count number
   --fhs INT:POSITIVE:INT in [1 - 34] ...
                               File Hashlist csv string
   --fh INT:POSITIVE:INT in [1 - 34] ...
@@ -299,7 +299,7 @@ Options:
   -b,--block UINT:POSITIVE:INT in [1 - 100]
                               Blocksize number
   -m,--mod INT:POSITIVE       Modulus size number
-  -t,--threads INT:POSITIVE   Thread count number
+  -t,--thread,--threads INT:POSITIVE   Thread count number
   -r,--bh INT:POSITIVE:INT in [1 - 34] ...
                               Block Hashlist csv string
   -s,--hl INT:POSITIVE:INT in [1 - 34] ...
