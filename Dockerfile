@@ -56,12 +56,12 @@ RUN make buildcpp
 # check the mdencode and mdzip binary execs
 RUN mdsig
 RUN mdencode
+# check the mdzip go binary execs
 RUN mdzip
 RUN mdunzip
-# check the mdzip cpp
-RUN mdzipcpp
-RUN mdunzipcpp
 
 # check the cpp binary
 RUN ls -lha
 RUN /go/src/app/mdencode/build/decoderRandomTestHC2
+RUN /go/src/app/mdencode/build/mdzipcpp
+RUN /go/src/app/mdencode/build/mdunzipcpp
