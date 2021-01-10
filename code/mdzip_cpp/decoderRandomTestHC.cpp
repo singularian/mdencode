@@ -58,7 +58,7 @@ int main (int argc, char **argv) {
      CLI::App app{"MDEncode GMP C++ Test Program"};
      app.add_option("-b,--block", blocksize, "Blocksize number")->check(CLI::PositiveNumber)->check(CLI::Range(1,100));
      app.add_option("-m,--mod", modsize, "Modulus size number")->check(CLI::PositiveNumber);
-     app.add_option("-t,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
+     app.add_option("-t,--thread,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
      //app.add_option("-v,--version", version, "Version number");
 
      // add a hashlist parameter

@@ -18,13 +18,10 @@ BUILD_TIME=`date +%FT%T%z`
 all:
 #	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC -lssl -lcrypto -lgmp -pthread -std=c++11
 #	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC $(OBJ) -lssl -lcrypto -lgmp -pthread -std=c++11
-	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC1 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11 
-	g++ -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11 
 # opt:
 # doesn't work
 #	g++ -O3 -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11 -pthread
-sync:
-	cp decoderRandomTestHCthreads.cpp decoderRandomTestHC.cpp
 test:
 	g++ tests/test_gmp2.cpp -o test_gmp2 -lgmp -lgmpxx
 	g++ tests/testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
@@ -41,7 +38,7 @@ testhash:
 	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
 	g++ external/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11
 clean:
-	rm -r decoderRandomTestHC1 decoderRandomTestHC2 
+	rm -r decoderRandomTestHC2 
 cleantest:
 	rm test_gmp2 test_sha1 testhw testargs testhcl testcsv testlog testswitch *.log
 list:

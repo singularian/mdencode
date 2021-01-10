@@ -58,6 +58,9 @@ RUN mdsig
 RUN mdencode
 RUN mdzip
 RUN mdunzip
+# check the mdzip cpp
+RUN mdzipcpp
+RUN mdunzipcpp
 
 # check the cpp binary
 RUN ls -lha
