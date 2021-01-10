@@ -1,4 +1,4 @@
-# Project MDencode MDzip Overview  
+# Project MDencode MDzip C++ Overview  
   
 This is the MDzip C++ command line utility can compress a file into a MDzip binary byte block file.  
 MDunzip will decompress the input signature binary block file to an output file.   

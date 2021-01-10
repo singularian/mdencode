@@ -1,6 +1,6 @@
-# Project MDencode MDzip Overview  
+# Project MDencode MDzip GO Overview  
   
-MDzip is a GO command line utility can compress a file into a MDzip binary byte block file.  
+MDzip GO is a command line utility can compress a file into a MDzip binary byte block file.  
 MDunzip will decompress the input signature binary block file to an output file.   
 MDunzip and MDzip use a Hash Context list to encode and decode a file.  
 MDZip uses a Prefix binary file with file and byte signatures with a modular floor. It can also use a signature keylist.  
@@ -8,6 +8,7 @@ MDzip takes an optional input key for the 32 byte Highway Hash 64 and Highway Ha
 MDunzip will decompress the input signature binary block file to an output file.  
 Block size is limited by the number of CPU threads and processors.   
 MZunzip runs a mutlithreaded modulus scan on the MDzip file and writes the results to an unzipped output file.  
+It currently has a different format than the C++ mdzip encoder.
 
 **MDZip Features**
 - User Specified Modulus Size
