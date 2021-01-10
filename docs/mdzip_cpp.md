@@ -191,7 +191,7 @@ Options:
   -h,--help                   Print this help message and exit
   -f,--file TEXT:FILE REQUIRED
                               MDunzip filename
-  -t,--threads INT:POSITIVE   Thread count number
+  -t,--thread,--threads INT:POSITIVE   Thread count number
   -l,--list BOOLEAN           List the mdzip file
   -u,--unzip BOOLEAN          mdunzip a file
   -o,--over BOOLEAN           Overwriting an existing mdunzip output file

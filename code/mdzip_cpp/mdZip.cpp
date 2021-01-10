@@ -41,7 +41,7 @@ int main (int argc, char **argv) {
      app.add_option("-f,--file",    filename,    "MDzip filename")->check(CLI::ExistingFile)->required();
      app.add_option("-b,--block",   blocksize,   "Blocksize number")->check(CLI::PositiveNumber)->check(CLI::Range(1,100));
      app.add_option("-m,--mod",     modsize,     "Modulus size number")->check(CLI::PositiveNumber);
-     app.add_option("-t,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
+     app.add_option("-t,--thread,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
 
      // add the file hash list parameter
      std::vector<int> filelist;
@@ -137,7 +137,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      const char *fname = mdzipfile.c_str();
      std::remove(fname);
 
-     // set the file hash list
+     // set the file hash listg
      mdHashContextList hclfile;
      hclfile.setVectorHL(fhlist, HASHBLOCK);
      hclfile.setFileHashList(filename);
