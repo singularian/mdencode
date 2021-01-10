@@ -23,7 +23,7 @@ MDencode also contains an mdzip and mdunzip utility for encoding and decoding fi
 
 # MDencode components
 
-- [mdencode](https://github.com/singularian/mdencode/blob/master/docs/mdencodeFile.md)
+- [mdencode file signatures](https://github.com/singularian/mdencode/blob/master/docs/mdencodeFile.md)
 - [mdzip/mdunzip C++](https://github.com/singularian/mdencode/blob/master/docs/mdzip_cpp.md)
 - [mdzip/mdunzip Go](https://github.com/singularian/mdencode/blob/master/docs/mdzip_go.md)
 
