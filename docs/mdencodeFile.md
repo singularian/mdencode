@@ -1,6 +1,6 @@
-# Project MDencode Overview :octocat:  
+# Project MDencode File Signature Overview :octocat:  
   
-MDencode is a [GO](https://golang.org/) command line file digital signature generator with modular floors.  
+MDencode contains a [GO](https://golang.org/) command line file digital signature generator with modular floors.  
 This program is written in GO and uses an interface for programmable formatters.  
 MDencode allows for the creation of sqlite3 db file signatures and the first random file signatures and signature decryption. 
 
