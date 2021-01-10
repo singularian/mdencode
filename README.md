@@ -19,7 +19,7 @@ MDencode also contains an mdzip and mdunzip utility for encoding and decoding fi
 - Plugin Formatters
 - Multiple [Signatures](https://github.com/singularian/mdencode/blob/master/docs/hashList.md) for Files and File Blocks
 - The "First" [Random File Signature](https://github.com/singularian/mdencode/blob/master/docs/RandomSignature.md) or Block signatures 
-- An example of a parallel signature modulus scan with an encoder and decoder ([mdzip and mdunzip](https://github.com/singularian/mdencode/blob/master/docs/mdzip.md))
+- An example of a parallel signature modulus scan with an encoder and decoder ([mdzip and mdunzip](https://github.com/singularian/mdencode/blob/master/docs/mdzip_cpp.md))
 
 # MDencode components
 
