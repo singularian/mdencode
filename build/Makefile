@@ -37,7 +37,7 @@ all:
 	go build $(LDFLAGS) -o mdnewdb ${MDE}/${CMD}/mdnewdb.go
 	go build $(LDFLAGS) -o mddbreport ${MDE}/${CMD}/mdencodeReport.go
 	go build $(LDFLAGS) -o mdbinlist ${MDE}/${CMD}/testBinReadMdFmt.go
-	@echo "Building mdzip"
+	@echo "Building mdzip GO"
 	go build $(LDFLAGS) -o mdzip ${MDZIP}/${CMD}/mdzip.go 
 	go build $(LDFLAGS) -o mdunzip ${MDZIP}/${CMD}/mdUnzip.go 
 	go build $(LDFLAGS) -o mdlist ${MDZIP}/${CMD}/mdlist.go 
@@ -45,7 +45,7 @@ all:
 	go build $(LDFLAGS) -o mdlistTest ${MDZIP}/${CMD}/testBinReadMdFmt.go 
 	go build $(LDFLAGS) -o mdsig ${MDZIP}/${CMD}/mdsig.go 
 	go build $(LDFLAGS) -o randfile ${MDZIP}/${CMD}/randomFile.go
-	@echo "Building mdzip test files"
+	@echo "Building mdzip GO test files"
 	go build $(LDFLAGS) -o decoderRandom ${TESTGO}/${CMD}/decoderRandom.go
 	go build $(LDFLAGS) -o decoderRandomTest ${TESTGO}/${CMD}/decoderRandomTest.go
 	go build $(LDFLAGS) -o decoderRandomTestHC ${TESTGO}/${CMD}/decoderRandomTestHC.go
@@ -56,7 +56,7 @@ build:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdnewdb ${MDE}/${CMD}/mdnewdb.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mddbreport ${MDE}/${CMD}/mdencodeReport.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdbinlist ${MDE}/${CMD}/testBinReadMdFmt.go
-	@echo "Building mdzip"
+	@echo "Building mdzip GO"
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip ${MDZIP}/${CMD}/mdzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip ${MDZIP}/${CMD}/mdUnzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist ${MDZIP}/${CMD}/mdlist.go

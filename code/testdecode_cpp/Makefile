@@ -16,6 +16,7 @@ BUILD_TIME=`date +%FT%T%z`
 # you also need to install the libfnv library in the fnv subdirectory
 #  it is included with -lfnv
 all:
+	@echo "Building test mdzip cpp"
 #	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC -lssl -lcrypto -lgmp -pthread -std=c++11
 #	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC $(OBJ) -lssl -lcrypto -lgmp -pthread -std=c++11
 	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11 
