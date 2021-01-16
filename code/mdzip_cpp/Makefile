@@ -21,10 +21,14 @@ all:
 # need to merge these or use lnk
 	@echo "Building mdzip cpp"
 	g++ -I. $(DEPS) mdZip.cpp  -o mdzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
+	@echo ""
 	@echo "Building mdunzip cpp"
 	g++ -I. $(DEPS) mdUnzip.cpp  -o mdunzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	@echo ""
 	@echo "Building mdzip fasthash64 cpp"
 	g++ -I. $(DEPS) mdZipSimple.cpp -o mdzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	@echo ""
+	@echo "Building mdunzip fasthash64 cpp"
 	g++ -I. $(DEPS) mdUnzipSimple.cpp -o mdunzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 test:
 	@echo "Building test mdzip cpp"

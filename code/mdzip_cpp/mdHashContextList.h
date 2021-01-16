@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "filehash.h"
+#include "mdRandom.h"
 #include "mdRegisters.h"
 #include "../testdecode_cpp/external/cityhash/cityhash.h"
 #include "../testdecode_cpp/external/crc32/crc32.h"
@@ -70,38 +71,38 @@ struct Hashlist {
 Hashlist mdHashlist[LAST] = {
     {1,  "cit64",    "Cityhash 64",           false, 8,   0},
     {2,  "crc32",    "CRC 32",                false, 4,   0},
-    {2,  "crc64",    "CRC 64",                false, 8,   0},
-    {3,  "fast32",   "Fasthash 32",           true,  4,   0},
-    {4,  "fast64",   "Fasthash 64",           true,  8,   0},
-    {5,  "fnv32",    "FNV-1  32",             false, 4,   0},
-    {6,  "fnv32a",   "FNV-1a 32",             false, 4,   0},
-    {7,  "fnv64",    "FNV-1  64",             false, 8,   0},
-    {8,  "fnv64a",   "FNV-1a 64",             false, 8,   0},
-    {9,  "hw64",     "Highway Hash 64",       true,  8,   0},
-    {12, "md2",      "MD2",                   false, 16,  0},
-    {13, "md4",      "MD4",                   false, 16,  0},
-    {14, "md5",      "MD5",                   false, 16,  0},
-    {15, "md6",      "MD6",                   false, 20,  0},
-    {16, "md62",     "MD6 Quicker",           true,  20,  0},
-    {10, "met641",   "Metro Hash 64 v1",      true,  8,   0},
-    {11, "met642",   "Metro Hash 64 v2",      true,  8,   0},
-    {16, "mx3",      "MX3",                   true,  8,   0},
-    {17, "png",      "Pengyhash 64",          true,  8,   0},
-    {18, "ripe160",  "Ripe MD 160",           false, 20,  0},
-    {19, "sea64",    "Seahash 64",            true,  8,   0},
-    {20, "sip64",    "Siphash 64",            true,  8,   0},
-    {21, "sha1_64",  "SHA1 64",               false, 8,   0},
-    {22, "sha1_128", "SHA1 128",              false, 16,  0},
-    {23, "sha1",     "SHA1",                  false, 20,  0},
-    {24, "sha256",   "SHA 256",               false, 32,  0},
-    {25, "sha384",   "SHA 384",               false, 48,  0},
-    {26, "sha512",   "SHA 512",               false, 64,  0},
-    {27, "spk32",    "Spooky 32",             true,  4,   0},
-    {28, "spk64",    "Spooky 64",             true,  8,   0},
-    {29, "xxh32",    "xxHash32",              true,  4,   0},
-    {30, "xxh64",    "xxHash64",              true,  8,   0},
-    {31, "whp",      "Whirlpool",             false, 64,  0},
-    {31, "wy64",     "WYhash 64",             true,  8,   0},
+    {3,  "crc64",    "CRC 64",                false, 8,   0},
+    {4,  "fast32",   "Fasthash 32",           true,  4,   0},
+    {5,  "fast64",   "Fasthash 64",           true,  8,   0},
+    {6,  "fnv32",    "FNV-1  32",             false, 4,   0},
+    {7,  "fnv32a",   "FNV-1a 32",             false, 4,   0},
+    {8,  "fnv64",    "FNV-1  64",             false, 8,   0},
+    {9,  "fnv64a",   "FNV-1a 64",             false, 8,   0},
+    {10, "hw64",     "Highway Hash 64",       true,  8,   0},
+    {11, "md2",      "MD2",                   false, 16,  0},
+    {12, "md4",      "MD4",                   false, 16,  0},
+    {13, "md5",      "MD5",                   false, 16,  0},
+    {14, "md6",      "MD6",                   false, 20,  0},
+    {15, "md62",     "MD6 Quicker",           true,  20,  0},
+    {16, "met641",   "Metro Hash 64 v1",      true,  8,   0},
+    {17, "met642",   "Metro Hash 64 v2",      true,  8,   0},
+    {18, "mx3",      "MX3",                   true,  8,   0},
+    {19, "png",      "Pengyhash 64",          true,  8,   0},
+    {20, "ripe160",  "Ripe MD 160",           false, 20,  0},
+    {21, "sea64",    "Seahash 64",            true,  8,   0},
+    {22, "sip64",    "Siphash 64",            true,  8,   0},
+    {23, "sha1_64",  "SHA1 64",               false, 8,   0},
+    {24, "sha1_128", "SHA1 128",              false, 16,  0},
+    {25, "sha1",     "SHA1",                  false, 20,  0},
+    {26, "sha256",   "SHA 256",               false, 32,  0},
+    {27, "sha384",   "SHA 384",               false, 48,  0},
+    {28, "sha512",   "SHA 512",               false, 64,  0},
+    {29, "spk32",    "Spooky 32",             true,  4,   0},
+    {30, "spk64",    "Spooky 64",             true,  8,   0},
+    {31, "xxh32",    "xxHash32",              true,  4,   0},
+    {32, "xxh64",    "xxHash64",              true,  8,   0},
+    {33, "whp",      "Whirlpool",             false, 64,  0},
+    {34, "wy64",     "WYhash 64",             true,  8,   0},
     {32, "last",     "Unused Signature",      false, 8,   0}
 };
 
@@ -223,19 +224,19 @@ public:
 
               switch(std::get<0>(hash)) {
                   case CIT64:
-                    rf.read(reinterpret_cast<char*>(&hregister[0].city64i), sizeof(long));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].city64seed), sizeof(long));
                     break;
                   case CRC32:
-                    rf.read(reinterpret_cast<char*>(&hregister[0].crc32i), sizeof(int));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].crc32seed), sizeof(int));
                     break;
                   case CRC64:
-                    rf.read(reinterpret_cast<char*>(&hregister[0].crc64i), sizeof(long));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].crc64seed), sizeof(long));
                     break;
                   case FAST32:
-                    rf.read(reinterpret_cast<char*>(&hregister[0].fast32i), sizeof(int));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].fast32seed), sizeof(int));
                     break;
                   case FAST64:
-                    rf.read(reinterpret_cast<char*>(&hregister[0].fast64i), sizeof(long));      
+                    rf.read(reinterpret_cast<char*>(&hregister[0].fast64seed), sizeof(long));      
                     break;
                   case FNV32:
                     break;
@@ -326,19 +327,19 @@ public:
 
               switch(std::get<0>(hash)) {
                   case CIT64:
-                    wf.write(reinterpret_cast<char*>(&hregister[0].city64i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].city64seed), sizeof(long));
                     break;
                   case CRC32:
-                    wf.write(reinterpret_cast<char*>(&hregister[0].crc32i), sizeof(int));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].crc32seed), sizeof(int));
                     break;
                   case CRC64:
-                    wf.write(reinterpret_cast<char*>(&hregister[0].crc64i), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].crc64seed), sizeof(long));
                     break;
                   case FAST32:
-                    wf.write(reinterpret_cast<char*>(&hregister[0].fast32i), sizeof(int));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].fast32seed), sizeof(int));
                     break;
                   case FAST64:
-                    wf.write(reinterpret_cast<char*>(&hregister[0].fast64i), sizeof(long));      
+                    wf.write(reinterpret_cast<char*>(&hregister[0].fast64seed), sizeof(long));      
                     break;
                   case FNV32:
                     break;
@@ -420,8 +421,7 @@ public:
 
     }  
 
-    // randomize the Signature keys
-    // should add a function to display the keys
+    // randomize the Signature keys based on the signature list
     void randomizeKeyList() {
           int hashblocksize = 0;
 
@@ -430,19 +430,19 @@ public:
 
               switch(std::get<0>(hash)) {
                   case CIT64:
-                    //
+                    hregister[0].city64seed = randLong();
                     break;
                   case CRC32:
-                    // 
+                    hregister[0].crc32seed = randInt();
                     break;
                   case CRC64:
-                    //
+                    hregister[0].crc64seed = randInt();
                     break;
                   case FAST32:
-                    //
+                    hregister[0].fast32seed = randInt();
                     break;
                   case FAST64:
-                    //      
+                    hregister[0].fast64seed = randInt();    
                     break;
                   case FNV32:
                     break;
@@ -453,7 +453,7 @@ public:
                   case FNV64A:
                     break;
                   case HW64:
-                    // 
+                    genRandomLongBlock(hregister[0].hw64key, 4);
                     break;
                   case MD2s:
                     break;
@@ -468,24 +468,24 @@ public:
                     // rf.read(reinterpret_cast<char*>(&hregister[0].md62i), hashblocksize);
                     break;
                   case MET641:
-                    /// 
+                    hregister[0].met641seed = randInt();   
                     break;
                   case MET642:
-                    // 
+                    hregister[0].met642seed = randInt();   
                     break;
                   case MX3:
-                    // 
+                    hregister[0].mx3seed = randLong(); 
                     break;
                   case PNG:
-                    // 
+                    hregister[0].png64seed = randInt(); 
                     break;
                   case RIPE160:
                     break;
                   case SEA:
-                    // 
+                     hregister[0].sea64seed = randLong(); 
                     break;
                   case SIP64: 
-                    // 
+                    genRandomByteBlock(hregister[0].sipkey, 16); 
                     break;
                   case SHA164:
                     break;
@@ -500,22 +500,22 @@ public:
                   case SHA512s:
                     break;
                   case SPK32:
-                    // 
+                    hregister[0].spookyseed32 = randInt();   
                     break;
                   case SPK64:
-                    // 
+                    hregister[0].spookyseed64 = randLong();   
                     break;
                   case XXH32:
-                    // 
+                    hregister[0].xxseed32 = randInt();   
                     break;
                   case XXH64:
-                    // 
+                    hregister[0].xxseed64 = randLong();    
                     break;
                   case WP:
                     break;
                   case WYH:
-                    // 
-                    // 
+                    hregister[0].wyseed64 = randLong();  
+                    genRandomLongBlock(hregister[0].wysecret64, 16);
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
@@ -890,7 +890,7 @@ public:
 
 
     // setByteBlockHashList
-    // this sets the block hash list signatures for an input block
+    // this sets the block hash list signatures for an input byte block
     void setByteBlockHashList(unsigned char *byteblock, int blocksize) {
 
           int hashblocksize = 0;
@@ -1161,7 +1161,7 @@ public:
     }
 
     // display the hash list keys
-    std::string displayHLhashesKeys() {
+    std::string displayHLhashKeys() {
         // clear the string stream
         ss.str(std::string());
 
