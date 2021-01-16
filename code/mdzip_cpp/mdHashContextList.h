@@ -214,8 +214,318 @@ public:
           setVectorHL(v, type);
     }
 
+    // load the Signature keys from a file
+    void readKeyList(std::ifstream &rf) {
+          int hashblocksize = 0;
+
+          for(auto hash  : hashlistvt[HASHBLOCK]) {
+              hashblocksize = std::get<2>(hash);
+
+              switch(std::get<0>(hash)) {
+                  case CIT64:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].city64i), sizeof(long));
+                    break;
+                  case CRC32:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].crc32i), sizeof(int));
+                    break;
+                  case CRC64:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].crc64i), sizeof(long));
+                    break;
+                  case FAST32:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].fast32i), sizeof(int));
+                    break;
+                  case FAST64:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].fast64i), sizeof(long));      
+                    break;
+                  case FNV32:
+                    break;
+                  case FNV32A:
+                    break;
+                  case FNV64:
+                    break;
+                  case FNV64A:
+                    break;
+                  case HW64:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].hw64key), 4);
+                    break;
+                  case MD2s:
+                    break;
+                  case MD4s: 
+                    break;
+                  case MD5s:
+                    break;
+                  case MD6:
+                    //rf.read(reinterpret_cast<char*>(&hregister[0].md6i), hashblocksize);
+                    break;
+                  case MD62:
+                    // rf.read(reinterpret_cast<char*>(&hregister[0].md62i), hashblocksize);
+                    break;
+                  case MET641:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].met641seed), sizeof(hregister[0].met641seed));
+                    break;
+                  case MET642:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].met642seed), sizeof(hregister[0].met642seed));
+                    break;
+                  case MX3:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].mx3seed), sizeof(hregister[0].mx3seed));
+                    break;
+                  case PNG:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].png64seed), sizeof(uint64_t));
+                    break;
+                  case RIPE160:
+                    break;
+                  case SEA:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].sea64seed), sizeof(uint64_t));
+                    break;
+                  case SIP64: 
+                    rf.read(reinterpret_cast<char*>(&hregister[0].sipkey), 16);
+                    break;
+                  case SHA164:
+                    break;
+                  case SHA1128:
+                    break;
+                  case SHA1s:
+                    break;
+                  case SHA256s:
+                    break;
+                  case SHA384s:
+                    break;
+                  case SHA512s:
+                    break;
+                  case SPK32:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].spookyseed32), sizeof(int));
+                    break;
+                  case SPK64:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].spookyseed64), sizeof(long));
+                    break;
+                  case XXH32:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].xxseed32), sizeof(int));
+                    break;
+                  case XXH64:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].xxseed64), sizeof(long));
+                    break;
+                  case WP:
+                    break;
+                  case WYH:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].wyseed64), sizeof(long));
+                    rf.read(reinterpret_cast<char*>(&hregister[0].wysecret64), 16);
+                    break;
+                  // default:
+                  //  std::cout << "Invalid hash" << std::endl;
+              }
+          }
+
+    }   
+
+    // write the Signature keys to a file
+    void writeKeyList(std::ofstream &wf) {
+          int hashblocksize = 0;
+
+          for(auto hash  : hashlistvt[HASHBLOCK]) {
+              hashblocksize = std::get<2>(hash);
+
+              switch(std::get<0>(hash)) {
+                  case CIT64:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].city64i), sizeof(long));
+                    break;
+                  case CRC32:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].crc32i), sizeof(int));
+                    break;
+                  case CRC64:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].crc64i), sizeof(long));
+                    break;
+                  case FAST32:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].fast32i), sizeof(int));
+                    break;
+                  case FAST64:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].fast64i), sizeof(long));      
+                    break;
+                  case FNV32:
+                    break;
+                  case FNV32A:
+                    break;
+                  case FNV64:
+                    break;
+                  case FNV64A:
+                    break;
+                  case HW64:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].hw64key), 4);
+                    break;
+                  case MD2s:
+                    break;
+                  case MD4s: 
+                    break;
+                  case MD5s:
+                    break;
+                  case MD6:
+                    // wf.write(reinterpret_cast<char*>(&hregister[0].md6i), hashblocksize);
+                    break;
+                  case MD62:
+                    // wf.write(reinterpret_cast<char*>(&hregister[0].md62i), hashblocksize);
+                    break;
+                  case MET641:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].met641seed), sizeof(hregister[0].met641seed));
+                    break;
+                  case MET642:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].met642seed), sizeof(hregister[0].met642seed));
+                    break;
+                  case MX3:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].mx3seed), sizeof(hregister[0].mx3seed));
+                    break;
+                  case PNG:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].png64seed), sizeof(uint64_t));
+                    break;
+                  case RIPE160:
+                    break;
+                  case SEA:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].sea64seed), sizeof(uint64_t));
+                    break;
+                  case SIP64: 
+                    wf.write(reinterpret_cast<char*>(&hregister[0].sipkey), 16);
+                    break;
+                  case SHA164:
+                    break;
+                  case SHA1128:
+                    break;
+                  case SHA1s:
+                    break;
+                  case SHA256s:
+                    break;
+                  case SHA384s:
+                    break;
+                  case SHA512s:
+                    break;
+                  case SPK32:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].spookyseed32), sizeof(int));
+                    break;
+                  case SPK64:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].spookyseed64), sizeof(long));
+                    break;
+                  case XXH32:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].xxseed32), sizeof(int));
+                    break;
+                  case XXH64:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].xxseed64), sizeof(long));
+                    break;
+                  case WP:
+                    break;
+                  case WYH:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].wyseed64), sizeof(long));
+                    wf.write(reinterpret_cast<char*>(&hregister[0].wysecret64), 16);
+                    break;
+                  // default:
+                  //  std::cout << "Invalid hash" << std::endl;
+              }
+          }
+
+    }  
+
+    // randomize the Signature keys
+    // should add a function to display the keys
+    void randomizeKeyList() {
+          int hashblocksize = 0;
+
+          for(auto hash  : hashlistvt[HASHBLOCK]) {
+              hashblocksize = std::get<2>(hash);
+
+              switch(std::get<0>(hash)) {
+                  case CIT64:
+                    //
+                    break;
+                  case CRC32:
+                    // 
+                    break;
+                  case CRC64:
+                    //
+                    break;
+                  case FAST32:
+                    //
+                    break;
+                  case FAST64:
+                    //      
+                    break;
+                  case FNV32:
+                    break;
+                  case FNV32A:
+                    break;
+                  case FNV64:
+                    break;
+                  case FNV64A:
+                    break;
+                  case HW64:
+                    // 
+                    break;
+                  case MD2s:
+                    break;
+                  case MD4s: 
+                    break;
+                  case MD5s:
+                    break;
+                  case MD6:
+                    //rf.read(reinterpret_cast<char*>(&hregister[0].md6i), hashblocksize);
+                    break;
+                  case MD62:
+                    // rf.read(reinterpret_cast<char*>(&hregister[0].md62i), hashblocksize);
+                    break;
+                  case MET641:
+                    /// 
+                    break;
+                  case MET642:
+                    // 
+                    break;
+                  case MX3:
+                    // 
+                    break;
+                  case PNG:
+                    // 
+                    break;
+                  case RIPE160:
+                    break;
+                  case SEA:
+                    // 
+                    break;
+                  case SIP64: 
+                    // 
+                    break;
+                  case SHA164:
+                    break;
+                  case SHA1128:
+                    break;
+                  case SHA1s:
+                    break;
+                  case SHA256s:
+                    break;
+                  case SHA384s:
+                    break;
+                  case SHA512s:
+                    break;
+                  case SPK32:
+                    // 
+                    break;
+                  case SPK64:
+                    // 
+                    break;
+                  case XXH32:
+                    // 
+                    break;
+                  case XXH64:
+                    // 
+                    break;
+                  case WP:
+                    break;
+                  case WYH:
+                    // 
+                    // 
+                    break;
+                  // default:
+                  //  std::cout << "Invalid hash" << std::endl;
+              }
+          }
+
+    }    
+
     // readBlockHashList
-    // write the hash list to a ofstream file object
+    // read the hash list to a ifstream file object
     void readBlockHashList(std::ifstream &rf) { 
 
           int hashblocksize = 0;
@@ -850,6 +1160,124 @@ public:
           return true;
     }
 
+    // display the hash list keys
+    std::string displayHLhashesKeys() {
+        // clear the string stream
+        ss.str(std::string());
+
+        int i = 0;
+        int hashblocksize = 0;
+        for(auto hash  : hashlistvt[HASHBLOCK]) {
+
+              hashblocksize = std::get<2>(hash); // should be the key size
+              ss << std::get<1>(hash) << " keys ";
+              // ss << "hash id " << std::get<0>(hash) << " " << " name " << std::get<1>(hash) << " hashblocksize " << std::to_string(hashblocksize) << " ";
+
+              switch(std::get<0>(hash)) {
+                  case CIT64:
+                     ss << std::to_string(hregister[0].city64seed) << " ";
+                     break;
+                  case CRC32:
+                     ss << std::to_string(hregister[0].crc32seed) << " ";
+                     break;
+                  case CRC64:
+                     ss << std::to_string(hregister[0].crc64seed) << " ";
+                     break;
+                  case FAST32:
+                     ss << std::to_string(hregister[0].fast32seed) << " ";
+                     break;
+                 case FAST64:
+                     ss << std::to_string(hregister[0].fast64seed) << " ";
+                     break;
+                  case FNV32:
+                     //ss << std::to_string(hregister[0].fnv32_1i) << " ";
+                     break;
+                  case FNV32A:
+                     //ss << std::to_string(hregister[0].fnv32a_1i) << " ";
+                     break;
+                  case FNV64:
+                     ss << std::to_string(hregister[0].fnv64_1i) << " ";
+                     break;
+                  case FNV64A:
+                     //ss << std::to_string(hregister[0].fnv64a_1i) << " ";
+                     break;
+                  case HW64:
+                  ////   addHashToDisplayStream(hregister[0].hw64key, 4); // TODO
+                     break;
+                  case MD2s:
+                     break;
+                  case MD4s:                     
+                     break;
+                  case MD5s:
+                     break;
+                  case MD6:
+                     //addHashToDisplayStream(hregister[0].md6i, hashblocksize);
+                     break;
+                  case MD62:
+                     //addHashToDisplayStream(hregister[0].md62i, hashblocksize);
+                     break;
+                  case MET641:
+                     ss << std::to_string(hregister[0].met641seed) << " ";
+                     break;
+                  case MET642:
+                     ss << std::to_string(hregister[0].met642seed) << " ";
+                     break;
+                  case MX3:
+                     ss << std::to_string(hregister[0].mx3seed) << " ";
+                     break;
+                  case PNG:
+                     ss << std::to_string(hregister[0].png64seed) << " ";
+                     break;
+                  case RIPE160:
+                     break;
+                  case SEA:
+                     ss << std::to_string(hregister[0].sea64seed) << " ";
+                     break;
+                  case SIP64:
+                     addHashToDisplayStream((unsigned char*) hregister[0].sipkey, 16);
+                     break;
+                  case SHA164:
+                     break;
+                  case SHA1128:
+                     break;
+                  case SHA1s:
+                     break;
+                  case SHA256s:
+                     break;
+                  case SHA384s:
+                     break;
+                  case SHA512s:
+                     break;
+                  case SPK32:
+                     ss << std::to_string(hregister[0].spookyseed32) << " ";
+                     break;
+                  case SPK64:
+                     ss << std::to_string(hregister[0].spookyseed64) << " ";
+                     break;
+                  case XXH32:
+                     ss << std::to_string(hregister[0].xxseed32) << " ";
+                     break;
+                  case XXH64:
+                     ss << std::to_string(hregister[0].xxseed64) << " ";
+                     break;
+                  case WP:
+                     break;
+                  case WYH:
+                     ss << std::to_string(hregister[0].wyseed64) << " ";
+                     // addHashToDisplayStream(hregister[0].wysecret64, 16);
+                     int i = 0;
+                     for(i=0; i < 16; ++i)
+                        ss << std::to_string(hregister[0].wysecret64[i]);
+                        ss << " ";
+                     break;
+                  // default:
+                  //  std::cout << "Invalid hash" << std::endl;
+              }
+         }
+         hashlist = ss.str();
+         return hashlist;         
+    }
+
     // display the hash list
     std::string displayHLhashes() {
         // clear the string stream
@@ -981,6 +1409,7 @@ public:
                ss << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (int)digest[i];
          ss << " ";
     }
+    
 
     // display the vector list
     // 1) file hashlist
