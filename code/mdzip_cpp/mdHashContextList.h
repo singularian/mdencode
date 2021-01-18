@@ -247,7 +247,7 @@ public:
                   case FNV64A:
                     break;
                   case HW64:
-                    rf.read(reinterpret_cast<char*>(&hregister[0].hw64key), 4);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].hw64key), 32);
                     break;
                   case MD2s:
                     break;
@@ -309,7 +309,7 @@ public:
                     break;
                   case WYH:
                     rf.read(reinterpret_cast<char*>(&hregister[0].wyseed64), sizeof(long));
-                    rf.read(reinterpret_cast<char*>(&hregister[0].wysecret64), 16);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].wysecret64), 128);
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
@@ -350,7 +350,7 @@ public:
                   case FNV64A:
                     break;
                   case HW64:
-                    wf.write(reinterpret_cast<char*>(&hregister[0].hw64key), 4);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].hw64key), 32);
                     break;
                   case MD2s:
                     break;
@@ -412,7 +412,7 @@ public:
                     break;
                   case WYH:
                     wf.write(reinterpret_cast<char*>(&hregister[0].wyseed64), sizeof(long));
-                    wf.write(reinterpret_cast<char*>(&hregister[0].wysecret64), 16);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].wysecret64), 128);
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
@@ -1169,40 +1169,42 @@ public:
         int hashblocksize = 0;
         for(auto hash  : hashlistvt[HASHBLOCK]) {
 
-              hashblocksize = std::get<2>(hash); // should be the key size
-              ss << std::get<1>(hash) << " keys ";
+              hashblocksize = std::get<2>(hash); // should be the key size     
               // ss << "hash id " << std::get<0>(hash) << " " << " name " << std::get<1>(hash) << " hashblocksize " << std::to_string(hashblocksize) << " ";
 
               switch(std::get<0>(hash)) {
                   case CIT64:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].city64seed) << " ";
                      break;
                   case CRC32:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].crc32seed) << " ";
                      break;
                   case CRC64:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].crc64seed) << " ";
                      break;
                   case FAST32:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].fast32seed) << " ";
                      break;
                  case FAST64:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].fast64seed) << " ";
                      break;
                   case FNV32:
-                     //ss << std::to_string(hregister[0].fnv32_1i) << " ";
                      break;
                   case FNV32A:
-                     //ss << std::to_string(hregister[0].fnv32a_1i) << " ";
                      break;
                   case FNV64:
-                     ss << std::to_string(hregister[0].fnv64_1i) << " ";
                      break;
                   case FNV64A:
-                     //ss << std::to_string(hregister[0].fnv64a_1i) << " ";
                      break;
                   case HW64:
-                  ////   addHashToDisplayStream(hregister[0].hw64key, 4); // TODO
+                     ////   addHashToDisplayStream(hregister[0].hw64key, 4); // TODO
+                     ss << std::get<1>(hash) << " keys ";
+                     for(i=0; i < 16; i++) { ss << hregister[0].hw64key << " "; }
                      break;
                   case MD2s:
                      break;
@@ -1217,23 +1219,29 @@ public:
                      //addHashToDisplayStream(hregister[0].md62i, hashblocksize);
                      break;
                   case MET641:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].met641seed) << " ";
                      break;
                   case MET642:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].met642seed) << " ";
                      break;
                   case MX3:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].mx3seed) << " ";
                      break;
                   case PNG:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].png64seed) << " ";
                      break;
                   case RIPE160:
                      break;
                   case SEA:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].sea64seed) << " ";
                      break;
                   case SIP64:
+                     ss << std::get<1>(hash) << " keys ";
                      addHashToDisplayStream((unsigned char*) hregister[0].sipkey, 16);
                      break;
                   case SHA164:
@@ -1249,25 +1257,30 @@ public:
                   case SHA512s:
                      break;
                   case SPK32:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].spookyseed32) << " ";
                      break;
                   case SPK64:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].spookyseed64) << " ";
                      break;
                   case XXH32:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].xxseed32) << " ";
                      break;
                   case XXH64:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].xxseed64) << " ";
                      break;
                   case WP:
                      break;
                   case WYH:
+                     ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].wyseed64) << " ";
                      // addHashToDisplayStream(hregister[0].wysecret64, 16);
                      int i = 0;
                      for(i=0; i < 16; ++i)
-                        ss << std::to_string(hregister[0].wysecret64[i]);
+                        ss << std::to_string(hregister[0].wysecret64[i]) << " ";
                         ss << " ";
                      break;
                   // default:

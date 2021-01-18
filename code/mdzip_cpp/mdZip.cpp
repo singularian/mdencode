@@ -16,10 +16,10 @@
 #include "common.h"
 #include "mdHashContextList.h"
 
-int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist);
+int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh);
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
                  int modsizeBytes, std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize, int hclblockblocksize, 
-                 std::string& filehashvector, std::string& blockhashvector, bool mdlist, int threadcount );
+                 std::string& filehashvector, std::string& blockhashvector, std::string& blockkeys, bool mdlist, int threadcount );
 void usage();
 
 using namespace std;
@@ -69,13 +69,15 @@ int main (int argc, char **argv) {
      std::string keylist;
      app.add_option("-k,--keylist", keylist, "Keylist csv string");
 
-     // randomize the keylist for the hashes
-     bool random = false;
-     app.add_option("--rand", random, "Randomize Keylist");
+     // TODO randomize the keylist for the file hashes
+
+     // randomize the keylist for the block hashes
+     bool randombh = false;
+     app.add_option("--randbh", randombh, "Randomize the Block Hash Keylist");
 
      // set list blocks
-     bool listzip = false;
-     app.add_option("-x,--list", listzip, "Display the Block list");
+     // bool listzip = false;
+     // app.add_option("-x,--list", listzip, "Display the Block list");
 
      // set logging
      bool runlogging = false;
@@ -106,14 +108,14 @@ int main (int argc, char **argv) {
      }
 
      // call mdzipfile
-     mdzipfile(filename, blocksize, modsize, filelist, blocklist);
+     mdzipfile(filename, blocksize, modsize, filelist, blocklist, randombh);
 
 }
 
 // mdzip an input file
 // current mdzip extension is .mdz
 // this is currently litte endian and 64 bit for the longs
-int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist) {
+int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh) {
 
      long blocknumber = 1;
      double mdversion = 1.01;
@@ -194,11 +196,32 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      // wf.write(reinterpret_cast<char*>(&filehashnames),   hclsize);
      wf.write(filehashnames.c_str(),   hclsize);
 
+     // TODO write the file hash key random list
+
      hclsize = blockhashnames.size();
      wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
      // wf.write(reinterpret_cast<char*>(&blockhashnames),   hclsize);
      wf.write(blockhashnames.c_str(),   hclsize);
-  
+
+     // write the block hash keys list
+     // if randomblock or randbh is set it uses the blockhashnames
+     // TODO allow the user to specify a block hash key list 
+     // For now I can make it use the same list as the blockhash list
+     std::string blockkeys = "default";
+     if (randombh == true) {
+         hclsize = blockhashnames.size();
+         wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
+         // std::cout << "bhash " <<  blockhashnames << std::endl;
+         // wf.write(blockhashnames.c_str(),   hclsize); 
+
+         hclblock.randomizeKeyList();
+         hclblock.writeKeyList(wf);
+         blockkeys = hclblock.displayHLhashKeys();
+     } else {
+         // write the hash size as a zero byte
+         hclsize = 0;
+         wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int)); 
+     }   
  
      // constexpr size_t bufferSize = blocksize;
      // unique_ptr<unsigned char[]> byteblock(new unsigned char[blocksize]);
@@ -227,7 +250,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
      // display the mdzip file info
      displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes, filehashnames, 
-     blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, true, 0);
+     blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, true, 0);
 
      while (nf)
      {
@@ -363,7 +386,8 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 // display the mdlist mdzip file info
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, 
                  int modsize, int modsizeBytes, std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize,
-                 int hclblockblocksize, std::string& filehashvector,  std::string& blockhashvector, bool mdlist, int threadcount ) {
+                 int hclblockblocksize, std::string& filehashvector,  std::string& blockhashvector, std::string& blockkeys, bool mdlist, 
+                 int threadcount ) {
 
 
    std::cout << std::left << std::setw(20) << "Filename Details: " << filename << std::endl;
@@ -383,6 +407,7 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
    std::cout << std::left << std::setw(20) << "Blockhashlist: "  << blockhashnames << std::endl;
    std::cout << std::left << std::setw(20) << "Filehashlist size: "  << filehashnames.size() << std::endl;
    std::cout << std::left << std::setw(20) << "Blockhashlist size: " << blockhashnames.size() << std::endl;
+   std::cout << std::left << std::setw(20) << "Blockhash key list: "   << blockkeys << std::endl;
 
    std::cout << std::left << std::setw(20) << "File Hash Bytes: "  << hclfileblocksize << std::endl;
    std::cout << std::left << std::setw(20) << "Block Hash Bytes: " << hclblockblocksize << std::endl;
@@ -407,10 +432,17 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
 // display the usage
 void usage() {
 std::string usageline = R"(
-Examples:
-   ./mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
-   ./mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
-   ./mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4 
+MDzip Examples:
+   mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
+   mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=true
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
+
+MDunzip Examples:
+   mdunzip --file=filename.mdz --thread=16 
+   mdunzip --file=test.mdz --thread=16 
+   mdunzip --file=test.mdz --list=true
+   mdunzip --file=filename.mdz --list=true --unzip=false   
 )";
 
     std::cout << usageline << std::endl;

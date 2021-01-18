@@ -118,7 +118,8 @@ Options:
   -b,--block INT:POSITIVE:INT in [1 - 100]
                               Blocksize number
   -m,--mod INT:POSITIVE       Modulus size number
-  -t,--thread,--threads INT:POSITIVE   Thread count number
+  -t,--thread,--threads INT:POSITIVE
+                              Thread count number
   --fhs INT:POSITIVE:INT in [1 - 34] ...
                               File Hashlist csv string
   --fh INT:POSITIVE:INT in [1 - 34] ...
@@ -128,16 +129,22 @@ Options:
   -s,--bh INT:POSITIVE:INT in [1 - 34] ...
                               Block Hashlist integers list
   -k,--keylist TEXT           Keylist csv string
-  --rand BOOLEAN              Randomize Keylist
-  -x,--list BOOLEAN           Display the Block list
+  --randbh BOOLEAN            Randomize the Block Hash Keylist
   -l,--log BOOLEAN            Run Logging
 
 
 
-Examples:
-   ./mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
-   ./mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
-   ./mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4 
+MDzip Examples:
+   mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
+   mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=true
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
+
+MDunzip Examples:
+   mdunzip --file=filename.mdz --thread=16 
+   mdunzip --file=test.mdz --thread=16 
+   mdunzip --file=test.mdz --list=true
+   mdunzip --file=filename.mdz --list=true --unzip=false   
 
 
 Hashlist:
@@ -177,13 +184,13 @@ ID          Hash Name   Description                   Key         Blocksize
 31          xxh32       xxHash32                      true        4           
 32          xxh64       xxHash64                      true        8           
 33          whp         Whirlpool                     false       64          
-34          wy64        WYhash 64                     true        8       
+34          wy64        WYhash 64                     true        8         
 ```                                                                                                 
 
 # MDunzip C++ Usage 
 
-```                                                                                                 
-user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ ./mdunzip                   
+```   
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$  mdunzip                                                                                              
 MDEncode MDunzip C++ Program
 Usage: [OPTIONS]
 
@@ -191,7 +198,8 @@ Options:
   -h,--help                   Print this help message and exit
   -f,--file TEXT:FILE REQUIRED
                               MDunzip filename
-  -t,--thread,--threads INT:POSITIVE   Thread count number
+  -t,--thread,--threads INT:POSITIVE
+                              Thread count number
   -l,--list BOOLEAN           List the mdzip file
   -u,--unzip BOOLEAN          mdunzip a file
   -o,--over BOOLEAN           Overwriting an existing mdunzip output file
@@ -199,11 +207,18 @@ Options:
 
 
 
-Examples:
-   ./mdunzip --file=filename.mdz --thread=16 
-   ./mdunzip --file=test.mdz --thread=16 
-   ./mdunzip --file=test.mdz --list=true
-   ./mdunzip --file=filename.mdz --list=true --unzip=false
+MDunzip Examples:
+   mdunzip --file=filename.mdz --thread=16 
+   mdunzip --file=test.mdz --thread=16 
+   mdunzip --file=test.mdz --list=true
+   mdunzip --file=filename.mdz --list=true --unzip=false
+
+MDzip Examples:
+   mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
+   mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=true
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
+
 
 
 Hashlist:
@@ -243,7 +258,7 @@ ID          Hash Name   Description                   Key         Blocksize
 31          xxh32       xxHash32                      true        4           
 32          xxh64       xxHash64                      true        8           
 33          whp         Whirlpool                     false       64          
-34          wy64        WYhash 64                     true        8  
+34          wy64        WYhash 64                     true        8   
 ```                                                                                                 
                                                                                                     
 

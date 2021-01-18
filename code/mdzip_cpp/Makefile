@@ -40,8 +40,8 @@ testhash:
 	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
 	g++ external/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11
 clean:
-	rm -r mdzip mdunzip *.log *.mdz
+	rm -r mdzip mdunzip mdzipnh mdunzipnh *.log *.mdz *.mdsz
 cleantest:
-	rm decoderRandomTestHC2 test_sha1 testhw testhcl *.log *.mdz
+	rm decoderRandomTestHC2 test_sha1 testhw testhcl *.log *.mdz *.mdsz
 list:
 	echo "all test clean test"
