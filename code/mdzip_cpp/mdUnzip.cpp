@@ -115,9 +115,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    int modsize          = 0;
    int hclfilesize;
    int hclblocksize;
-   // ===========================
-   int hclblockkeysize = 0;
-   // ===========================
+   int hclblockkeysize = 0;  // hash block random key list size
    std::string filehashnames;   
    std::string blockhashnames;
 
@@ -169,12 +167,9 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    delete buf2;
    // nf.read(reinterpret_cast<char*>(&blockhashnames), hclblocksize);
 
-   // TODO load the keylist 
-   // create another int size for the keylist and load the keylist into a char array
-   // then set each hashlist object with the keylist
-   // probably should add a key byte size to the registry 
-   // change the hash block list to a struct then have the first hashlist object load it and use it's registry to update the others
-   // the thread_local doesn't work
+   // TODO load the file hash keylist 
+
+   // Load in the block hash random key size
    nf.read(reinterpret_cast<char*>(&hclblockkeysize),   sizeof(int));
 
    // calculate the file block count and last block size
@@ -201,7 +196,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    // set the file block hash list
    std::string blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
 
-   // if the hclblockkeylist is greater than zero load in the random keylist 
+   // if the hclblockkeylist size is greater than zero load in the random block hash keylist 
    std::string blockkeys = "default"; 
    if (hclblockkeysize > 0) {
       hclblock.readKeyList(nf);
@@ -281,9 +276,7 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
    int modsize          = 0;
    int hclfilesize;
    int hclblocksize;
-   // ===========================
-   int hclblockkeysize = 0;
-   // ===========================
+   int hclblockkeysize = 0; // hash block random key list size
    std::string filehashnames;   
    std::string blockhashnames;
 
@@ -382,7 +375,7 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
 
    // TODO create a random file key size
 
-   // if the hclblockkeylist is greater than zero load in the random block keylist
+   // if the hclblockkeylist size is greater than zero load in the random block hash keylist
    std::string blockkeys = "default"; 
    if (hclblockkeysize > 0) {
       hclblock.readKeyList(nf);
@@ -585,7 +578,7 @@ void usage() {
 std::string usageline = R"(
 MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
-   mdunzip --file=test.mdz --thread=16 
+   mdunzip --file=test.mdz --thread=32 
    mdunzip --file=test.mdz --list=true
    mdunzip --file=filename.mdz --list=true --unzip=false
 
