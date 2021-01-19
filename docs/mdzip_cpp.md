@@ -3,7 +3,7 @@
 This is the MDzip C++ command line utility can compress a file into a MDzip binary byte block file.  
 MDunzip will decompress the input signature binary block file to an output file.   
 MDunzip and MDzip use a Hash Context list to encode and decode a file.  
-MDZip uses a Prefix binary file with file and byte signatures with a modular floor. It can also use a signature keylist.  
+MDZip uses a header prefixed binary file with file and byte block signatures with a modular floor. It can also use a signature keylist.  
 MDzip C++ takes an optional input key randomizer for the block hash list keys. It randomizes the supported signature keys and writes them to the mdzip file.    
 MDunzip will decompress the input signature binary block file to an output file.  
 Block size is limited by the number of CPU threads and processors.   
