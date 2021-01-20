@@ -8,6 +8,8 @@ git clone ssh://git@github.com/singularian/mdencode.git
 
 # mdencode Go Library Dependancies
 
+MDencode now uses the go package builder.
+
 ```
 Go Library Dependencies
 go get -u golang.org/x/crypto/blake2s
@@ -48,11 +50,13 @@ make build builds the mdencode to the mdBuild directory
 
 $GOPATH/github.com/singularian/mdencode/build $ make build  
 
-# Build mdZip and mdUnzip
+# Build MDzip and MDunzip GO
 
 mdzip and mdunzip and mdlist are the three main components for mdzip.
 mdzip creates a binary signature file with a modulus or modular floor.
 mdunzip will decode and mdzip file and write the output to a destination file.
+
+This is the prototype mdzip/mdunzip program. It has differences from the C++ version.
 
 
 ### Path
@@ -105,6 +109,6 @@ $GOPATH/github.com/singularian/mdencode/build $ make test               (Main bu
  
  $GOPATH/github.com/singularian/mdencode/build   (main build directory)  
  
- $GOPATH/github.com/singularian/mdencode/code/testdecode  
+ $GOPATH/github.com/singularian/mdencode/code/testdecode_cpp  
  $GOPATH/github.com/singularian/mdencode/code/decode  
  $GOPATH/github.com/singularian/mdencode/code/mdencode   
