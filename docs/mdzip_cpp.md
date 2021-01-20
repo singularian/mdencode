@@ -107,7 +107,7 @@ path: [github.com/singularian/mdencode/code/mdzip_cpp/](https://github.com/singu
 ### MDZip C++ Usage Example
 
 ```                                                                                                 
-user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ ./mdzip                     
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ ./mdzip             
 MDEncode MDzip C++ Program
 Usage: [OPTIONS]
 
@@ -189,8 +189,8 @@ ID          Hash Name   Description                   Key         Blocksize
 
 # MDunzip C++ Usage 
 
-```   
-user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$  mdunzip                                                                                              
+```     
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ ./mdunzip                                                                                                      
 MDEncode MDunzip C++ Program
 Usage: [OPTIONS]
 
@@ -285,9 +285,28 @@ These are a brief list of collision management in mdzip and mdunzip.
 
 # Build
 
-This is a guide for building MDencode on Linux.
+This is a guide for building MDencode MDzip C++ on Linux.
 
-[Example Build](https://github.com/singularian/mdencode/blob/master/docs/Build.md)
+```
+1) Install openssl
+   Under ubuntu 
+   apt-get install -y \
+    openssl \
+    libssl-dev \
+    libgmp3-dev \
+2) cd to the fnv directory
+   cd ~/mdencode/code/testdecode_cpp/external/fnv
+   RUN make install
+3) cd to the mdzip_cpp code director
+   cd ~/mdencode/code/mdzip_cpp 
+   make all
+4) Optional build the test c++ program
+   cd ~/mdencode/code/mdzip_cpp
+   make test
+4) Optional build path
+   cd ~/mdencode/build 
+   make buildcpp  
+```
 
 # Docker Container  
 
