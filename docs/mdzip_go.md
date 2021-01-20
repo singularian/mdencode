@@ -1,4 +1,4 @@
-# Project MDencode MDzip GO Overview  
+# Project MDencode Prototype MDzip GO Overview  
   
 MDzip GO is a command line utility can compress a file into a MDzip binary byte block file.  
 MDunzip will decompress the input signature binary block file to an output file.   
