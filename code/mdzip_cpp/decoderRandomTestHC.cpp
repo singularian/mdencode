@@ -228,10 +228,10 @@ int main (int argc, char **argv) {
      }
 
      // if not found = 1 then no match was found
-         if (mutex.getIsMatched() == 1) {
+     if (mutex.getIsMatched() == 1) {
             std::cout << "Modulus Scan Match Not Found" << std::endl;
             // break; // need to check the other blocks
-         // match is found   
+     // match is found   
      } else {
 
         int threadMatchNumber = mutex.getMatchThread(); 
