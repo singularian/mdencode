@@ -41,7 +41,8 @@ unsigned char *setByteBlock(size_t num_bytes);
 int calcExponent (mpz_t blockint);
 int calcExponentModulus (mpz_t modulus, mpz_t blockint);
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& vectorlist, std::string& displayHLhashes, mdMutexLog *log );
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, 
+                  int expmod, int blocksize, int threadcount, std::string& vectorlist, std::string& displayHLhashes,  std::string& blockkeys, mdMutexLog *log );
 void usage();
 
 // main
@@ -74,9 +75,9 @@ int main (int argc, char **argv) {
      // std::vector<int> vals;
      app.add_option("-s,--hl", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
-     // add a hash keylist parameter
-     std::string keylist;
-     app.add_option("-k,--keylist", keylist, "Keylist csv string");
+     // randomize the keylist for the block hashes
+     bool randombh = false;
+     app.add_option("--randbh", randombh, "Randomize the Block Hash Keylist");
 
      // process the hex byte arguments
      std::string hexstring; 
@@ -92,14 +93,9 @@ int main (int argc, char **argv) {
         return app.exit(e);
      }
 
+     // process the block hashlist
      csvvals.insert(csvvals.end(), vals.begin(), vals.end());
-     auto it = unique(begin(csvvals), end(csvvals));
-     csvvals.erase(it, end(csvvals));
-     // need to unique this list for duplicates
-     if (csvvals.size() > 0) {
-         def.clear();
-         def.insert(def.end(), csvvals.begin(), csvvals.end());
-     }
+     def.insert(def.end(), csvvals.begin(), csvvals.end());
 
      // for(string v  : csvvals)
 /*   std::cout << "hash values ";
@@ -190,10 +186,21 @@ int main (int argc, char **argv) {
      // this allows it to run mulithreaded 
      modscan* mst = new modscan[threadcount];
      for(int tnum = 0; tnum < threadcount; tnum++) {
-         mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex);
-         // set the hash context list and the signatures based on the current byte block
-         mst[tnum].hcl.setVectorHL(def, HASHBLOCK);
-         mst[tnum].hcl.setByteBlockHashList(byteblock, blocksize);
+ 
+        mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex);
+ 
+        // set the hash context list and the signatures based on the current byte block
+        mst[tnum].hcl.setVectorHL(def, HASHBLOCK);
+        
+        // randomize the keylist if the randombh is true
+        // copy the keylist to the other modscan objects after the first modscan object keylist randomization
+        if (randombh == true) { 
+            if (tnum == 0) mst[tnum].hcl.randomizeKeyList();
+            if (tnum > 0)  mst[tnum].hcl.hregister[0] = mst[0].hcl.hregister[0];
+        } 
+
+        // initialize the block hash signature list
+        mst[tnum].hcl.setByteBlockHashList(byteblock, blocksize);
      } 
 
      // initialize the modulus scan threads vector
@@ -205,7 +212,13 @@ int main (int argc, char **argv) {
      // display the current block stats
      std::string vectorlist = mst[0].hcl.getHLvectorsString(HASHBLOCK);
      std::string hashlist   = mst[0].hcl.displayHLhashes();
-     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, vectorlist, hashlist, &log );
+
+     std::string blockkeys = "default"; 
+     if (randombh == true) {
+        blockkeys = mst[0].hcl.displayHLhashKeys();
+     }  
+
+     displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, vectorlist, hashlist, blockkeys, &log );
 
      // std::cout << endl << "Running decode modscan" << endl << endl;
      log.writeLog("Running decode modscan");
@@ -398,7 +411,8 @@ void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {
 
 
 // displays the modulus scan information
-void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, int blocksize, int threadcount, std::string& vectorlist, std::string& hashlist, mdMutexLog *log) {
+void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, 
+                  int blocksize, int threadcount, std::string& vectorlist, std::string& hashlist, std::string& blockkeys, mdMutexLog *log) {
 
      std::ostringstream result;
      int f = 0;
@@ -475,6 +489,10 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      result << "Block Signatures         ";
      result << hashlist;
      result << endl;
+     
+     // result << std::left << std::setw(20) << "Blockkeylist: "   << blockkeys << std::endl;
+     result << "Blockkeylist             " << blockkeys << std::endl;
+     
 
      result << "Thread Count             " << std::to_string(threadcount) << endl;
 
@@ -492,13 +510,14 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 void usage() {
 std::string usageline = R"(
 Examples:
-   ./decoderRandomTestHC2 -b 12 -m 64 -t 16
-   ./decoderRandomTestHC2 --block=12 --mod=64    --threads=16
-   ./decoderRandomTestHC2 --block=12 --mod=128   --threads=16
-   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=0011
-   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011
-   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
-   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
+   decoderRandomTestHC2 -b 12 -m 64 -t 16
+   decoderRandomTestHC2 --block=12 --mod=64    --threads=16
+   decoderRandomTestHC2 --block=12 --mod=128   --threads=16
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=0011
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
+   decoderRandomTestHC2 --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh=true --block=12
 )";
 
     cout << usageline << endl;

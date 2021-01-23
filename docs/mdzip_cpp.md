@@ -326,32 +326,34 @@ This is the Usage for decoderRandomTestHC2.
 
 ```
 MDEncode GMP C++ Test Program
-Usage: ./decoderRandomTestHC2 [OPTIONS]
+Usage: decoderRandomTestHC2 [OPTIONS]
 
 Options:
   -h,--help                   Print this help message and exit
   -b,--block UINT:POSITIVE:INT in [1 - 100]
                               Blocksize number
   -m,--mod INT:POSITIVE       Modulus size number
-  -t,--thread,--threads INT:POSITIVE   Thread count number
+  -t,--thread,--threads INT:POSITIVE
+                              Thread count number
   -r,--bh INT:POSITIVE:INT in [1 - 34] ...
                               Block Hashlist csv string
   -s,--hl INT:POSITIVE:INT in [1 - 34] ...
                               Block Hashlist integers list
-  -k,--keylist TEXT           Keylist csv string
+  --randbh BOOLEAN            Randomize the Block Hash Keylist
   -x,--hex TEXT               Hex Byteblock string
   -l,--log BOOLEAN            Run Logging
 
 
 
 Examples:
-   ./decoderRandomTestHC2 -b 12 -m 64 -t 16
-   ./decoderRandomTestHC2 --block=12 --mod=64    --threads=16
-   ./decoderRandomTestHC2 --block=12 --mod=128   --threads=16
-   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=0011
-   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011
-   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
-   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
+   decoderRandomTestHC2 -b 12 -m 64 -t 16
+   decoderRandomTestHC2 --block=12 --mod=64    --threads=16
+   decoderRandomTestHC2 --block=12 --mod=128   --threads=16
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=0011
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
+   decoderRandomTestHC2 --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh=true --block=12
 
 
 Hashlist
@@ -391,7 +393,7 @@ ID          Hash Name   Description                   Key         Blocksize
 31          xxh32       xxHash32                      true        4           
 32          xxh64       xxHash64                      true        8           
 33          whp         Whirlpool                     false       64          
-34          wy64        WYhash 64                     true        8           
+34          wy64        WYhash 64                     true        8            
 ```
 
 ## Example 1: decoderRandomTestHC Tests  
