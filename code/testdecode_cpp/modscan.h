@@ -4,13 +4,13 @@
  * 
  * Project MDencode GMP C++ Modulus Scan Test Program
  * 
- * modscan.h is the modulus scan class
+ * modscanFile.h is the modulus scan mdunzip file class
  * 
  * 
  */
 #include <bits/stdc++.h>
 #include <openssl/sha.h>
-#include "mdHashContextList.h"
+#include <gmp.h>
 
 using namespace std;
 
@@ -22,7 +22,8 @@ class modscan
        unsigned char *byteblock; 
        mdMutex* mutexref;
        mdMutexLog* log;
-       // mdHashContextList hcl;
+       bool stop;
+       bool stopped;
     public: 
        string filename; 
        int exponent;
@@ -52,7 +53,8 @@ class modscan
        mpz_init_set_str(two, "2", 10); // exponent floor
        mpz_init_set_str(modremainder, "0", 10); // exponent floor
        mpz_init_set_str(modulusThreadInt, "0", 10); // exponent floor
-       mpz_init_set_ui(modulusThreadInt, (unsigned long) threadnumber); // exponent floor
+       /////mpz_init_set_ui(modulusThreadInt, (unsigned long) threadnumber); // exponent floor
+       mpz_init_set_ui(modulusThreadInt, 0);
        // mpz_init_set_ui(modulusThreadInt, threadnumber); // exponent floor
        // mpz_inits(remainder, modulusInt, modulusExpInt, blockInt, NULL);
        mpz_inits(remainder, modulusInt, modulusThreadInt, modulusExpInt, modulusExpIntCeil, NULL);
@@ -71,7 +73,6 @@ class modscan
        if (sizeof(byteblock) / sizeof(byteblock[0]) != 0) {
            cout << "Free byteblock" << endl;
            delete []byteblock;
-       // free (byteblock);
        }
     }
 
@@ -90,17 +91,23 @@ class modscan
         blocksize    = blocks;
         threadnumber = threadnum;
         threadcount  = threadcnt;
+        stop         = false;
+        stopped      = false;
         
-
-/*        printf("modulus blocksize %d \n",  blocksize);
+    // ==================================================================
+    // test code
+    /*if (threadnum == 0) {
+        printf("modulus blocksize %d \n",  blocksize);
         printf("modulus exponent1 %d \n",  exponent);
         printf("modulus exponent2 %d \nmodulus int ",  modexponent);
         gmp_printf("modulus int %Zd\n", modulusInt);
         gmp_printf("modulus int remainder %Zd\n", remainder);
         gmp_printf("starting block int %Zd\n", blockInt);
-*/
+    }*/
+    // ==================================================================
+
         byteblock = new unsigned char[blocksize];
-        // byteblock = (unsigned char *) malloc(blocksize);
+
 
     }
  
@@ -109,12 +116,11 @@ class modscan
        std::cout << "Filename is: " << filename << endl; 
     } 
 
-    void decode()
+    int decode()
     {
        // std::cout << endl << "Running decode modscan" << endl << endl;
 
        size_t count;
-       int continueFlag = 0;
        int lineNum = 0;
        int lineCount = 100000000;
        lineCount = lineCount + (1000000 * (threadnumber + 1));
@@ -140,11 +146,11 @@ class modscan
        // add the modulusInt * threadnum
        // it expects the threadnumber argument to be an unsigned long int or it doesn't multiply correctly
        mpz_add_ui (modulusThreadInt, modulusThreadInt, (unsigned long int) threadnumber);
-       //if (threadnumber == 2)
+       //if (threadnumber == 1)
        //gmp_printf("\n\n\n\n\n\nmodulus modulusthreadint before %d modulus threadint %Zd\n", threadnumber, modulusThreadInt);
        mpz_mul (modulusThreadInt, modulusThreadInt, modulusInt);
        
-       //if (threadnumber == 2)
+       //if (threadnumber == 1)
        //gmp_printf("\n\n\n\n\n\nmodulus threadint %d modulo %Zd after modulus thread int %Zd)\n", threadnumber, modulusInt, modulusThreadInt);
        mpz_add (blockInt, blockInt, modulusThreadInt); 
 
@@ -173,7 +179,7 @@ class modscan
 
        // should add some initial logging here for the initial blockInt
 
-       while (continueFlag == 0)
+       while (stop == false)
        {
            // byte order and endian parameters must match the import byte block 
            // currently byte order msb and native endian
@@ -210,11 +216,14 @@ class modscan
                  }
               }
            }
-           
+          
 
            mpz_add (blockInt, blockInt, modulusInt);
            lineNum++;
-       }
+        }
+
+       stopped = true; 
+       return 0;
 
     }
 
@@ -247,6 +256,54 @@ class modscan
     unsigned char* getModscanByteBlock()
     {
         return byteblock; 
+    }
+
+    // check if the thread is stopped
+    bool isStoppedThread() {
+        
+        return stopped;
+    }
+
+    // Stop the thread
+    void stopThread() {
+        // std::cout << "Stopping The thread " << threadnumber << " has stopped..." << std::endl;
+        stop = true;
+    }
+
+    // void resetThread( mpz_t rem, mpz_t modint, int modexp, int blocks) {
+    void resetThread( mpz_t rem, mpz_t modint, int modexp, int blocks, int threadnum) {
+        stop        = false;
+        stopped     = false;
+        exponent    = modexp;
+        modexponent = 1;
+
+        // check if this is the last byteblock less than the blocksize
+        if (blocks < blocksize) {
+            delete []byteblock;
+            byteblock = new unsigned char[blocks];
+        }
+
+        blocksize    = blocks;
+
+        mpz_init_set_str(remainder, "0", 10); 
+        mpz_init_set_str(modremainder, "0", 10); // exponent floor
+        mpz_init_set_str(modulusInt, "0", 10);
+        mpz_init_set_str(blockInt, "0", 10);
+        mpz_init_set_ui(modulusThreadInt, 0);
+
+        mpz_add (remainder, remainder, rem);
+        mpz_add (modulusInt, modulusInt, modint);
+        mpz_add (blockInt, blockInt, remainder);
+
+/*        if (threadnum == 0) {
+        printf("modulus blocksize %d \n",  blocksize);
+        printf("modulus exponent1 %d \n",  exponent);
+        printf("modulus exponent2 %d \nmodulus int ",  modexponent);
+        gmp_printf("modulus int %Zd\n", modulusInt);
+        gmp_printf("modulus int remainder %Zd\n", remainder);
+        gmp_printf("starting block int %Zd\n", blockInt);
+        }
+*/
     }
 
 }; 

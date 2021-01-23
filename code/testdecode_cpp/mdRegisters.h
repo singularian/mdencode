@@ -1,4 +1,4 @@
-#include "../testdecode_cpp/external/fnv/fnv.h"
+#include "external/fnv/fnv.h"
 
 struct hash_list 
 {
@@ -33,7 +33,7 @@ struct hash_list
     // highway hash
     uint64_t hw64i;
     uint64_t hw64o;
-    const uint64_t hw64key[4] = {1, 2, 3, 4};
+    uint64_t hw64key[4] = {1, 2, 3, 4};
     // metro64hash
     uint8_t met641i[8];
     uint8_t met641o[8];

@@ -28,6 +28,7 @@
 #include "external/CLI11.hpp" 
 #include "mdMutex.h"
 #include "mdMutexLog.h"
+#include "mdHashContextList.h"
 #include "modscan.h"
 #include "string.h"
 #include "stdio.h"
@@ -182,7 +183,7 @@ int main (int argc, char **argv) {
      // initialize the mutex object
      // I should set a result variable and pass it into the mutex
      // it result = 0 then the mutex can set it and stop the execution for the mod scan
-     mdMutex mutex;
+     mdMutex mutex(threadcount);
      mdMutexLog log(runlogging);
 
      // initialize the modulus scan array
@@ -218,49 +219,57 @@ int main (int argc, char **argv) {
         threads.at(tnum).detach();
      } 
 
-     // need to change this to three states
-     // found     = 0
-     // not found = 1
-     // found     = 2
-     // Maybe while (result == 0) {
-     while (mutex.getIsMatched() == false) {
+     // check the mutex ismatched for three states
+     // searching = 0 // searching for the value with the modscan
+     // not found = 1 // modscan mutext match result
+     // found     = 2 // modscan mutext match result 
+     while (mutex.getIsMatched() == 0) {
 
      }
 
-     int threadMatchNumber = mutex.getMatchThread(); 
-
-     // calculate the duration time
-     auto stop = std::chrono::high_resolution_clock::now(); 
-     // auto hours = std::chrono::duration_cast<std::chrono::hours>(stop - start); 
-     // auto min = std::chrono::duration_cast<std::chrono::minutes>(stop - start); 
-     double elapsed_time = double(std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count());
-
-     // check the modulus scan results
-     std::ostringstream result; 
-     unsigned char *modbyteblock;
-     modbyteblock = mst[threadMatchNumber].getModscanByteBlock();
-     if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
-          result << endl << "Found Match" << endl << endl;
-          result << "Elapsed Time (s) " << std::to_string(elapsed_time/1e9) << endl;
-          result << "Modulus Scan thread " << threadMatchNumber << " and Random byteblock match"; // << endl;
-          log.writeLog(result.str());
-
-          // log.logMatchByteblock(byteblock, blocksize, true);
-          // log.logMatchByteblock(modbyteblock, blocksize, true);
-
-          log.logMatchByteblock(byteblock, blocksize, false);
-          log.logMatchByteblock(modbyteblock, blocksize, false);
-
+     // if not found = 1 then no match was found
+         if (mutex.getIsMatched() == 1) {
+            std::cout << "Modulus Scan Match Not Found" << std::endl;
+            // break; // need to check the other blocks
+         // match is found   
      } else {
-          result << "Modulus Scan and Random byteblock don't match" << endl;
-          log.writeLog(result.str());
 
-          log.logMatchByteblock(byteblock, blocksize, true);
-          log.logMatchByteblock(modbyteblock, blocksize, true);
+        int threadMatchNumber = mutex.getMatchThread(); 
 
-          log.logMatchByteblock(byteblock, blocksize, false);
-          log.logMatchByteblock(modbyteblock, blocksize, false);
-     }
+        // calculate the duration time
+        auto stop = std::chrono::high_resolution_clock::now(); 
+        // auto hours = std::chrono::duration_cast<std::chrono::hours>(stop - start); 
+        // auto min = std::chrono::duration_cast<std::chrono::minutes>(stop - start); 
+        double elapsed_time = double(std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count());
+
+        // check the modulus scan results
+        std::ostringstream result; 
+        unsigned char *modbyteblock;
+        modbyteblock = mst[threadMatchNumber].getModscanByteBlock();
+
+        if (memcmp(modbyteblock, byteblock, blocksize) == 0) {
+            result << endl << "Found Match" << endl << endl;
+            result << "Elapsed Time (s) " << std::to_string(elapsed_time/1e9) << endl;
+            result << "Modulus Scan thread " << threadMatchNumber << " and Random byteblock match"; // << endl;
+            log.writeLog(result.str());
+
+            // log.logMatchByteblock(byteblock, blocksize, true);
+            // log.logMatchByteblock(modbyteblock, blocksize, true);
+
+            log.logMatchByteblock(byteblock, blocksize, false);
+            log.logMatchByteblock(modbyteblock, blocksize, false);
+
+        } else {
+            result << "Modulus Scan and Random byteblock don't match" << endl;
+            log.writeLog(result.str());
+
+            log.logMatchByteblock(byteblock, blocksize, true);
+            log.logMatchByteblock(modbyteblock, blocksize, true);
+
+            log.logMatchByteblock(byteblock, blocksize, false);
+            log.logMatchByteblock(modbyteblock, blocksize, false);
+        }
+     }    
 
      /* free used memory */
      free (byteblock);
@@ -296,7 +305,7 @@ unsigned char *convertHexToByteBlock(std::string & source) {
     size_t num_bytes = (source.length() / 2);
     stream = (unsigned char *) malloc(num_bytes * sizeof(unsigned char));
 
-    // elimnate this vector and just set these
+    // TODO eliminate this vector and just set these
     std::vector<unsigned char> bytes;
 
 
@@ -483,13 +492,13 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
 void usage() {
 std::string usageline = R"(
 Examples:
-   ./decoderRandomTestHCthreads_gmp -b 12 -m 64 -t 16
-   ./decoderRandomTestHCthreads_gmp --block=12 --mod=64    --threads=16
-   ./decoderRandomTestHCthreads_gmp --block=12 --mod=128   --threads=16
-   ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=0011
-   ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=FFd033FF202020202011
-   ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
-   ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
+   ./decoderRandomTestHC2 -b 12 -m 64 -t 16
+   ./decoderRandomTestHC2 --block=12 --mod=64    --threads=16
+   ./decoderRandomTestHC2 --block=12 --mod=128   --threads=16
+   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=0011
+   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011
+   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
+   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
 )";
 
     cout << usageline << endl;

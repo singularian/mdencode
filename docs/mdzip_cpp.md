@@ -345,13 +345,13 @@ Options:
 
 
 Examples:
-   ./decoderRandomTestHCthreads_gmp -b 12 -m 64 -t 16
-   ./decoderRandomTestHCthreads_gmp --block=12 --mod=64    --threads=16
-   ./decoderRandomTestHCthreads_gmp --block=12 --mod=128   --threads=16
-   ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=0011
-   ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=FFd033FF202020202011
-   ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
-   ./decoderRandomTestHCthreads_gmp --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
+   ./decoderRandomTestHC2 -b 12 -m 64 -t 16
+   ./decoderRandomTestHC2 --block=12 --mod=64    --threads=16
+   ./decoderRandomTestHC2 --block=12 --mod=128   --threads=16
+   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=0011
+   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011
+   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
+   ./decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
 
 
 Hashlist
