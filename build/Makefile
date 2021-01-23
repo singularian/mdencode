@@ -65,7 +65,7 @@ build:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${MDZIP}/${CMD}/mdsig.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile ${MDZIP}/${CMD}/randomFile.go
 buildcpp:
-	@echo "Building mdzip cpp"
+	@echo "Building mdzip C++"
 	g++ -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 	g++ -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdZip.cpp  -o mdzipcpp -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	g++ -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdUnzip.cpp  -o mdunzipcpp -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
@@ -77,7 +77,7 @@ mdencode:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mddbreport ${MDE}/${CMD}/mdencodeReport.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdbinlist ${MDE}/${CMD}/testBinReadMdFmt.go
 mdzip: 
-	@echo "Building mdzip go"
+	@echo "Building mdzip GO"
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdzip ${MDZIP}/${CMD}/mdzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdunzip ${MDZIP}/${CMD}/mdUnzip.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlist ${MDZIP}/${CMD}/mdlist.go
@@ -86,7 +86,7 @@ mdzip:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${MDZIP}/${CMD}/mdsig.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile ${MDZIP}/${CMD}/randomFile.go
 test:
-	@echo "Building mdzip go decodeRandom Tests"
+	@echo "Building mdzip GO decodeRandom Tests"
 	go build -o decoderRandom ${TESTGO}/${CMD}/decoderRandom.go
 	go build -o decoderRandomTest ${TESTGO}/${CMD}/decoderRandomTest.go
 	go build -o decoderRandomTestHC ${TESTGO}/${CMD}/decoderRandomTestHC.go
