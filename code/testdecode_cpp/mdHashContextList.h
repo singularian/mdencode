@@ -71,7 +71,7 @@ struct Hashlist {
 Hashlist mdHashlist[LAST] = {
     {1,  "cit64",    "Cityhash 64",           true,     8,      8},
     {2,  "crc32",    "CRC 32",                true,     4,      4},
-    {3,  "crc64",    "CRC 64",                true,     8,      4},
+    {3,  "crc64",    "CRC 64",                true,     8,      8},
     {4,  "fast32",   "Fasthash 32",           true,     4,      4},
     {5,  "fast64",   "Fasthash 64",           true,     8,      8},
     {6,  "fnv32",    "FNV-1  32",             false,    4,      0},
