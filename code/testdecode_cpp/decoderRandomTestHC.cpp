@@ -93,9 +93,17 @@ int main (int argc, char **argv) {
         return app.exit(e);
      }
 
-     // process the block hashlist
+     // unique the block hash list
      csvvals.insert(csvvals.end(), vals.begin(), vals.end());
-     def.insert(def.end(), csvvals.begin(), csvvals.end());
+     auto it = unique(begin(csvvals), end(csvvals));
+     csvvals.erase(it, end(csvvals));
+
+     // need to unique this list for duplicates
+     // if the csvals list is greater than zero use it instead of the default list
+     if (csvvals.size() > 0) {
+         def.clear();
+         def.insert(def.end(), csvvals.begin(), csvvals.end());
+     }
 
      // for(string v  : csvvals)
 /*   std::cout << "hash values ";

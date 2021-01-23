@@ -1204,7 +1204,7 @@ public:
                   case HW64:
                      ////   addHashToDisplayStream(hregister[0].hw64key, 4); // TODO
                      ss << std::get<1>(hash) << " keys ";
-                     for(i=0; i < 16; i++) { ss << hregister[0].hw64key << " "; }
+                     for(i=0; i < 4; i++) { ss << std::to_string(hregister[0].hw64key[i]) << " "; }
                      break;
                   case MD2s:
                      break;
