@@ -69,41 +69,41 @@ struct Hashlist {
 // could add a zero / non used signature and a last non used
 // so it starts at index 1
 Hashlist mdHashlist[LAST] = {
-    {1,  "cit64",    "Cityhash 64",           false, 8,   0},
-    {2,  "crc32",    "CRC 32",                false, 4,   0},
-    {3,  "crc64",    "CRC 64",                false, 8,   0},
-    {4,  "fast32",   "Fasthash 32",           true,  4,   0},
-    {5,  "fast64",   "Fasthash 64",           true,  8,   0},
-    {6,  "fnv32",    "FNV-1  32",             false, 4,   0},
-    {7,  "fnv32a",   "FNV-1a 32",             false, 4,   0},
-    {8,  "fnv64",    "FNV-1  64",             false, 8,   0},
-    {9,  "fnv64a",   "FNV-1a 64",             false, 8,   0},
-    {10, "hw64",     "Highway Hash 64",       true,  8,   0},
-    {11, "md2",      "MD2",                   false, 16,  0},
-    {12, "md4",      "MD4",                   false, 16,  0},
-    {13, "md5",      "MD5",                   false, 16,  0},
-    {14, "md6",      "MD6",                   false, 20,  0},
-    {15, "md62",     "MD6 Quicker",           true,  20,  0},
-    {16, "met641",   "Metro Hash 64 v1",      true,  8,   0},
-    {17, "met642",   "Metro Hash 64 v2",      true,  8,   0},
-    {18, "mx3",      "MX3",                   true,  8,   0},
-    {19, "png",      "Pengyhash 64",          true,  8,   0},
-    {20, "ripe160",  "Ripe MD 160",           false, 20,  0},
-    {21, "sea64",    "Seahash 64",            true,  8,   0},
-    {22, "sip64",    "Siphash 64",            true,  8,   0},
-    {23, "sha1_64",  "SHA1 64",               false, 8,   0},
-    {24, "sha1_128", "SHA1 128",              false, 16,  0},
-    {25, "sha1",     "SHA1",                  false, 20,  0},
-    {26, "sha256",   "SHA 256",               false, 32,  0},
-    {27, "sha384",   "SHA 384",               false, 48,  0},
-    {28, "sha512",   "SHA 512",               false, 64,  0},
-    {29, "spk32",    "Spooky 32",             true,  4,   0},
-    {30, "spk64",    "Spooky 64",             true,  8,   0},
-    {31, "xxh32",    "xxHash32",              true,  4,   0},
-    {32, "xxh64",    "xxHash64",              true,  8,   0},
-    {33, "whp",      "Whirlpool",             false, 64,  0},
-    {34, "wy64",     "WYhash 64",             true,  8,   0},
-    {32, "last",     "Unused Signature",      false, 8,   0}
+    {1,  "cit64",    "Cityhash 64",           true,     8,      8},
+    {2,  "crc32",    "CRC 32",                true,     4,      4},
+    {3,  "crc64",    "CRC 64",                true,     8,      4},
+    {4,  "fast32",   "Fasthash 32",           true,     4,      4},
+    {5,  "fast64",   "Fasthash 64",           true,     8,      8},
+    {6,  "fnv32",    "FNV-1  32",             false,    4,      0},
+    {7,  "fnv32a",   "FNV-1a 32",             false,    4,      0},
+    {8,  "fnv64",    "FNV-1  64",             false,    8,      0},
+    {9,  "fnv64a",   "FNV-1a 64",             false,    8,      0},
+    {10, "hw64",     "Highway Hash 64",       true,     8,      32},
+    {11, "md2",      "MD2",                   false,    16,     0},
+    {12, "md4",      "MD4",                   false,    16,     0},
+    {13, "md5",      "MD5",                   false,    16,     0},
+    {14, "md6",      "MD6",                   false,    20,     0},
+    {15, "md62",     "MD6 Quicker",           true,     20,     0},
+    {16, "met641",   "Metro Hash 64 v1",      true,     8,      4},
+    {17, "met642",   "Metro Hash 64 v2",      true,     8,      4},
+    {18, "mx3",      "MX3",                   true,     8,      8},
+    {19, "png",      "Pengyhash 64",          true,     8,      4},
+    {20, "ripe160",  "Ripe MD 160",           false,    20,     0},
+    {21, "sea64",    "Seahash 64",            true,     8,      8},
+    {22, "sip64",    "Siphash 64",            true,     8,      16},
+    {23, "sha1_64",  "SHA1 64",               false,    8,      0},
+    {24, "sha1_128", "SHA1 128",              false,    16,     0},
+    {25, "sha1",     "SHA1",                  false,    20,     0},
+    {26, "sha256",   "SHA 256",               false,    32,     0},
+    {27, "sha384",   "SHA 384",               false,    48,     0},
+    {28, "sha512",   "SHA 512",               false,    64,     0},
+    {29, "spk32",    "Spooky 32",             true,     4,      4},
+    {30, "spk64",    "Spooky 64",             true,     8,      8},
+    {31, "xxh32",    "xxHash32",              true,     4,      4},
+    {32, "xxh64",    "xxHash64",              true,     8,      8},
+    {33, "whp",      "Whirlpool",             false,    64,     0},
+    {34, "wy64",     "WYhash 64",             true,     8,      136},
+    {32, "last",     "Unused Signature",      false,    8,      0}
 };
 
 
@@ -1527,6 +1527,22 @@ public:
 
     }
 
+    // calculate the block key size for the correct hashlist type
+    // this returns the sum of the hash list vector block sizes
+    int calcBlockKeySize(int type) {
+
+        int signum = 0;
+        int hashblocksize = 0;
+        int sumhashkeyblocksize = 0;
+        for(auto hash  : hashlistvt[type]) {
+              signum = std::get<0>(hash);
+              hashblocksize = mdHashlist[signum].keysize;
+              sumhashkeyblocksize += hashblocksize;
+        }
+
+        return sumhashkeyblocksize;
+
+    }
 
     // calculate the block size for the correct hashlist type
     // this returns the sum of the hash list vector block sizes

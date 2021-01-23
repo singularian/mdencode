@@ -7,7 +7,7 @@ struct hash_list
     uint64_t city64o;
     uint64_t city64seed = 102922;
     // crc32
-    uint64_t crc32seed = 12121221;
+    uint32_t crc32seed = 12121221;
     uint32_t crc32i;
     uint32_t crc32o;
     // crc64
