@@ -1276,7 +1276,7 @@ public:
                      break;
                   case WYH:
                      ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].wyseed64) << " ";
+                     ss << std::to_string(hregister[0].wyseed64) << " secret ";
                      // addHashToDisplayStream(hregister[0].wysecret64, 16);
                      int i = 0;
                      for(i=0; i < 16; ++i)
