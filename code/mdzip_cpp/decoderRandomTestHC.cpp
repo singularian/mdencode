@@ -26,10 +26,10 @@
 #include <time.h>
 #include <vector>
 #include "../testdecode_cpp/external/CLI11.hpp" 
-#include "mdMutex.h"
-#include "mdMutexLog.h"
-#include "mdHashContextList.h"
-#include "modscanFile.h"
+#include "mdCore/mdMutex.h"
+#include "mdCore/mdMutexLog.h"
+#include "mdCore/mdHashContextList.h"
+#include "mdCore/modscanFile.h"
 #include "string.h"
 #include "stdio.h"
 

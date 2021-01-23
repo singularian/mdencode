@@ -20,8 +20,8 @@
 #include <sys/stat.h>
 #include "../testdecode_cpp/external/CLI11.hpp"
 #include <gmp.h>
-#include "common.h"
-#include "mdHashContextList.h"
+#include "mdCore/mdCommon.h"
+#include "mdCore/mdHashContextList.h"
 
 int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_t key, std::vector<int> &bhlist);
 void usage();

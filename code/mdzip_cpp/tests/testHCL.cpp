@@ -5,7 +5,7 @@
 #include <array>
 #include <openssl/sha.h>
 #include <sstream>
-#include "../mdHashContextList.h"
+#include "../mdCore/mdHashContextList.h"
 
 int main()
 {

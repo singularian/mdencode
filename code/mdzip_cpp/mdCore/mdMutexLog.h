@@ -4,7 +4,7 @@
 #include <mutex>
 #include <time.h>
 #include <plog/Log.h>
-#include "plog/Initializers/RollingFileInitializer.h"
+#include "../plog/Initializers/RollingFileInitializer.h"
 
 class mdMutexLog 
 {

@@ -15,11 +15,11 @@
 #include <sys/stat.h>
 #include "../testdecode_cpp/external/CLI11.hpp"
 #include <gmp.h>
-#include "common.h"
-#include "mdHashContextList.h"
-#include "mdMutex.h"
-#include "mdMutexLog.h"
-#include "modscanFile.h"
+#include "mdCore/mdCommon.h"
+#include "mdCore/mdHashContextList.h"
+#include "mdCore/mdMutex.h"
+#include "mdCore/mdMutexLog.h"
+#include "mdCore/modscanFile.h"
 
 
 using namespace std;

@@ -7,7 +7,7 @@
 #include <openssl/ripemd.h>
 #include <openssl/sha.h>
 #include <sstream>
-#include "../mdHashContextList.h"
+#include "../mdCore/mdHashContextList.h"
 // #include "../filehash.h"
 
 void printByteblock(unsigned char *byteblock, long blocksize, bool ishex);

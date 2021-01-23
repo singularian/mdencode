@@ -26,7 +26,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "filehash.h"
+#include "mdFilehash.h"
 #include "mdRandom.h"
 #include "mdRegisters.h"
 #include "../testdecode_cpp/external/cityhash/cityhash.h"

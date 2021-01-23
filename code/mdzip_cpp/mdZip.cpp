@@ -13,8 +13,8 @@
 #include <sys/stat.h>
 #include "../testdecode_cpp/external/CLI11.hpp"
 #include <gmp.h>
-#include "common.h"
-#include "mdHashContextList.h"
+#include "mdCore/mdCommon.h"
+#include "mdCore/mdHashContextList.h"
 
 int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh);
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
