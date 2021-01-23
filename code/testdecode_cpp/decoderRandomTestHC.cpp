@@ -152,15 +152,15 @@ int main (int argc, char **argv) {
      // void mpz_import (mpz_t rop, size_t count, int order, size_t size, int endian, size_t nails, const void *op) 
      // https://machinecognitis.github.io/Math.Gmp.Native/html/8c8c1e55-275f-cff8-2152-883a4eaa163c.htm
      /*
-        public:
-        static void mpz_import(
-	mpz_t^ rop, 
-	size_t count, 
-	int order, 
-	size_t size, 
-	int endian, 
-	size_t nails, 
-	void_ptr op )
+         public:
+         static void mpz_import(
+         mpz_t^ rop, 
+         size_t count, 
+         int order, 
+         size_t size, 
+         int endian, 
+         size_t nails, 
+         void_ptr op )
      */
      // the import is currently byteorder most significant and native endian 
      // the modscan has to match the byte order and endian paramters
