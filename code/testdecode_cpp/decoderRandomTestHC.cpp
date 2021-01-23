@@ -203,12 +203,24 @@ int main (int argc, char **argv) {
         // randomize the keylist if the randombh is true
         // copy the keylist to the other modscan objects after the first modscan object keylist randomization
         if (randombh == true) { 
-            if (tnum == 0) mst[tnum].hcl.randomizeKeyList();
-            if (tnum > 0)  mst[tnum].hcl.hregister[0] = mst[0].hcl.hregister[0];
-        } 
+            // randomize the keylist on the first modscan object
+            if (tnum == 0) {
+                  mst[tnum].hcl.randomizeKeyList();
 
-        // initialize the block hash signature list
-        mst[tnum].hcl.setByteBlockHashList(byteblock, blocksize);
+                  // initialize the block hash signature list for the first modscan object
+                  mst[tnum].hcl.setByteBlockHashList(byteblock, blocksize);
+            // copy the mdRegister struct to the other modscan objects
+            } else {     
+                  mst[tnum].hcl.hregister[0] = mst[0].hcl.hregister[0];
+            }
+        // set the modscan hashblock list without randomizing the keys    
+        } else {
+
+            // initialize the block hash signature list if the modscan object is the first
+            if (tnum == 0) mst[tnum].hcl.setByteBlockHashList(byteblock, blocksize);
+            // copy the mdRegister struct hash to the other mdRegister modscan structs from the first object
+            if (tnum > 0)  mst[tnum].hcl.hregister[0] = mst[0].hcl.hregister[0];
+        }
      } 
 
      // initialize the modulus scan threads vector
