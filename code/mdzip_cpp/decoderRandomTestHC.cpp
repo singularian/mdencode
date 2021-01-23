@@ -51,7 +51,7 @@ int main (int argc, char **argv) {
      size_t blocksize = 12;
      int modsize      = 64;
      int threadnumber = 0;
-     int threadcount  = 8;
+     int threadcount  = std::thread::hardware_concurrency();
      // current signature number handled in the hash context list
      int signum       = LAST - 1;
 
