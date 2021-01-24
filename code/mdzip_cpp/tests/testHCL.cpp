@@ -30,7 +30,7 @@ int main()
     hcl.setVectorHL(blockgroup, HASHBLOCKGROUP);
 
     // initialize a block hash list vector
-    std::vector<int> block = { 1, 2, 3, 15, 16, 17 };
+    std::vector<int> block = { 1, 2, 3, 15, 16, 17, 34 };
     hcl.setVectorHL(block, HASHBLOCK);
 
     // display the file and blockgroup and blockhash list input vectors
@@ -51,6 +51,7 @@ int main()
     std::cout << "Hash file block size "  << hcl.calcBlockSize(HASHFILE) << std::endl;
     std::cout << "Hash block group size " << hcl.calcBlockSize(HASHBLOCKGROUP) << std::endl;
     std::cout << "Hash block size "       << hcl.calcBlockSize(HASHBLOCK) << std::endl;
+    std::cout << "Hash block key size "   << hcl.calcBlockKeySize(HASHBLOCK) << std::endl;
     std::cout << std::endl;
 
     // display the block hash list

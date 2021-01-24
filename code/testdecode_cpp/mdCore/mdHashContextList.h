@@ -1444,32 +1444,34 @@ public:
 
     // get and create the vector list string associated with the hash type
     std::string getHLvectorsString(int type) {
-         // clear the hlss string stream
+        // clear the hlss string stream
          hlss.str(std::string());
-         int blocksize = 0; 
+         int blocksize    = 0; 
+         int blockkeysize = 0; 
 
          hlss << std::left << std::setw(12) << "Number";
          hlss << std::left << std::setw(13) << "Hash ID";
          hlss << std::left << std::setw(12) << "Hash Name ";
-         hlss << std::left << std::setw(12) << "Blocksize" << std::endl;
+         hlss << std::left << std::setw(12) << "Blocksize";
+         hlss << std::left << std::setw(12) << "Blockkeysize" << std::endl;
 
          int i = 1;
          for(auto val  : hashlistvt[type]) {
              hlss << std::left << std::setw(12) << i;
              hlss << std::left << std::setw(13) << std::get<0>(val);
              hlss << std::left << std::setw(12) << std::get<1>(val);
-             hlss << std::left << std::setw(12) << std::get<2>(val) << std::endl;
+             hlss << std::left << std::setw(12) << std::get<2>(val);
+             hlss << std::left << std::setw(12) << std::to_string(mdHashlist[std::get<0>(val)-1].keysize) << std::endl;
+         
              blocksize += std::get<2>(val);
+             blockkeysize += mdHashlist[std::get<0>(val)-1].keysize;
              i++;
          }
          
-         // hlss << std::right << std::setw(12) << " ";
-         // hlss << std::right << std::setw(13) << " ";
-         // hlss << std::left << std::setw(12) << "Total";
-         // hlss << std::endl;
          hlss << std::right << std::setw(30) << "Total";
-         hlss << "       "  << blocksize << std::endl;
-         // hlss << std::right << std::setw(6) << blocksize << std::endl; 
+         hlss << std::right << std::setw(7)  << " ";
+         hlss << std::left << std::setw(12) << blocksize;
+         hlss <<  blockkeysize << std::endl;
 
          return hlss.str(); 
     }
@@ -1535,7 +1537,7 @@ public:
         int hashblocksize = 0;
         int sumhashkeyblocksize = 0;
         for(auto hash  : hashlistvt[type]) {
-              signum = std::get<0>(hash);
+              signum = std::get<0>(hash) - 1;
               hashblocksize = mdHashlist[signum].keysize;
               sumhashkeyblocksize += hashblocksize;
         }
