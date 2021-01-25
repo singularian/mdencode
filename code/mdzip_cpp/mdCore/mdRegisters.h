@@ -103,7 +103,8 @@ struct hash_list
     uint64_t wyhash64i;
     uint64_t wyhash64o;
     uint64_t wyseed64 = 10232123120;
-    uint64_t wysecret64[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
+    uint64_t wysecret64[5] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull, 0x1d8e4e27c47d124full};
+
 };
 
 struct hash_key_list
@@ -111,7 +112,7 @@ struct hash_key_list
     // city hash
     uint64_t city64seed = 102922;
     // crc32
-    uint64_t crc32seed = 12121221;
+    uint32_t crc32seed = 12121221;
     // crc64
     uint64_t crc64seed = 12121221;
     // fasthash

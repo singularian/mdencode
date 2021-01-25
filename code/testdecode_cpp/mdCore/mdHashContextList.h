@@ -102,7 +102,7 @@ Hashlist mdHashlist[LAST] = {
     {31, "xxh32",    "xxHash32",              true,     4,      4},
     {32, "xxh64",    "xxHash64",              true,     8,      8},
     {33, "whp",      "Whirlpool",             false,    64,     0},
-    {34, "wy64",     "WYhash 64",             true,     8,      136},
+    {34, "wy64",     "WYhash 64",             true,     8,      48},
     {32, "last",     "Unused Signature",      false,    8,      0}
 };
 
@@ -309,7 +309,7 @@ public:
                     break;
                   case WYH:
                     rf.read(reinterpret_cast<char*>(&hregister[0].wyseed64), sizeof(long));
-                    rf.read(reinterpret_cast<char*>(&hregister[0].wysecret64), 128);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].wysecret64), 40);
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
@@ -412,7 +412,7 @@ public:
                     break;
                   case WYH:
                     wf.write(reinterpret_cast<char*>(&hregister[0].wyseed64), sizeof(long));
-                    wf.write(reinterpret_cast<char*>(&hregister[0].wysecret64), 128);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].wysecret64), 40);
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
@@ -1279,7 +1279,7 @@ public:
                      ss << std::to_string(hregister[0].wyseed64) << " secret ";
                      // addHashToDisplayStream(hregister[0].wysecret64, 16);
                      int i = 0;
-                     for(i=0; i < 16; ++i)
+                     for(i=0; i < 5; ++i)
                         ss << std::to_string(hregister[0].wysecret64[i]) << " ";
                         ss << " ";
                      break;
