@@ -643,9 +643,9 @@ uint32_t getFileHashSpooky32(char *filename, uint32_t spookyseed32)
 
 
 // create a Spooky64 file signature 
-uint32_t getFileHashSpooky64(char *filename, uint64_t spookyseed64)
+uint64_t getFileHashSpooky64(char *filename, uint64_t spookyseed64)
 {
-    uint32_t spooky64i = 0;    
+    uint64_t spooky64i = 0;    
     FILE *fp = fopen(filename, "rb");
     if (fp == NULL) {
         return 0;
