@@ -17,11 +17,11 @@ int main()
 
     std::string filename = "file.txt";
     uint64_t city64i = 0;
-    city64i = calculateCityhashFile((char *) filename.c_str(), 11111222);
+    city64i = getFileHashCityhash((char *) filename.c_str(), 11111222);
     std::cout << "cityhash64 file " << city64i << std::endl;
 
     uint8_t ripe160i[21];
-    calculateRipe160((char *) filename.c_str(), ripe160i);
+    getFileHashRipe160((char *) filename.c_str(), ripe160i);
     std::cout << "openssl ripe160" << std::endl;
     printByteblock(ripe160i, 20, true);
 
@@ -31,7 +31,7 @@ int main()
     // std::cout << "openssl sha1" << std::endl; 
     // printByteblock(sha1i, 20, true);
 
-    calculateSHA1((char *) filename.c_str(), sha1i);
+    getFileHashSHA1((char *) filename.c_str(), sha1i);
     std::cout << "openssl sha1" << std::endl;
     printByteblock(sha1i, 20, true);
     
