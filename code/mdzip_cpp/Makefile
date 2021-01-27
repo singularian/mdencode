@@ -1,6 +1,10 @@
 # This is how we want to name the binary output
 BINARY=mdzip
 
+# Project name
+PROJECT="mdencode mdzip C++"
+
+# variables
 MDZIP=mdzip_cpp
 TESTCPP=../testdecode_cpp
 CPPEXT=../testdecode_cpp/external
@@ -43,5 +47,15 @@ clean:
 	rm -r mdzip mdunzip mdzipnh mdunzipnh *.log *.mdz *.mdsz
 cleantest:
 	rm decoderRandomTestHC2 testhashfile testhcl *.log *.mdz *.mdsz
+# Display general help about this command
+help:
+	@echo "$(PROJECT) Makefile."
+	@echo "GOPATH=$(GOPATH)"
+	@echo "The following commands are available:"
+	@echo "    make all         : Build the C++ mdzip/mdunzip program"
+	@echo "    make test        : Build the test files"
+	@echo "    make testhash    : Run the hash context list test"
+	@echo "    make clean       : Remove any local build artifacts"
+	@echo "    make cleantest   : Remove any build artifacts"
 list:
-	echo "all test clean test"
+	echo "all test testhash clean cleantest"

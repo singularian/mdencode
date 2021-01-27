@@ -19,7 +19,7 @@
 int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh);
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
                  int modsizeBytes, std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize, int hclblockblocksize, 
-                 std::string& filehashvector, std::string& blockhashvector, std::string& blockkeys, bool mdlist, int threadcount );
+                 std::string& filehashvector, std::string& blockhashvector, std::string& blockkeys, std::string& filesig, bool mdlist, int threadcount );
 void usage();
 
 using namespace std;
@@ -139,7 +139,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      const char *fname = mdzipfile.c_str();
      std::remove(fname);
 
-     // set the file hash listg
+     // set the file hash list
      mdHashContextList hclfile;
      hclfile.setVectorHL(fhlist, HASHBLOCK);
      hclfile.setFileHashList(filename);
@@ -191,17 +191,24 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      std::string filehashnames  = hclfile.getHLvectorsStringNames(HASHBLOCK);
      std::string blockhashnames = hclblock.getHLvectorsStringNames(HASHBLOCK);
 
+     // write the file hash list names
      hclsize = filehashnames.size();
      wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
      // wf.write(reinterpret_cast<char*>(&filehashnames),   hclsize);
      wf.write(filehashnames.c_str(),   hclsize);
 
-     // TODO write the file hash key random list
-
+     // write the block hash list names string 
      hclsize = blockhashnames.size();
      wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
      // wf.write(reinterpret_cast<char*>(&blockhashnames),   hclsize);
      wf.write(blockhashnames.c_str(),   hclsize);
+
+     // write the file hash list to the mdzip file
+     // TODO write the file hash key random list
+     hclfile.writeBlockHashList(wf);
+     //std::cout << "file hash list " << std::endl;
+     //std::cout << hclfile.displayHLhashes() << std::endl;
+     std::string filesigs = hclfile.displayHLhashes();
 
      // write the block hash keys list
      // if randomblock or randbh is set it uses the blockhashnames
@@ -250,7 +257,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
      // display the mdzip file info
      displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes, filehashnames, 
-     blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, true, 0);
+     blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, filesigs, true, 0);
 
      while (nf)
      {
@@ -386,8 +393,8 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 // display the mdlist mdzip file info
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, 
                  int modsize, int modsizeBytes, std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize,
-                 int hclblockblocksize, std::string& filehashvector,  std::string& blockhashvector, std::string& blockkeys, bool mdlist, 
-                 int threadcount ) {
+                 int hclblockblocksize, std::string& filehashvector,  std::string& blockhashvector, std::string& blockkeys, 
+                 std::string& filesig, bool mdlist, int threadcount ) {
 
 
    std::cout << std::left << std::setw(20) << "Filename Details: " << filename << std::endl;
@@ -423,9 +430,13 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
    // std::cout << "File block group hash list " << std::endl;
    // std::cout << getHLvectorsString(HASHBLOCKGROUP) << std::endl;
 
-   // display the file block hash list
+    // display the file block hash list
    std::cout << "File block hashlist " << std::endl;
    std::cout << blockhashvector << std::endl;
+
+   std::cout << "File Signatures " << std::endl;
+   std::cout << filesig << std::endl;
+   std::cout << std::endl;
 }
 
 

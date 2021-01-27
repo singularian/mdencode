@@ -25,10 +25,10 @@
 using namespace std;
 
 int mdlist(std::string filename, bool listfile, bool runlogging);
-int mdunzipfile(std::string filename, int threadcount, bool runlogging);
+int mdunzipfile(std::string filename, int threadcount, bool runlogging, bool validate);
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
                  int modsizeBytes, std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize, int hclblockblocksize, 
-                 std::string& filehashvector, std::string& blockhashvector, std::string& blockkeys, bool mdlist, int threadcount );
+                 std::string& filehashvector, std::string& blockhashvector, std::string& blockkeys, std::string& filesig, bool mdlist, int threadcount );
 void usage();
 
 int main (int argc, char **argv) {
@@ -70,6 +70,11 @@ int main (int argc, char **argv) {
      // app.add_option("-l,--log", runlogging, "Run Logging");
      app.add_option("--log", runlogging, "Run Logging");
 
+
+     // run post validation 
+     bool validate = false;
+     app.add_option("--val", validate, "Run the File Signatures on the Output File");
+
      
      if (argc < 2)
      {
@@ -94,7 +99,7 @@ int main (int argc, char **argv) {
      // like highway hash and mod 32 and block 14 and 1 or no signature key
      // ./mdunzip --file=phone.txt.mdz --threads=32
      // currently creates phone.txt.mdz.out
-     if (runmdzip) mdunzipfile(filename, threadcount, runlogging);
+     if (runmdzip) mdunzipfile(filename, threadcount, runlogging, validate);
 
      return 0;
 }
@@ -196,6 +201,13 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    // set the file block hash list
    std::string blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
 
+   // TODO load the random file hash keys and key size
+   // load the file hash list 
+   hclfile.readBlockHashList(nf);
+   // std::cout << "file hash list " << std::endl;
+   // std::cout << hclfile.displayHLhashes() << std::endl;
+   std::string filesigs = hclfile.displayHLhashes();
+
    // if the hclblockkeylist size is greater than zero load in the random block hash keylist 
    std::string blockkeys = "default"; 
    if (hclblockkeysize > 0) {
@@ -205,7 +217,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    // display the mdzip file info
    displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes, filehashnames, 
-   blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, true, 0);
+   blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, filesigs, true, 0);
 
    // display the file block hash block list
    // block signatures / modulus exponent / modulus remainder
@@ -260,7 +272,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 // ie a file with the *.mdz extension
 // ie file.mdz file
 // the output unzipped file is currently file.mdz.out or extension .out
-int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
+int mdunzipfile(std::string filename, int threadcount, bool runlogging, bool validate) {
 
    // std::cout << "mdunzipping file " << filename << std::endl; // to output file
 
@@ -342,12 +354,6 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
    delete buf2;
    // nf.read(reinterpret_cast<char*>(&blockhashnames), hclblocksize);
 
-   // TODO load the file hash keylist 
-
-   // Load in the block hash random key size
-   nf.read(reinterpret_cast<char*>(&hclblockkeysize),   sizeof(int));
-   
-
    // calculate the file block count and last block size
    blockcount = CalcFileBlocks(filesize, blocksize);
    // calculate the last block size
@@ -373,7 +379,15 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
    // set the file block hash list
    std::string blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
 
-   // TODO create a random file key size
+   // TODO load the random file hash keys and key size
+   // load the file hash list 
+   hclfile.readBlockHashList(nf);
+   //std::cout << "file hash list " << std::endl;
+   //std::cout << hclfile.displayHLhashes() << std::endl;
+   std::string filesigs = hclfile.displayHLhashes();
+
+   // Load in the block hash random key size
+   nf.read(reinterpret_cast<char*>(&hclblockkeysize),   sizeof(int));
 
    // if the hclblockkeylist size is greater than zero load in the random block hash keylist
    std::string blockkeys = "default"; 
@@ -384,7 +398,8 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
 
    // display the mdzip file info
    displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes, filehashnames, 
-               blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, false, threadcount);
+               blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, filesigs,
+               false, threadcount);
 
    // display the file block hash block list
    // block signatures / modulus exponent / modulus remainder
@@ -526,6 +541,15 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
    nf.close();
    wf.close();
 
+   if (validate) {
+      if (hclfile.compareFileHashList(mdunzipfile)) {  
+         std::cout << "The mdunzip output file validates" << std::endl;
+      } else {
+         std::cout << "The mdunzip failed" << std::endl;
+      } 
+
+   }
+
    return 0;
 
 }
@@ -533,7 +557,7 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
 // display the mdlist mdzip file info
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, int modsizeBytes, 
                  std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize, int hclblockblocksize, 
-                 std::string& filehashvector,  std::string& blockhashvector, std::string& blockkeys, bool mdlist, int threadcount ) {
+                 std::string& filehashvector,  std::string& blockhashvector, std::string& blockkeys, std::string& filesig, bool mdlist, int threadcount ) {
 
 
    std::cout << std::left << std::setw(20) << "Zip Filename: " << filename << std::endl;
@@ -568,9 +592,15 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
    // std::cout << "File block group hash list " << std::endl;
    // std::cout << getHLvectorsString(HASHBLOCKGROUP) << std::endl;
 
-   // display the file block hash list
+   // display the file block hash list parameters and hash block size
    std::cout << "File block hashlist " << std::endl;
    std::cout << blockhashvector << std::endl;
+
+   // display the file signature list before the file block level signatures
+   // cit64 16527838090914794844 crc32 706283486
+   std::cout << "File Signatures " << std::endl;
+   std::cout << filesig << std::endl;
+   std::cout << std::endl;
 }
 
 // display the usage
@@ -579,7 +609,7 @@ std::string usageline = R"(
 MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=32 
-   mdunzip --file=test.mdz --list=true
+   mdunzip --file=test.mdz --list=true  --val=true
    mdunzip --file=filename.mdz --list=true --unzip=false
 
 MDzip Examples:

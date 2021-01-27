@@ -9,6 +9,8 @@ MDunzip will decompress the input signature binary block file to an output file.
 Block size is limited by the number of CPU threads and processors.   
 MZunzip runs a mutlithreaded modulus scan on the MDzip file and writes the results to an unzipped output file.  
 It currently doesn't use the same format as the GO version and has a different signature hash context list.
+MDunzip also supports a signature post validation and will check if the mdzip file signatures match the uncompressed output file.
+Signature post validation can also be used to eliminate collisions if there were any.
 
 **MDZip Features**
 - User Specified Modulus Size
@@ -23,6 +25,7 @@ It currently doesn't use the same format as the GO version and has a different s
 - Decrypts an MDZip file to an output file
 - File Signature List post validation
 - Uses the MDZip Signature Keys to change the output file signature Modulus Scan
+- File Signature post validation
 
 # MDZip File Format
 
@@ -76,7 +79,8 @@ These are MDzip and MDunzip command line examples. It doesn't currently support 
 ```bash
 mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
 mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
-mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4 
+mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=true
+mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
 ```
 
 # MDunzip Examples
@@ -86,7 +90,7 @@ mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4
 mdunzip --file=phone.txt.mdz --threads=32
 mdunzip --file=filename.mdz --thread=16 
 mdunzip --file=test.mdz --thread=16 
-mdunzip --file=test.mdz --list=true
+mdunzip --file=test.mdz --list=true --val=true
 mdunzip --file=filename.mdz --list=true --unzip=false
 ```
 
@@ -190,7 +194,7 @@ ID          Hash Name   Description                   Key         Blocksize
 # MDunzip C++ Usage 
 
 ```     
-user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ ./mdunzip                                                                                                      
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ mdunzip
 MDEncode MDunzip C++ Program
 Usage: [OPTIONS]
 
@@ -202,15 +206,16 @@ Options:
                               Thread count number
   -l,--list BOOLEAN           List the mdzip file
   -u,--unzip BOOLEAN          mdunzip a file
-  -o,--over BOOLEAN           Overwriting an existing mdunzip output file
+  -o,--over BOOLEAN           Overwriting an existing mdunzip output file TODO
   --log BOOLEAN               Run Logging
+  --val BOOLEAN               Run the File Signatures on the Output File
 
 
 
 MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
-   mdunzip --file=test.mdz --thread=16 
-   mdunzip --file=test.mdz --list=true
+   mdunzip --file=test.mdz --thread=32 
+   mdunzip --file=test.mdz --list=true --val=true
    mdunzip --file=filename.mdz --list=true --unzip=false
 
 MDzip Examples:
@@ -225,9 +230,9 @@ Hashlist:
 
 ID          Hash Name   Description                   Key         Blocksize   
 ==============================================================================
-1           cit64       Cityhash 64                   false       8           
-2           crc32       CRC 32                        false       4           
-3           crc64       CRC 64                        false       8           
+1           cit64       Cityhash 64                   true        8           
+2           crc32       CRC 32                        true        4           
+3           crc64       CRC 64                        true        8           
 4           fast32      Fasthash 32                   true        4           
 5           fast64      Fasthash 64                   true        8           
 6           fnv32       FNV-1  32                     false       4           
@@ -258,7 +263,7 @@ ID          Hash Name   Description                   Key         Blocksize
 31          xxh32       xxHash32                      true        4           
 32          xxh64       xxHash64                      true        8           
 33          whp         Whirlpool                     false       64          
-34          wy64        WYhash 64                     true        8   
+34          wy64        WYhash 64                     true        8           
 ```                                                                                                 
                                                                                                     
 
