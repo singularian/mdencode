@@ -29,30 +29,7 @@
 #include "mdFilehash.h"
 #include "mdRandom.h"
 #include "mdRegisters.h"
-/*
-#include "../testdecode_cpp/external/cityhash/cityhash.h"
-#include "../testdecode_cpp/external/crc32/crc32.h"
-#include "../testdecode_cpp/external/crc64/crc64.h"
-#include "../testdecode_cpp/external/csiphash.c"
-#include "../testdecode_cpp/external/fasthash/fasthash.h"
-#include "../testdecode_cpp/external/fnv/fnv.h"
-#include "../testdecode_cpp/external/highwayhash/highwayhash.h"
-#include "../testdecode_cpp/external/xxhash/xxhash32.h"
-#include "../testdecode_cpp/external/xxhash/xxhash64.h"
-#include "../testdecode_cpp/external/metro64/metrohash64.h"
-#include "../testdecode_cpp/external/mx3/mx3.h"
-#include "../testdecode_cpp/external/pengyhash/pengyhash.h"
-#include "../testdecode_cpp/external/seahash/seahash.c"
-#include "../testdecode_cpp/external/md2.c"
-#include <openssl/md4.h>
-#include <openssl/md5.h>
-#include "../testdecode_cpp/external/md6/md6.h"
-#include <openssl/ripemd.h>
-#include <openssl/sha.h>
-#include "../testdecode_cpp/external/spooky/Spooky.h"
-#include <openssl/whrlpool.h>
-#include "../testdecode_cpp/external/wyhash/wyhash.h"
-*/
+
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
 enum signatures {FIRST, CIT64, CRC32, CRC64, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, MD62, MET641, MET642, MX3, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, SPK32, SPK64, XXH32, XXH64, WP, WYH, LAST};
 

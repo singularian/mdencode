@@ -49,6 +49,7 @@ uint64_t getFileHashCityhash(char *filename, uint64_t city64seed)
     return city64i;
 }
 
+// get the CRC32 file hash
 uint32_t getFileHashCRC32(char *filename, uint32_t crc32seed)
 {
     uint32_t crc32i = 0;    
@@ -68,6 +69,7 @@ uint32_t getFileHashCRC32(char *filename, uint32_t crc32seed)
     return crc32i;
 }
 
+// get the CRC64 file hash
 uint64_t getFileHashCRC64(char *filename, uint64_t crc64seed)
 {
     uint64_t crc64i = 0;    
@@ -167,7 +169,6 @@ uint32_t getFileHashFNV32A(char *filename)
     return fnv32a_1i;
 }
 
-/////////////
 // FNV64
 uint64_t getFileHashFNV64(char *filename)
 {
@@ -231,7 +232,7 @@ uint64_t getFileHashHW64(char *filename, uint64_t *hw64key)
 
 
 
-// create a openssl MD2  file signature
+// create a MD2 file signature
 int getFileHashMD2(char *filename, unsigned char *digest)
 {
     FILE *fp = fopen(filename, "rb");
@@ -289,7 +290,7 @@ int getFileHashMD4(char *filename, unsigned char *digest)
     return 1;
 }
 
-// create a openssl MD5  file signature
+// create a openssl MD5 file signature
 int getFileHashMD5(char *filename, unsigned char *digest)
 {
     FILE *fp = fopen(filename, "rb");
@@ -321,7 +322,7 @@ int getFileHashMD5(char *filename, unsigned char *digest)
     return 1;
 }
 
-// create a openssl metro64_1 file signature
+// create a metro64_1 file signature
 int getFileHashMetro64_1(char *filename, unsigned char *digest, uint32_t met641seed)
 {
     FILE *fp = fopen(filename, "rb");
@@ -346,7 +347,7 @@ int getFileHashMetro64_1(char *filename, unsigned char *digest, uint32_t met641s
     return 1;
 }
 
-// create a openssl metro64_2 file signature
+// create a metro64_2 file signature
 int getFileHashMetro64_2(char *filename, unsigned char *digest, uint32_t met642seed)
 {
     FILE *fp = fopen(filename, "rb");
