@@ -28,11 +28,11 @@ int main (int argc, char **argv) {
     CLI::App app{"MDEncode GMP C++ Test Program"};
 
     std::string filename;
-    app.add_option("-f,--file",    filename,    "MDunzip filename")->check(CLI::ExistingFile)->required();
+    app.add_option("-f,--file", filename, "MDunzip filename")->check(CLI::ExistingFile)->required();
 
     // std::vector<int> vals;
     std::vector<int> fhlist = { 1, 10, 11, 12, 13, 14, 21, 22, 23, 24, 25, 26 };
-    app.add_option("-s,--hl", fhlist, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+    app.add_option("-s,--hl", fhlist, "File Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
     try {
         app.parse(argc, argv);
