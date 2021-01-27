@@ -37,11 +37,10 @@ test:
 	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 
 testhash:
-	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
-	g++ external/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11
+	g++ -I. $(DEPS) tests/testFileSignatures.cpp -o  testhashfile -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 clean:
 	rm -r mdzip mdunzip mdzipnh mdunzipnh *.log *.mdz *.mdsz
 cleantest:
-	rm decoderRandomTestHC2 test_sha1 testhw testhcl *.log *.mdz *.mdsz
+	rm decoderRandomTestHC2 testhashfile testhcl *.log *.mdz *.mdsz
 list:
 	echo "all test clean test"
