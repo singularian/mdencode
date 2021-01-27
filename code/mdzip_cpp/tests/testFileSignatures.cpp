@@ -8,32 +8,35 @@
 #include <openssl/sha.h>
 #include <sstream>
 #include "../mdCore/mdHashContextList.h"
-// #include "../filehash.h"
+#include "../testdecode_cpp/external/CLI11.hpp" 
 
-void printByteblock(unsigned char *byteblock, long blocksize, bool ishex);
+int main (int argc, char **argv) {
 
-int main()
-{
+    // current signature number handled in the hash context list
+    int signum       = LAST - 1;
 
-    std::string filename = "file.txt";
-    uint64_t city64i = 0;
-    city64i = getFileHashCityhash((char *) filename.c_str(), 11111222);
-    std::cout << "cityhash64 file " << city64i << std::endl;
+    // process the command line argument with the CLI11 command line parser
+    CLI::App app{"MDEncode GMP C++ Test Program"};
 
-    uint8_t ripe160i[21];
-    getFileHashRipe160((char *) filename.c_str(), ripe160i);
-    std::cout << "openssl ripe160" << std::endl;
-    printByteblock(ripe160i, 20, true);
+    std::string filename;
+    app.add_option("-f,--file",    filename,    "MDunzip filename")->check(CLI::ExistingFile)->required();
 
-    uint8_t sha1i[21];
-    char filenm[100] = "file.txt";
-    // calculateSHA1(filenm, sha1i);
-    // std::cout << "openssl sha1" << std::endl; 
-    // printByteblock(sha1i, 20, true);
+    // std::vector<int> vals;
+    std::vector<int> fhlist = { 1, 10, 11, 12, 13, 14, 21, 22, 23, 24, 25, 26 };
+    app.add_option("-s,--hl", fhlist, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
-    getFileHashSHA1((char *) filename.c_str(), sha1i);
-    std::cout << "openssl sha1" << std::endl;
-    printByteblock(sha1i, 20, true);
+    try {
+        app.parse(argc, argv);
+    } catch(const CLI::ParseError &e) {
+        return app.exit(e);
+    }
+
+    if (argc < 2)
+    {
+         cout << app.help() << endl;
+         // usage();
+         return 0;
+     }
     
 
     // initialize the hash list object
@@ -41,16 +44,19 @@ int main()
 
     // display the current hash signature list
     // hclfile.displayHLRegistry(0);
-    //std::cout << std::endl;
 
     // initialize a file hash list vector  
-    std::vector<int> file = { 1, 10, 11, 12, 13, 14, 21, 22, 23, 24, 25, 26 };
     // hclfile.setVectorHL(file, HASHFILE);
-    hclfile.setVectorHL(file, HASHBLOCK);
+    hclfile.setVectorHL(fhlist, HASHBLOCK);
     hclfile.setFileHashList(filename); // set the file hash list variables
 
     // display the block hash list
-    std::cout << hclfile.displayHLhashes() << std::endl;
+    std::string vectorlist = hclfile.getHLvectorsString(HASHBLOCK);
+    // std::string hashlist   = hclfile.displayHLhashes();
+
+    std::cout << "hashlist "  << vectorlist << std::endl;
+
+    std::cout << "file hash list " << hclfile.displayHLhashes() << std::endl;
 
 /*
     // TODO initialize a block group hash list vector
@@ -89,22 +95,5 @@ int main()
     // display the block hash list
     std::cout << hcl.displayHLhashes() << std::endl;
 */
-}
-
-// display the byteblock
-// void printByteblock(char *byteblock, long blocksize, bool ishex) {
-void printByteblock(unsigned char *byteblock, long blocksize, bool ishex) {
-        long i;
-        for(i=0; i < blocksize; i++)
-        {
-            if (ishex == false) {
-                printf("%d ",    byteblock[i]);
-            } else {
-                printf("%02X ", byteblock[i]);
-            }
-        }
-
-        printf("\n");
-
 }
 
