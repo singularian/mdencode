@@ -289,10 +289,10 @@ Examples:
    mdzipnh --file=test.txt 
    mdzipnh --file=test.txt  
 
-   mdunzipnh --file=filename.mdz --thread=16 
-   mdunzipnh --file=test.mdz --thread=16 
-   mdunzipnh --file=test.mdz --list=true
-   mdunzipnh --file=filename.mdz --list=true --unzip=false
+   mdunzipnh --file=filename.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --list=true
+   mdunzipnh --file=filename.mdsz --list=true --unzip=false
 ```
 
 # MDunzip C++ No Header Simplified Usage 
@@ -318,10 +318,10 @@ Options:
 
 
 Examples:
-   mdunzipnh --file=filename.mdz --thread=16 
-   mdunzipnh --file=test.mdz --thread=16 
-   mdunzipnh --file=test.mdz --list=true
-   mdunzipnh --file=filename.mdz --list=true --unzip=false
+   mdunzipnh --file=filename.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --list=true
+   mdunzipnh --file=filename.mdsz --list=true --unzip=false
 
    mdzipnh --file=test.txt  
    mdzipnh --file=test.txt 
