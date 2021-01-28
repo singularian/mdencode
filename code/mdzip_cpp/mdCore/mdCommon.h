@@ -72,6 +72,8 @@ long CalcFileBlocksRemainder(long filesize, long blocksize) {
 }
 
 // calculates an exponent of 2 less than the byte block int
+// this is used in mdzip.cpp to set the modulus floor
+// 2 ^ exponent < byteblock bigint
 int calcExponent (mpz_t blockint) {
     int exponent = 0;
 
@@ -91,6 +93,29 @@ int calcExponent (mpz_t blockint) {
     return exponent;
 }
 
+// Calculates an exponent of the modulus less than the byte block int
+// This isn't really used
+// It's more for Convenience to show the alternative exponent in decoderRandomTestHC.cpp
+// mod ^ exponent < byteblock bigint
+int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
+    int exponent = 0;
+
+    mpz_t result;
+
+    mpz_init_set_str(result, "", 10);
+    mpz_add (result, result, modulus); 
+
+
+    do {
+      mpz_mul(result, result, modulus);
+      exponent++;
+    } while(mpz_cmp(result,blockint) < 0);
+
+    mpz_clear(result);
+
+    return exponent;
+}
+
 // display the byteblock
 void printByteblock(unsigned char *byteblock, long blocksize, bool ishex) {
         long i;
@@ -105,29 +130,17 @@ void printByteblock(unsigned char *byteblock, long blocksize, bool ishex) {
 
         printf("\n");
 
-        /* for (int f = 0; f < blocksize; f++) {
-                  // std::cout << setw(2) << std::uppercase << std::hex << setfill('0') << (uint32_t)byteblock[f];
-                  std::cout << " ";
-        }
-        std::cout << std::endl;
-        */
-
 }
 
 // display the byteblock
-void printByteblock3 (char *byteblock, long blocksize, bool ishex) {
-        long i;
-        for(i=0; i < blocksize; i++)
-        {
-            if (ishex == false) {
-                printf("%d ",    byteblock[i]);
-            } else {
-                printf("%02X ", byteblock[i]);
-            }
-        }
+void printByteblock2 (char *byteblock, long blocksize, bool ishex) {
+    long i;
 
-        printf("\n");
-
+    for (int i = 0; i < blocksize; i++) {
+        std::cout << std::setw(2) << std::uppercase << std::hex << std::setfill('0') << (uint32_t)byteblock[i];
+        std::cout << " ";
+    }
+    std::cout << std::endl;       
 }
 
 

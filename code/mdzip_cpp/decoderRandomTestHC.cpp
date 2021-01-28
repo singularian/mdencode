@@ -26,6 +26,7 @@
 #include <time.h>
 #include <vector>
 #include "../testdecode_cpp/external/CLI11.hpp" 
+#include "mdCore/mdCommon.h"
 #include "mdCore/mdMutex.h"
 #include "mdCore/mdMutexLog.h"
 #include "mdCore/mdHashContextList.h"
@@ -372,46 +373,6 @@ unsigned char *setByteBlock(size_t num_bytes) {
     return stream;
 }
 
-
-// calculates an exponent of 2 less than the byte block int
-int calcExponent (mpz_t blockint) {
-    int exponent = 0;
-
-    mpz_t two, result;
-
-    mpz_init_set_str(two, "2", 10);
-    mpz_init_set_str(result, "2", 10);
-
-    do {
-      mpz_mul(result, result, two); 
-      exponent++; 
-    } while(mpz_cmp(result,blockint) < 0);
-
-    mpz_clear(two);
-    mpz_clear(result);
-
-    return exponent;
-}
-
-// calculates an exponent of the modulus less than the byte block int
-int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
-    int exponent = 0;
-
-    mpz_t result;
-
-    mpz_init_set_str(result, "", 10);
-    mpz_add (result, result, modulus); 
-
-
-    do {
-      mpz_mul(result, result, modulus);
-      exponent++;
-    } while(mpz_cmp(result,blockint) < 0);
-
-    mpz_clear(result);
-
-    return exponent;
-}
 
 // display the byteblock
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {

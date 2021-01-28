@@ -265,8 +265,68 @@ ID          Hash Name   Description                   Key         Blocksize
 33          whp         Whirlpool                     false       64          
 34          wy64        WYhash 64                     true        8           
 ```                                                                                                 
-                                                                                                    
 
+# MDzip C++ No Header Simplified Usage 
+
+This is the usage for a cut down simplified version of MDzip with just One 64-bit signature and a 14-byte block with a 32-bit modulus.
+
+```
+mdzipnh
+MDEncode Minimized MDzip C++ Program
+Usage: [OPTIONS]
+
+Options:
+  -h,--help                   Print this help message and exit
+  -f,--file TEXT:FILE REQUIRED
+                              MDzip filename
+  -k,--keylist TEXT           Keylist csv string
+  -l,--log BOOLEAN            Run Logging
+
+
+
+Examples:
+   mdzipnh --file=test.txt  
+   mdzipnh --file=test.txt 
+   mdzipnh --file=test.txt  
+
+   mdunzipnh --file=filename.mdz --thread=16 
+   mdunzipnh --file=test.mdz --thread=16 
+   mdunzipnh --file=test.mdz --list=true
+   mdunzipnh --file=filename.mdz --list=true --unzip=false
+```
+
+# MDunzip C++ No Header Simplified Usage 
+
+This is the usage for a cut down simplified version of MDunzip with just One 64-bit signature and a 14-byte block with a 32-bit modulus.
+
+```
+mdunzipnh
+MDEncode Minimized MDunzip C++ Program
+Usage: [OPTIONS]
+
+Options:
+  -h,--help                   Print this help message and exit
+  -f,--file TEXT:FILE REQUIRED
+                              MDunzip filename
+  -t,--thread,--threads INT:POSITIVE
+                              Thread count number
+  -l,--list BOOLEAN           List the mdzip file
+  -u,--unzip BOOLEAN          mdunzip a file
+  -o,--over BOOLEAN           Overwriting an existing mdunzip output file
+  --log BOOLEAN               Run Logging
+
+
+
+Examples:
+   mdunzipnh --file=filename.mdz --thread=16 
+   mdunzipnh --file=test.mdz --thread=16 
+   mdunzipnh --file=test.mdz --list=true
+   mdunzipnh --file=filename.mdz --list=true --unzip=false
+
+   mdzipnh --file=test.txt  
+   mdzipnh --file=test.txt 
+   mdzipnh --file=test.txt  
+```
 
 
 # MDZip Video Example 
