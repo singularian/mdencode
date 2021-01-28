@@ -44,30 +44,9 @@ int main (int argc, char **argv) {
      // process the command line argument with the CLI11 command line parser
      CLI::App app{"MDEncode Minimized MDzip C++ Program"};
      app.add_option("-f,--file",    filename,    "MDzip filename")->check(CLI::ExistingFile)->required();
-     // app.add_option("-b,--block",   blocksize,   "Blocksize number")->check(CLI::PositiveNumber)->check(CLI::Range(1,100));
-     // app.add_option("-m,--mod",     modsize,     "Modulus size number")->check(CLI::PositiveNumber);
-     // app.add_option("-t,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
-
-     // add the file hash list parameter
-     std::vector<int> filelist;
-     std::vector<int> flcsvvals;
-     std::vector<int> flvals;
-     // app.add_option("--fhs", flcsvvals, "File Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
-
-     // app.add_option("--fh", flvals, "File Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
      // add the block hashlist parameter
-     // std::string hashlist;
      std::vector<int> blocklist = { 5 };
-     std::vector<int> vals;
-     std::vector<int> csvvals;
-     // std::vector<std::string> csvvals;
-     // app.add_option("-r,--bh", vals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber);
-     // app.add_option("-r,--bhs", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
-     // app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',');
-
-     // std::vector<int> vals;
-     // app.add_option("-s,--bh", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
      // add a hash keylist parameter
      bool randkey;
@@ -86,6 +65,7 @@ int main (int argc, char **argv) {
      bool runlogging = false;
      app.add_option("-l,--log", runlogging, "Run Logging");
 
+     // check the argument count and display the usage if it's not specified
      if (argc < 2)
      {
         std::cout << app.help() << std::endl;
@@ -93,30 +73,20 @@ int main (int argc, char **argv) {
         return 0;
      }
 
-
+     // process the command arguments
      try {
         app.parse(argc, argv);
      } catch(const CLI::ParseError &e) {
         return app.exit(e);
      }
 
-     // process the file hashlist
-     filelist.insert(flcsvvals.end(), flvals.begin(), flvals.end());
-
-     // process the block hashlist
-     csvvals.insert(csvvals.end(), vals.begin(), vals.end());
-     if (csvvals.size() > 0) {
-         blocklist.clear();
-         blocklist.insert(blocklist.end(), csvvals.begin(), csvvals.end());
-     }
-
-     // call mdzipfile
+     // run mdzipfile
      mdzipfileNoHeader(filename, blocksize, modsize, key, blocklist);
 
 }
 
 // mdzip an input file
-// current mdzip extension is .mdz
+// current mdzip extension is .mdsz
 // this is currently litte endian and 64 bit for the longs
 int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_t key, std::vector<int> &bhlist) {
 
@@ -169,24 +139,13 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      mpz_init_set_str(modulusInt, "1", 10);
      mpz_init_set_str(byteblockInt, "0", 10);
 
-     // need to write the uint64_t key
-     // 64-bit key for the fasthash64 or the 64 bit key
     
      // need to make sure these are byte order independent
      // the block size header is currently 28 bytes
-//     wf.write(reinterpret_cast<char*>(&mdversion), sizeof(double));
      wf.write(reinterpret_cast<char*>(&filesize),  sizeof(long));
-/*     wf.write(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
-     wf.write(reinterpret_cast<char*>(&modsize),   sizeof(int));
-     // wf << mdh.version;
-     // wf << mdh.name;
-     // nf.close();
-     // wf.close();
-     // return 0; // test
-*/
-
-     // TODO need to write the file hash list 
-     // TODO need to also write the block group hash list if implemented
+     // need to write the uint64_t key
+     // 64-bit key for the fasthash64 or the 64 bit key
+     // TODO write the fasthash64 uint64_t key
 
      // initailize the block hash context list
      mdHashContextList hclblock;
@@ -199,28 +158,6 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      cout << std::endl;
      cout << "Hash Block Vector" << endl;
      cout << vectorlist << std::endl;
-/*
-     // write the hash list strings
-     // TODO need to write the keylist as well
-     // ie aes8:sha1:md5-aes8-keylist
-     int hclsize;
-     std::string filehashnames  = hclfile.getHLvectorsStringNames(HASHBLOCK);
-     std::string blockhashnames = hclblock.getHLvectorsStringNames(HASHBLOCK);
-     cout << "hash string file " << filehashnames << endl;
-     cout << "hash string block " << blockhashnames << endl;
-
-     hclsize = filehashnames.size();
-     wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
-     // wf.write(reinterpret_cast<char*>(&filehashnames),   hclsize);
-     wf.write(filehashnames.c_str(),   hclsize);
-     cout << "hashnames file size " << hclsize << endl;
-
-     hclsize = blockhashnames.size();
-     wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
-     // wf.write(reinterpret_cast<char*>(&blockhashnames),   hclsize);
-     wf.write(blockhashnames.c_str(),   hclsize);
-     cout << "hashnames block size " << hclsize << endl;
-*/  
  
      // constexpr size_t bufferSize = blocksize;
      // unique_ptr<unsigned char[]> byteblock(new unsigned char[blocksize]);
@@ -374,10 +311,10 @@ Examples:
    mdzipnh --file=test.txt 
    mdzipnh --file=test.txt  
 
-   mdunzipnh --file=filename.mdz --thread=16 
-   mdunzipnh --file=test.mdz --thread=16 
-   mdunzipnh --file=test.mdz --list=true
-   mdunzipnh --file=filename.mdz --list=true --unzip=false
+   mdunzipnh --file=filename.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --list=true
+   mdunzipnh --file=filename.mdsz --list=true --unzip=false
 )";
 
     std::cout << usageline << std::endl;

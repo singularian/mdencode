@@ -34,19 +34,20 @@ int main (int argc, char **argv) {
     std::vector<int> fhlist = { 1, 10, 11, 12, 13, 14, 21, 22, 23, 24, 25, 26 };
     app.add_option("-s,--hl", fhlist, "File Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
-    try {
-        app.parse(argc, argv);
-    } catch(const CLI::ParseError &e) {
-        return app.exit(e);
-    }
-
+    // check if no argument is specified
     if (argc < 2)
     {
          cout << app.help() << endl;
          // usage();
          return 0;
-     }
-    
+    }
+
+    // process the comman arguments
+    try {
+        app.parse(argc, argv);
+    } catch(const CLI::ParseError &e) {
+        return app.exit(e);
+    }
 
     // initialize the hash list object
     mdHashContextList hclfile;

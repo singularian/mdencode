@@ -205,10 +205,10 @@ Options:
   -t,--thread,--threads INT:POSITIVE
                               Thread count number
   -l,--list BOOLEAN           List the mdzip file
-  -u,--unzip BOOLEAN          mdunzip a file
-  -o,--over BOOLEAN           Overwriting an existing mdunzip output file TODO
+  -u,--unzip BOOLEAN          MDunzip a file
+  -o,--over BOOLEAN           Overwrite an existing mdunzip output file
   --log BOOLEAN               Run Logging
-  --val BOOLEAN               Run the File Signatures on the Output File
+  --val BOOLEAN               Run the File Signatures on the output file
 
 
 
@@ -311,8 +311,8 @@ Options:
   -t,--thread,--threads INT:POSITIVE
                               Thread count number
   -l,--list BOOLEAN           List the mdzip file
-  -u,--unzip BOOLEAN          mdunzip a file
-  -o,--over BOOLEAN           Overwriting an existing mdunzip output file
+  -u,--unzip BOOLEAN          MDunzip a file
+  -o,--over BOOLEAN           Overwrite an existing mdunzip output file
   --log BOOLEAN               Run Logging
 
 

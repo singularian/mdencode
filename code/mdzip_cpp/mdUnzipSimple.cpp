@@ -32,7 +32,7 @@
 using namespace std;
 
 int mdlist(std::string filename, bool listfile, bool runlogging);
-int mdunzipfile(std::string filename, int threadcount, bool runlogging);
+int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runlogging);
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
                  int modsizeBytes, std::string& blockhashnames, int hclblockblocksize, 
                  std::string& blockhashvector, bool mdlist, int threadcount );
@@ -53,8 +53,6 @@ int main (int argc, char **argv) {
      // process the command line argument with the CLI11 command line parser
      CLI::App app{"MDEncode Minimized MDunzip C++ Program"};
      app.add_option("-f,--file",    filename,    "MDunzip filename")->check(CLI::ExistingFile)->required();
-     // app.add_option("-b,--block",   blocksize,   "Blocksize number")->check(CLI::PositiveNumber)->check(CLI::Range(1,100));
-     // app.add_option("-m,--mod",     modsize,     "Modulus size number")->check(CLI::PositiveNumber);
      app.add_option("-t,--thread,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
 
      // display the block hash list 
@@ -65,19 +63,19 @@ int main (int argc, char **argv) {
      // if runmdzip is false you don't run it
      // you can run mdlist or mdunzip or both mdlist and mdunzip
      bool runmdzip = true;
-     app.add_option("-u,--unzip", runmdzip, "mdunzip a file");
+     app.add_option("-u,--unzip", runmdzip, "MDunzip a file");
 
      // overwrite the unzipped output file if it exists
      // stop and throw an error if it doesn't
-     bool overwrite = true;
-     app.add_option("-o,--over", runmdzip, "Overwriting an existing mdunzip output file");
+     bool overwrite = false;
+     app.add_option("-o,--over", overwrite, "Overwrite an existing mdunzip output file");
 
      // set logging
      bool runlogging = false;
      // app.add_option("-l,--log", runlogging, "Run Logging");
      app.add_option("--log", runlogging, "Run Logging");
 
-     
+     // check the argument count and display the usage if it's not specified
      if (argc < 2)
      {
         std::cout << app.help() << std::endl;
@@ -85,7 +83,7 @@ int main (int argc, char **argv) {
         return 0;
      }
 
-
+     // process the command arguments
      try {
         app.parse(argc, argv);
      } catch(const CLI::ParseError &e) {
@@ -102,9 +100,9 @@ int main (int argc, char **argv) {
      // run the mdunzipfile
      // should add a block only format with a specified signature and modsize and no header
      // like highway hash and mod 32 and block 14 and 1 or no signature key
-     // ./mdunzip --file=phone.txt.mdz --threads=32
-     // currently creates phone.txt.mdz.out
-     if (runmdzip) mdunzipfile(filename, threadcount, runlogging);
+     // ./mdunzipnh --file=phone.txt.mdsz --threads=32
+     // currently creates phone.txt.mdsz.out
+     if (runmdzip) mdunzipfile(filename, threadcount, overwrite, runlogging);
 
      return 0;
 }
@@ -253,7 +251,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 // ie a file with the *.mdz extension
 // ie file.mdz file
 // the output unzipped file is currently file.mdz.out or extension .out
-int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
+int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runlogging) {
 
    // std::cout << "mdunzipping file " << filename << std::endl; // to output file
 
@@ -275,15 +273,21 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
    // check if the input file is below the minimum
    // the header is about 36 bytes minimum
    inputfilesize = getFilesize(filename);
-   if (inputfilesize < 48) {
+   if (inputfilesize < 24) {
       std::cout << "Filename size below mdzip minimum!" << std::endl;
       return 1;
    }
 
-   // remove the old mdunzip output file if it exists
-   // TODO need to add the overwrite
+   // if the overwrite is specified remove the old mdunzip output file if it exists 
    const char *fname = mdunzipfile.c_str();
-   std::remove(fname);
+   if ((overwrite)) {
+      if (CheckIfFileExists(mdunzipfile)) std::remove(fname);
+   } else {
+      if (CheckIfFileExists(mdunzipfile)) {
+         std::cout << "Mdunzip " << mdunzipfile << " File exists please specify overwrite option" << std::endl;
+         return 1;
+      }
+   } 
 
    // open the mdzip file 
    std::ifstream nf(filename, std::ios::in | std::ios::binary);
@@ -293,6 +297,7 @@ int mdunzipfile(std::string filename, int threadcount, bool runlogging) {
       return 1;
    }
 
+   // open the mdunzip output file
    if(!wf) {
       std::cout << "Cannot open mdzip output file!" << std::endl;
       return 1;
@@ -549,10 +554,10 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
 void usage() {
 std::string usageline = R"(
 Examples:
-   mdunzipnh --file=filename.mdz --thread=16 
-   mdunzipnh --file=test.mdz --thread=16 
-   mdunzipnh --file=test.mdz --list=true
-   mdunzipnh --file=filename.mdz --list=true --unzip=false
+   mdunzipnh --file=filename.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --list=true
+   mdunzipnh --file=filename.mdsz --list=true --unzip=false
 
    mdzipnh --file=test.txt  
    mdzipnh --file=test.txt 

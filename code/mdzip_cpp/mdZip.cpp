@@ -83,6 +83,7 @@ int main (int argc, char **argv) {
      bool runlogging = false;
      app.add_option("-l,--log", runlogging, "Run Logging");
 
+     // check the argument count and display the usage if it's not specified
      if (argc < 2)
      {
         std::cout << app.help() << std::endl;
@@ -90,7 +91,7 @@ int main (int argc, char **argv) {
         return 0;
      }
 
-
+     // process the command arguments
      try {
         app.parse(argc, argv);
      } catch(const CLI::ParseError &e) {
@@ -107,7 +108,7 @@ int main (int argc, char **argv) {
          blocklist.insert(blocklist.end(), csvvals.begin(), csvvals.end());
      }
 
-     // call mdzipfile
+     // run mdzipfile
      mdzipfile(filename, blocksize, modsize, filelist, blocklist, randombh);
 
 }
@@ -167,15 +168,6 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      wf.write(reinterpret_cast<char*>(&filesize),  sizeof(long));
      wf.write(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
      wf.write(reinterpret_cast<char*>(&modsize),   sizeof(int));
-     // wf << mdh.version;
-     // wf << mdh.name;
-     // nf.close();
-     // wf.close();
-     // return 0; // test
-
-
-     // TODO need to write the file hash list 
-     // TODO need to also write the block group hash list if implemented
 
      // initailize the block hash context list
      mdHashContextList hclblock;
@@ -209,6 +201,8 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      //std::cout << "file hash list " << std::endl;
      //std::cout << hclfile.displayHLhashes() << std::endl;
      std::string filesigs = hclfile.displayHLhashes();
+
+     // TODO need to also write the block group hash list if implemented
 
      // write the block hash keys list
      // if randomblock or randbh is set it uses the blockhashnames

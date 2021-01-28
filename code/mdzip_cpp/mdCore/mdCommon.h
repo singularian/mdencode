@@ -166,6 +166,12 @@ long GetFileSize(std::string filename)
     return rc == 0 ? stat_buf.st_size : -1;
 }
 
+// check if a file exists
+bool CheckIfFileExists(std::string& filename) {
+  std::ifstream ifile(filename.c_str());
+  return (bool)ifile;
+}
+
 // copy a char buffer to an int
 // https://stackoverflow.com/questions/34943835/convert-four-bytes-to-integer-using-c
 int buffToInteger(char* buffer)
