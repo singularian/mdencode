@@ -303,7 +303,9 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
       if (CheckIfFileExists(mdunzipfile)) std::remove(fname);
    } else {
       if (CheckIfFileExists(mdunzipfile)) {
-         std::cout << "Mdunzip " << mdunzipfile << " File exists please specify overwrite option" << std::endl;
+         std::cout << "Mdunzip " << mdunzipfile << " file exists " << std::endl;
+         std::cout << "Please specify the overwrite file option " << std::endl;
+         std::cout << "mdunzip --file=" << filename << " --over=true" << std::endl;
          return 1;
       }
    } 
