@@ -42,7 +42,7 @@ int main (int argc, char **argv) {
      int signum       = LAST - 1;
 
      // process the command line argument with the CLI11 command line parser
-     CLI::App app{"MDEncode MDzip C++ Program"};
+     CLI::App app{"MDEncode Minimized MDzip C++ Program"};
      app.add_option("-f,--file",    filename,    "MDzip filename")->check(CLI::ExistingFile)->required();
      // app.add_option("-b,--block",   blocksize,   "Blocksize number")->check(CLI::PositiveNumber)->check(CLI::Range(1,100));
      // app.add_option("-m,--mod",     modsize,     "Modulus size number")->check(CLI::PositiveNumber);
@@ -370,9 +370,14 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
 void usage() {
 std::string usageline = R"(
 Examples:
-   ./mdzipnh --file=test.txt  
-   ./mdzipnh --file=test.txt 
-   ./mdzipnh --file=test.txt  
+   mdzipnh --file=test.txt  
+   mdzipnh --file=test.txt 
+   mdzipnh --file=test.txt  
+
+   mdunzipnh --file=filename.mdz --thread=16 
+   mdunzipnh --file=test.mdz --thread=16 
+   mdunzipnh --file=test.mdz --list=true
+   mdunzipnh --file=filename.mdz --list=true --unzip=false
 )";
 
     std::cout << usageline << std::endl;
@@ -380,9 +385,9 @@ Examples:
 
     // Add the current hash list signatures currently supported
     // to the usage
-    cout << "Hashlist:" << endl << endl;
-    mdHashContextList hcl;
-    hcl.displayHLRegistry(0);
+    // cout << "Hashlist:" << endl << endl;
+    // mdHashContextList hcl;
+    // hcl.displayHLRegistry(0);
 
 }
 
