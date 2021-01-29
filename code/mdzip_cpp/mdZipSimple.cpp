@@ -135,13 +135,7 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      // need to make sure these are byte order independent
      // the block size header is currently 28 bytes
      wf.write(reinterpret_cast<char*>(&filesize),  sizeof(long));
-     // need to write the uint64_t key
-     // 64-bit key for the fasthash64 or the 64 bit key
-     // TODO write the fasthash64 uint64_t key
-     // =================================================
-     // *************************************************
-     // I think I broke this the key is different TO DO 
-     // *************************************************
+     // read the key 
      wf.write(reinterpret_cast<char*>(&key),  sizeof(long));
 
      // initailize the block hash context list
