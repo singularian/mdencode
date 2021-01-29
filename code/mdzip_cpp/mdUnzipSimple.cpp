@@ -34,8 +34,8 @@ using namespace std;
 int mdlist(std::string filename, bool listfile, bool runlogging);
 int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runlogging);
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
-                 int modsizeBytes, std::string& blockhashnames, int hclblockblocksize, 
-                 std::string& blockhashvector, bool mdlist, int threadcount );
+                 int modsizeBytes, std::string& blockhashnames, int hclblockblocksize, std::string& blockhashvector, long blockkey, 
+                 bool mdlist, int threadcount );
 void usage();
 
 int main (int argc, char **argv) {
@@ -180,7 +180,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    // display the mdzip file info
    displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes,
-   blockhashnames, hclblockblocksize, blockhashvector, true, 0);
+   blockhashnames, hclblockblocksize, blockhashvector, blockkey, true, 0);
 
    // display the file block hash block list
    // block signatures / modulus exponent / modulus remainder
@@ -330,7 +330,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
 
    // display the mdzip file info
    displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes, 
-               blockhashnames, hclblockblocksize, blockhashvector, false, threadcount);
+               blockhashnames, hclblockblocksize, blockhashvector, blockkey, false, threadcount);
 
    // display the file block hash block list
    // block signatures / modulus exponent / modulus remainder
@@ -477,7 +477,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
 
 // display the mdlist mdzip file info
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, int modsizeBytes, std::string& blockhashnames, int hclblockblocksize, 
-                 std::string& blockhashvector, bool mdlist, int threadcount ) {
+                 std::string& blockhashvector, long blockkey, bool mdlist, int threadcount ) {
 
 
    std::cout << std::left << std::setw(20) << "Zip Filename: " << filename << std::endl;
@@ -494,22 +494,11 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
    
    std::cout << std::left << std::setw(20) << "Modsize: "        << modsize << std::endl;
    std::cout << std::left << std::setw(20) << "Modsize Bytes: "  << modsizeBytes << std::endl;
-   //std::cout << std::left << std::setw(20) << "Filehashlist: "   << filehashnames << std::endl;
    std::cout << std::left << std::setw(20) << "Blockhashlist: "  << blockhashnames << std::endl;
-
-   //std::cout << std::left << std::setw(20) << "File Hash Bytes: "  << hclfileblocksize << std::endl;
+   std::cout << std::left << std::setw(20) << "Blockhashkeylist: "  << blockkey  << std::endl;
    std::cout << std::left << std::setw(20) << "Block Hash Bytes: " << hclblockblocksize << std::endl;
    if (mdlist == false) std::cout << std::left << std::setw(20) << "Threadcount:" << threadcount << std::endl;
    std::cout << std::left << std::setw(20) << "Platform:" << (is_big_endian()? "Big": "Little") << " Endian" << std::endl;
-
-   // display the file hash list parameters and hash block size
-   //std::cout << std::endl;
-   //std::cout << "File hashlist " << std::endl;
-   //std::cout << filehashvector << std::endl;
-
-   // TODO display the hashblockgroup 
-   // std::cout << "File block group hash list " << std::endl;
-   // std::cout << getHLvectorsString(HASHBLOCKGROUP) << std::endl;
 
    // display the file block hash list
    std::cout << "File block hashlist " << std::endl;
