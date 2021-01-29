@@ -300,32 +300,28 @@ Examples:
 This is the usage for a cut down simplified version of MDunzip with just One 64-bit signature and a 14-byte block with a 32-bit modulus.
 
 ```
-mdunzipnh
-MDEncode Minimized MDunzip C++ Program
+MDEncode Minimized MDzip C++ Program
 Usage: [OPTIONS]
 
 Options:
   -h,--help                   Print this help message and exit
   -f,--file TEXT:FILE REQUIRED
-                              MDunzip filename
-  -t,--thread,--threads INT:POSITIVE
-                              Thread count number
-  -l,--list BOOLEAN           List the mdzip file
-  -u,--unzip BOOLEAN          MDunzip a file
-  -o,--over BOOLEAN           Overwrite an existing mdunzip output file
-  --log BOOLEAN               Run Logging
+                              MDzip filename
+  -k,--key UINT:POSITIVE      Set fasthash key number
+  -r,--rand BOOLEAN           Randomize the Key
+  -l,--log BOOLEAN            Run Logging
 
 
 
 Examples:
+   mdzipnh --file=test.txt  
+   mdzipnh --file=test.txt 
+   mdzipnh --file=test.txt  
+
    mdunzipnh --file=filename.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --list=true
    mdunzipnh --file=filename.mdsz --list=true --unzip=false
-
-   mdzipnh --file=test.txt  
-   mdzipnh --file=test.txt 
-   mdzipnh --file=test.txt  
 ```
 
 

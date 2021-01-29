@@ -22,13 +22,24 @@ BUILD_TIME=`date +%FT%T%z`
 # you also need to install the libfnv library in the fnv subdirectory
 #  it is included with -lfnv
 all:
-# need to merge these or use lnk
 	@echo "Building mdzip cpp"
 	g++ -I. $(DEPS) mdZip.cpp  -o mdzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	@echo ""
 	@echo "Building mdunzip cpp"
 	g++ -I. $(DEPS) mdUnzip.cpp  -o mdunzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 	@echo ""
+	@echo "Building mdzip fasthash64 cpp"
+	g++ -I. $(DEPS) mdZipSimple.cpp -o mdzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	@echo ""
+	@echo "Building mdunzip fasthash64 cpp"
+	g++ -I. $(DEPS) mdUnzipSimple.cpp -o mdunzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+mdzip:
+	@echo "Building mdzip cpp"
+	g++ -I. $(DEPS) mdZip.cpp  -o mdzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
+	@echo ""
+	@echo "Building mdunzip cpp"
+	g++ -I. $(DEPS) mdUnzip.cpp  -o mdunzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+mdzipsimple:	
 	@echo "Building mdzip fasthash64 cpp"
 	g++ -I. $(DEPS) mdZipSimple.cpp -o mdzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 	@echo ""
@@ -53,6 +64,8 @@ help:
 	@echo "GOPATH=$(GOPATH)"
 	@echo "The following commands are available:"
 	@echo "    make all         : Build the C++ mdzip/mdunzip program"
+	@echo "    make mdzip       : Build the C++ mdzip/mdunzip program"
+	@echo "    make mdzipsimple : Build the C++ mdzip/mdunzip program"
 	@echo "    make test        : Build the test files"
 	@echo "    make testhash    : Run the hash context list test"
 	@echo "    make clean       : Remove any local build artifacts"

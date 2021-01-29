@@ -49,17 +49,14 @@ int main (int argc, char **argv) {
      std::vector<int> blocklist = { 5 };
 
      // add a hash keylist parameter
-     bool randkey;
-     std::string keylist;
-     app.add_option("-k,--keylist", keylist, "Keylist csv string");
+     // bool randkey;
+     // std::string keylist;
+     // app.add_option("-k,--keylist", keylist, "Keylist csv string");
+     app.add_option("-k,--key", key, "Set fasthash key number")->check(CLI::PositiveNumber);
 
      // randomize the keylist for the hashes
      bool random = false;
-     // app.add_option("--rand", random, "Randomize Keylist");
-
-     // set list blocks
-     bool listzip = false;
-     // app.add_option("-x,--list", listzip, "Display the Block list");
+     app.add_option("-r,--rand", random, "Randomize the Key");
 
      // set logging
      bool runlogging = false;
@@ -79,6 +76,9 @@ int main (int argc, char **argv) {
      } catch(const CLI::ParseError &e) {
         return app.exit(e);
      }
+
+     // if the random key is set randomize the key
+     if (random) key = randLong(); 
 
      // run mdzipfile
      mdzipfileNoHeader(filename, blocksize, modsize, key, blocklist);
@@ -117,14 +117,10 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      const char *fname = mdzipfile.c_str();
      std::remove(fname);
 
-     // set the file hash list
-     //mdHashContextList hclfile;
-     // hclfile.setVectorHL(fhlist, HASHBLOCK);
-     //hclfile.setFileHashList(filename);
 
      std::ifstream nf(filename, std::ios::in | std::ios::binary);
      std::ofstream wf(mdzipfile, std::ios::out | std::ios::binary);
-     // std::ofstream wf(fname, std::ios::out | std::ios::binary);
+
      if(!wf) {
         std::cout << "Cannot open file!" << std::endl;
         return 1;
@@ -138,7 +134,6 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      mpz_init_set_str(remainder, "0", 10);
      mpz_init_set_str(modulusInt, "1", 10);
      mpz_init_set_str(byteblockInt, "0", 10);
-
     
      // need to make sure these are byte order independent
      // the block size header is currently 28 bytes
@@ -146,13 +141,21 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      // need to write the uint64_t key
      // 64-bit key for the fasthash64 or the 64 bit key
      // TODO write the fasthash64 uint64_t key
+     // =================================================
+     // *************************************************
+     // I think I broke this the key is different TO DO 
+     // *************************************************
+     wf.write(reinterpret_cast<char*>(&key),  sizeof(long));
 
      // initailize the block hash context list
      mdHashContextList hclblock;
      // set the block hash list with the block hash list vector 
      std::vector<int> blocklist = { 5 };
      hclblock.setVectorHL(blocklist, HASHBLOCK);
+
+     // set the key
      hclblock.hregister[0].fast64seed = key;
+
      // display the block hash list vector
      std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
      cout << std::endl;
@@ -318,7 +321,6 @@ Examples:
 )";
 
     std::cout << usageline << std::endl;
-    std::cout << std::endl;
 
     // Add the current hash list signatures currently supported
     // to the usage

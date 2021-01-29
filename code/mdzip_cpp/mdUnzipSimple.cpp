@@ -123,6 +123,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    int modsize          = 32;
    int hclfilesize;
    int hclblocksize;
+   long blockkey        = 0;
    std::string filehashnames;   
    std::string blockhashnames;
 
@@ -145,25 +146,14 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    }
 
    // begin reading in the mdzip file data
-   //nf.read(reinterpret_cast<char*>(&mdversion), sizeof(double));
    nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
-   //nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
-   //nf.read(reinterpret_cast<char*>(&modsize),   sizeof(int));
+   nf.read(reinterpret_cast<char*>(&blockkey),  sizeof(long));
 
    // initialize the modulusbytes array to store the modulo remainder
    int modsizeBytes = calcModulusBytes(modsize);
    unsigned char *modulusbytes = new unsigned char[modsizeBytes];
    mpz_t modulusInt;
    mpz_init_set_str(modulusInt, "1", 10);
-
-   // nf.read(reinterpret_cast<char*>(&blockhashnames), hclblocksize);
-
-   // TODO load the keylist 
-   // create another int size for the keylist and load the keylist into a char array
-   // then set each hashlist object with the keylist
-   // probably should add a key byte size to the registry 
-   // change the hash block list to a struct then have the first hashlist object load it and use it's registry to update the others
-   // the thread_local doesn't work
 
    // calculate the file block count and last block size
    blockcount = CalcFileBlocks(filesize, blocksize);
@@ -175,19 +165,13 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    // set the hash list vector tuple for file and hash blocks
    std::vector<int> blocklist = { 5 };
-   //hclfile.setVectorHLstring(filehashnames, HASHBLOCK);
-   //hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
    hclblock.setVectorHL(blocklist, HASHBLOCK);
 
+   // set the block hash key
+   hclblock.hregister[0].fast64seed = blockkey;
+
    // calculate the file and file block hash list size
-   //int hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
    int hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
-
-   // set the file hash list parameters and hash block size
-   // std::string filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
-
-   // TODO set the hashblockgroup 
-   //  std::string bghashvector = getHLvectorsString(HASHBLOCKGROUP);
 
    // set the file block hash list
    std::string blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
@@ -248,8 +232,8 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
 // mdunzipfile
 // mdunzip a valid mdzip file 
-// ie a file with the *.mdz extension
-// ie file.mdz file
+// ie a file with the *.mdsz extension
+// ie file.mdsz file
 // the output unzipped file is currently file.mdz.out or extension .out
 int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runlogging) {
 
@@ -267,6 +251,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    int modsize          = 32;
    int hclfilesize;
    int hclblocksize;
+   long blockkey        = 0;
    std::string filehashnames;   
    std::string blockhashnames;
 
@@ -305,12 +290,9 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
       return 1;
    }
 
-
    // begin reading in the mdzip file data
-   //nf.read(reinterpret_cast<char*>(&mdversion), sizeof(double));
    nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
-   //nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
-   //nf.read(reinterpret_cast<char*>(&modsize),   sizeof(int));
+   nf.read(reinterpret_cast<char*>(&blockkey),  sizeof(long));
 
    // initialize the modulusbytes array to store the modulo remainder
    int modsizeBytes = calcModulusBytes(modsize);
@@ -322,16 +304,6 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    // calculate the modulus 2 ^ modsize 
    mpz_ui_pow_ui (modulusInt, 2, modsize);
 
-
-   // nf.read(reinterpret_cast<char*>(&blockhashnames), hclblocksize);
-
-   // TODO load the keylist 
-   // create another int size for the keylist and load the keylist into a char array
-   // then set each hashlist object with the keylist
-   // probably should add a key byte size to the registry 
-   // change the hash block list to a struct then have the first hashlist object load it and use it's registry to update the others
-   // the thread_local doesn't work
-
    // calculate the file block count and last block size
    blockcount = CalcFileBlocks(filesize, blocksize);
    // blockremainder  = filesize % blocksize;
@@ -340,26 +312,18 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    //mdHashContextList hclfile;
    mdHashContextList hclblock;
 
-   // set the hash list vector tuple for file and hash blocks
-   //hclfile.setVectorHLstring(filehashnames, HASHBLOCK);
-   // hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
+   // set the hash list for the hash blocks
    std::vector<int> blocklist = { 5 };
-   //hclfile.setVectorHLstring(filehashnames, HASHBLOCK);
-   //hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
    hclblock.setVectorHL(blocklist, HASHBLOCK);
+
+   // set the key
+   hclblock.hregister[0].fast64seed = blockkey;
 
 
    // calculate the file and file block hash list size
-   //int hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
    int hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
 
    blockhashnames = hclblock.getHLvectorsStringNames(HASHBLOCK);
-
-   // set the file hash list parameters and hash block size
-   // std::string filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
-
-   // TODO set the hashblockgroup 
-   //  std::string bghashvector = getHLvectorsString(HASHBLOCKGROUP);
 
    // set the file block hash list
    std::string blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
