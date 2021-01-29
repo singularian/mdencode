@@ -43,15 +43,12 @@ int main (int argc, char **argv) {
 
      // process the command line argument with the CLI11 command line parser
      CLI::App app{"MDEncode Minimized MDzip C++ Program"};
-     app.add_option("-f,--file",    filename,    "MDzip filename")->check(CLI::ExistingFile)->required();
+     app.add_option("-f,--file", filename, "MDzip filename")->check(CLI::ExistingFile)->required();
 
      // add the block hashlist parameter
      std::vector<int> blocklist = { 5 };
 
-     // add a hash keylist parameter
-     // bool randkey;
-     // std::string keylist;
-     // app.add_option("-k,--keylist", keylist, "Keylist csv string");
+     // set the fasthash64 uint64_t 64 bit long
      app.add_option("-k,--key", key, "Set fasthash key number")->check(CLI::PositiveNumber);
 
      // randomize the keylist for the hashes
