@@ -312,7 +312,7 @@ Options:
   -l,--log BOOLEAN            Run Logging
 
 
-
+ 
 Examples:
    mdzipnh --file=test.txt  
    mdzipnh --file=test.txt 
