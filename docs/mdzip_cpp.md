@@ -18,12 +18,12 @@ Signature post validation can also be used to eliminate collisions if there were
 - File Hash Signatures
 - Block Hash Signatures
 - Optional Signature Keys
-- 32 Byte Highway Hash Signature Keys which change the signature
+- 32 Byte Highway Hash Signature Keys which change the signature (With multiple signature key combinations)
+- Lossless compression
 
 **MDUnzip Features**
 - Multithreaded Parallel Modulus Scan
 - Decrypts an MDZip file to an output file
-- File Signature List post validation
 - Uses the MDZip Signature Keys to change the output file signature Modulus Scan
 - File Signature post validation
 
@@ -570,9 +570,6 @@ Modulus Scan thread 31 and Random byteblock match
 
 # TODO List
 
-- Add the file signature blocks.
-- Add the file signature mdunzip post validation.
-- Add the hash keylist support to change the signature keys in the mdzip/mdunzip file.
 - Add Bigendian / little-endian conversion support. 
 - Make the go and C++ programs use the same format
 - Add more signatures to the signature list
