@@ -34,7 +34,7 @@ using namespace std;
 int mdlist(std::string filename, bool listfile, bool runlogging);
 int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runlogging);
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
-                 int modsizeBytes, std::string& blockhashnames, int hclblockblocksize, std::string& blockhashvector, long blockkey, 
+                 int modsizeBytes, std::string& blockhashnames, int hclblockblocksize, std::string& blockhashvector, uint64_t blockkey, 
                  bool mdlist, int threadcount );
 void usage();
 
@@ -123,7 +123,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    int modsize          = 32;
    int hclfilesize;
    int hclblocksize;
-   long blockkey        = 0;
+   uint64_t blockkey    = 0;
    std::string filehashnames;   
    std::string blockhashnames;
 
@@ -144,6 +144,8 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
       std::cout << "Cannot open file!" << std::endl;
       return 1;
    }
+
+   // TODO Check the file extension
 
    // begin reading in the mdzip file data
    nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
@@ -477,12 +479,11 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
 
 // display the mdlist mdzip file info
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, int modsizeBytes, std::string& blockhashnames, int hclblockblocksize, 
-                 std::string& blockhashvector, long blockkey, bool mdlist, int threadcount ) {
+                 std::string& blockhashvector, uint64_t blockkey, bool mdlist, int threadcount ) {
 
 
    std::cout << std::left << std::setw(20) << "Zip Filename: " << filename << std::endl;
    std::cout << std::left << std::setw(20) << "Unzip Filename: " << filename << ".out" << std::endl;
-   std::cout << std::endl;
 
    std::cout << std::left << std::setw(20) << "Version: "    << mdversion << std::endl;
    std::cout << std::left << std::setw(20) << "Filesize: "   << filesize  << std::endl;
@@ -515,8 +516,8 @@ Examples:
    mdunzipnh --file=test.mdsz --list=true
    mdunzipnh --file=filename.mdsz --list=true --unzip=false
 
-   mdzipnh --file=test.txt  
-   mdzipnh --file=test.txt 
+   mdzipnh --file=test.txt --key=1000 
+   mdzipnh --file=test.txt --rand=true
    mdzipnh --file=test.txt  
 
 )";

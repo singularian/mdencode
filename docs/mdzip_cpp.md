@@ -268,7 +268,7 @@ ID          Hash Name   Description                   Key         Blocksize
 
 # MDzip C++ No Header Simplified Usage 
 
-This is the usage for a cut down simplified version of MDzip with just One 64-bit signature and a 14-byte block with a 32-bit modulus.
+This is the usage for a cut down simplified version of MDzip with just One 64-bit fasthash 64 signature and a 14-byte block with a 32-bit modulus.
 
 ```
 MDEncode Minimized MDzip C++ Program
@@ -285,8 +285,8 @@ Options:
 
  
 Examples:
-   mdzipnh --file=test.txt  
-   mdzipnh --file=test.txt 
+   mdzipnh --file=test.txt --key=1000 
+   mdzipnh --file=test.txt --rand=true
    mdzipnh --file=test.txt  
 
    mdunzipnh --file=filename.mdsz --thread=16 
@@ -297,7 +297,7 @@ Examples:
 
 # MDunzip C++ No Header Simplified Usage 
 
-This is the usage for a cut down simplified version of MDunzip with just One 64-bit signature and a 14-byte block with a 32-bit modulus.
+This is the usage for a cut down simplified version of MDunzip with just One 64-bit fasthash 64 signature and a 14-byte block with a 32-bit modulus.
 
 ```
 MDEncode Minimized MDunzip C++ Program
@@ -322,8 +322,8 @@ Examples:
    mdunzipnh --file=test.mdsz --list=true
    mdunzipnh --file=filename.mdsz --list=true --unzip=false
 
-   mdzipnh --file=test.txt  
-   mdzipnh --file=test.txt 
+   mdzipnh --file=test.txt --key=1000 
+   mdzipnh --file=test.txt --rand=true
    mdzipnh --file=test.txt  
 
 ```

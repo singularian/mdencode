@@ -24,6 +24,9 @@
 #include "mdCore/mdHashContextList.h"
 
 int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_t key, std::vector<int> &bhlist);
+void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
+                 int modsizeBytes, std::string& blockhashnames, int hclblockblocksize, std::string& blockhashvector, uint64_t blockkey, 
+                 int threadcount );
 void usage();
 
 using namespace std;
@@ -46,6 +49,8 @@ int main (int argc, char **argv) {
      app.add_option("-f,--file", filename, "MDzip filename")->check(CLI::ExistingFile)->required();
 
      // add the block hashlist parameter
+     // could also add something to set this for a different 64-bit signature
+     // this is currently the fasthash 64 signature number it should probably be a string name
      std::vector<int> blocklist = { 5 };
 
      // set the fasthash64 uint64_t 64 bit long
@@ -97,17 +102,8 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      // if (filesize < blocksize) blocksize = filesize;
      if (filesize == 0) return 0;
 
-     cout << "Hash list ";
-     for(int i=0; i < bhlist.size(); i++)
-         std::cout << bhlist.at(i) << ' ';
-     cout << std::endl;
-
      long blockcount = CalcFileBlocks(filesize, blocksize);
      long blockremainder  = filesize % blocksize;
-
-     std::cout << "File size " << filesize << std::endl;
-     std::cout << "File block number "    << blockcount << std::endl;
-     std::cout << "File last block size " << blockremainder << std::endl;
 
      std::string mdzipfile = filename + ".mdsz";
 
@@ -140,18 +136,15 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
 
      // initailize the block hash context list
      mdHashContextList hclblock;
+
      // set the block hash list with the block hash list vector 
-     std::vector<int> blocklist = { 5 };
-     hclblock.setVectorHL(blocklist, HASHBLOCK);
+     hclblock.setVectorHL(bhlist, HASHBLOCK);
 
      // set the key
      hclblock.hregister[0].fast64seed = key;
 
-     // display the block hash list vector
+     // set the block hash list vector
      std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
-     cout << std::endl;
-     cout << "Hash Block Vector" << endl;
-     cout << vectorlist << std::endl;
  
      // constexpr size_t bufferSize = blocksize;
      // unique_ptr<unsigned char[]> byteblock(new unsigned char[blocksize]);
@@ -163,8 +156,14 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      // calculate the correct modulus byte size in case of a odd modulus size 33
      // the modulus parameter is in bits and this converts it to bytes 
      int modsizeBytes = calcModulusBytes(modsize);
-     cout << "Modsize bytes " << modsizeBytes << endl << endl;
      unsigned char *modulusint = new unsigned char[modsizeBytes];
+
+     // blockhashnames
+     std::string blockhashnames = hclblock.getHLvectorsStringNames(HASHBLOCK);
+
+     // display the mdzip file info
+     displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes,
+     blockhashnames, blocksize, vectorlist, key, 0);
 
      while (nf)
      {
@@ -297,12 +296,41 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
 
 }
 
+// display the mdlist mdzip file info
+void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, int modsizeBytes, std::string& blockhashnames, int hclblockblocksize, 
+                 std::string& blockhashvector, uint64_t blockkey, int threadcount ) {
+
+
+   std::cout << std::left << std::setw(20) << "Zip Filename: " << filename << std::endl;
+   std::cout << std::left << std::setw(20) << "Unzip Filename: " << filename << ".out" << std::endl;
+
+   std::cout << std::left << std::setw(20) << "Version: "    << mdversion << std::endl;
+   std::cout << std::left << std::setw(20) << "Filesize: "   << filesize  << std::endl;
+   std::cout << std::left << std::setw(20) << "Blocksize: "  << blocksize << std::endl;
+
+
+   std::cout << std::left << std::setw(20) << "Blockcount: "     << blockcount << std::endl;
+   std::cout << std::left << std::setw(20) << "Blockremainder: " << blockremainder << std::endl;
+   
+   std::cout << std::left << std::setw(20) << "Modsize: "        << modsize << std::endl;
+   std::cout << std::left << std::setw(20) << "Modsize Bytes: "  << modsizeBytes << std::endl;
+   std::cout << std::left << std::setw(20) << "Blockhashlist: "  << blockhashnames << std::endl;
+   std::cout << std::left << std::setw(20) << "Blockhashkeylist: "  << blockkey  << std::endl;
+   std::cout << std::left << std::setw(20) << "Block Hash Bytes: " << hclblockblocksize << std::endl;
+   std::cout << std::left << std::setw(20) << "Platform:" << (is_big_endian()? "Big": "Little") << " Endian" << std::endl;
+   std::cout << std::endl;
+
+   // display the file block hash list
+   std::cout << "File block hashlist " << std::endl;
+   std::cout << blockhashvector << std::endl;
+}
+
 // display the usage
 void usage() {
 std::string usageline = R"(
 Examples:
-   mdzipnh --file=test.txt  
-   mdzipnh --file=test.txt 
+   mdzipnh --file=test.txt --key=1000 
+   mdzipnh --file=test.txt --rand=true
    mdzipnh --file=test.txt  
 
    mdunzipnh --file=filename.mdsz --thread=16 
