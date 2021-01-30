@@ -271,35 +271,6 @@ ID          Hash Name   Description                   Key         Blocksize
 This is the usage for a cut down simplified version of MDzip with just One 64-bit signature and a 14-byte block with a 32-bit modulus.
 
 ```
-mdzipnh
-MDEncode Minimized MDzip C++ Program
-Usage: [OPTIONS]
-
-Options:
-  -h,--help                   Print this help message and exit
-  -f,--file TEXT:FILE REQUIRED
-                              MDzip filename
-  -k,--keylist TEXT           Keylist csv string
-  -l,--log BOOLEAN            Run Logging
-
-
-
-Examples:
-   mdzipnh --file=test.txt  
-   mdzipnh --file=test.txt 
-   mdzipnh --file=test.txt  
-
-   mdunzipnh --file=filename.mdsz --thread=16 
-   mdunzipnh --file=test.mdsz --thread=16 
-   mdunzipnh --file=test.mdsz --list=true
-   mdunzipnh --file=filename.mdsz --list=true --unzip=false
-```
-
-# MDunzip C++ No Header Simplified Usage 
-
-This is the usage for a cut down simplified version of MDunzip with just One 64-bit signature and a 14-byte block with a 32-bit modulus.
-
-```
 MDEncode Minimized MDzip C++ Program
 Usage: [OPTIONS]
 
@@ -322,6 +293,39 @@ Examples:
    mdunzipnh --file=test.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --list=true
    mdunzipnh --file=filename.mdsz --list=true --unzip=false
+```
+
+# MDunzip C++ No Header Simplified Usage 
+
+This is the usage for a cut down simplified version of MDunzip with just One 64-bit signature and a 14-byte block with a 32-bit modulus.
+
+```
+MDEncode Minimized MDunzip C++ Program
+Usage: [OPTIONS]
+
+Options:
+  -h,--help                   Print this help message and exit
+  -f,--file TEXT:FILE REQUIRED
+                              MDunzip filename
+  -t,--thread,--threads INT:POSITIVE
+                              Thread count number
+  -l,--list BOOLEAN           List the mdzip file
+  -u,--unzip BOOLEAN          MDunzip a file
+  -o,--over BOOLEAN           Overwrite an existing mdunzip output file
+  --log BOOLEAN               Run Logging
+
+
+
+Examples:
+   mdunzipnh --file=filename.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --list=true
+   mdunzipnh --file=filename.mdsz --list=true --unzip=false
+
+   mdzipnh --file=test.txt  
+   mdzipnh --file=test.txt 
+   mdzipnh --file=test.txt  
+
 ```
 
 
