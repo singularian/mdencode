@@ -143,6 +143,7 @@ MDzip Examples:
    mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=true
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
+   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh=true
 
 MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
@@ -223,6 +224,7 @@ MDzip Examples:
    mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=true
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
+   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh=true
 
 
 

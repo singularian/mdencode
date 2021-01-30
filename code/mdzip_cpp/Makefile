@@ -55,9 +55,9 @@ testhash:
 lines:
 	wc -l mdCore/*.h *.cpp
 clean:
-	rm -r mdzip mdunzip mdzipnh mdunzipnh *.log *.mdz *.mdsz
+	rm -r mdzip mdunzip mdzipnh mdunzipnh decoderRandomTestHC2 *.log *.mdz *.mdsz *.out
 cleantest:
-	rm decoderRandomTestHC2 testhashfile testhcl *.log *.mdz *.mdsz
+	rm decoderRandomTestHC2 testhashfile testhcl *.log *.mdz *.mdsz *.out
 # Display general help about this command
 help:
 	@echo "$(PROJECT) Makefile."
