@@ -499,6 +499,7 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
    std::cout << std::left << std::setw(20) << "Block Hash Bytes: " << hclblockblocksize << std::endl;
    if (mdlist == false) std::cout << std::left << std::setw(20) << "Threadcount:" << threadcount << std::endl;
    std::cout << std::left << std::setw(20) << "Platform:" << (is_big_endian()? "Big": "Little") << " Endian" << std::endl;
+   std::cout << std::endl;
 
    // display the file block hash list
    std::cout << "File block hashlist " << std::endl;
