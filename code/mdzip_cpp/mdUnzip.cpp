@@ -568,7 +568,6 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
 
    std::cout << std::left << std::setw(20) << "Zip Filename: " << filename << std::endl;
    std::cout << std::left << std::setw(20) << "Unzip Filename: " << filename << ".out" << std::endl;
-   std::cout << std::endl;
 
    std::cout << std::left << std::setw(20) << "Version: "    << mdversion << std::endl;
    std::cout << std::left << std::setw(20) << "Filesize: "   << filesize  << std::endl;

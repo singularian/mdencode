@@ -392,7 +392,6 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
 
 
    std::cout << std::left << std::setw(20) << "Filename Details: " << filename << std::endl;
-   std::cout << std::endl;
 
    std::cout << std::left << std::setw(20) << "Version: "    << mdversion << std::endl;
    std::cout << std::left << std::setw(20) << "Filesize: "   << filesize  << std::endl;
