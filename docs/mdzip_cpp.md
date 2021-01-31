@@ -280,8 +280,8 @@ Features
 - One 64-bit fasthash 64 signature
 - 14 byte signature block
 - 32 bit modulus
-- 64-bit fasthash 64 randomizable signature key.
-- A capability to use other signatures with 64 bits.
+- 64-bit fasthash 64 randomizable signature key
+- A capability to use other signatures with 64 bits
 
 ```
 MDEncode Minimized MDzip C++ Program
