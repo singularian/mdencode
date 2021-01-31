@@ -64,6 +64,7 @@ func createRandFile() int {
 	for a = 0; a < fd.blocksize; a++ {
 		fd.WriteFile(bs)
 		bytes, _ := sigRand.GenerateRandomBytes64(9)
+		bytes[0] = 20;
 		fd.WriteFile(bytes)
 	}
 

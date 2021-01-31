@@ -96,17 +96,20 @@ mdunzip --file=filename.mdz --list=true --unzip=false
 
 # MDZip C++ Usage
 
-[MD Encode Main Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
+This is the MDZip C++ Example Usage
 
-This is the MDZip Example Usage
+These are the 5 main programs. 
 
-These are the 2 main programs. 
-
-- mdzip    - creates an mdzip binary file with a modular floor
-- mdunzip  - unzips or displays the byte block and decodes an mdzip file to an output file. It can also display the block list.
+- mdzip      - Creates an mdzip binary file with a modular floor
+- mdunzip    - Unzips and decodes an mdzip file to an output file. It can also display the block list.
+- mdzipnh    - Creates a light weight simplified mdzip binary file with a modular floor and one signature.
+- mdunzipnh  - Unzips and decodes a simple mdzip file. It can also display the block list.  
+- decoderRandomTestHC2 - Test modulus scan program for the C++ MDZip.
 
 path: [github.com/singularian/mdencode/code/mdzip_cpp/](https://github.com/singularian/mdencode/tree/master/code/mdzip_cpp)
 
+
+[MD Encode Main Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
 
 ### MDZip C++ Usage Example
 
