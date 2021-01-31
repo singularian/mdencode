@@ -273,7 +273,15 @@ ID          Hash Name   Description                   Key         Blocksize
 
 # MDzip C++ No Header Simplified Usage 
 
-This is the usage for a cut down simplified version of MDzip with just One 64-bit fasthash 64 signature and a 14-byte block with a 32-bit modulus.
+This is the usage for a cut down simplified version of MDzip.
+
+Features  
+
+- One 64-bit fasthash 64 signature
+- 14 byte signature block
+- 32 bit modulus
+- 64-bit fasthash 64 randomizable signature key.
+- A capability to use other signatures with 64 bits.
 
 ```
 MDEncode Minimized MDzip C++ Program
