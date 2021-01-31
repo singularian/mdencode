@@ -203,14 +203,10 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
 
            // write the modulus remainder
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
-           // =========================================================================================
-           printByteblock(modulusint, modsizeBytes, true);
-           cout << "padding modus int " << endl;
-           padBlockBytes(count, modsizeBytes, modulusint);
-           
-           printByteblock(modulusint, modsizeBytes, true);
-           // =========================================================================================
 
+           // pad the GMP modulusint byte block 
+           // if the export count is less than the byte block
+           padBlockBytes(count, modsizeBytes, modulusint);
 
            // wf.write(reinterpret_cast<char*>(&modulusint),   sizeof(char) * modsizeBytes);
            wf.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);

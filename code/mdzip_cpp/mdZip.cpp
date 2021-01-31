@@ -2,9 +2,11 @@
  *
  * https://github.com/singularian/mdencode
  * 
- * Project MDencode GMP C++ Modulus Scan mdzip Program
+ * Project MDencode GMP C++ Modulus Scan MDzip Program
  * 
  * mdZip.cpp zips a file with the mdzip format 
+ * 
+ * The current mdzip file extension is mdz
  *
  * 
  * 
@@ -291,15 +293,11 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
            // write the modulus remainder
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
-           // =========================================================================================
-           printByteblock(modulusint, modsizeBytes, true);
-           cout << "padding modus int " << endl;
+
+           // pad the GMP modulusint byte block 
+           // if the export count is less than the byte block
            padBlockBytes(count, modsizeBytes, modulusint);
            
-           printByteblock(modulusint, modsizeBytes, true);
-           // =========================================================================================
-
-
            // wf.write(reinterpret_cast<char*>(&modulusint),   sizeof(char) * modsizeBytes);
            wf.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
            // wf.write(modulusint,   sizeof(char) * modsizeBytes);
