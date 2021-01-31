@@ -3,6 +3,7 @@
  * https://github.com/singularian/mdencode
  * 
  * Project MDencode GMP C++ Modulus Scan Test Program
+ * decoderRandomTestHC.cpp
  *
  * This is a C++ GMP modulus scan multithreaded test program 
  * MDencode GMP requires the GMP Library to build https://gmplib.org/ and the openssl library
@@ -39,8 +40,6 @@ using namespace std;
 unsigned char *genRandomByteBlock(size_t num_bytes);
 unsigned char *convertHexToByteBlock(std::string & source);
 unsigned char *setByteBlock(size_t num_bytes);
-int calcExponent (mpz_t blockint);
-int calcExponentModulus (mpz_t modulus, mpz_t blockint);
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, 
                   int expmod, int blocksize, int threadcount, std::string& vectorlist, std::string& displayHLhashes,  std::string& blockkeys, mdMutexLog *log );
