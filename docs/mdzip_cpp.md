@@ -100,11 +100,11 @@ This is the MDZip C++ Example Usage
 
 These are the 5 main programs. 
 
-- mdzip      - Creates an mdzip binary file with a modular floor
+- mdzip      - Creates an mdzip binary file with a modular floor and multiple signatures.
 - mdunzip    - Unzips and decodes an mdzip file to an output file. It can also display the block list.
 - mdzipnh    - Creates a light weight simplified mdzip binary file with a modular floor and one signature.
 - mdunzipnh  - Unzips and decodes a simple mdzip file. It can also display the block list.  
-- decoderRandomTestHC2 - Test modulus scan program for the C++ MDZip.
+- decoderRandomTestHC2 - Test modulus scan program for the C++ mdzip program.
 
 path: [github.com/singularian/mdencode/code/mdzip_cpp/](https://github.com/singularian/mdencode/tree/master/code/mdzip_cpp)
 
