@@ -431,7 +431,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
 
          // if the result is not found display not found
          if (mutex.getIsMatched() == NOTFOUND) {
-            std::cout << "Modulus Scan Match Not Found" << std::endl;
+            log.writeLog("Modulus Scan Match Not Found");
             // break; // need to check the other blocks
          // match is found   
          } else {
