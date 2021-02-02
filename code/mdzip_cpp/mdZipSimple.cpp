@@ -7,13 +7,14 @@
  * mdZipSimple.cpp zips a file with the mdzip format 
  * filename.mdsz
  * 
- * It uses one 64 bit hash fasthash64
- * and a filesize header uint64_t 
- * TODO add a 64 bit key
- * and a 14 byte block size
- * the modulus size is 32 bits
- *
+ * MDzip simple format
  * 
+ *   uint64_t input file filesize
+ *   uint64_t 64 bit randomizable signature fasthash64 key
+ *   block format
+ *   8 bytes for the 64-bit fasthash 64 hash - (It could use any number of 64 bit hashes or be configurable)
+ *   4 bytes for the 32-bit modulus
+ *   1 byte for the modulus exponent
  * 
 */
 #include <iostream>
@@ -205,7 +206,7 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
 
            // pad the GMP modulusint byte block 
-           // if the export count is less than the byte block
+           // if the export count is less than the byte block size
            padBlockBytes(count, modsizeBytes, modulusint);
 
            // write the modulus int
@@ -261,7 +262,7 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
 
            // pad the GMP modulusint byte block 
-           // if the export count is less than the byte block          
+           // if the export count is less than the byte block size         
            padBlockBytes(count, modsizeBytes, modulusint);
 
            // write the modulus int

@@ -7,13 +7,14 @@
  * mdUnzipSimple.cpp unzips a mdzip file or displays the block list
  * filename.mdsz
  * 
- * It uses one 64 bit hash fasthash64
- * and a filesize header uint64_t 
- * TODO add a 64 bit key
- * and a 14 byte block size
- * the modulus size is 32 bits
- *
+ * MDzip simple format
  * 
+ *   uint64_t input file filesize
+ *   uint64_t 64 bit randomizable signature fasthash64 key
+ *   block format
+ *   8 bytes for the 64-bit fasthash 64 hash - (It could use any number of 64 bit hashes or be configurable)
+ *   4 bytes for the 32-bit modulus
+ *   1 byte for the modulus exponent
  * 
 */
 #include <algorithm>
