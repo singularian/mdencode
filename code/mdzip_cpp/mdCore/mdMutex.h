@@ -3,6 +3,8 @@
 #include<vector>
 #include<mutex>
 
+enum status {SEARCHING, NOTFOUND, FOUND};
+
 class mdMutex 
 {
 private:
@@ -19,7 +21,7 @@ public:
 
     // initialize mdMutex
     mdMutex(int threadCnt) {
-        isMatched   = 0;
+        isMatched   = SEARCHING;
         notFound    = 0;
         matchCount  = 0;
         threadCount = threadCnt;
@@ -39,7 +41,7 @@ public:
         mutex.lock();
         notFound++;
         if (notFound == threadCount) {
-            isMatched = 1;
+            isMatched = NOTFOUND;
         }
         mutex.unlock();
     }
@@ -52,8 +54,8 @@ public:
     void setMatched(int thread) 
     {
         mutex.lock();
-        isMatched = 2;
-        lastThread = thread;
+        isMatched    = FOUND;
+        lastThread   = thread;
         matchCount++;
         mutex.unlock();
     }
@@ -62,10 +64,10 @@ public:
     void resetMatched()
     {
         mutex.lock();
-        isMatched  = 0;
-        lastThread = 0;
-        notFound   = 0;
-        matchCount = 0;
+        isMatched    = SEARCHING;
+        lastThread   = 0;
+        notFound     = 0;
+        matchCount   = 0;
         mutex.unlock();
 
     }

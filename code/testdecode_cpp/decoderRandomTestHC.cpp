@@ -3,6 +3,7 @@
  * https://github.com/singularian/mdencode
  * 
  * Project MDencode GMP C++ Modulus Scan Test Program
+ * decoderRandomTestHC.cpp
  *
  * This is a C++ GMP modulus scan multithreaded test program 
  * MDencode GMP requires the GMP Library to build https://gmplib.org/ and the openssl library
@@ -26,6 +27,7 @@
 #include <time.h>
 #include <vector>
 #include "external/CLI11.hpp" 
+#include "mdCore/mdCommon.h"
 #include "mdCore/mdMutex.h"
 #include "mdCore/mdMutexLog.h"
 #include "mdCore/mdHashContextList.h"
@@ -38,8 +40,6 @@ using namespace std;
 unsigned char *genRandomByteBlock(size_t num_bytes);
 unsigned char *convertHexToByteBlock(std::string & source);
 unsigned char *setByteBlock(size_t num_bytes);
-int calcExponent (mpz_t blockint);
-int calcExponentModulus (mpz_t modulus, mpz_t blockint);
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, 
                   int expmod, int blocksize, int threadcount, std::string& vectorlist, std::string& displayHLhashes,  std::string& blockkeys, mdMutexLog *log );
@@ -256,12 +256,12 @@ int main (int argc, char **argv) {
      // searching = 0 // searching for the value with the modscan
      // not found = 1 // modscan mutext match result
      // found     = 2 // modscan mutext match result 
-     while (mutex.getIsMatched() == 0) {
+     while (mutex.getIsMatched() == SEARCHING) {
 
      }
 
-     // if not found = 1 then no match was found
-     if (mutex.getIsMatched() == 1) {
+     // if the result is not found display not found
+     if (mutex.getIsMatched() == NOTFOUND) {
             std::cout << "Modulus Scan Match Not Found" << std::endl;
             // break; // need to check the other blocks
      // match is found   
@@ -372,46 +372,6 @@ unsigned char *setByteBlock(size_t num_bytes) {
     return stream;
 }
 
-
-// calculates an exponent of 2 less than the byte block int
-int calcExponent (mpz_t blockint) {
-    int exponent = 0;
-
-    mpz_t two, result;
-
-    mpz_init_set_str(two, "2", 10);
-    mpz_init_set_str(result, "2", 10);
-
-    do {
-      mpz_mul(result, result, two); 
-      exponent++; 
-    } while(mpz_cmp(result,blockint) < 0);
-
-    mpz_clear(two);
-    mpz_clear(result);
-
-    return exponent;
-}
-
-// calculates an exponent of the modulus less than the byte block int
-int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
-    int exponent = 0;
-
-    mpz_t result;
-
-    mpz_init_set_str(result, "", 10);
-    mpz_add (result, result, modulus); 
-
-
-    do {
-      mpz_mul(result, result, modulus);
-      exponent++;
-    } while(mpz_cmp(result,blockint) < 0);
-
-    mpz_clear(result);
-
-    return exponent;
-}
 
 // display the byteblock
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {

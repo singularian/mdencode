@@ -425,12 +425,12 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
          // searching = 0 // searching for the value with the modscan
          // not found = 1 // modscan mutext match result
          // found     = 2 // modscan mutext match result 
-         while (mutex.getIsMatched() == 0) {
+         while (mutex.getIsMatched() == SEARCHING) {
 
          }
 
-         // if not found = 1 then no match was found
-         if (mutex.getIsMatched() == 1) {
+         // if the result is not found display not found
+         if (mutex.getIsMatched() == NOTFOUND) {
             std::cout << "Modulus Scan Match Not Found" << std::endl;
             // break; // need to check the other blocks
          // match is found   
