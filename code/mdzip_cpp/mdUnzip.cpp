@@ -600,7 +600,18 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
    std::cout << std::endl;
 }
 
-// display the mdzip file block info
+// displayBlockInfo
+// display the signature block info
+// Action, blocknumber, currentblocksize
+// signature list
+// modulus exponent
+// modulus remainder
+//
+// Example
+// Unzipping Block 127 Bytes Size 14/14
+// fast64 11350068956456432289 
+// Modulus Exponent 65
+// Modulus Remainder 4243591440
 void displayBlockInfo(std::string action, int blocksize, int blk, int lastblk, long blockremainder, int modexponent, mpz_t modulusIntRemainder, 
                       mdHashContextList &hclblock, mdMutexLog &log) {
    
