@@ -232,12 +232,8 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
          wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int)); 
      }   
  
-     // constexpr size_t bufferSize = blocksize;
-     // unique_ptr<unsigned char[]> byteblock(new unsigned char[blocksize]);
-     // unique_ptr<char[]> byteblock(new char[blocksize]);
+     // create the byteblock buffer with the blocksize 
      unsigned char *byteblock  = new unsigned char[blocksize];
-     // need to add the last byte block size
-     // unsigned char *lastbyteblock = new unsigned char[blockremainder];
 
      // calculate the correct modulus byte size in case of a odd modulus size 33
      // the modulus parameter is in bits and this converts it to bytes 
@@ -276,19 +272,15 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
                byteblock  = new unsigned char[currentblocksize];   
            } 
 
-           std::cout << "Writing Block " << std::to_string(blocknumber) << " " << std::to_string(currentblocksize) << "/" << std::to_string(blocksize) << endl;
-           // nf.read(byteblock.get(), blocksize);
-           // hclblock.setByteBlockHashList(byteblock.get(), blocksize);
+           // read the current byteblock from the input file and generate a signature
            nf.read(reinterpret_cast<char*>(byteblock), (size_t) currentblocksize);
            hclblock.setByteBlockHashList((unsigned char*) byteblock, currentblocksize);
+
+           // write the signature list to the mdzip file
            hclblock.writeBlockHashList(wf);
+
+           // create a bigint number for the byte block
            mpz_import (byteblockInt, currentblocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);
-           // display data in the byteblock
-           printByteblock(byteblock, currentblocksize, true);
-
-           std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
-           std::cout << hclblock.displayHLhashes() << std::endl;
-
 
            // calculate the modulus 2 ^ modsize 
            mpz_ui_pow_ui (modulusInt, 2, modsize);
@@ -305,8 +297,6 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
                uint8_t modexponent2 = modexponent;
                wf.write(reinterpret_cast<char*>(&modexponent2),   sizeof(uint8_t));
            }
- 
-           std::cout << "Modulus Exponent " << modexponent << std::endl;
 
            // write the modulus remainder
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
@@ -317,13 +307,11 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            
            // write the modulus int
            wf.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
-
-           gmp_printf("Modulus Remainder %Zd\n\n", remainder);
            
            // display the byte block info
            // displayBlockInfo("Unzipping", blocksize, blk, lastblk, blockremainder, modexponent, modulusIntRemainder, hclblock, log);
            // std::string action, unsigned char *byteblock, long currentblocksize, long blocksize, int blk, int lastblk, int modexponent, mpz_t modulusIntRemainder, 
-           displayBlockInfo("Zipping 2", byteblock, currentblocksize, blocksize, blocknumber, lastblk, modexponent, remainder, hclblock); 
+           displayBlockInfo("Zipping", byteblock, currentblocksize, blocksize, blocknumber, lastblk, modexponent, remainder, hclblock); 
 
            // if this is the last block stop processing 
            if (blocknumber == blockcount) break;
