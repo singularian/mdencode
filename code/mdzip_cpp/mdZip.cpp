@@ -286,9 +286,10 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            // calculate the modulus remainder 
            mpz_mod (remainder, byteblockInt, modulusInt);
 
+           // calculate the modulus exponent with base two 
            int modexponent = calcExponent(byteblockInt);
-           // calculate the modulus exponent with two
-           // this should be a byte int if the file block size is less than 32 and an 32-bit int if it is greater than 32 bytes
+           
+           // modexponent should be a byte int if the file block size is less than 32 and an 32-bit int if it is greater than 32 bytes
            if (blocksize > 32) { 
                wf.write(reinterpret_cast<char*>(&modexponent),   sizeof(int));
            } else {
