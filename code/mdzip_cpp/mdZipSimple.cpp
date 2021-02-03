@@ -11,7 +11,7 @@
  * 
  *   uint64_t input file filesize
  *   uint64_t 64 bit randomizable signature fasthash64 key
- *   block signature format 
+ *   block signature format (file block 14 bytes)
  *   8 bytes for the 64-bit fasthash 64 hash - (It could use any number of 64 bit hashes or be configurable)
  *   4 bytes for the 32-bit modulus
  *   1 byte for the modulus exponent
