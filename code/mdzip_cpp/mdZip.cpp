@@ -134,9 +134,8 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
      // calculate the file block count and last block size
      long blockcount = CalcFileBlocks(filesize, blocksize);
+     
      // calculate the last block size
-     // long blockremainder  = filesize % blocksize;
-     // should use this one
      long blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
 
      // the curent block size
