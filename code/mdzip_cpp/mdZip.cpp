@@ -134,7 +134,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
      // calculate the file block count and last block size
      long blockcount = CalcFileBlocks(filesize, blocksize);
-     
+
      // calculate the last block size
      long blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
 
@@ -221,7 +221,6 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
          wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
          // std::cout << "bhash " <<  blockhashnames << std::endl;
          // wf.write(blockhashnames.c_str(),   hclsize); 
-
          hclblock.randomizeKeyList();
          hclblock.writeKeyList(wf);
          blockkeys = hclblock.displayHLhashKeys();

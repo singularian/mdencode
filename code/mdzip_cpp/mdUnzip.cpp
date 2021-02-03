@@ -601,8 +601,10 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
 }
 
 // displayBlockInfo
+//
 // display the signature block info
-// Action, blocknumber, currentblocksize
+//
+// action, blocknumber, currentblocksize
 // signature list
 // modulus exponent
 // modulus remainder
