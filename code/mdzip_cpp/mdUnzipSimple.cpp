@@ -37,6 +37,8 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
                  int modsizeBytes, std::string& blockhashnames, int hclblockblocksize, std::string& blockhashvector, uint64_t blockkey, 
                  bool mdlist, int threadcount );
+void displayBlockInfo(std::string action, int blocksize, int blk, int lastblk, long blockremainder, int modexponent, mpz_t modulusIntRemainder, 
+                      mdHashContextList &hclblock, mdMutexLog &log);                 
 void usage();
 
 int main (int argc, char **argv) {
@@ -146,6 +148,9 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
       return 1;
    }
 
+   // initialize the log object
+   mdMutexLog log(runlogging);
+
    // TODO Check the file extension
 
    // begin reading in the mdzip file data
@@ -196,19 +201,9 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    // read each of the mdzip file signature blocks
    for (blk = 0; blk < blockcount; blk++) {
-        if ((blk == lastblk) && (blockremainder != blocksize)) {
-           if (blocksize == 0) break; // should be and blocksize != 0
-           std::cout << "Reading Block " << (blk + 1);
-           std::cout << " bytes size " << blockremainder << "/" << blocksize << std::endl;
-        } else {
-           std::cout << "Reading Block " << (blk + 1);
-           std::cout << " bytes size " << blocksize << "/" << blocksize << std::endl;
-        }
 
         // read the file block hash list 
         hclblock.readBlockHashList(nf);
-        std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
-        std::cout << hclblock.displayHLhashes() << std::endl;
 
         // read the modulus exponent
         if (blocksize > 32) {
@@ -216,13 +211,13 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
         } else {
            nf.read(reinterpret_cast<char*>(&modexponent),   sizeof(uint8_t));
         }
-        std::cout << "Modulus Exponent " << modexponent << std::endl;
 
         // read the modulus remainder
         nf.read(reinterpret_cast<char*>(modulusbytes),   sizeof(char) * modsizeBytes);
         mpz_import (modulusInt, modsizeBytes, byteorder, sizeof(modulusbytes[0]), endian, 0, modulusbytes);
-        // printByteblock(modulusInt, modsizeBytes, true);
-        gmp_printf("Modulus Remainder %Zd\n\n", modulusInt);
+
+        // display the byte block info
+        displayBlockInfo("Displaying", blocksize, blk, lastblk, blockremainder, modexponent, modulusInt, hclblock, log);
    }
 
    delete modulusbytes;
@@ -362,20 +357,8 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    // read each of the mdzip file signature blocks
    for (blk = 0; blk < blockcount; blk++) {
 
-         if ((blk == lastblk) && (blockremainder != blocksize)) {
-           if (blocksize == 0) break;
-           std::cout << "Reading Block " << (blk + 1);
-           std::cout << " bytes size " << blockremainder << "/" << blocksize << std::endl;
-           blocksize = blockremainder;
-         } else {
-           std::cout << "Reading Block " << (blk + 1);
-           std::cout << " bytes size " << blocksize << "/" << blocksize << std::endl;
-         }
-
          // read the file block hash list 
          hclblock.readBlockHashList(nf);
-         std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
-         std::cout << hclblock.displayHLhashes() << std::endl;
 
          // read the modulus exponent
          if (blocksize > 32) {
@@ -383,14 +366,21 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
          } else {
            nf.read(reinterpret_cast<char*>(&modexponent),   sizeof(uint8_t));
          }
-         std::cout << "Modulus Exponent " << modexponent << std::endl;
 
          // read the modulus remainder
          nf.read(reinterpret_cast<char*>(modulusbytes),   sizeof(char) * modsizeBytes);
          mpz_import (modulusIntRemainder, modsizeBytes, byteorder, sizeof(modulusbytes[0]), endian, 0, modulusbytes);
-         // printByteblock(modulusInt, modsizeBytes, true);
-         gmp_printf("Modulus Remainder %Zd\n\n", modulusIntRemainder);
-         
+
+         // display the byte block info
+         displayBlockInfo("Unzipping", blocksize, blk, lastblk, blockremainder, modexponent, modulusIntRemainder, hclblock, log);
+
+         // check if this is the last byte block
+         // if it is set the blocksize to the last block size
+         if ((blk == lastblk) && (blockremainder != blocksize)) {
+           if (blocksize == 0) break;
+           blocksize = blockremainder;           
+         } 
+
          // set the thread modulus scan objects
          for(int tnum = 0; tnum < threadcount; tnum++) {
             // if this is the first block run the full initialization
@@ -451,7 +441,8 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
             log.logMatchByteblock(modbyteblock, blocksize, false);
             log.logMatchByteblock(modbyteblock, blocksize, true);
 
-            std::cout <<  std::endl; // TODO need to add this to the log
+            // add a newline before the next block
+            std::cout << std::endl << std::endl;
 
             // Write the modulus scan byteblock to a file
             wf.write(reinterpret_cast<char*>(modbyteblock),   blocksize);
@@ -506,6 +497,40 @@ void displayInfo(std::string& filename, double mdversion, long filesize, long bl
    // display the file block hash list
    std::cout << "File block hashlist " << std::endl;
    std::cout << blockhashvector << std::endl;
+}
+
+void displayBlockInfo(std::string action, int blocksize, int blk, int lastblk, long blockremainder, int modexponent, mpz_t modulusIntRemainder, 
+                      mdHashContextList &hclblock, mdMutexLog &log) {
+   
+   int blknum   = blk + 1;
+   int cblksize = blocksize;
+   std::cout << action << " Block " << blknum << " Bytes Size ";
+
+   // if this is the last block
+   // set the blocksize to the last block size
+   if ((blk == lastblk) && (blockremainder != blocksize)) {
+           cblksize = blockremainder;      
+   } 
+
+   // display the current block size fraction
+   // if this is a 12 byte block
+   // 8/12 if the block size is 8 out of a 12 byte block size
+   // 12/12 if the blocksize is equal
+   std::cout << cblksize << "/" << blocksize << std::endl;
+
+   // display out the hash block signatures
+   std::cout << hclblock.displayHLhashes() << std::endl;
+
+   // display the modulus exponent
+   std::cout << "Modulus Exponent " << modexponent << std::endl;
+
+   // if log == true log it otherwise just display it
+   gmp_printf("Modulus Remainder %Zd\n\n", modulusIntRemainder);
+   // result << "Modulus Bigint           ";
+   // gmp_printf("%Zd", modint);
+   // data = mpz_get_str(NULL, 10, modint);
+   // result << data << endl;
+   // free(data);
 }
 
 // display the usage
