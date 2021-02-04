@@ -346,7 +346,9 @@ Examples:
 
 These are examples for the C++ MDzip / MDunzip program  
 
-[MDzip Decompression Example](https://asciinema.org/a/rUzDEPcHuYzD5WnIo5ycTnkDg)
+[MDzip Decompression Example](https://asciinema.org/a/rUzDEPcHuYzD5WnIo5ycTnkDg)  
+
+[MDzip Decompression Example 2](https://asciinema.org/a/Bc3kmRoZMhv7AoArv6jL32SPj)
 
 
 # Collision Handling
