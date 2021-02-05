@@ -66,7 +66,7 @@ A modulus should be considered part of the file signature subset. A modulus is a
 
 # Modscan Iteration Calculator
 
-This is the modscan iteration number calculator.  It can uses division to determine the number of partitions in a modulus scan iteration.  
+This is the modscan iteration number calculator.  It can use division to determine the number of partitions in a modulus scan iteration.  
 
 Modscan_iterations = (Number / Modulus) + 1   
 
