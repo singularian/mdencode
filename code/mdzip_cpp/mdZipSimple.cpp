@@ -177,7 +177,7 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      // last block  
      long lastblk = blockcount;
 
-     while (nf)
+     while (!nf.eof())
      {
        if (blocknumber <= blockcount) {
            // check if this is the last block and the lastblocksize is not equal to the file block size
@@ -227,7 +227,8 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
            mdzip.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
            
            // display the byte block info
-           // displayBlockInfo("Unzipping", blocksize, blk, lastblk, blockremainder, modexponent, modulusIntRemainder, hclblock, log);
+           // TODO Need to add the logging
+           // displayBlockInfo("Zipping", byteblock, currentblocksize, blocksize, blocknumber, lastblk, modexponent, remainder, hclblock, log);
            displayBlockInfo("Zipping", byteblock, currentblocksize, blocksize, blocknumber, lastblk, modexponent, remainder, hclblock); 
 
            // if this is the last block stop processing 

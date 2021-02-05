@@ -314,7 +314,8 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            mdzip.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
            
            // display the byte block info
-           // displayBlockInfo("Unzipping", blocksize, blk, lastblk, blockremainder, modexponent, modulusIntRemainder, hclblock, log);
+           // TODO Need to add the logging
+           // displayBlockInfo("Zipping", byteblock, currentblocksize, blocksize, blocknumber, lastblk, modexponent, remainder, hclblock, log);          
            displayBlockInfo("Zipping", byteblock, currentblocksize, blocksize, blocknumber, lastblk, modexponent, remainder, hclblock); 
 
            // if this is the last block stop processing 
