@@ -638,6 +638,7 @@ Modulus Scan thread 31 and Random byteblock match
 - Add Bigendian / little-endian conversion support. 
 - Make the go and C++ programs use the same format
 - Add more signatures to the signature list
+- Possibly add decimal exponents instead of just integers. Example 2 ^ 111.2 or 111.9. The exponent can go above 111 for 13/14 encoding.
 
 # Donations
 
