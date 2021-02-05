@@ -64,6 +64,56 @@ A modulus should be considered part of the file signature subset. A modulus is a
 ![](https://github.com/singularian/mdencode/blob/master/diagrams/modularfloor.png)  
 ![](https://github.com/singularian/mdencode/blob/master/diagrams/modularfloorexponent.png)  
 
+# Modscan Iteration Calculator
+
+This is the modscan iteration number calculator.  It can uses division to determine the number of partitions in a modulus scan iteration.  
+
+Modscan_iterations = (Number / Modulus) + 1   
+
+This is example for 100 with a modulus of 10. There should be 11 iterations.  
+
+11 = (100 / 10) + 1
+
+With 100 mod 20 there should be 6 iterations.
+
+6 = (100 / 20) + 1
+
+
+#### Modscan Iterations for 100 Mod 10  
+
+This is a list of the modulus scan intervals for 100 Mod 10.  
+
+0   
+10  
+20  
+30  
+40  
+50  
+60  
+70  
+80  
+90  
+100  
+
+#### Modscan Iterations for 100 Mod 20
+
+100 / mod 20 = 5 + 1 = 6
+
+0  
+20  
+40  
+60  
+80  
+100  
+
+#### Modscan Iterations for 14 Bytes Mod 4 bytes
+
+A 14 byte block has 2 ^ 112 (8 bits * 14 bytes) possible bits. 
+
+2 ^ 112 / 2 ^ 32 = 2 ^ 80 + 1 
+
+There are 2 ^ 80 + 1 iterations with 32 bit modulus.
+There should be 12 bytes worth of signature and 8 for the fast hash 64 and 4 bytes for the 32 bit modulus to encode 10 bytes of data in the 13/14 encoding.  
 
 # Parallel Modulus Scan
 

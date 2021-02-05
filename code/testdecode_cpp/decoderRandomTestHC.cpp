@@ -185,8 +185,7 @@ int main (int argc, char **argv) {
      // displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, runlogging );
 
      // initialize the mutex object
-     // I should set a result variable and pass it into the mutex
-     // it result = 0 then the mutex can set it and stop the execution for the mod scan
+     // if result not equal to searching then the modscan can set the mutex result and stop the execution for the mod scan
      mdMutex mutex(threadcount);
      mdMutexLog log(runlogging);
 

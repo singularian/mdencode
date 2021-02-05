@@ -307,6 +307,9 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    // blockremainder  = filesize % blocksize;
    blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
 
+   // the curent block size
+   // long currentblocksize = blocksize;
+
    //mdHashContextList hclfile;
    mdHashContextList hclblock;
 
