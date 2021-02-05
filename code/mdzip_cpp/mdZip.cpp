@@ -152,11 +152,11 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      hclfile.setVectorHL(fhlist, HASHBLOCK);
      hclfile.setFileHashList(filename);
 
+     // create the ifstream and ofstream objects
      std::ifstream nf(filename, std::ios::in | std::ios::binary);
-     std::ofstream wf(mdzipfile, std::ios::out | std::ios::binary);
-     // std::ofstream wf(fname, std::ios::out | std::ios::binary);
-     if(!wf) {
-        std::cout << "Cannot open file!" << std::endl;
+     std::ofstream mdzip(mdzipfile, std::ios::out | std::ios::binary);  
+     if(!mdzip) {
+        std::cout << "Cannot open mdzip file!" << std::endl;
         return 1;
      }
 
@@ -164,19 +164,24 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      int byteorder = 0;
      int endian    = 0;
      size_t count;
-     mpz_t remainder, modulusInt, byteblockInt;
-     mpz_init_set_str(remainder, "0", 10);
-     mpz_init_set_str(modulusInt, "1", 10);
+     mpz_t byteblockInt, modulusInt, remainder;
      mpz_init_set_str(byteblockInt, "0", 10);
+     mpz_init_set_str(modulusInt, "1", 10);
+     mpz_init_set_str(remainder, "0", 10);
+
+     // calculate the modulus bigint as 2 ^ modsize 
+     // example 2 ^ 32 for a 32 bit modulus
+     // example 2 ^ 64 for a 64 bit modulus
+     mpz_ui_pow_ui (modulusInt, 2, modsize);
     
      // need to make sure these are byte order independent
      // the block size header is currently 28 bytes
-     wf.write(reinterpret_cast<char*>(&mdversion), sizeof(double));
-     wf.write(reinterpret_cast<char*>(&filesize),  sizeof(long));
-     wf.write(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
-     wf.write(reinterpret_cast<char*>(&modsize),   sizeof(int));
+     mdzip.write(reinterpret_cast<char*>(&mdversion), sizeof(double));
+     mdzip.write(reinterpret_cast<char*>(&filesize),  sizeof(long));
+     mdzip.write(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
+     mdzip.write(reinterpret_cast<char*>(&modsize),   sizeof(int));
 
-     // initailize the block hash context list
+     // initialize the block hash context list
      mdHashContextList hclblock;
      // set the block hash list with the block hash list vector 
      hclblock.setVectorHL(bhlist, HASHBLOCK);
@@ -192,19 +197,19 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
      // write the file hash list names
      hclsize = filehashnames.size();
-     wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
+     mdzip.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
      // wf.write(reinterpret_cast<char*>(&filehashnames),   hclsize);
-     wf.write(filehashnames.c_str(),   hclsize);
+     mdzip.write(filehashnames.c_str(),   hclsize);
 
      // write the block hash list names string 
      hclsize = blockhashnames.size();
-     wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
+     mdzip.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
      // wf.write(reinterpret_cast<char*>(&blockhashnames),   hclsize);
-     wf.write(blockhashnames.c_str(),   hclsize);
+     mdzip.write(blockhashnames.c_str(),   hclsize);
 
      // write the file hash list to the mdzip file
      // TODO write the file hash key random list
-     hclfile.writeBlockHashList(wf);
+     hclfile.writeBlockHashList(mdzip);
      //std::cout << "file hash list " << std::endl;
      //std::cout << hclfile.displayHLhashes() << std::endl;
      std::string filesigs = hclfile.displayHLhashes();
@@ -218,16 +223,16 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      std::string blockkeys = "default";
      if (randombh == true) {
          hclsize = blockhashnames.size();
-         wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
+         mdzip.write(reinterpret_cast<char*>(&hclsize),   sizeof(int));
          // std::cout << "bhash " <<  blockhashnames << std::endl;
          // wf.write(blockhashnames.c_str(),   hclsize); 
          hclblock.randomizeKeyList();
-         hclblock.writeKeyList(wf);
+         hclblock.writeKeyList(mdzip);
          blockkeys = hclblock.displayHLhashKeys();
      } else {
          // write the hash size as a zero byte
          hclsize = 0;
-         wf.write(reinterpret_cast<char*>(&hclsize),   sizeof(int)); 
+         mdzip.write(reinterpret_cast<char*>(&hclsize),   sizeof(int)); 
      }   
  
      // create the byteblock buffer with the blocksize 
@@ -258,7 +263,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      // last block  
      long lastblk = blockcount;
 
-     while (nf)
+     while (!nf.eof())
      {
 
         if (blocknumber <= blockcount) {
@@ -272,44 +277,44 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
            // read the current byteblock from the input file and generate a signature
            nf.read(reinterpret_cast<char*>(byteblock), (size_t) currentblocksize);
-           hclblock.setByteBlockHashList((unsigned char*) byteblock, currentblocksize);
 
+           // set the byte block hash list
+           hclblock.setByteBlockHashList((unsigned char*) byteblock, currentblocksize);
            // write the signature list to the mdzip file
-           hclblock.writeBlockHashList(wf);
+           hclblock.writeBlockHashList(mdzip);
 
            // create a bigint number for the byte block
            mpz_import (byteblockInt, currentblocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);
 
-           // calculate the modulus 2 ^ modsize 
-           mpz_ui_pow_ui (modulusInt, 2, modsize);
-
            // calculate the modulus remainder 
+           // modulus remainder = byteblockInt mod modulusInt
            mpz_mod (remainder, byteblockInt, modulusInt);
 
            // calculate the modulus exponent with base two 
            int modexponent = calcExponent(byteblockInt);
            
-           // modexponent should be a byte int if the file block size is less than 32 and an 32-bit int if it is greater than 32 bytes
+           // write modexponent
+           // if the file block size is less than 32 it's a byte 2 ^ 255 max
+           // if block size is greater than 32 bytes it's a int
            if (blocksize > 32) { 
-               wf.write(reinterpret_cast<char*>(&modexponent),   sizeof(int));
+               mdzip.write(reinterpret_cast<char*>(&modexponent),   sizeof(int));
            } else {
                uint8_t modexponent2 = modexponent;
-               wf.write(reinterpret_cast<char*>(&modexponent2),   sizeof(uint8_t));
+               mdzip.write(reinterpret_cast<char*>(&modexponent2),   sizeof(uint8_t));
            }
 
-           // write the modulus remainder
+           // export the gmp modulus int remainder to a modulus int byte block
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
 
+           // if the export count is less than the byte block size
            // pad the GMP modulusint byte block 
-           // if the export count is less than the byte block
            padBlockBytes(count, modsizeBytes, modulusint);
            
-           // write the modulus int
-           wf.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
+           // write the modulus int remainder byte block
+           mdzip.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
            
            // display the byte block info
            // displayBlockInfo("Unzipping", blocksize, blk, lastblk, blockremainder, modexponent, modulusIntRemainder, hclblock, log);
-           // std::string action, unsigned char *byteblock, long currentblocksize, long blocksize, int blk, int lastblk, int modexponent, mpz_t modulusIntRemainder, 
            displayBlockInfo("Zipping", byteblock, currentblocksize, blocksize, blocknumber, lastblk, modexponent, remainder, hclblock); 
 
            // if this is the last block stop processing 
@@ -324,9 +329,9 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      delete modulusint;
 
      nf.close();
-     wf.close();
+     mdzip.close();
 
-     if(!wf.good()) {
+     if(!mdzip.good()) {
        cout << "Error occurred at writing time!" << endl;
        // return 1;
      }

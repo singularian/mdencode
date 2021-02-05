@@ -98,14 +98,23 @@ int main (int argc, char **argv) {
 
      // execute the mdlist display mdzip file blocks if list is true
      // ./mdunzip --file=test.mdz --list=true
-     mdlist(filename, list, runlogging);
+     try {
+         mdlist(filename, list, runlogging);
+     } catch (exception& ex) {
+         std::cout << "MDList Exception " << std::endl;
+     } 
+
  
      // run the mdunzipfile
      // should add a block only format with a specified signature and modsize and no header
      // like highway hash and mod 32 and block 14 and 1 or no signature key
      // ./mdunzipnh --file=phone.txt.mdsz --threads=32
      // currently creates phone.txt.mdsz.out
-     if (runmdzip) mdunzipfile(filename, threadcount, overwrite, runlogging);
+     try {
+         if (runmdzip) mdunzipfile(filename, threadcount, overwrite, runlogging);
+     } catch (exception& ex) {
+         std::cout << "MDunzip Exception " << std::endl;
+     }     
 
      return 0;
 }
@@ -133,6 +142,12 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    // if the listfile boolean is false don't run the list mdzip file
    if (!listfile) return 0;
 
+   // Check the file extension
+   if(fileExtension(filename) != "mdsz") {
+      std::cout << "Invalid MDzip File!" << std::endl;
+      return 1;
+   }
+
    // check if the input file is below the minimum
    // the header is about 36 bytes minimum
    inputfilesize = getFilesize(filename);
@@ -150,8 +165,6 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    // initialize the log object
    mdMutexLog log(runlogging);
-
-   // TODO Check the file extension
 
    // begin reading in the mdzip file data
    nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
@@ -253,6 +266,12 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    std::string filehashnames;   
    std::string blockhashnames;
 
+   // Check the file extension
+   if(fileExtension(filename) != "mdsz") {
+      std::cout << "Invalid MDzip File!" << std::endl;
+      return 1;
+   }
+
    // check if the input file is below the minimum
    // the header is about 36 bytes minimum
    inputfilesize = getFilesize(filename);
@@ -319,7 +338,6 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
 
    // set the key
    hclblock.hregister[0].fast64seed = blockkey;
-
 
    // calculate the file and file block hash list size
    int hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);

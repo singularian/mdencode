@@ -91,14 +91,22 @@ int main (int argc, char **argv) {
 
      // execute the mdlist display mdzip file blocks if list is true
      // ./mdunzip --file=test.mdz --list=true
-     mdlist(filename, list, runlogging);
+     try {
+         mdlist(filename, list, runlogging);
+     } catch (exception& ex) {
+         std::cout << "MDList Exception" << std::endl;
+     } 
  
      // run the mdunzipfile
      // should add a block only format with a specified signature and modsize and no header
      // like highway hash and mod 32 and block 14 and 1 or no signature key
      // ./mdunzip --file=phone.txt.mdz --threads=32
      // currently creates phone.txt.mdz.out
-     if (runmdzip) mdunzipfile(filename, threadcount, overwrite, runlogging, validate);
+     try {
+         if (runmdzip) mdunzipfile(filename, threadcount, overwrite, runlogging, validate);
+     } catch (exception& ex) {
+         std::cout << "MDunzip Exception" << std::endl;
+     }
 
      return 0;
 }
@@ -125,6 +133,12 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    // if the listfile boolean is false don't run the list mdzip file
    if (!listfile) return 0;
+
+   // Check the file extension
+   if(fileExtension(filename) != "mdz") {
+      std::cout << "Invalid MDzip File!" << std::endl;
+      return 1;
+   }
 
    // check if the input file is below the minimum
    // the header is about 36 bytes minimum
@@ -285,6 +299,12 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    int hclblockkeysize = 0; // hash block random key list size
    std::string filehashnames;   
    std::string blockhashnames;
+
+   // Check the file extension
+   if(fileExtension(filename) != "mdz") {
+      std::cout << "Invalid MDzip File!" << std::endl;
+      return 1;
+   }
 
    // check if the input file is below the minimum
    // the header is about 36 bytes minimum

@@ -172,6 +172,15 @@ bool CheckIfFileExists(std::string& filename) {
   return (bool)ifile;
 }
 
+// get the file extension
+// filename.mdz
+// extension is mdz
+std::string fileExtension(const std::string& file){
+    std::string::size_type pos=file.find_last_of('.');
+    if(pos!=std::string::npos&&pos!=0)return file.substr(pos+1);
+    else return "";
+}
+
 // copy a char buffer to an int
 // https://stackoverflow.com/questions/34943835/convert-four-bytes-to-integer-using-c
 int buffToInteger(char* buffer)

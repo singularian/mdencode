@@ -119,12 +119,11 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      const char *fname = mdzipfile.c_str();
      std::remove(fname);
 
-
+     // create the ifstream and ofstream objects
      std::ifstream nf(filename, std::ios::in | std::ios::binary);
-     std::ofstream wf(mdzipfile, std::ios::out | std::ios::binary);
-
-     if(!wf) {
-        std::cout << "Cannot open file!" << std::endl;
+     std::ofstream mdzip(mdzipfile, std::ios::out | std::ios::binary);
+     if(!mdzip) {
+        std::cout << "Cannot open mdzip file!" << std::endl;
         return 1;
      }
 
@@ -132,18 +131,23 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      int byteorder = 0;
      int endian    = 0;
      size_t count;
-     mpz_t remainder, modulusInt, byteblockInt;
-     mpz_init_set_str(remainder, "0", 10);
-     mpz_init_set_str(modulusInt, "1", 10);
+     mpz_t byteblockInt, modulusInt, remainder;
      mpz_init_set_str(byteblockInt, "0", 10);
+     mpz_init_set_str(modulusInt, "1", 10);
+     mpz_init_set_str(remainder, "0", 10);
+
+     // calculate the modulus bigint as 2 ^ modsize 
+     // example 2 ^ 32 for a 32 bit modulus
+     // example 2 ^ 64 for a 64 bit modulus
+     mpz_ui_pow_ui (modulusInt, 2, modsize);
     
      // need to make sure these are byte order independent
-     // the block size header is currently 28 bytes
-     wf.write(reinterpret_cast<char*>(&filesize),  sizeof(long));
-     // read the key 
-     wf.write(reinterpret_cast<char*>(&key),  sizeof(long));
+     // the block size header is currently 16 bytes
+     mdzip.write(reinterpret_cast<char*>(&filesize),  sizeof(long));
+     // read the signature key 
+     mdzip.write(reinterpret_cast<char*>(&key),  sizeof(long));
 
-     // initailize the block hash context list
+     // initialize the block hash context list
      mdHashContextList hclblock;
 
      // set the block hash list with the block hash list vector 
@@ -186,44 +190,44 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
 
            // read the current byteblock from the input file and generate a signature
            nf.read(reinterpret_cast<char*>(byteblock), (size_t) currentblocksize);
-           hclblock.setByteBlockHashList((unsigned char*) byteblock, currentblocksize);
 
+           // set the byte block hash list
+           hclblock.setByteBlockHashList((unsigned char*) byteblock, currentblocksize);
            // write the signature list to the mdzip file
-           hclblock.writeBlockHashList(wf);
+           hclblock.writeBlockHashList(mdzip);
 
            // create a bigint number for the byte block
            mpz_import (byteblockInt, currentblocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);
 
-           // calculate the modulus 2 ^ modsize 
-           mpz_ui_pow_ui (modulusInt, 2, modsize);
-
            // calculate the modulus remainder 
+           // modulus remainder = byteblockInt mod modulusInt
            mpz_mod (remainder, byteblockInt, modulusInt);
          
            // calculate the modulus exponent with base two 
            int modexponent = calcExponent(byteblockInt);
 
-           // modexponent should be a byte int if the file block size is less than 32 and an 32-bit int if it is greater than 32 bytes
+           // write modexponent
+           // if the file block size is less than 32 it's a byte 2 ^ 255 max
+           // if block size is greater than 32 bytes it's a int
            if (blocksize > 32) { 
-               wf.write(reinterpret_cast<char*>(&modexponent),   sizeof(int));
+               mdzip.write(reinterpret_cast<char*>(&modexponent),   sizeof(int));
            } else {
                uint8_t modexponent2 = modexponent;
-               wf.write(reinterpret_cast<char*>(&modexponent2),   sizeof(uint8_t));
+               mdzip.write(reinterpret_cast<char*>(&modexponent2),   sizeof(uint8_t));
            }
 
-           // write the modulus remainder
+           // export the gmp modulus int remainder to a modulus int byte block
            mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
 
+           // if the export count is less than the byte block size
            // pad the GMP modulusint byte block 
-           // if the export count is less than the byte block
            padBlockBytes(count, modsizeBytes, modulusint);
            
-           // write the modulus int
-           wf.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
+           // write the modulus int remainder byte block
+           mdzip.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
            
            // display the byte block info
            // displayBlockInfo("Unzipping", blocksize, blk, lastblk, blockremainder, modexponent, modulusIntRemainder, hclblock, log);
-           // std::string action, unsigned char *byteblock, long currentblocksize, long blocksize, int blk, int lastblk, int modexponent, mpz_t modulusIntRemainder, 
            displayBlockInfo("Zipping", byteblock, currentblocksize, blocksize, blocknumber, lastblk, modexponent, remainder, hclblock); 
 
            // if this is the last block stop processing 
@@ -239,9 +243,9 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      delete modulusint;
 
      nf.close();
-     wf.close();
+     mdzip.close();
 
-     if(!wf.good()) {
+     if(!mdzip.good()) {
        cout << "Error occurred at writing time!" << endl;
        // return 1;
      }
