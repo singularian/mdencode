@@ -32,6 +32,7 @@
 
 using namespace std;
 
+int validateMDzip(std::string filename);
 int mdlist(std::string filename, bool listfile, bool runlogging);
 int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runlogging);
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
@@ -96,6 +97,10 @@ int main (int argc, char **argv) {
      // block signature vector
      std::vector<int> blocklist = { 5 };
 
+     // validate mdzip file
+     // validateMDzip(filename);
+     // return 0;
+
      // execute the mdlist display mdzip file blocks if list is true
      // ./mdunzip --file=test.mdz --list=true
      try {
@@ -117,6 +122,83 @@ int main (int argc, char **argv) {
      }     
 
      return 0;
+}
+
+// validate file
+int validateMDzip(std::string filename) {
+   // check the inputfilesize variable
+   size_t inputfilesize = 0;
+   // mdzip mdlist variables
+   double mdversion     = 1.0;
+   long blocksize       = 14;
+   long blockcount      = 0;
+   long blockremainder  = 0;
+   long filesize        = 0;
+   int modexponent      = 0;
+   int modsize          = 32;
+   int hclfilesize;
+   int hclblocksize;
+   uint64_t blockkey    = 0;
+   std::string filehashnames;   
+   std::string blockhashnames;
+
+   // if the listfile boolean is false don't run the list mdzip file
+   // if (!listfile) return 0;
+
+   // Check the file extension
+   if(fileExtension(filename) != "mdsz") {
+      std::cout << "Invalid MDzip File!" << std::endl;
+      return 1;
+   }
+
+   // check if the input file is below the minimum
+   // the header is about 36 bytes minimum
+   inputfilesize = getFilesize(filename);
+   if (inputfilesize < 21) {
+      std::cout << "Filename size below mdzip minimum!" << std::endl;
+      return 1;
+   }
+
+   // open the mdzip file 
+   std::ifstream nf(filename, std::ios::in | std::ios::binary);
+   if(!nf) {
+      std::cout << "Cannot open file!" << std::endl;
+      return 1;
+   }
+
+   // begin reading in the mdzip file data
+   nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
+   nf.read(reinterpret_cast<char*>(&blockkey),  sizeof(long));
+
+   // initialize the modulusbytes array to store the modulo remainder
+   int modsizeBytes = calcModulusBytes(modsize);
+
+   // calculate the file block count and last block size
+   blockcount = CalcFileBlocks(filesize, blocksize);
+   blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
+
+   // mdHashContextList hclfile;
+   mdHashContextList hclblock;
+
+   // set the hash list vector tuple for file and hash blocks
+   std::vector<int> blocklist = { 5 };
+   hclblock.setVectorHL(blocklist, HASHBLOCK);
+
+   int modexp = 1;
+   int hashblocksize = hclblock.calcBlockSize(HASHBLOCK) + modsizeBytes + 1;
+   int totalblocksize = hashblocksize * blockcount;
+
+   long sumfilesize = 16 + totalblocksize;
+
+   if (sumfilesize == inputfilesize) {
+      std::cout << "MDzip File " << filename << " validates " << std::endl; 
+      std::cout << "MDzip File " << sumfilesize << " = " << inputfilesize << std::endl; 
+   }
+
+   nf.close();
+
+   return 0;   
+
 }
 
 // mdlist
@@ -267,6 +349,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    std::string blockhashnames;
 
    // Check the file extension
+   // need to modify this logic to allow more than one
    if(fileExtension(filename) != "mdsz") {
       std::cout << "Invalid MDzip File!" << std::endl;
       return 1;

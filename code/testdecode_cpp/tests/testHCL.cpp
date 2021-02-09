@@ -55,4 +55,10 @@ int main()
 
     // display the block hash list
     std::cout << hcl.displayHLhashes() << std::endl;
+
+    int keysize   = hcl.calcBlockKeySize(HASHBLOCK);
+    int blocksize = hcl.calcBlockSize(HASHBLOCK);
+
+    std::cout << "Block size " << keysize << std::endl;	
+    std::cout << "Key size "   << blocksize << std::endl;	
 }
