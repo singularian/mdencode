@@ -16,24 +16,12 @@ BUILD_TIME=`date +%FT%T%z`
 # you also need to install the libfnv library in the fnv subdirectory
 #  it is included with -lfnv
 all:
-	@echo "Building test mdzip cpp"
-#	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC -lssl -lcrypto -lgmp -pthread -std=c++11
-#	g++ -I. external/highwayhash.c decoderRandomTestHC.cpp -o decoderRandomTestHC $(OBJ) -lssl -lcrypto -lgmp -pthread -std=c++11
+	@echo "Building Test Decoder HCL"
 	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11 
-# opt:
-# doesn't work
-#	g++ -O3 -I. $(DEPS) decoderRandomTestHCthreads.cpp -o decoderRandomTestHCthreads_gmp -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11 -pthread
 test:
-	g++ tests/testArgs.cpp -lssl -lcrypto -o testargs -std=c++11
-	g++ tests/testCSVSplit.cpp  -o testcsv -std=c++11
 	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 testdecode:
 	./decoderRandomTestHC2 --mod=64 --threads=32 --block=12 --hl 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34
-testlog:
-#	g++ -I. example_logging_to_file.cpp -o testlog -std=c++11
-#	g++  easylogging++.cc example_logging_to_file.cpp -o testlog -std=c++11
-	g++ -I. external/easylogging++.cc tests/easylogger.cpp -o testlog -std=c++11
-#	g++ tests/testThreadLocal.cpp -o test -pthread -std=c++11
 testhash:
 	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
 	g++ external/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11
