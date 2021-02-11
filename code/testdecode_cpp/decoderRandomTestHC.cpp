@@ -144,6 +144,7 @@ int main (int argc, char **argv) {
      // set a predefined byte block for testing
      // byteblock = setByteBlock(blocksize);
 
+     // run the modulus scan decode on the byteblock
      decodeRandomBlock(blocksize, modsize, randombh, def, byteblock, threadnumber, threadcount, runlogging);
 
      return 0;
