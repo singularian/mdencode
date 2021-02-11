@@ -61,24 +61,28 @@ int main (int argc, char **argv) {
 
      // display the block hash list 
      bool list = false;
-     app.add_option("-l,--list", list, "List the mdzip file");
+     app.add_flag("-l,--list", list, "List the mdzip file");
 
      // Add an mdzip option boolean to just allow mdlist to be specified
      // if runmdzip is false you don't run it
      // you can run mdlist or mdunzip or both mdlist and mdunzip
-     bool runmdzip = true;
-     app.add_option("-u,--unzip", runmdzip, "MDunzip a file");
+     bool runmdzip = false;
+     app.add_flag("-u,--unzip", runmdzip, "MDunzip a file");
 
      // overwrite the unzipped output file if it exists
      // stop and throw an error if it doesn't
      bool overwrite = false;
-     app.add_option("-o,--over", overwrite, "Overwrite an existing mdunzip output file");
+     app.add_flag("-o,--over", overwrite, "Overwrite an existing mdunzip output file");
 
      // set logging
      bool runlogging = false;
      // app.add_option("-l,--log", runlogging, "Run Logging");
-     app.add_option("--log", runlogging, "Run Logging");
+     app.add_flag("--log", runlogging, "Run Logging");
 
+     // validate the mdzip file 
+     bool validatemdzip = false;
+     app.add_flag("--valmdzip", validatemdzip, "Validate the mdzip file");
+   
      // check the argument count and display the usage if it's not specified
      if (argc < 2)
      {
@@ -97,14 +101,16 @@ int main (int argc, char **argv) {
      // block signature vector
      std::vector<int> blocklist = { 5 };
 
-     // validate mdzip file
-     // validateMDzip(filename);
-     // return 0;
+     // validate the mdzip file
+     if (validatemdzip) {
+         validateMDzip(filename);
+         return 0;
+     }
 
      // execute the mdlist display mdzip file blocks if list is true
      // ./mdunzip --file=test.mdz --list=true
      try {
-         mdlist(filename, list, runlogging);
+          if (list) mdlist(filename, list, runlogging);
      } catch (exception& ex) {
          std::cout << "MDList Exception " << std::endl;
      } 
@@ -116,7 +122,8 @@ int main (int argc, char **argv) {
      // ./mdunzipnh --file=phone.txt.mdsz --threads=32
      // currently creates phone.txt.mdsz.out
      try {
-         if (runmdzip) mdunzipfile(filename, threadcount, overwrite, runlogging);
+         if (!list) mdunzipfile(filename, threadcount, overwrite, runlogging);
+         if (list && runmdzip) mdunzipfile(filename, threadcount, overwrite, runlogging);
      } catch (exception& ex) {
          std::cout << "MDunzip Exception " << std::endl;
      }     
@@ -124,7 +131,7 @@ int main (int argc, char **argv) {
      return 0;
 }
 
-// validate file
+// validate the mdzip file format
 int validateMDzip(std::string filename) {
    // check the inputfilesize variable
    size_t inputfilesize = 0;

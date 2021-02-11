@@ -69,6 +69,7 @@ int main (int argc, char **argv) {
      app.add_option("-s,--bh", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
      // add a hash keylist parameter
+     // TODO Not currently used
      bool randkey;
      std::string keylist;
      app.add_option("-k,--keylist", keylist, "Keylist csv string");
@@ -77,7 +78,7 @@ int main (int argc, char **argv) {
 
      // randomize the keylist for the block hashes
      bool randombh = false;
-     app.add_option("--randbh", randombh, "Randomize the Block Hash Keylist");
+     app.add_flag("--randbh", randombh, "Randomize the Block Hash Keylist");
 
      // set list blocks
      // bool listzip = false;
@@ -85,7 +86,7 @@ int main (int argc, char **argv) {
 
      // set logging
      bool runlogging = false;
-     app.add_option("-l,--log", runlogging, "Run Logging");
+     app.add_flag("-l,--log", runlogging, "Run Logging");
 
      // check the argument count and display the usage if it's not specified
      if (argc < 2)

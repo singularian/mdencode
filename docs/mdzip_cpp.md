@@ -258,18 +258,19 @@ Options:
                               MDunzip filename
   -t,--thread,--threads INT:POSITIVE
                               Thread count number
-  -l,--list BOOLEAN           List the mdzip file
-  -u,--unzip BOOLEAN          MDunzip a file
-  -o,--over BOOLEAN           Overwrite an existing mdunzip output file
-  --log BOOLEAN               Run Logging
-  --val BOOLEAN               Run the File Signatures on the output file
+  -l,--list                   List the mdzip file
+  -u,--unzip                  MDunzip a file
+  -o,--over                   Overwrite an existing mdunzip output file
+  --log                       Run Logging
+  --val                       Run the File Signatures on the output uncompressed file
+  --valmdzip                  Validate the mdzip file
 
 
 
 MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=32 
-   mdunzip --file=test.mdz --list=true --val=true
+   mdunzip --file=test.mdz --list=true  --val=true
    mdunzip --file=filename.mdz --list=true --unzip=false
 
 MDzip Examples:
@@ -318,7 +319,7 @@ ID          Hash Name   Description                   Key         Blocksize
 31          xxh32       xxHash32                      true        4           
 32          xxh64       xxHash64                      true        8           
 33          whp         Whirlpool                     false       64          
-34          wy64        WYhash 64                     true        8           
+34          wy64        WYhash 64                     true        8             
 ```                                                                                                 
 
 # MDzip C++ No Header Simplified Usage 
@@ -334,6 +335,7 @@ Features
 - A capability to use other signatures with 64 bits
 
 ```
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ mdzipnh
 MDEncode Minimized MDzip C++ Program
 Usage: [OPTIONS]
 
@@ -363,6 +365,7 @@ Examples:
 This is the usage for a cut down simplified version of MDunzip with just One 64-bit fasthash 64 signature and a 14-byte block with a 32-bit modulus.
 
 ```
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ mdunzipnh
 MDEncode Minimized MDunzip C++ Program
 Usage: [OPTIONS]
 
@@ -372,10 +375,11 @@ Options:
                               MDunzip filename
   -t,--thread,--threads INT:POSITIVE
                               Thread count number
-  -l,--list BOOLEAN           List the mdzip file
-  -u,--unzip BOOLEAN          MDunzip a file
-  -o,--over BOOLEAN           Overwrite an existing mdunzip output file
-  --log BOOLEAN               Run Logging
+  -l,--list                   List the mdzip file
+  -u,--unzip                  MDunzip a file
+  -o,--over                   Overwrite an existing mdunzip output file
+  --log                       Run Logging
+  --valmdzip                  Validate the mdzip file
 
 
 

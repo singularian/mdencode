@@ -24,6 +24,7 @@
 
 using namespace std;
 
+int validateMDzip(std::string filename, bool validatemdzipfile);
 int mdlist(std::string filename, bool listfile, bool runlogging);
 int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runlogging, bool validate);
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
@@ -52,27 +53,31 @@ int main (int argc, char **argv) {
 
      // display the block hash list 
      bool list = false;
-     app.add_option("-l,--list", list, "List the mdzip file");
+     app.add_flag("-l,--list", list, "List the mdzip file");
 
      // Add an mdzip option boolean to just allow mdlist to be specified
      // if runmdzip is false you don't run it
      // you can run mdlist or mdunzip or both mdlist and mdunzip
-     bool runmdzip = true;
-     app.add_option("-u,--unzip", runmdzip, "MDunzip a file");
+     bool runmdzip = false;
+     app.add_flag("-u,--unzip", runmdzip, "MDunzip a file");
 
      // overwrite the unzipped output file if it exists
      // stop and throw an error if it doesn't
      bool overwrite = false;
-     app.add_option("-o,--over", overwrite, "Overwrite an existing mdunzip output file");
+     app.add_flag("-o,--over", overwrite, "Overwrite an existing mdunzip output file");
 
      // set logging
      bool runlogging = false;
      // app.add_option("-l,--log", runlogging, "Run Logging");
-     app.add_option("--log", runlogging, "Run Logging");
+     app.add_flag("--log", runlogging, "Run Logging");
 
      // run post mdunzip validation 
      bool validate = false;
-     app.add_option("--val", validate, "Run the File Signatures on the Output File");
+     app.add_flag("--val", validate, "Run the File Signatures on the output uncompressed file");
+
+     // validate the mdzip file 
+     bool validatemdzip = false;
+     app.add_flag("--valmdzip", validatemdzip, "Validate the mdzip file");
 
      // check the argument count and display the usage if it's not specified
      if (argc < 2)
@@ -89,6 +94,12 @@ int main (int argc, char **argv) {
         return app.exit(e);
      }
 
+     // validate the mdzip file
+     if (validatemdzip) {
+         validateMDzip(filename, true);
+         return 0;
+     }
+
      // execute the mdlist display mdzip file blocks if list is true
      // ./mdunzip --file=test.mdz --list=true
      try {
@@ -103,13 +114,174 @@ int main (int argc, char **argv) {
      // ./mdunzip --file=phone.txt.mdz --threads=32
      // currently creates phone.txt.mdz.out
      try {
-         if (runmdzip) mdunzipfile(filename, threadcount, overwrite, runlogging, validate);
+         if (!list) mdunzipfile(filename, threadcount, overwrite, runlogging, validate);
+         if (list && runmdzip) mdunzipfile(filename, threadcount, overwrite, runlogging, validate);
      } catch (exception& ex) {
          std::cout << "MDunzip Exception" << std::endl;
      }
 
      return 0;
 }
+
+// validate the mdzip file format
+int validateMDzip(std::string filename, bool validatemdzipfile) {
+
+      // check the inputfilesize variable
+   size_t inputfilesize = 0;
+   // mdzip mdlist variables
+   double mdversion     = 1.0;
+   long blocksize       = 0;
+   long blockcount      = 0;
+   long blockremainder  = 0;
+   long filesize        = 0;
+   int modexponent      = 0;
+   int modsize          = 0;
+   int hclfilesize;
+   int hclblocksize;
+   int hclblockkeysize = 0;  // hash block random key list size
+   std::string filehashnames;   
+   std::string blockhashnames;
+
+   // if the listfile boolean is false don't run the list mdzip file
+   if (!validatemdzipfile) return 0;
+
+   // Check the file extension
+   if(fileExtension(filename) != "mdz") {
+      std::cout << "Invalid MDzip File!" << std::endl;
+      return 1;
+   }
+
+   // check if the input file is below the minimum
+   // the header is about 36 bytes minimum
+   inputfilesize = getFilesize(filename);
+   if (inputfilesize < 48) {
+      std::cout << "Filename size below mdzip minimum!" << std::endl;
+      return 1;
+   }
+
+   // open the mdzip file 
+   std::ifstream nf(filename, std::ios::in | std::ios::binary);
+   if(!nf) {
+      std::cout << "Cannot open file!" << std::endl;
+      return 1;
+   }
+
+   // initialize the log object
+   // mdMutexLog log(runlogging);
+
+   // begin reading in the mdzip file data
+   nf.read(reinterpret_cast<char*>(&mdversion), sizeof(double));
+   nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
+   nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
+   nf.read(reinterpret_cast<char*>(&modsize),   sizeof(int));
+
+   // initialize the modulusbytes array to store the modulo remainder
+   int modsizeBytes = calcModulusBytes(modsize);
+
+   // read the file hash list string from the mdzip file
+   nf.read(reinterpret_cast<char*>(&hclfilesize),    sizeof(int));
+   char* buf = new char[hclfilesize];
+   // nf.read(reinterpret_cast<char*>(&filehashnames),  hclfilesize);
+   if (hclfilesize > 0) {
+     nf.read(buf,  hclfilesize);
+     filehashnames.append(buf, hclfilesize);
+     delete buf;
+   }
+
+   // read the file block hash list string from the mdzip file
+   nf.read(reinterpret_cast<char*>(&hclblocksize),   sizeof(int));
+   char* buf2 = new char[hclblocksize];
+   nf.read(buf2,  hclblocksize);
+   blockhashnames.append(buf2, hclblocksize);
+   delete buf2;
+   // nf.read(reinterpret_cast<char*>(&blockhashnames), hclblocksize);
+
+   // TODO load the file hash keylist 
+
+   // calculate the file block count and last block size
+   blockcount = CalcFileBlocks(filesize, blocksize);
+   blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
+   
+   mdHashContextList hclfile;
+   mdHashContextList hclblock;
+
+   // set the hash list vector tuple for file and hash blocks
+   hclfile.setVectorHLstring(filehashnames, HASHBLOCK);
+   hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
+
+   // calculate the file and file block hash list size
+   int hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
+   int hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
+
+   // set the file hash list parameters and hash block size
+   std::string filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
+
+   // TODO set the hashblockgroup 
+   //  std::string bghashvector = getHLvectorsString(HASHBLOCKGROUP);
+
+   // set the file block hash list
+   std::string blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
+
+   // TODO load the random file hash keys and key size
+   // load the file hash list 
+   hclfile.readBlockHashList(nf);
+
+   // Load in the block hash random key size
+   nf.read(reinterpret_cast<char*>(&hclblockkeysize),   sizeof(int));
+
+   // set the filesigs string
+   std::string filesigs = hclfile.displayHLhashes();
+
+   // if the hclblockkeylist size is greater than zero load in the random block hash keylist 
+   std::string blockkeys = "default"; 
+   if (hclblockkeysize > 0) {
+      /// std::cout << "setting mdlist keylist " << hclblockkeysize << std::endl;
+      hclblock.readKeyList(nf);
+      blockkeys = hclblock.displayHLhashKeys();
+   }  
+
+   // display the mdzip file info
+   // displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes, filehashnames, 
+   // blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, filesigs, true, 0);
+
+   // calculate the modulus exponent block size
+   long modexponentsize = 1;
+   if (blocksize > 32) {
+       modexponentsize = 4;   
+   } 
+
+   // calculate the total hash blcock size
+   int hashblocksize  = (hclblock.calcBlockSize(HASHBLOCK) + modsizeBytes + modexponentsize);
+   int totalblocksize = (hashblocksize * blockcount);
+
+   // calculate the mdzip file size
+   long prefixsize  = 40;
+   long sumfilesize = prefixsize;
+   // add the hash string list size
+   sumfilesize += hclfilesize;
+   sumfilesize += hclblocksize;
+
+   // add the file block size and key block size and hash block size
+   sumfilesize += hclfile.calcBlockSize(HASHBLOCK);
+   // sumfilesize += hclblock.calcBlockSize(HASHBLOCK);
+   sumfilesize += hclblock.calcBlockKeySize(HASHBLOCK);
+   sumfilesize += totalblocksize;
+
+   if (sumfilesize == inputfilesize) {
+      std::cout << "MDzip File " << filename << " validates " << std::endl; 
+      std::cout << "MDzip File " << sumfilesize << " = " << inputfilesize << std::endl; 
+   } else {
+      std::cout << "MDzip File doesn't validate" << std::endl; 
+      // std::cout << "MDzip File " << sumfilesize << " = " << inputfilesize << std::endl; 
+      // std::cout << "MDzip File hash size " << hclfile.calcBlockSize(HASHBLOCK) << std::endl; 
+      // std::cout << "MDzip File block size " << totalblocksize << std::endl; 
+   }
+
+   nf.close();
+
+   return 0;
+
+}   
 
 // mdlist
 // display the mdzip block contents of a file
@@ -227,7 +399,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    // if the hclblockkeylist size is greater than zero load in the random block hash keylist 
    std::string blockkeys = "default"; 
    if (hclblockkeysize > 0) {
-      std::cout << "setting mdlist keylist " << hclblockkeysize << std::endl;
+      // std::cout << "setting mdlist keylist " << hclblockkeysize << std::endl;
       hclblock.readKeyList(nf);
       blockkeys = hclblock.displayHLhashKeys();
    }  

@@ -61,11 +61,11 @@ int main (int argc, char **argv) {
 
      // randomize the keylist for the hashes
      bool random = false;
-     app.add_option("-r,--rand", random, "Randomize the Key");
+     app.add_flag("-r,--rand", random, "Randomize the Key");
 
      // set logging
      bool runlogging = false;
-     app.add_option("-l,--log", runlogging, "Run Logging");
+     app.add_flag("-l,--log", runlogging, "Run Logging");
 
      // check the argument count and display the usage if it's not specified
      if (argc < 2)
