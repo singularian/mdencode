@@ -140,7 +140,6 @@ public:
     void setVectorHL(std::vector<int> &v, int type)
     {
           // Deduplicate or unique the hashlist input vector v and preserve the order
-          // set the iterator  
           use_std_hash_remove_dup(v);
 
           // create a hashlist tuple vector
