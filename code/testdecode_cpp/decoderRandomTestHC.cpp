@@ -66,15 +66,12 @@ int main (int argc, char **argv) {
      //app.add_option("-v,--version", version, "Version number");
 
      // add a hashlist parameter
-     // std::string hashlist;
-     std::vector<int> vals;
+     // csv hash list    
      std::vector<int> csvvals;
-     // std::vector<std::string> csvvals;
-     // app.add_option("-r,--bh", vals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber);
      app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
-     // app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',');
 
-     // std::vector<int> vals;
+     // integer hash list
+     std::vector<int> vals;
      app.add_option("-s,--hl", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
      // randomize the keylist for the block hashes
