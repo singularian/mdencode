@@ -1,10 +1,14 @@
 #include <string>
 #include <iterator>
 #include <iostream>
+#include <iomanip>
 #include <algorithm>
 #include <array>
 #include <openssl/sha.h>
 #include <sstream>
+#include <fstream>
+#include <vector>
+#include "mdCore/mdCommon.h"
 #include "../mdCore/mdHashContextList.h"
 
 int main()

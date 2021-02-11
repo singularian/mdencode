@@ -15,8 +15,10 @@
 #include <openssl/ripemd.h>
 #include <openssl/sha.h>
 #include <sstream>
-#include "../mdCore/mdHashContextList.h"
 #include "../testdecode_cpp/external/CLI11.hpp" 
+#include "mdCore/mdCommon.h"
+#include "../mdCore/mdHashContextList.h"
+
 
 //  testhashfile --file=file.txt --hl 14 15 13
 int main (int argc, char **argv) {
