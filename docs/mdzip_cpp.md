@@ -1,6 +1,6 @@
 # Project MDencode MDzip C++ Overview  
   
-This is the MDzip C++ command line utility can compress a file into a MDzip binary byte block file.  
+This is the MDzip C++ 11 command line utility can compress a file into a MDzip binary byte block file.  
 MDunzip will decompress the input signature binary block file to an output file.   
 MDunzip and MDzip use a Hash Context list to encode and decode a file.  
 MDZip uses a header prefixed binary file with file and byte block signatures with a modular floor. It can also use a signature keylist.  
