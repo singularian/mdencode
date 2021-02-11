@@ -46,7 +46,7 @@ mdzipsimple:
 	@echo "Building mdunzip fasthash64 cpp"
 	g++ -I. $(DEPS) mdUnzipSimple.cpp -o mdunzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 test:
-	@echo "Building test mdzip cpp"
+	@echo "Building testdecode mdzip cpp"
 	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 testhash:
 	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
