@@ -47,10 +47,9 @@ mdzipsimple:
 	g++ -I. $(DEPS) mdUnzipSimple.cpp -o mdunzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 test:
 	@echo "Building test mdzip cpp"
-	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
-	g++ -I. $(DEPS) tests/testFileSignatures.cpp -o  testhashfile -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 testhash:
+	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	g++ -I. $(DEPS) tests/testFileSignatures.cpp -o  testhashfile -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 lines:
 	wc -l mdCore/*.h *.cpp
