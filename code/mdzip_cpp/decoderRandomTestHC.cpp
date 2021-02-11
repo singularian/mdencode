@@ -40,9 +40,12 @@ using namespace std;
 unsigned char *genRandomByteBlock(size_t num_bytes);
 unsigned char *convertHexToByteBlock(std::string & source);
 unsigned char *setByteBlock(size_t num_bytes);
+int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector<int> &bhlist, unsigned char *byteblock, 
+                       int threadnumber, int threadcount, bool runlogging);
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, 
-                  int expmod, int blocksize, int threadcount, std::string& vectorlist, std::string& displayHLhashes,  std::string& blockkeys, mdMutexLog *log );
+                  int expmod, int blocksize, int threadcount, std::string& vectorlist, std::string& displayHLhashes,  std::string& blockkeys, 
+                  mdMutexLog *log );
 void usage();
 
 // main
@@ -77,7 +80,7 @@ int main (int argc, char **argv) {
 
      // randomize the keylist for the block hashes
      bool randombh = false;
-     app.add_option("--randbh", randombh, "Randomize the Block Hash Keylist");
+     app.add_flag("--randbh", randombh, "Randomize the Block Hash Keylist");
 
      // process the hex byte arguments
      std::string hexstring; 
@@ -85,7 +88,7 @@ int main (int argc, char **argv) {
      app.add_option("-x,--hex", hexstring, "Hex Byteblock string");
 
      bool runlogging = false;
-     app.add_option("-l,--log", runlogging, "Run Logging");
+     app.add_flag("-l,--log", runlogging, "Run Logging");
 
      try {
         app.parse(argc, argv);
@@ -140,7 +143,15 @@ int main (int argc, char **argv) {
 
      // set a predefined byte block for testing
      // byteblock = setByteBlock(blocksize);
-       
+
+     decodeRandomBlock(blocksize, modsize, randombh, def, byteblock, threadnumber, threadcount, runlogging);
+
+     return 0;
+}
+
+// decodes a random byte sized byteblock with a group of signatures and a random signature key
+int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector<int> &bhlist, unsigned char *byteblock, 
+                       int threadnumber, int threadcount, bool runlogging) {
 
      mpz_t remainder, modulusInt, byteblockInt;
 
@@ -197,7 +208,7 @@ int main (int argc, char **argv) {
         mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex);
  
         // set the hash context list and the signatures based on the current byte block
-        mst[tnum].hcl.setVectorHL(def, HASHBLOCK);
+        mst[tnum].hcl.setVectorHL(bhlist, HASHBLOCK);
         
         // randomize the keylist if the randombh is true
         // copy the keylist to the other modscan objects after the first modscan object keylist randomization
