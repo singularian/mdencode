@@ -96,31 +96,14 @@ int main (int argc, char **argv) {
         return app.exit(e);
      }
 
-     // unique the block hash list
+     // combine csvvals and the integer vals block hash list
+     // the hash context list will unique them in non sorted order
      csvvals.insert(csvvals.end(), vals.begin(), vals.end());
-     auto it = unique(begin(csvvals), end(csvvals));
-     csvvals.erase(it, end(csvvals));
 
-     // need to unique this list for duplicates
-     // if the csvals list is greater than zero use it instead of the default list
-     if (csvvals.size() > 0) {
-         def.clear();
-         def.insert(def.end(), csvvals.begin(), csvvals.end());
-     }
-
-     // for(string v  : csvvals)
-/*   std::cout << "hash values ";
-     for(int v2  : def)
-     std::cout << " " << v2 << " ";
-     std::cout << std::endl;
-*/
-
-/*
-     cout << endl << "csv vals ";
-     for(int v  : vals)
-        std::cout << ": " << v << " ";
-     std::cout << std::endl;
-*/
+     // if the hash context list is empty assign a default value
+     if (csvvals.size() == 0) {
+        csvvals = { 5 };
+     }    
 
      // check if the argument count is less than 2
      // then display the usage
@@ -145,7 +128,7 @@ int main (int argc, char **argv) {
      // byteblock = setByteBlock(blocksize);
 
      // run the modulus scan decode on the byteblock
-     decodeRandomBlock(blocksize, modsize, randombh, def, byteblock, threadnumber, threadcount, runlogging);
+     decodeRandomBlock(blocksize, modsize, randombh, csvvals, byteblock, threadnumber, threadcount, runlogging);
 
      return 0;
 }
