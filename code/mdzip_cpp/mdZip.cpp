@@ -55,18 +55,13 @@ int main (int argc, char **argv) {
 
      app.add_option("--fh", flvals, "File Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
-     // add the block hashlist parameter
-     // std::string hashlist;
-     std::vector<int> blocklist = { 1 };
-     std::vector<int> vals;
+     // add the csv block hashlist parameter   
      std::vector<int> csvvals;
-     // std::vector<std::string> csvvals;
-     // app.add_option("-r,--bh", vals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber);
      app.add_option("-r,--bhs", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
-     // app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',');
 
-     // std::vector<int> vals;
-     app.add_option("-s,--bh", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+     // integer block hash list 
+     std::vector<int> intvals;
+     app.add_option("-s,--bh", intvals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
      // add a hash keylist parameter
      // TODO Not currently used
@@ -80,7 +75,7 @@ int main (int argc, char **argv) {
      bool randombh = false;
      app.add_flag("--randbh", randombh, "Randomize the Block Hash Keylist");
 
-     // set list blocks
+     // set list blocks not currently used
      // bool listzip = false;
      // app.add_option("-x,--list", listzip, "Display the Block list");
 
@@ -106,15 +101,16 @@ int main (int argc, char **argv) {
      // process the file hashlist
      filelist.insert(flcsvvals.end(), flvals.begin(), flvals.end());
 
-     // process the block hashlist
-     csvvals.insert(csvvals.end(), vals.begin(), vals.end());
-     if (csvvals.size() > 0) {
-         blocklist.clear();
-         blocklist.insert(blocklist.end(), csvvals.begin(), csvvals.end());
-     }
+     // combine csvvals and the integer vals block hash list
+     // the hash context list will unique them in non sorted order
+     csvvals.insert(csvvals.end(), intvals.begin(), intvals.end());
+
+     if (csvvals.size() == 0) {
+        csvvals = { 5 };
+     }    
 
      // run mdzipfile
-     mdzipfile(filename, blocksize, modsize, filelist, blocklist, randombh);
+     mdzipfile(filename, blocksize, modsize, filelist, csvvals, randombh);
 
 }
 

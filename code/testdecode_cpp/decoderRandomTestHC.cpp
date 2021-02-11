@@ -65,14 +65,14 @@ int main (int argc, char **argv) {
      app.add_option("-t,--thread,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
      //app.add_option("-v,--version", version, "Version number");
 
-     // add a hashlist parameter
+    // add the block hashlist parameter
      // csv hash list    
      std::vector<int> csvvals;
      app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
-     // integer hash list
-     std::vector<int> vals;
-     app.add_option("-s,--hl", vals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+     // integer block hash list
+     std::vector<int> intvals;
+     app.add_option("-s,--hl", intvals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
 
      // randomize the keylist for the block hashes
      bool randombh = false;
@@ -94,7 +94,7 @@ int main (int argc, char **argv) {
 
      // combine csvvals and the integer vals block hash list
      // the hash context list will unique them in non sorted order
-     csvvals.insert(csvvals.end(), vals.begin(), vals.end());
+     csvvals.insert(csvvals.end(), intvals.begin(), intvals.end());
 
      // if the hash context list is empty assign a default value
      if (csvvals.size() == 0) {
