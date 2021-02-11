@@ -192,9 +192,6 @@ int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector
      // calculate the modulus exponent with the modulus
      int expmod = calcExponentModulus(modulusInt, byteblockInt);
 
-     // display the current block stats
-     // displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, runlogging );
-
      // initialize the mutex object
      // if result not equal to searching then the modscan can set the mutex result and stop the execution for the mod scan
      mdMutex mutex(threadcount);
@@ -248,6 +245,8 @@ int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector
         blockkeys = mst[0].hcl.displayHLhashKeys();
      }  
 
+     // display the current block stats after initialization
+     // display the block keys
      displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, vectorlist, hashlist, blockkeys, &log );
 
      // std::cout << endl << "Running decode modscan" << endl << endl;
