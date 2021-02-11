@@ -1,4 +1,4 @@
-#include "../external/highwayhash.h"
+#include "../external/highwayhash/highwayhash.h"
 
 #include <inttypes.h>
 #include <stdio.h>

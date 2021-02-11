@@ -19,15 +19,16 @@ all:
 	@echo "Building Test Decoder HCL"
 	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11 
 test:
-	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
+	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 testdecode:
 	./decoderRandomTestHC2 --mod=64 --threads=32 --block=12 --hl 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34
 testhash:
-	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
-	g++ external/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11
+	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
+#	g++ tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
+	g++ external/highwayhash/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11
 clean:
 	rm -r decoderRandomTestHC2 
 cleantest:
 	rm test_gmp2 test_sha1 testhw testargs testhcl testcsv testlog testswitch *.log
 list:
-	echo "all test testlog clean test"
+	echo "all testhash testlog clean test"
