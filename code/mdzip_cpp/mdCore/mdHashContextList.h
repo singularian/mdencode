@@ -1627,8 +1627,9 @@ public:
          std::cout << std::left << std::setw(12) << "Hash Name ";
          std::cout << std::left << std::setw(30) << "Description";
          std::cout << std::left << std::setw(12) << "Key";
-         std::cout << std::left << std::setw(12) << "Blocksize" << std::endl;
-         std::cout << "==============================================================================" << std::endl;
+         std::cout << std::left << std::setw(16) << "Blocksize";
+         std::cout << std::left << std::setw(16) << "Blockkeysize" << std::endl;
+         std::cout << "===============================================================================================" << std::endl;
 
          for (int i = 0; i < hashlistsize; i++) {
             if (mdHashlist[i].name == "last") break;
@@ -1636,7 +1637,8 @@ public:
             std::cout << std::left << std::setw(12) << mdHashlist[i].name;
             std::cout << std::left << std::setw(30) << mdHashlist[i].description;
             std::cout << std::left << std::setw(12) << std::boolalpha << mdHashlist[i].haskey;
-            std::cout << std::left << std::setw(12) << mdHashlist[i].blocksize;
+            std::cout << std::left << std::setw(16) << mdHashlist[i].blocksize;
+            std::cout << std::left << std::setw(16) << mdHashlist[i].keysize;
             std::cout << std::endl;
          }
     }
