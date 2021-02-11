@@ -150,10 +150,10 @@ void printByteblock2 (char *byteblock, long blocksize, bool ishex) {
 // unique output 1 2 3 11 4 5 16 20 19
 void use_std_hash_remove_dup( std::vector<int>& num )
 {
-    std::unordered_set<int> set ;
-    std::size_t pos = 0 ;
+    std::unordered_set<int> set;
+    std::size_t pos = 0;
     for( int v : num ) if( set.insert(v).second ) num[pos++] = v;
-    num.resize(pos) ;
+    num.resize(pos);
 }
 
 /**
