@@ -1,5 +1,7 @@
 #include <cstring>
 #include <gmp.h>
+#include <unordered_set>
+#include <set>
 #include <sys/stat.h>
 
 
@@ -143,6 +145,16 @@ void printByteblock2 (char *byteblock, long blocksize, bool ishex) {
     std::cout << std::endl;       
 }
 
+// unique a vector list and preserve the order
+// 1, 2, 3, 3, 11, 4, 5, 11, 16, 11, 20, 19
+// unique output 1 2 3 11 4 5 16 20 19
+void use_std_hash_remove_dup( std::vector<int>& num )
+{
+    std::unordered_set<int> set ;
+    std::size_t pos = 0 ;
+    for( int v : num ) if( set.insert(v).second ) num[pos++] = v;
+    num.resize(pos) ;
+}
 
 /**
  * Get the size of a file.
@@ -168,8 +180,8 @@ long GetFileSize(std::string filename)
 
 // check if a file exists
 bool CheckIfFileExists(std::string& filename) {
-  std::ifstream ifile(filename.c_str());
-  return (bool)ifile;
+    std::ifstream ifile(filename.c_str());
+    return (bool)ifile;
 }
 
 // get the file extension

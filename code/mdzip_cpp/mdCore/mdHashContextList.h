@@ -141,13 +141,7 @@ public:
     {
           // Deduplicate or unique the hashlist input vector v and preserve the order
           // set the iterator  
-          std::vector<int>::iterator ip; 
-  
-          // Use std::unique on the hash list vector
-          ip = std::unique(v.begin(), v.end()); 
-  
-          // Resizing the input vector to remove the undefined terms 
-          v.resize(std::distance(v.begin(), ip)); 
+          use_std_hash_remove_dup(v);
 
           // create a hashlist tuple vector
           std::tuple<int,std::string,int> hashTuple;
