@@ -67,21 +67,16 @@ int main (int argc, char **argv) {
 
      // add the block hashlist parameter
      // csv hash list    
-     std::vector<std::string> v;
      std::vector<int> csvvals;
-     // app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
      app.add_option("-r,--bh", [&csvvals, &signum](std::vector<std::string> val){
         return splitRange(val, csvvals, signum);
      }, "Block Hashlist csv string")->delimiter(',')->expected(1,signum)->allow_extra_args(true);
 
      // integer block hash list
      std::vector<int> intvals;
-     // app.add_option("-s,--hl", intvals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
-
      app.add_option("-s,--hl", [&intvals, &signum](std::vector<std::string> val){
          return splitRange(val, intvals, signum);
      }, "Block Hashlist integers list")->expected(1,signum)->allow_extra_args(true);
-
 
      // randomize the keylist for the block hashes
      bool randombh = false;
