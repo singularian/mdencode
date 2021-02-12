@@ -65,12 +65,20 @@ build:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${MDZIP}/${CMD}/mdsig.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile ${MDZIP}/${CMD}/randomFile.go
 buildcpp:
-	@echo "Building Test Decode C++"
-	g++ -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 	@echo "Building mdzip C++"
 	g++ -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdZip.cpp  -o mdzipcpp -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
+	@echo ""
 	@echo "Building mdunzip C++"
 	g++ -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdUnzip.cpp  -o mdunzipcpp -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	@echo ""
+	@echo "Building mdzip fasthash64 C++"
+	g++ -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdZipSimple.cpp -o mdzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	@echo ""
+	@echo "Building mdunzip fasthash64 C++"
+	g++ -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdUnzipSimple.cpp -o mdunzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	@echo ""
+	@echo "Building Test Decode C++"
+	g++ -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 mdencode:
 	@echo "Building mdencode"
 	go build $(LDFLAGS) -o ${BUILD_DIR}/md ${MDE}/${CMD}/mdencode.go

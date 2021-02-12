@@ -22,31 +22,31 @@ BUILD_TIME=`date +%FT%T%z`
 # you also need to install the libfnv library in the fnv subdirectory
 #  it is included with -lfnv
 all:
-	@echo "Building mdzip cpp"
+	@echo "Building mdzip C++"
 	g++ -I. $(DEPS) mdZip.cpp  -o mdzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	@echo ""
-	@echo "Building mdunzip cpp"
+	@echo "Building mdunzip C++"
 	g++ -I. $(DEPS) mdUnzip.cpp  -o mdunzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 	@echo ""
-	@echo "Building mdzip fasthash64 cpp"
+	@echo "Building mdzip fasthash64 C++"
 	g++ -I. $(DEPS) mdZipSimple.cpp -o mdzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 	@echo ""
-	@echo "Building mdunzip fasthash64 cpp"
+	@echo "Building mdunzip fasthash64 C++"
 	g++ -I. $(DEPS) mdUnzipSimple.cpp -o mdunzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 mdzip:
-	@echo "Building mdzip cpp"
+	@echo "Building mdzip C++"
 	g++ -I. $(DEPS) mdZip.cpp  -o mdzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	@echo ""
-	@echo "Building mdunzip cpp"
+	@echo "Building mdunzip C++"
 	g++ -I. $(DEPS) mdUnzip.cpp  -o mdunzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 mdzipsimple:	
-	@echo "Building mdzip fasthash64 cpp"
+	@echo "Building mdzip fasthash64 C++"
 	g++ -I. $(DEPS) mdZipSimple.cpp -o mdzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 	@echo ""
-	@echo "Building mdunzip fasthash64 cpp"
+	@echo "Building mdunzip fasthash64 C++"
 	g++ -I. $(DEPS) mdUnzipSimple.cpp -o mdunzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 test:
-	@echo "Building testdecode mdzip cpp"
+	@echo "Building Testdecode C++"
 	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 testhash:
 	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
