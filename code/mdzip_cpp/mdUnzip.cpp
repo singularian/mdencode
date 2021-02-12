@@ -846,15 +846,16 @@ std::string usageline = R"(
 MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=32 
-   mdunzip --file=test.mdz --list=true  --val=true
-   mdunzip --file=filename.mdz --list=true --unzip=false
+   mdunzip --file=test.mdz     --list --val
+   mdunzip --file=filename.mdz --list --unzip=false
 
 MDzip Examples:
    mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
    mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
-   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=true
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
-   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh=true
+   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
 
 )";
 

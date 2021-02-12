@@ -65,14 +65,23 @@ int main (int argc, char **argv) {
      app.add_option("-t,--thread,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
      //app.add_option("-v,--version", version, "Version number");
 
-    // add the block hashlist parameter
+     // add the block hashlist parameter
      // csv hash list    
+     std::vector<std::string> v;
      std::vector<int> csvvals;
-     app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+     // app.add_option("-r,--bh", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+     app.add_option("-r,--bh", [&csvvals, &signum](std::vector<std::string> val){
+        return splitRange(val, csvvals, signum);
+     }, "Block Hashlist csv string")->delimiter(',')->expected(1,signum)->allow_extra_args(true);
 
      // integer block hash list
      std::vector<int> intvals;
-     app.add_option("-s,--hl", intvals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+     // app.add_option("-s,--hl", intvals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+
+     app.add_option("-s,--hl", [&intvals, &signum](std::vector<std::string> val){
+         return splitRange(val, intvals, signum);
+     }, "Block Hashlist integers list")->expected(1,signum)->allow_extra_args(true);
+
 
      // randomize the keylist for the block hashes
      bool randombh = false;
@@ -99,7 +108,7 @@ int main (int argc, char **argv) {
      // if the hash context list is empty assign a default value
      if (csvvals.size() == 0) {
         csvvals = { 5 };
-     } 
+     }    
 
      // check if the argument count is less than 2
      // then display the usage
@@ -484,9 +493,10 @@ Examples:
    decoderRandomTestHC2 --block=12 --mod=128   --threads=16
    decoderRandomTestHC2 --mod=64 --threads=16 --hex=0011
    decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
-   decoderRandomTestHC2 --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh=true --block=12
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --hl 1 2 3 4 5
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --bh 1,5,7
+   decoderRandomTestHC2 --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh --block=12
+   decoderRandomTestHC2 --mod=64 --threads=32 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh --block=12
 )";
 
     cout << usageline << endl;

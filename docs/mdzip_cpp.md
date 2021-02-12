@@ -194,15 +194,16 @@ Options:
 MDzip Examples:
    mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
    mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
-   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=true
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
-   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh=true
+   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
 
 MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=16 
-   mdunzip --file=test.mdz --list=true
-   mdunzip --file=filename.mdz --list=true --unzip=false   
+   mdunzip --file=test.mdz --list
+   mdunzip --file=filename.mdz --list --unzip=false   
 
 
 Hashlist:
@@ -279,6 +280,7 @@ MDzip Examples:
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=true
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
    mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh=true
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
 
 
 
@@ -351,13 +353,13 @@ Options:
  
 Examples:
    mdzipnh --file=test.txt --key=1000 
-   mdzipnh --file=test.txt --rand=true
+   mdzipnh --file=test.txt --rand
    mdzipnh --file=test.txt  
 
    mdunzipnh --file=filename.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --thread=16 
-   mdunzipnh --file=test.mdsz --list=true
-   mdunzipnh --file=filename.mdsz --list=true --unzip=false
+   mdunzipnh --file=test.mdsz --list
+   mdunzipnh --file=filename.mdsz --list --unzip=false
 ```
 
 # MDunzip C++ No Header Simplified Usage 
@@ -386,11 +388,11 @@ Options:
 Examples:
    mdunzipnh --file=filename.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --thread=16 
-   mdunzipnh --file=test.mdsz --list=true
-   mdunzipnh --file=filename.mdsz --list=true --unzip=false
+   mdunzipnh --file=test.mdsz --list
+   mdunzipnh --file=filename.mdsz --list --unzip=false
 
    mdzipnh --file=test.txt --key=1000 
-   mdzipnh --file=test.txt --rand=true
+   mdzipnh --file=test.txt --rand
    mdzipnh --file=test.txt  
 
 ```
@@ -455,14 +457,16 @@ A Docker container was also created in Dockerhub.
 The MDzip C++ engine provides a commandline modulus test scan with the hash context list.  It generates a random byte block n-bytes or can use a hex or decimal byte block of n-bytes.  
 It also can use a N-bit modulus and a hash list and signature key as well as the thread number and then runs a modulus scan and compares results.  
 If the byte blocks match the modulus scan result is a success.  It displays the hash signature list under the usage.
+The test program also supports signature ranges such as 1-5 or 10-20.
 
-path: github.com/singularian/mdencode/code/testdecode_cpp/
+path:   [github.com/singularian/mdencode/code/testdecode_cpp/](github.com/singularian/mdencode/code/testdecode_cpp/)
+path 2: [github.com/singularian/mdencode/code/testdecode_cpp/](github.com/singularian/mdencode/code/mdzip_cpp/)
 
 This is the Usage for decoderRandomTestHC2.
 
 ```
 MDEncode GMP C++ Test Program
-Usage: decoderRandomTestHC2 [OPTIONS]
+Usage: ./decoderRandomTestHC2 [OPTIONS]
 
 Options:
   -h,--help                   Print this help message and exit
@@ -471,13 +475,11 @@ Options:
   -m,--mod INT:POSITIVE       Modulus size number
   -t,--thread,--threads INT:POSITIVE
                               Thread count number
-  -r,--bh INT:POSITIVE:INT in [1 - 34] ...
-                              Block Hashlist csv string
-  -s,--hl INT:POSITIVE:INT in [1 - 34] ...
-                              Block Hashlist integers list
-  --randbh BOOLEAN            Randomize the Block Hash Keylist
+  -r,--bh                     Block Hashlist csv string
+  -s,--hl                     Block Hashlist integers list
+  --randbh                    Randomize the Block Hash Keylist
   -x,--hex TEXT               Hex Byteblock string
-  -l,--log BOOLEAN            Run Logging
+  -l,--log                    Run Logging
 
 
 
@@ -487,9 +489,11 @@ Examples:
    decoderRandomTestHC2 --block=12 --mod=128   --threads=16
    decoderRandomTestHC2 --mod=64 --threads=16 --hex=0011
    decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --hl 1 2 3 4 5
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log=true --bh 1,5,7
-   decoderRandomTestHC2 --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh=true --block=12
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --hl 1 2 3 4 5
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --bh 1,5,7
+   decoderRandomTestHC2 --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh --block=12
+   decoderRandomTestHC2 --mod=64 --threads=32 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh --block=12
+
 
 
 Hashlist

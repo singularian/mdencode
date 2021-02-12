@@ -48,20 +48,28 @@ int main (int argc, char **argv) {
      app.add_option("-t,--thread,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
 
      // add the file hash list parameter
-     std::vector<int> filelist;
-     std::vector<int> flcsvvals;
-     std::vector<int> flvals;
-     app.add_option("--fhs", flcsvvals, "File Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+     std::vector<int> flcsvvals;    
+     app.add_option("--fhs", [&flcsvvals, &signum](std::vector<std::string> val){
+        return splitRange(val, flcsvvals, signum);
+     }, "File Hashlist csv string")->delimiter(',')->expected(1,signum)->allow_extra_args(true);
 
-     app.add_option("--fh", flvals, "File Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+     // integer file hash list parameter
+     std::vector<int> flvals;
+     app.add_option("--fh", [&flvals, &signum](std::vector<std::string> val){
+        return splitRange(val, flvals, signum);
+     }, "File Hashlist integers list")->expected(1,signum)->allow_extra_args(true);
 
      // add the csv block hashlist parameter   
      std::vector<int> csvvals;
-     app.add_option("-r,--bhs", csvvals, "Block Hashlist csv string")->delimiter(',')->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+     app.add_option("-r,--bhs", [&csvvals, &signum](std::vector<std::string> val){
+        return splitRange(val, csvvals, signum);
+     }, "File Hashlist csv string")->delimiter(',')->expected(1,signum)->allow_extra_args(true);
 
-     // integer block hash list 
+     // integer block hash list parameter
      std::vector<int> intvals;
-     app.add_option("-s,--bh", intvals, "Block Hashlist integers list")->check(CLI::PositiveNumber)->check(CLI::Range(1,signum));
+     app.add_option("-s,--bh", [&intvals, &signum](std::vector<std::string> val){
+        return splitRange(val, intvals, signum);
+     }, "Block Hashlist integers list")->expected(1,signum)->allow_extra_args(true);
 
      // add a hash keylist parameter
      // TODO Not currently used
@@ -98,9 +106,11 @@ int main (int argc, char **argv) {
         return app.exit(e);
      }
 
-     // process the file hashlist
-     filelist.insert(flcsvvals.end(), flvals.begin(), flvals.end());
+     // process the file hashlists
+     // combine the flcsvvals and flvals vectors
+     flcsvvals.insert(flcsvvals.end(), flvals.begin(), flvals.end());
 
+     // process the block hashlists 
      // combine csvvals and the integer vals block hash list
      // the hash context list will unique them in non sorted order
      csvvals.insert(csvvals.end(), intvals.begin(), intvals.end());
@@ -110,7 +120,7 @@ int main (int argc, char **argv) {
      }    
 
      // run mdzipfile
-     mdzipfile(filename, blocksize, modsize, filelist, csvvals, randombh);
+     mdzipfile(filename, blocksize, modsize, flcsvvals, csvvals, randombh);
 
 }
 
@@ -443,15 +453,16 @@ std::string usageline = R"(
 MDzip Examples:
    mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
    mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
-   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=true
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
-   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh=true
+   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
 
 MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=16 
-   mdunzip --file=test.mdz --list=true
-   mdunzip --file=filename.mdz --list=true --unzip=false   
+   mdunzip --file=test.mdz --list
+   mdunzip --file=filename.mdz --list --unzip=false   
 )";
 
     std::cout << usageline << std::endl;

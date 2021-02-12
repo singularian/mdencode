@@ -339,13 +339,13 @@ void usage() {
 std::string usageline = R"(
 Examples:
    mdzipnh --file=test.txt --key=1000 
-   mdzipnh --file=test.txt --rand=true
+   mdzipnh --file=test.txt --rand
    mdzipnh --file=test.txt  
 
    mdunzipnh --file=filename.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --thread=16 
-   mdunzipnh --file=test.mdsz --list=true
-   mdunzipnh --file=filename.mdsz --list=true --unzip=false
+   mdunzipnh --file=test.mdsz --list
+   mdunzipnh --file=filename.mdsz --list --unzip=false
 )";
 
     std::cout << usageline << std::endl;

@@ -1,5 +1,6 @@
 #include <cstring>
 #include <gmp.h>
+#include <regex>
 #include <unordered_set>
 #include <set>
 #include <sys/stat.h>
@@ -145,6 +146,16 @@ void printByteblock2 (char *byteblock, long blocksize, bool ishex) {
     std::cout << std::endl;       
 }
 
+// display a vector
+void displayVector(std::vector<int> &v)
+{
+    for(int i = 0; i< v.size(); i++)
+    {
+        std::cout << v[i] << " ";
+    }
+    std::cout << "\n" << std::endl;
+}
+
 // unique a vector list and preserve the order
 // 1, 2, 3, 3, 11, 4, 5, 11, 16, 11, 20, 19
 // unique output 1 2 3 11 4 5 16 20 19
@@ -155,6 +166,59 @@ void use_std_hash_remove_dup( std::vector<int>& num )
     for( int v : num ) if( set.insert(v).second ) num[pos++] = v;
     num.resize(pos);
 }
+
+// split a string 
+// string 1,2,3,4 
+// split(string, ',') = 1 2 3 4
+std::vector<std::string> splitString(std::string &s, char delim) {
+        std::stringstream ss(s);
+        std::string item;
+        std::vector<std::string> elems;
+
+        while (std::getline(ss, item, delim)) {
+                elems.push_back(item);
+        }
+
+        return elems;
+}
+
+// convert a csv vector range string to an int vector
+// this is for the CLI11 lambda function for hash lists
+// 1-3 12 19 20-22
+// output 1,2,3,12,19,20,21,22
+bool splitRange(std::vector<std::string>& val, std::vector<int>& intvals, int signum) {
+        char delim = '-';
+        std::vector<std::string> v;
+        for(int i = 0; i<val.size(); i++) {
+                // match for numbers 
+                if (std::regex_match (val[i], std::regex("([0-9]+)") )) { 
+                        int a = std::stoi(val[i]);
+                        if (a > signum) return false;
+                        intvals.push_back(a);
+                // check range numbers 1-9 or 10-23        
+                } else if (std::regex_match (val[i], std::regex("([0-9]+\\-[0-9]+)") )) { 
+                        std::string number = val[i];
+                        v = splitString(number, delim);
+                        if (v.size() == 2) {
+                                int a = std::stoi(v[0]);
+                                int b = std::stoi(v[1]);
+                                if (a > signum || b > signum) return false;
+                                // the range should be 2-20 or the first number less than the second
+                                if (a < b) {
+                                       for (int j = a; j <= b; j++) intvals.push_back(j);
+                                } else if (a == b) {
+                                       intvals.push_back(a);
+                                } else {   
+                                        return false;
+                                }
+                        }
+                } else {
+                        return false;
+                }
+
+        }
+        return true;
+}        
 
 /**
  * Get the size of a file.
@@ -180,8 +244,17 @@ long GetFileSize(std::string filename)
 
 // check if a file exists
 bool CheckIfFileExists(std::string& filename) {
-  std::ifstream ifile(filename.c_str());
-  return (bool)ifile;
+    std::ifstream ifile(filename.c_str());
+    return (bool)ifile;
+}
+
+// get the file extension
+// filename.mdz
+// extension is mdz
+std::string fileExtension(const std::string& file){
+    std::string::size_type pos=file.find_last_of('.');
+    if(pos!=std::string::npos&&pos!=0)return file.substr(pos+1);
+    else return "";
 }
 
 // copy a char buffer to an int
