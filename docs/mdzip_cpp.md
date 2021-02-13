@@ -459,8 +459,8 @@ It also can use a N-bit modulus and a hash list and signature key as well as the
 If the byte blocks match the modulus scan result is a success.  It displays the hash signature list under the usage.
 The test program also supports signature ranges such as 1-5 or 10-20.
 
-path:   [github.com/singularian/mdencode/code/testdecode_cpp/](github.com/singularian/mdencode/code/testdecode_cpp/)
-path 2: [github.com/singularian/mdencode/code/testdecode_cpp/](github.com/singularian/mdencode/code/mdzip_cpp/)
+path: [github.com/singularian/mdencode/code/mdzip_cpp/](https://github.com/singularian/mdencode/tree/master/code/mdzip_cpp/)  
+test path: [github.com/singularian/mdencode/code/testdecode_cpp/](https://github.com/singularian/mdencode/tree/master/code/testdecode_cpp/)
 
 This is the Usage for decoderRandomTestHC2.
 
