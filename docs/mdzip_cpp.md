@@ -20,6 +20,7 @@ Signature post validation can also be used to eliminate collisions if there were
 - Optional Signature Keys
 - 32 Byte Highway Hash Signature Keys which change the signature (With multiple signature key combinations)
 - Lossless compression
+- Optional signature mdzip parameter ranges (signatues 1-5 or 12-24 for mdzip file and block signatures).
 
 **MDUnzip Features**
 - Multithreaded Parallel Modulus Scan
@@ -536,7 +537,7 @@ ID          Hash Name   Description                   Key         Blocksize
 34          wy64        WYhash 64                     true        8            
 ```
 
-## Example 1: decoderRandomTestHC Tests  
+## Example 1: decoderRandomTestHC2 Tests  
   
 This is an example of the modular floor using the C++ test program. 
 It's differentiated from the GO Version by the number. 
@@ -548,9 +549,6 @@ It calculated and found the 14 byte block (13 bytes compressed) in 4 hours on a 
 - 8 bytes for the 64-bit fasthash 64 - (It can use any number of 64 bit hashes)
 - 4 bytes for the 32-bit modulus 
 - 1 byte for the modulus exponent 
-
-C++ Test program
-- ```$GOPATH/github.com/singularian/mdencode/code/testdecode_cpp/decoderRandomTestHC2```
 
 ```
 ./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=000000001211211111111122FFFC
@@ -644,9 +642,10 @@ Modulus Scan thread 31 and Random byteblock match
 # TODO List
 
 - Add Bigendian / little-endian conversion support. 
-- Make the go and C++ programs use the same format
-- Add more signatures to the signature list
+- Make the go and C++ programs use the same format.
+- Add more signatures to the signature list.
 - Possibly add decimal exponents instead of just integers. Example 2 ^ 111.2 or 111.9. The exponent can go above 111 for 13/14 encoding.
+- Add the blockgroup signatures.
 
 # Donations
 
