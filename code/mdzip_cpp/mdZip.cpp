@@ -116,7 +116,7 @@ int main (int argc, char **argv) {
      csvvals.insert(csvvals.end(), intvals.begin(), intvals.end());
 
      if (csvvals.size() == 0) {
-        csvvals = { 5 };
+        csvvals = { FAST64 };
      }    
 
      // run mdzipfile

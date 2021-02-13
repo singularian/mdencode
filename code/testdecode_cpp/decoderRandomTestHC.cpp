@@ -102,7 +102,7 @@ int main (int argc, char **argv) {
 
      // if the hash context list is empty assign a default value
      if (csvvals.size() == 0) {
-        csvvals = { 5 };
+        csvvals = { FAST64 };
      }    
 
      // check if the argument count is less than 2

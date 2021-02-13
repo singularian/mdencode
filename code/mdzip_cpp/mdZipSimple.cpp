@@ -41,7 +41,7 @@ int main (int argc, char **argv) {
      long blockcount;
      long blocksize   = 14;
      int modsize      = 32;
-     uint64_t key     = 1;
+     uint64_t key     = 100000;
      int threadnumber = 0;
      int threadcount  = 8;
      // current signature number handled in the hash context list
@@ -54,7 +54,7 @@ int main (int argc, char **argv) {
      // add the block hashlist parameter
      // could also add something to set this for a different 64-bit signature
      // this is currently the fasthash 64 signature number it should probably be a string name
-     std::vector<int> blocklist = { 5 };
+     std::vector<int> blocklist = { FAST64 };
 
      // set the fasthash64 uint64_t 64 bit long
      app.add_option("-k,--key", key, "Set fasthash key number")->check(CLI::PositiveNumber);

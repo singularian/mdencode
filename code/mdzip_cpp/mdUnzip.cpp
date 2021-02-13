@@ -146,7 +146,10 @@ int validateMDzip(std::string filename, bool validatemdzipfile) {
    if (!validatemdzipfile) return 0;
 
    // Check the file extension
-   if(fileExtension(filename) != "mdz") {
+   // Might want to use compression number ie .100mdz as an extension
+   // It can be a mdz extension or out extension for recursion
+   std::string fileExt = fileExtension(filename);
+   if((fileExt != "mdz") && (fileExt != "out")) {
       std::cout << "Invalid MDzip File!" << std::endl;
       return 1;
    }
@@ -307,7 +310,10 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    if (!listfile) return 0;
 
    // Check the file extension
-   if(fileExtension(filename) != "mdz") {
+   // Might want to use compression number ie .100mdz as an extension
+   // It can be a mdz extension or out extension for recursion
+   std::string fileExt = fileExtension(filename);
+   if((fileExt != "mdz") && (fileExt != "out")) {
       std::cout << "Invalid MDzip File!" << std::endl;
       return 1;
    }
@@ -454,8 +460,6 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 // the output unzipped file is currently file.mdz.out or extension .out
 int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runlogging, bool validate) {
 
-   // std::cout << "mdunzipping file " << filename << std::endl; // to output file
-
    size_t inputfilesize = 0;
    std:string mdunzipfile = filename + ".out";
    // mdunzip data variables
@@ -473,7 +477,10 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    std::string blockhashnames;
 
    // Check the file extension
-   if(fileExtension(filename) != "mdz") {
+   // Might want to use compression number ie .100mdz as an extension
+   // It can be a mdz extension or out extension for recursion
+   std::string fileExt = fileExtension(filename);
+   if((fileExt != "mdz") && (fileExt != "out")) {
       std::cout << "Invalid MDzip File!" << std::endl;
       return 1;
    }
@@ -847,7 +854,8 @@ MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=32 
    mdunzip --file=test.mdz     --list --val
-   mdunzip --file=filename.mdz --list --unzip=false
+   mdunzip --file=filename.mdz --list --unzip=true
+   mdunzip --file=filename.mdz --valmdzip
 
 MDzip Examples:
    mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 

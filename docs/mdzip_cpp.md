@@ -130,8 +130,9 @@ These are MDzip and MDunzip command line examples. It doesn't currently support 
 ```bash
 mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
 mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
-mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=true
+mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh
 mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
+mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
 ```
 
 # MDunzip Examples
@@ -141,8 +142,10 @@ mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=fal
 mdunzip --file=phone.txt.mdz --threads=32
 mdunzip --file=filename.mdz --thread=16 
 mdunzip --file=test.mdz --thread=16 
-mdunzip --file=test.mdz --list=true --val=true
-mdunzip --file=filename.mdz --list=true --unzip=false
+mdunzip --file=test.mdz --list 
+mdunzip --file=test.mdz --val
+mdunzip --file=filename.mdz --list --unzip=true
+mdunzip --file=filename.mdz --valmdzip
 ```
 
 # MDZip C++ Usage
@@ -204,47 +207,48 @@ MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=16 
    mdunzip --file=test.mdz --list
-   mdunzip --file=filename.mdz --list --unzip=false   
+   mdunzip --file=filename.mdz --list --unzip=true
+   mdunzip --file=filename.mdz --valmdzip  
 
 
 Hashlist:
 
-ID          Hash Name   Description                   Key         Blocksize   
-==============================================================================
-1           cit64       Cityhash 64                   false       8           
-2           crc32       CRC 32                        false       4           
-3           crc64       CRC 64                        false       8           
-4           fast32      Fasthash 32                   true        4           
-5           fast64      Fasthash 64                   true        8           
-6           fnv32       FNV-1  32                     false       4           
-7           fnv32a      FNV-1a 32                     false       4           
-8           fnv64       FNV-1  64                     false       8           
-9           fnv64a      FNV-1a 64                     false       8           
-10          hw64        Highway Hash 64               true        8           
-11          md2         MD2                           false       16          
-12          md4         MD4                           false       16          
-13          md5         MD5                           false       16          
-14          md6         MD6                           false       20          
-15          md62        MD6 Quicker                   true        20          
-16          met641      Metro Hash 64 v1              true        8           
-17          met642      Metro Hash 64 v2              true        8           
-18          mx3         MX3                           true        8           
-19          png         Pengyhash 64                  true        8           
-20          ripe160     Ripe MD 160                   false       20          
-21          sea64       Seahash 64                    true        8           
-22          sip64       Siphash 64                    true        8           
-23          sha1_64     SHA1 64                       false       8           
-24          sha1_128    SHA1 128                      false       16          
-25          sha1        SHA1                          false       20          
-26          sha256      SHA 256                       false       32          
-27          sha384      SHA 384                       false       48          
-28          sha512      SHA 512                       false       64          
-29          spk32       Spooky 32                     true        4           
-30          spk64       Spooky 64                     true        8           
-31          xxh32       xxHash32                      true        4           
-32          xxh64       xxHash64                      true        8           
-33          whp         Whirlpool                     false       64          
-34          wy64        WYhash 64                     true        8         
+ID          Hash Name   Description                   Key         Blocksize       Blockkeysize    
+===============================================================================================
+1           cit64       Cityhash 64                   true        8               8               
+2           crc32       CRC 32                        true        4               4               
+3           crc64       CRC 64                        true        8               8               
+4           fast32      Fasthash 32                   true        4               4               
+5           fast64      Fasthash 64                   true        8               8               
+6           fnv32       FNV-1  32                     false       4               0               
+7           fnv32a      FNV-1a 32                     false       4               0               
+8           fnv64       FNV-1  64                     false       8               0               
+9           fnv64a      FNV-1a 64                     false       8               0               
+10          hw64        Highway Hash 64               true        8               32              
+11          md2         MD2                           false       16              0               
+12          md4         MD4                           false       16              0               
+13          md5         MD5                           false       16              0               
+14          md6         MD6                           false       20              0               
+15          md62        MD6 Quicker                   true        20              0               
+16          met641      Metro Hash 64 v1              true        8               4               
+17          met642      Metro Hash 64 v2              true        8               4               
+18          mx3         MX3                           true        8               8               
+19          png         Pengyhash 64                  true        8               4               
+20          ripe160     Ripe MD 160                   false       20              0               
+21          sea64       Seahash 64                    true        8               8               
+22          sip64       Siphash 64                    true        8               16              
+23          sha1_64     SHA1 64                       false       8               0               
+24          sha1_128    SHA1 128                      false       16              0               
+25          sha1        SHA1                          false       20              0               
+26          sha256      SHA 256                       false       32              0               
+27          sha384      SHA 384                       false       48              0               
+28          sha512      SHA 512                       false       64              0               
+29          spk32       Spooky 32                     true        4               4               
+30          spk64       Spooky 64                     true        8               8               
+31          xxh32       xxHash32                      true        4               4               
+32          xxh64       xxHash64                      true        8               8               
+33          whp         Whirlpool                     false       64              0               
+34          wy64        WYhash 64                     true        8               48                     
 ```                                                                                                 
 
 # MDunzip C++ Usage 
@@ -272,57 +276,58 @@ Options:
 MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=32 
-   mdunzip --file=test.mdz --list=true  --val=true
-   mdunzip --file=filename.mdz --list=true --unzip=false
+   mdunzip --file=test.mdz --list  --val
+   mdunzip --file=filename.mdz --list --unzip=true
+   mdunzip --file=filename.mdz --valmdzip
 
 MDzip Examples:
    mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
    mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
-   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=true
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
-   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh=true
+   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh
    mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
 
 
 
 Hashlist:
 
-ID          Hash Name   Description                   Key         Blocksize   
-==============================================================================
-1           cit64       Cityhash 64                   true        8           
-2           crc32       CRC 32                        true        4           
-3           crc64       CRC 64                        true        8           
-4           fast32      Fasthash 32                   true        4           
-5           fast64      Fasthash 64                   true        8           
-6           fnv32       FNV-1  32                     false       4           
-7           fnv32a      FNV-1a 32                     false       4           
-8           fnv64       FNV-1  64                     false       8           
-9           fnv64a      FNV-1a 64                     false       8           
-10          hw64        Highway Hash 64               true        8           
-11          md2         MD2                           false       16          
-12          md4         MD4                           false       16          
-13          md5         MD5                           false       16          
-14          md6         MD6                           false       20          
-15          md62        MD6 Quicker                   true        20          
-16          met641      Metro Hash 64 v1              true        8           
-17          met642      Metro Hash 64 v2              true        8           
-18          mx3         MX3                           true        8           
-19          png         Pengyhash 64                  true        8           
-20          ripe160     Ripe MD 160                   false       20          
-21          sea64       Seahash 64                    true        8           
-22          sip64       Siphash 64                    true        8           
-23          sha1_64     SHA1 64                       false       8           
-24          sha1_128    SHA1 128                      false       16          
-25          sha1        SHA1                          false       20          
-26          sha256      SHA 256                       false       32          
-27          sha384      SHA 384                       false       48          
-28          sha512      SHA 512                       false       64          
-29          spk32       Spooky 32                     true        4           
-30          spk64       Spooky 64                     true        8           
-31          xxh32       xxHash32                      true        4           
-32          xxh64       xxHash64                      true        8           
-33          whp         Whirlpool                     false       64          
-34          wy64        WYhash 64                     true        8             
+ID          Hash Name   Description                   Key         Blocksize       Blockkeysize    
+===============================================================================================
+1           cit64       Cityhash 64                   true        8               8               
+2           crc32       CRC 32                        true        4               4               
+3           crc64       CRC 64                        true        8               8               
+4           fast32      Fasthash 32                   true        4               4               
+5           fast64      Fasthash 64                   true        8               8               
+6           fnv32       FNV-1  32                     false       4               0               
+7           fnv32a      FNV-1a 32                     false       4               0               
+8           fnv64       FNV-1  64                     false       8               0               
+9           fnv64a      FNV-1a 64                     false       8               0               
+10          hw64        Highway Hash 64               true        8               32              
+11          md2         MD2                           false       16              0               
+12          md4         MD4                           false       16              0               
+13          md5         MD5                           false       16              0               
+14          md6         MD6                           false       20              0               
+15          md62        MD6 Quicker                   true        20              0               
+16          met641      Metro Hash 64 v1              true        8               4               
+17          met642      Metro Hash 64 v2              true        8               4               
+18          mx3         MX3                           true        8               8               
+19          png         Pengyhash 64                  true        8               4               
+20          ripe160     Ripe MD 160                   false       20              0               
+21          sea64       Seahash 64                    true        8               8               
+22          sip64       Siphash 64                    true        8               16              
+23          sha1_64     SHA1 64                       false       8               0               
+24          sha1_128    SHA1 128                      false       16              0               
+25          sha1        SHA1                          false       20              0               
+26          sha256      SHA 256                       false       32              0               
+27          sha384      SHA 384                       false       48              0               
+28          sha512      SHA 512                       false       64              0               
+29          spk32       Spooky 32                     true        4               4               
+30          spk64       Spooky 64                     true        8               8               
+31          xxh32       xxHash32                      true        4               4               
+32          xxh64       xxHash64                      true        8               8               
+33          whp         Whirlpool                     false       64              0               
+34          wy64        WYhash 64                     true        8               48                 
 ```                                                                                                 
 
 # MDzip C++ No Header Simplified Usage 
@@ -360,7 +365,8 @@ Examples:
    mdunzipnh --file=filename.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --list
-   mdunzipnh --file=filename.mdsz --list --unzip=false
+   mdunzipnh --file=filename.mdsz --list --unzip=true
+   mdunzipnh --file=filename.mdsz --valmdzip
 ```
 
 # MDunzip C++ No Header Simplified Usage 
@@ -390,7 +396,8 @@ Examples:
    mdunzipnh --file=filename.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --list
-   mdunzipnh --file=filename.mdsz --list --unzip=false
+   mdunzipnh --file=filename.mdsz --list --unzip=true
+   mdunzipnh --file=filename.mdsz --valmdzip
 
    mdzipnh --file=test.txt --key=1000 
    mdzipnh --file=test.txt --rand
@@ -499,42 +506,42 @@ Examples:
 
 Hashlist
 
-ID          Hash Name   Description                   Key         Blocksize   
-==============================================================================
-1           cit64       Cityhash 64                   false       8           
-2           crc32       CRC 32                        false       4           
-3           crc64       CRC 64                        false       8           
-4           fast32      Fasthash 32                   true        4           
-5           fast64      Fasthash 64                   true        8           
-6           fnv32       FNV-1  32                     false       4           
-7           fnv32a      FNV-1a 32                     false       4           
-8           fnv64       FNV-1  64                     false       8           
-9           fnv64a      FNV-1a 64                     false       8           
-10          hw64        Highway Hash 64               true        8           
-11          md2         MD2                           false       16          
-12          md4         MD4                           false       16          
-13          md5         MD5                           false       16          
-14          md6         MD6                           false       20          
-15          md62        MD6 Quicker                   true        20          
-16          met641      Metro Hash 64 v1              true        8           
-17          met642      Metro Hash 64 v2              true        8           
-18          mx3         MX3                           true        8           
-19          png         Pengyhash 64                  true        8           
-20          ripe160     Ripe MD 160                   false       20          
-21          sea64       Seahash 64                    true        8           
-22          sip64       Siphash 64                    true        8           
-23          sha1_64     SHA1 64                       false       8           
-24          sha1_128    SHA1 128                      false       16          
-25          sha1        SHA1                          false       20          
-26          sha256      SHA 256                       false       32          
-27          sha384      SHA 384                       false       48          
-28          sha512      SHA 512                       false       64          
-29          spk32       Spooky 32                     true        4           
-30          spk64       Spooky 64                     true        8           
-31          xxh32       xxHash32                      true        4           
-32          xxh64       xxHash64                      true        8           
-33          whp         Whirlpool                     false       64          
-34          wy64        WYhash 64                     true        8            
+ID          Hash Name   Description                   Key         Blocksize       Blockkeysize    
+===============================================================================================
+1           cit64       Cityhash 64                   true        8               8               
+2           crc32       CRC 32                        true        4               4               
+3           crc64       CRC 64                        true        8               8               
+4           fast32      Fasthash 32                   true        4               4               
+5           fast64      Fasthash 64                   true        8               8               
+6           fnv32       FNV-1  32                     false       4               0               
+7           fnv32a      FNV-1a 32                     false       4               0               
+8           fnv64       FNV-1  64                     false       8               0               
+9           fnv64a      FNV-1a 64                     false       8               0               
+10          hw64        Highway Hash 64               true        8               32              
+11          md2         MD2                           false       16              0               
+12          md4         MD4                           false       16              0               
+13          md5         MD5                           false       16              0               
+14          md6         MD6                           false       20              0               
+15          md62        MD6 Quicker                   true        20              0               
+16          met641      Metro Hash 64 v1              true        8               4               
+17          met642      Metro Hash 64 v2              true        8               4               
+18          mx3         MX3                           true        8               8               
+19          png         Pengyhash 64                  true        8               4               
+20          ripe160     Ripe MD 160                   false       20              0               
+21          sea64       Seahash 64                    true        8               8               
+22          sip64       Siphash 64                    true        8               16              
+23          sha1_64     SHA1 64                       false       8               0               
+24          sha1_128    SHA1 128                      false       16              0               
+25          sha1        SHA1                          false       20              0               
+26          sha256      SHA 256                       false       32              0               
+27          sha384      SHA 384                       false       48              0               
+28          sha512      SHA 512                       false       64              0               
+29          spk32       Spooky 32                     true        4               4               
+30          spk64       Spooky 64                     true        8               8               
+31          xxh32       xxHash32                      true        4               4               
+32          xxh64       xxHash64                      true        8               8               
+33          whp         Whirlpool                     false       64              0               
+34          wy64        WYhash 64                     true        8               48                   
 ```
 
 ## Example 1: decoderRandomTestHC2 Tests  

@@ -99,7 +99,7 @@ int main (int argc, char **argv) {
      }
 
      // block signature vector
-     std::vector<int> blocklist = { 5 };
+     std::vector<int> blocklist = { FAST64 };
 
      // validate the mdzip file
      if (validatemdzip) {
@@ -153,7 +153,10 @@ int validateMDzip(std::string filename) {
    // if (!listfile) return 0;
 
    // Check the file extension
-   if(fileExtension(filename) != "mdsz") {
+   // Might want to use compression number ie .100mdsz as an extension
+   // It can be a mdsz extension or out extension for recursion
+   std::string fileExt = fileExtension(filename);
+   if((fileExt != "mdsz") && (fileExt != "out")) {      
       std::cout << "Invalid MDzip File!" << std::endl;
       return 1;
    }
@@ -188,7 +191,7 @@ int validateMDzip(std::string filename) {
    mdHashContextList hclblock;
 
    // set the hash list vector tuple for file and hash blocks
-   std::vector<int> blocklist = { 5 };
+   std::vector<int> blocklist = { FAST64 };
    hclblock.setVectorHL(blocklist, HASHBLOCK);
 
    int modexp = 1;
@@ -232,7 +235,10 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    if (!listfile) return 0;
 
    // Check the file extension
-   if(fileExtension(filename) != "mdsz") {
+   // might want to use Numbermdsz ie .100mdsz as an extension
+   // It can be a mdsz extension or out extension for recursion
+   std::string fileExt = fileExtension(filename);
+   if((fileExt != "mdsz") && (fileExt != "out")) {      
       std::cout << "Invalid MDzip File!" << std::endl;
       return 1;
    }
@@ -274,7 +280,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    mdHashContextList hclblock;
 
    // set the hash list vector tuple for file and hash blocks
-   std::vector<int> blocklist = { 5 };
+   std::vector<int> blocklist = { FAST64 };
    hclblock.setVectorHL(blocklist, HASHBLOCK);
 
    // set the block hash key
@@ -337,8 +343,6 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 // the output unzipped file is currently file.mdz.out or extension .out
 int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runlogging) {
 
-   // std::cout << "mdunzipping file " << filename << std::endl; // to output file
-
    size_t inputfilesize = 0;
    std:string mdunzipfile = filename + ".out";
    // mdunzip data variables
@@ -356,8 +360,10 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    std::string blockhashnames;
 
    // Check the file extension
-   // need to modify this logic to allow more than one
-   if(fileExtension(filename) != "mdsz") {
+   // might want to use Numbersmdz ie .100mdsz as an extension
+   // It can be a mdsz extension or out extension for recursion
+   std::string fileExt = fileExtension(filename);
+   if((fileExt != "mdsz") && (fileExt != "out")) {      
       std::cout << "Invalid MDzip File!" << std::endl;
       return 1;
    }
@@ -423,7 +429,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    mdHashContextList hclblock;
 
    // set the hash list for the hash blocks
-   std::vector<int> blocklist = { 5 };
+   std::vector<int> blocklist = { FAST64 };
    hclblock.setVectorHL(blocklist, HASHBLOCK);
 
    // set the key
@@ -665,7 +671,8 @@ Examples:
    mdunzipnh --file=filename.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --list
-   mdunzipnh --file=filename.mdsz --list --unzip=false
+   mdunzipnh --file=filename.mdsz --list --unzip=true
+   mdunzipnh --file=filename.mdz --valmdzip
 
    mdzipnh --file=test.txt --key=1000 
    mdzipnh --file=test.txt --rand
