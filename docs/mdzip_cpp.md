@@ -20,7 +20,7 @@ Signature post validation can also be used to eliminate collisions if there were
 - Optional Signature Keys
 - 32 Byte Highway Hash Signature Keys which change the signature (With multiple signature key combinations)
 - Lossless compression
-- Optional signature mdzip parameter ranges (signatues 1-5 or 12-24 for mdzip file and block signatures).
+- Optional signature mdzip parameter ranges (signatures 1-5 or 12-24 for mdzip file and block signatures).
 
 **MDUnzip Features**
 - Multithreaded Parallel Modulus Scan
