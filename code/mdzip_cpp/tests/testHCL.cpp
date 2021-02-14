@@ -20,6 +20,8 @@ int main()
     hcl.displayHLRegistry(0);
     std::cout << std::endl;
 
+    std::cout << "Hash length " << hcl.getRegistrySize() << std::endl;
+
     // initialize a file hash list vector  
     std::vector<int> file = { 1, 2, 3, 15, 16 };
     hcl.setVectorHL(file, HASHFILE);

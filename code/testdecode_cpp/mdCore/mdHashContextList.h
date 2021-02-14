@@ -1553,6 +1553,14 @@ public:
         return sumhashblocksize;
 
     }
+
+    // get the registry hash list size
+    // hashlistsize = LAST - 1;
+    int getRegistrySize() {
+
+        return hashlistsize;
+
+    }
     
 
 };
