@@ -106,39 +106,3 @@ struct hash_list
     uint64_t wysecret64[5] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull, 0x1d8e4e27c47d124full};
 };
 
-struct hash_key_list
-{
-    // city hash
-    uint64_t city64seed = 100000;
-    // crc32
-    uint32_t crc32seed = 100000;
-    // crc64
-    uint64_t crc64seed = 100000;
-    // fasthash
-    uint32_t fast32seed = 100000;
-    uint64_t fast64seed = 100000;
-    // highway hash
-    const uint64_t hw64key[4] = {1, 2, 3, 4};
-    // metro64hash
-    uint32_t met641seed = 100000;
-    uint32_t met642seed = 100000;
-    // md6
-    unsigned char md62key[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
-    // mx3
-    uint64_t mx3seed    = 100000;
-    // pengyhash
-    uint32_t png64seed  = 100000;
-    // seahash
-    uint64_t sea64seed  = 100000;
-    // siphash
-    char sipkey[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
-    // spooky 32 / 64
-    uint32_t spookyseed32 = 100000;
-    uint64_t spookyseed64 = 100000;
-    // xxhash
-    uint32_t xxseed32 = 100000;
-    uint64_t xxseed64 = 100000;
-    // wyhash
-    uint64_t wyseed64 = 100000;
-    uint64_t wysecret64[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
-};

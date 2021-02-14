@@ -122,9 +122,8 @@ private:
     std::map<std::string, int> hclmap;
 public:
     // hash results registers
-    // could make the struct public for copying
+    // public for struct to struct copying
     hash_list hregister [2];
-    hash_key_list keyregister;
     // string stream variables
     std::stringstream bhlist;
     std::stringstream ss;

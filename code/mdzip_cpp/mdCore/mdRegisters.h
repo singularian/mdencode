@@ -107,39 +107,4 @@ struct hash_list
 
 };
 
-struct hash_key_list
-{
-    // city hash
-    uint64_t city64seed = 102922;
-    // crc32
-    uint32_t crc32seed = 12121221;
-    // crc64
-    uint64_t crc64seed = 12121221;
-    // fasthash
-    uint32_t fast32seed = 200;
-    uint64_t fast64seed = 1;
-    // highway hash
-    const uint64_t hw64key[4] = {1, 2, 3, 4};
-    // metro64hash
-    uint32_t met641seed = 1237789;
-    uint32_t met642seed = 1237789;
-    // md6
-    unsigned char md62key[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
-    // mx3
-    uint64_t mx3seed = 121212;
-    // pengyhash
-    uint32_t png64seed = 127982;
-    // seahash
-    uint64_t sea64seed = 12312;
-    // siphash
-    char sipkey[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
-    // spooky 32 / 64
-    uint32_t spookyseed32 = 12312;
-    uint64_t spookyseed64 = 1232;
-    // xxhash
-    uint32_t xxseed32 = 0;
-    uint64_t xxseed64 = 0;
-    // wyhash
-    uint64_t wyseed64 = 10232123120;
-    uint64_t wysecret64[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
-};
+
