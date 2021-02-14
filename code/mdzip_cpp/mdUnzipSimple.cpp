@@ -23,6 +23,7 @@
 #include <sys/stat.h>
 #include "../testdecode_cpp/external/CLI11.hpp"
 #include <gmp.h>
+#include <gmpxx.h>
 #include "mdCore/mdCommon.h"
 #include "mdCore/mdHashContextList.h"
 #include "mdCore/mdMutex.h"
@@ -655,13 +656,9 @@ void displayBlockInfo(std::string action, int blocksize, int blk, int lastblk, l
    // display the modulus exponent
    std::cout << "Modulus Exponent " << modexponent << std::endl;
 
-   // if log == true log it otherwise just display it
-   gmp_printf("Modulus Remainder %Zd\n\n", modulusIntRemainder);
-   // result << "Modulus Bigint           ";
-   // gmp_printf("%Zd", modint);
-   // data = mpz_get_str(NULL, 10, modint);
-   // result << data << endl;
-   // free(data);
+   // display the modulus remainder
+   mpz_class modint(modulusIntRemainder);
+   std::cout << "Modulus Remainder " << modint << std::endl;
 }
 
 // display the usage

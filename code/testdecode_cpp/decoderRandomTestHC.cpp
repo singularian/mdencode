@@ -23,6 +23,7 @@
 #include <iostream>
 #include <sstream>
 #include <gmp.h>
+#include <gmpxx.h>
 #include <string>
 #include <time.h>
 #include <vector>
@@ -432,47 +433,32 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
           result << setw(4) <<  std::left << setfill(' ') << std::to_string(byteblock[f]);
      }
 
-     result << endl;
-     result << "Random Byteblock Bigint  ";
-     char *data;
-     // mpz_out_str(stdout, 10, blockint);
-     data = mpz_get_str(NULL, 10, blockint);
-     result << data << endl; 
-     // gmp_printf("%Zd\n", blockint);
-     // cout << endl;
-     free(data);
+     result << std::endl;
 
-     result << "Modulus Size             " << std::to_string(modsize) << endl;
+     // display the byteblock bigint
+     mpz_class blockBigInt(blockint);
+     result << "Random Byteblock Bigint  " << blockBigInt.get_str() << std::endl;
+     result << "Modulus Size             " << std::to_string(modsize) << std::endl;
 
-     result << "Modulus Bigint           ";
-     // gmp_printf("%Zd", modint);
-     data = mpz_get_str(NULL, 10, modint);
-     result << data << endl;
-     free(data);
+     // display the modulus bigint
+     mpz_class modBigInt(modint);
+     result << "Modulus Bigint           " << modBigInt.get_str() << std::endl;
 
-     result << "Modulus Remainder        ";
-     // gmp_printf("%Zd", remainder);
-     data = mpz_get_str(NULL, 10, remainder);
-     result << data << endl;
-     free(data);
+     // display the modulus remainder
+     mpz_class modRemainder(remainder);
+     result << "Modulus Remainder        " << modRemainder.get_str() << std::endl;
 
-     result << "Modulus 2   ^ Exponent   " << std::to_string(exponent) << endl;
-     result << "Modulus Mod ^ Exponent   " << std::to_string(expmod) << endl;
+     result << "Modulus 2   ^ Exponent   " << std::to_string(exponent) << std::endl;
+     result << "Modulus Mod ^ Exponent   " << std::to_string(expmod) << std::endl;
     
      result << "Block Signatures         ";
-     result << hashlist;
-     result << endl;
+     result << hashlist << std::endl;
      
      // result << std::left << std::setw(20) << "Blockkeylist: "   << blockkeys << std::endl;
      result << "Blockkeylist             " << blockkeys << std::endl;
-     
-
-     result << "Thread Count             " << std::to_string(threadcount) << endl;
-
-     result << "Logging                  " << boolalpha << log->checkIfLogging() << endl;
-     result << endl;
-
-     result << "Hash Block Vector" << endl;
+     result << "Thread Count             " << std::to_string(threadcount) << std::endl;
+     result << "Logging                  " << boolalpha << log->checkIfLogging() << std::endl << std::endl;
+     result << "Hash Block Vector" << std::endl;
      result << vectorlist;
 
 

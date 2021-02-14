@@ -22,7 +22,9 @@
 #include <ctime>
 #include <iostream>
 #include <sstream>
+#include "stdio.h"
 #include <gmp.h>
+#include <gmpxx.h>
 #include <string>
 #include <time.h>
 #include <vector>
@@ -33,7 +35,7 @@
 #include "mdCore/mdHashContextList.h"
 #include "mdCore/modscanFile.h"
 #include "string.h"
-#include "stdio.h"
+
 
 using namespace std;
 
@@ -75,9 +77,8 @@ int main (int argc, char **argv) {
      // integer block hash list
      std::vector<int> intvals;
      app.add_option("-s,--hl", [&intvals, &signum](std::vector<std::string> val){
-        return splitRange(val, intvals, signum);
+         return splitRange(val, intvals, signum);
      }, "Block Hashlist integers list")->expected(1,signum)->allow_extra_args(true);
-
 
      // randomize the keylist for the block hashes
      bool randombh = false;
@@ -412,7 +413,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
           result << setw(4) <<  std::left << setfill(' ') << std::to_string((f + 1));
      }
 
-     result << endl;
+     result << std::endl;
 
      // write the byteblock hex
      result << "Random Byteblock Hex     ";
@@ -425,7 +426,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
           result << setw(pad) << std::uppercase << std::hex << setfill(' ') << (int)byteblock[f];
           pad = 4;
      }
-     result << endl;
+     result << std::endl;
 
      // write the byteblock integer number
      result << "Random Byteblock Int     ";
@@ -433,47 +434,32 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
           result << setw(4) <<  std::left << setfill(' ') << std::to_string(byteblock[f]);
      }
 
-     result << endl;
-     result << "Random Byteblock Bigint  ";
-     char *data;
-     // mpz_out_str(stdout, 10, blockint);
-     data = mpz_get_str(NULL, 10, blockint);
-     result << data << endl; 
-     // gmp_printf("%Zd\n", blockint);
-     // cout << endl;
-     free(data);
+     result << std::endl;
 
-     result << "Modulus Size             " << std::to_string(modsize) << endl;
+     // display the byteblock bigint
+     mpz_class blockBigInt(blockint);
+     result << "Random Byteblock Bigint  " << blockBigInt.get_str() << std::endl;
+     result << "Modulus Size             " << std::to_string(modsize) << std::endl;
 
-     result << "Modulus Bigint           ";
-     // gmp_printf("%Zd", modint);
-     data = mpz_get_str(NULL, 10, modint);
-     result << data << endl;
-     free(data);
+     // display the modulus bigint
+     mpz_class modBigInt(modint);
+     result << "Modulus Bigint           " << modBigInt.get_str() << std::endl;
 
-     result << "Modulus Remainder        ";
-     // gmp_printf("%Zd", remainder);
-     data = mpz_get_str(NULL, 10, remainder);
-     result << data << endl;
-     free(data);
+     // display the modulus remainder
+     mpz_class modRemainder(remainder);
+     result << "Modulus Remainder        " << modRemainder.get_str() << std::endl;
 
-     result << "Modulus 2   ^ Exponent   " << std::to_string(exponent) << endl;
-     result << "Modulus Mod ^ Exponent   " << std::to_string(expmod) << endl;
+     result << "Modulus 2   ^ Exponent   " << std::to_string(exponent) << std::endl;
+     result << "Modulus Mod ^ Exponent   " << std::to_string(expmod) << std::endl;
     
      result << "Block Signatures         ";
-     result << hashlist;
-     result << endl;
+     result << hashlist << std::endl;
      
      // result << std::left << std::setw(20) << "Blockkeylist: "   << blockkeys << std::endl;
-     result << "Blockkeylist             " << blockkeys << std::endl;
-     
-
-     result << "Thread Count             " << std::to_string(threadcount) << endl;
-
-     result << "Logging                  " << boolalpha << log->checkIfLogging() << endl;
-     result << endl;
-
-     result << "Hash Block Vector" << endl;
+     result << "Blockkeylist             " << blockkeys << std::endl;    
+     result << "Thread Count             " << std::to_string(threadcount) << std::endl;
+     result << "Logging                  " << boolalpha << log->checkIfLogging() << std::endl << std::endl;
+     result << "Hash Block Vector" << std::endl;
      result << vectorlist;
 
 

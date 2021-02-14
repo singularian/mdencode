@@ -23,31 +23,31 @@ BUILD_TIME=`date +%FT%T%z`
 #  it is included with -lfnv
 all:
 	@echo "Building mdzip C++"
-	g++ -I. $(DEPS) mdZip.cpp  -o mdzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
+	g++ -I. $(DEPS) mdZip.cpp  -o mdzip -lssl -lcrypto -lgmpxx -lgmp -Xlinker -zmuldefs -std=c++11
 	@echo ""
 	@echo "Building mdunzip C++"
-	g++ -I. $(DEPS) mdUnzip.cpp  -o mdunzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	g++ -I. $(DEPS) mdUnzip.cpp  -o mdunzip -lssl -lcrypto -lgmpxx -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 	@echo ""
 	@echo "Building mdzip fasthash64 C++"
-	g++ -I. $(DEPS) mdZipSimple.cpp -o mdzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	g++ -I. $(DEPS) mdZipSimple.cpp -o mdzipnh -lssl -lcrypto -lgmpxx -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 	@echo ""
 	@echo "Building mdunzip fasthash64 C++"
-	g++ -I. $(DEPS) mdUnzipSimple.cpp -o mdunzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	g++ -I. $(DEPS) mdUnzipSimple.cpp -o mdunzipnh  -lssl -lcrypto -lgmpxx -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 mdzip:
 	@echo "Building mdzip C++"
 	g++ -I. $(DEPS) mdZip.cpp  -o mdzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	@echo ""
 	@echo "Building mdunzip C++"
-	g++ -I. $(DEPS) mdUnzip.cpp  -o mdunzip -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	g++ -I. $(DEPS) mdUnzip.cpp  -o mdunzip -lssl -lcrypto -lgmpxx -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 mdzipsimple:	
 	@echo "Building mdzip fasthash64 C++"
 	g++ -I. $(DEPS) mdZipSimple.cpp -o mdzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 	@echo ""
 	@echo "Building mdunzip fasthash64 C++"
-	g++ -I. $(DEPS) mdUnzipSimple.cpp -o mdunzipnh  -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	g++ -I. $(DEPS) mdUnzipSimple.cpp -o mdunzipnh  -lssl -lcrypto -lgmpxx -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 test:
 	@echo "Building Test Decoder HCL C++"
-	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+	g++ -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 -lfnv -lssl -lcrypto -lgmpxx -lgmp -Xlinker -zmuldefs -pthread -std=c++11
 testhash:
 	g++ -I. $(DEPS) tests/testHCL.cpp  -o testhcl -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
 	g++ -I. $(DEPS) tests/testFileSignatures.cpp -o  testhashfile -lssl -lcrypto -lgmp -Xlinker -zmuldefs -std=c++11
