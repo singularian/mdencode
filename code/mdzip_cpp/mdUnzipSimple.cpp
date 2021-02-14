@@ -186,6 +186,7 @@ int validateMDzip(std::string filename) {
 
    // calculate the file block count and last block size
    blockcount = CalcFileBlocks(filesize, blocksize);
+   // calculate the last block size
    blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
 
    // mdHashContextList hclfile;
@@ -274,7 +275,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
    // calculate the file block count and last block size
    blockcount = CalcFileBlocks(filesize, blocksize);
-   // blockremainder  = filesize % blocksize;
+   // calculate the last block size
    blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
 
    // mdHashContextList hclfile;
@@ -420,7 +421,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
 
    // calculate the file block count and last block size
    blockcount = CalcFileBlocks(filesize, blocksize);
-   // blockremainder  = filesize % blocksize;
+   // calculate the last block size
    blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
 
    // the curent block size
