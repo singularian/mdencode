@@ -841,7 +841,7 @@ void displayBlockInfo(std::string action, int blocksize, int blk, int lastblk, l
 
    // display the modulus remainder
    mpz_class modint(modulusIntRemainder);
-   std::cout << "Modulus Remainder " << modint << std::endl;
+   std::cout << "Modulus Remainder " << modint << std::endl << std::endl;
 }
 
 // display the usage

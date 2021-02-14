@@ -440,7 +440,7 @@ void displayBlockInfo(std::string action, unsigned char *byteblock, long current
 
    // display the modulus remainder
    mpz_class modint(modulusIntRemainder);
-   std::cout << "Modulus Remainder " << modint << std::endl;
+   std::cout << "Modulus Remainder " << modint << std::endl << std::endl;
 }
 
 
