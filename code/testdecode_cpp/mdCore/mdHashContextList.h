@@ -507,7 +507,7 @@ public:
                     break;
                   case WYH:
                     hregister[0].wyseed64 = randLong();  
-                    genRandomLongBlock(hregister[0].wysecret64, 16);
+                    genRandomLongBlock(hregister[0].wysecret64, 5);
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
@@ -517,7 +517,7 @@ public:
     }    
 
     // readBlockHashList
-    // read the hash list to a ifstream file object
+    // read the hash list from a ifstream file object
     void readBlockHashList(std::ifstream &rf) { 
 
           int hashblocksize = 0;

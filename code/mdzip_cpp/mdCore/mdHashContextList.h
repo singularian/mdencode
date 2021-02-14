@@ -495,7 +495,7 @@ public:
     }    
 
     // readBlockHashList
-    // read the hash list to a ifstream file object
+    // read the hash list from a ifstream file object
     void readBlockHashList(std::ifstream &rf) { 
 
           int hashblocksize = 0;
