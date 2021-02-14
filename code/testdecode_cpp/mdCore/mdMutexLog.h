@@ -93,14 +93,13 @@ public:
     // void writeLogThread(int thread, mpz_t blockint, char *logtext) 
     void writeLogThread(int thread, mpz_t blockint) 
     {
-        char blockInt [2000]; // need to make this fit the byteblock bigint size
         if (islogging) {
            mutex.lock();
            lastThread = thread;
 
            /* Write a message */
-           mpz_get_str (blockInt, 10, blockint);
-           PLOGD << "thread " << std::to_string(thread) << " " << blockInt;
+           mpz_class blockInt(blockint);
+           PLOGD << "thread " << std::to_string(thread) << " " << blockInt.get_str();
            mutex.unlock();
         }
     }
