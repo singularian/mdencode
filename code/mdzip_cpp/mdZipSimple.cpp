@@ -342,7 +342,8 @@ Examples:
    mdunzipnh --file=filename.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --list
-   mdunzipnh --file=filename.mdsz --list --unzip=false
+   mdunzipnh --file=filename.mdsz --list --unzip
+   mdunzipnh --file=filename.mdsz --valmdzip
 )";
 
     std::cout << usageline << std::endl;

@@ -207,7 +207,7 @@ MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=16 
    mdunzip --file=test.mdz --list
-   mdunzip --file=filename.mdz --list --unzip=true
+   mdunzip --file=filename.mdz --list --unzip
    mdunzip --file=filename.mdz --valmdzip  
 
 
@@ -277,7 +277,7 @@ MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=32 
    mdunzip --file=test.mdz --list  --val
-   mdunzip --file=filename.mdz --list --unzip=true
+   mdunzip --file=filename.mdz --list --unzip
    mdunzip --file=filename.mdz --valmdzip
 
 MDzip Examples:
@@ -365,7 +365,7 @@ Examples:
    mdunzipnh --file=filename.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --list
-   mdunzipnh --file=filename.mdsz --list --unzip=true
+   mdunzipnh --file=filename.mdsz --list --unzip
    mdunzipnh --file=filename.mdsz --valmdzip
 ```
 
@@ -396,7 +396,7 @@ Examples:
    mdunzipnh --file=filename.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --list
-   mdunzipnh --file=filename.mdsz --list --unzip=true
+   mdunzipnh --file=filename.mdsz --list --unzip
    mdunzipnh --file=filename.mdsz --valmdzip
 
    mdzipnh --file=test.txt --key=1000 

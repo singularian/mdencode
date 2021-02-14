@@ -459,7 +459,8 @@ MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=16 
    mdunzip --file=test.mdz --list
-   mdunzip --file=filename.mdz --list --unzip=false   
+   mdunzip --file=filename.mdz --list --unzip 
+   mdunzip --file=filename.mdz --valmdzip 
 )";
 
     std::cout << usageline << std::endl;

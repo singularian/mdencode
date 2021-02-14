@@ -669,8 +669,8 @@ Examples:
    mdunzipnh --file=filename.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --thread=16 
    mdunzipnh --file=test.mdsz --list
-   mdunzipnh --file=filename.mdsz --list --unzip=true
-   mdunzipnh --file=filename.mdz --valmdzip
+   mdunzipnh --file=filename.mdsz --list --unzip
+   mdunzipnh --file=filename.mdsz --valmdzip
 
    mdzipnh --file=test.txt --key=1000 
    mdzipnh --file=test.txt --rand
