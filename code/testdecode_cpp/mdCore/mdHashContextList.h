@@ -114,7 +114,8 @@ private:
     int lastThread;
     int threadcount;
     int blocksize;
-    int hashlistsize;
+    // set the hashlistsize to the last signatures enum value - 1
+    int hashlistsize = LAST - 1;
     // hash list vectors
     // vector with tuple - hashnumber, hashname, blocksize
     std::vector<std::tuple<int,std::string,int>> hashlistvt[3];
@@ -133,9 +134,6 @@ public:
 
     // initialize mdHashContextList
     mdHashContextList() {
-
-        // set the hashlistsize to the last signatures enum value - 1
-        hashlistsize = LAST - 1;
 
         // add the struct hash registry to the hclmap
         // could move this to a separate function
