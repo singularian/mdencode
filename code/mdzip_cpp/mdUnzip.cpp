@@ -502,7 +502,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
       if (CheckIfFileExists(mdunzipfile)) {
          std::cout << "Mdunzip " << mdunzipfile << " file exists " << std::endl;
          std::cout << "Please specify the overwrite file option " << std::endl;
-         std::cout << "mdunzip --file=" << filename << " --over=true" << std::endl;
+         std::cout << "mdunzip --file=" << filename << " --over" << std::endl;
          return 1;
       }
    } 
@@ -851,7 +851,7 @@ MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=32 
    mdunzip --file=test.mdz     --list --val
-   mdunzip --file=filename.mdz --list --unzip=true
+   mdunzip --file=filename.mdz --list --unzip
    mdunzip --file=filename.mdz --valmdzip
 
 MDzip Examples:
