@@ -42,8 +42,8 @@ COPY . .
 RUN ls -lha /go/src/app/mdencode
 
 # change to the build /go/src/app/mdencode/code
-WORKDIR /go/src/app/mdencode/code/testdecode_cpp/external/fnv
-RUN make install
+# WORKDIR /go/src/app/mdencode/code/testdecode_cpp/external/fnv
+# RUN make install
 
 # change to the build directory
 WORKDIR /go/src/app/mdencode/build
