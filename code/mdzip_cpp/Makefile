@@ -26,7 +26,7 @@ BUILD_TIME=`date +%FT%T%z`
 #  it is included with -lfnv
 all:
 	@echo "Building mdzip C++"
-	$(CC) -I.  $(DEPS) mdZip.cpp  -o mdzip $(LDLIBS)
+	$(CC) -I. $(DEPS) mdZip.cpp  -o mdzip $(LDLIBS)
 	@echo ""
 	@echo "Building mdunzip C++"
 	$(CC) -I. $(DEPS) mdUnzip.cpp  -o mdunzip $(LDLIBS)
