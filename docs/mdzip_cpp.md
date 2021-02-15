@@ -442,7 +442,8 @@ This is a guide for building MDencode MDzip C++ on Linux.
     libgmp3-dev \
 2) cd to the fnv directory
    cd ~/mdencode/code/testdecode_cpp/external/fnv
-   RUN make install
+   RUN make
+   or RUN make install
 3) cd to the mdzip_cpp code directory
    cd ~/mdencode/code/mdzip_cpp 
    make all
