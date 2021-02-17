@@ -17,7 +17,7 @@ TESTGO=../code/testdecode_go
 # mdzip cpp
 MDZIPCPP=../code/mdzip_cpp
 TESTCPP=../code/testdecode_cpp
-CPPEXT=../code/testdecode_cpp/external
+CPPEXT=../code/mdzip_cpp/external
 
 # c compiler
 CC=g++
