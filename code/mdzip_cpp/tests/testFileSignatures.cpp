@@ -15,7 +15,7 @@
 #include <openssl/ripemd.h>
 #include <openssl/sha.h>
 #include <sstream>
-#include "../testdecode_cpp/external/CLI11.hpp" 
+#include "external/CLI11.hpp" 
 #include "mdCore/mdCommon.h"
 #include "../mdCore/mdHashContextList.h"
 
