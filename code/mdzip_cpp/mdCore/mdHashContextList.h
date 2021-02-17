@@ -689,12 +689,12 @@ public:
                     break;
                   case SHA164:
                     uint8_t sha164[8];
-                    memcpy(sha164, hregister[0].sha1i, blocksize);
+                    memcpy(sha164, hregister[0].sha1i, hashblocksize);
                     wf.write(reinterpret_cast<char*>(&sha164), hashblocksize);
                     break;
                   case SHA1128:
                     uint8_t sha1128[16];
-                    memcpy(sha1128, hregister[0].sha1i, blocksize);
+                    memcpy(sha1128, hregister[0].sha1i, hashblocksize);
                     wf.write(reinterpret_cast<char*>(&sha1128), hashblocksize);
                     break;
                   case SHA1s:
