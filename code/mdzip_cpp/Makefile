@@ -21,8 +21,6 @@ VERSION=1.0.0
 BUILD_TIME=`date +%FT%T%z`
 
 # decoderRandomTestHCthreads.cpp requires the lib gmp and openssl
-# you also need to install the libfnv library in the fnv subdirectory
-#  it is included with -lfnv
 all:
 	@echo "Building mdzip C++"
 	$(CC) -I. $(DEPS) mdZip.cpp  -o mdzip $(LDLIBS)
