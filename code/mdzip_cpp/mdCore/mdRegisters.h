@@ -1,5 +1,3 @@
-#include "../testdecode_cpp/external/fnv/fnv.h"
-
 struct hash_list 
 {
     // city hash
@@ -22,14 +20,14 @@ struct hash_list
     uint64_t fast64o;
     uint64_t fast64seed = 100000;
     // fnv1
-    Fnv32_t fnv32_1i; 
-    Fnv32_t fnv32_1o;
-    Fnv32_t fnv32a_1i;
-    Fnv32_t fnv32a_1o;
-    Fnv64_t fnv64_1i; 
-    Fnv64_t fnv64_1o; 
-    Fnv64_t fnv64a_1i; 
-    Fnv64_t fnv64a_1o;
+    uint32_t fnv32_1i; 
+    uint32_t fnv32_1o;
+    uint32_t fnv32a_1i;
+    uint32_t fnv32a_1o;
+    uint64_t fnv64_1i; 
+    uint64_t fnv64_1o; 
+    uint64_t fnv64a_1i; 
+    uint64_t fnv64a_1o;
     // highway hash
     uint64_t hw64i;
     uint64_t hw64o;

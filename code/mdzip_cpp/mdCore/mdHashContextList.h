@@ -15,7 +15,7 @@
  * 
  * 
 */
-#include <fstream>
+#include <fstream> 
 #include <iostream>
 #include <iomanip>
 #include <map>
@@ -1036,16 +1036,16 @@ public:
                     hregister[0].fast64i = fasthash64(byteblock, blocksize, hregister[0].fast64seed);
                     break;
                   case FNV32:
-                    hregister[0].fnv32_1i = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
+                    hregister[0].fnv32_1i = fnv32_1(byteblock, blocksize, FNV1_32_INIT);
                     break;
                   case FNV32A:
-                    hregister[0].fnv32a_1i = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
+                    hregister[0].fnv32a_1i = fnv32_1a(byteblock, blocksize, FNV1_32A_INIT);
                     break;
                   case FNV64:
-                    hregister[0].fnv64_1i = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
+                    hregister[0].fnv64_1i  = fnv64_1(byteblock, blocksize, FNV1_64_INIT);
                     break;
                   case FNV64A:
-                    hregister[0].fnv64a_1i = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
+                    hregister[0].fnv64a_1i = fnv64_1a(byteblock, blocksize, FNV1A_64_INIT);
                     break;
                   case HW64:
                     hregister[0].hw64i = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
@@ -1159,19 +1159,19 @@ public:
                     if (hregister[0].fast64i != hregister[0].fast64o) return false;
                     break;
                   case FNV32:
-                    hregister[0].fnv32_1o = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
+                    hregister[0].fnv32_1o = fnv32_1(byteblock, blocksize, FNV1_32_INIT);
                     if (hregister[0].fnv32_1i != hregister[0].fnv32_1o) return false;
                     break;
                   case FNV32A:
-                    hregister[0].fnv32a_1o = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
+                    hregister[0].fnv32a_1o = fnv32_1a(byteblock, blocksize, FNV1_32A_INIT);
                     if (hregister[0].fnv32a_1i != hregister[0].fnv32a_1o) return false;
                     break;
                   case FNV64:
-                    hregister[0].fnv64_1o = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
+                    hregister[0].fnv64_1o = fnv64_1(byteblock, blocksize, FNV1_64_INIT);
                     if (hregister[0].fnv64_1i != hregister[0].fnv64_1o) return false;
                     break;
                   case FNV64A:
-                    hregister[0].fnv64a_1o = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
+                    hregister[0].fnv64a_1o = fnv64_1a(byteblock, blocksize, FNV1A_64_INIT);
                     if (hregister[0].fnv64a_1i != hregister[0].fnv64a_1o) return false;
                     break;
                   case HW64:

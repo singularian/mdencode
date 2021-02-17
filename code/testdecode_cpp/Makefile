@@ -2,7 +2,9 @@
 PROJECT="mdencode test mdzip C++"
 
 # variables
-CPPEXT=external
+CPPEXT=../mdzip_cpp/external
+# CPPEXT=../testdecode_cpp/external
+#../testdecode_cpp/external
 
 # compiler
 CC=g++

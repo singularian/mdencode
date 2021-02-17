@@ -1,27 +1,28 @@
 #include <cstring>
 #include <stdio.h>
-#include "../testdecode_cpp/external/cityhash/cityhash.h"
-#include "../testdecode_cpp/external/crc32/crc32.h"
-#include "../testdecode_cpp/external/crc64/crc64.h"
-#include "../testdecode_cpp/external/csiphash.c"
-#include "../testdecode_cpp/external/fasthash/fasthash.h"
-#include "../testdecode_cpp/external/fnv/fnv.h"
-#include "../testdecode_cpp/external/highwayhash/highwayhash.h"
-#include "../testdecode_cpp/external/xxhash/xxhash32.h"
-#include "../testdecode_cpp/external/xxhash/xxhash64.h"
-#include "../testdecode_cpp/external/metro64/metrohash64.h"
-#include "../testdecode_cpp/external/mx3/mx3.h"
-#include "../testdecode_cpp/external/pengyhash/pengyhash.h"
-#include "../testdecode_cpp/external/seahash/seahash.c"
-#include "../testdecode_cpp/external/md2.c"
+#include "external/cityhash/cityhash.h"
+#include "external/crc32/crc32.h"
+#include "external/crc64/crc64.h"
+#include "external/csiphash.c"
+#include "external/fasthash/fasthash.h"
+// #include "external/fnv/fnv.h"
+#include "external/fnv2/fnv.h"
+#include "external/highwayhash/highwayhash.h"
+#include "external/xxhash/xxhash32.h"
+#include "external/xxhash/xxhash64.h"
+#include "external/metro64/metrohash64.h"
+#include "external/mx3/mx3.h"
+#include "external/pengyhash/pengyhash.h"
+#include "external/seahash/seahash.c"
+#include "external/md2.c"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
-#include "../testdecode_cpp/external/md6/md6.h"
+#include "external/md6/md6.h"
 #include <openssl/ripemd.h>
 #include <openssl/sha.h>
-#include "../testdecode_cpp/external/spooky/Spooky.h"
+#include "external/spooky/Spooky.h"
 #include <openssl/whrlpool.h>
-#include "../testdecode_cpp/external/wyhash/wyhash.h"
+#include "external/wyhash/wyhash.h"
 
 
 static const int K_READ_BUF_SIZE = { 1024 * 16 };
@@ -142,7 +143,7 @@ uint32_t getFileHashFNV32(char *filename)
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
-        fnv32_1i += fnv_32_buf(buf, total_read, FNV1_32_INIT);
+        fnv32_1i += fnv32_1(buf, total_read, FNV1_32_INIT);
     }
     fclose(fp);
 
@@ -162,7 +163,7 @@ uint32_t getFileHashFNV32A(char *filename)
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
-        fnv32a_1i += fnv_32a_buf(buf, total_read, FNV1_32A_INIT);
+        fnv32a_1i += fnv32_1a(buf, total_read, FNV1_32A_INIT);
     }
     fclose(fp);
 
@@ -182,7 +183,7 @@ uint64_t getFileHashFNV64(char *filename)
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
-        fnv64_1i += fnv_64_buf(buf, total_read, FNV1_64_INIT);
+        fnv64_1i += fnv64_1(buf, total_read, FNV1_64_INIT);
     }
     fclose(fp);
 
@@ -202,7 +203,7 @@ uint64_t getFileHashFNV64A(char *filename)
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
-        fnv64a_1i += fnv_64a_buf(buf, total_read, FNV1A_64_INIT);
+        fnv64a_1i += fnv64_1a(buf, total_read, FNV1A_64_INIT);
     }
     fclose(fp);
 

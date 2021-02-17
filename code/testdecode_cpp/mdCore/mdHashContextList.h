@@ -29,28 +29,29 @@
 #include "mdFilehash.h"
 #include "mdRandom.h"
 #include "mdRegisters.h"
-#include "external/cityhash/cityhash.h"
-#include "external/crc32/crc32.h"
-#include "external/crc64/crc64.h"
-#include "external/csiphash.c"
-#include "external/fasthash/fasthash.h"
-#include "external/fnv/fnv.h"
-#include "external/highwayhash/highwayhash.h"
-#include "external/xxhash/xxhash32.h"
-#include "external/xxhash/xxhash64.h"
-#include "external/metro64/metrohash64.h"
-#include "external/mx3/mx3.h"
-#include "external/pengyhash/pengyhash.h"
-#include "external/seahash/seahash.c"
-#include "external/md2.c"
+// #include "../testdecode_cpp/external/md6/md6.h"
+#include "../mdzip_cpp/external/cityhash/cityhash.h"
+#include "../mdzip_cpp/external/crc32/crc32.h"
+#include "../mdzip_cpp/external/crc64/crc64.h"
+#include "../mdzip_cpp/external/csiphash.c"
+#include "../mdzip_cpp/external/fasthash/fasthash.h"
+#include "../mdzip_cpp/external/fnv/fnv.h"
+#include "../mdzip_cpp/external/highwayhash/highwayhash.h"
+#include "../mdzip_cpp/external/xxhash/xxhash32.h"
+#include "../mdzip_cpp/external/xxhash/xxhash64.h"
+#include "../mdzip_cpp/external/metro64/metrohash64.h"
+#include "../mdzip_cpp/external/mx3/mx3.h"
+#include "../mdzip_cpp/external/pengyhash/pengyhash.h"
+#include "../mdzip_cpp/external/seahash/seahash.c"
+#include "../mdzip_cpp/external/md2.c"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
-#include "external/md6/md6.h"
+#include "../mdzip_cpp/external/md6/md6.h"
 #include <openssl/ripemd.h>
 #include <openssl/sha.h>
-#include "external/spooky/Spooky.h"
+#include "../mdzip_cpp/external/spooky/Spooky.h"
 #include <openssl/whrlpool.h>
-#include "external/wyhash/wyhash.h"
+#include "../mdzip_cpp/external/wyhash/wyhash.h"
 
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
 // signatures enum list

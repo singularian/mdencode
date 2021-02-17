@@ -13,7 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <sys/stat.h>
-#include "../testdecode_cpp/external/CLI11.hpp"
+#include "external/CLI11.hpp"
 #include <gmp.h>
 #include <gmpxx.h>
 #include "mdCore/mdCommon.h"

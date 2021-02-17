@@ -1,8 +1,8 @@
 #include <cstring>
 #include <stdio.h>
-#include "../testdecode_cpp/external/cityhash/cityhash.h"
-#include "../testdecode_cpp/external/md2.c"
-#include "../testdecode_cpp/external/metro64/metrohash64.h"
+#include "../mdzip_cpp/external/cityhash/cityhash.h"
+#include "../mdzip_cpp/external/md2.c"
+#include "../mdzip_cpp/external/metro64/metrohash64.h"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
 #include <openssl/ripemd.h>

@@ -1,4 +1,4 @@
-#include "external/fnv/fnv.h"
+#include "../mdzip_cpp/external/fnv/fnv.h"
 
 struct hash_list 
 {
