@@ -15,7 +15,7 @@
  * 
  * 
 */
-#include <fstream>
+#include <fstream> 
 #include <iostream>
 #include <iomanip>
 #include <map>
@@ -29,29 +29,6 @@
 #include "mdFilehash.h"
 #include "mdRandom.h"
 #include "mdRegisters.h"
-// #include "../testdecode_cpp/external/md6/md6.h"
-#include "../mdzip_cpp/external/cityhash/cityhash.h"
-#include "../mdzip_cpp/external/crc32/crc32.h"
-#include "../mdzip_cpp/external/crc64/crc64.h"
-#include "../mdzip_cpp/external/csiphash.c"
-#include "../mdzip_cpp/external/fasthash/fasthash.h"
-#include "../mdzip_cpp/external/fnv/fnv.h"
-#include "../mdzip_cpp/external/highwayhash/highwayhash.h"
-#include "../mdzip_cpp/external/xxhash/xxhash32.h"
-#include "../mdzip_cpp/external/xxhash/xxhash64.h"
-#include "../mdzip_cpp/external/metro64/metrohash64.h"
-#include "../mdzip_cpp/external/mx3/mx3.h"
-#include "../mdzip_cpp/external/pengyhash/pengyhash.h"
-#include "../mdzip_cpp/external/seahash/seahash.c"
-#include "../mdzip_cpp/external/md2.c"
-#include <openssl/md4.h>
-#include <openssl/md5.h>
-#include "../mdzip_cpp/external/md6/md6.h"
-#include <openssl/ripemd.h>
-#include <openssl/sha.h>
-#include "../mdzip_cpp/external/spooky/Spooky.h"
-#include <openssl/whrlpool.h>
-#include "../mdzip_cpp/external/wyhash/wyhash.h"
 
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
 // signatures enum list
@@ -712,12 +689,12 @@ public:
                     break;
                   case SHA164:
                     uint8_t sha164[8];
-                    memcpy(sha164, hregister[0].sha1i, blocksize);
+                    memcpy(sha164, hregister[0].sha1i, hashblocksize);
                     wf.write(reinterpret_cast<char*>(&sha164), hashblocksize);
                     break;
                   case SHA1128:
                     uint8_t sha1128[16];
-                    memcpy(sha1128, hregister[0].sha1i, blocksize);
+                    memcpy(sha1128, hregister[0].sha1i, hashblocksize);
                     wf.write(reinterpret_cast<char*>(&sha1128), hashblocksize);
                     break;
                   case SHA1s:
@@ -766,121 +743,272 @@ public:
 
               switch(std::get<0>(hash)) {
                   case CIT64:
-                    //city64i = cityhash64_with_seed(byteblock, blocksize, city64seed);
-                    hregister[0].city64i = calculateCityhashFile((char *) filename.c_str(), hregister[0].city64seed);
+                    hregister[0].city64i = getFileHashCityhash((char *) filename.c_str(), hregister[0].city64seed);
                     break;
                   case CRC32:
-                    //hregister[0].crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
+                    hregister[0].crc32i = getFileHashCRC32((char *) filename.c_str(), hregister[0].crc32seed);
                     break;
                   case CRC64:
-                   //crc64i = CRC::Calculate(byteblock, blocksize, CRC::CRC_32());
+                    hregister[0].crc64i = getFileHashCRC64((char *) filename.c_str(), hregister[0].crc64seed);
+                    break;
                   case FAST32:
-                    //hregister[0].fast32i = fasthash32(byteblock, blocksize, hregister[0].fast32seed);
+                    hregister[0].fast32i = getFileHashFast32((char *) filename.c_str(), hregister[0].fast32seed);
                     break;
                   case FAST64:
-                    //hregister[0].fast64i = fasthash64(byteblock, blocksize, hregister[0].fast64seed);
+                    hregister[0].fast64i = getFileHashFast64((char *) filename.c_str(), hregister[0].fast64seed);
                     break;
                   case FNV32:
-                    //hregister[0].fnv32_1i = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
+                    hregister[0].fnv32_1i = getFileHashFNV32((char *) filename.c_str());
                     break;
                   case FNV32A:
-                    //hregister[0].fnv32a_1i = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
+                    hregister[0].fnv32a_1i = getFileHashFNV32A((char *) filename.c_str());
                     break;
                   case FNV64:
-                    //hregister[0].fnv64_1i = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
+                    hregister[0].fnv64_1i = getFileHashFNV64((char *) filename.c_str());
                     break;
                   case FNV64A:
-                    //hregister[0].fnv64a_1i = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
+                    hregister[0].fnv64a_1i = getFileHashFNV64A((char *) filename.c_str());
                     break;
                   case HW64:
-                    //hregister[0].hw64i = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
+                    hregister[0].hw64i = getFileHashHW64((char *) filename.c_str(), hregister[0].hw64key);
                     break;
-                  case MD2s:
-                    //md2(byteblock,(size_t)blocksize,md2i);
-                    calculateMD2((char *) filename.c_str(), hregister[0].md2i);
+                  case MD2s:                    
+                    getFileHashMD2((char *) filename.c_str(), hregister[0].md2i);
                     break;
                   case MD4s:
-                    //MD4(byteblock,(long)blocksize,md4i);
-                    calculateMD4((char *) filename.c_str(), hregister[0].md4i);
+                    getFileHashMD4((char *) filename.c_str(), hregister[0].md4i);
                     break;
                   case MD5s:
-                    //MD5(byteblock,(long)blocksize,md5i);
-                    calculateMD5((char *) filename.c_str(), hregister[0].md5i);
+                    getFileHashMD5((char *) filename.c_str(), hregister[0].md5i);
                     break;
+                  // TODO Need to remove MD6 since it's not supported  
                   case MD6:
                     //md6_hash(160, byteblock,(uint64_t)(blocksize*8), hregister[0].md6i);
+                    getFileHashMD5((char *) filename.c_str(), hregister[0].md6i);
                     break;
                   case MD62:
                     //md6_full_hash(160, byteblock,(uint64_t)(blocksize*8), hregister[0].md62key,16,md6_default_L, 4, hregister[0].md62i);
+                    getFileHashMD5((char *) filename.c_str(), hregister[0].md62i);
                     break;
                   case MET641:
-                    //metrohash64_1(byteblock, (uint64_t) blocksize, met641seed, met641i);
-                    calculateMetro64_1((char *) filename.c_str(), hregister[0].met641i);
+                    getFileHashMetro64_1((char *) filename.c_str(), hregister[0].met641i, hregister[0].met641seed);
                     break;
                   case MET642:
-                    //metrohash64_2(byteblock, (uint64_t) blocksize, met642seed, met642i);
-                    calculateMetro64_2((char *) filename.c_str(), hregister[0].met642i);
+                    getFileHashMetro64_2((char *) filename.c_str(), hregister[0].met642i, hregister[0].met642seed);
                     break;
                   case MX3:
-                    // hash(reinterpret_cast<char*>(&mx3i), hashblocksize);
+                    hregister[0].mx3i = getFileHashMX3((char *) filename.c_str(), hregister[0].mx3seed);
                     break;
                   case PNG:
-                    //png64i = pengyhash(byteblock, (size_t) blocksize, hregister[0].png64seed);
+                    hregister[0].png64i = getFileHashPNG((char *) filename.c_str(), hregister[0].png64seed);
                     break;
                   case RIPE160:
-                    //RIPEMD160(byteblock, blocksize, ripe160i);
-                    calculateRipe160((char *) filename.c_str(), hregister[0].ripe160i);
+                    getFileHashRipe160((char *) filename.c_str(), hregister[0].ripe160i);
                     break;
                   case SEA:
-                    //sea64i = seahash((const char*)byteblock, blocksize, hregister[0].sea64seed);
+                    hregister[0].sea64i = getFileHashSeahash((char *) filename.c_str(), hregister[0].sea64seed);
                     break;
                   case SIP64: 
-                    //siphash64i = siphash24(byteblock, blocksize, hregister[0].sipkey);
+                    hregister[0].siphash64i = getFileHashSiphash((char *) filename.c_str(), hregister[0].sipkey);
                     break;
                   case SHA164:
-                    calculateSHA1((char *) filename.c_str(), hregister[0].sha1i);
+                    getFileHashSHA1((char *) filename.c_str(), hregister[0].sha1i);
                     break;
                   case SHA1128:
-                    calculateSHA1((char *) filename.c_str(), hregister[0].sha1i);
+                    getFileHashSHA1((char *) filename.c_str(), hregister[0].sha1i);
                     break;
                   case SHA1s:
-                    calculateSHA1((char *) filename.c_str(), hregister[0].sha1i);
+                    getFileHashSHA1((char *) filename.c_str(), hregister[0].sha1i);
                     break;
                   case SHA256s:
-                    //SHA256(byteblock, blocksize, sha256i);
-                    calculateSHA256((char *) filename.c_str(), hregister[0].sha256i);
+                    getFileHashSHA256((char *) filename.c_str(), hregister[0].sha256i);
                     break;
                   case SHA384s:
-                    //SHA384(byteblock, blocksize, sha384i);
-                    calculateSHA384((char *) filename.c_str(), hregister[0].sha384i);
+                    getFileHashSHA384((char *) filename.c_str(), hregister[0].sha384i);
                     break;
                   case SHA512s:
-                    //SHA512(byteblock, blocksize, sha512i);
-                    calculateSHA512((char *) filename.c_str(), hregister[0].sha512i);
+                    getFileHashSHA512((char *) filename.c_str(), hregister[0].sha512i);
                     break;
                   case SPK32:
-                    //spooky32i = SpookyHash::Hash32(byteblock, blocksize, hregister[0].spookyseed32);
+                    hregister[0].spooky32i = getFileHashSpooky32((char *) filename.c_str(), hregister[0].spookyseed32);
                     break;
-                  case SPK64:
-                    //spooky64i = SpookyHash::Hash64(byteblock, blocksize, hregister[0].spookyseed64);
+                  case SPK64:        
+                    hregister[0].spooky64i = getFileHashSpooky64((char *) filename.c_str(), hregister[0].spookyseed64);
                     break;
                   case XXH32:
-                    //xxhash32i = XXHash32::hash(byteblock, blocksize, hregister[0].xxseed32);
+                    hregister[0].xxhash32i = getFileHashXXH32((char *) filename.c_str(), hregister[0].xxseed32);
                     break;
                   case XXH64:
-                    //xxhash64i = XXHash64::hash(byteblock, blocksize, hregister[0].xxseed64);
+                    hregister[0].xxhash64i = getFileHashXXH64((char *) filename.c_str(), hregister[0].xxseed64);
                     break;
                   case WP:
-                    // TODO
+                    getFileHashWP((char *) filename.c_str(), hregister[0].whp512i);
                     break;
                   case WYH:
-                    //wyhash64i = wyhash(byteblock, blocksize, hregister[0].wyseed64, (const uint64_t*) hregister[0].wysecret64);
+                    hregister[0].wyhash64i = getFileHashWyhash((char *) filename.c_str(), hregister[0].wyseed64, hregister[0].wysecret64);
                     break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
               }
           }
     }
+
+    // compare the mdzip file hash list with the output file hash list 
+    // if the comparison is true return true otherwise return false
+    bool compareFileHashList(std::string& filename) {
+
+         int hashblocksize = 0;
+         for(auto hash  : hashlistvt[HASHBLOCK]) {
+              //hashblocksize = mdHashlist[hash.first-1].blocksize;
+              hashblocksize = std::get<2>(hash);
+
+              switch(std::get<0>(hash)) {
+                  case CIT64:
+                    hregister[0].city64o = getFileHashCityhash((char *) filename.c_str(), hregister[0].city64seed);
+                    if (hregister[0].city64i != hregister[0].city64o) return false;
+                    break;
+                  case CRC32:
+                    hregister[0].crc32o = getFileHashCRC32((char *) filename.c_str(), hregister[0].crc32seed);
+                    if (hregister[0].crc32i != hregister[0].crc32o) return false;
+                    break;
+                  case CRC64:
+                    hregister[0].crc64o = getFileHashCRC64((char *) filename.c_str(), hregister[0].crc64seed);
+                    if (hregister[0].crc64i != hregister[0].crc64o) return false;
+                    break;
+                  case FAST32:
+                    hregister[0].fast32o = getFileHashFast32((char *) filename.c_str(), hregister[0].fast32seed);
+                    if (hregister[0].fast32i != hregister[0].fast32o) return false;
+                    break;
+                  case FAST64:
+                    hregister[0].fast64o = getFileHashFast64((char *) filename.c_str(), hregister[0].fast64seed);
+                    if (hregister[0].fast64i != hregister[0].fast64o) return false;
+                    break;
+                  case FNV32:
+                    hregister[0].fnv32_1o = getFileHashFNV32((char *) filename.c_str());
+                    if (hregister[0].fnv32_1i != hregister[0].fnv32_1o) return false;
+                    break;
+                  case FNV32A:
+                    hregister[0].fnv32a_1o = getFileHashFNV32A((char *) filename.c_str());
+                    if (hregister[0].fnv32a_1i != hregister[0].fnv32a_1o) return false;
+                    break;
+                  case FNV64:
+                    hregister[0].fnv64_1o = getFileHashFNV64((char *) filename.c_str());
+                    if (hregister[0].fnv64_1i != hregister[0].fnv64_1o) return false;
+                    break;
+                  case FNV64A:
+                    hregister[0].fnv64a_1o = getFileHashFNV64A((char *) filename.c_str());
+                    if (hregister[0].fnv64a_1i != hregister[0].fnv64a_1o) return false;
+                    break;
+                  case HW64:
+                    hregister[0].hw64o = getFileHashHW64((char *) filename.c_str(), hregister[0].hw64key);
+                    if (hregister[0].hw64i != hregister[0].hw64o) return false;
+                    break;
+                  case MD2s:
+                    getFileHashMD2((char *) filename.c_str(), hregister[0].md2o);
+                    if (memcmp(hregister[0].md2i, hregister[0].md2o, 16) != 0) return false;
+                    break;
+                  case MD4s:
+                    getFileHashMD4((char *) filename.c_str(), hregister[0].md4o);
+                    if (memcmp(hregister[0].md4i, hregister[0].md4o, 16) != 0) return false;
+                    break;
+                  case MD5s:
+                    getFileHashMD5((char *) filename.c_str(), hregister[0].md5o);
+                    if (memcmp(hregister[0].md5i, hregister[0].md5o, 16) != 0) return false;
+                    break;
+                  // TODO Need to remove MD6 since it's not supported  
+                  case MD6:
+                    getFileHashMD5((char *) filename.c_str(), hregister[0].md6o);
+                    if (memcmp(hregister[0].md6i, hregister[0].md6o, 20) != 0) return false;
+                    break;
+                  case MD62:
+                    getFileHashMD5((char *) filename.c_str(), hregister[0].md62o);
+                    if (memcmp(hregister[0].md62i, hregister[0].md62o, 20) != 0) return false;
+                    break;
+                  case MET641:
+                    getFileHashMetro64_1((char *) filename.c_str(), hregister[0].met641o, hregister[0].met641seed);
+                    if (memcmp(hregister[0].met641i, hregister[0].met641o, 8) != 0) return false;
+                    break;
+                  case MET642:
+                    getFileHashMetro64_2((char *) filename.c_str(), hregister[0].met642o, hregister[0].met642seed);
+                    if (memcmp(hregister[0].met642i, hregister[0].met642o, 8) != 0) return false;
+                    break;
+                  case MX3:
+                    hregister[0].mx3o = getFileHashMX3((char *) filename.c_str(), hregister[0].mx3seed);
+                    if (hregister[0].mx3i != hregister[0].mx3o) return false;
+                    break;
+                  case PNG:
+                    hregister[0].png64o = getFileHashPNG((char *) filename.c_str(), hregister[0].png64seed);
+                    if (hregister[0].png64i != hregister[0].png64o) return false;
+                    break;
+                  case RIPE160:
+                    getFileHashRipe160((char *) filename.c_str(), hregister[0].ripe160o);
+                    if (memcmp(hregister[0].ripe160i, hregister[0].ripe160o, 20) != 0) return false;
+                    break;
+                  case SEA:
+                    hregister[0].sea64o = getFileHashSeahash((char *) filename.c_str(), hregister[0].sea64seed);
+                    if (hregister[0].sea64i != hregister[0].sea64o) return false;
+                    break;
+                  case SIP64:
+                    hregister[0].siphash64o = getFileHashSiphash((char *) filename.c_str(), hregister[0].sipkey);
+                    if (hregister[0].siphash64i != hregister[0].siphash64o) return false;
+                    break;
+                  case SHA164:
+                    getFileHashSHA1((char *) filename.c_str(), hregister[0].sha1o);
+                    if (memcmp(hregister[0].sha1i, hregister[0].sha1o, 8) != 0) return false;
+                    break;
+                  case SHA1128:
+                    getFileHashSHA1((char *) filename.c_str(), hregister[0].sha1o);
+                    if (memcmp(hregister[0].sha1i, hregister[0].sha1o, 16) != 0) return false;
+                    break;
+                  case SHA1s:
+                    getFileHashSHA1((char *) filename.c_str(), hregister[0].sha1o);
+                    if (memcmp(hregister[0].sha1i, hregister[0].sha1o, 20) != 0) return false;
+                    break;
+                  case SHA256s:
+                    getFileHashSHA256((char *) filename.c_str(), hregister[0].sha256o);
+                    if (memcmp(hregister[0].sha256i, hregister[0].sha256o, 32) != 0) return false;
+                    break;
+                  case SHA384s:
+                    getFileHashSHA384((char *) filename.c_str(), hregister[0].sha384o);
+                    if (memcmp(hregister[0].sha384i, hregister[0].sha384o, 48) != 0) return false;
+                    break;
+                  case SHA512s:
+                    getFileHashSHA512((char *) filename.c_str(), hregister[0].sha512o);
+                    if (memcmp(hregister[0].sha512i, hregister[0].sha512o, 64) != 0) return false;
+                    break;
+                  case SPK32:
+                    hregister[0].spooky32o = getFileHashSpooky32((char *) filename.c_str(), hregister[0].spookyseed32);
+                    if (hregister[0].spooky32i != hregister[0].spooky32o) return false;
+                    break;
+                  case SPK64:
+                    hregister[0].spooky64o = getFileHashSpooky64((char *) filename.c_str(), hregister[0].spookyseed64);
+                    if (hregister[0].spooky64i != hregister[0].spooky64o) return false;
+                    break;
+                  case XXH32:
+                    hregister[0].xxhash32o = getFileHashXXH32((char *) filename.c_str(), hregister[0].xxseed32);
+                    if (hregister[0].xxhash32i != hregister[0].xxhash32o) return false;
+                    break;
+                  case XXH64:
+                    hregister[0].xxhash64o = getFileHashXXH64((char *) filename.c_str(), hregister[0].xxseed64);
+                    if (hregister[0].xxhash64i != hregister[0].xxhash64o) return false;
+                    break;
+                  case WP:
+                    getFileHashWP((char *) filename.c_str(), hregister[0].whp512o);
+                    if (memcmp(hregister[0].whp512i, hregister[0].whp512o, 64) != 0) return false;
+                    break;
+                  case WYH:
+                    hregister[0].wyhash64o = getFileHashWyhash((char *) filename.c_str(), hregister[0].wyseed64, hregister[0].wysecret64);
+                    if (hregister[0].wyhash64i != hregister[0].wyhash64o) return false;
+                    break;
+                  // default:
+                  //  std::cout << "Invalid hash" << std::endl;
+              }
+          }
+
+          return true;
+    }
+
+    
 
 
     // setByteBlockHashList
@@ -908,16 +1036,16 @@ public:
                     hregister[0].fast64i = fasthash64(byteblock, blocksize, hregister[0].fast64seed);
                     break;
                   case FNV32:
-                    hregister[0].fnv32_1i = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
+                    hregister[0].fnv32_1i = fnv32_1(byteblock, blocksize, FNV1_32_INIT);
                     break;
                   case FNV32A:
-                    hregister[0].fnv32a_1i = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
+                    hregister[0].fnv32a_1i = fnv32_1a(byteblock, blocksize, FNV1_32A_INIT);
                     break;
                   case FNV64:
-                    hregister[0].fnv64_1i = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
+                    hregister[0].fnv64_1i  = fnv64_1(byteblock, blocksize, FNV1_64_INIT);
                     break;
                   case FNV64A:
-                    hregister[0].fnv64a_1i = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
+                    hregister[0].fnv64a_1i = fnv64_1a(byteblock, blocksize, FNV1A_64_INIT);
                     break;
                   case HW64:
                     hregister[0].hw64i = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
@@ -1031,19 +1159,19 @@ public:
                     if (hregister[0].fast64i != hregister[0].fast64o) return false;
                     break;
                   case FNV32:
-                    hregister[0].fnv32_1o = fnv_32_buf(byteblock, blocksize, FNV1_32_INIT);
+                    hregister[0].fnv32_1o = fnv32_1(byteblock, blocksize, FNV1_32_INIT);
                     if (hregister[0].fnv32_1i != hregister[0].fnv32_1o) return false;
                     break;
                   case FNV32A:
-                    hregister[0].fnv32a_1o = fnv_32a_buf(byteblock, blocksize, FNV1_32A_INIT);
+                    hregister[0].fnv32a_1o = fnv32_1a(byteblock, blocksize, FNV1_32A_INIT);
                     if (hregister[0].fnv32a_1i != hregister[0].fnv32a_1o) return false;
                     break;
                   case FNV64:
-                    hregister[0].fnv64_1o = fnv_64_buf(byteblock, blocksize, FNV1_64_INIT);
+                    hregister[0].fnv64_1o = fnv64_1(byteblock, blocksize, FNV1_64_INIT);
                     if (hregister[0].fnv64_1i != hregister[0].fnv64_1o) return false;
                     break;
                   case FNV64A:
-                    hregister[0].fnv64a_1o = fnv_64a_buf(byteblock, blocksize, FNV1A_64_INIT);
+                    hregister[0].fnv64a_1o = fnv64_1a(byteblock, blocksize, FNV1A_64_INIT);
                     if (hregister[0].fnv64a_1i != hregister[0].fnv64a_1o) return false;
                     break;
                   case HW64:
@@ -1438,7 +1566,7 @@ public:
 
     // get and create the vector list string associated with the hash type
     std::string getHLvectorsString(int type) {
-        // clear the hlss string stream
+         // clear the hlss string stream
          hlss.str(std::string());
          int blocksize    = 0; 
          int blockkeysize = 0; 
@@ -1455,8 +1583,8 @@ public:
              hlss << std::left << std::setw(13) << std::get<0>(val);
              hlss << std::left << std::setw(12) << std::get<1>(val);
              hlss << std::left << std::setw(12) << std::get<2>(val);
-             hlss << std::left << std::setw(12) << std::to_string(mdHashlist[std::get<0>(val)-1].keysize) << std::endl;
-         
+             hlss << std::left << std::setw(11) << std::to_string(mdHashlist[std::get<0>(val)-1].keysize) << std::endl;
+       
              blocksize += std::get<2>(val);
              blockkeysize += mdHashlist[std::get<0>(val)-1].keysize;
              i++;
@@ -1511,7 +1639,6 @@ public:
             std::cout << std::left << std::setw(12) << std::boolalpha << mdHashlist[i].haskey;
             std::cout << std::left << std::setw(16) << mdHashlist[i].blocksize;
             std::cout << std::left << std::setw(16) << mdHashlist[i].keysize;
-            
             std::cout << std::endl;
          }
     }
