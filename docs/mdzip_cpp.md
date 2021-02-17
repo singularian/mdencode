@@ -440,14 +440,10 @@ This is a guide for building MDencode MDzip C++ on Linux.
     openssl \
     libssl-dev \
     libgmp3-dev \
-2) cd to the fnv directory
-   cd ~/mdencode/code/testdecode_cpp/external/fnv
-   RUN make
-   or RUN make install
-3) cd to the mdzip_cpp code directory
+2) cd to the mdzip_cpp code directory
    cd ~/mdencode/code/mdzip_cpp 
    make all
-4) Optional build the test c++ program
+3) Optional build the test c++ program
    cd ~/mdencode/code/mdzip_cpp
    make test
 4) Optional build path
