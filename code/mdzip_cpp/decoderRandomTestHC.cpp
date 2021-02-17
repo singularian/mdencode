@@ -28,7 +28,7 @@
 #include <string>
 #include <time.h>
 #include <vector>
-#include "../testdecode_cpp/external/CLI11.hpp" 
+#include "external/CLI11.hpp" 
 #include "mdCore/mdCommon.h"
 #include "mdCore/mdMutex.h"
 #include "mdCore/mdMutexLog.h"
