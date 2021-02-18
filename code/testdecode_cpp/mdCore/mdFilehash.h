@@ -3,7 +3,7 @@
 #include "../mdzip_cpp/external/cityhash/cityhash.h"
 #include "../mdzip_cpp/external/crc32/crc32.h"
 #include "../mdzip_cpp/external/crc64/crc64.h"
-#include "../mdzip_cpp/external/csiphash.c"
+#include "../mdzip_cpp/external/csiphash.h"
 #include "../mdzip_cpp/external/fasthash/fasthash.h"
 // #include "../mdzip_cpp/external/fnv/fnv.h"
 #include "../mdzip_cpp/external/fnv2/fnv.h"
@@ -13,7 +13,7 @@
 #include "../mdzip_cpp/external/metro64/metrohash64.h"
 #include "../mdzip_cpp/external/mx3/mx3.h"
 #include "../mdzip_cpp/external/pengyhash/pengyhash.h"
-#include "../mdzip_cpp/external/seahash/seahash.c"
+#include "../mdzip_cpp/external/seahash/seahash.h"
 #include "../mdzip_cpp/external/md2.c"
 #include <openssl/md4.h>
 #include <openssl/md5.h>

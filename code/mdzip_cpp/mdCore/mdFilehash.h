@@ -3,7 +3,7 @@
 #include "external/cityhash/cityhash.h"
 #include "external/crc32/crc32.h"
 #include "external/crc64/crc64.h"
-#include "external/csiphash.c"
+#include "external/csiphash/csiphash.h"
 #include "external/fasthash/fasthash.h"
 // #include "external/fnv/fnv.h"
 #include "external/fnv2/fnv.h"
@@ -13,7 +13,7 @@
 #include "external/metro64/metrohash64.h"
 #include "external/mx3/mx3.h"
 #include "external/pengyhash/pengyhash.h"
-#include "external/seahash/seahash.c"
+#include "external/seahash/seahash.h"
 #include "external/md2.c"
 #include <openssl/md4.h>
 #include <openssl/md5.h>

@@ -4,8 +4,8 @@
 // http://isthe.com/chongo/tech/comp/fnv/
 // https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function#FNV_prime
 
-// const uint32_t Prime     = 0x01000193; //   16777619
-// const uint32_t Offset64  = 0x811C9DC5; // 2166136261
+// const uint32_t Prime32   = 0x01000193; //   16777619
+// const uint32_t Offset32  = 0x811C9DC5; // 2166136261
 const uint32_t Prime32   = 16777619;
 const uint32_t Offset32  = 2166136261;
 
@@ -24,7 +24,7 @@ inline uint32_t fnv32_1(const void* data, size_t numBytes, uint32_t hash)
 {
     const unsigned char* ptr = (const unsigned char*)data;
     while (numBytes--)
-	hash = (hash * Prime32) ^ (*ptr++);
+	    hash = (hash * Prime32) ^ (*ptr++);
     return hash;
 }
 
