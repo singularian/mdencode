@@ -14,7 +14,7 @@
 #include "external/mx3/mx3.h"
 #include "external/pengyhash/pengyhash.h"
 #include "external/seahash/seahash.h"
-#include "external/md2.c"
+#include "external/md2/md2.h"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
 #include "external/md6/md6.h"
