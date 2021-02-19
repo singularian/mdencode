@@ -4,6 +4,7 @@
 #include "../mdzip_cpp/external/crc32/crc32.h"
 #include "../mdzip_cpp/external/crc64/crc64.h"
 #include "../mdzip_cpp/external/csiphash/csiphash.h"
+#include "../mdzip_cpp/external/siphash/siphash.h"
 #include "../mdzip_cpp/external/fasthash/fasthash.h"
 // #include "../mdzip_cpp/external/fnv/fnv.h"
 #include "../mdzip_cpp/external/fnv2/fnv.h"
@@ -14,7 +15,7 @@
 #include "../mdzip_cpp/external/mx3/mx3.h"
 #include "../mdzip_cpp/external/pengyhash/pengyhash.h"
 #include "../mdzip_cpp/external/seahash/seahash.h"
-#include "../mdzip_cpp/external/md2/md2.c"
+#include "../mdzip_cpp/external/md2/md2.h"
 #include <openssl/md4.h>
 #include <openssl/md5.h>
 #include "../mdzip_cpp/external/md6/md6.h"
@@ -487,6 +488,32 @@ uint64_t getFileHashSiphash(char *filename, char *sipkey)
     return siphash64i;
 }
 
+// create a siphash 128 file signature
+int getFileHashSiphash128(char *filename, unsigned char *digest, uint8_t *sipkey)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+
+    unsigned char buf[K_READ_BUF_SIZE] = { };
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        if(!siphash(buf, total_read, sipkey, digest, 16));
+        {
+            fclose(fp);
+            return 0;
+        }
+    }
+    fclose(fp);
+
+
+    // return true;
+    return 1;
+}
+
 // create a openssl SHA1 file signature
 int getFileHashSHA1(char *filename, unsigned char *digest)
 {
@@ -495,7 +522,6 @@ int getFileHashSHA1(char *filename, unsigned char *digest)
         return 0;
     }
 
-    // unsigned char* sha1_digest = malloc(sizeof(char)*SHA_DIGEST_LENGTH);
     SHA_CTX context;
 
     if(!SHA1_Init(&context))

@@ -1,5 +1,3 @@
-#include "../mdzip_cpp/external/fnv/fnv.h"
-
 struct hash_list 
 {
     // city hash
@@ -22,14 +20,14 @@ struct hash_list
     uint64_t fast64o;
     uint64_t fast64seed = 100000;
     // fnv1
-    Fnv32_t fnv32_1i; 
-    Fnv32_t fnv32_1o;
-    Fnv32_t fnv32a_1i;
-    Fnv32_t fnv32a_1o;
-    Fnv64_t fnv64_1i; 
-    Fnv64_t fnv64_1o; 
-    Fnv64_t fnv64a_1i; 
-    Fnv64_t fnv64a_1o;
+    uint32_t fnv32_1i; 
+    uint32_t fnv32_1o;
+    uint32_t fnv32a_1i;
+    uint32_t fnv32a_1o;
+    uint64_t fnv64_1i; 
+    uint64_t fnv64_1o; 
+    uint64_t fnv64a_1i; 
+    uint64_t fnv64a_1o;
     // highway hash
     uint64_t hw64i;
     uint64_t hw64o;
@@ -82,20 +80,24 @@ struct hash_list
     uint64_t siphash64i;
     uint64_t siphash64o;
     char sipkey[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
+    // siphash 128
+    uint8_t siphash128i[16];
+    uint8_t siphash128o[16];
+    uint8_t sipkey128[16]  = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
     // spooky 32 / 64
     uint32_t spooky32i;
     uint32_t spooky32o;
-    uint32_t spookyseed32;
+    uint32_t spookyseed32 = 100000;
     uint64_t spooky64i;
     uint64_t spooky64o;
-    uint64_t spookyseed64;
+    uint64_t spookyseed64 = 100000;
     // xxhash
     uint32_t xxhash32i;
     uint32_t xxhash32o;
-    uint32_t xxseed32 = 100000;
+    uint32_t xxseed32    = 100000;
     uint64_t xxhash64i;
     uint64_t xxhash64o;
-    uint64_t xxseed64 = 100000;
+    uint64_t xxseed64    = 100000;
     // Whirlpool
     uint8_t whp512i[64];
     uint8_t whp512o[64];
@@ -104,5 +106,7 @@ struct hash_list
     uint64_t wyhash64o;
     uint64_t wyseed64 = 100000;
     uint64_t wysecret64[5] = {0xa0761d6478bd642full, 0xe7037ed1a0b428dbull, 0x8ebc6af09c88c6e3ull, 0x589965cc75374cc3ull, 0x1d8e4e27c47d124full};
+
 };
+
 

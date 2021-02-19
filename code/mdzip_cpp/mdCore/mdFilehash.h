@@ -4,6 +4,7 @@
 #include "external/crc32/crc32.h"
 #include "external/crc64/crc64.h"
 #include "external/csiphash/csiphash.h"
+#include "external/siphash/siphash.h"
 #include "external/fasthash/fasthash.h"
 // #include "external/fnv/fnv.h"
 #include "external/fnv2/fnv.h"
@@ -487,6 +488,32 @@ uint64_t getFileHashSiphash(char *filename, char *sipkey)
     return siphash64i;
 }
 
+// create a siphash 128 file signature
+int getFileHashSiphash128(char *filename, unsigned char *digest, uint8_t *sipkey)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+
+    unsigned char buf[K_READ_BUF_SIZE] = { };
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        if(!siphash(buf, total_read, sipkey, digest, 16));
+        {
+            fclose(fp);
+            return 0;
+        }
+    }
+    fclose(fp);
+
+
+    // return true;
+    return 1;
+}
+
 // create a openssl SHA1 file signature
 int getFileHashSHA1(char *filename, unsigned char *digest)
 {
@@ -495,7 +522,6 @@ int getFileHashSHA1(char *filename, unsigned char *digest)
         return 0;
     }
 
-    // unsigned char* sha1_digest = malloc(sizeof(char)*SHA_DIGEST_LENGTH);
     SHA_CTX context;
 
     if(!SHA1_Init(&context))

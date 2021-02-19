@@ -237,18 +237,19 @@ ID          Hash Name   Description                   Key         Blocksize     
 20          ripe160     Ripe MD 160                   false       20              0               
 21          sea64       Seahash 64                    true        8               8               
 22          sip64       Siphash 64                    true        8               16              
-23          sha1_64     SHA1 64                       false       8               0               
-24          sha1_128    SHA1 128                      false       16              0               
-25          sha1        SHA1                          false       20              0               
-26          sha256      SHA 256                       false       32              0               
-27          sha384      SHA 384                       false       48              0               
-28          sha512      SHA 512                       false       64              0               
-29          spk32       Spooky 32                     true        4               4               
-30          spk64       Spooky 64                     true        8               8               
-31          xxh32       xxHash32                      true        4               4               
-32          xxh64       xxHash64                      true        8               8               
-33          whp         Whirlpool                     false       64              0               
-34          wy64        WYhash 64                     true        8               48                     
+23          sip128      Siphash 128                   true        16              16              
+24          sha1_64     SHA1 64                       false       8               0               
+25          sha1_128    SHA1 128                      false       16              0               
+26          sha1        SHA1                          false       20              0               
+27          sha256      SHA 256                       false       32              0               
+28          sha384      SHA 384                       false       48              0               
+29          sha512      SHA 512                       false       64              0               
+30          spk32       Spooky 32                     true        4               4               
+31          spk64       Spooky 64                     true        8               8               
+32          xxh32       xxHash32                      true        4               4               
+33          xxh64       xxHash64                      true        8               8               
+34          whp         Whirlpool                     false       64              0               
+35          wy64        WYhash 64                     true        8               48                               
 ```                                                                                                 
 
 # MDunzip C++ Usage 
@@ -316,18 +317,19 @@ ID          Hash Name   Description                   Key         Blocksize     
 20          ripe160     Ripe MD 160                   false       20              0               
 21          sea64       Seahash 64                    true        8               8               
 22          sip64       Siphash 64                    true        8               16              
-23          sha1_64     SHA1 64                       false       8               0               
-24          sha1_128    SHA1 128                      false       16              0               
-25          sha1        SHA1                          false       20              0               
-26          sha256      SHA 256                       false       32              0               
-27          sha384      SHA 384                       false       48              0               
-28          sha512      SHA 512                       false       64              0               
-29          spk32       Spooky 32                     true        4               4               
-30          spk64       Spooky 64                     true        8               8               
-31          xxh32       xxHash32                      true        4               4               
-32          xxh64       xxHash64                      true        8               8               
-33          whp         Whirlpool                     false       64              0               
-34          wy64        WYhash 64                     true        8               48                 
+23          sip128      Siphash 128                   true        16              16              
+24          sha1_64     SHA1 64                       false       8               0               
+25          sha1_128    SHA1 128                      false       16              0               
+26          sha1        SHA1                          false       20              0               
+27          sha256      SHA 256                       false       32              0               
+28          sha384      SHA 384                       false       48              0               
+29          sha512      SHA 512                       false       64              0               
+30          spk32       Spooky 32                     true        4               4               
+31          spk64       Spooky 64                     true        8               8               
+32          xxh32       xxHash32                      true        4               4               
+33          xxh64       xxHash64                      true        8               8               
+34          whp         Whirlpool                     false       64              0               
+35          wy64        WYhash 64                     true        8               48              
 ```                                                                                                 
 
 # MDzip C++ No Header Simplified Usage 
@@ -527,18 +529,19 @@ ID          Hash Name   Description                   Key         Blocksize     
 20          ripe160     Ripe MD 160                   false       20              0               
 21          sea64       Seahash 64                    true        8               8               
 22          sip64       Siphash 64                    true        8               16              
-23          sha1_64     SHA1 64                       false       8               0               
-24          sha1_128    SHA1 128                      false       16              0               
-25          sha1        SHA1                          false       20              0               
-26          sha256      SHA 256                       false       32              0               
-27          sha384      SHA 384                       false       48              0               
-28          sha512      SHA 512                       false       64              0               
-29          spk32       Spooky 32                     true        4               4               
-30          spk64       Spooky 64                     true        8               8               
-31          xxh32       xxHash32                      true        4               4               
-32          xxh64       xxHash64                      true        8               8               
-33          whp         Whirlpool                     false       64              0               
-34          wy64        WYhash 64                     true        8               48                   
+23          sip128      Siphash 128                   true        16              16              
+24          sha1_64     SHA1 64                       false       8               0               
+25          sha1_128    SHA1 128                      false       16              0               
+26          sha1        SHA1                          false       20              0               
+27          sha256      SHA 256                       false       32              0               
+28          sha384      SHA 384                       false       48              0               
+29          sha512      SHA 512                       false       64              0               
+30          spk32       Spooky 32                     true        4               4               
+31          spk64       Spooky 64                     true        8               8               
+32          xxh32       xxHash32                      true        4               4               
+33          xxh64       xxHash64                      true        8               8               
+34          whp         Whirlpool                     false       64              0               
+35          wy64        WYhash 64                     true        8               48                            
 ```
 
 ## Example 1: decoderRandomTestHC2 Tests  

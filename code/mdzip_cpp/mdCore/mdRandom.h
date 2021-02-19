@@ -56,6 +56,18 @@ int genRandomUnsignedByteBlock(unsigned char *stream, int num_bytes) {
     return 0;
 }
 
+
+// randomize an uint8_t array
+int genRandomUnsignedByteBlock2(uint8_t *stream, int num_bytes) {
+    srand(time(0));
+
+    for (int f = 0; f < num_bytes; f++) {
+       stream[f] = (rand() % 255);
+    }
+
+    return 0;
+}
+
 // randomize a uint64_t 64 bit array
 int genRandomLongBlock(uint64_t *stream, int num_bytes) {
 

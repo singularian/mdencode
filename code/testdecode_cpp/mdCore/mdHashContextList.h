@@ -33,7 +33,7 @@
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
 // signatures enum list
 enum signatures {FIRST, CIT64, CRC32, CRC64, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, 
-                MD62, MET641, MET642, MX3, PNG, RIPE160, SEA, SIP64, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, 
+                MD62, MET641, MET642, MX3, PNG, RIPE160, SEA, SIP64, SIP128, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, 
                 SPK32, SPK64, XXH32, XXH64, WP, WYH, LAST};
 
 // should add a speed column to show which signatures are fastest
@@ -72,6 +72,7 @@ Hashlist mdHashlist[LAST] = {
     {20, "ripe160",  "Ripe MD 160",           false,    20,     0},
     {21, "sea64",    "Seahash 64",            true,     8,      8},
     {22, "sip64",    "Siphash 64",            true,     8,      16},
+    {22, "sip128",   "Siphash 128",           true,     16,     16},
     {23, "sha1_64",  "SHA1 64",               false,    8,      0},
     {24, "sha1_128", "SHA1 128",              false,    16,     0},
     {25, "sha1",     "SHA1",                  false,    20,     0},
@@ -252,6 +253,9 @@ public:
                   case SIP64: 
                     rf.read(reinterpret_cast<char*>(&hregister[0].sipkey), 16);
                     break;
+                  case SIP128: 
+                    rf.read(reinterpret_cast<char*>(&hregister[0].sipkey128), 16);
+                    break;       
                   case SHA164:
                     break;
                   case SHA1128:
@@ -355,6 +359,9 @@ public:
                   case SIP64: 
                     wf.write(reinterpret_cast<char*>(&hregister[0].sipkey), 16);
                     break;
+                  case SIP128: 
+                    wf.write(reinterpret_cast<char*>(&hregister[0].sipkey128), 16);
+                    break;   
                   case SHA164:
                     break;
                   case SHA1128:
@@ -457,6 +464,9 @@ public:
                     break;
                   case SIP64: 
                     genRandomByteBlock(hregister[0].sipkey, 16); 
+                    break;
+                  case SIP128: 
+                    genRandomUnsignedByteBlock2(hregister[0].sipkey128, 16); 
                     break;
                   case SHA164:
                     break;
@@ -569,6 +579,9 @@ public:
                     break;
                   case SIP64: 
                     rf.read(reinterpret_cast<char*>(&hregister[0].siphash64i), sizeof(long));
+                    break;
+                  case SIP128: 
+                    rf.read(reinterpret_cast<char*>(&hregister[0].siphash128i), hashblocksize);
                     break;
                   case SHA164:
                     rf.read(reinterpret_cast<char*>(&hregister[0].sha1i), hashblocksize);
@@ -686,7 +699,10 @@ public:
                     break;
                   case SIP64: 
                     wf.write(reinterpret_cast<char*>(&hregister[0].siphash64i), sizeof(long));
-                    break;
+                    break; 
+                  case SIP128: 
+                    wf.write(reinterpret_cast<char*>(&hregister[0].siphash128i), hashblocksize);
+                    break;  
                   case SHA164:
                     uint8_t sha164[8];
                     memcpy(sha164, hregister[0].sha1i, hashblocksize);
@@ -708,7 +724,7 @@ public:
                     break;
                   case SHA512s:
                     wf.write(reinterpret_cast<char*>(&hregister[0].sha512i), hashblocksize);
-                    break;
+                    break; 
                   case SPK32:
                     wf.write(reinterpret_cast<char*>(&hregister[0].spooky32i), sizeof(int));
                     break;
@@ -717,7 +733,7 @@ public:
                     break;
                   case XXH32:
                     wf.write(reinterpret_cast<char*>(&hregister[0].xxhash32i), sizeof(int));
-                    break;
+                    break;                     
                   case XXH64:
                     wf.write(reinterpret_cast<char*>(&hregister[0].xxhash64i), sizeof(long));
                     break;
@@ -811,6 +827,9 @@ public:
                   case SIP64: 
                     hregister[0].siphash64i = getFileHashSiphash((char *) filename.c_str(), hregister[0].sipkey);
                     break;
+                  case SIP128: 
+                    getFileHashSiphash128((char *) filename.c_str(), hregister[0].siphash128i, hregister[0].sipkey128);
+                    break;  
                   case SHA164:
                     getFileHashSHA1((char *) filename.c_str(), hregister[0].sha1i);
                     break;
@@ -952,6 +971,10 @@ public:
                     hregister[0].siphash64o = getFileHashSiphash((char *) filename.c_str(), hregister[0].sipkey);
                     if (hregister[0].siphash64i != hregister[0].siphash64o) return false;
                     break;
+                   case SIP128:
+                    getFileHashSiphash128((char *) filename.c_str(), hregister[0].siphash128o, hregister[0].sipkey128);
+                    if (memcmp(hregister[0].siphash128i, hregister[0].siphash128o, 16) != 0) return false;
+                    break; 
                   case SHA164:
                     getFileHashSHA1((char *) filename.c_str(), hregister[0].sha1o);
                     if (memcmp(hregister[0].sha1i, hregister[0].sha1o, 8) != 0) return false;
@@ -1086,6 +1109,9 @@ public:
                   case SIP64: 
                     hregister[0].siphash64i = siphash24(byteblock, blocksize, hregister[0].sipkey);
                     break;
+                  case SIP128:
+                    siphash(byteblock, blocksize, hregister[0].sipkey128, hregister[0].siphash128i, hashblocksize);
+                    break;  
                   case SHA164:
                     SHA1(byteblock, blocksize, hregister[0].sha1i);
                     break;
@@ -1226,6 +1252,10 @@ public:
                     hregister[0].siphash64o = siphash24(byteblock, blocksize, hregister[0].sipkey);
                     if (hregister[0].siphash64i != hregister[0].siphash64o) return false;
                     break;
+                  case SIP128:
+                    siphash(byteblock, blocksize, hregister[0].sipkey128, hregister[0].siphash128o, 16);
+                    if (memcmp(hregister[0].siphash128i, hregister[0].siphash128o, 16) != 0) return false;
+                    break;  
                   case SHA164:
                     SHA1(byteblock, blocksize, hregister[0].sha1o);
                     if (memcmp(hregister[0].sha1i, hregister[0].sha1o, 8) != 0) return false;
@@ -1366,6 +1396,10 @@ public:
                      ss << std::get<1>(hash) << " keys ";
                      addHashToDisplayStream((unsigned char*) hregister[0].sipkey, 16);
                      break;
+                  case SIP128:
+                     ss << std::get<1>(hash) << " keys ";
+                     addHashToDisplayStream((unsigned char*) hregister[0].sipkey128, 16);
+                     break;   
                   case SHA164:
                      break;
                   case SHA1128:
@@ -1493,6 +1527,9 @@ public:
                   case SIP64:
                      ss << std::to_string(hregister[0].siphash64i) << " ";
                      break;
+                   case SIP128:
+                     addHashToDisplayStream(hregister[0].siphash128i, hashblocksize);
+                     break;   
                   case SHA164:
                      addHashToDisplayStream(hregister[0].sha1i, hashblocksize);
                      break;
