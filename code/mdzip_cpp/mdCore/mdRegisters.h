@@ -76,10 +76,24 @@ struct hash_list
     uint8_t sha384o[64];
     uint8_t sha512i[64];
     uint8_t sha512o[64];
-    // siphash
+    // siphash 32
+    // uses the second siphash method
+    uint8_t siphash32i[16];
+    uint8_t siphash32o[16];
+    uint8_t sipkey32[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
+    // siphash 32 2
+    uint8_t siphash322i[16];
+    uint8_t siphash322o[16];
+    uint8_t sipkey322[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
+    // siphash48
+    // uses the second siphash method
+    uint8_t siphash48i[16];
+    uint8_t siphash48o[16];
+    uint8_t sipkey48[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
+    // siphash 64
     uint64_t siphash64i;
     uint64_t siphash64o;
-    char sipkey[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
+    char sipkey64[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
     // siphash 128
     uint8_t siphash128i[16];
     uint8_t siphash128o[16];
