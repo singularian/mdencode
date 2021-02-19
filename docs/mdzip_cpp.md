@@ -462,48 +462,7 @@ Examples:
    decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --bh 1,5,7
    decoderRandomTestHC2 --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh --block=12
    decoderRandomTestHC2 --mod=64 --threads=32 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh --block=12
-
-
-
-Hashlist
-
-ID          Hash Name   Description                   Key         Blocksize       Blockkeysize    
-===============================================================================================
-1           cit64       Cityhash 64                   true        8               8               
-2           crc32       CRC 32                        true        4               4               
-3           crc64       CRC 64                        true        8               8               
-4           fast32      Fasthash 32                   true        4               4               
-5           fast64      Fasthash 64                   true        8               8               
-6           fnv32       FNV-1  32                     false       4               0               
-7           fnv32a      FNV-1a 32                     false       4               0               
-8           fnv64       FNV-1  64                     false       8               0               
-9           fnv64a      FNV-1a 64                     false       8               0               
-10          hw64        Highway Hash 64               true        8               32              
-11          md2         MD2                           false       16              0               
-12          md4         MD4                           false       16              0               
-13          md5         MD5                           false       16              0               
-14          md6         MD6                           false       20              0               
-15          md62        MD6 Quicker                   true        20              0               
-16          met641      Metro Hash 64 v1              true        8               4               
-17          met642      Metro Hash 64 v2              true        8               4               
-18          mx3         MX3                           true        8               8               
-19          png         Pengyhash 64                  true        8               4               
-20          ripe160     Ripe MD 160                   false       20              0               
-21          sea64       Seahash 64                    true        8               8               
-22          sip64       Siphash 64                    true        8               16              
-23          sip128      Siphash 128                   true        16              16              
-24          sha1_64     SHA1 64                       false       8               0               
-25          sha1_128    SHA1 128                      false       16              0               
-26          sha1        SHA1                          false       20              0               
-27          sha256      SHA 256                       false       32              0               
-28          sha384      SHA 384                       false       48              0               
-29          sha512      SHA 512                       false       64              0               
-30          spk32       Spooky 32                     true        4               4               
-31          spk64       Spooky 64                     true        8               8               
-32          xxh32       xxHash32                      true        4               4               
-33          xxh64       xxHash64                      true        8               8               
-34          whp         Whirlpool                     false       64              0               
-35          wy64        WYhash 64                     true        8               48                            
+                         
 ```
 
 ## Example 1: decoderRandomTestHC2 Tests  
