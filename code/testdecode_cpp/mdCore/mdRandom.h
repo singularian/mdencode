@@ -35,10 +35,9 @@ uint64_t randLong()
 
 // randomize a char array
 int genRandomByteBlock(char *stream, int num_bytes) {
-    srand(time(0));
 
     for (int f = 0; f < num_bytes; f++) {
-       stream[f] = (rand() % 255);
+       stream[f] = (randInt() % 255);
     }
 
     return 0;
@@ -47,10 +46,9 @@ int genRandomByteBlock(char *stream, int num_bytes) {
 
 // randomize an uint8_t array
 int genRandomUnsignedByteBlock(unsigned char *stream, int num_bytes) {
-    srand(time(0));
 
     for (int f = 0; f < num_bytes; f++) {
-       stream[f] = (rand() % 255);
+       stream[f] = (randInt() % 255);
     }
 
     return 0;
@@ -59,10 +57,9 @@ int genRandomUnsignedByteBlock(unsigned char *stream, int num_bytes) {
 
 // randomize an uint8_t array
 int genRandomUnsignedByteBlock2(uint8_t *stream, int num_bytes) {
-    srand(time(0));
 
     for (int f = 0; f < num_bytes; f++) {
-       stream[f] = (rand() % 255);
+        stream[f] = (randInt() % 255);
     }
 
     return 0;
