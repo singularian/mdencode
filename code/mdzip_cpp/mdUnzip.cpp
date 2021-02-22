@@ -184,12 +184,12 @@ int validateMDzip(std::string filename, bool validatemdzipfile) {
 
    // read the file hash list string from the mdzip file
    nf.read(reinterpret_cast<char*>(&hclfilesize),    sizeof(int));
-   char* buf = new char[hclfilesize];
+   char* buf1 = new char[hclfilesize];
    // nf.read(reinterpret_cast<char*>(&filehashnames),  hclfilesize);
    if (hclfilesize > 0) {
-     nf.read(buf,  hclfilesize);
-     filehashnames.append(buf, hclfilesize);
-     delete buf;
+     nf.read(buf1,  hclfilesize);
+     filehashnames.append(buf1, hclfilesize);
+     delete buf1;
    }
 
    // read the file block hash list string from the mdzip file

@@ -4,6 +4,8 @@
 #include "../mdzip_cpp/external/crc32/crc32.h"
 #include "../mdzip_cpp/external/crc64/crc64.h"
 #include "../mdzip_cpp/external/csiphash/csiphash.h"
+#include "../mdzip_cpp/external/RHash-1.4.1/edonr.h"
+#include "../mdzip_cpp/external/RHash-1.4.1/has160.h"
 #include "../mdzip_cpp/external/siphash/siphash.h"
 #include "../mdzip_cpp/external/fasthash/fasthash.h"
 // #include "../mdzip_cpp/external/fnv/fnv.h"
@@ -19,14 +21,19 @@
 #include <openssl/md4.h>
 #include <openssl/md5.h>
 #include "../mdzip_cpp/external/md6/md6.h"
+#include <cryptopp/ripemd.h>
 #include <openssl/ripemd.h>
 #include <openssl/sha.h>
 #include "../mdzip_cpp/external/spooky/Spooky.h"
+#include <cryptopp/tiger.h>
 #include <openssl/whrlpool.h>
 #include "../mdzip_cpp/external/wyhash/wyhash.h"
+#include "mdCore/mdBlockhash.h"
+
 
 
 static const int K_READ_BUF_SIZE = { 1024 * 16 };
+unsigned char buf[K_READ_BUF_SIZE] = { };
 
 // create a cityhash64 file signature
 // Add each block to the uinti64_t result
@@ -40,7 +47,6 @@ uint64_t getFileHashCityhash(char *filename, uint64_t city64seed)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -60,7 +66,6 @@ uint32_t getFileHashCRC32(char *filename, uint32_t crc32seed)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -80,7 +85,6 @@ uint64_t getFileHashCRC64(char *filename, uint64_t crc64seed)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -89,6 +93,30 @@ uint64_t getFileHashCRC64(char *filename, uint64_t crc64seed)
     fclose(fp);
 
     return crc64i;
+}
+
+// create a lib rhash Edonr 224 file signature
+int getFileHashEDONR224(char *filename, unsigned char *digest)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+    edonr_ctx context;
+    rhash_edonr224_init(&context);
+
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        rhash_edonr256_update(&context, buf, total_read);
+    }
+    fclose(fp);
+
+    rhash_edonr256_final(&context, digest);
+
+    // return true;
+    return 1;
 }
 
 // fasthash32 file
@@ -100,7 +128,6 @@ uint32_t getFileHashFast32(char *filename, uint32_t fast32seed)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -120,7 +147,6 @@ uint64_t getFileHashFast64(char *filename, uint64_t fast64seed)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -140,7 +166,6 @@ uint32_t getFileHashFNV32(char *filename)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -160,7 +185,6 @@ uint32_t getFileHashFNV32A(char *filename)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -180,7 +204,6 @@ uint64_t getFileHashFNV64(char *filename)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -200,7 +223,6 @@ uint64_t getFileHashFNV64A(char *filename)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -209,6 +231,30 @@ uint64_t getFileHashFNV64A(char *filename)
     fclose(fp);
 
     return fnv64a_1i;
+}
+
+// create a lib rhash HAS-160 file signature
+int getFileHashHAS160(char *filename, unsigned char *digest)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+    has160_ctx context;
+    rhash_has160_init(&context);
+
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        rhash_has160_update(&context, buf, total_read);
+    }
+    fclose(fp);
+
+    rhash_has160_final(&context, digest);
+
+    // return true;
+    return 1;
 }
 
 // Highway Hash 64
@@ -220,7 +266,6 @@ uint64_t getFileHashHW64(char *filename, uint64_t *hw64key)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -230,9 +275,6 @@ uint64_t getFileHashHW64(char *filename, uint64_t *hw64key)
 
     return hw64i;
 }
-
-
-
 
 // create a MD2 file signature
 int getFileHashMD2(char *filename, unsigned char *digest)
@@ -245,7 +287,6 @@ int getFileHashMD2(char *filename, unsigned char *digest)
     MD2_CTX context;
     md2_init(&context);
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -273,7 +314,6 @@ int getFileHashMD4(char *filename, unsigned char *digest)
     if(!MD4_Init(&context))
         return 0;
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -305,7 +345,6 @@ int getFileHashMD5(char *filename, unsigned char *digest)
     if(!MD5_Init(&context))
         return 0;
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -335,7 +374,6 @@ int getFileHashMetro64_1(char *filename, unsigned char *digest, uint32_t met641s
     MetroHash64 metro;
     metro.Initialize(met641seed);
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -360,7 +398,6 @@ int getFileHashMetro64_2(char *filename, unsigned char *digest, uint32_t met642s
     MetroHash64 metro;
     metro.Initialize(met642seed);
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -383,7 +420,6 @@ uint64_t getFileHashMX3(char *filename, uint64_t mx3seed)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -403,7 +439,6 @@ uint64_t getFileHashPNG(char *filename, uint64_t png64seed)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -412,6 +447,29 @@ uint64_t getFileHashPNG(char *filename, uint64_t png64seed)
     fclose(fp);
 
     return png64i;
+}
+
+// create a crypto++ Ripe128 file signature
+int getFileHashRipe128(char *filename, unsigned char *digest)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+    CryptoPP::RIPEMD128 hash;
+
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        hash.Update(buf, total_read);
+    }
+    fclose(fp);
+
+    hash.Final(digest);
+
+    // return true;
+    return 1;
 }
 
 // create a openssl ripe160 file signature
@@ -427,7 +485,6 @@ int getFileHashRipe160(char *filename, unsigned char *digest)
     if(!RIPEMD160_Init(&context))
         return 0;
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -447,6 +504,52 @@ int getFileHashRipe160(char *filename, unsigned char *digest)
     return 1;
 }
 
+// create a crypto++ ripe256 file signature
+int getFileHashRipe256(char *filename, unsigned char *digest)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+    CryptoPP::RIPEMD256 hash;
+
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        hash.Update(buf, total_read);
+    }
+    fclose(fp);
+
+    hash.Final(digest);
+
+    // return true;
+    return 1;
+}
+
+// create a crypto++ ripe320 file signature
+int getFileHashRipe320(char *filename, unsigned char *digest)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+    CryptoPP::RIPEMD320 hash;
+
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        hash.Update(buf, total_read);
+    }
+    fclose(fp);
+
+    hash.Final(digest);
+
+    // return true;
+    return 1;
+}
+
 // create a Seahash file signature 
 uint64_t getFileHashSeahash(char *filename, uint64_t sea64seed)
 {
@@ -456,7 +559,6 @@ uint64_t getFileHashSeahash(char *filename, uint64_t sea64seed)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -477,7 +579,6 @@ uint64_t getFileHashSiphash(char *filename, char *sipkey)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -496,8 +597,6 @@ int getFileHashSiphash128(char *filename, unsigned char *digest, uint8_t *sipkey
         return 0;
     }
 
-
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -527,7 +626,6 @@ int getFileHashSHA1(char *filename, unsigned char *digest)
     if(!SHA1_Init(&context))
         return 0;
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -559,7 +657,6 @@ int getFileHashSHA256(char *filename, unsigned char *digest)
     if(!SHA256_Init(&context))
         return 0;
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
 /*    while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -597,7 +694,6 @@ int getFileHashSHA384(char *filename, unsigned char *digest)
     if(!SHA384_Init(&context))
         return 0; 
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -629,7 +725,6 @@ int getFileHashSHA512(char *filename, unsigned char *digest)
     if(!SHA512_Init(&context))
         return 0;
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -657,7 +752,6 @@ uint32_t getFileHashSpooky32(char *filename, uint32_t spookyseed32)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -678,7 +772,6 @@ uint64_t getFileHashSpooky64(char *filename, uint64_t spookyseed64)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -687,6 +780,29 @@ uint64_t getFileHashSpooky64(char *filename, uint64_t spookyseed64)
     fclose(fp);
 
     return spooky64i;
+}
+
+// create a crypto++ tiger file signature
+int getFileHashTiger(char *filename, unsigned char *digest)
+{
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        return 0;
+    }
+
+    CryptoPP::Tiger hash;
+
+    while (!feof(fp))
+    {
+        size_t total_read = fread(buf, 1, sizeof(buf), fp);
+        hash.Update(buf, total_read);
+    }
+    fclose(fp);
+
+    hash.Final(digest);
+
+    // return true;
+    return 1;
 }
 
 
@@ -699,7 +815,6 @@ uint32_t getFileHashXXH32(char *filename, uint32_t xxseed32)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -719,7 +834,6 @@ uint64_t getFileHashXXH64(char *filename, uint64_t xxseed64)
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -743,7 +857,6 @@ int getFileHashWP(char *filename, unsigned char *digest)
     if(!WHIRLPOOL_Init(&context))
         return 0;
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);
@@ -772,7 +885,6 @@ uint64_t getFileHashWyhash(char *filename, uint64_t wyseed64, uint64_t *wysecret
         return 0;
     }
 
-    unsigned char buf[K_READ_BUF_SIZE] = { };
     while (!feof(fp))
     {
         size_t total_read = fread(buf, 1, sizeof(buf), fp);

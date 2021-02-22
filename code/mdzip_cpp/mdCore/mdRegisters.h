@@ -12,6 +12,9 @@ struct hash_list
     uint64_t crc64seed  = 100000;
     uint64_t crc64i;
     uint64_t crc64o;
+    // rhash edon 224
+    uint8_t edn224i[28];
+    uint8_t edn224o[28];   
     // fasthash
     uint32_t fast32i;
     uint32_t fast32o;
@@ -28,6 +31,9 @@ struct hash_list
     uint64_t fnv64_1o; 
     uint64_t fnv64a_1i; 
     uint64_t fnv64a_1o;
+    // rhash has-160
+    uint8_t has160i[20];
+    uint8_t has160o[20];
     // highway hash
     uint64_t hw64i;
     uint64_t hw64o;
@@ -60,9 +66,18 @@ struct hash_list
     uint64_t png64i;
     uint64_t png64o;
     uint32_t png64seed  = 100000;
+    // ripe 128
+    uint8_t ripe128i[16];
+    uint8_t ripe128o[16];
     // ripe 160
     uint8_t ripe160i[21];
     uint8_t ripe160o[21];
+    // ripe 256
+    uint8_t ripe256i[32];
+    uint8_t ripe256o[32];
+    // ripe 320
+    uint8_t ripe320i[40];
+    uint8_t ripe320o[40];
     // seahash
     uint64_t sea64i;
     uint64_t sea64o;
@@ -72,8 +87,8 @@ struct hash_list
     uint8_t sha1o[21];
     uint8_t sha256i[32];
     uint8_t sha256o[32];
-    uint8_t sha384i[64];
-    uint8_t sha384o[64];
+    uint8_t sha384i[48];
+    uint8_t sha384o[48];
     uint8_t sha512i[64];
     uint8_t sha512o[64];
     // siphash 32
@@ -105,6 +120,9 @@ struct hash_list
     uint64_t spooky64i;
     uint64_t spooky64o;
     uint64_t spookyseed64 = 100000;
+    // tiger 192
+    unsigned char tiger192i[24];
+    unsigned char tiger192o[24];
     // xxhash
     uint32_t xxhash32i;
     uint32_t xxhash32o;

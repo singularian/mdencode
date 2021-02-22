@@ -32,9 +32,10 @@
 
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
 // signatures enum list
-enum signatures {FIRST, CIT64, CRC32, CRC64, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HW64, MD2s, MD4s, MD5s, MD6, 
-                MD62, MET641, MET642, MX3, PNG, RIPE160, SEA, SIP32, SIP322, SIP48, SIP64, SIP128, SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, 
-                SPK32, SPK64, XXH32, XXH64, WP, WYH, LAST};
+enum signatures {FIRST, CIT64, CRC32, CRC64, EDN224, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HAS160, HW64, MD2s, MD4s, MD5s, MD6, 
+                MD62, MET641, MET642, MX3, PNG, RIPE128, RIPE160, RIPE256, RIPE320, SEA, SIP32, SIP322, SIP48, SIP64, SIP128, 
+                SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, 
+                SPK32, SPK64, TIGER192, XXH32, XXH64, WP, WYH, LAST};
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -53,42 +54,48 @@ Hashlist mdHashlist[LAST] = {
     {1,  "cit64",    "Cityhash 64",           true,     8,      8},
     {2,  "crc32",    "CRC 32",                true,     4,      4},
     {3,  "crc64",    "CRC 64",                true,     8,      8},
-    {4,  "fast32",   "Fasthash 32",           true,     4,      4},
-    {5,  "fast64",   "Fasthash 64",           true,     8,      8},
-    {6,  "fnv32",    "FNV-1  32",             false,    4,      0},
-    {7,  "fnv32a",   "FNV-1a 32",             false,    4,      0},
-    {8,  "fnv64",    "FNV-1  64",             false,    8,      0},
-    {9,  "fnv64a",   "FNV-1a 64",             false,    8,      0},
-    {10, "hw64",     "Highway Hash 64",       true,     8,      32},
-    {11, "md2",      "MD2",                   false,    16,     0},
-    {12, "md4",      "MD4",                   false,    16,     0},
-    {13, "md5",      "MD5",                   false,    16,     0},
-    {14, "md6",      "MD6",                   false,    20,     0},
-    {15, "md62",     "MD6 Quicker",           true,     20,     0},
-    {16, "met641",   "Metro Hash 64 v1",      true,     8,      4},
-    {17, "met642",   "Metro Hash 64 v2",      true,     8,      4},
-    {18, "mx3",      "MX3",                   true,     8,      8},
-    {19, "png",      "Pengyhash 64",          true,     8,      4},
-    {20, "ripe160",  "Ripe MD 160",           false,    20,     0},
-    {21, "sea64",    "Seahash 64",            true,     8,      8},
-    {22, "sip32",    "Siphash 32",            true,     4,      16},
-    {22, "sip322",   "Siphash 32b",           true,     4,      16},
-    {22, "sip48",    "Siphash 48",            true,     6,      16},
-    {22, "sip64",    "Siphash 64",            true,     8,      16},
-    {22, "sip128",   "Siphash 128",           true,     16,     16},
-    {23, "sha1_64",  "SHA1 64",               false,    8,      0},
-    {24, "sha1_128", "SHA1 128",              false,    16,     0},
-    {25, "sha1",     "SHA1",                  false,    20,     0},
-    {26, "sha256",   "SHA 256",               false,    32,     0},
-    {27, "sha384",   "SHA 384",               false,    48,     0},
-    {28, "sha512",   "SHA 512",               false,    64,     0},
-    {29, "spk32",    "Spooky 32",             true,     4,      4},
-    {30, "spk64",    "Spooky 64",             true,     8,      8},
-    {31, "xxh32",    "xxHash32",              true,     4,      4},
-    {32, "xxh64",    "xxHash64",              true,     8,      8},
-    {33, "whp",      "Whirlpool",             false,    64,     0},
-    {34, "wy64",     "WYhash 64",             true,     8,      48},
-    {32, "last",     "Unused Signature",      false,    8,      0}
+    {4,  "edn224",   "EDON-R 224",            false,    28,     0},
+    {5,  "fast32",   "Fasthash 32",           true,     4,      4},
+    {6,  "fast64",   "Fasthash 64",           true,     8,      8},
+    {7,  "fnv32",    "FNV-1  32",             false,    4,      0},
+    {8,  "fnv32a",   "FNV-1a 32",             false,    4,      0},
+    {9,  "fnv64",    "FNV-1  64",             false,    8,      0},
+    {10,  "fnv64a",   "FNV-1a 64",             false,    8,      0},
+    {11, "has160",   "HAS 160",               false,    20,     0},
+    {12, "hw64",     "Highway Hash 64",       true,     8,      32},
+    {13, "md2",      "MD2",                   false,    16,     0},
+    {14, "md4",      "MD4",                   false,    16,     0},
+    {15, "md5",      "MD5",                   false,    16,     0},
+    {16, "md6",      "MD6",                   false,    20,     0},
+    {17, "md62",     "MD6 Quicker",           true,     20,     0},
+    {18, "met641",   "Metro Hash 64 v1",      true,     8,      4},
+    {19, "met642",   "Metro Hash 64 v2",      true,     8,      4},
+    {20, "mx3",      "MX3",                   true,     8,      8},
+    {21, "png",      "Pengyhash 64",          true,     8,      4},
+    {22, "ripe128",  "Ripe MD 128",           false,    16,     0},
+    {23, "ripe160",  "Ripe MD 160",           false,    20,     0},
+    {24, "ripe256",  "Ripe MD 256",           false,    32,     0},
+    {25, "ripe320",  "Ripe MD 320",           false,    40,     0},
+    {26, "sea64",    "Seahash 64",            true,     8,      8},
+    {27, "sip32",    "Siphash 32",            true,     4,      16},
+    {28, "sip322",   "Siphash 32b",           true,     4,      16},
+    {29, "sip48",    "Siphash 48",            true,     6,      16},
+    {30, "sip64",    "Siphash 64",            true,     8,      16},
+    {31, "sip128",   "Siphash 128",           true,     16,     16},
+    {32, "sha1_64",  "SHA1 64",               false,    8,      0},
+    {33, "sha1_128", "SHA1 128",              false,    16,     0},
+    {34, "sha1",     "SHA1",                  false,    20,     0},
+    {35, "sha256",   "SHA 256",               false,    32,     0},
+    {36, "sha384",   "SHA 384",               false,    48,     0},
+    {37, "sha512",   "SHA 512",               false,    64,     0},
+    {38, "spk32",    "Spooky 32",             true,     4,      4},
+    {39, "spk64",    "Spooky 64",             true,     8,      8},
+    {40, "tgr",      "Tiger 192",             false,    24,     0},
+    {41, "xxh32",    "xxHash32",              true,     4,      4},
+    {42, "xxh64",    "xxHash64",              true,     8,      8},
+    {43, "whp",      "Whirlpool",             false,    64,     0},
+    {44, "wy64",     "WYhash 64",             true,     8,      48},
+    {45, "last",     "Unused Signature",      false,    8,      0}
 };
 
 
@@ -207,6 +214,8 @@ public:
                   case CRC64:
                     rf.read(reinterpret_cast<char*>(&hregister[0].crc64seed), sizeof(long));
                     break;
+                  case EDN224:
+                    break;  
                   case FAST32:
                     rf.read(reinterpret_cast<char*>(&hregister[0].fast32seed), sizeof(int));
                     break;
@@ -221,6 +230,8 @@ public:
                     break;
                   case FNV64A:
                     break;
+                  case HAS160:
+                    break;  
                   case HW64:
                     rf.read(reinterpret_cast<char*>(&hregister[0].hw64key), 32);
                     break;
@@ -248,8 +259,14 @@ public:
                   case PNG:
                     rf.read(reinterpret_cast<char*>(&hregister[0].png64seed), sizeof(uint64_t));
                     break;
+                  case RIPE128:
+                    break;  
                   case RIPE160:
                     break;
+                  case RIPE256:
+                    break;  
+                  case RIPE320:
+                    break; 
                   case SEA:
                     rf.read(reinterpret_cast<char*>(&hregister[0].sea64seed), sizeof(uint64_t));
                     break;
@@ -286,6 +303,8 @@ public:
                   case SPK64:
                     rf.read(reinterpret_cast<char*>(&hregister[0].spookyseed64), sizeof(long));
                     break;
+                  case TIGER192:
+                    break;  
                   case XXH32:
                     rf.read(reinterpret_cast<char*>(&hregister[0].xxseed32), sizeof(int));
                     break;
@@ -322,6 +341,8 @@ public:
                   case CRC64:
                     wf.write(reinterpret_cast<char*>(&hregister[0].crc64seed), sizeof(long));
                     break;
+                  case EDN224:
+                    break;  
                   case FAST32:
                     wf.write(reinterpret_cast<char*>(&hregister[0].fast32seed), sizeof(int));
                     break;
@@ -336,6 +357,8 @@ public:
                     break;
                   case FNV64A:
                     break;
+                  case HAS160:
+                    break;    
                   case HW64:
                     wf.write(reinterpret_cast<char*>(&hregister[0].hw64key), 32);
                     break;
@@ -363,8 +386,14 @@ public:
                   case PNG:
                     wf.write(reinterpret_cast<char*>(&hregister[0].png64seed), sizeof(uint64_t));
                     break;
+                  case RIPE128:
+                    break;  
                   case RIPE160:
                     break;
+                  case RIPE256:
+                    break;  
+                  case RIPE320:
+                    break; 
                   case SEA:
                     wf.write(reinterpret_cast<char*>(&hregister[0].sea64seed), sizeof(uint64_t));
                     break;
@@ -401,6 +430,8 @@ public:
                   case SPK64:
                     wf.write(reinterpret_cast<char*>(&hregister[0].spookyseed64), sizeof(long));
                     break;
+                  case TIGER192:
+                    break;   
                   case XXH32:
                     wf.write(reinterpret_cast<char*>(&hregister[0].xxseed32), sizeof(int));
                     break;
@@ -437,6 +468,8 @@ public:
                   case CRC64:
                     hregister[0].crc64seed = randInt();
                     break;
+                  case EDN224:
+                    break;  
                   case FAST32:
                     hregister[0].fast32seed = randInt();
                     break;
@@ -451,6 +484,8 @@ public:
                     break;
                   case FNV64A:
                     break;
+                  case HAS160:
+                    break;    
                   case HW64:
                     genRandomLongBlock(hregister[0].hw64key, 4);
                     break;
@@ -478,8 +513,14 @@ public:
                   case PNG:
                     hregister[0].png64seed = randInt(); 
                     break;
+                  case RIPE128:
+                    break;  
                   case RIPE160:
                     break;
+                  case RIPE256:
+                    break;  
+                  case RIPE320:
+                    break; 
                   case SEA:
                      hregister[0].sea64seed = randLong(); 
                     break;
@@ -516,6 +557,8 @@ public:
                   case SPK64:
                     hregister[0].spookyseed64 = randLong();   
                     break;
+                  case TIGER192:
+                    break;   
                   case XXH32:
                     hregister[0].xxseed32 = randInt();   
                     break;
@@ -553,6 +596,9 @@ public:
                   case CRC64:
                     rf.read(reinterpret_cast<char*>(&hregister[0].crc64i), sizeof(long));
                     break;
+                  case EDN224:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].edn224i), hashblocksize);
+                    break;  
                   case FAST32:
                     rf.read(reinterpret_cast<char*>(&hregister[0].fast32i), sizeof(int));
                     break;
@@ -571,6 +617,9 @@ public:
                   case FNV64A:
                     rf.read(reinterpret_cast<char*>(&hregister[0].fnv64a_1i), sizeof(long));
                     break;
+                  case HAS160:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].has160i), hashblocksize); 
+                    break;  
                   case HW64:
                     rf.read(reinterpret_cast<char*>(&hregister[0].hw64i), sizeof(long));
                     break;
@@ -601,9 +650,18 @@ public:
                   case PNG:
                     rf.read(reinterpret_cast<char*>(&hregister[0].png64i), hashblocksize);
                     break;
+                  case RIPE128:  
+                    rf.read(reinterpret_cast<char*>(&hregister[0].ripe128i), hashblocksize);
+                    break;
                   case RIPE160:
                     rf.read(reinterpret_cast<char*>(&hregister[0].ripe160i), hashblocksize);
                     break;
+                  case RIPE256:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].ripe256i), hashblocksize);
+                    break;  
+                  case RIPE320:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].ripe320i), hashblocksize);
+                    break;    
                   case SEA:
                     rf.read(reinterpret_cast<char*>(&hregister[0].sea64i), sizeof(long));
                     break;
@@ -646,6 +704,9 @@ public:
                   case SPK64:
                     rf.read(reinterpret_cast<char*>(&hregister[0].spooky64i), sizeof(long));
                     break;
+                  case TIGER192:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].tiger192i), hashblocksize);
+                    break;   
                   case XXH32:
                     rf.read(reinterpret_cast<char*>(&hregister[0].xxhash32i), sizeof(int));
                     break;
@@ -682,6 +743,9 @@ public:
                   case CRC64:
                     wf.write(reinterpret_cast<char*>(&hregister[0].crc64i), sizeof(long));
                     break;
+                  case EDN224:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].edn224i), hashblocksize);
+                    break;    
                   case FAST32:
                     wf.write(reinterpret_cast<char*>(&hregister[0].fast32i), sizeof(int));
                     break;
@@ -700,6 +764,9 @@ public:
                   case FNV64A:
                     wf.write(reinterpret_cast<char*>(&hregister[0].fnv64a_1i), sizeof(long));
                     break;
+                  case HAS160:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].has160i), hashblocksize); 
+                    break;   
                   case HW64:
                     wf.write(reinterpret_cast<char*>(&hregister[0].hw64i), sizeof(long));
                     break;
@@ -730,9 +797,18 @@ public:
                   case PNG:
                     wf.write(reinterpret_cast<char*>(&hregister[0].png64i), hashblocksize);
                     break;
+                  case RIPE128:  
+                    wf.write(reinterpret_cast<char*>(&hregister[0].ripe128i), hashblocksize);
+                    break;
                   case RIPE160:
                     wf.write(reinterpret_cast<char*>(&hregister[0].ripe160i), hashblocksize);
                     break;
+                  case RIPE256:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].ripe256i), hashblocksize);
+                    break;  
+                  case RIPE320:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].ripe320i), hashblocksize);
+                    break; 
                   case SEA:
                     wf.write(reinterpret_cast<char*>(&hregister[0].sea64i), sizeof(long));
                     break;
@@ -779,6 +855,9 @@ public:
                   case SPK64:
                     wf.write(reinterpret_cast<char*>(&hregister[0].spooky64i), sizeof(long));
                     break;
+                  case TIGER192:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].tiger192i), hashblocksize);
+                    break;     
                   case XXH32:
                     wf.write(reinterpret_cast<char*>(&hregister[0].xxhash32i), sizeof(int));
                     break;                     
@@ -815,6 +894,9 @@ public:
                   case CRC64:
                     hregister[0].crc64i = getFileHashCRC64((char *) filename.c_str(), hregister[0].crc64seed);
                     break;
+                  case EDN224:
+                    getFileHashEDONR224((char *) filename.c_str(), hregister[0].edn224i);
+                    break;
                   case FAST32:
                     hregister[0].fast32i = getFileHashFast32((char *) filename.c_str(), hregister[0].fast32seed);
                     break;
@@ -833,6 +915,9 @@ public:
                   case FNV64A:
                     hregister[0].fnv64a_1i = getFileHashFNV64A((char *) filename.c_str());
                     break;
+                  case HAS160:
+                    getFileHashHAS160((char *) filename.c_str(), hregister[0].has160i);
+                    break;  
                   case HW64:
                     hregister[0].hw64i = getFileHashHW64((char *) filename.c_str(), hregister[0].hw64key);
                     break;
@@ -866,9 +951,18 @@ public:
                   case PNG:
                     hregister[0].png64i = getFileHashPNG((char *) filename.c_str(), hregister[0].png64seed);
                     break;
+                  case RIPE128:
+                    getFileHashRipe128((char *) filename.c_str(), hregister[0].ripe128i);
+                    break;  
                   case RIPE160:
                     getFileHashRipe160((char *) filename.c_str(), hregister[0].ripe160i);
                     break;
+                  case RIPE256:
+                    getFileHashRipe256((char *) filename.c_str(), hregister[0].ripe256i);
+                    break;  
+                  case RIPE320:
+                    getFileHashRipe320((char *) filename.c_str(), hregister[0].ripe320i);
+                    break;    
                   case SEA:
                     hregister[0].sea64i = getFileHashSeahash((char *) filename.c_str(), hregister[0].sea64seed);
                     break;
@@ -911,6 +1005,9 @@ public:
                   case SPK64:        
                     hregister[0].spooky64i = getFileHashSpooky64((char *) filename.c_str(), hregister[0].spookyseed64);
                     break;
+                  case TIGER192:
+                    getFileHashTiger((char *) filename.c_str(), hregister[0].tiger192i);
+                    break;                       
                   case XXH32:
                     hregister[0].xxhash32i = getFileHashXXH32((char *) filename.c_str(), hregister[0].xxseed32);
                     break;
@@ -951,6 +1048,10 @@ public:
                     hregister[0].crc64o = getFileHashCRC64((char *) filename.c_str(), hregister[0].crc64seed);
                     if (hregister[0].crc64i != hregister[0].crc64o) return false;
                     break;
+                  case EDN224:
+                    getFileHashEDONR224((char *) filename.c_str(), hregister[0].edn224o);
+                    if (memcmp(hregister[0].edn224i, hregister[0].edn224o, 28) != 0) return false;
+                    break;  
                   case FAST32:
                     hregister[0].fast32o = getFileHashFast32((char *) filename.c_str(), hregister[0].fast32seed);
                     if (hregister[0].fast32i != hregister[0].fast32o) return false;
@@ -975,6 +1076,10 @@ public:
                     hregister[0].fnv64a_1o = getFileHashFNV64A((char *) filename.c_str());
                     if (hregister[0].fnv64a_1i != hregister[0].fnv64a_1o) return false;
                     break;
+                  case HAS160:
+                    getFileHashHAS160((char *) filename.c_str(), hregister[0].has160o);
+                    if (memcmp(hregister[0].has160i, hregister[0].has160o, 20) != 0) return false;
+                    break;  
                   case HW64:
                     hregister[0].hw64o = getFileHashHW64((char *) filename.c_str(), hregister[0].hw64key);
                     if (hregister[0].hw64i != hregister[0].hw64o) return false;
@@ -1016,10 +1121,22 @@ public:
                     hregister[0].png64o = getFileHashPNG((char *) filename.c_str(), hregister[0].png64seed);
                     if (hregister[0].png64i != hregister[0].png64o) return false;
                     break;
+                  case RIPE128:
+                    getFileHashRipe128((char *) filename.c_str(), hregister[0].ripe128o);
+                    if (memcmp(hregister[0].ripe128i, hregister[0].ripe128o, 16) != 0) return false;
+                    break;  
                   case RIPE160:
                     getFileHashRipe160((char *) filename.c_str(), hregister[0].ripe160o);
                     if (memcmp(hregister[0].ripe160i, hregister[0].ripe160o, 20) != 0) return false;
                     break;
+                  case RIPE256:
+                    getFileHashRipe256((char *) filename.c_str(), hregister[0].ripe256o);
+                    if (memcmp(hregister[0].ripe256i, hregister[0].ripe256o, 32) != 0) return false;
+                    break; 
+                  case RIPE320:
+                    getFileHashRipe320((char *) filename.c_str(), hregister[0].ripe320o);
+                    if (memcmp(hregister[0].ripe320i, hregister[0].ripe320o, 40) != 0) return false;
+                    break;    
                   case SEA:
                     hregister[0].sea64o = getFileHashSeahash((char *) filename.c_str(), hregister[0].sea64seed);
                     if (hregister[0].sea64i != hregister[0].sea64o) return false;
@@ -1076,6 +1193,10 @@ public:
                     hregister[0].spooky64o = getFileHashSpooky64((char *) filename.c_str(), hregister[0].spookyseed64);
                     if (hregister[0].spooky64i != hregister[0].spooky64o) return false;
                     break;
+                  case TIGER192:
+                    getFileHashTiger((char *) filename.c_str(), hregister[0].tiger192o);
+                    if (memcmp(hregister[0].tiger192i, hregister[0].tiger192o, 24) != 0) return false;
+                    break;     
                   case XXH32:
                     hregister[0].xxhash32o = getFileHashXXH32((char *) filename.c_str(), hregister[0].xxseed32);
                     if (hregister[0].xxhash32i != hregister[0].xxhash32o) return false;
@@ -1121,6 +1242,9 @@ public:
                   case CRC64:
                     hregister[0].crc64i = crc64(hregister[0].crc64seed, byteblock, blocksize);
                     break;
+                  case EDN224:
+                    getEDONR224(byteblock, blocksize, hregister[0].edn224i);
+                    break;  
                   case FAST32:
                     hregister[0].fast32i = fasthash32(byteblock, blocksize, hregister[0].fast32seed);
                     break;
@@ -1139,6 +1263,9 @@ public:
                   case FNV64A:
                     hregister[0].fnv64a_1i = fnv64_1a(byteblock, blocksize, FNV1A_64_INIT);
                     break;
+                  case HAS160:
+                    getHAS160(byteblock, blocksize, hregister[0].has160i);
+                    break;  
                   case HW64:
                     hregister[0].hw64i = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
                     break;
@@ -1169,9 +1296,18 @@ public:
                   case PNG:
                     hregister[0].png64i = pengyhash(byteblock, (size_t) blocksize, hregister[0].png64seed);
                     break;
+                  case RIPE128:
+                    getRIPEMD128(byteblock, blocksize, hregister[0].ripe128i);
+                    break;
                   case RIPE160:
                     RIPEMD160(byteblock, blocksize, hregister[0].ripe160i);
                     break;
+                  case RIPE256:
+                    getRIPEMD256(byteblock, blocksize, hregister[0].ripe256i);
+                    break;
+                  case RIPE320:
+                    getRIPEMD320(byteblock, blocksize, hregister[0].ripe320i);
+                    break;  
                   case SEA:
                     hregister[0].sea64i = seahash((const char*)byteblock, blocksize, hregister[0].sea64seed);
                     break;
@@ -1214,6 +1350,9 @@ public:
                   case SPK64:
                     hregister[0].spooky64i = SpookyHash::Hash64(byteblock, blocksize, hregister[0].spookyseed64);
                     break;
+                  case TIGER192:
+                    getTiger(byteblock, blocksize, hregister[0].tiger192i);
+                    break;     
                   case XXH32:
                     hregister[0].xxhash32i = XXHash32::hash(byteblock, blocksize, hregister[0].xxseed32);
                     break;
@@ -1254,6 +1393,10 @@ public:
                     hregister[0].crc64o = crc64(hregister[0].crc64seed, byteblock, blocksize);
                     if (hregister[0].crc64i != hregister[0].crc64o) return false;
                     break;
+                  case EDN224:
+                    getEDONR224(byteblock, (long) blocksize, hregister[0].edn224o);
+                    if (memcmp(hregister[0].edn224i, hregister[0].edn224o, hashblocksize) != 0) return false;
+                    break;    
                   case FAST32:
                     hregister[0].fast32o = fasthash32(byteblock, blocksize, hregister[0].fast32seed);
                     if (hregister[0].fast32i != hregister[0].fast32o) return false;
@@ -1278,6 +1421,10 @@ public:
                     hregister[0].fnv64a_1o = fnv64_1a(byteblock, blocksize, FNV1A_64_INIT);
                     if (hregister[0].fnv64a_1i != hregister[0].fnv64a_1o) return false;
                     break;
+                  case HAS160:
+                    getHAS160(byteblock, blocksize, hregister[0].has160o);
+                    if (memcmp(hregister[0].has160i, hregister[0].has160o, 20) != 0) return false;
+                    break;   
                   case HW64:
                     hregister[0].hw64o = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
                     if (hregister[0].hw64i != hregister[0].hw64o) return false;
@@ -1318,10 +1465,22 @@ public:
                     hregister[0].png64o = pengyhash(byteblock, (size_t) blocksize, hregister[0].png64seed);
                     if (hregister[0].png64i != hregister[0].png64o) return false;
                     break;
+                  case RIPE128:
+                    getRIPEMD128(byteblock, blocksize, hregister[0].ripe128o);
+                    if (memcmp(hregister[0].ripe128i, hregister[0].ripe128o, hashblocksize) != 0) return false;
+                    break; 
                   case RIPE160:
                     RIPEMD160(byteblock, blocksize, hregister[0].ripe160o);
                     if (memcmp(hregister[0].ripe160i, hregister[0].ripe160o, 20) != 0) return false;
                     break;
+                  case RIPE256:
+                    getRIPEMD256(byteblock, blocksize, hregister[0].ripe256o);
+                    if (memcmp(hregister[0].ripe256i, hregister[0].ripe256o, hashblocksize) != 0) return false;
+                    break; 
+                  case RIPE320:
+                    getRIPEMD320(byteblock, blocksize, hregister[0].ripe320o);
+                    if (memcmp(hregister[0].ripe320i, hregister[0].ripe320o, hashblocksize) != 0) return false;
+                    break;                       
                   case SEA:
                     hregister[0].sea64o = seahash((const char*) byteblock, blocksize, hregister[0].sea64seed);
                     if (hregister[0].sea64i != hregister[0].sea64o) return false;
@@ -1378,6 +1537,10 @@ public:
                     hregister[0].spooky64o = SpookyHash::Hash64(byteblock, blocksize, hregister[0].spookyseed64);
                     if (hregister[0].spooky64i != hregister[0].spooky64o) return false;
                     break;
+                  case TIGER192:
+                    getTiger(byteblock, blocksize, hregister[0].tiger192o);
+                    if (memcmp(hregister[0].tiger192i, hregister[0].tiger192o, hashblocksize) != 0) return false;
+                    break;   
                   case XXH32:
                     hregister[0].xxhash32o = XXHash32::hash(byteblock, blocksize, hregister[0].xxseed32);
                     if (hregister[0].xxhash32i != hregister[0].xxhash32o) return false;
@@ -1427,11 +1590,13 @@ public:
                      ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].crc64seed) << " ";
                      break;
+                  case EDN224:
+                     break;   
                   case FAST32:
                      ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].fast32seed) << " ";
                      break;
-                 case FAST64:
+                  case FAST64:
                      ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].fast64seed) << " ";
                      break;
@@ -1443,6 +1608,8 @@ public:
                      break;
                   case FNV64A:
                      break;
+                  case HAS160:
+                     break;   
                   case HW64:
                      ////   addHashToDisplayStream(hregister[0].hw64key, 4); // TODO
                      ss << std::get<1>(hash) << " keys ";
@@ -1476,8 +1643,14 @@ public:
                      ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].png64seed) << " ";
                      break;
+                  case RIPE128:
+                     break;   
                   case RIPE160:
                      break;
+                  case RIPE256:
+                     break;
+                  case RIPE320:
+                     break;      
                   case SEA:
                      ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].sea64seed) << " ";
@@ -1526,6 +1699,8 @@ public:
                      ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].xxseed32) << " ";
                      break;
+                  case TIGER192:
+                    break; 
                   case XXH64:
                      ss << std::get<1>(hash) << " keys ";
                      ss << std::to_string(hregister[0].xxseed64) << " ";
@@ -1572,10 +1747,13 @@ public:
                   case CRC64:
                      ss << std::to_string(hregister[0].crc64i) << " ";
                      break;
+                  case EDN224:
+                     addHashToDisplayStream(hregister[0].edn224i, hashblocksize);
+                     break;     
                   case FAST32:
                      ss << std::to_string(hregister[0].fast32i) << " ";
                      break;
-                 case FAST64:
+                  case FAST64:
                      ss << std::to_string(hregister[0].fast64i) << " ";
                      break;
                   case FNV32:
@@ -1590,6 +1768,9 @@ public:
                   case FNV64A:
                      ss << std::to_string(hregister[0].fnv64a_1i) << " ";
                      break;
+                  case HAS160:
+                     addHashToDisplayStream(hregister[0].has160i, hashblocksize);
+                     break;   
                   case HW64:
                      ss << std::to_string(hregister[0].hw64i) << " ";
                      break;
@@ -1620,9 +1801,18 @@ public:
                   case PNG:
                      ss << std::to_string(hregister[0].png64i) << " ";
                      break;
+                  case RIPE128:
+                     addHashToDisplayStream(hregister[0].ripe128i, hashblocksize);
+                     break;   
                   case RIPE160:
                      addHashToDisplayStream(hregister[0].ripe160i, hashblocksize);
                      break;
+                  case RIPE256:
+                     addHashToDisplayStream(hregister[0].ripe256i, hashblocksize);
+                     break;  
+                  case RIPE320:
+                     addHashToDisplayStream(hregister[0].ripe320i, hashblocksize);
+                     break;     
                   case SEA:
                      ss << std::to_string(hregister[0].sea64i) << " ";
                      break;
@@ -1665,6 +1855,9 @@ public:
                   case SPK64:
                      ss << std::to_string(hregister[0].spooky64i) << " ";
                      break;
+                  case TIGER192:
+                     addHashToDisplayStream(hregister[0].tiger192i, hashblocksize);
+                     break;                     
                   case XXH32:
                      ss << std::to_string(hregister[0].xxhash32i) << " ";
                      break;

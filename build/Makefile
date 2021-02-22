@@ -25,12 +25,13 @@ CC=g++
 # C++ Dependencies
 DEPS=$(CPPEXT)/cityhash/cityhash.c $(CPPEXT)/crc32/crc32.c $(CPPEXT)/crc64/crc64.c $(CPPEXT)/fasthash/fasthash.cpp
 DEPS+=$(CPPEXT)/highwayhash/highwayhash.c $(CPPEXT)/metro64/metrohash64.cpp $(CPPEXT)/pengyhash/pengyhash.c
+DEPS+=$(CPPEXT)/RHash-1.4.1/has160.c $(CPPEXT)/RHash-1.4.1/edonr.c
 DEPS+=$(CPPEXT)/csiphash/csiphash.c $(CPPEXT)/siphash/siphash.c $(CPPEXT)/seahash/seahash.c $(CPPEXT)/spooky/Spooky.cpp
 # DEPS+=$(CPPEXT)/fnv/hash_32.c $(CPPEXT)/fnv/hash_32a.c $(CPPEXT)/fnv/hash_64.c $(CPPEXT)/fnv/hash_64a.c 
 DEPS+=$(CPPEXT)/md2/md2.c $(CPPEXT)/md6/md6.h $(CPPEXT)/md6/md6_mode.c $(CPPEXT)/md6/md6_compress.c 
 
 # C++ libs
-LDLIBS=-lssl -lcrypto -lgmpxx -lgmp -Xlinker -zmuldefs -pthread -std=c++11
+LDLIBS=-lssl -lcrypto -lgmpxx -lgmp -lcryptopp -Xlinker -zmuldefs -pthread -std=c++11
 
 # Setup the -ldflags option for go build here, interpolate the variable values
 LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"

@@ -8,11 +8,14 @@ FROM golang:1.15 AS builder
 # RUN adduser -S -D -H -h /app appuser
 # USER appuser
 
-# install openssl and libgmp
+# install openssl and libgmp and libcrypto++
 RUN apt update && apt-get install -y \
     openssl \
     libssl-dev \
     libgmp3-dev \
+    libcrypto++-dev \
+    libcrypto++-doc \
+    libcrypto++-utils \
 && rm -rf /var/lib/apt/lists/*
 
 # setup the GOBIN environment
