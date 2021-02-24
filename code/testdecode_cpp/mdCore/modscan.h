@@ -143,35 +143,28 @@ class modscan
        // add the modulus ^ modulus exponent to the block int 
        mpz_add (blockInt, blockInt, modremainder);
 
-       // add the modulusInt * threadnum
+       // set the modulusThreadInt which is zero
+       // add the modulusThreadInt + threadnumber
        // it expects the threadnumber argument to be an unsigned long int or it doesn't multiply correctly
        mpz_add_ui (modulusThreadInt, modulusThreadInt, (unsigned long int) threadnumber);
-       //if (threadnumber == 1)
-       //gmp_printf("\n\n\n\n\n\nmodulus modulusthreadint before %d modulus threadint %Zd\n", threadnumber, modulusThreadInt);
+
+       // multiply the modulusInt * the modulusThreadInt which was previously set to the threadnumber
        mpz_mul (modulusThreadInt, modulusThreadInt, modulusInt);
        
-       //if (threadnumber == 1)
-       //gmp_printf("\n\n\n\n\n\nmodulus threadint %d modulo %Zd after modulus thread int %Zd)\n", threadnumber, modulusInt, modulusThreadInt);
+       // add the modulusThreadInt to the starting blockInt
        mpz_add (blockInt, blockInt, modulusThreadInt); 
-
-       //if (threadnumber == 2)
-       //gmp_printf("\n\n\n\n\n\nmodulus threadnum %d modulusint %Zd modulusThreadInt %Zd blockInt %Zd\n\n\n\n", threadnumber, modulusInt, modulusThreadInt, blockInt);
-          
+   
        // multiply the modulusInt * threadcount
        // the threadcount must be 1 or greater
        // mpz_mul_si (mpz_t rop, const mpz_t op1, long int op2)
        mpz_mul_si (modulusInt, modulusInt, (long int) threadcount);
-       // gmp_printf("\n\n\n\n\n\nmodulus * threadcount %Zd\n", modulusInt);
 
-/*       printf("modulus exponent %d\n",  modexponent);
-       gmp_printf("modulus exponent %Zd", modulusExpInt);
-       cout << endl;
-       gmp_printf("%Zd", modulusInt);
-       cout << endl;
-*/
        // need to check the initial floor for 0011 byte block
        // gmp_printf("\nmodscan blockint modulus incrementer %Zd", blockInt);
        // cout << endl;
+
+       if (log->checkIfLogging()) log->mdMutexLog::writeLogThreadFloor(threadnumber, threadcount, exponent, modulusExpInt, modulusInt, modulusThreadInt);
+
 
        uint8_t results[40];
        int n;

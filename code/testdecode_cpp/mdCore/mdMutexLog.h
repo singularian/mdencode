@@ -4,14 +4,16 @@
 #include <mutex>
 #include <time.h>
 #include <plog/Log.h>
-#include "plog/Initializers/RollingFileInitializer.h"
+#include "../plog/Initializers/RollingFileInitializer.h"
 
 class mdMutexLog 
 {
 private:
     bool islogging;
+    bool logThreadFloor;
     int lastThread;
     int threadcount;
+    int blocknumber;
     int blocksize;
     std::mutex mutex;
 public:
@@ -19,7 +21,8 @@ public:
 
     // initialize mdMutex
     mdMutexLog(bool logging) {
-       islogging = logging;       
+       islogging = logging;   
+       logThreadFloor = true;    
        int r;
 
        char logfilename [100];
@@ -88,9 +91,34 @@ public:
 
     }
 
+    // writeLog the Thread Modulus thread parameters
+    // modulusTotalThreadInt = modulus times totalthreadnumber
+    //    if the totalthreadnumber = 32 
+    //    modulusTotalThreadInt = modulus * 32
+    // modulusThreadInt = modulus * threadnumber
+    //    if the totalthreadnumber = 32 
+    //    modulusThreadInt0  = modulus * 0
+    //    modulusThreadInt31 = modulus * 31
+    void writeLogThreadFloor(int thread, int threadcount, int modexponent, mpz_t modulusExpInt, mpz_t modulusTotalThreadInt, mpz_t modulusThreadInt) 
+    {
+        if (islogging && logThreadFloor) {
+           mutex.lock();
 
-    // writeLog Thread 
-    // void writeLogThread(int thread, mpz_t blockint, char *logtext) 
+           /* Write a message */
+           mpz_class modExpInt(modulusExpInt);
+           mpz_class modInt(modulusTotalThreadInt);
+           mpz_class modThreadInt(modulusThreadInt);
+           PLOGD << "tnum " << std::to_string(thread) << "/" << std::to_string(threadcount) << " modbase exp 2 ^ " <<  std::to_string(modexponent) 
+           << " = " << modExpInt.get_str()
+           << "; modthreadtotalint = " << modInt.get_str() << "; modthreadint = mod * " << std::to_string(thread) <<  " = " << modThreadInt.get_str();
+ 
+           // only log this once 
+           if (thread == (threadcount - 1)) logThreadFloor = false;
+           mutex.unlock();
+        }
+    }
+
+    // writeLog the Thread blockint for each modscan n million iterations
     void writeLogThread(int thread, mpz_t blockint) 
     {
         if (islogging) {

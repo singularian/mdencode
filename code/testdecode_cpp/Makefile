@@ -33,6 +33,7 @@ sync:
 	cp $(MDZIP)/mdBlockhash.h mdCore
 	cp $(MDZIP)/mdFilehash.h mdCore
 	cp $(MDZIP)/mdHashContextList.h mdCore
+	cp $(MDZIP)/mdMutexLog.h mdCore
 	cp $(MDZIP)/mdRandom.h mdCore
 	cp $(MDZIP)/mdRegisters.h mdCore	
 	perl -i -pe "s/external/\.\.\/mdzip_cpp\/external/g" mdCore/mdFilehash.h
