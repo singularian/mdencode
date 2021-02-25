@@ -33,6 +33,7 @@ sync:
 	cp $(MDZIP)/mdBlockhash.h mdCore
 	cp $(MDZIP)/mdFilehash.h mdCore
 	cp $(MDZIP)/mdHashContextList.h mdCore
+	cp $(MDZIP)/modscanFile.h mdCore/modscan.h
 	cp $(MDZIP)/mdMutexLog.h mdCore
 	cp $(MDZIP)/mdRandom.h mdCore
 	cp $(MDZIP)/mdRegisters.h mdCore	

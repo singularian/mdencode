@@ -99,17 +99,16 @@ public:
     //    if the totalthreadnumber = 32 
     //    modulusThreadInt0  = modulus * 0
     //    modulusThreadInt31 = modulus * 31
-    void writeLogThreadFloor(int thread, int threadcount, int modexponent, mpz_t modulusExpInt, mpz_t modulusTotalThreadInt, mpz_t modulusThreadInt) 
+    void writeLogThreadFloor(int thread, int threadcount, mpz_t modulusTotalThreadInt, mpz_t modulusThreadInt) 
     {
         if (islogging && logThreadFloor) {
            mutex.lock();
 
-           /* Write a message */
-           mpz_class modExpInt(modulusExpInt);
+           /* Log the modulus thread multiples */
            mpz_class modInt(modulusTotalThreadInt);
            mpz_class modThreadInt(modulusThreadInt);
-           PLOGD << "tnum " << std::to_string(thread) << "/" << std::to_string(threadcount) << " modbase exp 2 ^ " <<  std::to_string(modexponent) 
-           << " = " << modExpInt.get_str()
+
+           PLOGD << "tnum " << std::to_string(thread) << "/" << std::to_string(threadcount)
            << "; modthreadtotalint = " << modInt.get_str() << "; modthreadint = mod * " << std::to_string(thread) <<  " = " << modThreadInt.get_str();
  
            // only log this once 

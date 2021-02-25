@@ -163,14 +163,13 @@ class modscan
        // gmp_printf("\nmodscan blockint modulus incrementer %Zd", blockInt);
        // cout << endl;
 
-       if (log->checkIfLogging()) log->mdMutexLog::writeLogThreadFloor(threadnumber, threadcount, exponent, modulusExpInt, modulusInt, modulusThreadInt);
+       // log the initial thread floor 
+       // should add some initial logging here for the initial blockInt
+       if (log->checkIfLogging()) log->mdMutexLog::writeLogThreadFloor(threadnumber, threadcount, modulusInt, modulusThreadInt);
 
-
-       uint8_t results[40];
        int n;
        int diff;
 
-       // should add some initial logging here for the initial blockInt
 
        while (stop == false)
        {
@@ -210,7 +209,7 @@ class modscan
               }
            }
           
-
+           // increment by the modulusInt 
            mpz_add (blockInt, blockInt, modulusInt);
            lineNum++;
         }
