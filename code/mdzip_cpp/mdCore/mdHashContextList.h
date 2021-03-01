@@ -30,10 +30,11 @@
 #include "mdRandom.h"
 #include "mdRegisters.h"
 
+// TODO should add a keylist type for setting the keylist separately from the hash block or file list
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
 // signatures enum list
 enum signatures {FIRST, CIT64, CRC32, CRC64, EDN224, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HAS160, HW64, MD2s, MD4s, MD5s, MD6, 
-                MD62, MET641, MET642, MX3, PNG, RIPE128, RIPE160, RIPE256, RIPE320, SEA, SIP32, SIP322, SIP48, SIP64, SIP128, 
+                MD62, MET641, MET642, MX3, PNG, RIPE128, RIPE160, RIPE256, RIPE320, SEA, SIP32, SIP322, SIP40, SIP48, SIP64, SIP128, 
                 SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, 
                 SPK32, SPK64, TIGER192, XXH32, XXH64, WP, WYH, LAST};
 
@@ -60,7 +61,7 @@ Hashlist mdHashlist[LAST] = {
     {7,  "fnv32",    "FNV-1  32",             false,    4,      0},
     {8,  "fnv32a",   "FNV-1a 32",             false,    4,      0},
     {9,  "fnv64",    "FNV-1  64",             false,    8,      0},
-    {10,  "fnv64a",   "FNV-1a 64",             false,    8,      0},
+    {10, "fnv64a",   "FNV-1a 64",             false,    8,      0},
     {11, "has160",   "HAS 160",               false,    20,     0},
     {12, "hw64",     "Highway Hash 64",       true,     8,      32},
     {13, "md2",      "MD2",                   false,    16,     0},
@@ -79,23 +80,24 @@ Hashlist mdHashlist[LAST] = {
     {26, "sea64",    "Seahash 64",            true,     8,      8},
     {27, "sip32",    "Siphash 32",            true,     4,      16},
     {28, "sip322",   "Siphash 32b",           true,     4,      16},
-    {29, "sip48",    "Siphash 48",            true,     6,      16},
-    {30, "sip64",    "Siphash 64",            true,     8,      16},
-    {31, "sip128",   "Siphash 128",           true,     16,     16},
-    {32, "sha1_64",  "SHA1 64",               false,    8,      0},
-    {33, "sha1_128", "SHA1 128",              false,    16,     0},
-    {34, "sha1",     "SHA1",                  false,    20,     0},
-    {35, "sha256",   "SHA 256",               false,    32,     0},
-    {36, "sha384",   "SHA 384",               false,    48,     0},
-    {37, "sha512",   "SHA 512",               false,    64,     0},
-    {38, "spk32",    "Spooky 32",             true,     4,      4},
-    {39, "spk64",    "Spooky 64",             true,     8,      8},
-    {40, "tgr",      "Tiger 192",             false,    24,     0},
-    {41, "xxh32",    "xxHash32",              true,     4,      4},
-    {42, "xxh64",    "xxHash64",              true,     8,      8},
-    {43, "whp",      "Whirlpool",             false,    64,     0},
-    {44, "wy64",     "WYhash 64",             true,     8,      48},
-    {45, "last",     "Unused Signature",      false,    8,      0}
+    {29, "sip40",    "Siphash 40",            true,     5,      16},
+    {30, "sip48",    "Siphash 48",            true,     6,      16},
+    {31, "sip64",    "Siphash 64",            true,     8,      16},
+    {32, "sip128",   "Siphash 128",           true,     16,     16},
+    {33, "sha1_64",  "SHA1 64",               false,    8,      0},
+    {34, "sha1_128", "SHA1 128",              false,    16,     0},
+    {35, "sha1",     "SHA1",                  false,    20,     0},
+    {36, "sha256",   "SHA 256",               false,    32,     0},
+    {37, "sha384",   "SHA 384",               false,    48,     0},
+    {38, "sha512",   "SHA 512",               false,    64,     0},
+    {39, "spk32",    "Spooky 32",             true,     4,      4},
+    {40, "spk64",    "Spooky 64",             true,     8,      8},
+    {41, "tgr",      "Tiger 192",             false,    24,     0},
+    {42, "xxh32",    "xxHash32",              true,     4,      4},
+    {43, "xxh64",    "xxHash64",              true,     8,      8},
+    {44, "whp",      "Whirlpool",             false,    64,     0},
+    {45, "wy64",     "WYhash 64",             true,     8,      48},
+    {46, "last",     "Unused Signature",      false,    8,      0}
 };
 
 
@@ -275,7 +277,10 @@ public:
                     break;  
                   case SIP322: 
                     rf.read(reinterpret_cast<char*>(&hregister[0].sipkey322), 16);
-                    break;    
+                    break;  
+                  case SIP40: 
+                    rf.read(reinterpret_cast<char*>(&hregister[0].sipkey40), 16);
+                    break;       
                   case SIP48: 
                     rf.read(reinterpret_cast<char*>(&hregister[0].sipkey48), 16);
                     break;  
@@ -402,7 +407,10 @@ public:
                     break;
                   case SIP322: 
                     wf.write(reinterpret_cast<char*>(&hregister[0].sipkey322), 16);
-                    break;  
+                    break; 
+                  case SIP40: 
+                    wf.write(reinterpret_cast<char*>(&hregister[0].sipkey40), 16);
+                    break;      
                   case SIP48: 
                     wf.write(reinterpret_cast<char*>(&hregister[0].sipkey48), 16);
                     break;                        
@@ -529,7 +537,10 @@ public:
                     break;
                   case SIP322:
                     genRandomUnsignedByteBlock2(hregister[0].sipkey322, 16); 
-                    break;     
+                    break;    
+                  case SIP40:
+                    genRandomUnsignedByteBlock2(hregister[0].sipkey40, 16); 
+                    break;    
                   case SIP48:
                     genRandomUnsignedByteBlock2(hregister[0].sipkey48, 16); 
                     break;    
@@ -670,7 +681,10 @@ public:
                     break; 
                   case SIP322: 
                     rf.read(reinterpret_cast<char*>(&hregister[0].siphash322i), hashblocksize);
-                    break;   
+                    break; 
+                  case SIP40: 
+                    rf.read(reinterpret_cast<char*>(&hregister[0].siphash40i), hashblocksize);
+                    break;    
                   case SIP48: 
                     rf.read(reinterpret_cast<char*>(&hregister[0].siphash48i), hashblocksize);
                     break;   
@@ -818,6 +832,9 @@ public:
                   case SIP322: 
                     wf.write(reinterpret_cast<char*>(&hregister[0].siphash322i), hashblocksize);
                     break; 
+                  case SIP40: 
+                    wf.write(reinterpret_cast<char*>(&hregister[0].siphash40i), hashblocksize);
+                    break;   
                   case SIP48: 
                     wf.write(reinterpret_cast<char*>(&hregister[0].siphash48i), hashblocksize);
                     break;  
@@ -971,7 +988,10 @@ public:
                     break;  
                   case SIP322: 
                     getFileHashSiphash128((char *) filename.c_str(), hregister[0].siphash322i, hregister[0].sipkey322);
-                    break;                                      
+                    break;   
+                  case SIP40: 
+                    getFileHashSiphash128((char *) filename.c_str(), hregister[0].siphash40i, hregister[0].sipkey40);
+                    break;                                       
                   case SIP48: 
                     getFileHashSiphash128((char *) filename.c_str(), hregister[0].siphash48i, hregister[0].sipkey48);
                     break;    
@@ -1148,7 +1168,11 @@ public:
                   case SIP322:
                     getFileHashSiphash128((char *) filename.c_str(), hregister[0].siphash322o, hregister[0].sipkey322);
                     if (memcmp(hregister[0].siphash322i, hregister[0].siphash322o, 4) != 0) return false;
-                    break;    
+                    break; 
+                  case SIP40:
+                    getFileHashSiphash128((char *) filename.c_str(), hregister[0].siphash40o, hregister[0].sipkey40);
+                    if (memcmp(hregister[0].siphash40i, hregister[0].siphash40o, 5) != 0) return false;
+                    break;      
                   case SIP48:
                     getFileHashSiphash128((char *) filename.c_str(), hregister[0].siphash48o, hregister[0].sipkey48);
                     if (memcmp(hregister[0].siphash48i, hregister[0].siphash48o, 6) != 0) return false;
@@ -1316,6 +1340,9 @@ public:
                     break; 
                   case SIP322:
                     siphash(byteblock, blocksize, hregister[0].sipkey322, hregister[0].siphash322i, 16);
+                    break;   
+                  case SIP40:
+                    siphash(byteblock, blocksize, hregister[0].sipkey40, hregister[0].siphash40i, 16);
                     break;   
                   case SIP48:
                     siphash(byteblock, blocksize, hregister[0].sipkey48, hregister[0].siphash48i, 16);
@@ -1492,7 +1519,11 @@ public:
                   case SIP322:
                     siphash(byteblock, blocksize, hregister[0].sipkey322, hregister[0].siphash322o, 16);
                     if (memcmp(hregister[0].siphash322i, hregister[0].siphash322o, hashblocksize) != 0) return false;
-                    break;  
+                    break;
+                  case SIP40:
+                    siphash(byteblock, blocksize, hregister[0].sipkey40, hregister[0].siphash40o, 16);
+                    if (memcmp(hregister[0].siphash40i, hregister[0].siphash40o, hashblocksize) != 0) return false;
+                    break;     
                   case SIP48:
                     siphash(byteblock, blocksize, hregister[0].sipkey48, hregister[0].siphash48o, 16);
                     if (memcmp(hregister[0].siphash48i, hregister[0].siphash48o, hashblocksize) != 0) return false;
@@ -1662,7 +1693,11 @@ public:
                   case SIP322:
                      ss << std::get<1>(hash) << " keys ";
                      addHashToDisplayStream((unsigned char*) hregister[0].sipkey322, 16);
-                     break;     
+                     break;   
+                  case SIP40:
+                     ss << std::get<1>(hash) << " keys ";
+                     addHashToDisplayStream((unsigned char*) hregister[0].sipkey40, 16);
+                     break;       
                   case SIP48:
                      ss << std::get<1>(hash) << " keys ";
                      addHashToDisplayStream((unsigned char*) hregister[0].sipkey48, 16);
@@ -1821,14 +1856,17 @@ public:
                      break;  
                   case SIP322:
                      addHashToDisplayStream(hregister[0].siphash322i, hashblocksize);
-                     break;     
+                     break;  
+                  case SIP40:
+                     addHashToDisplayStream(hregister[0].siphash40i, hashblocksize);
+                     break;        
                   case SIP48:
                      addHashToDisplayStream(hregister[0].siphash48i, hashblocksize);
                      break;      
                   case SIP64:
                      ss << std::to_string(hregister[0].siphash64i) << " ";
                      break;
-                   case SIP128:
+                  case SIP128:
                      addHashToDisplayStream(hregister[0].siphash128i, hashblocksize);
                      break;   
                   case SHA164:

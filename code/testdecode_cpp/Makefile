@@ -39,7 +39,7 @@ sync:
 	cp $(MDZIP)/mdRegisters.h mdCore	
 	perl -i -pe "s/external/\.\.\/mdzip_cpp\/external/g" mdCore/mdFilehash.h
 testdecode:
-	./decoderRandomTestHC2 --mod=64 --threads=32 --block=12 --hl 1-34
+	./decoderRandomTestHC2 --mod=64 --threads=32 --block=12 --hl 1-45
 testhash:
 	$(CC) -I. $(DEPS) tests/testHCL.cpp  -o testhcl $(LDLIBS)
 #	$(CC) tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11

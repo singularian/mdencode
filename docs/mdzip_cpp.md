@@ -282,22 +282,23 @@ ID          Hash Name   Description                   Key         Blocksize     
 26          sea64       Seahash 64                    true        8               8               
 27          sip32       Siphash 32                    true        4               16              
 28          sip322      Siphash 32b                   true        4               16              
-29          sip48       Siphash 48                    true        6               16              
-30          sip64       Siphash 64                    true        8               16              
-31          sip128      Siphash 128                   true        16              16              
-32          sha1_64     SHA1 64                       false       8               0               
-33          sha1_128    SHA1 128                      false       16              0               
-34          sha1        SHA1                          false       20              0               
-35          sha256      SHA 256                       false       32              0               
-36          sha384      SHA 384                       false       48              0               
-37          sha512      SHA 512                       false       64              0               
-38          spk32       Spooky 32                     true        4               4               
-39          spk64       Spooky 64                     true        8               8               
-40          tgr         Tiger 192                     false       24              0               
-41          xxh32       xxHash32                      true        4               4               
-42          xxh64       xxHash64                      true        8               8               
-43          whp         Whirlpool                     false       64              0               
-44          wy64        WYhash 64                     true        8               48              
+29          sip40       Siphash 40                    true        5               16              
+30          sip48       Siphash 48                    true        6               16              
+31          sip64       Siphash 64                    true        8               16              
+32          sip128      Siphash 128                   true        16              16              
+33          sha1_64     SHA1 64                       false       8               0               
+34          sha1_128    SHA1 128                      false       16              0               
+35          sha1        SHA1                          false       20              0               
+36          sha256      SHA 256                       false       32              0               
+37          sha384      SHA 384                       false       48              0               
+38          sha512      SHA 512                       false       64              0               
+39          spk32       Spooky 32                     true        4               4               
+40          spk64       Spooky 64                     true        8               8               
+41          tgr         Tiger 192                     false       24              0               
+42          xxh32       xxHash32                      true        4               4               
+43          xxh64       xxHash64                      true        8               8               
+44          whp         Whirlpool                     false       64              0               
+45          wy64        WYhash 64                     true        8               48                 
 ```                                                                                                 
 
 # MDzip C++ No Header Simplified Usage 
@@ -574,6 +575,96 @@ Elapsed Time (s) 220182.811267 - 61.16 hours
 Modulus Scan thread 31 and Random byteblock match
 0   0   0   32  32  65  33  97  18  63  24  34  255 252
 0   0   0   32  32  65  33  97  18  63  24  34  255 252
+```
+
+## Example 2: decoderRandomTestHC2 Tests
+
+This a new test run on a Ryzen 3950x with 11/12 encoding. It saves one byte of data during compression.  
+This test uses `decoderRandomTestHC2`.   
+
+11/12 Modulus Encoding  
+- 6 bytes for the 48-bit Siphash 64 Chop - (It also has a 16-byte key)
+- 4 bytes for the 32-bit modulus 
+- 1 byte for the modulus exponent 
+
+```
+./decoderRandomTestHC2 --mod=32 --hl 29 --randbh --hex=000001d033FF112F2C232111 --log
+
+Start Time               Sat Feb 27 23:50:28 2021
+Block Size               12
+Random Byteblock         000001D033FF112F2C232111
+                         1   2   3   4   5   6   7   8   9   10  11  12
+Random Byteblock Hex     00  00  01  D0  33  FF  11  2F  2C  23  21  11
+Random Byteblock Int     0   0   1   208 51  255 17  47  44  35  33  17
+Random Byteblock Bigint  8563035982510529126673
+Modulus Size             32
+Modulus Bigint           4294967296
+Modulus Remainder        740499729
+Modulus 2   ^ Exponent   72
+Modulus Mod ^ Exponent   2
+Block Signatures         sip48 739E3BBF9C0D
+Blockkeylist             sip48 keys 1D22285839EBC9A802F2378CAC0A6727
+Thread Count             32
+Logging                  true
+
+Hash Block Vector
+Number      Hash ID      Hash Name   Blocksize   Blockkeysize
+1           29           sip48       6           16
+                         Total       6           16
+
+Running decode modscan
+
+Found Match
+
+Elapsed Time (s) 9859.919956
+Modulus Scan thread 15 and Random byteblock match
+0   0   1   208 51  255 17  47  44  35  33  17
+0   0   1   208 51  255 17  47  44  35  33  17
+```
+
+## Example 3: decoderRandomTestHC2 Tests
+
+This a new test run on a Ryzen 3950x with 10/11 encoding. It saves one byte of data during compression. 
+The program uses `decoderRandomTestHC2`. It compresses 11 bytes to 10 bytes. It decompresses back to 11 bytes.    
+
+10/11 Modulus Encoding  
+- 5 bytes for the 40-bit Siphash 64 Chop - (It also has a 16-byte key)
+- 4 bytes for the 32-bit modulus 
+- 1 byte for the modulus exponent
+
+```
+decoderRandomTestHC2 --mod=32 --hl 29 --randbh --hex=0001d033FF112F2C232111 --log
+
+Start Time               Sun Feb 28 17:46:52 2021
+Block Size               11
+Random Byteblock         0001D033FF112F2C232111
+                         1   2   3   4   5   6   7   8   9   10  11  
+Random Byteblock Hex     00  01  D0  33  FF  11  2F  2C  23  21  11  
+Random Byteblock Int     0   1   208 51  255 17  47  44  35  33  17  
+Random Byteblock Bigint  8563035982510529126673
+Modulus Size             32
+Modulus Bigint           4294967296
+Modulus Remainder        740499729
+Modulus 2   ^ Exponent   72
+Modulus Mod ^ Exponent   2
+Block Signatures         sip40 D169FB7F37 
+Blockkeylist             sip40 keys 55BA99EA27E137AAA709A3CF6B1809C7 
+Thread Count             32
+Logging                  true
+
+Hash Block Vector
+Number      Hash ID      Hash Name   Blocksize   Blockkeysize
+1           29           sip40       5           16         
+                         Total       5           16
+
+Running decode modscan
+
+Found Match
+
+Elapsed Time (s) 9345.232866
+Modulus Scan thread 15 and Random byteblock match
+0   1   208 51  255 17  47  44  35  33  17  
+0   1   208 51  255 17  47  44  35  33  17  
 ```
 
 # TODO List
