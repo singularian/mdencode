@@ -69,8 +69,11 @@ int main (int argc, char **argv) {
 
      // set logging
      bool runlogging = false;
-     // app.add_option("-l,--log", runlogging, "Run Logging");
      app.add_flag("--log", runlogging, "Run Logging");
+
+     // set debug
+     bool debug = false;;
+     app.add_flag("--debug", debug, "Run Dubug");
 
      // run post mdunzip validation 
      bool validate = false;

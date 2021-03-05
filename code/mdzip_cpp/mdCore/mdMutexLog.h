@@ -101,7 +101,7 @@ public:
     //    modulusThreadInt31 = modulus * 31
     void writeLogThreadFloor(int thread, int threadcount, mpz_t modulusTotalThreadInt, mpz_t modulusThreadInt) 
     {
-        if (islogging && logThreadFloor) {
+        //if (islogging && logThreadFloor) {
            mutex.lock();
 
            /* Log the modulus thread multiples */
@@ -114,7 +114,7 @@ public:
            // only log this once 
            if (thread == (threadcount - 1)) logThreadFloor = false;
            mutex.unlock();
-        }
+        //}
     }
 
     // writeLog the Thread blockint for each modscan n million iterations

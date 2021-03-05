@@ -38,7 +38,7 @@ class modscan
        mpz_t remainder;
        mpz_t modulusInt; 
        mpz_t modulusThreadInt; 
-       mpz_t modulusExpInt; 
+       mpz_t modulusExpIntFloor; 
        mpz_t modulusExpIntCeil; 
        mpz_t blockInt;
        // hash context list
@@ -57,7 +57,7 @@ class modscan
        mpz_init_set_ui(modulusThreadInt, 0);
        // mpz_init_set_ui(modulusThreadInt, threadnumber); // exponent floor
        // mpz_inits(remainder, modulusInt, modulusExpInt, blockInt, NULL);
-       mpz_inits(remainder, modulusInt, modulusThreadInt, modulusExpInt, modulusExpIntCeil, NULL);
+       mpz_inits(remainder, modulusInt, modulusThreadInt, modulusExpIntFloor, modulusExpIntCeil, NULL);
        // initialize the byte block bigint
        // mpz_init_set_str(blockInt, "0", 10);
        // mpz_init2 (blockInt, blocksize * 8); // For preallocating the size and padding
@@ -67,15 +67,16 @@ class modscan
     // Destructor
     ~modscan()
     {
-       std::cout << "Destroying modscan" << endl;
-       mpz_clears(two, modremainder, remainder, modulusInt, modulusThreadInt, modulusExpInt, modulusExpIntCeil, blockInt, NULL);
+       std::cout << "Destroying modscan" << std::endl;
+       mpz_clears(two, modremainder, remainder, modulusInt, modulusThreadInt, modulusExpIntFloor, modulusExpIntCeil, blockInt, NULL);
 
        if (sizeof(byteblock) / sizeof(byteblock[0]) != 0) {
-           cout << "Free byteblock" << endl;
+           std::cout << "Free byteblock" << std::endl;
            delete []byteblock;
        }
     }
 
+    // set the Modscan parameters
     void setModscan(mdMutexLog *mdmutexlog, int bytesorder, int end, mpz_t rem, mpz_t modint, int exp, int modexp, int blocks, int threadnum, int threadcnt, mdMutex *mdmutex) {
 
         log      = mdmutexlog;
@@ -93,79 +94,51 @@ class modscan
         threadcount  = threadcnt;
         stop         = false;
         stopped      = false;
-        
-    // ==================================================================
-    // test code
-    /*if (threadnum == 0) {
-        printf("modulus blocksize %d \n",  blocksize);
-        printf("modulus exponent1 %d \n",  exponent);
-        printf("modulus exponent2 %d \nmodulus int ",  modexponent);
-        gmp_printf("modulus int %Zd\n", modulusInt);
-        gmp_printf("modulus int remainder %Zd\n", remainder);
-        gmp_printf("starting block int %Zd\n", blockInt);
-    }*/
-    // ==================================================================
 
+        // set the modulus exponent floor  
+        mpz_pow_ui (modulusExpIntFloor, two, exponent);
+        convertFloorBase2(modulusExpIntFloor, modulusInt);
+
+        // set the exponent ceiling
+        mpz_pow_ui (modulusExpIntCeil, two, exponent + 1);
+
+        // add the 2 log blockInt to the blockInt 
+        // 2 ^ exp less than the blockInt
+        // modremainder is set in convertFloorBase2()
+        // TODO create a decrementing modscan
+        mpz_add (blockInt, blockInt, modremainder);
+
+        // set the modulusThreadInt which is initialized as zero
+        // add the modulusThreadInt + threadnumber
+        // it expects the threadnumber argument to be an unsigned long int or it doesn't multiply correctly
+        mpz_add_ui (modulusThreadInt, modulusThreadInt, (unsigned long int) threadnumber);
+
+        // multiply the modulusInt * the modulusThreadInt which was previously set to the threadnumber
+        mpz_mul (modulusThreadInt, modulusThreadInt, modulusInt);
+       
+        // add the modulusThreadInt to the starting blockInt
+        mpz_add (blockInt, blockInt, modulusThreadInt); 
+   
+        // multiply the modulusInt * threadcount
+        // the threadcount must be 1 or greater
+        // mpz_mul_si (mpz_t rop, const mpz_t op1, long int op2)
+        mpz_mul_si (modulusInt, modulusInt, (long int) threadcount);
+
+        // log the initial thread floor 
+        // should add some initial logging here for the initial blockInt, exponent, modexponent, remainder, blockInt
+        if (log->checkIfLogging()) log->mdMutexLog::writeLogThreadFloor(threadnumber, threadcount, modulusInt, modulusThreadInt);
+        
         byteblock = new unsigned char[blocksize];
 
-
     }
- 
-    void printname() 
-    { 
-       std::cout << "Filename is: " << filename << endl; 
-    } 
 
+    // decode the byte block
     int decode()
     {
-       // std::cout << endl << "Running decode modscan" << endl << endl;
-
        size_t count;
        int lineNum = 0;
        int lineCount = 100000000;
        lineCount = lineCount + (1000000 * (threadnumber + 1));
-
-       // need to change this to use the 2^exp 
-       // calculate the modulus raised to the exponent
-       // mpz_pow_ui (modulusExpInt, 2, modsize);
-       ///if (modexponent > 1) {
-           //// mpz_pow_ui (modulusExpInt, modulusInt, modexponent);
-           // add the modulus ^ modulus exponent to the block int 
-           //// mpz_add (blockInt, blockInt, modulusExpInt);
-       //}
-       // mpz_pow_ui (modulusExpInt, modulusInt, modexponent);
-       mpz_pow_ui (modulusExpInt, two, exponent);
-       convertFloorBase2(modulusExpInt, modulusInt);
-
-       // set the exponent ceiling
-       mpz_pow_ui (modulusExpIntCeil, two, exponent + 1);
-
-       // add the modulus ^ modulus exponent to the block int 
-       mpz_add (blockInt, blockInt, modremainder);
-
-       // set the modulusThreadInt which is zero
-       // add the modulusThreadInt + threadnumber
-       // it expects the threadnumber argument to be an unsigned long int or it doesn't multiply correctly
-       mpz_add_ui (modulusThreadInt, modulusThreadInt, (unsigned long int) threadnumber);
-
-       // multiply the modulusInt * the modulusThreadInt which was previously set to the threadnumber
-       mpz_mul (modulusThreadInt, modulusThreadInt, modulusInt);
-       
-       // add the modulusThreadInt to the starting blockInt
-       mpz_add (blockInt, blockInt, modulusThreadInt); 
-   
-       // multiply the modulusInt * threadcount
-       // the threadcount must be 1 or greater
-       // mpz_mul_si (mpz_t rop, const mpz_t op1, long int op2)
-       mpz_mul_si (modulusInt, modulusInt, (long int) threadcount);
-
-       // need to check the initial floor for 0011 byte block
-       // gmp_printf("\nmodscan blockint modulus incrementer %Zd", blockInt);
-       // cout << endl;
-
-       // log the initial thread floor 
-       // should add some initial logging here for the initial blockInt
-       if (log->checkIfLogging()) log->mdMutexLog::writeLogThreadFloor(threadnumber, threadcount, modulusInt, modulusThreadInt);
 
        int n;
        int diff;
@@ -193,7 +166,7 @@ class modscan
                mutexref->mdMutex::setMatched(threadnumber);
                break;
            } else {
-              if (lineNum > lineCount) {
+            if (lineNum > lineCount) {
                  lineNum = 0;
                  log->mdMutexLog::writeLogThread(threadnumber, blockInt);
 
@@ -219,6 +192,7 @@ class modscan
     }
 
     // converts 2 ^ exp to the modulus floor ^ exp
+    // TODO Need to make a better exponential floor with the decimal exponent or exponent +- modulus multiple
     void convertFloorBase2(mpz_t modfloor, mpz_t modint) {
         mpz_t mfloor;
         mpz_t zero;
@@ -278,23 +252,44 @@ class modscan
 
         mpz_init_set_str(remainder, "0", 10); 
         mpz_init_set_str(modremainder, "0", 10); // exponent floor
-        mpz_init_set_str(modulusInt, "0", 10);
+        // mpz_init_set_str(modulusInt, "0", 10);
         mpz_init_set_str(blockInt, "0", 10);
-        mpz_init_set_ui(modulusThreadInt, 0);
 
         mpz_add (remainder, remainder, rem);
-        mpz_add (modulusInt, modulusInt, modint);
+        // mpz_add (modulusInt, modulusInt, modint);
         mpz_add (blockInt, blockInt, remainder);
 
-/*        if (threadnum == 0) {
-        printf("modulus blocksize %d \n",  blocksize);
-        printf("modulus exponent1 %d \n",  exponent);
-        printf("modulus exponent2 %d \nmodulus int ",  modexponent);
-        gmp_printf("modulus int %Zd\n", modulusInt);
-        gmp_printf("modulus int remainder %Zd\n", remainder);
-        gmp_printf("starting block int %Zd\n", blockInt);
-        }
-*/
+        // set the modulus exponent floor  
+        mpz_pow_ui (modulusExpIntFloor, two, exponent);
+        convertFloorBase2(modulusExpIntFloor, modulusInt);
+
+        // set the exponent ceiling
+        mpz_pow_ui (modulusExpIntCeil, two, exponent + 1);
+
+        // add the 2 log blockInt to the blockInt 
+        // 2 ^ exp less than the blockInt
+        // modremainder is set in convertFloorBase2()
+        // TODO create a decrementing modscan
+        mpz_add (blockInt, blockInt, modremainder);
+
+        /// ===============================================================
+        // this is already set in the initializer
+        // set the modulusThreadInt which is initialized as zero
+        // add the modulusThreadInt + threadnumber
+        // it expects the threadnumber argument to be an unsigned long int or it doesn't multiply correctly
+        // mpz_add_ui (modulusThreadInt, modulusThreadInt, (unsigned long int) threadnumber);
+
+        // multiply the modulusInt * the modulusThreadInt which was previously set to the threadnumber
+        // mpz_mul (modulusThreadInt, modulusThreadInt, modulusInt);
+        /// ===============================================================
+       
+        // add the modulusThreadInt to the starting blockInt
+        mpz_add (blockInt, blockInt, modulusThreadInt); 
+
+        // log the initial thread floor 
+        // should add some initial logging here for the initial blockInt, exponent, modexponent, remainder, blockInt
+        // if (log->checkIfLogging()) log->mdMutexLog::writeLogThreadFloor(threadnumber, threadcount, modulusInt, modulusThreadInt);
+
     }
 
 }; 
