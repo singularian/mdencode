@@ -191,7 +191,7 @@ class modscan
 
     }
 
-    // converts 2 ^ exp to the modulus floor ^ exp
+    // converts 2 ^ exp to the modulus * multiple
     // TODO Need to make a better exponential floor with the decimal exponent or exponent +- modulus multiple
     void convertFloorBase2(mpz_t modfloor, mpz_t modint) {
         mpz_t mfloor;
