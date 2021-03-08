@@ -30,6 +30,7 @@ all:
 test:
 	$(CC) -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 $(LDLIBS)
 sync:
+	cp $(MDZIP)/mdCommon.h mdCore
 	cp $(MDZIP)/mdBlockhash.h mdCore
 	cp $(MDZIP)/mdFilehash.h mdCore
 	cp $(MDZIP)/mdHashContextList.h mdCore

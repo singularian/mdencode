@@ -22,19 +22,20 @@
 #include <ctime>
 #include <iostream>
 #include <sstream>
+#include "stdio.h"
 #include <gmp.h>
 #include <gmpxx.h>
 #include <string>
 #include <time.h>
 #include <vector>
-#include "../mdzip_cpp/external/CLI11.hpp" 
+#include "../mdzip_cpp/external/CLI11.hpp"
 #include "mdCore/mdCommon.h"
 #include "mdCore/mdMutex.h"
 #include "mdCore/mdMutexLog.h"
 #include "mdCore/mdHashContextList.h"
 #include "mdCore/modscan.h"
 #include "string.h"
-#include "stdio.h"
+
 
 using namespace std;
 
@@ -167,6 +168,10 @@ int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector
 
      // calculate the modulus 2 ^ modsize 
      mpz_ui_pow_ui (modulusInt, 2, modsize);
+     // subtract 1 from the modulusInt
+     // 2^modsize - 1
+     // 32-bits example 4,294,967,295 (23^2 − 1)
+     mpz_sub_ui(modulusInt, modulusInt, 1);
 
      // calculate the modulus remainder 
      mpz_mod (remainder, byteblockInt, modulusInt); 
@@ -412,7 +417,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
           result << setw(4) <<  std::left << setfill(' ') << std::to_string((f + 1));
      }
 
-     result << endl;
+     result << std::endl;
 
      // write the byteblock hex
      result << "Random Byteblock Hex     ";
@@ -425,7 +430,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
           result << setw(pad) << std::uppercase << std::hex << setfill(' ') << (int)byteblock[f];
           pad = 4;
      }
-     result << endl;
+     result << std::endl;
 
      // write the byteblock integer number
      result << "Random Byteblock Int     ";
@@ -455,7 +460,7 @@ void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t
      result << hashlist << std::endl;
      
      // result << std::left << std::setw(20) << "Blockkeylist: "   << blockkeys << std::endl;
-     result << "Blockkeylist             " << blockkeys << std::endl;
+     result << "Blockkeylist             " << blockkeys << std::endl;    
      result << "Thread Count             " << std::to_string(threadcount) << std::endl;
      result << "Logging                  " << boolalpha << log->checkIfLogging() << std::endl << std::endl;
      result << "Hash Block Vector" << std::endl;
