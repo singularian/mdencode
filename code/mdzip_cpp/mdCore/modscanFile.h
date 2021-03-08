@@ -97,9 +97,10 @@ class modscan
 
         // set the modulus exponent floor  
         mpz_pow_ui (modulusExpIntFloor, two, exponent);
-        convertFloorBase2(modulusExpIntFloor, modulusInt);
         // subtract 1 from modulusExpIntFloor
-        // mpz_sub_ui(modulusExpIntFloor, modulusExpIntFloor, 1);
+        mpz_sub_ui(modulusExpIntFloor, modulusExpIntFloor, 1);
+        // calculate the exponent floor
+        convertFloorBase2(modulusExpIntFloor, modulusInt);
 
         // set the exponent ceiling
         mpz_pow_ui (modulusExpIntCeil, two, exponent + 1);
@@ -213,8 +214,8 @@ class modscan
 
         // ./decoderRandomTestHC2 --mod=13 --threads=31 --bh=6-8,23,33,34 --hl 1 --randbh --block=12 --hex=001112  
         } else {
-          mpz_sub(modremainder, modremainder, modfloor); // original
-          // mpz_sub(modremainder, modfloor, modremainder);
+          // mpz_sub(modremainder, modremainder, modfloor); // original
+          mpz_sub(modremainder, modfloor, modremainder);
 
         }
 
@@ -267,9 +268,10 @@ class modscan
 
         // set the modulus exponent floor  
         mpz_pow_ui (modulusExpIntFloor, two, exponent);
-        convertFloorBase2(modulusExpIntFloor, modulusInt);
         // subtract 1 from modulusExpIntFloor
-        // mpz_sub_ui(modulusExpIntFloor, modulusExpIntFloor, 1);
+        mpz_sub_ui(modulusExpIntFloor, modulusExpIntFloor, 1);
+        // calculate the exponent floor
+        convertFloorBase2(modulusExpIntFloor, modulusInt);
 
         // set the exponent ceiling
         mpz_pow_ui (modulusExpIntCeil, two, exponent + 1);
