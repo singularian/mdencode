@@ -76,21 +76,29 @@ long CalcFileBlocksRemainder(long filesize, long blocksize) {
 
 // calculates an exponent of 2 less than the byte block int
 // this is used in mdzip.cpp to set the modulus floor
-// 2 ^ exponent < byteblock bigint
+// 2 ^ exponent - 1 <= byteblock bigint
 int calcExponent (mpz_t blockint) {
     int exponent = 0;
 
-    mpz_t two, result;
+    mpz_t two, exponentInt, result;
 
     mpz_init_set_str(two, "2", 10);
-    mpz_init_set_str(result, "2", 10);
+    mpz_init_set_str(exponentInt, "2", 10);
+    mpz_init_set_str(result, "0", 10);
 
     do {
-      mpz_mul(result, result, two);
+      mpz_mul(exponentInt, exponentInt, two);
+      mpz_set(result, exponentInt);
+      // subtract 1 from the exponentInt
+      // 2^modsize - 1
+      // 32-bits example 4,294,967,295 (23^2 − 1)
+      mpz_sub_ui(result, result, 1);
+
       exponent++;
-    } while(mpz_cmp(result,blockint) < 0);
+    } while(mpz_cmp(result,blockint) <= 0);
 
     mpz_clear(two);
+    mpz_clear(exponentInt);
     mpz_clear(result);
 
     return exponent;
