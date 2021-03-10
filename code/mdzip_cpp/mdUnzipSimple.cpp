@@ -416,12 +416,13 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    mpz_init_set_str(modulusInt, "1", 10);
    mpz_init_set_str(modulusIntRemainder, "1", 10);
 
-   // calculate the modulus 2 ^ modsize 
-   mpz_ui_pow_ui (modulusInt, 2, modsize);
+   // calculate the modulus 2 ^ modsize - 1
+   //mpz_ui_pow_ui (modulusInt, 2, modsize);
    // subtract 1 from the modulusInt
    // 2^modsize - 1
-   // 32-bits example 4,294,967,295 (23^2 − 1)
-   mpz_sub_ui(modulusInt, modulusInt, 1);
+   // 32-bits example 4,294,967,295 (2^32 − 1)
+   // mpz_sub_ui(modulusInt, modulusInt, 1);
+   calcModulusInt(modulusInt, modsize);
 
    // calculate the file block count and last block size
    blockcount = CalcFileBlocks(filesize, blocksize);

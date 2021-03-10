@@ -177,14 +177,15 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      mpz_init_set_str(modulusInt, "1", 10);
      mpz_init_set_str(remainder, "0", 10);
 
-     // calculate the modulus bigint as 2 ^ modsize 
+     // calculate the modulus bigint as 2 ^ modsize - 1
      // example 2 ^ 32 for a 32 bit modulus
      // example 2 ^ 64 for a 64 bit modulus
-     mpz_ui_pow_ui (modulusInt, 2, modsize);
+     // mpz_ui_pow_ui (modulusInt, 2, modsize);
      // subtract 1 from the modulusInt
      // 2^modsize - 1
      // 32-bits example 4,294,967,295 (23^2 − 1)
-     mpz_sub_ui(modulusInt, modulusInt, 1);
+     // mpz_sub_ui(modulusInt, modulusInt, 1);
+     calcModulusInt(modulusInt, modsize);
     
      // need to make sure these are byte order independent
      // the block size header is currently 28 bytes

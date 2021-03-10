@@ -95,10 +95,12 @@ class modscan
         stop         = false;
         stopped      = false;
 
-        // set the modulus exponent floor  
-        mpz_pow_ui (modulusExpIntFloor, two, exponent);
+        // set the modulus exponent floor - 1 
+        // mpz_pow_ui (modulusExpIntFloor, two, exponent);
         // subtract 1 from modulusExpIntFloor
-        mpz_sub_ui(modulusExpIntFloor, modulusExpIntFloor, 1);
+        //mpz_sub_ui(modulusExpIntFloor, modulusExpIntFloor, 1);
+        calcModulusInt(modulusExpIntFloor, exponent);
+
         // calculate the exponent floor
         convertFloorBase2(modulusExpIntFloor, modulusInt);
 
@@ -266,10 +268,12 @@ class modscan
         // mpz_add (modulusInt, modulusInt, modint);
         mpz_add (blockInt, blockInt, remainder);
 
-        // set the modulus exponent floor  
-        mpz_pow_ui (modulusExpIntFloor, two, exponent);
+        // set the modulus exponent floor - 1 
+        //mpz_pow_ui (modulusExpIntFloor, two, exponent);
         // subtract 1 from modulusExpIntFloor
-        mpz_sub_ui(modulusExpIntFloor, modulusExpIntFloor, 1);
+        //mpz_sub_ui(modulusExpIntFloor, modulusExpIntFloor, 1);
+        calcModulusInt(modulusExpIntFloor, exponent);
+
         // calculate the exponent floor
         convertFloorBase2(modulusExpIntFloor, modulusInt);
 

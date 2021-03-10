@@ -74,6 +74,21 @@ long CalcFileBlocksRemainder(long filesize, long blocksize) {
 
 }
 
+// ==============================================
+// calculate the modulusInt 
+// modulusInt = 2 ^ modsize - 1
+// example 32-bits 4,294,967,295 (2^32 − 1)
+void calcModulusInt (mpz_t modulusInt, int modsize) {
+
+   // calculate the modulus 2 ^ modsize 
+   mpz_ui_pow_ui (modulusInt, 2, modsize);
+   
+   // subtract 1 from the modulusInt
+   mpz_sub_ui(modulusInt, modulusInt, 1);
+
+}  
+// ==============================================  
+
 // calculates an exponent of 2 less than the byte block int
 // this is used in mdzip.cpp to set the modulus floor
 // 2 ^ exponent < byteblock bigint
