@@ -85,7 +85,7 @@ void calcModulusInt (mpz_t modulusInt, int modsize) {
    // subtract 1 from the modulusInt
    mpz_sub_ui(modulusInt, modulusInt, 1);
 
-}  
+}   
 
 // calculates an exponent of 2 less than the byte block int
 // this is used in mdzip.cpp to set the modulus floor
@@ -226,10 +226,11 @@ std::vector<std::string> splitString(std::string &s, char delim) {
         return elems;
 }
 
-// convert a csv vector range string to an int vector
+// convert a csv or int vector range string to an int vector
 // this is for the CLI11 lambda function for hash lists
-// 1-3 12 19 20-22
-// output 1,2,3,12,19,20,21,22
+// range example 1-9 or numberstart dash number end
+// 1-3 12 19 20-22 = 1 3 12 19 20 21 22
+// 1-3,12,19,20-22 = 1 3 12 19 20 21 22
 bool splitRange(std::vector<std::string>& val, std::vector<int>& intvals, int signum) {
         char delim = '-';
         std::vector<std::string> v;
