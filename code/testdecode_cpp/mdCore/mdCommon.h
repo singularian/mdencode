@@ -74,6 +74,41 @@ long CalcFileBlocksRemainder(long filesize, long blocksize) {
 
 }
 
+// calculate the modulusInt 
+// modulusInt = 2 ^ modsize - 1
+// example 32-bits 4,294,967,295 (2^32 − 1)
+void calcModulusInt (mpz_t modulusInt, int modsize) {
+
+   // calculate the modulus 2 ^ modsize 
+   mpz_ui_pow_ui (modulusInt, 2, modsize);
+
+   // subtract 1 from the modulusInt
+   mpz_sub_ui(modulusInt, modulusInt, 1);
+
+}  
+
+// calculates an exponent of 2 less than the byte block int
+// this is used in mdzip.cpp to set the modulus floor
+// 2 ^ exponent < byteblock bigint
+int calcExponentOriginal (mpz_t blockint) {
+    int exponent = 0;
+
+    mpz_t two, result;
+
+    mpz_init_set_str(two, "2", 10);
+    mpz_init_set_str(result, "2", 10);
+
+    do {
+      mpz_mul(result, result, two);
+      exponent++;
+    } while(mpz_cmp(result,blockint) < 0);
+
+    mpz_clear(two);
+    mpz_clear(result);
+
+    return exponent;
+}
+
 // calculates an exponent of 2 less than the byte block int
 // this is used in mdzip.cpp to set the modulus floor
 // 2 ^ exponent - 1 <= byteblock bigint
@@ -91,7 +126,7 @@ int calcExponent (mpz_t blockint) {
       mpz_set(result, exponentInt);
       // subtract 1 from the exponentInt
       // 2^modsize - 1
-      // 32-bits example 4,294,967,295 (23^2 − 1)
+      // 32-bits example 4,294,967,295 (2^32 − 1)
       mpz_sub_ui(result, result, 1);
 
       exponent++;
@@ -108,6 +143,7 @@ int calcExponent (mpz_t blockint) {
 // This isn't really used
 // It's more for Convenience to show the alternative exponent in decoderRandomTestHC.cpp
 // mod ^ exponent < byteblock bigint
+// Only used in decoderRandomTestHC.cpp
 int calcExponentModulus (mpz_t modulus, mpz_t blockint) {
     int exponent = 0;
 
