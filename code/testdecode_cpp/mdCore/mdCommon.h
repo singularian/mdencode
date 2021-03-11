@@ -112,6 +112,9 @@ int calcExponentOriginal (mpz_t blockint) {
 // calculates an exponent of 2 less than the byte block int
 // this is used in mdzip.cpp to set the modulus floor
 // 2 ^ exponent - 1 <= byteblock bigint
+//
+// This allows for max byteblocks modulus floors
+// ie FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF = 2 ^ 136
 int calcExponent (mpz_t blockint) {
     int exponent = 0;
 
