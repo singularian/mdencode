@@ -48,9 +48,10 @@ public:
 
     // set matched
     // ismatched value
-    // searching = 0 // searching for the value with the modscan
-    // not found = 1 // modscan mutext match result
-    // found     = 2 // modscan mutext match result
+    // searching      = 0 // searching for the value with the modscan
+    // not found      = 1 // modscan mutext match result
+    // found one      = 2 // modscan mutext match result
+    // found multiple = 3 // modscan mutext match result
     void setMatched(int thread) 
     {
         mutex.lock();

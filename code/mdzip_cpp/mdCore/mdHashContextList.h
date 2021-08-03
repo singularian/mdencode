@@ -108,8 +108,15 @@ private:
     int lastThread;
     int threadcount;
     int blocksize;
+    // blocknumber is for making a per block signature key
+    // need to add a get and set for this
+    // TODO it can increment or decrement the signature key (possibly integer) to make the block keys unique per block
+    // It adds or increments/decrements the blocknumber to the hash key
+    // It can also set a pseudo random number generator seed to set each block with a different signature key.
+    int blocknumber = 0; 
     // set the hashlistsize to the last signatures enum value - 1
     int hashlistsize = LAST - 1;
+    // TODO Need to simplify this have hashblock, hashkey vectors
     // hash list vectors
     // vector with tuple - hashnumber, hashname, blocksize
     std::vector<std::tuple<int,std::string,int>> hashlistvt[3];
@@ -2015,7 +2022,11 @@ public:
             std::cout << std::left << std::setw(12) << i + 1; 
             std::cout << std::left << std::setw(12) << mdHashlist[i].name;
             std::cout << std::left << std::setw(30) << mdHashlist[i].description;
-            std::cout << std::left << std::setw(12) << std::boolalpha << mdHashlist[i].haskey;
+
+            // std::cout << std::left << std::setw(12) << std::boolalpha << mdHashlist[i].haskey;
+            if (mdHashlist[i].haskey == true)  std::cout << std::left << std::setw(12) << "True";
+            if (mdHashlist[i].haskey == false) std::cout << std::left << std::setw(12) << "False"; 
+
             std::cout << std::left << std::setw(16) << mdHashlist[i].blocksize;
             std::cout << std::left << std::setw(16) << mdHashlist[i].keysize;
             std::cout << std::endl;
