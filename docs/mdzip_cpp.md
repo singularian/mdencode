@@ -254,51 +254,51 @@ MDzip Examples:
 ```
 ID          Hash Name   Description                   Key         Blocksize       Blockkeysize    
 ===============================================================================================
-1           cit64       Cityhash 64                   true        8               8               
-2           crc32       CRC 32                        true        4               4               
-3           crc64       CRC 64                        true        8               8               
-4           edn224      EDON-R 224                    false       28              0               
-5           fast32      Fasthash 32                   true        4               4               
-6           fast64      Fasthash 64                   true        8               8               
-7           fnv32       FNV-1  32                     false       4               0               
-8           fnv32a      FNV-1a 32                     false       4               0               
-9           fnv64       FNV-1  64                     false       8               0               
-10          fnv64a      FNV-1a 64                     false       8               0               
-11          has160      HAS 160                       false       20              0               
-12          hw64        Highway Hash 64               true        8               32              
-13          md2         MD2                           false       16              0               
-14          md4         MD4                           false       16              0               
-15          md5         MD5                           false       16              0               
-16          md6         MD6                           false       20              0               
-17          md62        MD6 Quicker                   true        20              0               
-18          met641      Metro Hash 64 v1              true        8               4               
-19          met642      Metro Hash 64 v2              true        8               4               
-20          mx3         MX3                           true        8               8               
-21          png         Pengyhash 64                  true        8               4               
-22          ripe128     Ripe MD 128                   false       16              0               
-23          ripe160     Ripe MD 160                   false       20              0               
-24          ripe256     Ripe MD 256                   false       32              0               
-25          ripe320     Ripe MD 320                   false       40              0               
-26          sea64       Seahash 64                    true        8               8               
-27          sip32       Siphash 32                    true        4               16              
-28          sip322      Siphash 32b                   true        4               16              
-29          sip40       Siphash 40                    true        5               16              
-30          sip48       Siphash 48                    true        6               16              
-31          sip64       Siphash 64                    true        8               16              
-32          sip128      Siphash 128                   true        16              16              
-33          sha1_64     SHA1 64                       false       8               0               
-34          sha1_128    SHA1 128                      false       16              0               
-35          sha1        SHA1                          false       20              0               
-36          sha256      SHA 256                       false       32              0               
-37          sha384      SHA 384                       false       48              0               
-38          sha512      SHA 512                       false       64              0               
-39          spk32       Spooky 32                     true        4               4               
-40          spk64       Spooky 64                     true        8               8               
-41          tgr         Tiger 192                     false       24              0               
-42          xxh32       xxHash32                      true        4               4               
-43          xxh64       xxHash64                      true        8               8               
-44          whp         Whirlpool                     false       64              0               
-45          wy64        WYhash 64                     true        8               48                 
+1           cit64       Cityhash 64                   True        8               8               
+2           crc32       CRC 32                        True        4               4               
+3           crc64       CRC 64                        True        8               8               
+4           edn224      EDON-R 224                    False       28              0               
+5           fast32      Fasthash 32                   True        4               4               
+6           fast64      Fasthash 64                   True        8               8               
+7           fnv32       FNV-1  32                     False       4               0               
+8           fnv32a      FNV-1a 32                     False       4               0               
+9           fnv64       FNV-1  64                     False       8               0               
+10          fnv64a      FNV-1a 64                     False       8               0               
+11          has160      HAS 160                       False       20              0               
+12          hw64        Highway Hash 64               True        8               32              
+13          md2         MD2                           False       16              0               
+14          md4         MD4                           False       16              0               
+15          md5         MD5                           False       16              0               
+16          md6         MD6                           False       20              0               
+17          md62        MD6 Quicker                   True        20              0               
+18          met641      Metro Hash 64 v1              True        8               4               
+19          met642      Metro Hash 64 v2              True        8               4               
+20          mx3         MX3                           True        8               8               
+21          png         Pengyhash 64                  True        8               4               
+22          ripe128     Ripe MD 128                   False       16              0               
+23          ripe160     Ripe MD 160                   False       20              0               
+24          ripe256     Ripe MD 256                   False       32              0               
+25          ripe320     Ripe MD 320                   False       40              0               
+26          sea64       Seahash 64                    True        8               8               
+27          sip32       Siphash 32                    True        4               16              
+28          sip322      Siphash 32b                   True        4               16              
+29          sip40       Siphash 40                    True        5               16              
+30          sip48       Siphash 48                    True        6               16              
+31          sip64       Siphash 64                    True        8               16              
+32          sip128      Siphash 128                   True        16              16              
+33          sha1_64     SHA1 64                       False       8               0               
+34          sha1_128    SHA1 128                      False       16              0               
+35          sha1        SHA1                          False       20              0               
+36          sha256      SHA 256                       False       32              0               
+37          sha384      SHA 384                       False       48              0               
+38          sha512      SHA 512                       False       64              0               
+39          spk32       Spooky 32                     True        4               4               
+40          spk64       Spooky 64                     True        8               8               
+41          tgr         Tiger 192                     False       24              0               
+42          xxh32       xxHash32                      True        4               4               
+43          xxh64       xxHash64                      True        8               8               
+44          whp         Whirlpool                     False       64              0               
+45          wy64        WYhash 64                     True        8               48                 
 ```                                                                                                 
 
 # MDzip C++ No Header Simplified Usage 
