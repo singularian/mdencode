@@ -288,6 +288,8 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            hclblock.setByteBlockHashList((unsigned char*) byteblock, currentblocksize);
            // write the signature list to the mdzip file
            hclblock.writeBlockHashList(mdzip);
+           // increment the hash context list block number 
+           hclblock.incrementBlockNum();
 
            // create a bigint number for the byte block
            mpz_import (byteblockInt, currentblocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);

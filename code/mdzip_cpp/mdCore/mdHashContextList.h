@@ -113,7 +113,7 @@ private:
     // TODO it can increment or decrement the signature key (possibly integer) to make the block keys unique per block
     // It adds or increments/decrements the blocknumber to the hash key
     // It can also set a pseudo random number generator seed to set each block with a different signature key.
-    int blocknumber = 0; 
+    long blocknumber = 0; 
     // set the hashlistsize to the last signatures enum value - 1
     int hashlistsize = LAST - 1;
     // TODO Need to simplify this have hashblock, hashkey vectors
@@ -595,6 +595,15 @@ public:
           }
 
     }    
+
+    // increment the Block Signature keys based on the signature list for the next file block
+    // It can either add the block number to the signature key
+    // or
+    // It can also use a Pseudo Random Number Generator and seed to make each file block signature key different
+    void incrementBlockKeyList() {
+          // TODO
+
+    }   
 
     // readBlockHashList
     // read the hash list from a ifstream file object
@@ -2083,5 +2092,15 @@ public:
 
     }
     
+    // increment the file block number
+    void incrementBlockNum() {
+        blocknumber++;
 
+        // incrementBlockKeyList();
+    }
+
+    // get the file block number
+    long getHclBlockNum() {
+        return blocknumber;
+    }
 };

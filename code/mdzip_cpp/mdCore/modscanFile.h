@@ -296,6 +296,14 @@ class modscan
         // add the modulusThreadInt to the starting blockInt
         mpz_add (blockInt, blockInt, modulusThreadInt); 
 
+        // after each reset increment the Hash Context List signature keys and block numbers
+        // TODO increment the hash context list block number for each signature supported
+        // TODO increment the Pseudo Random Number Generator to set the next signature block keys
+        //
+        // This will potentially allow each block to have a different signature key
+        // probably need to add a parameter zip/unzipfile to increment the signature keys and store it in the file
+        hcl.incrementBlockNum();
+
         // log the initial thread floor 
         // should add some initial logging here for the initial blockInt, exponent, modexponent, remainder, blockInt
         // if (log->checkIfLogging()) log->mdMutexLog::writeLogThreadFloor(threadnumber, threadcount, modulusInt, modulusThreadInt);

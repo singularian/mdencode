@@ -314,6 +314,8 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
 
         // read the file block hash list 
         hclblock.readBlockHashList(nf);
+        // increment the hash context list block number 
+        hclblock.incrementBlockNum();
 
         // read the modulus exponent
         if (blocksize > 32) {
