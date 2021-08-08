@@ -502,7 +502,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
            blocksize = blockremainder;           
          } 
 
-         // after each reset increment the Hash Context List signature keys and block numbers
+         // after the first block increment the Hash Context List signature keys and block numbers
          // TODO increment the hash context list block number for each signature supported
          // TODO increment the Pseudo Random Number Generator to set the next signature block keys
          //

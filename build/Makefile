@@ -168,6 +168,19 @@ runtestcpp:
 	@echo ""
 	@echo "Unzipping randomfile"
 	mdunzipcpp --file=randomfile.mdz --val=true	--over
+# test the mdzip C++ no header
+# needs more cpu threads to finish	
+runtestcpp2:	
+	@echo ""
+	@echo "Starting the mdzip  C++ no headertest"
+	@echo "Zipping the file randomfile"
+	mdzipnh --file=randomfile --rand
+	@echo ""
+	@echo "Running mdlist randomfile.mdz"
+	mdunzipnh --file=randomfile.mdsz --list 
+	@echo ""
+	@echo "Unzipping randomfile"
+	mdunzipnh --file=randomfile.mdsz --over
 # run the C++ Hash Context List Tests	
 hctestcpp:
 	@echo "Running C++ Hash Context List Tests"
