@@ -602,8 +602,40 @@ public:
     // It can also use a Pseudo Random Number Generator and seed to make each file block signature key different
     //
     // Alternatively it can use a large signature key of 16 bytes or larger like siphash
-    void incrementBlockKeyList() {
+    int incrementBlockKeyList() {
+
+          if (blocknumber == 0) return 0;
+
           // TODO
+          // initialize the gmp bigint variables         
+          int keysize = 16;
+          int byteorder = 0;
+          int endian    = 0;
+          size_t count;
+          mpz_t keyblockInt;
+          mpz_init_set_str(keyblockInt, "0", 10);
+          // mpz_import (byteblockInt, currentblocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);
+          mpz_import (keyblockInt, keysize, byteorder, sizeof(hregister[0].sipkey48[0]), endian, 0, hregister[0].sipkey48);
+          // hregister[0].sipkey48
+          mpz_add_ui (keyblockInt, keyblockInt, blocknumber);
+
+          cout << "testing byteblock incrementer st " << std::endl;
+          printByteblock(hregister[0].sipkey48, keysize, true);
+
+          int n;
+          int diff;        
+          mpz_export(hregister[0].sipkey48, &count, byteorder, sizeof(hregister[0].sipkey48[0]), endian, 0, keyblockInt);
+          if (count < keysize) {
+               diff = keysize - count;
+               for (n = (keysize - diff); n >= 0; n--) hregister[0].sipkey48[n+diff] = hregister[0].sipkey48[n];
+               for (n = 0; n < diff; n++) hregister[0].sipkey48[n] = 0;
+          }
+          printByteblock(hregister[0].sipkey48, keysize, true);
+          cout << "testing byteblock incrementer end " << std::endl;
+
+          mpz_clear(keyblockInt);
+
+          return 0;
 
     }   
 
@@ -2101,7 +2133,7 @@ public:
     // 9 is the end number 
     void incrementBlockNum() {
         blocknumber++;
-        // std::cout << "HCL Block Number " << blocknumber << std::endl;
+        std::cout << "HCL Block Number " << blocknumber << std::endl;
 
         // TODO increment the block key list
         // incrementBlockKeyList();

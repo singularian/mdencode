@@ -502,6 +502,18 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
            blocksize = blockremainder;           
          } 
 
+         // after each reset increment the Hash Context List signature keys and block numbers
+         // TODO increment the hash context list block number for each signature supported
+         // TODO increment the Pseudo Random Number Generator to set the next signature block keys
+         //
+         // This will potentially allow each block to have a different signature key
+         // probably need to add a parameter zip/unzipfile to increment the signature keys and store it in the file
+         //
+         // increment the block number and signature keys if the signature incrementer is enabled and block number is greater than one
+         // needs to increment just once
+         // std::cout << "Incrementing block " << blk << std::endl;
+         if (blk > 0) hclblock.incrementBlockNum(); 
+
          // set the thread modulus scan objects
          for(int tnum = 0; tnum < threadcount; tnum++) {
             // if this is the first block run the full initialization
