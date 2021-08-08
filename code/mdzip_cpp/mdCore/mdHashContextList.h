@@ -600,6 +600,8 @@ public:
     // It can either add the block number to the signature key
     // or
     // It can also use a Pseudo Random Number Generator and seed to make each file block signature key different
+    //
+    // Alternatively it can use a large signature key of 16 bytes or larger like siphash
     void incrementBlockKeyList() {
           // TODO
 
@@ -2093,9 +2095,15 @@ public:
     }
     
     // increment the file block number
+    // it starts at zero
+    // in a 10 block file this means 
+    // 0 is the start number
+    // 9 is the end number 
     void incrementBlockNum() {
         blocknumber++;
+        // std::cout << "HCL Block Number " << blocknumber << std::endl;
 
+        // TODO increment the block key list
         // incrementBlockKeyList();
     }
 
