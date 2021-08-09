@@ -75,6 +75,7 @@ build:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest ${MDZIP}/${CMD}/testBinReadMdFmt.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${MDZIP}/${CMD}/mdsig.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile ${MDZIP}/${CMD}/randomFile.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile2 ${MDZIP}/${CMD}/randomFile2.go
 # build mdzip C++
 buildcpp:
 	@echo "Building mdzip C++"
@@ -109,6 +110,7 @@ mdzip:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdlistTest ${MDZIP}/${CMD}/testBinReadMdFmt.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${MDZIP}/${CMD}/mdsig.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile ${MDZIP}/${CMD}/randomFile.go
+	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile2 ${MDZIP}/${CMD}/randomFile2.go
 mdzipcpp:
 	make buildcpp	
 test:
