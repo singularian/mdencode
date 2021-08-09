@@ -91,7 +91,7 @@ buildcpp:
 	@echo ""
 	@echo "Building Test Decode C++"
 	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/decoderRandomTestHC.cpp -o decoderRandomTestHC2 $(LDLIBS)
-# build mdzip GO
+# build mdencode GO
 mdencode:
 	@echo "Building mdencode"
 	go build $(LDFLAGS) -o ${BUILD_DIR}/md ${MDE}/${CMD}/mdencode.go
@@ -209,8 +209,9 @@ help:
 	@echo "    make test        : Build the test files"
 	@echo "    make runtest     : Run the GO mdzip/mdunzip test"
 	@echo "    make hctest      : Run the GO Hash Context List test"
-	@echo "    make runtestcpp  : Run the CPP mdzip/mdunzip test"
-	@echo "    make hctestcpp   : Run an GO Hash Context List test"
+	@echo "    make runtestcpp  : Run the C++ mdzip/mdunzip test"
+	@echo "    make runtestcpp2 : Run the C++ mdzip/mdunzip fasthash test"
+	@echo "    make hctestcpp   : Run the C++ Hash Context List test"
 	@echo "    make clean       : Remove any local build artifacts"
 	@echo "    make cleanbuild  : Remove any build artifacts"
 list:
