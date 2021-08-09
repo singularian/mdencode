@@ -180,12 +180,13 @@ runtestcpp2:
 	rm -f randomfile
 	# head -c 100 /dev/urandom > randomfile
 	# randfile2 -size=1 -out=randomfile - old args
-	# originally I was using this byte block with to improve the test time 
+	# originally I was using this byte block with to zero bytes improve the test time 
 	# bytes 1 - 5 as zero
 	# byte six set at 14 
 	# bytes 7 - 14 random
 	# Example Block Bytes         00 00 00 00 00 14 04 6E 1B 0A 1E AA F3 0F
 	randfile2 -blocknum=10 -bsize=14 -zsize=6 -first=14 -out=randomfile
+	# randfile2 -blocknum=17 -bsize=14 -zsize=6 -first=14 -out=randomfile
 	@echo "Zipping the file randomfile"
 	mdzipnh --file=randomfile --rand
 	@echo ""
@@ -194,6 +195,8 @@ runtestcpp2:
 	@echo ""
 	@echo "Unzipping randomfile"
 	mdunzipnh --file=randomfile.mdsz --over
+	@echo "Checking differences"
+	diff randomfile randomfile.mdsz.out
 # run the C++ Hash Context List Tests	
 hctestcpp:
 	@echo "Running C++ Hash Context List Tests"
