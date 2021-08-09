@@ -29,6 +29,7 @@
 #include "mdFilehash.h"
 #include "mdRandom.h"
 #include "mdRegisters.h"
+#include "mdIncrementKey.h"
 
 // TODO should add a keylist type for setting the keylist separately from the hash block or file list
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
@@ -603,37 +604,21 @@ public:
     //
     // Alternatively it can use a large signature key of 16 bytes or larger like siphash
     int incrementBlockKeyList() {
+          int hashblocksize = 0;
 
-          if (blocknumber == 0) return 0;
+          // skip the first block
+          if (blocknumber == 1) return 0;
 
-          // TODO
-          // initialize the gmp bigint variables         
-          int keysize = 16;
-          int byteorder = 0;
-          int endian    = 0;
-          size_t count;
-          mpz_t keyblockInt;
-          mpz_init_set_str(keyblockInt, "0", 10);
-          // mpz_import (byteblockInt, currentblocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);
-          mpz_import (keyblockInt, keysize, byteorder, sizeof(hregister[0].sipkey48[0]), endian, 0, hregister[0].sipkey48);
-          // hregister[0].sipkey48
-          mpz_add_ui (keyblockInt, keyblockInt, blocknumber);
+          for(auto hash  : hashlistvt[HASHBLOCK]) {
+              hashblocksize = std::get<2>(hash);
 
-          cout << "testing byteblock incrementer st " << std::endl;
-          printByteblock(hregister[0].sipkey48, keysize, true);
+              switch(std::get<0>(hash)) {
+                  case SIP48:
+                    incrementByteblock(16, hregister[0].sipkey48, blocknumber);
+                    break;   
+              }      
 
-          int n;
-          int diff;        
-          mpz_export(hregister[0].sipkey48, &count, byteorder, sizeof(hregister[0].sipkey48[0]), endian, 0, keyblockInt);
-          if (count < keysize) {
-               diff = keysize - count;
-               for (n = (keysize - diff); n >= 0; n--) hregister[0].sipkey48[n+diff] = hregister[0].sipkey48[n];
-               for (n = 0; n < diff; n++) hregister[0].sipkey48[n] = 0;
-          }
-          printByteblock(hregister[0].sipkey48, keysize, true);
-          cout << "testing byteblock incrementer end " << std::endl;
-
-          mpz_clear(keyblockInt);
+          }   
 
           return 0;
 
@@ -2133,7 +2118,7 @@ public:
     // 9 is the end number 
     void incrementBlockNum() {
         blocknumber++;
-        std::cout << "HCL Block Number " << blocknumber << std::endl;
+        // std::cout << "HCL Block Number " << blocknumber << std::endl;
 
         // TODO increment the block key list
         // incrementBlockKeyList();

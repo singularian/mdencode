@@ -315,7 +315,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
         // read the file block hash list 
         hclblock.readBlockHashList(nf);
         // increment the hash context list block number 
-        hclblock.incrementBlockNum();
+        if ((blk > 0) && (blk < blockcount)) hclblock.incrementBlockNum();
 
         // read the modulus exponent
         if (blocksize > 32) {
@@ -512,7 +512,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
          // increment the block number and signature keys if the signature incrementer is enabled and block number is greater than one
          // needs to increment just once
          // std::cout << "Incrementing block " << blk << std::endl;
-         if (blk > 0) hclblock.incrementBlockNum(); 
+         if ((blk > 0) && (blk < blockcount)) hclblock.incrementBlockNum();  
 
          // set the thread modulus scan objects
          for(int tnum = 0; tnum < threadcount; tnum++) {

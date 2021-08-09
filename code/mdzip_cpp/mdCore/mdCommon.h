@@ -221,8 +221,7 @@ void displayVector(std::vector<int> &v)
     {
         std::cout << v[i] << " ";
     }
-    std::cout << "\n"
-              << std::endl;
+    std::cout << "\n" << std::endl;
 }
 
 // unique a vector list and preserve the order
