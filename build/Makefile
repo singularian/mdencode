@@ -171,7 +171,7 @@ runtestcpp:
 	@echo ""
 	@echo "Unzipping randomfile"
 	mdunzipcpp --file=randomfile.mdz --val=true	--over
-# test the mdzip C++ no header
+# test the mdzip C++ no header fasthash64 encoder 
 # needs more cpu threads to finish	
 runtestcpp2:	
 	@echo ""
