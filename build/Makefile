@@ -203,7 +203,7 @@ hctestcpp:
 	./decoderRandomTestHC2 --mod=64 --block=11 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh
 # clean the build directory	
 clean:
-	rm -r mdzip mdunzip mdzipcpp mdunzipcpp mdzipnh mdunzipnh mdcmd mdlist mdlistTest mdsig randfile md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC decoderRandomTestHC2 randomfile randomfile.mdz randomfile.mdz.out *.log
+	rm -r mdzip mdunzip mdzipcpp mdunzipcpp mdzipnh mdunzipnh mdcmd mdlist mdlistTest mdsig randfile randfile2 md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC decoderRandomTestHC2 randomfile randomfile.mdz randomfile.mdz.out *.mdsz *.mdsz.out *.log
 # clean the build directory
 cleanbuild:
 	rm -r ${BUILD_DIR}/mdzip ${BUILD_DIR}/mdunzip ${BUILD_DIR}/mdcmd ${BUILD_DIR}/mdlist ${BUILD_DIR}/mdsig ${BUILD_DIR}/randfile ${BUILD_DIR}/mdencode ${BUILD_DIR}/mdbinlist ${BUILD_DIR}/md ${BUILD_DIR}/mddbreport ${BUILD_DIR}/mdnewdb
