@@ -666,14 +666,17 @@ void displayBlockInfo(std::string action, int blocksize, int blk, int lastblk, l
    std::cout << cblksize << "/" << blocksize << std::endl;
 
    // display out the hash block signatures
-   std::cout << hclblock.displayHLhashes() << std::endl;
+   std::cout << std::left << std::setw(20) << "Signatures " << hclblock.displayHLhashes() << std::endl;
+
+   // display the hash block signatures keys
+   std::cout << std::left << std::setw(20) << "Signatures keys " << hclblock.displayHLhashKeys() << std::endl;
 
    // display the modulus exponent
-   std::cout << "Modulus Exponent " << modexponent << std::endl;
+   std::cout << std::left << std::setw(20) << "Modulus Exponent " << modexponent << std::endl;
 
    // display the modulus remainder
    mpz_class modint(modulusIntRemainder);
-   std::cout << "Modulus Remainder " << modint << std::endl << std::endl;
+   std::cout << std::left << std::setw(20) << "Modulus Remainder " << modint << std::endl << std::endl;
 }
 
 // display the usage

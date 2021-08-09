@@ -52,6 +52,7 @@ all:
 	go build $(LDFLAGS) -o mdlistTest ${MDZIP}/${CMD}/testBinReadMdFmt.go 
 	go build $(LDFLAGS) -o mdsig ${MDZIP}/${CMD}/mdsig.go 
 	go build $(LDFLAGS) -o randfile ${MDZIP}/${CMD}/randomFile.go
+	go build $(LDFLAGS) -o randfile2 ${MDZIP}/${CMD}/randomFile2.go
 	@echo "Building mdzip GO test files"
 	go build $(LDFLAGS) -o decoderRandom ${TESTGO}/${CMD}/decoderRandom.go
 	go build $(LDFLAGS) -o decoderRandomTest ${TESTGO}/${CMD}/decoderRandomTest.go
@@ -172,7 +173,11 @@ runtestcpp:
 # needs more cpu threads to finish	
 runtestcpp2:	
 	@echo ""
-	@echo "Starting the mdzip  C++ no headertest"
+	@echo "Starting the mdzip  C++ no header test"
+	@echo "Creating randomfile"
+	rm randomfile
+	# head -c 100 /dev/urandom > randomfile
+	randfile2 -size=1 -out=randomfile
 	@echo "Zipping the file randomfile"
 	mdzipnh --file=randomfile --rand
 	@echo ""
