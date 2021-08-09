@@ -284,12 +284,12 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            // read the current byteblock from the input file and generate a signature
            nf.read(reinterpret_cast<char*>(byteblock), (size_t) currentblocksize);
 
+           // increment the hash context list block number 
+           hclblock.incrementBlockNum();
            // set the byte block hash list
            hclblock.setByteBlockHashList((unsigned char*) byteblock, currentblocksize);
            // write the signature list to the mdzip file
            hclblock.writeBlockHashList(mdzip);
-           // increment the hash context list block number 
-           hclblock.incrementBlockNum();
 
            // create a bigint number for the byte block
            mpz_import (byteblockInt, currentblocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);
@@ -430,17 +430,21 @@ void displayBlockInfo(std::string action, unsigned char *byteblock, long current
    std::cout << currentblocksize << "/" << blocksize << std::endl;
 
    // print the byte block
+   std::cout << std::left << std::setw(20) << "Block Bytes ";
    printByteblock(byteblock, currentblocksize, true);
 
-   // display out the hash block signatures
-   std::cout << hclblock.displayHLhashes() << std::endl;
+   // display the hash block signatures
+   std::cout << std::left << std::setw(20) << "Signatures " << hclblock.displayHLhashes() << std::endl;
+
+   // display the hash block signatures keys
+   std::cout << std::left << std::setw(20) << "Signatures keys " << hclblock.displayHLhashKeys() << std::endl;
 
    // display the modulus exponent
-   std::cout << "Modulus Exponent " << modexponent << std::endl;
+   std::cout << std::left << std::setw(20) << "Modulus Exponent " << modexponent << std::endl;
 
    // display the modulus remainder
    mpz_class modint(modulusIntRemainder);
-   std::cout << "Modulus Remainder " << modint << std::endl << std::endl;
+   std::cout << std::left << std::setw(20) << "Modulus Remainder " << modint << std::endl << std::endl;
 }
 
 

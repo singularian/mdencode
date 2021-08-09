@@ -434,7 +434,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
         // read the file block hash list 
         hclblock.readBlockHashList(nf);
         // increment the hash context list block number 
-        if ((blk > 0) && (blk < blockcount)) hclblock.incrementBlockNum();
+        hclblock.incrementBlockNum();
 
         // read the modulus exponent
         if (blocksize > 32) {
@@ -650,10 +650,11 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
          mpz_import (modulusIntRemainder, modsizeBytes, byteorder, sizeof(modulusbytes[0]), endian, 0, modulusbytes);
 
          // display the byte block info
-         displayBlockInfo("Unzipping", blocksize, blk, lastblk, blockremainder, modexponent, modulusIntRemainder, hclblock, log);
+         // displayBlockInfo("Unzipping", blocksize, blk, lastblk, blockremainder, modexponent, modulusIntRemainder, hclblock, log);
 
          // check if this is the last byte block
          // if it is set the blocksize to the last block size
+         long currblocksize = blocksize;
          if ((blk == lastblk) && (blockremainder != blocksize)) {
            if (blocksize == 0) break;
            blocksize = blockremainder;           
@@ -668,8 +669,13 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
          //
          // increment the block number and signature keys if the signature incrementer is enabled and block number is greater than one
          // needs to increment just once
-         // std::cout << "Incrementing block " << blk << "/" << blockcount << std::endl;
-         if ((blk > 0) && (blk < blockcount)) hclblock.incrementBlockNum(); 
+         std::cout << "Incrementing block " << blk << "/" << blockcount << std::endl;
+         // if ((blk < blockcount)) hclblock.incrementBlockNum(); 
+         // if (blk > 0) hclblock.incrementBlockNum(); 
+         hclblock.incrementBlockNum(); 
+
+         // display the byte block info
+         displayBlockInfo("Unzipping", currblocksize, blk, lastblk, blockremainder, modexponent, modulusIntRemainder, hclblock, log);
    
          // set the thread modulus scan objects
          for(int tnum = 0; tnum < threadcount; tnum++) {
@@ -850,14 +856,18 @@ void displayBlockInfo(std::string action, int blocksize, int blk, int lastblk, l
    std::cout << cblksize << "/" << blocksize << std::endl;
 
    // display out the hash block signatures
-   std::cout << hclblock.displayHLhashes() << std::endl;
+   std::cout << std::left << std::setw(20) << "Signatures " << hclblock.displayHLhashes() << std::endl;
+
+   // display the hash block signatures keys
+   std::cout << std::left << std::setw(20) << "Signatures keys " << hclblock.displayHLhashKeys() << std::endl;
 
    // display the modulus exponent
-   std::cout << "Modulus Exponent " << modexponent << std::endl;
+   std::cout << std::left << std::setw(20) << "Modulus Exponent " << modexponent << std::endl;
 
    // display the modulus remainder
    mpz_class modint(modulusIntRemainder);
-   std::cout << "Modulus Remainder " << modint << std::endl << std::endl;
+   std::cout << std::left << std::setw(20) << "Modulus Remainder " << modint << std::endl << std::endl;
+
 }
 
 // display the usage

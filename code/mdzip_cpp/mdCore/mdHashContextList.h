@@ -607,7 +607,7 @@ public:
           int hashblocksize = 0;
 
           // skip the first block
-          if (blocknumber == 1) return 0;
+          // if (blocknumber == 1) return 0;
 
           for(auto hash  : hashlistvt[HASHBLOCK]) {
               hashblocksize = std::get<2>(hash);
@@ -615,6 +615,8 @@ public:
               switch(std::get<0>(hash)) {
                   case SIP48:
                     incrementByteblock(16, hregister[0].sipkey48, blocknumber);
+                    // cout << "testing byteblock incrementer st " << std::endl;
+                    // printByteblock(hregister[0].sipkey48, 16, true); 
                     break;   
               }      
 
@@ -2117,11 +2119,10 @@ public:
     // 0 is the start number
     // 9 is the end number 
     void incrementBlockNum() {
+       //// if (blocknumber >= 1) incrementBlockKeyList();
         blocknumber++;
         // std::cout << "HCL Block Number " << blocknumber << std::endl;
-
-        // TODO increment the block key list
-        // incrementBlockKeyList();
+        
     }
 
     // get the file block number
