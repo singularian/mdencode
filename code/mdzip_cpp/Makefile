@@ -36,6 +36,12 @@ all:
 	@echo ""
 	@echo "Building mdunzip fasthash64 C++"
 	$(CC) -I. $(DEPS) mdUnzipSimple.cpp -o mdunzipnh $(LDLIBS)
+	@echo ""
+	@echo "Building mdzip sip40 C++"
+	$(CC) -I. $(DEPS) mdZipSip40.cpp -o mdzipsip40 $(LDLIBS)
+	@echo ""
+	@echo "Building mdunzip sip40 C++"
+	$(CC) -I. $(DEPS) mdUnzipSip40.cpp -o mdunzipsip40 $(LDLIBS)	
 mdzip:
 	@echo "Building mdzip C++"
 	$(CC) -I. $(DEPS) mdZip.cpp  -o mdzip $(LDLIBS)
@@ -48,16 +54,39 @@ mdzipsimple:
 	@echo ""
 	@echo "Building mdunzip fasthash64 C++"
 	$(CC) -I. $(DEPS) mdUnzipSimple.cpp -o mdunzipnh $(LDLIBS)
+mdzipsip:	
+	@echo "Building mdzip sip40 C++"
+	$(CC) -I. $(DEPS) mdZipSip40.cpp -o mdzipsip40 $(LDLIBS)
+	@echo ""
+	@echo "Building mdunzip sip40 C++"
+	$(CC) -I. $(DEPS) mdUnzipSip40.cpp -o mdunzipsip40 $(LDLIBS)
 test:
 	@echo "Building Test Decoder HCL C++"
 	$(CC) -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 $(LDLIBS)
 testhash:
 	$(CC) -I. $(DEPS) tests/testHCL.cpp  -o testhcl $(LDLIBS)
 	$(CC) -I. $(DEPS) tests/testFileSignatures.cpp -o  testhashfile $(LDLIBS)
+runtestsip:	
+	@echo ""
+	@echo "Starting the mdzip  C++ sip40"
+	@echo "Creating randomfile"
+	# cp randomfile randomfile.2
+	rm -f randomfile
+	randfile2 -blocknum=100 -bsize=11 -zsize=4 -first=14 -out=randomfile
+	@echo "Zipping the file randomfile"
+	mdzipsip40 --file=randomfile --randbh --fh=11
+	@echo ""
+	@echo "Running mdlist randomfile.mdz"
+	mdunzipsip40 --file=randomfile.mdz --list 
+	@echo ""
+	@echo "Unzipping randomfile"
+	mdunzipsip40 --file=randomfile.mdz --over --val=true
+	# @echo "Checking differences"
+	# diff randomfile randomfile.mdz.out	
 lines:
 	wc -l mdCore/*.h *.cpp
 clean:
-	rm -r mdzip mdunzip mdzipnh mdunzipnh decoderRandomTestHC2 *.log *.mdz *.mdsz *.out
+	rm -r mdzip mdunzip mdzipnh mdunzipnh mdzipsip40 mdunzipsip40 decoderRandomTestHC2 *.log *.mdz *.mdsz *.out randfile
 cleantest:
 	rm decoderRandomTestHC2 testhashfile testhcl *.log *.mdz *.mdsz *.out
 # Display general help about this command

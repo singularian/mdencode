@@ -143,7 +143,7 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
      // need to make sure these are byte order independent
      // the block size header is currently 16 bytes
      mdzip.write(reinterpret_cast<char*>(&filesize),  sizeof(long));
-     // read the signature key 
+     // write the signature key 
      mdzip.write(reinterpret_cast<char*>(&key),  sizeof(long));
 
      // initialize the block hash context list

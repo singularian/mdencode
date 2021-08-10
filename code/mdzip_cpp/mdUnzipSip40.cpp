@@ -48,7 +48,7 @@ int main (int argc, char **argv) {
      int signum       = LAST - 1;
 
      // process the command line argument with the CLI11 command line parser
-     CLI::App app{"MDEncode MDunzip C++ Program"};
+     CLI::App app{"MDEncode MDunzip Sip 40 C++ Program"};
      app.add_option("-f,--file",    filename,    "MDunzip filename")->check(CLI::ExistingFile)->required();
      app.add_option("-t,--thread,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
 
@@ -670,6 +670,8 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
          // increment the block number and signature keys if the signature incrementer is enabled and block number is greater than one
          // needs to increment just once
          // std::cout << "Incrementing block " << blk << "/" << blockcount << std::endl;
+         // if ((blk < blockcount)) hclblock.incrementBlockNum(); 
+         // if (blk > 0) hclblock.incrementBlockNum(); 
          hclblock.incrementBlockNum(); 
 
          // display the byte block info
