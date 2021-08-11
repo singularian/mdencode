@@ -213,7 +213,8 @@ runtestsip:
 	# cp randomfile randomfile.2
 	rm -f randomfile
 	# randfile2 -blocknum=100 -bsize=11 -zsize=4 -first=14 -out=randomfile
-	# random block in this format 
+	# this test uses a random block in this format 
+	# it could also use a full non padded block 
 	# 0   0   1   127 231 57  115 27  53  37  74
 	# 00  00  01  7F  E7  39  73  1B  35  25  4A
 	randfile2 -blocknum=10 -bsize=11 -zsize=3 -first=1 -out=randomfile
