@@ -18,6 +18,7 @@ Signature post validation can also be used to eliminate collisions if there were
 - File Hash Signatures
 - Block Hash Signatures
 - Optional Signature Keys
+- The capability to increment or decrement or change the block signature key with each signature block.
 - 32 Byte Highway Hash Signature Keys which change the signature (With multiple signature key combinations)
 - Lossless compression
 - Optional signature mdzip parameter ranges (Example signature arguments could be 1-5 or 12-24 for mdzip file or block signatures).
@@ -155,12 +156,14 @@ mdunzip --file=filename.mdz --valmdzip
 
 This is the MDZip C++ Example Usage
 
-These are the 5 main programs. 
+These are the 7 main programs. There are currently 3 mdzip variants.
 
-- mdzip      - Creates an mdzip (mdz) binary file with a modular floor and multiple signatures.
-- mdunzip    - Unzips and decodes an mdzip (mdz) file to an output file. It can also display the block list.
-- mdzipnh    - Creates a light weight simplified mdzip (mdsz) binary file with a modular floor and one signature.
-- mdunzipnh  - Unzips and decodes a simple mdzip (mdsz) file. It can also display the block list.  
+- mdzip                - Creates an mdzip (mdz) binary file with a modular floor and multiple signatures.
+- mdunzip              - Unzips and decodes an mdzip (mdz) file to an output file. It can also display the block list.
+- mdzipnh              - Creates a light weight simplified mdzip (mdsz) binary file with a modular floor and one signature.
+- mdunzipnh            - Unzips and decodes a simple mdzip (mdsz) file. It can also display the block list. 
+- mdzipsip40           - Creates a sip40 decrementing and incrementing key mdzip (mdz) binary file with a modular floor and multiple signatures. 
+- mdunzipsip40         - Unzips and decodes an sip40 mdzip (mdz) file to an output file. It can also display the block list.
 - decoderRandomTestHC2 - Test modulus scan program for the C++ mdzip program.
 
 path: [github.com/singularian/mdencode/code/mdzip_cpp/](https://github.com/singularian/mdencode/tree/master/code/mdzip_cpp)
