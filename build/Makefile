@@ -222,6 +222,10 @@ runtestsip:
 	randfile2 -blocknum=10 -bsize=11 -zsize=3 -first=1 -out=randomfile
 	@echo "Zipping the file randomfile"
 	mdzipsip40 --file=randomfile --randbh --fh=11
+	# validating the mdzip file
+	@echo ""
+	@echo "Validating the randomfile.mdz"
+	mdunzipsip40 --file=randomfile.mdz --valmdzip
 	@echo ""
 	@echo "Running mdlist randomfile.mdz"
 	mdunzipsip40 --file=randomfile.mdz --list 
@@ -241,6 +245,10 @@ runtestsipdec:
 	randfile2 -blocknum=10 -bsize=11 -zsize=3 -first=1 -out=randomfile
 	@echo "Zipping the file randomfile"
 	mdzipsip40 --file=randomfile --randbh --fh=11 --dec
+	# validating the mdzip file
+	@echo ""
+	@echo "Validating the randomfile.mdz"
+	mdunzipsip40 --file=randomfile.mdz --valmdzip
 	@echo ""
 	@echo "Running mdlist randomfile.mdz"
 	mdunzipsip40 --file=randomfile.mdz --list 
@@ -260,6 +268,10 @@ runtestsipinc:
 	randfile2 -blocknum=10 -bsize=11 -zsize=3 -first=1 -out=randomfile
 	@echo "Zipping the file randomfile"
 	mdzipsip40 --file=randomfile --randbh --fh=11 --inc
+	# validating the mdzip file
+	@echo ""
+	@echo "Validating the randomfile.mdz"
+	mdunzipsip40 --file=randomfile.mdz --valmdzip
 	@echo ""
 	@echo "Running mdlist randomfile.mdz"
 	mdunzipsip40 --file=randomfile.mdz --list 
