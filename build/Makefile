@@ -117,13 +117,15 @@ mdzip:
 	go build $(LDFLAGS) -o ${BUILD_DIR}/mdsig ${MDZIP}/${CMD}/mdsig.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile ${MDZIP}/${CMD}/randomFile.go
 	go build $(LDFLAGS) -o ${BUILD_DIR}/randfile2 ${MDZIP}/${CMD}/randomFile2.go
-mdzipcpp:
-	make buildcpp	
+# build the mdzip test GO
 test:
 	@echo "Building mdzip GO decodeRandom Tests"
 	go build -o decoderRandom ${TESTGO}/${CMD}/decoderRandom.go
 	go build -o decoderRandomTest ${TESTGO}/${CMD}/decoderRandomTest.go
-	go build -o decoderRandomTestHC ${TESTGO}/${CMD}/decoderRandomTestHC.go
+	go build -o decoderRandomTestHC ${TESTGO}/${CMD}/decoderRandomTestHC.go	
+# 	build mdzip c++
+mdzipcpp:
+	make buildcpp	
 # windows build
 windows:
 	@echo "Windows Build"

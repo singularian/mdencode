@@ -610,6 +610,7 @@ public:
     // Incrementing for adding
     // Decrementing for subtraction
     // I can use the double mdVersion to specify if it is incrementing or decrementing or a PSG generator
+    // It could also add others to increment by 1000 or 1 million or a billions or even different i/d numbers
     int incrementBlockKeyList() {
           int hashblocksize = 0;
 

@@ -165,16 +165,18 @@ Modulus Scan thread 31 and Random byteblock match
 
 # Parallel Modulus Scan
 
-There are currently two example modulus scan programs. These include
+There are currently two test modulus scan programs. These include
 
 - GO test modulus scan ```$GOPATH/github.com/singularian/mdencode/code/testdecode_go/decoderRandomTestHC``` uses GO routines to run the modulus scan for a signature on a byte block
 - C++ test modulus scan ```$GOPATH/github.com/singularian/mdencode/code/testdecode_cpp/decoderRandomTestHC2``` uses C++ threads to run the modulus scan
 
-MDZip and MDUnzip also use a parallel modulus scan currently with the GO core. There is now an alternative [mdzip C++](https://github.com/singularian/mdencode/tree/master/docs/mdzip_cpp.md) engine to the GO program.  
+MDZip and MDUnzip also use a parallel modulus scan with the GO or C++ core. [mdzip C++](https://github.com/singularian/mdencode/tree/master/docs/mdzip_cpp.md).  
 
 
-This is an example of a parallel modulus scan with 16 threads.
-[Decoder Parallel Examples](https://github.com/singularian/mdencode/blob/master/examples/mdencodeParallelmodscan2.txt)
+These are examples of a parallel modulus scan for mdzip C++ with Siphash 40.  
+[Siphash 40 MDzip With No Increment Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash40_test.md)
+[Siphash 40 MDzip With Decrement Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash40_test_dec.md)
+[Siphash 40 MDzip With Increment Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash40_test_inc.md)
 
 # MDzip and MDunzip Overview
 

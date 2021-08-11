@@ -571,7 +571,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
             modbyteblock = mst[threadMatchNumber].getModscanByteBlock();
             // result << endl << "Found Match" << endl << endl;
             // result << "Elapsed Time (s) " << std::to_string(elapsed_time/1e9) << endl;
-            result << "Modulus Scan thread " << threadMatchNumber << " Match " << std::endl;
+            result << "Modulus Scan Thread " << threadMatchNumber << " Match " << std::endl;
             log.writeLog(result.str());
 
             log.logMatchByteblock(modbyteblock, blocksize, false);
