@@ -125,14 +125,17 @@ In decoderRandomTestHC2 this allows for the blocksize and modulus bitsize and th
 
 # MDZip Examples
 
-These are MDzip and MDunzip command line examples. It doesn't currently support the setting of the hash key for the C++ version.
+These are MDzip and MDunzip command line examples. It supports the hash key block increment and decrement and mdzip signature keys.
 
 ```bash
-mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
-mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
-mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh
-mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
-mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
+   mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
+   mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
+   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh --dec
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh --inc
 ```
 
 # MDunzip Examples
@@ -213,7 +216,7 @@ MDunzip Examples:
 
 ```     
 user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ mdunzip
-DEncode MDunzip C++ Program
+MDEncode MDunzip C++ Program
 Usage: [OPTIONS]
 
 Options:
