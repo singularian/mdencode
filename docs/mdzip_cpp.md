@@ -17,11 +17,11 @@ Signature post validation can also be used to eliminate collisions if there were
 - User Specified Block Size
 - File Hash Signatures
 - Block Hash Signatures
-- Optional Signature Keys
+- Optional Randomized Signature Keys
 - The capability to increment or decrement or change the block signature key with each signature block.
 - 32 Byte Highway Hash Signature Keys which change the signature (With multiple signature key combinations)
 - Lossless compression
-- Optional signature mdzip parameter ranges (Example signature arguments could be 1-5 or 12-24 for mdzip file or block signatures).
+- Optional signature mdzip signature parameter ranges (Example signature arguments could be 1-5 or 12-24 for mdzip file or block signatures).
 
 **MDUnzip Features**
 - Multithreaded Parallel Modulus Scan
