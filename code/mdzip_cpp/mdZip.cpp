@@ -19,7 +19,7 @@
 #include "mdCore/mdCommon.h"
 #include "mdCore/mdHashContextList.h"
 
-int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh);
+int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh, bool inc, bool dec);
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
                  int modsizeBytes, std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize, int hclblockblocksize, 
                  std::string& filehashvector, std::string& blockhashvector, std::string& blockkeys, std::string& filesig, bool mdlist, int threadcount );
@@ -46,7 +46,7 @@ int main (int argc, char **argv) {
      app.add_option("-f,--file",    filename,    "MDzip filename")->check(CLI::ExistingFile)->required();
      app.add_option("-b,--block",   blocksize,   "Blocksize number")->check(CLI::PositiveNumber)->check(CLI::Range(1,100));
      app.add_option("-m,--mod",     modsize,     "Modulus size number")->check(CLI::PositiveNumber);
-     app.add_option("-t,--thread,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
+     // app.add_option("-t,--thread,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
 
      // add the file hash list parameter
      std::vector<int> flcsvvals;    
@@ -88,6 +88,11 @@ int main (int argc, char **argv) {
      // bool listzip = false;
      // app.add_option("-x,--list", listzip, "Display the Block list");
 
+     bool increment = false;
+     app.add_flag("--inc", increment, "Increment the Block Hash Keylist");
+     bool decrement = false;
+     app.add_flag("--dec", decrement, "Decrement the Block Hash Keylist");
+
      // set logging
      bool runlogging = false;
      app.add_flag("-l,--log", runlogging, "Run Logging");
@@ -121,14 +126,14 @@ int main (int argc, char **argv) {
      }    
 
      // run mdzipfile
-     mdzipfile(filename, blocksize, modsize, flcsvvals, csvvals, randombh);
+     mdzipfile(filename, blocksize, modsize, flcsvvals, csvvals, randombh, increment, decrement);
 
 }
 
 // mdzip an input file
 // current mdzip extension is .mdz
 // this is currently litte endian and 64 bit for the longs
-int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh) {
+int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh, bool inc, bool dec) {
 
      long blocknumber = 1;
      double mdversion = 1.01;
@@ -179,6 +184,13 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
      // calculate the modulus bigint as 2 ^ modsize - 1
      calcModulusInt(modulusInt, modsize);
+
+     // if the increment or decrement is set change the mdVersion 
+     // bool incrementKey = false;
+     int incKey = NOINC;
+     if (dec) { mdversion = 1.11; incKey = DEC; };
+     if (inc) { mdversion = 1.12; incKey = INC; };
+     // if (dec || inc) incrementKey = true;
     
      // need to make sure these are byte order independent
      // the block size header is currently 28 bytes
@@ -285,7 +297,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            nf.read(reinterpret_cast<char*>(byteblock), (size_t) currentblocksize);
 
            // increment the hash context list block number 
-           hclblock.incrementBlockNum();
+           hclblock.incrementBlockNum(incKey);
            // set the byte block hash list
            hclblock.setByteBlockHashList((unsigned char*) byteblock, currentblocksize);
            // write the signature list to the mdzip file
@@ -458,6 +470,8 @@ MDzip Examples:
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
    mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh
    mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh --dec
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh --inc
 
 MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 

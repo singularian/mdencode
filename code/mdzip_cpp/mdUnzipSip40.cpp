@@ -270,9 +270,10 @@ int validateMDzip(std::string filename, bool validatemdzipfile) {
 
    // add the file block size and key block size and hash block size
    sumfilesize += hclfile.calcBlockSize(HASHBLOCK);
-   // sumfilesize += hclblock.calcBlockSize(HASHBLOCK);
    sumfilesize += hclblock.calcBlockKeySize(HASHBLOCK);
    sumfilesize += totalblocksize;
+
+   nf.close();
 
    if (sumfilesize == inputfilesize) {
       std::cout << "MDzip File " << filename << " validates " << std::endl; 
@@ -282,9 +283,9 @@ int validateMDzip(std::string filename, bool validatemdzipfile) {
       // std::cout << "MDzip File " << sumfilesize << " = " << inputfilesize << std::endl; 
       // std::cout << "MDzip File hash size " << hclfile.calcBlockSize(HASHBLOCK) << std::endl; 
       // std::cout << "MDzip File block size " << totalblocksize << std::endl; 
+      return 1;
    }
 
-   nf.close();
 
    return 0;
 
@@ -345,6 +346,12 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
    nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
    nf.read(reinterpret_cast<char*>(&modsize),   sizeof(int));
+
+   // if the increment or decrement is set change the mdVersion 
+   // bool incrementKey = false;
+   int incKey = NOINC;
+   if (mdversion == 1.11) incKey = DEC;
+   if (mdversion == 1.12) incKey = INC;
 
    // initialize the modulusbytes array to store the modulo remainder
    int modsizeBytes = calcModulusBytes(modsize);
@@ -434,7 +441,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
         // read the file block hash list 
         hclblock.readBlockHashList(nf);
         // increment the hash context list block number 
-        hclblock.incrementBlockNum();
+        hclblock.incrementBlockNum(incKey);
 
         // read the modulus exponent
         if (blocksize > 32) {
@@ -532,6 +539,12 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
    nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
    nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
    nf.read(reinterpret_cast<char*>(&modsize),   sizeof(int));
+
+   // if the increment or decrement is set change the mdVersion 
+   // bool incrementKey = false;
+   int incKey = NOINC;
+   if (mdversion == 1.11) incKey = DEC;
+   if (mdversion == 1.12) incKey = INC;
 
    // initialize the modulusbytes array to store the modulo remainder
    int modsizeBytes = calcModulusBytes(modsize);
@@ -670,9 +683,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
          // increment the block number and signature keys if the signature incrementer is enabled and block number is greater than one
          // needs to increment just once
          // std::cout << "Incrementing block " << blk << "/" << blockcount << std::endl;
-         // if ((blk < blockcount)) hclblock.incrementBlockNum(); 
-         // if (blk > 0) hclblock.incrementBlockNum(); 
-         hclblock.incrementBlockNum(); 
+         hclblock.incrementBlockNum(incKey); 
 
          // display the byte block info
          displayBlockInfo("Unzipping", currblocksize, blk, lastblk, blockremainder, modexponent, modulusIntRemainder, hclblock, log);
@@ -766,6 +777,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
          log.writeLog("The mdunzip output file validates");
       } else {
          log.writeLog("The mdunzip failed");
+         return 1;
       } 
 
    }
@@ -881,12 +893,12 @@ MDunzip Examples:
    mdunzip --file=filename.mdz --valmdzip
 
 MDzip Examples:
-   mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
-   mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
-   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh
-   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
-   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh
-   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
+   mdzip --file=test.txt 
+   mdzip --file=test.txt --fh 1 2 3 
+   mdzip --file=test.txt --fh 11     --randbh
+   mdzip --file=test.txt --fh 11     --randbh=false
+   mdzip --file=randfile --fh 13     --randbh --inc
+   mdzip --file=randfile --fh 13     --randbh --dec
 
 )";
 

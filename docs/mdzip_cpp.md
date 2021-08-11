@@ -179,19 +179,15 @@ Options:
   -b,--block INT:POSITIVE:INT in [1 - 100]
                               Blocksize number
   -m,--mod INT:POSITIVE       Modulus size number
-  -t,--thread,--threads INT:POSITIVE
-                              Thread count number
-  --fhs INT:POSITIVE:INT in [1 - 34] ...
-                              File Hashlist csv string
-  --fh INT:POSITIVE:INT in [1 - 34] ...
-                              File Hashlist integers list
-  -r,--bhs INT:POSITIVE:INT in [1 - 34] ...
-                              Block Hashlist csv string
-  -s,--bh INT:POSITIVE:INT in [1 - 34] ...
-                              Block Hashlist integers list
+  --fhs                       File Hashlist csv string
+  --fh                        File Hashlist integers list
+  -r,--bhs                    File Hashlist csv string
+  -s,--bh                     Block Hashlist integers list
   -k,--keylist TEXT           Keylist csv string
-  --randbh BOOLEAN            Randomize the Block Hash Keylist
-  -l,--log BOOLEAN            Run Logging
+  --randbh                    Randomize the Block Hash Keylist
+  --inc                       Increment the Block Hash Keylist
+  --dec                       Decrement the Block Hash Keylist
+  -l,--log                    Run Logging
 
 
 
@@ -202,20 +198,22 @@ MDzip Examples:
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
    mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh
    mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh --dec
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh --inc
 
 MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=16 
    mdunzip --file=test.mdz --list
-   mdunzip --file=filename.mdz --list --unzip
-   mdunzip --file=filename.mdz --valmdzip                              
+   mdunzip --file=filename.mdz --list --unzip 
+   mdunzip --file=filename.mdz --valmdzip                        
 ```                                                                                                 
 
 # MDunzip C++ Usage 
 
 ```     
 user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ mdunzip
-MDEncode MDunzip C++ Program
+DEncode MDunzip C++ Program
 Usage: [OPTIONS]
 
 Options:
@@ -228,6 +226,7 @@ Options:
   -u,--unzip                  MDunzip a file
   -o,--over                   Overwrite an existing mdunzip output file
   --log                       Run Logging
+  --debug                     Run Dubug
   --val                       Run the File Signatures on the output uncompressed file
   --valmdzip                  Validate the mdzip file
 
@@ -236,7 +235,7 @@ Options:
 MDunzip Examples:
    mdunzip --file=filename.mdz --thread=16 
    mdunzip --file=test.mdz --thread=32 
-   mdunzip --file=test.mdz --list  --val
+   mdunzip --file=test.mdz     --list --val
    mdunzip --file=filename.mdz --list --unzip
    mdunzip --file=filename.mdz --valmdzip
 
@@ -247,6 +246,8 @@ MDzip Examples:
    mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
    mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh
    mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh --dec
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh --inc
 ```
 
 # MDunzip C++ Hashlist  

@@ -191,7 +191,7 @@ int mdzipfileNoHeader(std::string filename, long blocksize, int modsize, uint64_
            nf.read(reinterpret_cast<char*>(byteblock), (size_t) currentblocksize);
 
            // increment the hash context list block number 
-           hclblock.incrementBlockNum();
+           hclblock.incrementBlockNum(NOINC);
            // set the byte block hash list
            hclblock.setByteBlockHashList((unsigned char*) byteblock, currentblocksize);
            // write the signature list to the mdzip file

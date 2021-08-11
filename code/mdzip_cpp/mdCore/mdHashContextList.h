@@ -39,6 +39,9 @@ enum signatures {FIRST, CIT64, CRC32, CRC64, EDN224, FAST32, FAST64, FNV32, FNV3
                 SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, 
                 SPK32, SPK64, TIGER192, XXH32, XXH64, WP, WYH, LAST};
 
+// key incrementer
+enum keyincrementer {NOINC, DEC, INC};                
+
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
 struct Hashlist {
@@ -115,6 +118,7 @@ private:
     // It adds or increments/decrements the blocknumber to the hash key
     // It can also set a pseudo random number generator seed to set each block with a different signature key.
     long blocknumber = 0; 
+    int incrementKey = NOINC;
     // set the hashlistsize to the last signatures enum value - 1
     int hashlistsize = LAST - 1;
     // TODO Need to simplify this have hashblock, hashkey vectors
@@ -603,6 +607,9 @@ public:
     // It can also use a Pseudo Random Number Generator and seed to make each file block signature key different
     //
     // Alternatively it can use a large signature key of 16 bytes or larger like siphash
+    // Incrementing for adding
+    // Decrementing for subtraction
+    // I can use the double mdVersion to specify if it is incrementing or decrementing or a PSG generator
     int incrementBlockKeyList() {
           int hashblocksize = 0;
 
@@ -613,8 +620,13 @@ public:
               hashblocksize = std::get<2>(hash);
 
               switch(std::get<0>(hash)) {
+                  case SIP40:
+                    incrementByteblock(16, hregister[0].sipkey40, blocknumber, incrementKey);
+                    // cout << "testing byteblock incrementer st " << std::endl;
+                    // printByteblock(hregister[0].sipkey40, 16, true); 
+                    break;  
                   case SIP48:
-                    incrementByteblock(16, hregister[0].sipkey48, blocknumber);
+                    incrementByteblock(16, hregister[0].sipkey48, blocknumber, incrementKey);
                     // cout << "testing byteblock incrementer st " << std::endl;
                     // printByteblock(hregister[0].sipkey48, 16, true); 
                     break;   
@@ -2118,8 +2130,10 @@ public:
     // in a 10 block file this means 
     // 0 is the start number
     // 9 is the end number 
-    void incrementBlockNum() {
-       //// if (blocknumber >= 1) incrementBlockKeyList();
+    void incrementBlockNum(int incKey) {
+        incrementKey = incKey;
+
+        if (blocknumber >= 1 && incKey != NOINC) incrementBlockKeyList();
         blocknumber++;
         // std::cout << "HCL Block Number " << blocknumber << std::endl;
         

@@ -1,6 +1,6 @@
 
 // add a blocknumber long integer to a gmp bigint of a signature key byteblock
-int incrementByteblock(int blocksize, unsigned char *byteblock, long blocknumber)
+int incrementByteblock(int blocksize, unsigned char *byteblock, long blocknumber, int incrementKey)
 {
     // initialize the gmp bigint variables         
     int byteorder = 0;
@@ -13,7 +13,11 @@ int incrementByteblock(int blocksize, unsigned char *byteblock, long blocknumber
     mpz_import (keyblockInt, blocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);
 
     // add the blocknumber to the byte block big int
-    mpz_add_ui (keyblockInt, keyblockInt, blocknumber);
+    if (incrementKey == 1) {
+        mpz_sub_ui (keyblockInt, keyblockInt, blocknumber);
+    } else if (incrementKey == 2) {
+        mpz_add_ui (keyblockInt, keyblockInt, blocknumber);
+    }
 
     // cout << "testing byteblock incrementer st " << std::endl;
     //printByteblock(byteblock, blocksize, true); 

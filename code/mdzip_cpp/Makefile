@@ -71,10 +71,11 @@ runtestsip:
 	@echo "Starting the mdzip  C++ sip40"
 	@echo "Creating randomfile"
 	# cp randomfile randomfile.2
-	rm -f randomfile
-	randfile2 -blocknum=100 -bsize=11 -zsize=4 -first=14 -out=randomfile
+	### rm -f randomfile
+	# randfile2 -blocknum=100 -bsize=11 -zsize=4 -first=14 -out=randomfile
+	##### randfile2 -blocknum=100 -bsize=11 -zsize=3 -first=1 -out=randomfile
 	@echo "Zipping the file randomfile"
-	mdzipsip40 --file=randomfile --randbh --fh=11
+	mdzipsip40 --file=randomfile --randbh --fh=11 --inc
 	@echo ""
 	@echo "Running mdlist randomfile.mdz"
 	mdunzipsip40 --file=randomfile.mdz --list 

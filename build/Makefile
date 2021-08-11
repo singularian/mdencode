@@ -90,6 +90,12 @@ buildcpp:
 	@echo "Building mdunzip fasthash64 C++"
 	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdUnzipSimple.cpp -o mdunzipnh  $(LDLIBS)
 	@echo ""
+	@echo "Building mdzip sip40 C++"
+	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdZipSip40.cpp  -o mdzipsip40 $(LDLIBS)
+	@echo ""
+	@echo "Building mdunzip C++"
+	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdUnzipSip40.cpp  -o mdunzipsip40 $(LDLIBS)	
+	@echo ""
 	@echo "Building Test Decode C++"
 	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/decoderRandomTestHC.cpp -o decoderRandomTestHC2 $(LDLIBS)
 # build mdencode GO
@@ -164,7 +170,9 @@ runtestcpp:
 	head -c 100 /dev/urandom > randomfile
 	@echo ""
 	@echo "Zipping the file randomfile"
-	mdzipcpp --file=randomfile --fh=4 --bh=30 --mod=64 --block=11 --randbh
+	# mdzipcpp --file=randomfile --fh=4 --bh=30 --mod=64 --block=11 --randbh
+	mdzipcpp --file=randomfile --fh=4 --bh=30 --mod=64 --block=11 --randbh --dec
+	# mdzipcpp --file=randomfile --fh=4 --bh=30 --mod=64 --block=11 --randbh --inc
 	@echo ""
 	@echo "Running mdlist randomfile.mdz"
 	mdunzipcpp --file=randomfile.mdz --val=true --list 
@@ -197,6 +205,66 @@ runtestcpp2:
 	mdunzipnh --file=randomfile.mdsz --over
 	@echo "Checking differences"
 	diff randomfile randomfile.mdsz.out
+# test the mdzip C++ sip40 non incrementing key
+runtestsip:	
+	@echo ""
+	@echo "Starting the mdzip  C++ sip40 non incrementing key"
+	@echo "Creating randomfile"
+	# cp randomfile randomfile.2
+	rm -f randomfile
+	# randfile2 -blocknum=100 -bsize=11 -zsize=4 -first=14 -out=randomfile
+	# random block in this format 
+	# 0   0   1   127 231 57  115 27  53  37  74
+	# 00  00  01  7F  E7  39  73  1B  35  25  4A
+	randfile2 -blocknum=10 -bsize=11 -zsize=3 -first=1 -out=randomfile
+	@echo "Zipping the file randomfile"
+	mdzipsip40 --file=randomfile --randbh --fh=11
+	@echo ""
+	@echo "Running mdlist randomfile.mdz"
+	mdunzipsip40 --file=randomfile.mdz --list 
+	@echo ""
+	@echo "Unzipping randomfile"
+	mdunzipsip40 --file=randomfile.mdz --over --val=true
+	# @echo "Checking differences"
+	# diff randomfile randomfile.mdz.out	
+# test the mdzip C++ sip40 decrement key
+runtestsipdec:	
+	@echo ""
+	@echo "Starting the mdzip  C++ sip40 decrement key"
+	@echo "Creating randomfile"
+	# cp randomfile randomfile.2
+	rm -f randomfile
+	# randfile2 -blocknum=100 -bsize=11 -zsize=4 -first=14 -out=randomfile
+	randfile2 -blocknum=10 -bsize=11 -zsize=3 -first=1 -out=randomfile
+	@echo "Zipping the file randomfile"
+	mdzipsip40 --file=randomfile --randbh --fh=11 --dec
+	@echo ""
+	@echo "Running mdlist randomfile.mdz"
+	mdunzipsip40 --file=randomfile.mdz --list 
+	@echo ""
+	@echo "Unzipping randomfile"
+	mdunzipsip40 --file=randomfile.mdz --over --val=true
+	# @echo "Checking differences"
+	# diff randomfile randomfile.mdz.out
+# test the mdzip C++ sip40 increment key	
+runtestsipinc:	
+	@echo ""
+	@echo "Starting the mdzip C++ sip40 increment key"
+	@echo "Creating randomfile"
+	# cp randomfile randomfile.2
+	rm -f randomfile
+	# randfile2 -blocknum=100 -bsize=11 -zsize=4 -first=14 -out=randomfile
+	randfile2 -blocknum=10 -bsize=11 -zsize=3 -first=1 -out=randomfile
+	@echo "Zipping the file randomfile"
+	mdzipsip40 --file=randomfile --randbh --fh=11 --inc
+	@echo ""
+	@echo "Running mdlist randomfile.mdz"
+	mdunzipsip40 --file=randomfile.mdz --list 
+	@echo ""
+	@echo "Unzipping randomfile"
+	mdunzipsip40 --file=randomfile.mdz --over --val=true
+	# @echo "Checking differences"
+	# diff randomfile randomfile.mdz.out		
 # run the C++ Hash Context List Tests	
 hctestcpp:
 	@echo "Running C++ Hash Context List Tests"
