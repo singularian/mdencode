@@ -125,9 +125,10 @@ Each of the threads runs a modulus scan in parallel with a different modulus mul
 In decoderRandomTestHC2 this allows for the blocksize and modulus bitsize and thread count as well as the bytes either random or specified as hex the command line argument. In MDunzip it will search for a matching byteblock associated with a signature and modulus floor.
 
 These are examples of a parallel modulus scan for mdzip C++ with Siphash 40.  
-[Siphash 40 MDzip With No Increment Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash40_test.md)  
-[Siphash 40 MDzip With Decrement Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash40_test_dec.md)  
-[Siphash 40 MDzip With Increment Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash40_test_inc.md)  
+  
+- [Siphash 40 MDzip With No Increment Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash40_test.md)  
+- [Siphash 40 MDzip With Decrement Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash40_test_dec.md)  
+- [Siphash 40 MDzip With Increment Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash40_test_inc.md)  
 
 # MDZip Examples
 
