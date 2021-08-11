@@ -206,7 +206,7 @@ Proccessing power limits the size of the input block.
 
 # MDZip Usage
 
-- [MDZip CPP Usage](https://github.com/singularian/mdencode/blob/master/docs/mdzip_cpp.md)
+- [MDZip C++ Usage](https://github.com/singularian/mdencode/blob/master/docs/mdzip_cpp.md)
 - [MDZip GO Usage](https://github.com/singularian/mdencode/blob/master/docs/mdzip_go.md)
 
 # MDZip Video Example 
