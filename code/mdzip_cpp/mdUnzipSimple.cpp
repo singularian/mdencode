@@ -133,6 +133,7 @@ int main (int argc, char **argv) {
 
 // validate the mdzip file format
 int validateMDzip(std::string filename) {
+
    // check the inputfilesize variable
    size_t inputfilesize = 0;
    // mdzip mdlist variables
