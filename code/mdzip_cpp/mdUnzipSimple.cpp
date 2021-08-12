@@ -104,8 +104,7 @@ int main (int argc, char **argv) {
 
      // validate the mdzip file
      if (validatemdzip) {
-         validateMDzip(filename);
-         return 0;
+         return validateMDzip(filename);
      }
 
      // execute the mdlist display mdzip file blocks if list is true
