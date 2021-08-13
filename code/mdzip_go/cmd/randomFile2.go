@@ -108,11 +108,28 @@ func printUsage() {
        Random File Blocks Bytes Size (default "14")
   -zsize uint64
        Random File Blocks Zero Bytes Size (default "4")
+  -first uint64
+       Random File First Block Byte	   
   -out string
         Output Filename
 
    Examples:
-	./rfblock -blocknum=10 -bsize=14 -zsize=5 -first=14 -out=randfile
+	 ./randfile2 -blocknum=10 -bsize=14 -zsize=5 -first=14 -out=randfile
+
+   Byteblock Examples
+     Generate a random 11 byte block with 3 leading zeros and the first as byte as 1
+     ./randfile -blocknum=10 -bsize=11 -zsize=3 -first=1 -out=randfile
+
+     Blocksize 11 bytes
+ 	 0   0   1   127 231 57  115 27  53  37  74
+ 	 00  00  01  7F  E7  39  73  1B  35  25  4A    	
+
+     Generate a random 14 byte block with 3 leading zeros and the first as byte as 1
+     ./randfile2 -blocknum=100 -bsize=11 -zsize=4 -first=14 -out=randomfile
+
+     Blocksize 14 bytes
+ 	 00  00   00   00  00  14  04  6E  1B  0A  1E  AA  F3  0F   
+
     `)
 
 	fmt.Println()
