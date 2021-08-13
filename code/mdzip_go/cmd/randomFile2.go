@@ -124,11 +124,11 @@ func printUsage() {
  	 0   0   1   127 231 57  115 27  53  37  74
  	 00  00  01  7F  E7  39  73  1B  35  25  4A    	
 
-     Generate a random 14 byte block with 3 leading zeros and the first as byte as 1
-     ./randfile2 -blocknum=100 -bsize=11 -zsize=4 -first=14 -out=randomfile
+     Generate a random 14 byte block with 4 leading zeros and the first as byte as 14 or 0E hex
+     ./randfile2 -blocknum=100 -bsize=14 -zsize=4 -first=14 -out=randomfile
 
      Blocksize 14 bytes
- 	 00  00   00   00  00  14  04  6E  1B  0A  1E  AA  F3  0F   
+ 	 00   00  00  0E 26  A2  FD 4E  48  1B  34  0F  21  02  
 
     `)
 
