@@ -37,7 +37,8 @@ sync:
 	cp $(MDZIP)/modscanFile.h mdCore/modscan.h
 	cp $(MDZIP)/mdMutexLog.h mdCore
 	cp $(MDZIP)/mdRandom.h mdCore
-	cp $(MDZIP)/mdRegisters.h mdCore	
+	cp $(MDZIP)/mdRegisters.h mdCore
+	cp $(MDZIP)/mdIncrementKey.h mdCore	
 	perl -i -pe "s/external/\.\.\/mdzip_cpp\/external/g" mdCore/mdFilehash.h
 testdecode:
 	./decoderRandomTestHC2 --mod=64 --threads=32 --block=12 --hl 1-45

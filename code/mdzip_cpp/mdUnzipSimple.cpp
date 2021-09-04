@@ -121,14 +121,15 @@ int main (int argc, char **argv) {
      // like highway hash and mod 32 and block 14 and 1 or no signature key
      // ./mdunzipnh --file=phone.txt.mdsz --threads=32
      // currently creates phone.txt.mdsz.out
+     int rc = 0;
      try {
-         if (!list) mdunzipfile(filename, threadcount, overwrite, runlogging);
-         if (list && runmdzip) mdunzipfile(filename, threadcount, overwrite, runlogging);
+         if (!list) rc = mdunzipfile(filename, threadcount, overwrite, runlogging);
+         if (list && runmdzip) rc = mdunzipfile(filename, threadcount, overwrite, runlogging);
      } catch (exception& ex) {
          std::cout << "MDunzip Exception " << std::endl;
      }     
 
-     return 0;
+     return rc;
 }
 
 // validate the mdzip file format

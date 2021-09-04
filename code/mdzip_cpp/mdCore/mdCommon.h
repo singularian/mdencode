@@ -388,3 +388,45 @@ std::string isTrue(bool val)
 
     return trueString;
 }
+
+// slice a hash signature bytes with a boolean list
+// bool boolHash[16] = {0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0 };
+// 49 89 6C 28 22 DF B4 43 CE D3 24 0F 5C 7E FC 85 
+// 49 6C 28 B4 43 DF B4 43 CE D3 24 0F 5C 7E FC 85
+int sliceHashBoolean(uint8_t *byteblock, long blocksize, bool boolhash[16]) {
+
+    long i = 0, pos = 0;
+    bool hashval = false;
+    for (i = 0; i < blocksize; i++)
+    {
+        if (boolhash[i] == true) {
+           byteblock[pos] = byteblock[i];
+           pos++;
+        }
+
+    }
+
+    return 0;
+
+}
+
+// boolean compare with two byteblocks
+// compare two equally sized hashes with a boolean
+// bool boolHash[16] = {0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0 };
+// if the boolean is true compare the bytes at the array index position
+// if the boolean is false skip the comparison
+// this needs to be in place
+bool booleanHashCompare(uint8_t *byteblock, uint8_t *byteblock2, long blocksize, bool boolhash[16]) {
+
+    long i = 0, pos = 0;
+    for (i = 0; i < blocksize; i++)
+    {
+        if (boolhash[i] == true) {
+           if (byteblock[i] != byteblock2[i]) return false;
+        }
+
+    }
+
+    return true;
+
+}

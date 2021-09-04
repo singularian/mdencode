@@ -28,7 +28,7 @@
 #include <string>
 #include <time.h>
 #include <vector>
-#include "../mdzip_cpp/external/CLI11.hpp"
+#include "../mdzip_cpp/external/CLI11.hpp" 
 #include "mdCore/mdCommon.h"
 #include "mdCore/mdMutex.h"
 #include "mdCore/mdMutexLog.h"
@@ -43,7 +43,7 @@ unsigned char *genRandomByteBlock(size_t num_bytes);
 unsigned char *convertHexToByteBlock(std::string & source);
 unsigned char *setByteBlock(size_t num_bytes);
 int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector<int> &bhlist, unsigned char *byteblock, 
-                       int threadnumber, int threadcount, bool runlogging);
+                       int threadnumber, int threadcount, bool skipDecode, bool runlogging);
 void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, 
                   int expmod, int blocksize, int threadcount, std::string& vectorlist, std::string& displayHLhashes,  std::string& blockkeys, 
@@ -92,6 +92,10 @@ int main (int argc, char **argv) {
      bool runlogging = false;
      app.add_flag("-l,--log", runlogging, "Run Logging");
 
+     // TODO Should add an option to disable the modulus scan and just run the hash
+     bool skipDecode = false;
+     app.add_flag("-q,--skip", skipDecode, "Skip the Modulus Scan");
+
      try {
         app.parse(argc, argv);
      } catch(const CLI::ParseError &e) {
@@ -130,14 +134,14 @@ int main (int argc, char **argv) {
      // byteblock = setByteBlock(blocksize);
 
      // run the modulus scan decode on the byteblock
-     decodeRandomBlock(blocksize, modsize, randombh, csvvals, byteblock, threadnumber, threadcount, runlogging);
+     decodeRandomBlock(blocksize, modsize, randombh, csvvals, byteblock, threadnumber, threadcount, skipDecode, runlogging);
 
      return 0;
 }
 
 // decodes a random byte sized byteblock with a group of signatures and a random signature key
 int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector<int> &bhlist, unsigned char *byteblock, 
-                       int threadnumber, int threadcount, bool runlogging) {
+                       int threadnumber, int threadcount, bool skipDecode, bool runlogging) {
 
      mpz_t remainder, modulusInt, byteblockInt;
 
@@ -167,7 +171,7 @@ int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector
      mpz_import (byteblockInt, blocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);  
 
      // calculate the modulusInt
-     // 2 ^ modsize - 1 
+     // 2 ^ modsize - 1
      calcModulusInt(modulusInt, modsize);
 
      // calculate the modulus remainder 
@@ -217,11 +221,20 @@ int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector
         }
      } 
 
+/*      if (skipDecode) {
+         free (byteblock);
+         mpz_clear(remainder);
+         mpz_clear(modulusInt);
+         mpz_clear(byteblockInt);
+         displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, vectorlist, hashlist, blockkeys, &log );
+         return 0;
+     }   
+*/
      // initialize the modulus scan threads vector
-     std::vector<std::thread> threads;
-     for(int tnum = 0; tnum < threadcount; tnum++){
-        threads.push_back(std::thread(&modscan::decode, std::ref(mst[tnum])));
-     }
+     //std::vector<std::thread> threads;
+     //for(int tnum = 0; tnum < threadcount; tnum++){
+     //   threads.push_back(std::thread(&modscan::decode, std::ref(mst[tnum])));
+     //}
 
      // display the current block stats
      std::string vectorlist = mst[0].hcl.getHLvectorsString(HASHBLOCK);
@@ -235,6 +248,21 @@ int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector
      // display the current block stats after initialization
      // display the block keys
      displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, vectorlist, hashlist, blockkeys, &log );
+
+     if (skipDecode) {
+        free (byteblock);
+        mpz_clear(remainder);
+        mpz_clear(modulusInt);
+        mpz_clear(byteblockInt);
+        log.writeLog("Skipping decode modscan");
+        return 0;      
+     } 
+
+     // initialize the modulus scan threads vector
+     std::vector<std::thread> threads;
+     for(int tnum = 0; tnum < threadcount; tnum++){
+        threads.push_back(std::thread(&modscan::decode, std::ref(mst[tnum])));
+     }
 
      // std::cout << endl << "Running decode modscan" << endl << endl;
      log.writeLog("Running decode modscan");

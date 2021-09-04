@@ -472,6 +472,7 @@ Options:
   --randbh                    Randomize the Block Hash Keylist
   -x,--hex TEXT               Hex Byteblock string
   -l,--log                    Run Logging
+  -q,--skip                   Skip the Modulus Scan
 
 
 
