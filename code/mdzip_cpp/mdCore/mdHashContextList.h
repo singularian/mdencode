@@ -34,7 +34,7 @@
 // TODO should add a keylist type for setting the keylist separately from the hash block or file list
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
 // signatures enum list
-enum signatures {FIRST, CIT64, CRC32, CRC64, EDN224, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HAS160, HW64, MD2s, MD4s, MD5s, MD6, 
+enum signatures {FIRST, CIT64, CRC32, CRC64, EDN224, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HAS160, HW40, HW64, MD2s, MD4s, MD5s, MD6, 
                 MD62, MET641, MET642, MX3, PNG, RIPE128, RIPE160, RIPE256, RIPE320, SEA, SIP32, SIP322, SIP40, SIP48, SIP64, SIP128, 
                 SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, 
                 SPK32, SPK64, TIGER192, XXH32, XXH64, WP, WYH, LAST};
@@ -67,6 +67,7 @@ Hashlist mdHashlist[LAST] = {
     {9,  "fnv64",    "FNV-1  64",             false,    8,      0},
     {10, "fnv64a",   "FNV-1a 64",             false,    8,      0},
     {11, "has160",   "HAS 160",               false,    20,     0},
+    {12, "hw40",     "Highway Hash 40",       true,     5,      32},
     {12, "hw64",     "Highway Hash 64",       true,     8,      32},
     {13, "md2",      "MD2",                   false,    16,     0},
     {14, "md4",      "MD4",                   false,    16,     0},
@@ -246,6 +247,9 @@ public:
                     break;
                   case HAS160:
                     break;  
+                  case HW40:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].hw40key), 32);
+                    break;  
                   case HW64:
                     rf.read(reinterpret_cast<char*>(&hregister[0].hw64key), 32);
                     break;
@@ -375,6 +379,9 @@ public:
                   case FNV64A:
                     break;
                   case HAS160:
+                    break;  
+                  case HW40:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].hw40key), 32);
                     break;    
                   case HW64:
                     wf.write(reinterpret_cast<char*>(&hregister[0].hw64key), 32);
@@ -505,6 +512,9 @@ public:
                   case FNV64A:
                     break;
                   case HAS160:
+                    break;  
+                  case HW40:
+                    genRandomLongBlock(hregister[0].hw40key, 4);
                     break;    
                   case HW64:
                     genRandomLongBlock(hregister[0].hw64key, 4);
@@ -681,6 +691,10 @@ public:
                   case HAS160:
                     rf.read(reinterpret_cast<char*>(&hregister[0].has160i), hashblocksize); 
                     break;  
+                  case HW40:
+                    // rf.read(reinterpret_cast<char*>(&hregister[0].hw40i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].hw40bi), hashblocksize);
+                    break;  
                   case HW64:
                     rf.read(reinterpret_cast<char*>(&hregister[0].hw64i), sizeof(long));
                     break;
@@ -830,6 +844,10 @@ public:
                     break;
                   case HAS160:
                     wf.write(reinterpret_cast<char*>(&hregister[0].has160i), hashblocksize); 
+                    break;  
+                  case HW40:
+                    // wf.write(reinterpret_cast<char*>(&hregister[0].hw40i), hashblocksize);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].hw40bi), hashblocksize);
                     break;   
                   case HW64:
                     wf.write(reinterpret_cast<char*>(&hregister[0].hw64i), sizeof(long));
@@ -984,6 +1002,10 @@ public:
                     break;
                   case HAS160:
                     getFileHashHAS160((char *) filename.c_str(), hregister[0].has160i);
+                    break;  
+                  case HW40:
+                    hregister[0].hw40i = getFileHashHW64((char *) filename.c_str(), hregister[0].hw40key);
+                    convertLongToBytes(hregister[0].hw40i, hregister[0].hw40bi);
                     break;  
                   case HW64:
                     hregister[0].hw64i = getFileHashHW64((char *) filename.c_str(), hregister[0].hw64key);
@@ -1149,6 +1171,11 @@ public:
                   case HAS160:
                     getFileHashHAS160((char *) filename.c_str(), hregister[0].has160o);
                     if (memcmp(hregister[0].has160i, hregister[0].has160o, 20) != 0) return false;
+                    break;  
+                  case HW40:
+                    hregister[0].hw40o = getFileHashHW64((char *) filename.c_str(), hregister[0].hw40key);
+                    convertLongToBytes(hregister[0].hw40o, hregister[0].hw40bo);
+                    if (memcmp(hregister[0].hw40bi, hregister[0].hw40bo, hashblocksize) != 0) return false;
                     break;  
                   case HW64:
                     hregister[0].hw64o = getFileHashHW64((char *) filename.c_str(), hregister[0].hw64key);
@@ -1340,6 +1367,12 @@ public:
                   case HAS160:
                     getHAS160(byteblock, blocksize, hregister[0].has160i);
                     break;  
+                  case HW40:
+                    hregister[0].hw40i = HighwayHash64(byteblock, blocksize, hregister[0].hw40key);
+                    convertLongToBytes(hregister[0].hw40i, hregister[0].hw40bi);
+                    // convertLongToBytes(HighwayHash64(byteblock, blocksize, hregister[0].hw40key), hregister[0].hw40bi);
+                    // cout << "sdlkfjsldkfjskdfjskdfj " << 
+                    break;
                   case HW64:
                     hregister[0].hw64i = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
                     break;
@@ -1501,7 +1534,17 @@ public:
                   case HAS160:
                     getHAS160(byteblock, blocksize, hregister[0].has160o);
                     if (memcmp(hregister[0].has160i, hregister[0].has160o, 20) != 0) return false;
-                    break;   
+                    break;
+                  case HW40:
+                    // hregister[0].hw40o = HighwayHash64(byteblock, blocksize, hregister[0].hw40key);
+                    // cout << std::endl << "hash 40 in " << hregister[0].hw40i << " out " << hregister[0].hw40o << " " << hashblocksize << std::endl;
+                    //convertLongToBytes(hregister[0].hw40o, hregister[0].hw40bo);
+                    convertLongToBytes(HighwayHash64(byteblock, blocksize, hregister[0].hw40key), hregister[0].hw40bo);
+                    //printByteblock(hregister[0].hw40bi, 8, true);
+                    //printByteblock(hregister[0].hw40bo, 8, true);
+                    //cout << std::endl << "hash 40 cmp " << memcmp(hregister[0].hw40bi, hregister[0].hw40bo, hashblocksize) << std::endl;
+                    if (memcmp(hregister[0].hw40bi, hregister[0].hw40bo, hashblocksize) != 0) return false;
+                    break;
                   case HW64:
                     hregister[0].hw64o = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
                     if (hregister[0].hw64i != hregister[0].hw64o) return false;
@@ -1691,6 +1734,10 @@ public:
                      break;
                   case HAS160:
                      break;   
+                  case HW40: 
+                     ss << std::get<1>(hash) << " keys ";
+                     for(i=0; i < 4; i++) { ss << std::to_string(hregister[0].hw40key[i]) << " "; }
+                     break;  
                   case HW64:
                      ////   addHashToDisplayStream(hregister[0].hw64key, 4); // TODO
                      ss << std::get<1>(hash) << " keys ";
@@ -1856,8 +1903,14 @@ public:
                   case HAS160:
                      addHashToDisplayStream(hregister[0].has160i, hashblocksize);
                      break;   
+                  case HW40:
+                     addHashToDisplayStream(hregister[0].hw40bi, hashblocksize);
+                     break;   
                   case HW64:
                      ss << std::to_string(hregister[0].hw64i) << " ";
+                     uint8_t  hw40bi[8];
+                     convertLongToBytes(hregister[0].hw64i, hw40bi);
+                     addHashToDisplayStream(hw40bi, hashblocksize);
                      break;
                   case MD2s:
                      addHashToDisplayStream(hregister[0].md2i, hashblocksize);

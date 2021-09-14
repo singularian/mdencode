@@ -359,6 +359,14 @@ int buffToInteger(char *buffer)
     return a;
 }
 
+// https://linux.die.net/man/3/htole64
+// https://stackoverflow.com/questions/56022775/convert-uint64-t-to-byte-array-portably-and-optimally-in-clang#56027525
+void convertLongToBytes(uint64_t x, uint8_t* dest) {
+    x = htole64(x);
+    std::memcpy(dest, &x, sizeof(x));
+}
+
+
 // Checks if the platform is big- or little-endian.
 // https://github.com/steinwurf/endian/blob/master/src/endian/is_big_endian.hpp
 //

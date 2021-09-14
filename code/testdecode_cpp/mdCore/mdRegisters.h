@@ -34,7 +34,13 @@ struct hash_list
     // rhash has-160
     uint8_t has160i[20];
     uint8_t has160o[20];
-    // highway hash
+    // highway hash 40
+    uint64_t hw40i;
+    uint64_t hw40o;
+    uint8_t  hw40bi[8];
+    uint8_t  hw40bo[8];
+    uint64_t hw40key[4] = {1, 2, 3, 4};    
+    // highway hash 64
     uint64_t hw64i;
     uint64_t hw64o;
     uint64_t hw64key[4] = {1, 2, 3, 4};
@@ -101,13 +107,19 @@ struct hash_list
     uint8_t siphash322o[16];
     uint8_t sipkey322[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
     // siphash40
-    // uses the second siphash method
-    // bool boolHash[16] = {1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-    bool boolHash[16] = {1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 };
+    // currently uses the second siphash method
     uint8_t siphash40i[16];
     uint8_t siphash40o[16];
+    // bool boolHash[16] = {1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+    bool    boolHash[16] = {1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 };
     uint8_t sipkey40[16] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf};
-    uint8_t sipkey42[64] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf,
+    // siphash40 test variant with a 64 byte key
+    uint8_t siphash402i[16];
+    uint8_t siphash402o[16];
+    // siphash40 variant with 64 byte key boolean compare array
+    bool    sipboolHash42[16] = {1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 };
+    // siphash40 64 byte key 
+    uint8_t sipkey402[64] = {0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf,
                             0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf,
                             0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf,
                             0,1,2,3,4,5,6,7,8,9,0xa,0xb,0xc,0xd,0xe,0xf };

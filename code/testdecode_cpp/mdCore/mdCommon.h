@@ -359,6 +359,14 @@ int buffToInteger(char *buffer)
     return a;
 }
 
+// https://linux.die.net/man/3/htole64
+// https://stackoverflow.com/questions/56022775/convert-uint64-t-to-byte-array-portably-and-optimally-in-clang#56027525
+void convertLongToBytes(uint64_t x, uint8_t* dest) {
+    x = htole64(x);
+    std::memcpy(dest, &x, sizeof(x));
+}
+
+
 // Checks if the platform is big- or little-endian.
 // https://github.com/steinwurf/endian/blob/master/src/endian/is_big_endian.hpp
 //
@@ -415,6 +423,7 @@ int sliceHashBoolean(uint8_t *byteblock, long blocksize, bool boolhash[16]) {
 // bool boolHash[16] = {0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0 };
 // if the boolean is true compare the bytes at the array index position
 // if the boolean is false skip the comparison
+// this needs to be in place
 bool booleanHashCompare(uint8_t *byteblock, uint8_t *byteblock2, long blocksize, bool boolhash[16]) {
 
     long i = 0, pos = 0;

@@ -14,13 +14,9 @@ int incrementByteblock(int blocksize, unsigned char *byteblock, long blocknumber
 
     // add the blocknumber to the byte block big int
     if (incrementKey == 1) {
-        //  mpz_sub_ui (keyblockInt, keyblockInt, blocknumber);
-        // try decrement by 1 trillion
-        mpz_sub_ui (keyblockInt, keyblockInt, 1000000000000);
+        mpz_sub_ui (keyblockInt, keyblockInt, blocknumber);
     } else if (incrementKey == 2) {
-        // mpz_add_ui (keyblockInt, keyblockInt, blocknumber);
-        // try increment??? by 1 trillion
-        mpz_add_ui (keyblockInt, keyblockInt, 1000000000000);
+        mpz_add_ui (keyblockInt, keyblockInt, blocknumber);
     }
 
     // cout << "testing byteblock incrementer st " << std::endl;

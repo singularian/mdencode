@@ -29,14 +29,18 @@
 #include "mdFilehash.h"
 #include "mdRandom.h"
 #include "mdRegisters.h"
+#include "mdIncrementKey.h"
 
 // TODO should add a keylist type for setting the keylist separately from the hash block or file list
 enum htype {HASHFILE,HASHBLOCKGROUP,HASHBLOCK,HASHLAST};
 // signatures enum list
-enum signatures {FIRST, CIT64, CRC32, CRC64, EDN224, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HAS160, HW64, MD2s, MD4s, MD5s, MD6, 
+enum signatures {FIRST, CIT64, CRC32, CRC64, EDN224, FAST32, FAST64, FNV32, FNV32A, FNV64, FNV64A, HAS160, HW40, HW64, MD2s, MD4s, MD5s, MD6, 
                 MD62, MET641, MET642, MX3, PNG, RIPE128, RIPE160, RIPE256, RIPE320, SEA, SIP32, SIP322, SIP40, SIP48, SIP64, SIP128, 
                 SHA164, SHA1128, SHA1s, SHA256s, SHA384s, SHA512s, 
                 SPK32, SPK64, TIGER192, XXH32, XXH64, WP, WYH, LAST};
+
+// key incrementer
+enum keyincrementer {NOINC, DEC, INC};                
 
 // should add a speed column to show which signatures are fastest
 // maybe add an enabled/disabled option
@@ -63,6 +67,7 @@ Hashlist mdHashlist[LAST] = {
     {9,  "fnv64",    "FNV-1  64",             false,    8,      0},
     {10, "fnv64a",   "FNV-1a 64",             false,    8,      0},
     {11, "has160",   "HAS 160",               false,    20,     0},
+    {12, "hw40",     "Highway Hash 40",       true,     5,      32},
     {12, "hw64",     "Highway Hash 64",       true,     8,      32},
     {13, "md2",      "MD2",                   false,    16,     0},
     {14, "md4",      "MD4",                   false,    16,     0},
@@ -108,8 +113,16 @@ private:
     int lastThread;
     int threadcount;
     int blocksize;
+    // blocknumber is for making a per block signature key
+    // need to add a get and set for this
+    // TODO it can increment or decrement the signature key (possibly integer) to make the block keys unique per block
+    // It adds or increments/decrements the blocknumber to the hash key
+    // It can also set a pseudo random number generator seed to set each block with a different signature key.
+    long blocknumber = 0; 
+    int incrementKey = NOINC;
     // set the hashlistsize to the last signatures enum value - 1
     int hashlistsize = LAST - 1;
+    // TODO Need to simplify this have hashblock, hashkey vectors
     // hash list vectors
     // vector with tuple - hashnumber, hashname, blocksize
     std::vector<std::tuple<int,std::string,int>> hashlistvt[3];
@@ -233,6 +246,9 @@ public:
                   case FNV64A:
                     break;
                   case HAS160:
+                    break;  
+                  case HW40:
+                    rf.read(reinterpret_cast<char*>(&hregister[0].hw40key), 32);
                     break;  
                   case HW64:
                     rf.read(reinterpret_cast<char*>(&hregister[0].hw64key), 32);
@@ -363,6 +379,9 @@ public:
                   case FNV64A:
                     break;
                   case HAS160:
+                    break;  
+                  case HW40:
+                    wf.write(reinterpret_cast<char*>(&hregister[0].hw40key), 32);
                     break;    
                   case HW64:
                     wf.write(reinterpret_cast<char*>(&hregister[0].hw64key), 32);
@@ -493,6 +512,9 @@ public:
                   case FNV64A:
                     break;
                   case HAS160:
+                    break;  
+                  case HW40:
+                    genRandomLongBlock(hregister[0].hw40key, 4);
                     break;    
                   case HW64:
                     genRandomLongBlock(hregister[0].hw64key, 4);
@@ -589,6 +611,44 @@ public:
 
     }    
 
+    // increment the Block Signature keys based on the signature list for the next file block
+    // It can either add the block number to the signature key
+    // or
+    // It can also use a Pseudo Random Number Generator and seed to make each file block signature key different
+    //
+    // Alternatively it can use a large signature key of 16 bytes or larger like siphash
+    // Incrementing for adding
+    // Decrementing for subtraction
+    // I can use the double mdVersion to specify if it is incrementing or decrementing or a PSG generator
+    // It could also add others to increment by 1000 or 1 million or a billions or even different i/d numbers
+    int incrementBlockKeyList() {
+          int hashblocksize = 0;
+
+          // skip the first block
+          // if (blocknumber == 1) return 0;
+
+          for(auto hash  : hashlistvt[HASHBLOCK]) {
+              hashblocksize = std::get<2>(hash);
+
+              switch(std::get<0>(hash)) {
+                  case SIP40:
+                    incrementByteblock(16, hregister[0].sipkey40, blocknumber, incrementKey);
+                    // cout << "testing byteblock incrementer st " << std::endl;
+                    // printByteblock(hregister[0].sipkey40, 16, true); 
+                    break;  
+                  case SIP48:
+                    incrementByteblock(16, hregister[0].sipkey48, blocknumber, incrementKey);
+                    // cout << "testing byteblock incrementer st " << std::endl;
+                    // printByteblock(hregister[0].sipkey48, 16, true); 
+                    break;   
+              }      
+
+          }   
+
+          return 0;
+
+    }   
+
     // readBlockHashList
     // read the hash list from a ifstream file object
     void readBlockHashList(std::ifstream &rf) { 
@@ -630,6 +690,10 @@ public:
                     break;
                   case HAS160:
                     rf.read(reinterpret_cast<char*>(&hregister[0].has160i), hashblocksize); 
+                    break;  
+                  case HW40:
+                    // rf.read(reinterpret_cast<char*>(&hregister[0].hw40i), hashblocksize);
+                    rf.read(reinterpret_cast<char*>(&hregister[0].hw40bi), hashblocksize);
                     break;  
                   case HW64:
                     rf.read(reinterpret_cast<char*>(&hregister[0].hw64i), sizeof(long));
@@ -780,6 +844,10 @@ public:
                     break;
                   case HAS160:
                     wf.write(reinterpret_cast<char*>(&hregister[0].has160i), hashblocksize); 
+                    break;  
+                  case HW40:
+                    // wf.write(reinterpret_cast<char*>(&hregister[0].hw40i), hashblocksize);
+                    wf.write(reinterpret_cast<char*>(&hregister[0].hw40bi), hashblocksize);
                     break;   
                   case HW64:
                     wf.write(reinterpret_cast<char*>(&hregister[0].hw64i), sizeof(long));
@@ -934,6 +1002,10 @@ public:
                     break;
                   case HAS160:
                     getFileHashHAS160((char *) filename.c_str(), hregister[0].has160i);
+                    break;  
+                  case HW40:
+                    hregister[0].hw40i = getFileHashHW64((char *) filename.c_str(), hregister[0].hw40key);
+                    convertLongToBytes(hregister[0].hw40i, hregister[0].hw40bi);
                     break;  
                   case HW64:
                     hregister[0].hw64i = getFileHashHW64((char *) filename.c_str(), hregister[0].hw64key);
@@ -1099,6 +1171,11 @@ public:
                   case HAS160:
                     getFileHashHAS160((char *) filename.c_str(), hregister[0].has160o);
                     if (memcmp(hregister[0].has160i, hregister[0].has160o, 20) != 0) return false;
+                    break;  
+                  case HW40:
+                    hregister[0].hw40o = getFileHashHW64((char *) filename.c_str(), hregister[0].hw40key);
+                    convertLongToBytes(hregister[0].hw40o, hregister[0].hw40bo);
+                    if (memcmp(hregister[0].hw40bi, hregister[0].hw40bo, hashblocksize) != 0) return false;
                     break;  
                   case HW64:
                     hregister[0].hw64o = getFileHashHW64((char *) filename.c_str(), hregister[0].hw64key);
@@ -1290,6 +1367,12 @@ public:
                   case HAS160:
                     getHAS160(byteblock, blocksize, hregister[0].has160i);
                     break;  
+                  case HW40:
+                    hregister[0].hw40i = HighwayHash64(byteblock, blocksize, hregister[0].hw40key);
+                    convertLongToBytes(hregister[0].hw40i, hregister[0].hw40bi);
+                    // convertLongToBytes(HighwayHash64(byteblock, blocksize, hregister[0].hw40key), hregister[0].hw40bi);
+                    // cout << "sdlkfjsldkfjskdfjskdfj " << 
+                    break;
                   case HW64:
                     hregister[0].hw64i = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
                     break;
@@ -1451,7 +1534,17 @@ public:
                   case HAS160:
                     getHAS160(byteblock, blocksize, hregister[0].has160o);
                     if (memcmp(hregister[0].has160i, hregister[0].has160o, 20) != 0) return false;
-                    break;   
+                    break;
+                  case HW40:
+                    // hregister[0].hw40o = HighwayHash64(byteblock, blocksize, hregister[0].hw40key);
+                    // cout << std::endl << "hash 40 in " << hregister[0].hw40i << " out " << hregister[0].hw40o << " " << hashblocksize << std::endl;
+                    //convertLongToBytes(hregister[0].hw40o, hregister[0].hw40bo);
+                    convertLongToBytes(HighwayHash64(byteblock, blocksize, hregister[0].hw40key), hregister[0].hw40bo);
+                    //printByteblock(hregister[0].hw40bi, 8, true);
+                    //printByteblock(hregister[0].hw40bo, 8, true);
+                    //cout << std::endl << "hash 40 cmp " << memcmp(hregister[0].hw40bi, hregister[0].hw40bo, hashblocksize) << std::endl;
+                    if (memcmp(hregister[0].hw40bi, hregister[0].hw40bo, hashblocksize) != 0) return false;
+                    break;
                   case HW64:
                     hregister[0].hw64o = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
                     if (hregister[0].hw64i != hregister[0].hw64o) return false;
@@ -1641,6 +1734,10 @@ public:
                      break;
                   case HAS160:
                      break;   
+                  case HW40: 
+                     ss << std::get<1>(hash) << " keys ";
+                     for(i=0; i < 4; i++) { ss << std::to_string(hregister[0].hw40key[i]) << " "; }
+                     break;  
                   case HW64:
                      ////   addHashToDisplayStream(hregister[0].hw64key, 4); // TODO
                      ss << std::get<1>(hash) << " keys ";
@@ -1806,8 +1903,14 @@ public:
                   case HAS160:
                      addHashToDisplayStream(hregister[0].has160i, hashblocksize);
                      break;   
+                  case HW40:
+                     addHashToDisplayStream(hregister[0].hw40bi, hashblocksize);
+                     break;   
                   case HW64:
                      ss << std::to_string(hregister[0].hw64i) << " ";
+                     uint8_t  hw40bi[8];
+                     convertLongToBytes(hregister[0].hw64i, hw40bi);
+                     addHashToDisplayStream(hw40bi, hashblocksize);
                      break;
                   case MD2s:
                      addHashToDisplayStream(hregister[0].md2i, hashblocksize);
@@ -2015,7 +2118,11 @@ public:
             std::cout << std::left << std::setw(12) << i + 1; 
             std::cout << std::left << std::setw(12) << mdHashlist[i].name;
             std::cout << std::left << std::setw(30) << mdHashlist[i].description;
-            std::cout << std::left << std::setw(12) << std::boolalpha << mdHashlist[i].haskey;
+
+            // std::cout << std::left << std::setw(12) << std::boolalpha << mdHashlist[i].haskey;
+            if (mdHashlist[i].haskey == true)  std::cout << std::left << std::setw(12) << "True";
+            if (mdHashlist[i].haskey == false) std::cout << std::left << std::setw(12) << "False"; 
+
             std::cout << std::left << std::setw(16) << mdHashlist[i].blocksize;
             std::cout << std::left << std::setw(16) << mdHashlist[i].keysize;
             std::cout << std::endl;
@@ -2072,5 +2179,22 @@ public:
 
     }
     
+    // increment the file block number
+    // it starts at zero
+    // in a 10 block file this means 
+    // 0 is the start number
+    // 9 is the end number 
+    void incrementBlockNum(int incKey) {
+        incrementKey = incKey;
 
+        if (blocknumber >= 1 && incKey != NOINC) incrementBlockKeyList();
+        blocknumber++;
+        // std::cout << "HCL Block Number " << blocknumber << std::endl;
+        
+    }
+
+    // get the file block number
+    long getHclBlockNum() {
+        return blocknumber;
+    }
 };
