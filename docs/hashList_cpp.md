@@ -1,4 +1,4 @@
-# MDunzip C++ Hashlist  
+# MDzip C++ Hashlist  
 
 This is the current C++ signature hash list. 
 
