@@ -177,12 +177,13 @@ path: [github.com/singularian/mdencode/code/mdzip_cpp/](https://github.com/singu
 
 [MD Encode Main Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
 
-### MDZip C++ Usage Example
+This is the MDZip Usage Doc
 
-This is the MDZip Usage 
+[MDencode C++ Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage_cpp.md)  
 
-- [MDencode C++ Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage_cpp.md)  
-- [MDencode GO Hashlist](https://github.com/singularian/mdencode/blob/master/docs/hashList_go.md) 
+# MDZip C++ Hashlist
+
+[MDencode C++ Hashlist](https://github.com/singularian/mdencode/blob/master/docs/hashList_cpp.md) 
 
 
 # MDZip Video Example 
