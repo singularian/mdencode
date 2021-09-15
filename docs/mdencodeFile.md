@@ -44,7 +44,7 @@ You can also add signatures. The design goal is to have hundreds of selectable s
 - The capability to add more signatures 
 - A chief design goal is to have hundreds of user selectable file or block and block group signatures
 - Prioritize file signature quantity over usability
-- A large extensible [Digital Signature List](https://github.com/singularian/mdencode/blob/master/docs/hashList.md)
+- A large extensible [Digital Signature List](https://github.com/singularian/mdencode/blob/master/docs/hashList_go.md)
 
 # Digital Signature Heirarchy
 
@@ -77,7 +77,7 @@ In one run the mdencode program can run ripe160, sha1, sha224 and whirlpool on a
 This allows for a file signature to have the lists randomized and improves security by making signatures unpredictable. The signature lists
 for mdencode are bit strings which can be random bit strings. This allows for the first random file signatures.
 
-- [Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
+- [Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage_go.md)
 
 # Output Formats
 
