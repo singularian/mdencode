@@ -175,11 +175,10 @@ These are the 7 main programs. There are currently 3 mdzip variants.
 path: [github.com/singularian/mdencode/code/mdzip_cpp/](https://github.com/singularian/mdencode/tree/master/code/mdzip_cpp)
 
 
-[MD Encode Main Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
-
 This is the MDZip Usage Doc
 
 [MDencode C++ Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage_cpp.md)  
+[MDencode Main Example Usage](https://github.com/singularian/mdencode/blob/master/docs/Usage.md)
 
 # MDZip C++ Hashlist
 
