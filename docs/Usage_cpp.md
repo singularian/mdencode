@@ -161,3 +161,40 @@ Examples:
    mdzipnh --file=test.txt  
 
 ```
+
+# MDzip C++ Test
+
+This is the Usage for decoderRandomTestHC2.
+
+```
+MDEncode GMP C++ Test Program
+Usage: ./decoderRandomTestHC2 [OPTIONS]
+
+Options:
+  -h,--help                   Print this help message and exit
+  -b,--block UINT:POSITIVE:INT in [1 - 100]
+                              Blocksize number
+  -m,--mod INT:POSITIVE       Modulus size number
+  -t,--thread,--threads INT:POSITIVE
+                              Thread count number
+  -r,--bh                     Block Hashlist csv string
+  -s,--hl                     Block Hashlist integers list
+  --randbh                    Randomize the Block Hash Keylist
+  -x,--hex TEXT               Hex Byteblock string
+  -l,--log                    Run Logging
+  -q,--skip                   Skip the Modulus Scan
+
+
+
+Examples:
+   decoderRandomTestHC2 -b 12 -m 64 -t 16
+   decoderRandomTestHC2 --block=12 --mod=64    --threads=16
+   decoderRandomTestHC2 --block=12 --mod=128   --threads=16
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=0011
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --hl 1 2 3 4 5
+   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --bh 1,5,7
+   decoderRandomTestHC2 --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh --block=12
+   decoderRandomTestHC2 --mod=64 --threads=32 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh --block=12
+                         
+```
