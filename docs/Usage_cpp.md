@@ -1,0 +1,163 @@
+# Command Line Usage of MDzip C++
+
+
+## MDZip C++ Usage Example
+
+```                                                                                                 
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ ./mdzip             
+MDEncode MDzip C++ Program
+Usage: [OPTIONS]
+
+Options:
+  -h,--help                   Print this help message and exit
+  -f,--file TEXT:FILE REQUIRED
+                              MDzip filename
+  -b,--block INT:POSITIVE:INT in [1 - 100]
+                              Blocksize number
+  -m,--mod INT:POSITIVE       Modulus size number
+  --fhs                       File Hashlist csv string
+  --fh                        File Hashlist integers list
+  -r,--bhs                    File Hashlist csv string
+  -s,--bh                     Block Hashlist integers list
+  -k,--keylist TEXT           Keylist csv string
+  --randbh                    Randomize the Block Hash Keylist
+  --inc                       Increment the Block Hash Keylist
+  --dec                       Decrement the Block Hash Keylist
+  -l,--log                    Run Logging
+
+
+
+MDzip Examples:
+   mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
+   mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
+   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh --dec
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh --inc
+
+MDunzip Examples:
+   mdunzip --file=filename.mdz --thread=16 
+   mdunzip --file=test.mdz --thread=16 
+   mdunzip --file=test.mdz --list
+   mdunzip --file=filename.mdz --list --unzip 
+   mdunzip --file=filename.mdz --valmdzip                        
+```                                                                                                 
+
+# MDunzip C++ Usage 
+
+```     
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ mdunzip
+MDEncode MDunzip C++ Program
+Usage: [OPTIONS]
+
+Options:
+  -h,--help                   Print this help message and exit
+  -f,--file TEXT:FILE REQUIRED
+                              MDunzip filename
+  -t,--thread,--threads INT:POSITIVE
+                              Thread count number
+  -l,--list                   List the mdzip file
+  -u,--unzip                  MDunzip a file
+  -o,--over                   Overwrite an existing mdunzip output file
+  --log                       Run Logging
+  --debug                     Run Dubug
+  --val                       Run the File Signatures on the output uncompressed file
+  --valmdzip                  Validate the mdzip file
+
+
+
+MDunzip Examples:
+   mdunzip --file=filename.mdz --thread=16 
+   mdunzip --file=test.mdz --thread=32 
+   mdunzip --file=test.mdz     --list --val
+   mdunzip --file=filename.mdz --list --unzip
+   mdunzip --file=filename.mdz --valmdzip
+
+MDzip Examples:
+   mdzip --file=test.txt --block=12 --mod=64 --bh 1 2 3 4 
+   mdzip --file=test.txt --block=12 --mod=64 --fh 1 2 3  --bh 1 2 3 4 
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh
+   mdzip --file=test.txt --block=12 --mod=64 --fh 11     --bh 1 2 3 4  --randbh=false
+   mdzip --file=randfile --block=14 --mod=32 --fh 13     --bh 5        --randbh
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh --dec
+   mdzip --file=randFileTest --mod=64 --bh=1-4 --bhs=23-25,26 --fh=1 6-7 15-20 --randbh --inc
+```
+                                                                                           
+
+# MDzip C++ No Header Simplified Usage 
+
+This is the usage for a cut down simplified version of MDzip.
+
+Features  
+
+- One 64-bit fasthash 64 signature
+- 14 byte signature block
+- 32 bit modulus
+- 64-bit fasthash 64 randomizable signature key
+- A capability to use other signatures with 64 bits
+
+```
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ mdzipnh
+MDEncode Minimized MDzip C++ Program
+Usage: [OPTIONS]
+
+Options:
+  -h,--help                   Print this help message and exit
+  -f,--file TEXT:FILE REQUIRED
+                              MDzip filename
+  -k,--key UINT:POSITIVE      Set fasthash key number
+  -r,--rand BOOLEAN           Randomize the Key
+  -l,--log BOOLEAN            Run Logging
+
+
+ 
+Examples:
+   mdzipnh --file=test.txt --key=1000 
+   mdzipnh --file=test.txt --rand
+   mdzipnh --file=test.txt  
+
+   mdunzipnh --file=filename.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --list
+   mdunzipnh --file=filename.mdsz --list --unzip
+   mdunzipnh --file=filename.mdsz --valmdzip
+```
+
+# MDunzip C++ No Header Simplified Usage 
+
+This is the usage for a cut down simplified version of MDunzip with just One 64-bit fasthash 64 signature and a 14-byte block with a 32-bit modulus.
+
+```
+user@server:~/projects/src/github.com/singularian/mdencode/code/mdzip_cpp$ mdunzipnh
+MDEncode Minimized MDunzip C++ Program
+Usage: [OPTIONS]
+
+Options:
+  -h,--help                   Print this help message and exit
+  -f,--file TEXT:FILE REQUIRED
+                              MDunzip filename
+  -t,--thread,--threads INT:POSITIVE
+                              Thread count number
+  -l,--list                   List the mdzip file
+  -u,--unzip                  MDunzip a file
+  -o,--over                   Overwrite an existing mdunzip output file
+  --log                       Run Logging
+  --valmdzip                  Validate the mdzip file
+
+
+
+Examples:
+   mdunzipnh --file=filename.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --thread=16 
+   mdunzipnh --file=test.mdsz --list
+   mdunzipnh --file=filename.mdsz --list --unzip
+   mdunzipnh --file=filename.mdsz --valmdzip
+
+   mdzipnh --file=test.txt --key=1000 
+   mdzipnh --file=test.txt --rand
+   mdzipnh --file=test.txt  
+
+```
