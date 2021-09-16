@@ -1371,7 +1371,6 @@ public:
                     hregister[0].hw40i = HighwayHash64(byteblock, blocksize, hregister[0].hw40key);
                     convertLongToBytes(hregister[0].hw40i, hregister[0].hw40bi);
                     // convertLongToBytes(HighwayHash64(byteblock, blocksize, hregister[0].hw40key), hregister[0].hw40bi);
-                    // cout << "sdlkfjsldkfjskdfjskdfj " << 
                     break;
                   case HW64:
                     hregister[0].hw64i = HighwayHash64(byteblock, blocksize, hregister[0].hw64key);
@@ -1537,12 +1536,7 @@ public:
                     break;
                   case HW40:
                     // hregister[0].hw40o = HighwayHash64(byteblock, blocksize, hregister[0].hw40key);
-                    // cout << std::endl << "hash 40 in " << hregister[0].hw40i << " out " << hregister[0].hw40o << " " << hashblocksize << std::endl;
-                    //convertLongToBytes(hregister[0].hw40o, hregister[0].hw40bo);
                     convertLongToBytes(HighwayHash64(byteblock, blocksize, hregister[0].hw40key), hregister[0].hw40bo);
-                    //printByteblock(hregister[0].hw40bi, 8, true);
-                    //printByteblock(hregister[0].hw40bo, 8, true);
-                    //cout << std::endl << "hash 40 cmp " << memcmp(hregister[0].hw40bi, hregister[0].hw40bo, hashblocksize) << std::endl;
                     if (memcmp(hregister[0].hw40bi, hregister[0].hw40bo, hashblocksize) != 0) return false;
                     break;
                   case HW64:
@@ -1682,7 +1676,7 @@ public:
                     if (hregister[0].wyhash64i != hregister[0].wyhash64o) return false;
                     break;
                   // default:
-                  //  std::cout << "Invalid hash" << std::endl;
+                  //  std::cout << "Invalid hash " << std::endl;
               }
           }
 
