@@ -416,9 +416,8 @@ uint8_t *mdzipModExponentBitstream(std::ifstream &nf, long filesize, long blockc
                byteblock  = new unsigned char[currentblocksize];   
            } 
 
-           // read the current byteblock from the input file and generate a signature
+           // read the current byteblock from the input file and generate a modulus exponent
            nf.read(reinterpret_cast<char*>(byteblock), (size_t) currentblocksize);
-
 
            // create a bigint number for the byte block
            mpz_import (byteblockInt, currentblocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);
