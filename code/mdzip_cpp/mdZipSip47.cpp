@@ -361,10 +361,9 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      }
 
      /* free used memory */
-     mpz_clear(remainder);
-     mpz_clear(modulusInt);
      mpz_clear(byteblockInt);
-
+     mpz_clear(modulusInt);
+     mpz_clear(remainder);
 
      return 0;
 
