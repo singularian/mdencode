@@ -21,7 +21,7 @@
 #include "external/bitstream/Bitstream.h"
 
 int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh, bool inc, bool dec);
-uint8_t *mdzipModExponentBitstream(std::ifstream &nf, long filesize, long blocksize, int modsize, mpz_t modulusInt);
+uint8_t *mdzipModExponentBitstream(std::ifstream &nf, long filesize, long blockcount, long blockremainder, long blocksize, int modsize, mpz_t modulusInt);
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
                  int modsizeBytes, std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize, int hclblockblocksize, 
                  std::string& filehashvector, std::string& blockhashvector, std::string& blockkeys, std::string& filesig, bool mdlist, int threadcount );
@@ -281,16 +281,16 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes, filehashnames, 
      blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, filesigs, true, 0);
 
-     // last block  
+     // set last block  
      long lastblk = blockcount;
 
      // create the 7 bit modulus exponent bitstream block
-     uint8_t *modExpBlock = mdzipModExponentBitstream(nf, filesize, blocksize, modsize, modulusInt);
+     uint8_t *modExpBlock = mdzipModExponentBitstream(nf, filesize, blockcount, blockremainder, blocksize, modsize, modulusInt);
      // write the 7 bit modulus exponent bitstream to the mdzip file
      mdzip.write(reinterpret_cast<char*>(modExpBlock),  modByteBlockSize);
      // seek to beginning of file
      nf.seekg (0, nf.beg);
-
+     // initialize the bitstreamreader with the modulus exponent block and size 
      BitstreamReader bsr(modExpBlock, modByteBlockSize);
 
      while (!nf.eof())
@@ -322,7 +322,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            // modulus remainder = byteblockInt mod modulusInt
            mpz_mod (remainder, byteblockInt, modulusInt);
 
-           // get the modulus exponent from the bitstream reader
+           // get the modulus exponent from the bitstream reader buffer
            modexponent = bsr.get<7>();
 
            // export the gmp modulus int remainder to a modulus int byte block
@@ -370,25 +370,16 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
 
 }
 
-// ==================================================================
+// need to clean this up
+// change the global variable for modByteBlockSize
 // converts the modulus exponent to a 7 bit stream
-uint8_t *mdzipModExponentBitstream(std::ifstream &nf, long filesize, long blocksize, int modsize, mpz_t modulusInt) {
+uint8_t *mdzipModExponentBitstream(std::ifstream &nf, long filesize, long blockcount, long blockremainder, long blocksize, int modsize, mpz_t modulusInt) {
 
      long blocknumber = 1;
      int modexponent  = 0;
 
-     // calculate the file block count and last block size 
-     long blockcount = CalcFileBlocks(filesize, blocksize);
-     
-     // calculate the last block size
-     long blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
-
      // the curent block size
      long currentblocksize = blocksize;
-
-
-     // create the ifstream and ofstream objects
-     // std::ifstream nf(filename, std::ios::in | std::ios::binary);
 
      // initialize the gmp bigint variables
      int byteorder = 0;
@@ -400,7 +391,7 @@ uint8_t *mdzipModExponentBitstream(std::ifstream &nf, long filesize, long blocks
      // create the byteblock buffer with the blocksize  
      unsigned char *byteblock  = new unsigned char[blocksize];
 
-     // last block  
+     // set last block  
      long lastblk = blockcount;
 
      // calculate modulus exponent bit block size
@@ -454,7 +445,6 @@ uint8_t *mdzipModExponentBitstream(std::ifstream &nf, long filesize, long blocks
     return modExpBlock;
 }
 
-// ==================================
 
 // display the mdlist mdzip file info
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, 
