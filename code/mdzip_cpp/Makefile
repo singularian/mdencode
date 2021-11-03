@@ -41,7 +41,13 @@ all:
 	$(CC) -I. $(DEPS) mdZipSip40.cpp -o mdzipsip40 $(LDLIBS)
 	@echo ""
 	@echo "Building mdunzip sip40 C++"
-	$(CC) -I. $(DEPS) mdUnzipSip40.cpp -o mdunzipsip40 $(LDLIBS)	
+	$(CC) -I. $(DEPS) mdUnzipSip40.cpp -o mdunzipsip40 $(LDLIBS)
+	@echo ""
+	@echo "Building mdzip sip47 bitstream C++ (Currently the Gold One)"	
+	$(CC) -I. $(DEPS) mdZipSip47.cpp -o mdzipsip47 $(LDLIBS)
+	@echo ""
+	@echo "Building mdunzip sip47 bitstream C++"
+	$(CC) -I. $(DEPS) mdUnzipSip47.cpp -o mdunzipsip47 $(LDLIBS)	
 mdzip:
 	@echo "Building mdzip C++"
 	$(CC) -I. $(DEPS) mdZip.cpp  -o mdzip $(LDLIBS)
@@ -60,6 +66,13 @@ mdzipsip:
 	@echo ""
 	@echo "Building mdunzip sip40 C++"
 	$(CC) -I. $(DEPS) mdUnzipSip40.cpp -o mdunzipsip40 $(LDLIBS)
+mdzipsip47:
+	@echo ""
+	@echo "Building mdzip sip47 bitstream C++"	
+	$(CC) -I. $(DEPS) mdZipSip47.cpp -o mdzipsip47 $(LDLIBS)
+	@echo ""
+	@echo "Building mdunzip sip47 bitstream C++"
+	$(CC) -I. $(DEPS) mdUnzipSip47.cpp -o mdunzipsip47 $(LDLIBS)	
 test:
 	@echo "Building Test Decoder HCL C++"
 	$(CC) -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 $(LDLIBS)
@@ -91,7 +104,7 @@ runtestsip:
 lines:
 	wc -l mdCore/*.h *.cpp
 clean:
-	rm -r mdzip mdunzip mdzipnh mdunzipnh mdzipsip40 mdunzipsip40 decoderRandomTestHC2 *.log *.mdz *.mdsz *.out randfile
+	rm -r mdzip mdunzip mdzipnh mdunzipnh mdzipsip40 mdunzipsip40 mdzipsip47 mdunzipsip47 decoderRandomTestHC2 *.log *.mdz *.mdsz *.out randfile
 cleantest:
 	rm decoderRandomTestHC2 testhashfile testhcl *.log *.mdz *.mdsz *.out
 # Display general help about this command
