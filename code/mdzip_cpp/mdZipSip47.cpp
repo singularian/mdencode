@@ -134,9 +134,15 @@ int main (int argc, char **argv) {
 
 }
 
-// mdzip an input file
+// mdzipsip47 an input file
 // current mdzip extension is .mdz
 // this is currently little endian and 64 bit for the longs
+// 
+// 5 bytes sip40
+// 4 bytes 32-bit modulus
+// 3-7 bits for the modulus exponent (2^80 max or 80 max)
+// 75-79 bits to encode an 80 bit block
+// 9.7/10 encoding
 int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh, bool inc, bool dec) {
 
      long blocknumber = 1;
