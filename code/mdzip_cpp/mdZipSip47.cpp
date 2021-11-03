@@ -141,7 +141,7 @@ int main (int argc, char **argv) {
 // 5 bytes sip40
 // 4 bytes 32-bit modulus
 // 3-7 bits for the modulus exponent (2^80 max or 80 max)
-// 75-79 bits to encode an 80 bit block
+// 75-79 bits to encode an 80 bit file block
 // 9.7/10 encoding
 int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh, bool inc, bool dec) {
 
