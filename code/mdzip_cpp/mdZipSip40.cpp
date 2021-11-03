@@ -128,7 +128,7 @@ int main (int argc, char **argv) {
 
 // mdzip an input file
 // current mdzip extension is .mdz
-// this is currently litte endian and 64 bit for the longs
+// this is currently little endian and 64 bit for the longs
 int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh, bool inc, bool dec) {
 
      long blocknumber = 1;
