@@ -93,8 +93,14 @@ buildcpp:
 	@echo "Building mdzip sip40 C++"
 	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdZipSip40.cpp  -o mdzipsip40 $(LDLIBS)
 	@echo ""
-	@echo "Building mdunzip C++"
+	@echo "Building mdunzip sip40 C++"
 	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdUnzipSip40.cpp  -o mdunzipsip40 $(LDLIBS)	
+	@echo ""
+	@echo "Building mdzip sip47 C++"
+	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdZipSip47.cpp  -o mdzipsip47 $(LDLIBS)
+	@echo ""
+	@echo "Building mdunzip sip47 C++"
+	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdUnzipSip47.cpp  -o mdunzipsip47 $(LDLIBS)	
 	@echo ""
 	@echo "Building Test Decode C++"
 	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/decoderRandomTestHC.cpp -o decoderRandomTestHC2 $(LDLIBS)
@@ -279,14 +285,41 @@ runtestsipinc:
 	@echo "Unzipping randomfile"
 	mdunzipsip40 --file=randomfile.mdz --over --val=true
 	# @echo "Checking differences"
-	# diff randomfile randomfile.mdz.out		
+	# diff randomfile randomfile.mdz.out	
+# test the mdzip C++ sip40 non incrementing key
+runtestsip47:	
+	@echo ""
+	@echo "Starting the mdzip  C++ sip47 modulus bitstream"
+	@echo "Creating randomfile"
+	# cp randomfile randomfile.2
+	rm -f randomfile
+	# randfile2 -blocknum=100 -bsize=10 -zsize=1 -first=14 -out=randomfile
+	# this test uses a random block in this format 
+	# it could also use a full non padded block 
+	# 0   1   127 231 57  115 27  53  37  74
+	# 00  14  7F  E7  39  73  1B  35  25  4A
+	randfile2 -blocknum=10 -bsize=10 -zsize=2 -first=1 -out=randomfile
+	@echo "Zipping the file randomfile"
+	mdzipsip47 --file=randomfile --randbh --fh=11
+	# validating the mdzip file
+	@echo ""
+	@echo "Validating the randomfile.mdz TODO"
+# mdunzipsip47 --file=randomfile.mdz --valmdzip
+	@echo ""
+	@echo "Running mdlist randomfile.mdz TODO"
+#	mdunzipsip47 --file=randomfile.mdz --list 
+	@echo ""
+	@echo "Unzipping randomfile"
+	mdunzipsip47 --file=randomfile.mdz --over --val=true
+	# @echo "Checking differences"
+	# diff randomfile randomfile.mdz.out			
 # run the C++ Hash Context List Tests	
 hctestcpp:
 	@echo "Running C++ Hash Context List Tests"
 	./decoderRandomTestHC2 --mod=64 --block=11 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh
 # clean the build directory	
 clean:
-	rm -r mdzip mdunzip mdzipcpp mdunzipcpp mdzipnh mdunzipnh mdcmd mdlist mdlistTest mdsig randfile randfile2 md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC decoderRandomTestHC2 randomfile randomfile.mdz randomfile.mdz.out *.mdsz *.mdsz.out *.log
+	rm -r mdzip mdunzip mdzipcpp mdunzipcpp mdzipnh mdunzipnh mdzipsip47 mdzipsip47 mdcmd mdlist mdlistTest mdsig randfile randfile2 md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC decoderRandomTestHC2 randomfile randomfile.mdz randomfile.mdz.out *.mdsz *.mdsz.out *.log
 # clean the build directory
 cleanbuild:
 	rm -r ${BUILD_DIR}/mdzip ${BUILD_DIR}/mdunzip ${BUILD_DIR}/mdcmd ${BUILD_DIR}/mdlist ${BUILD_DIR}/mdsig ${BUILD_DIR}/randfile ${BUILD_DIR}/mdencode ${BUILD_DIR}/mdbinlist ${BUILD_DIR}/md ${BUILD_DIR}/mddbreport ${BUILD_DIR}/mdnewdb
