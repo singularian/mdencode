@@ -284,13 +284,12 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
      // last block  
      long lastblk = blockcount;
 
-     // write the 7 bit modulus exponent bitstream
+     // create the 7 bit modulus exponent bitstream block
      uint8_t *modExpBlock = mdzipModExponentBitstream(nf, filesize, blocksize, modsize, modulusInt);
+     // write the 7 bit modulus exponent bitstream to the mdzip file
      mdzip.write(reinterpret_cast<char*>(modExpBlock),  modByteBlockSize);
      // seek to beginning of file
      nf.seekg (0, nf.beg);
-
-     std::cout << "modulus exponent block size " << modByteBlockSize << std::endl;
 
      BitstreamReader bsr(modExpBlock, modByteBlockSize);
 
@@ -323,21 +322,7 @@ int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int
            // modulus remainder = byteblockInt mod modulusInt
            mpz_mod (remainder, byteblockInt, modulusInt);
 
-
-           // ================================================================================= 
-           // calculate the modulus exponent with base two 
-           // int modexponent = calcExponent(byteblockInt);
-           
-           // write modexponent
-           // if the file block size is less than 32 it's a byte 2 ^ 255 max
-           // if block size is greater than 32 bytes it's a int
-           /* if (blocksize > 32) { 
-               mdzip.write(reinterpret_cast<char*>(&modexponent),   sizeof(int));
-           } else {
-               uint8_t modexponent2 = modexponent;
-               mdzip.write(reinterpret_cast<char*>(&modexponent2),   sizeof(uint8_t));
-           } */
-           // =================================================================================
+           // get the modulus exponent from the bitstream reader
            modexponent = bsr.get<7>();
 
            // export the gmp modulus int remainder to a modulus int byte block
@@ -424,13 +409,9 @@ uint8_t *mdzipModExponentBitstream(std::ifstream &nf, long filesize, long blocks
      modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
      if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
 
-
-     // std::cout << "File " << filename << " filesize " << filesize << " blockcount " << blockcount << " lastblocksize " << blockremainder << std::endl;
-     std::cout << "modbitblocksize " << modBitBlockSize << " modbyteblocksize " << modByteBlockSize <<  std::endl;
-
      // Create bitStream object
      uint8_t *modExpBlock = new uint8_t[modByteBlockSize];
-     std::cout << "block size " << sizeof(modExpBlock) << " " << modByteBlockSize << std::endl;
+     // std::cout << "block size " << sizeof(modExpBlock) << " " << modByteBlockSize << std::endl;
      BitstreamWriter bsw(modExpBlock, modByteBlockSize);
 
      while (!nf.eof())
@@ -453,10 +434,10 @@ uint8_t *mdzipModExponentBitstream(std::ifstream &nf, long filesize, long blocks
 
            // calculate the modulus exponent with base two 
            int modexponent = calcExponent(byteblockInt);
-
+           // add the modulus exponent to the bitstreamwriter as a 7 bit number
+           // this could be optimized to use RLE or 4 or 5 or 6 bits
+           // 7 bits will encode all the possible combinations of 2^80 which is the exponent max in a 10 byte block 
            bsw.put<7>(modexponent);
-
-           // std::cout << "block " << blocknumber << "/" << blockcount << " modexponent " << modexponent << std::endl;
 
            // if this is the last block stop processing 
            if (blocknumber == blockcount) break;

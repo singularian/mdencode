@@ -293,7 +293,7 @@ runtestsip47:
 	@echo "Creating randomfile"
 	# cp randomfile randomfile.2
 	rm -f randomfile
-	# randfile2 -blocknum=100 -bsize=10 -zsize=1 -first=14 -out=randomfile
+	# randfile2 -blocknum=100 -bsize=10 -zsize=2 -first=14 -out=randomfile
 	# this test uses a random block in this format 
 	# it could also use a full non padded block 
 	# 0   1   127 231 57  115 27  53  37  74
@@ -306,8 +306,8 @@ runtestsip47:
 	@echo "Validating the randomfile.mdz TODO"
 # mdunzipsip47 --file=randomfile.mdz --valmdzip
 	@echo ""
-	@echo "Running mdlist randomfile.mdz TODO"
-#	mdunzipsip47 --file=randomfile.mdz --list 
+	@echo "Running mdlist randomfile.mdz"
+	mdunzipsip47 --file=randomfile.mdz --list 
 	@echo ""
 	@echo "Unzipping randomfile"
 	mdunzipsip47 --file=randomfile.mdz --over --val=true

@@ -435,6 +435,19 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
    int byteorder = 0;
    int endian    = 0;
 
+   // calculate modulus exponent bitstream block size
+   long modBitBlockSize = blockcount * 7;
+   long modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
+   if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
+
+   // Create bitStream object
+   // Create the modulus exponent bitstream buffer
+   uint8_t *modExpBlock = new uint8_t[modByteBlockSize];
+   // load the modulus exponent bitstream block from the file
+   nf.read(reinterpret_cast<char*>(modExpBlock),  modByteBlockSize);
+   // initialize the bitstreamreader
+   BitstreamReader bsr(modExpBlock, modByteBlockSize);
+
    // read each of the mdzip file signature blocks
    for (blk = 0; blk < blockcount; blk++) {
         if (blocksize == 0) break;
@@ -445,11 +458,7 @@ int mdlist(std::string filename, bool listfile, bool runlogging) {
         hclblock.incrementBlockNum(incKey);
 
         // read the modulus exponent
-        if (blocksize > 32) {
-           nf.read(reinterpret_cast<char*>(&modexponent),   sizeof(int));
-        } else {
-           nf.read(reinterpret_cast<char*>(&modexponent),   sizeof(uint8_t));
-        }
+        modexponent = bsr.get<7>();
 
         // read the modulus remainder
         nf.read(reinterpret_cast<char*>(modulusbytes),   sizeof(char) * modsizeBytes);
@@ -646,23 +655,20 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
          mst[tnum].hcl.setVectorHLstring(blockhashnames, HASHBLOCK);
    }
 
-   // calculate modulus exponent bit block size
+   // calculate modulus exponent bitstream block size
    long modBitBlockSize = blockcount * 7;
    long modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
    if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
 
 
-   // std::cout << "File " << filename << " filesize " << filesize << " blockcount " << blockcount << " lastblocksize " << blockremainder << std::endl;
-   std::cout << "modbitblocksize " << modBitBlockSize << " modbyteblocksize " << modByteBlockSize <<  std::endl;
-
    // Create bitStream object
+   // Create the modulus exponent bitstream buffer
    uint8_t *modExpBlock = new uint8_t[modByteBlockSize];
-   std::cout << "block size " << sizeof(modExpBlock) << " " << modByteBlockSize << std::endl;
+   // load the modulus exponent bitstream block from the file
    nf.read(reinterpret_cast<char*>(modExpBlock),  modByteBlockSize);
-
+   // initialize the bitstreamreader
    BitstreamReader bsr(modExpBlock, modByteBlockSize);
 
- 
    // read each of the mdzip file signature blocks
    for (blk = 0; blk < blockcount; blk++) {
 
@@ -670,11 +676,7 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
          hclblock.readBlockHashList(nf);
 
          // read the modulus exponent
-         /* if (blocksize > 32) {
-           nf.read(reinterpret_cast<char*>(&modexponent),   sizeof(int));
-         } else {
-           nf.read(reinterpret_cast<char*>(&modexponent),   sizeof(uint8_t));
-         } */
+         // 7 bits at a time
          modexponent = bsr.get<7>();
 
          // read the modulus remainder
