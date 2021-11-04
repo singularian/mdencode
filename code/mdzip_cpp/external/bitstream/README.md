@@ -6,7 +6,7 @@ small utility functions for serialization and de-serialization of data
 
 ## Original Github repo
 
-[Bitstream bitstream](https://github.com/marcmo/bitstream)
+[Bitstream](https://github.com/marcmo/bitstream)
 
 ## Example Usecase
 
