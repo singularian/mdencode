@@ -216,6 +216,7 @@ These are examples of a parallel modulus scan for mdzip C++ with Siphash 40.
 - [Siphash 40 MDzip With No Increment Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash40_test.md)  
 - [Siphash 40 MDzip With Decrement Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash40_test_dec.md)  
 - [Siphash 40 MDzip With Increment Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash40_test_inc.md)  
+- [Siphash 47 MDzip With No Increment Key](https://github.com/singularian/mdencode/blob/master/docs/tests/mdzip_siphash47_test_noinc.md)
 
 # MDzip and MDunzip Overview
 
