@@ -288,7 +288,8 @@ runtestsipinc:
 	# diff randomfile randomfile.mdz.out	
 # test the mdzip C++ sip47 non incrementing key
 # this uses a 7 bit bitstream to encode the modulus scan exponent block
-# this means it can save 4 to 5 bits per 80 bit 10 byte block
+# this means it can save 1 to 5 bits per 80 bit 10 byte block
+# it can also use RLE to encode the modulus scan exponent block
 runtestsip47:	
 	@echo ""
 	@echo "Starting the mdzip  C++ sip47 modulus bitstream"
@@ -303,6 +304,7 @@ runtestsip47:
 	# out to add a last block param
 	randfile2 -blocknum=10 -bsize=10 -zsize=2 -first=1 -out=randomfile
 	@echo "Zipping the file randomfile"
+	# mdzipsip47 --file=randomfile --randbh --fh=11 --inc
 	mdzipsip47 --file=randomfile --randbh --fh=11
 	# validating the mdzip file
 	@echo ""
@@ -314,8 +316,8 @@ runtestsip47:
 	@echo ""
 	@echo "Unzipping randomfile"
 	mdunzipsip47 --file=randomfile.mdz --over --val=true
-	# @echo "Checking differences"
-	# diff randomfile randomfile.mdz.out			
+	@echo "Checking differences"
+	diff randomfile randomfile.mdz.out			
 # run the C++ Hash Context List Tests	
 hctestcpp:
 	@echo "Running C++ Hash Context List Tests"
