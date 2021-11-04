@@ -2,7 +2,7 @@
 
 This is an example of the siphash47 decompression.  
 It currently uses a 7 bit bitstream to encode the modulus exponent.  
-This means that an 80 bit and 10 byte file block can be encoded as 79 bits.  
+This means that an 10 byte file block (80 bits) can be encoded as 79 bits max.  
 
 10 byte file block encoding
 - 5 bytes siphash40
