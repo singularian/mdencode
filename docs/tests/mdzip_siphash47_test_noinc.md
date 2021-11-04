@@ -137,8 +137,6 @@ Signatures keys     sip40 keys 8FD7542D47BAC03C623C4F7D5A022C8F
 Modulus Exponent    64
 Modulus Remainder   534789339
 
-# validating the mdzip file
-
 Validating the randomfile.mdz
 
 mdunzipsip47 --file=randomfile.mdz --valmdzip
