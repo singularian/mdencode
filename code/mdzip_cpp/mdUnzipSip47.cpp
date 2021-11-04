@@ -184,10 +184,10 @@ int validateMDzip(std::string filename, bool validatemdzipfile) {
    nf.read(reinterpret_cast<char*>(&modsize),   sizeof(int));
 
    // initialize the modulusbytes array to store the modulo remainder
-   int modsizeBytes = calcModulusBytes(modsize);
+   int modsizeBytes = calcModulusBytes(modsize); // 32 
 
    // read the file hash list string from the mdzip file
-   nf.read(reinterpret_cast<char*>(&hclfilesize),    sizeof(int));
+   nf.read(reinterpret_cast<char*>(&hclfilesize),    sizeof(int)); // 36
    char* buf1 = new char[hclfilesize];
    // nf.read(reinterpret_cast<char*>(&filehashnames),  hclfilesize);
    if (hclfilesize > 0) {
@@ -197,7 +197,7 @@ int validateMDzip(std::string filename, bool validatemdzipfile) {
    }
 
    // read the file block hash list string from the mdzip file
-   nf.read(reinterpret_cast<char*>(&hclblocksize),   sizeof(int));
+   nf.read(reinterpret_cast<char*>(&hclblocksize),   sizeof(int)); // 40
    char* buf2 = new char[hclblocksize];
    nf.read(buf2,  hclblocksize);
    blockhashnames.append(buf2, hclblocksize);
@@ -235,7 +235,7 @@ int validateMDzip(std::string filename, bool validatemdzipfile) {
    hclfile.readBlockHashList(nf);
 
    // Load in the block hash random key size
-   nf.read(reinterpret_cast<char*>(&hclblockkeysize),   sizeof(int));
+   nf.read(reinterpret_cast<char*>(&hclblockkeysize),   sizeof(int)); // 44
 
    // set the filesigs string
    std::string filesigs = hclfile.displayHLhashes();
@@ -253,13 +253,12 @@ int validateMDzip(std::string filename, bool validatemdzipfile) {
    // blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, filesigs, true, 0);
 
    // calculate the modulus exponent block size
-   long modexponentsize = 1;
-   if (blocksize > 32) {
-       modexponentsize = 4;   
-   } 
+   long modBitBlockSize = blockcount * 7;
+   long modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
+   if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
 
    // calculate the total hash blcock size
-   int hashblocksize  = (hclblock.calcBlockSize(HASHBLOCK) + modsizeBytes + modexponentsize);
+   int hashblocksize  = (hclblock.calcBlockSize(HASHBLOCK) + modsizeBytes);
    int totalblocksize = (hashblocksize * blockcount);
 
    // calculate the mdzip file size
@@ -268,6 +267,9 @@ int validateMDzip(std::string filename, bool validatemdzipfile) {
    // add the hash string list size
    sumfilesize += hclfilesize;
    sumfilesize += hclblocksize;
+
+   // add the modexponent block byte size for the bitsteam data
+   sumfilesize += modByteBlockSize;
 
    // add the file block size and key block size and hash block size
    sumfilesize += hclfile.calcBlockSize(HASHBLOCK);
@@ -281,9 +283,11 @@ int validateMDzip(std::string filename, bool validatemdzipfile) {
       std::cout << "MDzip File " << sumfilesize << " = " << inputfilesize << std::endl; 
    } else {
       std::cout << "MDzip File doesn't validate" << std::endl; 
-      // std::cout << "MDzip File " << sumfilesize << " = " << inputfilesize << std::endl; 
+      std::cout << "MDzip File " << sumfilesize << " = " << inputfilesize << std::endl; 
       // std::cout << "MDzip File hash size " << hclfile.calcBlockSize(HASHBLOCK) << std::endl; 
       // std::cout << "MDzip File block size " << totalblocksize << std::endl; 
+      // std::cout << "MDzip File block key size " << hclblock.calcBlockKeySize(HASHBLOCK) << std::endl;
+
       return 1;
    }
 

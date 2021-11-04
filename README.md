@@ -161,6 +161,44 @@ Modulus Scan thread 31 and Random byteblock match
 0   0   0   32  32  65  33  97  18  63  24  34  255 252
 ```
 
+This is the Sip47 modulus scan decompression example running on a ryzen 3950x.
+It could use a 4 to 7 bit bitstream to encode the modulus exponent.
+
+```
+./decoderRandomTestHC2 --mod=32  --hl 30 --randbh  --log --hex=0066BDF2F888F000FF00 --block=10
+
+Start Time               Sun Oct 31 19:06:06 2021
+Block Size               10
+Random Byteblock         0066BDF2F888F000FF00
+                         1   2   3   4   5   6   7   8   9   10
+Random Byteblock Hex     00  66  BD  F2  F8  88  F0  00  FF  00
+Random Byteblock Int     0   102 189 242 248 136 240 0   255 0
+Random Byteblock Bigint  1895255171002932461312
+Modulus Size             32
+Modulus Bigint           4294967295
+Modulus Remainder        2918447087
+Modulus 2   ^ Exponent   70
+Modulus Mod ^ Exponent   2
+Block Signatures         sip40 5246BACF79
+Blockkeylist             sip40 keys 8E197EC7727CECD973118AEE2E72BE65
+Thread Count             32
+Logging                  true
+
+Hash Block Vector
+Number      Hash ID      Hash Name   Blocksize   Blockkeysize
+1           30           sip40       5           16
+                         Total       5           16
+
+Running decode modscan
+
+Found Match
+
+Elapsed Time (s) 2448.636829 = 40.8 minutes
+Modulus Scan thread 15 and Random byteblock match
+0 102 189 242 248 136 240   0 255   0
+0 102 189 242 248 136 240   0 255   0
+```
+
 [Other Decoder Examples](https://github.com/singularian/mdencode/blob/master/docs/EXAMPLES.md)
 
 # Parallel Modulus Scan

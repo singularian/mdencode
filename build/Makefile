@@ -286,25 +286,28 @@ runtestsipinc:
 	mdunzipsip40 --file=randomfile.mdz --over --val=true
 	# @echo "Checking differences"
 	# diff randomfile randomfile.mdz.out	
-# test the mdzip C++ sip40 non incrementing key
+# test the mdzip C++ sip47 non incrementing key
+# this uses a 7 bit bitstream to encode the modulus scan exponent block
+# this means it can save 4 to 5 bits per 80 bit 10 byte block
 runtestsip47:	
 	@echo ""
 	@echo "Starting the mdzip  C++ sip47 modulus bitstream"
 	@echo "Creating randomfile"
 	# cp randomfile randomfile.2
 	rm -f randomfile
-	# randfile2 -blocknum=100 -bsize=10 -zsize=2 -first=14 -out=randomfile
+	# randfile2 -blocknum=10 -bsize=10 -zsize=2 -first=14 -out=randomfile
 	# this test uses a random block in this format 
 	# it could also use a full non padded block 
 	# 0   1   127 231 57  115 27  53  37  74
 	# 00  14  7F  E7  39  73  1B  35  25  4A
+	# out to add a last block param
 	randfile2 -blocknum=10 -bsize=10 -zsize=2 -first=1 -out=randomfile
 	@echo "Zipping the file randomfile"
 	mdzipsip47 --file=randomfile --randbh --fh=11
 	# validating the mdzip file
 	@echo ""
-	@echo "Validating the randomfile.mdz TODO"
-# mdunzipsip47 --file=randomfile.mdz --valmdzip
+	@echo "Validating the randomfile.mdz"
+	mdunzipsip47 --file=randomfile.mdz --valmdzip
 	@echo ""
 	@echo "Running mdlist randomfile.mdz"
 	mdunzipsip47 --file=randomfile.mdz --list 
