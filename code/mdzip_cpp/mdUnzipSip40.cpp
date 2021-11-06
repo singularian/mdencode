@@ -40,7 +40,7 @@ int main (int argc, char **argv) {
      std::string filename;
      long filesize;
      long blockcount;
-     long blocksize   = 12;
+     long blocksize   = 11;
      int modsize      = 64;
      int threadnumber = 0;
      int threadcount  = std::thread::hardware_concurrency();
@@ -280,7 +280,7 @@ int validateMDzip(std::string filename, bool validatemdzipfile) {
       std::cout << "MDzip File " << sumfilesize << " = " << inputfilesize << std::endl; 
    } else {
       std::cout << "MDzip File doesn't validate" << std::endl; 
-      // std::cout << "MDzip File " << sumfilesize << " = " << inputfilesize << std::endl; 
+      std::cout << "MDzip File " << sumfilesize << " != " << inputfilesize << std::endl; 
       // std::cout << "MDzip File hash size " << hclfile.calcBlockSize(HASHBLOCK) << std::endl; 
       // std::cout << "MDzip File block size " << totalblocksize << std::endl; 
       return 1;
@@ -652,11 +652,11 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
          hclblock.readBlockHashList(nf);
 
          // read the modulus exponent
-         if (blocksize > 32) {
+         /* if (blocksize > 32) {
            nf.read(reinterpret_cast<char*>(&modexponent),   sizeof(int));
          } else {
            nf.read(reinterpret_cast<char*>(&modexponent),   sizeof(uint8_t));
-         }
+         } */
 
          // read the modulus remainder
          nf.read(reinterpret_cast<char*>(modulusbytes),   sizeof(char) * modsizeBytes);

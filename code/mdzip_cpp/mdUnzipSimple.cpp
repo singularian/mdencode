@@ -207,7 +207,7 @@ int validateMDzip(std::string filename) {
 
    if (sumfilesize == inputfilesize) {
       std::cout << "MDzip File " << filename << " validates " << std::endl; 
-      std::cout << "MDzip File " << sumfilesize << " = " << inputfilesize << std::endl; 
+      std::cout << "MDzip File Sum " << sumfilesize << " != " << inputfilesize << std::endl; 
    } else {
       std::cout << "MDzip File doesn't validate" << std::endl; 
       return 1;

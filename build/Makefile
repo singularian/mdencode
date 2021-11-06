@@ -302,6 +302,7 @@ runtestsip47:
 	# 0   1   127 231 57  115 27  53  37  74
 	# 00  14  7F  E7  39  73  1B  35  25  4A
 	# out to add a last block param
+	# 900 blocks is about compressive for 7 bit encoding
 	randfile2 -blocknum=10 -bsize=10 -zsize=2 -first=1 -out=randomfile
 	@echo "Zipping the file randomfile"
 	# mdzipsip47 --file=randomfile --randbh --fh=11 --inc
