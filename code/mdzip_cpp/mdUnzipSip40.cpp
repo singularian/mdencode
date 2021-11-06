@@ -280,7 +280,7 @@ int validateMDzip(std::string filename, bool validatemdzipfile) {
       std::cout << "MDzip File " << sumfilesize << " = " << inputfilesize << std::endl; 
    } else {
       std::cout << "MDzip File doesn't validate" << std::endl; 
-      std::cout << "MDzip File " << sumfilesize << " != " << inputfilesize << std::endl; 
+      std::cout << "MDzip File Sum " << sumfilesize << " != " << inputfilesize << std::endl; 
       // std::cout << "MDzip File hash size " << hclfile.calcBlockSize(HASHBLOCK) << std::endl; 
       // std::cout << "MDzip File block size " << totalblocksize << std::endl; 
       return 1;
