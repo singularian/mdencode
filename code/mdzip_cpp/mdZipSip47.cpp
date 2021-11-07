@@ -90,6 +90,18 @@ int main (int argc, char **argv) {
      bool runlogging = false;
      app.add_flag("-l,--log", runlogging, "Run Logging");
 
+     // display the usage without the hashlist 
+     // bool nohashlist = false;
+     // app.add_flag("-n,--usage", nohashlist, "MDzip Usage without the hash list"); 
+
+     // display the usage without the hashlist
+     // requires the file parameter so this doesn't quite work
+     /* if (nohashlist) {
+        std::cout << app.help() << std::endl;
+        usage(false);
+        return 0;
+     } */   
+
      // check the argument count and display the usage if it's not specified
      if (argc < 2)
      {
@@ -114,7 +126,7 @@ int main (int argc, char **argv) {
 
      // possibly create a rolling signature where it can run si40/48 on one and hw40/48 on alternate runs 
      // byteblock mod x run this sig
-     // alternate between runs? Has to be repeatable
+     // alternate between mdscan iterations? Has to be repeatable
      // run mdzipfile
      mdZip47 mdz(filename, blocksize, modsize, flcsvvals, blocklist, randombh, increment, decrement);
      mdz.mdzipfile();
