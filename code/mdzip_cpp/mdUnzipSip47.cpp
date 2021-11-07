@@ -13,17 +13,8 @@
 #include "external/CLI11.hpp"
 #include "mdZip/mdUnzip47.h"
 
-
 using namespace std;
 
-int validateMDzip(std::string filename, bool validatemdzipfile);
-int mdlist(std::string filename, bool listfile, bool runlogging);
-int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runlogging, bool validate);
-void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
-                 int modsizeBytes, std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize, int hclblockblocksize, 
-                 std::string& filehashvector, std::string& blockhashvector, std::string& blockkeys, std::string& filesig, bool mdlist, int threadcount );
-void displayBlockInfo(std::string action, int blocksize, int blk, int lastblk, long blockremainder, int modexponent, mpz_t modulusIntRemainder, 
-                      mdHashContextList &hclblock, mdMutexLog &log);
 void usage();
 
 int main (int argc, char **argv) {
