@@ -13,7 +13,7 @@
 */
 #include <iostream>
 #include "external/CLI11.hpp"
-#include "mdCore/mdZip47.h"
+#include "mdZip/mdZip47.h"
 
 void usage(bool displayHCL); 
 
@@ -112,6 +112,9 @@ int main (int argc, char **argv) {
 
      std::vector<int> blocklist = { SIP40 };
 
+     // possibly create a rolling signature where it can run si40/48 on one and hw40/48 on alternate runs 
+     // byteblock mod x run this sig
+     // alternate between runs? Has to be repeatable
      // run mdzipfile
      mdZip47 mdz(filename, blocksize, modsize, flcsvvals, blocklist, randombh, increment, decrement);
      mdz.mdzipfile();
