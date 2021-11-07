@@ -127,6 +127,8 @@ int main (int argc, char **argv) {
      // possibly create a rolling signature where it can run si40/48 on one and hw40/48 on alternate runs 
      // byteblock mod x run this sig
      // alternate between mdscan iterations? Has to be repeatable
+     // 
+     // another alternative is sip48 mod24 and a 3-6/7bitstream file block encoding. It trades some speed for a larger signature
      // run mdzipfile
      mdZip47 mdz(filename, blocksize, modsize, flcsvvals, blocklist, randombh, increment, decrement);
      mdz.mdzipfile();
