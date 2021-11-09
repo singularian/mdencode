@@ -31,8 +31,6 @@ public:
     // Destructor
     ~mdMutex()
     {
-
-
     } 
 
     // increment the threads match not found count
@@ -73,6 +71,10 @@ public:
 
     }
 
+    // set the thread count
+    void setThreadCount(int threadCnt) {
+        threadCount = threadCnt;
+    }
     
     int  getMatchThread() {     return lastThread; }
     int  getNotFound()    {     return notFound; }

@@ -41,8 +41,8 @@ int main (int argc, char **argv) {
      // Add an mdzip option boolean to just allow mdlist to be specified
      // if runmdzip is false you don't run it
      // you can run mdlist or mdunzip or both mdlist and mdunzip
-     bool runmdzip = false;
-     app.add_flag("-u,--unzip", runmdzip, "MDunzip a file");
+     bool rununzip = false;
+     app.add_flag("-u,--unzip", rununzip, "MDunzip a file");
 
      // overwrite the unzipped output file if it exists
      // stop and throw an error if it doesn't
@@ -106,7 +106,7 @@ int main (int argc, char **argv) {
          if (!list) rc = mdunzip.mdunzipfile();
          // if the list and mdunzip flags are set run both
          // I might make it just run one
-         if (list && runmdunzip) rc = mdunzip.mdunzipfile();
+         if (list && rununzip) rc = mdunzip.mdunzipfile();
      } catch (exception& ex) {
          std::cout << "MDunzip Exception" << std::endl;
      }

@@ -44,13 +44,12 @@ private:
     int endian    = 0;
     size_t count;
     mpz_t byteblockInt, modulusInt, remainder;
+    // log variable
+    // mdMutexLog log{false};
  public:    
-
 
     // initialize the mdzip object
     mdZip47() {
-
-
     }
 
     mdZip47(std::string fileName, long blockSize, int modBitSize, std::vector<int> &fhList, std::vector<int> &bhList, bool randomBH, bool Inc, bool Dec) {
@@ -83,7 +82,11 @@ private:
     // set the version
     void setVersion(double version) {
         mdversion = version;
+    }
 
+    // set the mdzip filename
+    void setFilename(std::string fileName) {
+        filename = fileName;
     }
 
     // get the version
@@ -129,7 +132,7 @@ private:
         return blockremainder;
     }    
 
-    // set the modulus bit size
+    // set the modulus byte size
     void setModulus() {
 
         if (modsizebits == 0) return;
@@ -488,7 +491,7 @@ private:
 
     // display the mdlist mdzip file info
     void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, 
-        int modsize, int modsizeBytes, std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize,
+        int modsizeBits, int modsizeBytes, std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize,
         int hclblockblocksize, std::string& filehashvector,  std::string& blockhashvector, std::string& blockkeys, 
         std::string& filesig, bool mdlist, int threadcount ) {
 
@@ -503,7 +506,7 @@ private:
         std::cout << std::left << std::setw(20) << "Blockcount: "     << blockcount << std::endl;
         std::cout << std::left << std::setw(20) << "Blockremainder: " << blockremainder << std::endl;
 
-        std::cout << std::left << std::setw(20) << "Modsize: "        << modsize << std::endl;
+        std::cout << std::left << std::setw(20) << "Modsize: "        << modsizeBits << std::endl;
         std::cout << std::left << std::setw(20) << "Modsize Bytes: "  << modsizeBytes << std::endl;
         std::cout << std::left << std::setw(20) << "Filehashlist: "   << filehashnames << std::endl;
         std::cout << std::left << std::setw(20) << "Blockhashlist: "  << blockhashnames << std::endl;

@@ -18,6 +18,7 @@ private:
     int threadcount       = 8;
     // file variables
     std::string filename;
+    std::string unzipfilename;
     size_t inputfilesize  = 0;
     long filesize         = 0;
     // mdzip variables
@@ -28,8 +29,8 @@ private:
     long blockcount       = 0;
     long blockremainder   = 0; // the last file block size
     long blocknumber      = 1; // current file block number position
-    int modsize           = 0; // duplicate for mdunzip need to refactor this
-    int modsizebits       = 32;
+    // modulus variables
+    int modsizebits       = 32; // should make this modsizeBits
     int modsizeBytes      = 4;
     int modexponent       = 0;
     long modByteBlockSize = 0; // mdzip bitstream modulus exponent byte size
@@ -56,13 +57,13 @@ private:
     int endian    = 0;
     size_t count;
     mpz_t byteblockInt, modulusInt, remainder;
+    // initialize the mutex and log objects
+    mdMutex    mutex{8};
+    mdMutexLog log{false};
  public:    
-
 
     // initialize the mdzip object
     mdUnzip47() {
-
-
     }
 
     // filename, threadcount, overwrite, runlogging, validate
@@ -75,9 +76,11 @@ private:
         listfile    = listFile;
 
         // setModulus();
-
+                
+        // initialize the log object
+        mutex.setThreadCount(threadcount);
+        log.setLogging(runlogging);
     }
-
 
     // Destructor
     ~mdUnzip47() {
@@ -90,10 +93,20 @@ private:
         // nf.read(reinterpret_cast<char*>(&modsize),   sizeof(int));
     }
 
+    // set the input filename
+    void setFilename(std::string fileName) {
+        filename = fileName;
+    }
+
+    // set the unzip filename
+    void setUnzipFilename(std::string fileName) {
+        // std:string mdunzipfile = filename + mdunzipExtension;
+        unzipfilename = filename + mdunzipExtension;
+    }
+
     // set the version
     void setVersion(double version) {
         mdversion = version;
-
     }
 
     // get the version
@@ -139,10 +152,13 @@ private:
         return blockremainder;
     }    
 
-    // set the modulus bit size
+    // set the modulus byte size
     void setModulus() {
 
-        if (modsizebits == 0) return;
+        if (modsizebits == 0) {
+            modsizeBytes = 0;
+            return;    
+        }    
  
         if ((modsizebits % 8) == 0)
         {
@@ -215,20 +231,14 @@ private:
             return 1;
         }
 
-        // initialize the log object
-        // mdMutexLog log(runlogging);
-
         // begin reading in the mdzip file data
         nf.read(reinterpret_cast<char*>(&mdversion), sizeof(double));
         nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
         nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
-        nf.read(reinterpret_cast<char*>(&modsize),   sizeof(int));
+        nf.read(reinterpret_cast<char*>(&modsizebits),   sizeof(int));
 
-        // initialize the modulusbytes array to store the modulo remainder
-        int modsizeBytes = calcModulusBytes(modsize); // 32
-        // ================================== 
-        // setModulus(); ????
-        // ==================================
+        // initialize the modulusbytes size to store the modulo exponent
+        setModulus();
 
         // read the file hash list string from the mdzip file
         nf.read(reinterpret_cast<char*>(&hclfilesize),    sizeof(int)); // 36
@@ -288,15 +298,8 @@ private:
         // set hclblockkeysize to the hclblockkeysize calculated by the hash context list
         std::string blockkeys = "default"; 
         if (hclblockkeysize > 0) {
-            /// std::cout << "setting mdlist keylist " << hclblockkeysize << std::endl;
-            //hclblock.readKeyList(nf);
-            // blockkeys = hclblock.displayHLhashKeys();
             hclblockkeysize = hclblock.calcBlockKeySize(HASHBLOCK);
         }  
-
-        // display the mdzip file info
-        // displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes, filehashnames, 
-        // blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, filesigs, true, 0);
 
         // calculate the modulus exponent block size
         long modBitBlockSize = blockcount * 7;
@@ -319,7 +322,10 @@ private:
 
         // add the file block size and key block size and hash block size
         sumfilesize += hclfile.calcBlockSize(HASHBLOCK);
-        sumfilesize += hclblockkeysize; // there might be a bug here where if it has the default key it adds the block key size when it should be zero
+        // if it is the default key hclblockkeysize is zero
+        // if it is not the default key then hclblockkeysize is the calculated key block size
+        sumfilesize += hclblockkeysize; 
+        // add the total block size
         sumfilesize += totalblocksize;
 
         nf.close();
@@ -337,9 +343,7 @@ private:
             return 1;
         }
 
-
         return 0;
-
     }   
 
     // mdlist
@@ -374,14 +378,11 @@ private:
             return 1;
         }
 
-        // initialize the log object
-        mdMutexLog log(runlogging);
-
         // begin reading in the mdzip file data
         nf.read(reinterpret_cast<char*>(&mdversion), sizeof(double));
         nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
         nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
-        nf.read(reinterpret_cast<char*>(&modsize),   sizeof(int));
+        nf.read(reinterpret_cast<char*>(&modsizebits),   sizeof(int));
 
         // if the increment or decrement is set change the mdVersion 
         // bool incrementKey = false;
@@ -389,12 +390,8 @@ private:
         if (mdversion == 1.11) incKey = DEC;
         if (mdversion == 1.12) incKey = INC;
 
-        // initialize the modulusbytes array to store the modulo remainder
-        int modsizeBytes = calcModulusBytes(modsize);
-        // ==================================================
-        // setModulus(); ????
-        // ==================================================
-
+        // initialize the modulusbytes array and bigint to store the modulo remainder
+        setModulus(); 
         unsigned char *modulusbytes = new unsigned char[modsizeBytes];
         mpz_t modulusInt;
         mpz_init_set_str(modulusInt, "1", 10);
@@ -467,17 +464,13 @@ private:
         }  
 
         // display the mdzip file info
-        displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes, filehashnames, 
+        displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsizebits, modsizeBytes, filehashnames, 
         blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, filesigs, true, 0);
 
         // display the file block hash block list
         // block signatures / modulus exponent / modulus remainder
         int blk = 0;
         int lastblk = blockcount - 1;
-
-        // initialize the gmp bigint import variables
-        int byteorder = 0;
-        int endian    = 0;
 
         // calculate modulus exponent bitstream block size
         long modBitBlockSize = blockcount * 7;
@@ -573,12 +566,11 @@ private:
             return 1;
         }
 
-
         // begin reading in the mdzip file data
         nf.read(reinterpret_cast<char*>(&mdversion), sizeof(double));
         nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
         nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
-        nf.read(reinterpret_cast<char*>(&modsize),   sizeof(int));
+        nf.read(reinterpret_cast<char*>(&modsizebits),   sizeof(int));
 
         // if the increment or decrement is set change the mdVersion 
         // bool incrementKey = false;
@@ -586,18 +578,15 @@ private:
         if (mdversion == 1.11) incKey = DEC;
         if (mdversion == 1.12) incKey = INC;
 
-        // initialize the modulusbytes array to store the modulo remainder
-        int modsizeBytes = calcModulusBytes(modsize);
-        // ======================================================================
-        // setModulus(); ????
-        // ======================================================================
+        // initialize the modulusbytes array and bigint to store the modulo remainder
+        setModulus(); 
         unsigned char *modulusbytes = new unsigned char[modsizeBytes];
         mpz_t modulusInt, modulusIntRemainder;
         mpz_init_set_str(modulusInt, "1", 10);
         mpz_init_set_str(modulusIntRemainder, "1", 10);
 
         // calculate the modulus 2 ^ modsize - 1
-        calcModulusInt(modulusInt, modsize);
+        calcModulusInt(modulusInt, modsizebits);
 
         // clear the filehashnames and blockhashnames in case they were set in mdlist
         // this also prevents it from being set twice
@@ -665,7 +654,7 @@ private:
         }  
 
         // display the mdzip file info
-        displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsize, modsizeBytes, filehashnames, 
+        displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsizebits, modsizeBytes, filehashnames, 
                     blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, filesigs,
                     false, threadcount);
 
@@ -673,16 +662,6 @@ private:
         // block signatures / modulus exponent / modulus remainder
         int blk = 0;
         int lastblk = blockcount - 1;
-
-        // initialize the gmp bigint import variables
-        int byteorder = 0;
-        int endian    = 0;
-
-        // initialize the mutex object
-        // I should set a result variable and pass it into the mutex
-        // it result = 0 then the mutex can set it and stop the execution for the mod scan
-        mdMutex    mutex(threadcount);
-        mdMutexLog log(runlogging);
 
         // initialize the modulus scan array
         // this allows it to run mulithreaded 
@@ -697,7 +676,6 @@ private:
         long modBitBlockSize = blockcount * 7;
         long modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
         if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
-
 
         // Create bitStream object
         // Create the modulus exponent bitstream buffer
@@ -778,11 +756,12 @@ private:
                 } 
 
                 // check the mutex ismatched for three states
-                // searching = 0 // searching for the value with the modscan
-                // not found = 1 // modscan mutext match result
-                // found     = 2 // modscan mutext match result 
+                // searching      = 0 // searching for the value with the modscan
+                // not found      = 1 // modscan mutext match result
+                // found          = 2 // modscan mutext match result 
+                //
+                // multiple found = 3 // not currently being used
                 while (mutex.getIsMatched() == SEARCHING) {
-
                 }
 
                 // if the result is not found display not found
@@ -822,7 +801,6 @@ private:
                 
                 mutex.resetMatched();
                 threads.clear();
-
         }
 
         delete modExpBlock;
@@ -840,7 +818,6 @@ private:
                 log.writeLog("The mdunzip failed");
                 return 1;
             } 
-
         }
 
         return 0;
@@ -849,32 +826,31 @@ private:
 
 
     // display the mdlist mdzip file info
-    void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, int modsizeBytes, 
+    void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsizeBits, int modsizeBytes, 
                     std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize, int hclblockblocksize, 
                     std::string& filehashvector,  std::string& blockhashvector, std::string& blockkeys, std::string& filesig, bool mdlist, int threadcount ) {
 
+        std::cout << std::left << std::setw(20) << "Zip Filename: "     << filename << std::endl;
+        std::cout << std::left << std::setw(20) << "Unzip Filename: "   << filename << ".out" << std::endl;
 
-        std::cout << std::left << std::setw(20) << "Zip Filename: " << filename << std::endl;
-        std::cout << std::left << std::setw(20) << "Unzip Filename: " << filename << ".out" << std::endl;
-
-        std::cout << std::left << std::setw(20) << "Version: "    << mdversion << std::endl;
-        std::cout << std::left << std::setw(20) << "Filesize: "   << filesize  << std::endl;
-        std::cout << std::left << std::setw(20) << "Blocksize: "  << blocksize << std::endl;
+        std::cout << std::left << std::setw(20) << "Version: "          << mdversion << std::endl;
+        std::cout << std::left << std::setw(20) << "Filesize: "         << filesize  << std::endl;
+        std::cout << std::left << std::setw(20) << "Blocksize: "        << blocksize << std::endl;
 
 
-        std::cout << std::left << std::setw(20) << "Blockcount: "     << blockcount << std::endl;
-        std::cout << std::left << std::setw(20) << "Blockremainder: " << blockremainder << std::endl;
+        std::cout << std::left << std::setw(20) << "Blockcount: "       << blockcount << std::endl;
+        std::cout << std::left << std::setw(20) << "Blockremainder: "   << blockremainder << std::endl;
         
-        std::cout << std::left << std::setw(20) << "Modsize: "        << modsize << std::endl;
-        std::cout << std::left << std::setw(20) << "Modsize Bytes: "  << modsizeBytes << std::endl;
-        std::cout << std::left << std::setw(20) << "Filehashlist: "   << filehashnames << std::endl;
-        std::cout << std::left << std::setw(20) << "Blockhashlist: "  << blockhashnames << std::endl;
-        std::cout << std::left << std::setw(20) << "Blockkeylist: "   << blockkeys << std::endl;
+        std::cout << std::left << std::setw(20) << "Modsize: "          << modsizeBits << std::endl;
+        std::cout << std::left << std::setw(20) << "Modsize Bytes: "    << modsizeBytes << std::endl;
+        std::cout << std::left << std::setw(20) << "Filehashlist: "     << filehashnames << std::endl;
+        std::cout << std::left << std::setw(20) << "Blockhashlist: "    << blockhashnames << std::endl;
+        std::cout << std::left << std::setw(20) << "Blockkeylist: "     << blockkeys << std::endl;
 
         std::cout << std::left << std::setw(20) << "File Hash Bytes: "  << hclfileblocksize << std::endl;
         std::cout << std::left << std::setw(20) << "Block Hash Bytes: " << hclblockblocksize << std::endl;
-        if (mdlist == false) std::cout << std::left << std::setw(20) << "Threadcount:" << threadcount << std::endl;
-        std::cout << std::left << std::setw(20) << "Platform:" << (is_big_endian()? "Big": "Little") << " Endian" << std::endl;
+        if (mdlist == false) std::cout << std::left << std::setw(20)    << "Threadcount:" << threadcount << std::endl;
+        std::cout << std::left << std::setw(20) << "Platform:"          << (is_big_endian()? "Big": "Little") << " Endian" << std::endl;
 
         // display the file hash list parameters and hash block size
         std::cout << std::endl;
@@ -930,20 +906,17 @@ private:
         std::cout << cblksize << "/" << blocksize << std::endl;
 
         // display out the hash block signatures
-        std::cout << std::left << std::setw(20) << "Signatures " << hclblock.displayHLhashes() << std::endl;
+        std::cout << std::left << std::setw(20) << "Signatures "        << hclblock.displayHLhashes() << std::endl;
 
         // display the hash block signatures keys
-        std::cout << std::left << std::setw(20) << "Signatures keys " << hclblock.displayHLhashKeys() << std::endl;
+        std::cout << std::left << std::setw(20) << "Signatures keys "   << hclblock.displayHLhashKeys() << std::endl;
 
         // display the modulus exponent
-        std::cout << std::left << std::setw(20) << "Modulus Exponent " << modexponent << std::endl;
+        std::cout << std::left << std::setw(20) << "Modulus Exponent "  << modexponent << std::endl;
 
         // display the modulus remainder
         mpz_class modint(modulusIntRemainder);
         std::cout << std::left << std::setw(20) << "Modulus Remainder " << modint << std::endl << std::endl;
                         
     }
-
-
-
 };

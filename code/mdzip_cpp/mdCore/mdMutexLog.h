@@ -9,6 +9,7 @@
 class mdMutexLog 
 {
 private:
+    char logfilename [100];
     bool islogging;
     bool logThreadFloor;
     int lastThread;
@@ -20,22 +21,21 @@ public:
     std::string logger_name;
 
     // initialize mdMutex
-    mdMutexLog(bool logging) {
-       islogging = logging;   
-       logThreadFloor = true;    
-       int r;
+    mdMutexLog(bool logging) 
+    {
+        islogging = logging;   
+        logThreadFloor = true;    
+        int r;
 
-       char logfilename [100];
+        format_time(logfilename);
+        logger_name = logfilename;
 
-       format_time(logfilename);
-       logger_name = logfilename;
-
-       if (islogging) { 
-       // plog::init(plog::debug, logger_name);
-       // plog::init(plog::info, (const char*) logfilename);
-         plog::init(plog::debug, (const char*) logfilename);
-         PLOGD << "starting log!"; 
-      }
+        if (islogging) { 
+                // plog::init(plog::debug, logger_name);
+                // plog::init(plog::info, (const char*) logfilename);
+                plog::init(plog::debug, (const char*) logfilename);
+                PLOGD << "starting log!"; 
+        }
     }
 
     // Destructor
@@ -49,6 +49,17 @@ public:
     {
         mutex.lock();
         mutex.unlock();
+    }
+
+    // setLogging allows the logging object to be initialized as false and logging turned on post initialization
+    void setLogging(bool setlogging) {
+       if ((!islogging) && (setlogging == true)) { 
+            // plog::init(plog::debug, logger_name);
+            // plog::init(plog::info, (const char*) logfilename);
+            plog::init(plog::debug, (const char*) logfilename);
+            PLOGD << "starting log!"; 
+            islogging = true;
+      }
     }
 
     // check if logging
