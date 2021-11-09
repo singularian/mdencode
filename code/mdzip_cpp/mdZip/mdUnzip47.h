@@ -74,10 +74,8 @@ private:
         runlogging  = runLogging;
         validate    = Validate;
         listfile    = listFile;
-
-        // setModulus();
                 
-        // initialize the log object
+        // initialize the mutex and log object
         mutex.setThreadCount(threadcount);
         log.setLogging(runlogging);
     }
