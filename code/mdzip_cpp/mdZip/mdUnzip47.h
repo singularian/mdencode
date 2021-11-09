@@ -189,10 +189,7 @@ private:
     }
 
     // validate the mdzip file format
-    int validateMDzip(std::string filename, bool validatemdzipfile) {
-
-         // if the listfile boolean is false don't run the list mdzip file
-        if (!validatemdzipfile) return 0;
+    int validateMDzip() {
 
         // Check the file extension
         // Might want to use compression number ie .100mdz as an extension
@@ -287,12 +284,14 @@ private:
         // set the filesigs string
         std::string filesigs = hclfile.displayHLhashes();
 
-        // if the hclblockkeylist size is greater than zero load in the random block hash keylist 
+        // if the hclblockkeylist size is greater than zero 
+        // set hclblockkeysize to the hclblockkeysize calculated by the hash context list
         std::string blockkeys = "default"; 
         if (hclblockkeysize > 0) {
             /// std::cout << "setting mdlist keylist " << hclblockkeysize << std::endl;
-            hclblock.readKeyList(nf);
-            blockkeys = hclblock.displayHLhashKeys();
+            //hclblock.readKeyList(nf);
+            // blockkeys = hclblock.displayHLhashKeys();
+            hclblockkeysize = hclblock.calcBlockKeySize(HASHBLOCK);
         }  
 
         // display the mdzip file info
@@ -320,7 +319,7 @@ private:
 
         // add the file block size and key block size and hash block size
         sumfilesize += hclfile.calcBlockSize(HASHBLOCK);
-        sumfilesize += hclblock.calcBlockKeySize(HASHBLOCK);
+        sumfilesize += hclblockkeysize; // there might be a bug here where if it has the default key it adds the block key size when it should be zero
         sumfilesize += totalblocksize;
 
         nf.close();
@@ -333,7 +332,7 @@ private:
             std::cout << "MDzip File Sum " << sumfilesize << " != " << inputfilesize << std::endl; 
             // std::cout << "MDzip File hash size " << hclfile.calcBlockSize(HASHBLOCK) << std::endl; 
             // std::cout << "MDzip File block size " << totalblocksize << std::endl; 
-            // std::cout << "MDzip File block key size " << hclblock.calcBlockKeySize(HASHBLOCK) << std::endl;
+            // std::cout << "MDzip File block key size " << hclblockkeysize << std::endl;
 
             return 1;
         }
@@ -345,9 +344,10 @@ private:
 
     // mdlist
     // display the mdzip block contents of a file
-    int mdlist(std::string filename, bool listfile, bool runlogging) {
+    int mdlist() {
 
-        // if the listfile boolean is false don't run the list mdzip file
+        // check if the listfile is true otherwise don't run the mdlist
+        // it is currently running mdlist() and checking if this boolean is true before continuing
         if (!listfile) return 0;
 
         // Check the file extension
@@ -398,6 +398,11 @@ private:
         unsigned char *modulusbytes = new unsigned char[modsizeBytes];
         mpz_t modulusInt;
         mpz_init_set_str(modulusInt, "1", 10);
+
+        // clear the filehashnames and blockhashnames in case they were set previously in mdlist
+        // this also prevents it from being set twice
+        filehashnames.clear();
+        blockhashnames.clear();
 
         // read the file hash list string from the mdzip file
         nf.read(reinterpret_cast<char*>(&hclfilesize),    sizeof(int));
@@ -593,7 +598,12 @@ private:
 
         // calculate the modulus 2 ^ modsize - 1
         calcModulusInt(modulusInt, modsize);
-        
+
+        // clear the filehashnames and blockhashnames in case they were set in mdlist
+        // this also prevents it from being set twice
+        filehashnames.clear();
+        blockhashnames.clear();
+
         // read the file hash list string from the mdzip file
         nf.read(reinterpret_cast<char*>(&hclfilesize),    sizeof(int));
         char* buf = new char[hclfilesize];
