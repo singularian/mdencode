@@ -76,12 +76,13 @@ private:
     }
 
     // initialize the mdText object data
-    mdTest(std::string hexString, size_t blockSize, int modsizeBits, bool randomBH, std::vector<int> &bhlist, int threadCount, bool skip, bool runLogging) {
+    mdTest(std::string hexString, size_t blockSize, int modsizeBits, bool randomBH, std::vector<int> &bhList, int threadCount, bool skip, bool runLogging) {
         hexstring   = hexString;         
         blocksize   = blockSize;
         modsizebits = modsizeBits;
         threadcount = threadCount;
         randombh    = randomBH;
+        bhlist      = bhList;
         skipDecode  = skip;
         runlogging  = runLogging;
 
@@ -163,8 +164,7 @@ private:
     }
  
     // decodes a random byte sized byteblock with a group of signatures and a random signature key
-    int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector<int> &bhlist, unsigned char *byteblock, 
-                        int threadnumber, int threadcount, bool skipDecode, bool runlogging) {
+    int decodeRandomBlock () {
 
         mpz_t remainder, modulusInt, byteblockInt;
 
@@ -189,13 +189,11 @@ private:
         // the import is currently byteorder most significant and native endian 
         // the modscan has to match the byte order and endian paramters
         // set byte order and endian once and then set them in modscan object so it matches and can be set once
-        int byteorder = 1;
-        int endian    = 0;
         mpz_import (byteblockInt, blocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);  
 
         // calculate the modulusInt
         // 2 ^ modsize - 1
-        calcModulusInt(modulusInt, modsize);
+        calcModulusInt(modulusInt, modsizebits);
 
         // calculate the modulus remainder 
         mpz_mod (remainder, byteblockInt, modulusInt); 
@@ -255,7 +253,7 @@ private:
 
         // display the current block stats after initialization
         // display the block keys
-        displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, vectorlist, hashlist, blockkeys, &log );
+        displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsizebits, exp, expmod, blocksize, threadcount, vectorlist, hashlist, blockkeys, &log );
 
         if (skipDecode) {
             delete[] byteblock;
@@ -393,7 +391,7 @@ private:
 
 
     // displays the modulus scan information
-    void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, int expmod, 
+    void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsizebits, int exponent, int expmod, 
                     int blocksize, int threadcount, std::string& vectorlist, std::string& hashlist, std::string& blockkeys, mdMutexLog *log) {
 
         std::ostringstream result;
@@ -446,7 +444,7 @@ private:
         // display the byteblock bigint
         mpz_class blockBigInt(blockint);
         result << "Random Byteblock Bigint  " << blockBigInt.get_str() << std::endl;
-        result << "Modulus Size             " << std::to_string(modsize) << std::endl;
+        result << "Modulus Size             " << std::to_string(modsizebits) << std::endl;
 
         // display the modulus bigint
         mpz_class modBigInt(modint);

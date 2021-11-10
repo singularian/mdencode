@@ -95,21 +95,11 @@ int main (int argc, char **argv) {
       }
 
       // initialize the mdText object
-      mdTest mdt;
+      mdTest mdt(hexstring, blocksize, modsize, randombh, csvvals, threadcount, skipDecode, runlogging);
       
-      unsigned char *byteblock;
-      // generate a random n byte byteblock if the hexstring is empty
-      if (hexstring.empty()) {
-         byteblock = mdt.genRandomByteBlock(blocksize);
-      // process the hex string into a byte block
-      } else {
-         byteblock = mdt.convertHexToByteBlock(hexstring);
-         blocksize = hexstring.length() / 2;
-      }
-
-      // run the modulus scan decode on the byteblock
+       // run the modulus scan decode on the byteblock
       // decodeRandomBlock(blocksize, modsize, randombh, csvvals, byteblock, threadnumber, threadcount, skipDecode, runlogging);  
-      mdt.decodeRandomBlock(blocksize, modsize, randombh, csvvals, byteblock, threadnumber, threadcount, skipDecode, runlogging);
+      mdt.decodeRandomBlock();
 
       return 0;
 }
