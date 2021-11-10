@@ -75,7 +75,7 @@ private:
     mdTest() {
     }
 
-    // initialize the mdText object data
+    // initialize the mdTest object data
     mdTest(std::string hexString, size_t blockSize, int modsizeBits, bool randomBH, std::vector<int> &bhList, int threadCount, bool skip, bool runLogging) {
         hexstring   = hexString;         
         blocksize   = blockSize;
