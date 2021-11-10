@@ -38,16 +38,8 @@
 class mdTest 
 {
 private:
+    // test variables
     int threadcount       = 8;
-    // file variables
-    std::string filename;
-    std::string unzipfilename;
-    size_t inputfilesize  = 0;
-    long filesize         = 0;
-    // mdzip variables
-    std::string mdzipExtension   = ".mdz";
-    std::string mdunzipExtension = ".out";
-    double mdversion      = 1.01;
     long blocksize        = 10;
     long blockcount       = 0;
     long blockremainder   = 0; // the last file block size
@@ -63,6 +55,7 @@ private:
     int hclblocksize      = 0; // redundant
     int hclblockblocksize = 0; // hash file size
     int hclblockkeysize   = 0; // variable for mdunzip 
+    // hash list variables
     std::string filehashnames;   
     std::string blockhashnames;
     std::vector<int> fhlist;
@@ -70,11 +63,8 @@ private:
     bool randombh;
     bool inc;
     bool dec;
-    // mdunzip variables
-    bool overwrite         = false;
+    // logging variables
     bool runlogging        = false;
-    bool validate          = false;
-    bool listfile          = false; 
     // initialize the gmp bigint variables
     int byteorder = 0;
     int endian    = 0;
@@ -90,13 +80,9 @@ private:
     }
 
     // filename, threadcount, overwrite, runlogging, validate
-    mdTest(std::string fileName, int threadCount, bool overWrite, bool runLogging, bool Validate, bool listFile) {
-        filename    = fileName;
+    mdTest(std::string hexstring, size_t blocksize, int modsizeBits, bool randombh, std::vector<int> &bhlist, int threadnumber, int threadCount, bool skipDecode, bool runLogging) {
         threadcount = threadCount;
-        overwrite   = overWrite;
         runlogging  = runLogging;
-        validate    = Validate;
-        listfile    = listFile;
                 
         // initialize the mutex and log object
         mutex.setThreadCount(threadcount);
@@ -160,8 +146,6 @@ private:
         return modexponent;
     }
  
-
-
     // decodes a random byte sized byteblock with a group of signatures and a random signature key
     int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector<int> &bhlist, unsigned char *byteblock, 
                         int threadnumber, int threadcount, bool skipDecode, bool runlogging) {

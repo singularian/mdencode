@@ -66,7 +66,7 @@ int main (int argc, char **argv) {
       bool runlogging = false;
       app.add_flag("-l,--log", runlogging, "Run Logging");
 
-      // TODO Should add an option to disable the modulus scan and just run the hash
+      // Disable the modulus scan and just run the modulus and block signatures
       bool skipDecode = false;
       app.add_flag("-q,--skip", skipDecode, "Skip the Modulus Scan");
 
