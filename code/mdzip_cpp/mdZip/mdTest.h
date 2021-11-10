@@ -166,12 +166,12 @@ private:
     // decodes a random byte sized byteblock with a group of signatures and a random signature key
     int decodeRandomBlock () {
 
-        mpz_t remainder, modulusInt, byteblockInt;
+        // could initialize the byteblock here 
 
-        mpz_init_set_str(remainder, "0", 10);
-        mpz_init_set_str(modulusInt, "1", 10);
         mpz_init_set_str(byteblockInt, "0", 10);
-
+        mpz_init_set_str(modulusInt, "1", 10);
+        mpz_init_set_str(remainder, "0", 10);
+        
         // create the byteblock bigint
         // void mpz_import (mpz_t rop, size_t count, int order, size_t size, int endian, size_t nails, const void *op) 
         // https://machinecognitis.github.io/Math.Gmp.Native/html/8c8c1e55-275f-cff8-2152-883a4eaa163c.htm
