@@ -1,7 +1,7 @@
-#include<iostream>
-#include<thread>
-#include<vector>
-#include<mutex>
+#include <iostream>
+#include <thread>
+#include <vector>
+#include <mutex>
 
 enum status {SEARCHING, NOTFOUND, FOUND};
 
