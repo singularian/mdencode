@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <new>
 #include <sys/stat.h>
 #include <thread>
 #include <gmp.h>
@@ -617,7 +618,7 @@ private:
         mdHashContextList hclfile;
         mdHashContextList hclblock;
 
-            // set the hash list vector tuple for file and hash blocks
+        // set the hash list vector tuple for file and hash blocks
         hclfile.setVectorHLstring(filehashnames, HASHBLOCK);
         hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
 
@@ -801,8 +802,13 @@ private:
                 threads.clear();
         }
 
+        // delete the bitstream array
         delete modExpBlock;
+        
+        // delete the modscan objects 
+        delete[] mst;
 
+        // delete the gmp bigints
         mpz_clear(modulusInt);
         mpz_clear(modulusIntRemainder);
         

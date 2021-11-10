@@ -27,6 +27,7 @@
 #include <gmpxx.h>
 #include <string>
 #include <time.h>
+#include <thread>
 #include <vector>
 #include "../mdzip_cpp/external/CLI11.hpp" 
 #include "mdCore/mdCommon.h"
@@ -34,17 +35,14 @@
 #include "mdCore/mdMutexLog.h"
 #include "mdCore/mdHashContextList.h"
 #include "mdCore/modscan.h"
-#include "string.h"
 
 
 using namespace std;
 
 unsigned char *genRandomByteBlock(size_t num_bytes);
 unsigned char *convertHexToByteBlock(std::string & source);
-unsigned char *setByteBlock(size_t num_bytes);
 int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector<int> &bhlist, unsigned char *byteblock, 
                        int threadnumber, int threadcount, bool skipDecode, bool runlogging);
-void printByteblock(unsigned char *byteblock, int blocksize, bool ishex);
 void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsize, int exponent, 
                   int expmod, int blocksize, int threadcount, std::string& vectorlist, std::string& displayHLhashes,  std::string& blockkeys, 
                   mdMutexLog *log );
@@ -221,21 +219,6 @@ int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector
         }
      } 
 
-/*      if (skipDecode) {
-         free (byteblock);
-         mpz_clear(remainder);
-         mpz_clear(modulusInt);
-         mpz_clear(byteblockInt);
-         displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, vectorlist, hashlist, blockkeys, &log );
-         return 0;
-     }   
-*/
-     // initialize the modulus scan threads vector
-     //std::vector<std::thread> threads;
-     //for(int tnum = 0; tnum < threadcount; tnum++){
-     //   threads.push_back(std::thread(&modscan::decode, std::ref(mst[tnum])));
-     //}
-
      // display the current block stats
      std::string vectorlist = mst[0].hcl.getHLvectorsString(HASHBLOCK);
      std::string hashlist   = mst[0].hcl.displayHLhashes();
@@ -250,7 +233,8 @@ int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector
      displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsize, exp, expmod, blocksize, threadcount, vectorlist, hashlist, blockkeys, &log );
 
      if (skipDecode) {
-        free (byteblock);
+        delete[] byteblock;
+        delete[] mst;
         mpz_clear(remainder);
         mpz_clear(modulusInt);
         mpz_clear(byteblockInt);
@@ -261,7 +245,7 @@ int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector
      // initialize the modulus scan threads vector
      std::vector<std::thread> threads;
      for(int tnum = 0; tnum < threadcount; tnum++){
-        threads.push_back(std::thread(&modscan::decode, std::ref(mst[tnum])));
+         threads.push_back(std::thread(&modscan::decode, std::ref(mst[tnum])));
      }
 
      // std::cout << endl << "Running decode modscan" << endl << endl;
@@ -282,9 +266,15 @@ int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector
      // found     = 2 // modscan mutext match result 
      while (mutex.getIsMatched() == SEARCHING) {
 
-     }
+     } 
 
-     // if the result is not found display not found
+     // stop the threads on the first match
+     for(int tnum = 0; tnum < threadcount; tnum++) {
+        mst[tnum].stopThread();
+        while (!mst[tnum].isStoppedThread()) { }
+     } 
+
+     // if the result is not found display not found   
      if (mutex.getIsMatched() == NOTFOUND) {
             log.writeLog("Modulus Scan Match Not Found");
             // break; // need to check the other blocks
@@ -329,42 +319,43 @@ int decodeRandomBlock (size_t blocksize, int modsize, bool randombh, std::vector
      }    
 
      /* free used memory */
-     free (byteblock);
+     delete[] byteblock;
+
+     // delete the modscan objects 
+     delete[] mst;
+
      mpz_clear(remainder);
      mpz_clear(modulusInt);
      mpz_clear(byteblockInt);
      // mpz_clears(remainder, modulusInt, byteblockInt, NULL);
 
-
-
-    return 0;
+     return 0;
 }
 
 // returns a random byte sized byteblock
 unsigned char *genRandomByteBlock(size_t num_bytes) {
-    unsigned char *stream;
-    stream = (unsigned char *) malloc(num_bytes);
+
+    unsigned char *byteblock = new unsigned char [num_bytes];
+
     srand(time(0));
 
     for (int f = 0; f < num_bytes; f++) {
-       stream[f] = (rand() % 255);
+       byteblock[f] = (rand() % 255);
     }
 
-    return stream;
+    return byteblock;
 }
 
 // convert hex bytes to byte array
 // it should also check 00FF33 or 0000FFFF7873 hex strings
 unsigned char *convertHexToByteBlock(std::string & source) {
 
-    unsigned char *stream;
     if ((source.length() % 2) == 1) source = source + "0";
     size_t num_bytes = (source.length() / 2);
-    stream = (unsigned char *) malloc(num_bytes * sizeof(unsigned char));
+    unsigned char *byteblock = new unsigned char [num_bytes];
 
     // TODO eliminate this vector and just set these
     std::vector<unsigned char> bytes;
-
 
     for (unsigned int i = 0; i < source.length(); i += 2) {
       std::string byteString = source.substr(i, 2);
@@ -373,44 +364,12 @@ unsigned char *convertHexToByteBlock(std::string & source) {
     }
 
     for (int f = 0; f < num_bytes; f++) {
-       stream[f] = bytes[f];
+       byteblock[f] = bytes[f];
     }
 
 
-    return stream;
+    return byteblock;
 
-}
-
-// returns a predefined test byteblock
-unsigned char *setByteBlock(size_t num_bytes) {
-    unsigned char *stream;
-    // stream = (unsigned char *) malloc(num_bytes);
-    stream = (unsigned char *) malloc(11);
-
-    int num [] = { 139, 176, 100, 82, 220, 198, 148, 121, 155, 202, 74 };
-
-    for (int f = 0; f < 11; f++) {
-       stream[f] = num[f];
-    }
-
-    return stream;
-}
-
-
-// display the byteblock
-void printByteblock(unsigned char *byteblock, int blocksize, bool ishex) {
-
-        int i;
-        for(i=0;i<blocksize;i++)
-        {
-            if (ishex == false) {
-                printf("%d ",    byteblock[i]);
-            } else {
-                printf("%02X  ", byteblock[i]);
-            }
-        }
-
-        printf("\n");
 }
 
 

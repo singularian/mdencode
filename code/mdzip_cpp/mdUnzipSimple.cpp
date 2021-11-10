@@ -596,6 +596,9 @@ int mdunzipfile(std::string filename, int threadcount, bool overwrite, bool runl
 
    }
 
+   // delete the modscan objects 
+   delete[] mst;
+   // delete the gmp bigints
    mpz_clear(modulusInt);
    mpz_clear(modulusIntRemainder);
    
