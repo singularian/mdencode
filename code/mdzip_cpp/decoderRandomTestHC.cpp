@@ -97,8 +97,7 @@ int main (int argc, char **argv) {
       // initialize the mdText object
       mdTest mdt(hexstring, blocksize, modsize, randombh, csvvals, threadcount, skipDecode, runlogging);
       
-       // run the modulus scan decode on the byteblock
-      // decodeRandomBlock(blocksize, modsize, randombh, csvvals, byteblock, threadnumber, threadcount, skipDecode, runlogging);  
+      // run the modulus scan decode on the byteblock
       mdt.decodeRandomBlock();
 
       return 0;
