@@ -47,8 +47,8 @@ private:
     // modulus variables
     int modsizebits       = 32; // should make this modsizeBits
     int modsizeBytes      = 4;
-    int modexponent       = 0;
-    long modByteBlockSize = 0; // mdzip bitstream modulus exponent byte size
+    int modexponent       = 0;  // 2 ^ n less than the byteblock int
+    int modexponent2      = 0;  // the modulus to the exponent less than the byteblock int
     // hash context list variables
     int hclblocksize      = 0; // redundant
     int hclblockblocksize = 0; // hash file size
@@ -199,22 +199,17 @@ private:
         mpz_mod (remainder, byteblockInt, modulusInt); 
 
         // calculate the modulus exponent with two
-        int exp = calcExponent(byteblockInt);
+        modexponent = calcExponent(byteblockInt);
 
         // calculate the modulus exponent with the modulus
-        int expmod = calcExponentModulus(modulusInt, byteblockInt);
-
-        // initialize the mutex object
-        // if result not equal to searching then the modscan can set the mutex result and stop the execution for the mod scan
-        mdMutex mutex(threadcount);
-        mdMutexLog log(runlogging);
+        modexponent2 = calcExponentModulus(modulusInt, byteblockInt);
 
         // initialize the modulus scan array
         // this allows it to run mulithreaded 
         modscan* mst = new modscan[threadcount];
         for(int tnum = 0; tnum < threadcount; tnum++) {
     
-            mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, exp, expmod, blocksize, tnum, threadcount, &mutex);
+            mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, modexponent, modexponent2, blocksize, tnum, threadcount, &mutex);
     
             // set the hash context list and the signatures based on the current byte block
             mst[tnum].hcl.setVectorHL(bhlist, HASHBLOCK);
@@ -253,7 +248,7 @@ private:
 
         // display the current block stats after initialization
         // display the block keys
-        displayFloor(byteblock, remainder, modulusInt, byteblockInt, modsizebits, exp, expmod, blocksize, threadcount, vectorlist, hashlist, blockkeys, &log );
+        displayFloor(vectorlist, hashlist, blockkeys );
 
         if (skipDecode) {
             delete[] byteblock;
@@ -391,8 +386,7 @@ private:
 
 
     // displays the modulus scan information
-    void displayFloor(unsigned char *byteblock, mpz_t remainder, mpz_t modint, mpz_t blockint, int modsizebits, int exponent, int expmod, 
-                    int blocksize, int threadcount, std::string& vectorlist, std::string& hashlist, std::string& blockkeys, mdMutexLog *log) {
+    void displayFloor(std::string& vectorlist, std::string& hashlist, std::string& blockkeys) {   
 
         std::ostringstream result;
         int f = 0;
@@ -442,20 +436,20 @@ private:
         result << std::endl;
 
         // display the byteblock bigint
-        mpz_class blockBigInt(blockint);
+        mpz_class blockBigInt(byteblockInt);
         result << "Random Byteblock Bigint  " << blockBigInt.get_str() << std::endl;
         result << "Modulus Size             " << std::to_string(modsizebits) << std::endl;
 
         // display the modulus bigint
-        mpz_class modBigInt(modint);
+        mpz_class modBigInt(modulusInt);
         result << "Modulus Bigint           " << modBigInt.get_str() << std::endl;
 
         // display the modulus remainder
         mpz_class modRemainder(remainder);
         result << "Modulus Remainder        " << modRemainder.get_str() << std::endl;
 
-        result << "Modulus 2   ^ Exponent   " << std::to_string(exponent) << std::endl;
-        result << "Modulus Mod ^ Exponent   " << std::to_string(expmod) << std::endl;
+        result << "Modulus 2   ^ Exponent   " << std::to_string(modexponent) << std::endl;
+        result << "Modulus Mod ^ Exponent   " << std::to_string(modexponent2) << std::endl;
         
         result << "Block Signatures         ";
         result << hashlist << std::endl;
@@ -463,12 +457,12 @@ private:
         // result << std::left << std::setw(20) << "Blockkeylist: "   << blockkeys << std::endl;
         result << "Blockkeylist             " << blockkeys << std::endl;    
         result << "Thread Count             " << std::to_string(threadcount) << std::endl;
-        result << "Logging                  " << boolalpha << log->checkIfLogging() << std::endl << std::endl;
+        result << "Logging                  " << boolalpha << log.checkIfLogging() << std::endl << std::endl;
         result << "Hash Block Vector" << std::endl;
         result << vectorlist;
 
-
-        log->writeLog(result.str());
+        // write the modulus scan data to the log
+        log.writeLog(result.str());
     }
 
 };
