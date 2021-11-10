@@ -40,7 +40,9 @@ class mdTest
 private:
     // test variables
     int threadcount       = 8;
-    std::string hexstring; 
+    // byteclock variables
+    std::string    hexstring; 
+    unsigned char *byteblock;
     long blocksize        = 10;
     // modulus variables
     int modsizebits       = 32; // should make this modsizeBits
@@ -84,6 +86,7 @@ private:
         runlogging  = runLogging;
 
         setModulus();
+        setByteBlock();
                 
         // initialize the mutex and log object
         mutex.setThreadCount(threadcount);
@@ -103,6 +106,19 @@ private:
     long getBlockSize() {
         return blocksize;
     }
+
+    // initialize the test uint8_t byteblock 
+    void setByteBlock() {
+          
+        // generate a random n byte byteblock if the hexstring is empty
+        if (hexstring.empty()) {
+            byteblock = genRandomByteBlock(blocksize);
+        // otherwise process the hex string into a byte block
+        } else {
+            byteblock = convertHexToByteBlock(hexstring);
+            blocksize = hexstring.length() / 2;
+        }
+    }  
 
     // set the modulus byte size
     void setModulus() {
