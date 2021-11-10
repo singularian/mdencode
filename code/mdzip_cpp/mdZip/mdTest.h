@@ -360,7 +360,7 @@ private:
     // returns a random byte sized byteblock
     unsigned char *genRandomByteBlock(size_t num_bytes) {
 
-        unsigned char *byteblock = new unsigned char [num_bytes];
+        byteblock = new unsigned char [num_bytes];
 
         srand(time(0));
 
@@ -377,7 +377,7 @@ private:
 
         if ((source.length() % 2) == 1) source = source + "0";
         size_t num_bytes = (source.length() / 2);
-        unsigned char *byteblock = new unsigned char [num_bytes];
+        byteblock = new unsigned char [num_bytes];
 
         int f = 0;
         for (unsigned int i = 0; i < source.length(); i += 2) {
