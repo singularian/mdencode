@@ -1,7 +1,7 @@
-#include<iostream>
-#include<thread>
-#include<vector>
-#include<mutex>
+#include <iostream>
+#include <thread>
+#include <vector>
+#include <mutex>
 
 enum status {SEARCHING, NOTFOUND, FOUND};
 
@@ -31,8 +31,6 @@ public:
     // Destructor
     ~mdMutex()
     {
-
-
     } 
 
     // increment the threads match not found count
@@ -48,9 +46,10 @@ public:
 
     // set matched
     // ismatched value
-    // searching = 0 // searching for the value with the modscan
-    // not found = 1 // modscan mutext match result
-    // found     = 2 // modscan mutext match result
+    // searching      = 0 // searching for the value with the modscan
+    // not found      = 1 // modscan mutext match result
+    // found one      = 2 // modscan mutext match result
+    // found multiple = 3 // modscan mutext match result
     void setMatched(int thread) 
     {
         mutex.lock();
@@ -72,6 +71,10 @@ public:
 
     }
 
+    // set the thread count
+    void setThreadCount(int threadCnt) {
+        threadCount = threadCnt;
+    }
     
     int  getMatchThread() {     return lastThread; }
     int  getNotFound()    {     return notFound; }

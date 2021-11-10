@@ -67,7 +67,7 @@ class modscan
     // Destructor
     ~modscan()
     {
-       // std::cout << "Destroying modscan" << std::endl;
+       // std::cout << "Destroying modscan " << threadnumber << std::endl;
        mpz_clears(two, modremainder, remainder, modulusInt, modulusThreadInt, modulusExpIntFloor, modulusExpIntCeil, blockInt, NULL);
 
        if (sizeof(byteblock) / sizeof(byteblock[0]) != 0) {

@@ -28,7 +28,6 @@
 #include <time.h>
 #include <thread>
 #include <vector>
-#include "external/CLI11.hpp" 
 #include "mdCore/mdCommon.h"
 #include "mdCore/mdMutex.h"
 #include "mdCore/mdMutexLog.h"
