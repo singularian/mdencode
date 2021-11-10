@@ -128,9 +128,6 @@ int main (int argc, char **argv) {
         blocksize = hexstring.length() / 2;
      }
 
-     // set a predefined byte block for testing
-     // byteblock = setByteBlock(blocksize);
-
      // run the modulus scan decode on the byteblock
      decodeRandomBlock(blocksize, modsize, randombh, csvvals, byteblock, threadnumber, threadcount, skipDecode, runlogging);
 
@@ -348,7 +345,7 @@ unsigned char *genRandomByteBlock(size_t num_bytes) {
 
 // convert a hex byte string argument to unsigned byte byteblock array
 // it should also check 00FF33 or 0000FFFF7873 hex strings
-unsigned char *convertHexToByteBlock(std::string & source) {
+unsigned char *convertHexToByteBlock(std::string &source) {
 
     if ((source.length() % 2) == 1) source = source + "0";
     size_t num_bytes = (source.length() / 2);
