@@ -346,7 +346,7 @@ unsigned char *genRandomByteBlock(size_t num_bytes) {
     return byteblock;
 }
 
-// convert hex bytes to byte array
+// convert a hex byte string argument to unsigned byte byteblock array
 // it should also check 00FF33 or 0000FFFF7873 hex strings
 unsigned char *convertHexToByteBlock(std::string & source) {
 
@@ -354,19 +354,13 @@ unsigned char *convertHexToByteBlock(std::string & source) {
     size_t num_bytes = (source.length() / 2);
     unsigned char *byteblock = new unsigned char [num_bytes];
 
-    // TODO eliminate this vector and just set these
-    std::vector<unsigned char> bytes;
-
+    int f = 0;
     for (unsigned int i = 0; i < source.length(); i += 2) {
       std::string byteString = source.substr(i, 2);
-      char byte = (char) strtol(byteString.c_str(), NULL, 16);
-      bytes.push_back(byte);
+      unsigned char byte = (char) strtol(byteString.c_str(), NULL, 16);
+      byteblock[f] = byte;
+      f++;
     }
-
-    for (int f = 0; f < num_bytes; f++) {
-       byteblock[f] = bytes[f];
-    }
-
 
     return byteblock;
 
