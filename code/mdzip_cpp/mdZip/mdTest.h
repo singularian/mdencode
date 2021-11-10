@@ -40,29 +40,23 @@ class mdTest
 private:
     // test variables
     int threadcount       = 8;
+    std::string hexstring; 
     long blocksize        = 10;
-    long blockcount       = 0;
-    long blockremainder   = 0; // the last file block size
-    long blocknumber      = 1; // current file block number position
     // modulus variables
     int modsizebits       = 32; // should make this modsizeBits
     int modsizeBytes      = 4;
     int modexponent       = 0;
     long modByteBlockSize = 0; // mdzip bitstream modulus exponent byte size
     // hash context list variables
-    int hclfilesize       = 0; // redundant
-    int hclfileblocksize  = 0; // hash file size
     int hclblocksize      = 0; // redundant
     int hclblockblocksize = 0; // hash file size
     int hclblockkeysize   = 0; // variable for mdunzip 
     // hash list variables
-    std::string filehashnames;   
     std::string blockhashnames;
-    std::vector<int> fhlist;
     std::vector<int> bhlist;
-    bool randombh;
-    bool inc;
-    bool dec;
+    // boolean variables
+    bool randombh          = false;
+    bool skipDecode        = false;
     // logging variables
     bool runlogging        = false;
     // initialize the gmp bigint variables
@@ -79,10 +73,17 @@ private:
     mdTest() {
     }
 
-    // filename, threadcount, overwrite, runlogging, validate
-    mdTest(std::string hexstring, size_t blocksize, int modsizeBits, bool randombh, std::vector<int> &bhlist, int threadnumber, int threadCount, bool skipDecode, bool runLogging) {
+    // initialize the mdText object data
+    mdTest(std::string hexString, size_t blockSize, int modsizeBits, bool randomBH, std::vector<int> &bhlist, int threadCount, bool skip, bool runLogging) {
+        hexstring   = hexString;         
+        blocksize   = blockSize;
+        modsizebits = modsizeBits;
         threadcount = threadCount;
+        randombh    = randomBH;
+        skipDecode  = skip;
         runlogging  = runLogging;
+
+        setModulus();
                 
         // initialize the mutex and log object
         mutex.setThreadCount(threadcount);
@@ -93,7 +94,6 @@ private:
     ~mdTest() {
     } 
     
-
     // set the block size
     void setBlockSize(long bsize) {
         blocksize = bsize;
