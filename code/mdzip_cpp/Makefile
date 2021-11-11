@@ -76,7 +76,6 @@ mdzipsip47:
 test:
 	@echo "Building Test Decoder HCL C++"
 	$(CC) -I. $(DEPS) mdTest.cpp -o mdtest $(LDLIBS)
-	$(CC) -I. $(DEPS) mdTest.cpp -o decoderRandomTestHC2 $(LDLIBS)
 testhash:
 	$(CC) -I. $(DEPS) tests/testHCL.cpp  -o testhcl $(LDLIBS)
 	$(CC) -I. $(DEPS) tests/testFileSignatures.cpp -o  testhashfile $(LDLIBS)
@@ -103,9 +102,9 @@ runtestsip:
 	# @echo "Checking differences"
 	# diff randomfile randomfile.mdz.out	
 lines:
-	wc -l mdCore/*.h *.cpp
+	wc -l mdCore/*.h mdZip/*.h *.cpp
 clean:
-	rm -r mdzip mdunzip mdzipnh mdunzipnh mdzipsip40 mdunzipsip40 mdzipsip47 mdunzipsip47 mdtest decoderRandomTestHC2 *.log *.mdz *.mdsz *.out randfile
+	rm -r mdzip mdunzip mdzipnh mdunzipnh mdzipsip40 mdunzipsip40 mdzipsip47 mdunzipsip47 mdtest *.log *.mdz *.mdsz *.out randfile
 cleantest:
 	rm decoderRandomTestHC2 testhashfile testhcl *.log *.mdz *.mdsz *.out
 # Display general help about this command

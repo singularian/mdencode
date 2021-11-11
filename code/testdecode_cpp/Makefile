@@ -26,10 +26,8 @@ BUILD_TIME=`date +%FT%T%z`
 # decoderRandomTestHCthreads.cpp requires the lib gmp and openssl
 all:
 	@echo "Building Test Decoder HCL"
-	$(CC) -I. $(DEPS) mdTest.cpp -o decoderRandomTestHC2 $(LDLIBS) 
 	$(CC) -I. $(DEPS) mdTest.cpp -o mdtest $(LDLIBS) 
 test:
-	$(CC) -I. $(DEPS) mdTest.cpp -o decoderRandomTestHC2 $(LDLIBS)
 	$(CC) -I. $(DEPS) mdTest.cpp -o mdtest $(LDLIBS) 
 sync:
 	cp $(MDZIP)/mdCommon.h mdCore
@@ -49,7 +47,7 @@ testhash:
 #	$(CC) tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
 	$(CC) external/highwayhash/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11
 clean:
-	rm -r decoderRandomTestHC2 mdtest
+	rm -r mdtest
 cleantest:
 	rm test_gmp2 test_sha1 testhw testargs testhcl testcsv testlog testswitch *.log
 list:
