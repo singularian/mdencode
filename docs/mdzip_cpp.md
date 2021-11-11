@@ -249,7 +249,7 @@ The test program also supports signature ranges such as 1-5 or 10-20.
 path: [github.com/singularian/mdencode/code/mdzip_cpp/](https://github.com/singularian/mdencode/tree/master/code/mdzip_cpp/)  
 test path: [github.com/singularian/mdencode/code/testdecode_cpp/](https://github.com/singularian/mdencode/tree/master/code/testdecode_cpp/)
 
-This is the Usage for decoderRandomTestHC2 and mdtest.
+This is the Usage for mdtest.
 
 ```
 MDEncode GMP C++ Test Program
@@ -389,7 +389,6 @@ Modulus Scan thread 31 and Random byteblock match
 ## Example 2: mdtest Tests
 
 This a new test run on a Ryzen 3950x with 11/12 encoding. It saves one byte of data during compression.  
-This test uses `mdtest`.   
 
 11/12 Modulus Encoding  
 - 6 bytes for the 48-bit Siphash 64 Chop - (It also has a 16-byte key)
@@ -434,7 +433,7 @@ Modulus Scan thread 15 and Random byteblock match
 ## Example 3: mdtest Tests
 
 This a new test run on a Ryzen 3950x with 10/11 encoding. It saves one byte of data during compression. 
-The program uses `decoderRandomTestHC2`. It compresses 11 bytes to 10 bytes. It decompresses back to 11 bytes.    
+It compresses 11 bytes to 10 bytes. It decompresses back to 11 bytes.    
 
 10/11 Modulus Encoding  
 - 5 bytes for the 40-bit Siphash 64 Chop - (It also has a 16-byte key)
