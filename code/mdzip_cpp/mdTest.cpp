@@ -3,8 +3,8 @@
  * https://github.com/singularian/mdencode
  * 
  * Project MDencode GMP C++ Modulus Scan Test Program
- * decoderRandomTestHC.cpp
- *
+ * mdTest.cpp
+ * 
  * This is a C++ GMP modulus scan multithreaded test program 
  * MDencode GMP requires the GMP Library to build https://gmplib.org/ and the openssl library
  * It also requires the libfnv library to be built and installed for the FNV1 signature
@@ -108,15 +108,15 @@ int main (int argc, char **argv) {
 void usage() {
 std::string usageline = R"(
 Examples:
-   decoderRandomTestHC2 -b 12 -m 64 -t 16
-   decoderRandomTestHC2 --block=12 --mod=64    --threads=16
-   decoderRandomTestHC2 --block=12 --mod=128   --threads=16
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=0011
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --hl 1 2 3 4 5
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --bh 1,5,7
-   decoderRandomTestHC2 --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh --block=12
-   decoderRandomTestHC2 --mod=64 --threads=32 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh --block=12
+   mdtest -b 12 -m 64 -t 16
+   mdtest --block=12 --mod=64    --threads=16
+   mdtest --block=12 --mod=128   --threads=16
+   mdtest --mod=64 --threads=16 --hex=0011
+   mdtest --mod=64 --threads=16 --hex=FFd033FF202020202011
+   mdtest --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --hl 1 2 3 4 5
+   mdtest --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --bh 1,5,7
+   mdtest --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh --block=12
+   mdtest --mod=64 --threads=32 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh --block=12
 )";
 
       cout << usageline << endl;

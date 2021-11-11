@@ -171,7 +171,6 @@ These are the 7 main programs. There are currently 3 mdzip variants.
 - mdzipsip40           - Creates a sip40 decrementing and incrementing key mdzip (mdz) binary file with a modular floor and multiple signatures. 
 - mdunzipsip40         - Unzips and decodes an sip40 mdzip (mdz) file to an output file. It can also display the block list.
 - mdtest               - Test modulus scan program for the C++ mdzip program.
-- decoderRandomTestHC2 - Test modulus scan program for the C++ mdzip program.
 
 path: [github.com/singularian/mdencode/code/mdzip_cpp/](https://github.com/singularian/mdencode/tree/master/code/mdzip_cpp)
 
@@ -254,7 +253,7 @@ This is the Usage for decoderRandomTestHC2 and mdtest.
 
 ```
 MDEncode GMP C++ Test Program
-Usage: ./decoderRandomTestHC2 [OPTIONS]
+Usage: ./mdtest [OPTIONS]
 
 Options:
   -h,--help                   Print this help message and exit
@@ -273,23 +272,23 @@ Options:
 
 
 Examples:
-   decoderRandomTestHC2 -b 12 -m 64 -t 16
-   decoderRandomTestHC2 --block=12 --mod=64    --threads=16
-   decoderRandomTestHC2 --block=12 --mod=128   --threads=16
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=0011
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --hl 1 2 3 4 5
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --bh 1,5,7
-   decoderRandomTestHC2 --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh --block=12
-   decoderRandomTestHC2 --mod=64 --threads=32 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh --block=12
+   mdtest -b 12 -m 64 -t 16
+   mdtest --block=12 --mod=64    --threads=16
+   mdtest --block=12 --mod=128   --threads=16
+   mdtest --mod=64 --threads=16 --hex=0011
+   mdtest --mod=64 --threads=16 --hex=FFd033FF202020202011
+   mdtest --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --hl 1 2 3 4 5
+   mdtest --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --bh 1,5,7
+   mdtest --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh --block=12
+   mdtest --mod=64 --threads=32 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh --block=12
                          
 ```
 
-## Example 1: decoderRandomTestHC2 Tests  
+## Example 1: mdtest Tests  
   
 This is an example of the modular floor using the C++ test program. 
 It's differentiated from the GO Version by the number. 
-The program `decoderRandomTestHC2` is using a random 14 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
+The program `mdtest` is using a random 14 byte array and then running a modulus scan to find the corresponding file block associated with a digital signature.  
 It uses a 32 bit modulus and calculates modulus exponent floor or ceiling and then creates a fast64 hash. A modulus scan splits up the parallel search on 32 threads. 
 It calculated and found the 14 byte block (13 bytes compressed) in 4 hours on a Ryzen 3950x. It compresses the 14 byte block to 13 bytes and decompresses it to 14 bytes.  
 
@@ -299,7 +298,7 @@ It calculated and found the 14 byte block (13 bytes compressed) in 4 hours on a 
 - 1 byte for the modulus exponent 
 
 ```
-./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=000000001211211111111122FFFC
+./mdtest --mod=32 --threads=32 --hl 4  --hex=000000001211211111111122FFFC
 hash values  4
 Start Time               Sun Nov 15 17:52:53 2020
 Block Size               14
@@ -327,7 +326,7 @@ Modulus Scan thread 17 and Random byteblock match
 Second modulus scan decompression example with a larger block running on a ryzen 3950x.
 
 ```
-./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=0000000016412161123F1822FFFC --log=true
+./mdtest --mod=32 --threads=32 --hl 4  --hex=0000000016412161123F1822FFFC --log=true
 hash values  4 
 Start Time               Tue Nov 17 21:44:08 2020
 Block Size               14
@@ -357,7 +356,7 @@ Modulus Scan thread 31 and Random byteblock match
 Another modulus scan decompression example with a larger byte block 
 
 ```
-./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=0000002020412161123F1822FFFC --log=true
+./mdtest --mod=32 --threads=32 --hl 4  --hex=0000002020412161123F1822FFFC --log=true
 hash values  4
 
 Start Time               Sat Nov 21 19:59:59 2020
@@ -387,10 +386,10 @@ Modulus Scan thread 31 and Random byteblock match
 0   0   0   32  32  65  33  97  18  63  24  34  255 252
 ```
 
-## Example 2: decoderRandomTestHC2 Tests
+## Example 2: mdtest Tests
 
 This a new test run on a Ryzen 3950x with 11/12 encoding. It saves one byte of data during compression.  
-This test uses `decoderRandomTestHC2`.   
+This test uses `mdtest`.   
 
 11/12 Modulus Encoding  
 - 6 bytes for the 48-bit Siphash 64 Chop - (It also has a 16-byte key)
@@ -398,7 +397,7 @@ This test uses `decoderRandomTestHC2`.
 - 1 byte for the modulus exponent 
 
 ```
-./decoderRandomTestHC2 --mod=32 --hl 29 --randbh --hex=000001d033FF112F2C232111 --log
+./mdtest --mod=32 --hl 29 --randbh --hex=000001d033FF112F2C232111 --log
 
 Start Time               Sat Feb 27 23:50:28 2021
 Block Size               12
@@ -432,7 +431,7 @@ Modulus Scan thread 15 and Random byteblock match
 0   0   1   208 51  255 17  47  44  35  33  17
 ```
 
-## Example 3: decoderRandomTestHC2 Tests
+## Example 3: mdtest Tests
 
 This a new test run on a Ryzen 3950x with 10/11 encoding. It saves one byte of data during compression. 
 The program uses `decoderRandomTestHC2`. It compresses 11 bytes to 10 bytes. It decompresses back to 11 bytes.    
@@ -443,7 +442,7 @@ The program uses `decoderRandomTestHC2`. It compresses 11 bytes to 10 bytes. It 
 - 1 byte for the modulus exponent
 
 ```
-decoderRandomTestHC2 --mod=32 --hl 29 --randbh --hex=0001d033FF112F2C232111 --log
+mdtest --mod=32 --hl 29 --randbh --hex=0001d033FF112F2C232111 --log
 
 Start Time               Sun Feb 28 17:46:52 2021
 Block Size               11

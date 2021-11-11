@@ -164,11 +164,11 @@ Examples:
 
 # MDzip C++ Test
 
-This is the Usage for decoderRandomTestHC2.
+This is the Usage for mdtest.
 
 ```
 MDEncode GMP C++ Test Program
-Usage: ./decoderRandomTestHC2 [OPTIONS]
+Usage: ./mdtest [OPTIONS]
 
 Options:
   -h,--help                   Print this help message and exit
@@ -187,14 +187,14 @@ Options:
 
 
 Examples:
-   decoderRandomTestHC2 -b 12 -m 64 -t 16
-   decoderRandomTestHC2 --block=12 --mod=64    --threads=16
-   decoderRandomTestHC2 --block=12 --mod=128   --threads=16
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=0011
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --hl 1 2 3 4 5
-   decoderRandomTestHC2 --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --bh 1,5,7
-   decoderRandomTestHC2 --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh --block=12
-   decoderRandomTestHC2 --mod=64 --threads=32 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh --block=12
+   mdtest -b 12 -m 64 -t 16
+   mdtest --block=12 --mod=64    --threads=16
+   mdtest --block=12 --mod=128   --threads=16
+   mdtest --mod=64 --threads=16 --hex=0011
+   mdtest --mod=64 --threads=16 --hex=FFd033FF202020202011
+   mdtest --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --hl 1 2 3 4 5
+   mdtest --mod=64 --threads=16 --hex=FFd033FF202020202011 --log --bh 1,5,7
+   mdtest --mod=64 --threads=32  --hl 1 2 3 4 5 --randbh --block=12
+   mdtest --mod=64 --threads=32 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh --block=12
                          
 ```
