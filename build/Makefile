@@ -103,7 +103,6 @@ buildcpp:
 	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdUnzipSip47.cpp  -o mdunzipsip47 $(LDLIBS)	
 	@echo ""
 	@echo "Building Test Decode C++"
-	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdTest.cpp -o decoderRandomTestHC2 $(LDLIBS)
 	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdTest.cpp -o mdtest $(LDLIBS)
 # build mdencode GO
 mdencode:
@@ -328,7 +327,7 @@ hctestcpp:
 # clean the build directory	
 clean:
 	rm -r mdzip mdunzip mdzipcpp mdunzipcpp mdzipnh mdunzipnh mdzipsip47 mdzipsip47 mdtest 
-	rm -r mdcmd mdlist mdlistTest mdsig randfile randfile2 md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC decoderRandomTestHC2 
+	rm -r mdcmd mdlist mdlistTest mdsig randfile randfile2 md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC 
 #	rm -r randomfile randomfile.mdz randomfile.mdz.out *.mdsz *.mdsz.out *.log
 # clean the build directory
 cleanbuild:
