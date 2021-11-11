@@ -170,6 +170,7 @@ These are the 7 main programs. There are currently 3 mdzip variants.
 - mdunzipnh            - Unzips and decodes a simple mdzip (mdsz) file. It can also display the block list. 
 - mdzipsip40           - Creates a sip40 decrementing and incrementing key mdzip (mdz) binary file with a modular floor and multiple signatures. 
 - mdunzipsip40         - Unzips and decodes an sip40 mdzip (mdz) file to an output file. It can also display the block list.
+- mdtest               - Test modulus scan program for the C++ mdzip program.
 - decoderRandomTestHC2 - Test modulus scan program for the C++ mdzip program.
 
 path: [github.com/singularian/mdencode/code/mdzip_cpp/](https://github.com/singularian/mdencode/tree/master/code/mdzip_cpp)
@@ -249,7 +250,7 @@ The test program also supports signature ranges such as 1-5 or 10-20.
 path: [github.com/singularian/mdencode/code/mdzip_cpp/](https://github.com/singularian/mdencode/tree/master/code/mdzip_cpp/)  
 test path: [github.com/singularian/mdencode/code/testdecode_cpp/](https://github.com/singularian/mdencode/tree/master/code/testdecode_cpp/)
 
-This is the Usage for decoderRandomTestHC2.
+This is the Usage for decoderRandomTestHC2 and mdtest.
 
 ```
 MDEncode GMP C++ Test Program

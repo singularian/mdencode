@@ -26,9 +26,11 @@ BUILD_TIME=`date +%FT%T%z`
 # decoderRandomTestHCthreads.cpp requires the lib gmp and openssl
 all:
 	@echo "Building Test Decoder HCL"
-	$(CC) -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 $(LDLIBS) 
+	$(CC) -I. $(DEPS) mdTest.cpp -o decoderRandomTestHC2 $(LDLIBS) 
+	$(CC) -I. $(DEPS) mdTest.cpp -o mdtest $(LDLIBS) 
 test:
-	$(CC) -I. $(DEPS) decoderRandomTestHC.cpp -o decoderRandomTestHC2 $(LDLIBS)
+	$(CC) -I. $(DEPS) mdTest.cpp -o decoderRandomTestHC2 $(LDLIBS)
+	$(CC) -I. $(DEPS) mdTest.cpp -o mdtest $(LDLIBS) 
 sync:
 	cp $(MDZIP)/mdCommon.h mdCore
 	cp $(MDZIP)/mdBlockhash.h mdCore
@@ -41,13 +43,13 @@ sync:
 	cp $(MDZIP)/mdIncrementKey.h mdCore	
 	perl -i -pe "s/external/\.\.\/mdzip_cpp\/external/g" mdCore/mdFilehash.h
 testdecode:
-	./decoderRandomTestHC2 --mod=64 --threads=32 --block=12 --hl 1-45
+	./mdTest --mod=64 --threads=32 --block=12 --hl 1-45
 testhash:
 	$(CC) -I. $(DEPS) tests/testHCL.cpp  -o testhcl $(LDLIBS)
 #	$(CC) tests/test_sha1.c -lssl -lcrypto -o test_sha1 -std=c++11
 	$(CC) external/highwayhash/highwayhash.c tests/highwayhash_test.c  -o testhw -std=c++11
 clean:
-	rm -r decoderRandomTestHC2 
+	rm -r decoderRandomTestHC2 mdtest
 cleantest:
 	rm test_gmp2 test_sha1 testhw testargs testhcl testcsv testlog testswitch *.log
 list:

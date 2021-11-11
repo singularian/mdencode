@@ -49,9 +49,7 @@ private:
     int modexponent       = 0;  // 2 ^ n less than the byteblock int
     int modexponent2      = 0;  // the modulus to the exponent less than the byteblock int
     // hash context list variables
-    int hclblocksize      = 0; // redundant
-    int hclblockblocksize = 0; // hash file size
-    int hclblockkeysize   = 0; // variable for mdunzip 
+    // hcl placeholder
     // hash list variables
     std::string blockhashnames;
     std::vector<int> bhlist;

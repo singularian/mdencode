@@ -131,7 +131,7 @@ int main (int argc, char **argv) {
      // 
      // another alternative is sip48 mod24 and a 3-6/7bitstream file block encoding. It trades some speed for a larger signature
      // run mdzipfile
-     mdZip47 mdz(filename, blocksize, modsize, flcsvvals, blocklist, randombh, increment, decrement);
+     mdZip47 mdz(filename, blocksize, modsize, flcsvvals, blocklist, randombh, increment, decrement, runlogging);
      mdz.mdzipfile();
 
 }

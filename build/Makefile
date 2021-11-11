@@ -103,7 +103,8 @@ buildcpp:
 	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdUnzipSip47.cpp  -o mdunzipsip47 $(LDLIBS)	
 	@echo ""
 	@echo "Building Test Decode C++"
-	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/decoderRandomTestHC.cpp -o decoderRandomTestHC2 $(LDLIBS)
+	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdTest.cpp -o decoderRandomTestHC2 $(LDLIBS)
+	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/mdTest.cpp -o mdtest $(LDLIBS)
 # build mdencode GO
 mdencode:
 	@echo "Building mdencode"
@@ -292,7 +293,7 @@ runtestsipinc:
 # it can also use RLE to encode the modulus scan exponent block
 runtestsip47:	
 	@echo ""
-	@echo "Starting the mdzip  C++ sip47 modulus bitstream"
+	@echo "Starting the mdzip C++ sip47 modulus bitstream test"
 	@echo "Creating randomfile"
 	# cp randomfile randomfile.2
 	rm -f randomfile
@@ -304,6 +305,7 @@ runtestsip47:
 	# out to add a last block param
 	# 900 blocks is about compressive for 7 bit encoding
 	randfile2 -blocknum=10 -bsize=10 -zsize=2 -first=1 -out=randomfile
+	@echo ""
 	@echo "Zipping the file randomfile"
 	# mdzipsip47 --file=randomfile --randbh --fh=11 --inc
 	mdzipsip47 --file=randomfile --randbh --fh=11
@@ -322,10 +324,12 @@ runtestsip47:
 # run the C++ Hash Context List Tests	
 hctestcpp:
 	@echo "Running C++ Hash Context List Tests"
-	./decoderRandomTestHC2 --mod=64 --block=11 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh
+	mdtest --mod=64 --block=11 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh
 # clean the build directory	
 clean:
-	rm -r mdzip mdunzip mdzipcpp mdunzipcpp mdzipnh mdunzipnh mdzipsip47 mdzipsip47 mdcmd mdlist mdlistTest mdsig randfile randfile2 md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC decoderRandomTestHC2 randomfile randomfile.mdz randomfile.mdz.out *.mdsz *.mdsz.out *.log
+	rm -r mdzip mdunzip mdzipcpp mdunzipcpp mdzipnh mdunzipnh mdzipsip47 mdzipsip47 mdtest 
+	rm -r mdcmd mdlist mdlistTest mdsig randfile randfile2 md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC decoderRandomTestHC2 
+#	rm -r randomfile randomfile.mdz randomfile.mdz.out *.mdsz *.mdsz.out *.log
 # clean the build directory
 cleanbuild:
 	rm -r ${BUILD_DIR}/mdzip ${BUILD_DIR}/mdunzip ${BUILD_DIR}/mdcmd ${BUILD_DIR}/mdlist ${BUILD_DIR}/mdsig ${BUILD_DIR}/randfile ${BUILD_DIR}/mdencode ${BUILD_DIR}/mdbinlist ${BUILD_DIR}/md ${BUILD_DIR}/mddbreport ${BUILD_DIR}/mdnewdb
