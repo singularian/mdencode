@@ -119,10 +119,10 @@ There should be 12 bytes worth of signature and 8 for the fast hash 64 and 4 byt
 
 # Parallel Modulus Scan
 
-The Modulus Scan is run in parallel within MDunzip.  The modulus scan is configurable number of threads and the start and end thread.  
+The Modulus Scan is run in parallel within `mdunzip`.  The modulus scan is configurable number of threads and the start and end thread.  
 Each of the threads runs a modulus scan in parallel with a different modulus multiple. When a result is founding matching the original signature block it returns a byteblock. It can then validate the output byteblock result.
 
-In decoderRandomTestHC2 this allows for the blocksize and modulus bitsize and thread count as well as the bytes either random or specified as hex the command line argument. In MDunzip it will search for a matching byteblock associated with a signature and modulus floor.
+In `mdtest` this allows for the blocksize and modulus bitsize and thread count as well as the bytes either random or specified as hex the command line argument. In `mdunzip` it will search for a matching byteblock associated with a signature and modulus floor.
 
 These are examples of a parallel modulus scan for mdzip C++ with Siphash 40.  
   
