@@ -5,10 +5,8 @@
  * Project MDencode C++ Modulus Scan Test Decode Object
  * mdTest.h
  *
- * This is a C++ GMP modulus scan multithreaded test program 
- * MDencode GMP requires the GMP Library to build https://gmplib.org/ and the openssl library
- * It also requires the libfnv library to be built and installed for the FNV1 signature
- * MDencode uses a hash context list configured with the command arguments to run against a modulus scan 
+ * 
+ * MDencode mdtest uses a hash context list configured with the command arguments to run against a modulus scan 
  *
  * This includes the MD2 and MD4 and MD5 and MD6 signatures in the hash context list.
  *

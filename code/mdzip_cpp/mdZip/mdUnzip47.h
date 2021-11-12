@@ -1,3 +1,15 @@
+/**
+ *
+ * https://github.com/singularian/mdencode
+ * 
+ * Project MDencode GMP C++ Modulus Scan mdunzip Program
+ * 
+ * mdUnzip47.h unzips a mdzip file or displays the block list and validates an mdzip file
+ * This currently uses sip40 with a 32 bit modulus and a 7 bit bitstream for the modulus exponent
+ *
+ * 
+ * 
+*/
 #include <algorithm>
 #include <fstream>
 #include <iostream>
