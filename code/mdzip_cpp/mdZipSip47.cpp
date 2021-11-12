@@ -7,6 +7,13 @@
  * mdZip.cpp zips a file with the mdzip format 
  * 
  * The current mdzip file extension is mdz
+ * 
+ * This example uses 
+ * siphash 40 
+ * 32 bit modulus
+ * 7 bit bitream for the modulus exponent
+ * 10 bytes for the file block 
+ * 
  *
  * 
  * 

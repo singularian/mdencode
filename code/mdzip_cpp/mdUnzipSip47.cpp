@@ -6,7 +6,11 @@
  * 
  * mdUnzip.cpp unzips a mdzip file or displays the block list
  *
- * 
+ * This example uses 
+ * siphash 40 
+ * 32 bit modulus
+ * 7 bit bitream for the modulus exponent
+ * 10 bytes for the file block 
  * 
 */
 #include <iostream>
