@@ -162,6 +162,71 @@ Examples:
 
 ```
 
+# MDzip Siphash 47 Usage 
+
+mdzipsip47 can use two formats.  
+- siphash40 with a 32 bit modulus and a 10 block file.
+- siphash48 with a 24 bit modulus and a 10 block file (--sip48 option).
+
+```
+MDEncode MDzip Sip 47 C++ Program
+Usage: [OPTIONS]
+
+Options:
+  -h,--help                   Print this help message and exit
+  -f,--file TEXT:FILE REQUIRED
+                              MDzip filename
+  --fhs                       File Hashlist csv string
+  --fh                        File Hashlist integers list
+  --sip48                     Use Siphash48 for the block hash and modulus 24
+  -k,--keylist TEXT           Keylist csv string
+  --randbh                    Randomize the Block Hash Keylist
+  --inc                       Increment the Block Hash Keylist
+  --dec                       Decrement the Block Hash Keylist
+  -l,--log                    Run Logging
+
+
+
+   MDzip Examples:
+      mdzipsip47 --file=test.txt 
+      mdzipsip47 --file=test.txt --fh 1 2 3 
+      mdzipsip47 --file=test.txt --fh 11     --randbh
+      mdzipsip47 --file=test.txt --fh 11     --randbh=false
+      mdzipsip47 --file=randfile --fh 13     --randbh --inc
+      mdzipsip47 --file=randfile --fh 13     --randbh --dec
+
+   MDunzip Examples:
+      mdunzipsip47 --file=filename.mdz --thread=16 
+      mdunzipsip47 --file=test.mdz --thread=16 
+      mdunzipsip47 --file=test.mdz --list
+      mdunzipsip47 --file=filename.mdz --list --unzip 
+      mdunzipsip47 --file=filename.mdz --valmdzip 
+```
+
+# MDunzip Siphash 47 Usage
+
+
+
+```
+MDEncode MDunzip Sip 47 C++ Program
+Usage: [OPTIONS]
+
+Options:
+  -h,--help                   Print this help message and exit
+  -f,--file TEXT:FILE REQUIRED
+                              MDunzip filename
+  -t,--thread,--threads INT:POSITIVE
+                              Thread count number
+  -l,--list                   List the mdzip file
+  -u,--unzip                  MDunzip a file
+  -o,--over                   Overwrite an existing mdunzip output file
+  --log                       Run Logging
+  --debug                     Run Dubug
+  --val                       Run the File Signatures on the output uncompressed file
+  --valmdzip                  Validate the mdzip file
+
+```
+
 # MDzip C++ Test
 
 This is the Usage for mdtest.

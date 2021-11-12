@@ -470,7 +470,7 @@ private:
             blockkeys = hclblock.displayHLhashKeys();
         }  
 
-        // display the mdzip file info
+        // display the mdzip mdlist file info 
         displayInfo(false);
 
         // display the file block hash block list
@@ -652,8 +652,7 @@ private:
         }  
 
         // display the mdzip file info
-        // displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsizebits, modsizeBytes, filehashnames, 
-        displayInfo(false);
+        displayInfo(true);
 
         // display the file block hash block list
         // block signatures / modulus exponent / modulus remainder
@@ -695,9 +694,6 @@ private:
                 // read the modulus remainder
                 nf.read(reinterpret_cast<char*>(modulusbytes),   sizeof(char) * modsizeBytes);
                 mpz_import (modulusIntRemainder, modsizeBytes, byteorder, sizeof(modulusbytes[0]), endian, 0, modulusbytes);
-
-                // display the byte block info
-                // displayBlockInfo("Unzipping", blocksize, blk, lastblk, blockremainder, modexponent, modulusIntRemainder, hclblock, log);
 
                 // check if this is the last byte block
                 // if it is set the blocksize to the last block size
@@ -827,7 +823,7 @@ private:
     }
 
     // display the mdzip file info
-    void displayInfo(bool mdlist) {
+    void displayInfo(bool mdzip) {
 
         std::cout << std::left << std::setw(20) << "Zip Filename: "     << filename << std::endl;
         std::cout << std::left << std::setw(20) << "Unzip Filename: "   << filename << ".out" << std::endl;
@@ -848,7 +844,9 @@ private:
 
         std::cout << std::left << std::setw(20) << "File Hash Bytes: "  << hclfileblocksize << std::endl;
         std::cout << std::left << std::setw(20) << "Block Hash Bytes: " << hclblockblocksize << std::endl;
-        if (mdlist == false) std::cout << std::left << std::setw(20)    << "Threadcount:" << threadcount << std::endl;
+        if (mdlist) {
+        std::cout << std::left << std::setw(20) << "Threadcount:"       << threadcount << std::endl; }
+        std::cout << std::left << std::setw(20) << "Logging: "          << boolalpha << log.checkIfLogging() << std::endl;
         std::cout << std::left << std::setw(20) << "Platform:"          << (is_big_endian()? "Big": "Little") << " Endian" << std::endl;
 
         // display the file hash list parameters and hash block size

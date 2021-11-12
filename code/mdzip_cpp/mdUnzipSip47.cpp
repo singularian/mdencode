@@ -141,9 +141,9 @@ MDzip Examples:
     std::cout << usageline << std::endl;
     std::cout << std::endl;
 
-    // Add the current hash list signatures currently supported
-    // to the usage
-    cout << "Hashlist:" << endl << endl;
+    // Add the current hash list signatures currently supported  to the usage
+    // This is currently only used for the file signatures in mdzip sip47
+    cout << "File Hashlist:" << endl << endl;
     mdHashContextList hcl;
     hcl.displayHLRegistry(0);
 
