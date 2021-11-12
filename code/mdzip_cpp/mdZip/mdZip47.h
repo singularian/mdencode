@@ -405,8 +405,7 @@ private:
             mdzip.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
             
             // display the byte block info
-            // TODO Need to add the logging
-            // displayBlockInfo("Zipping", byteblock, currentblocksize, blocksize, blocknumber, lastblk, modexponent, remainder, hclblock, log);          
+            // TODO Need to add the logging       
             displayBlockInfo("Zipping", byteblock, currentblocksize, blocksize, blocknumber, lastblk, modexponent, remainder, hclblock); 
 
             // if this is the last block stop processing 
@@ -592,7 +591,5 @@ private:
         mpz_class modint(modulusIntRemainder);
         std::cout << std::left << std::setw(20) << "Modulus Remainder " << modint << std::endl << std::endl;
     }
-
-
 
 };
