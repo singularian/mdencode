@@ -96,12 +96,7 @@ private:
     ~mdTest() {
     } 
     
-    // set the block size
-    void setBlockSize(long bsize) {
-        blocksize = bsize;
-    }
-
-    // get the file block size
+     // get the file block size
     long getBlockSize() {
         return blocksize;
     }
@@ -120,6 +115,7 @@ private:
     }  
 
     // get the random byteblock
+    // this returns a pointer to the byteblock
     unsigned char *getByteBlock() {
         return byteblock;
     }
@@ -151,9 +147,9 @@ private:
         return modsizebits;
     }
 
-    // get the modulus bit size
+    // get the modulus byte size
     long getModulusBytesSize() {
-        return modsizebits;
+        return modsizeBytes;
     }
 
     // set the modulus exponent size
@@ -161,7 +157,7 @@ private:
         modexponent = exponent;
     }
 
-    // get the modulus exponent size
+    // get the modulus exponent number
     long getModulusExponent() {
         return modexponent;
     }
