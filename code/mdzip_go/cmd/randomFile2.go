@@ -78,6 +78,11 @@ func createRandFile() int {
 		fd.WriteFile(bytes)
 	}
 
+	// generate a random last block
+	fmt.Println("Generating last block ", a + 1)
+	bytes, _ := sigRand.GenerateRandomBytes64(6)
+        fd.WriteFile(bytes)
+
 	fmt.Println("Randomfile ", fd.outputfilename, "Created")
 
 	return 0

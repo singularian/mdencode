@@ -140,19 +140,19 @@ int main (int argc, char **argv) {
 void usage(bool displayHCL) {
    std::string usageline = R"(
    MDzip Examples:
-      mdzip --file=test.txt 
-      mdzip --file=test.txt --fh 1 2 3 
-      mdzip --file=test.txt --fh 11     --randbh
-      mdzip --file=test.txt --fh 11     --randbh=false
-      mdzip --file=randfile --fh 13     --randbh --inc
-      mdzip --file=randfile --fh 13     --randbh --dec
+      mdzipsip47 --file=test.txt 
+      mdzipsip47 --file=test.txt --fh 1 2 3 
+      mdzipsip47 --file=test.txt --fh 11     --randbh
+      mdzipsip47 --file=test.txt --fh 11     --randbh=false
+      mdzipsip47 --file=randfile --fh 13     --randbh --inc
+      mdzipsip47 --file=randfile --fh 13     --randbh --dec
 
    MDunzip Examples:
-      mdunzip --file=filename.mdz --thread=16 
-      mdunzip --file=test.mdz --thread=16 
-      mdunzip --file=test.mdz --list
-      mdunzip --file=filename.mdz --list --unzip 
-      mdunzip --file=filename.mdz --valmdzip 
+      mdunzipsip47 --file=filename.mdz --thread=16 
+      mdunzipsip47 --file=test.mdz --thread=16 
+      mdunzipsip47 --file=test.mdz --list
+      mdunzipsip47 --file=filename.mdz --list --unzip 
+      mdunzipsip47 --file=filename.mdz --valmdzip 
    )";
 
    std::cout << usageline << std::endl;

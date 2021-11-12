@@ -45,6 +45,12 @@ private:
     std::string blockhashnames;
     std::vector<int> fhlist;
     std::vector<int> bhlist;
+    std::string filesigs;
+    std::string blockkeys = "default";
+    // file and block hash list data sizes and total size
+    std::string filehashvector;
+    std::string blockhashvector;
+    // mdzip booleans
     bool randombh;
     bool inc;
     bool dec;
@@ -57,7 +63,7 @@ private:
     int byteorder = 0;
     int endian    = 0;
     size_t count;
-    mpz_t byteblockInt, modulusInt, remainder;
+    mpz_t byteblockInt, modulusInt, modulusIntRemainder, remainder;
     // initialize the mutex and log objects
     mdMutex    mutex{8};
     mdMutexLog log{false};
@@ -85,6 +91,8 @@ private:
     ~mdUnzip47() {
     } 
     
+    // read from the zip file
+    // TODO
     void readZipFile(std::ifstream &nf) {
         // nf.read(reinterpret_cast<char*>(&mdversion), sizeof(double));
         // nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
@@ -99,7 +107,6 @@ private:
 
     // set the unzip filename
     void setUnzipFilename(std::string fileName) {
-        // std:string mdunzipfile = filename + mdunzipExtension;
         unzipfilename = filename + mdunzipExtension;
     }
 
@@ -240,12 +247,12 @@ private:
         setModulus();
 
         // read the file hash list string from the mdzip file
+        // nf.read(reinterpret_cast<char*>(&filehashnames),  hclfilesize);
         nf.read(reinterpret_cast<char*>(&hclfilesize),    sizeof(int)); // 36
         char* buf1 = new char[hclfilesize];
-        // nf.read(reinterpret_cast<char*>(&filehashnames),  hclfilesize);
         if (hclfilesize > 0) {
             nf.read(buf1,  hclfilesize);
-            filehashnames.append(buf1, hclfilesize);
+            filehashnames.assign(buf1, hclfilesize);
             delete buf1;
         }
 
@@ -253,9 +260,8 @@ private:
         nf.read(reinterpret_cast<char*>(&hclblocksize),   sizeof(int)); // 40
         char* buf2 = new char[hclblocksize];
         nf.read(buf2,  hclblocksize);
-        blockhashnames.append(buf2, hclblocksize);
+        blockhashnames.assign(buf2, hclblocksize);
         delete buf2;
-        // nf.read(reinterpret_cast<char*>(&blockhashnames), hclblocksize);
 
         // TODO load the file hash keylist 
 
@@ -271,17 +277,17 @@ private:
         hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
 
         // calculate the file and file block hash list size
-        int hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
-        int hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
+        hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
+        hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
 
         // set the file hash list parameters and hash block size
-        std::string filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
+        filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
 
         // TODO set the hashblockgroup 
         //  std::string bghashvector = getHLvectorsString(HASHBLOCKGROUP);
 
         // set the file block hash list
-        std::string blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
+        blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
 
         // TODO load the random file hash keys and key size
         // load the file hash list 
@@ -291,11 +297,10 @@ private:
         nf.read(reinterpret_cast<char*>(&hclblockkeysize),   sizeof(int)); // 44
 
         // set the filesigs string
-        std::string filesigs = hclfile.displayHLhashes();
+        filesigs = hclfile.displayHLhashes();
 
         // if the hclblockkeylist size is greater than zero 
         // set hclblockkeysize to the hclblockkeysize calculated by the hash context list
-        std::string blockkeys = "default"; 
         if (hclblockkeysize > 0) {
             hclblockkeysize = hclblock.calcBlockKeySize(HASHBLOCK);
         }  
@@ -392,21 +397,14 @@ private:
         // initialize the modulusbytes array and bigint to store the modulo remainder
         setModulus(); 
         unsigned char *modulusbytes = new unsigned char[modsizeBytes];
-        mpz_t modulusInt;
-        mpz_init_set_str(modulusInt, "1", 10);
-
-        // clear the filehashnames and blockhashnames in case they were set previously in mdlist
-        // this also prevents it from being set twice
-        filehashnames.clear();
-        blockhashnames.clear();
+        mpz_init_set_str(modulusIntRemainder, "1", 10);
 
         // read the file hash list string from the mdzip file
         nf.read(reinterpret_cast<char*>(&hclfilesize),    sizeof(int));
         char* buf = new char[hclfilesize];
-        // nf.read(reinterpret_cast<char*>(&filehashnames),  hclfilesize);
         if (hclfilesize > 0) {
             nf.read(buf,  hclfilesize);
-            filehashnames.append(buf, hclfilesize);
+            filehashnames.assign(buf, hclfilesize);
             delete buf;
         }
 
@@ -414,9 +412,8 @@ private:
         nf.read(reinterpret_cast<char*>(&hclblocksize),   sizeof(int));
         char* buf2 = new char[hclblocksize];
         nf.read(buf2,  hclblocksize);
-        blockhashnames.append(buf2, hclblocksize);
+        blockhashnames.assign(buf2, hclblocksize);
         delete buf2;
-        // nf.read(reinterpret_cast<char*>(&blockhashnames), hclblocksize);
 
         // TODO load the file hash keylist 
 
@@ -432,17 +429,17 @@ private:
         hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
 
         // calculate the file and file block hash list size
-        int hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
-        int hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
+        hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
+        hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
 
         // set the file hash list parameters and hash block size
-        std::string filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
+        filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
 
         // TODO set the hashblockgroup 
         //  std::string bghashvector = getHLvectorsString(HASHBLOCKGROUP);
 
         // set the file block hash list
-        std::string blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
+        blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
 
         // TODO load the random file hash keys and key size
         // load the file hash list 
@@ -452,19 +449,17 @@ private:
         nf.read(reinterpret_cast<char*>(&hclblockkeysize),   sizeof(int));
 
         // set the filesigs string
-        std::string filesigs = hclfile.displayHLhashes();
+        filesigs = hclfile.displayHLhashes();
 
         // if the hclblockkeylist size is greater than zero load in the random block hash keylist 
-        std::string blockkeys = "default"; 
+        // otherwise the blockkeys will be set as default
         if (hclblockkeysize > 0) {
-            // std::cout << "setting mdlist keylist " << hclblockkeysize << std::endl;
             hclblock.readKeyList(nf);
             blockkeys = hclblock.displayHLhashKeys();
         }  
 
         // display the mdzip file info
-        displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsizebits, modsizeBytes, filehashnames, 
-        blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, filesigs, true, 0);
+        displayInfo(false);
 
         // display the file block hash block list
         // block signatures / modulus exponent / modulus remainder
@@ -498,14 +493,14 @@ private:
 
                 // read the modulus remainder
                 nf.read(reinterpret_cast<char*>(modulusbytes),   sizeof(char) * modsizeBytes);
-                mpz_import (modulusInt, modsizeBytes, byteorder, sizeof(modulusbytes[0]), endian, 0, modulusbytes);
+                mpz_import (modulusIntRemainder, modsizeBytes, byteorder, sizeof(modulusbytes[0]), endian, 0, modulusbytes);
 
                 // display the byte block info
-                displayBlockInfo("Displaying", blocksize, blk, lastblk, blockremainder, modexponent, modulusInt, hclblock, log);
+                displayBlockInfo("Displaying", blocksize, blk, lastblk, blockremainder, modexponent, hclblock);
         }
 
         delete modulusbytes;
-        mpz_clear(modulusInt);
+        mpz_clear(modulusIntRemainder);
         nf.close();
 
         return 0;
@@ -566,10 +561,10 @@ private:
         }
 
         // begin reading in the mdzip file data
-        nf.read(reinterpret_cast<char*>(&mdversion), sizeof(double));
-        nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
-        nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
-        nf.read(reinterpret_cast<char*>(&modsizebits),   sizeof(int));
+        nf.read(reinterpret_cast<char*>(&mdversion),    sizeof(double));
+        nf.read(reinterpret_cast<char*>(&filesize),     sizeof(long));
+        nf.read(reinterpret_cast<char*>(&blocksize),    sizeof(blocksize));
+        nf.read(reinterpret_cast<char*>(&modsizebits),  sizeof(int));
 
         // if the increment or decrement is set change the mdVersion 
         // bool incrementKey = false;
@@ -580,25 +575,18 @@ private:
         // initialize the modulusbytes array and bigint to store the modulo remainder
         setModulus(); 
         unsigned char *modulusbytes = new unsigned char[modsizeBytes];
-        mpz_t modulusInt, modulusIntRemainder;
         mpz_init_set_str(modulusInt, "1", 10);
         mpz_init_set_str(modulusIntRemainder, "1", 10);
 
         // calculate the modulus 2 ^ modsize - 1
         calcModulusInt(modulusInt, modsizebits);
 
-        // clear the filehashnames and blockhashnames in case they were set in mdlist
-        // this also prevents it from being set twice
-        filehashnames.clear();
-        blockhashnames.clear();
-
         // read the file hash list string from the mdzip file
         nf.read(reinterpret_cast<char*>(&hclfilesize),    sizeof(int));
         char* buf = new char[hclfilesize];
-        // nf.read(reinterpret_cast<char*>(&filehashnames),  hclfilesize);
         if (hclfilesize > 0) {
             nf.read(buf,  hclfilesize);
-            filehashnames.append(buf, hclfilesize);
+            filehashnames.assign(buf, hclfilesize);
             delete buf;
         }
 
@@ -606,9 +594,8 @@ private:
         nf.read(reinterpret_cast<char*>(&hclblocksize),   sizeof(int));
         char* buf2 = new char[hclblocksize];
         nf.read(buf2,  hclblocksize);
-        blockhashnames.append(buf2, hclblocksize);
+        blockhashnames.assign(buf2, hclblocksize);
         delete buf2;
-        // nf.read(reinterpret_cast<char*>(&blockhashnames), hclblocksize);
 
         // calculate the file block count and last block size
         blockcount = CalcFileBlocks(filesize, blocksize);
@@ -623,39 +610,38 @@ private:
         hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
 
         // calculate the file and file block hash list size
-        int hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
-        int hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
+        hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
+        hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
 
         // set the file hash list parameters and hash block size
-        std::string filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
+        filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
 
         // TODO set the hashblockgroup 
         //  std::string bghashvector = getHLvectorsString(HASHBLOCKGROUP);
 
         // set the file block hash list
-        std::string blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
+        blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
 
         // TODO load the random file hash keys and key size
         // load the file hash list 
         hclfile.readBlockHashList(nf);
 
         // set the filesigs string
-        std::string filesigs = hclfile.displayHLhashes();
+        filesigs = hclfile.displayHLhashes();
 
         // Load in the block hash random key size
         nf.read(reinterpret_cast<char*>(&hclblockkeysize),   sizeof(int));
 
         // if the hclblockkeylist size is greater than zero load in the random block hash keylist
-        std::string blockkeys = "default"; 
+        // otherwise the blockkeys will be set as default
         if (hclblockkeysize > 0) {
             hclblock.readKeyList(nf);
             blockkeys = hclblock.displayHLhashKeys();
         }  
 
         // display the mdzip file info
-        displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsizebits, modsizeBytes, filehashnames, 
-                    blockhashnames, hclfileblocksize, hclblockblocksize, filehashvector,  blockhashvector, blockkeys, filesigs,
-                    false, threadcount);
+        // displayInfo(filename, mdversion, filesize, blocksize, blockcount, blockremainder, modsizebits, modsizeBytes, filehashnames, 
+        displayInfo(false);
 
         // display the file block hash block list
         // block signatures / modulus exponent / modulus remainder
@@ -706,7 +692,7 @@ private:
                 long currblocksize = blocksize;
                 if ((blk == lastblk) && (blockremainder != blocksize)) {
                 if (blocksize == 0) break;
-                blocksize = blockremainder;           
+                    blocksize = blockremainder;           
                 } 
 
                 // after the first block increment the Hash Context List signature keys and block numbers
@@ -722,17 +708,17 @@ private:
                 hclblock.incrementBlockNum(incKey); 
 
                 // display the byte block info
-                displayBlockInfo("Unzipping", currblocksize, blk, lastblk, blockremainder, modexponent, modulusIntRemainder, hclblock, log);
+                displayBlockInfo("Unzipping", currblocksize, blk, lastblk, blockremainder, modexponent, hclblock);
         
                 // set the thread modulus scan objects
                 for(int tnum = 0; tnum < threadcount; tnum++) {
                     // if this is the first block run the full initialization
                     if (blk < 1) { 
-                    mst[tnum].setModscan(&log, byteorder, endian, modulusIntRemainder, modulusInt, modexponent, 1, blocksize, tnum, threadcount, &mutex);
+                        mst[tnum].setModscan(&log, byteorder, endian, modulusIntRemainder, modulusInt, modexponent, 1, blocksize, tnum, threadcount, &mutex);
                     } else {
-                    // modulusInt remainder is the mod remainder
-                    // modulusInt is the 2 ^ mod exponent
-                    mst[tnum].resetThread(modulusIntRemainder, modulusInt, modexponent, blocksize, tnum);
+                        // modulusInt remainder is the mod remainder
+                        // modulusInt is the 2 ^ mod exponent
+                        mst[tnum].resetThread(modulusIntRemainder, modulusInt, modexponent, blocksize, tnum);
                     }  
                     // set the hash context list and the signatures based on the current byte block
                     // copy the register struct to the thread register
@@ -828,11 +814,8 @@ private:
 
     }
 
-
     // display the mdlist mdzip file info
-    void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsizeBits, int modsizeBytes, 
-                    std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize, int hclblockblocksize, 
-                    std::string& filehashvector,  std::string& blockhashvector, std::string& blockkeys, std::string& filesig, bool mdlist, int threadcount ) {
+    void displayInfo(bool mdlist) {
 
         std::cout << std::left << std::setw(20) << "Zip Filename: "     << filename << std::endl;
         std::cout << std::left << std::setw(20) << "Unzip Filename: "   << filename << ".out" << std::endl;
@@ -845,7 +828,7 @@ private:
         std::cout << std::left << std::setw(20) << "Blockcount: "       << blockcount << std::endl;
         std::cout << std::left << std::setw(20) << "Blockremainder: "   << blockremainder << std::endl;
         
-        std::cout << std::left << std::setw(20) << "Modsize: "          << modsizeBits << std::endl;
+        std::cout << std::left << std::setw(20) << "Modsize: "          << modsizebits << std::endl;
         std::cout << std::left << std::setw(20) << "Modsize Bytes: "    << modsizeBytes << std::endl;
         std::cout << std::left << std::setw(20) << "Filehashlist: "     << filehashnames << std::endl;
         std::cout << std::left << std::setw(20) << "Blockhashlist: "    << blockhashnames << std::endl;
@@ -872,7 +855,7 @@ private:
         // display the file signature list before the file block level signatures
         // cit64 16527838090914794844 crc32 706283486
         std::cout << "File Signatures " << std::endl;
-        std::cout << filesig << std::endl;
+        std::cout << filesigs << std::endl;
         std::cout << std::endl;
     }
 
@@ -890,8 +873,7 @@ private:
     // fast64 11350068956456432289 
     // Modulus Exponent 65
     // Modulus Remainder 4243591440
-    void displayBlockInfo(std::string action, int blocksize, int blk, int lastblk, long blockremainder, int modexponent, mpz_t modulusIntRemainder, 
-                        mdHashContextList &hclblock, mdMutexLog &log) {
+    void displayBlockInfo(std::string action, int blocksize, int blk, int lastblk, long blockremainder, int modexponent, mdHashContextList &hclblock) {
     
         int blknum   = blk + 1;
         int cblksize = blocksize;
