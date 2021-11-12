@@ -347,7 +347,7 @@ private:
         blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
 
         // display the mdzip file info 
-        displayInfo(true);
+        displayInfo();
 
         // set last block  
         long lastblk = blockcount;
@@ -506,7 +506,7 @@ private:
 
 
     // display the mdlist mdzip file info
-    void displayInfo(bool mdlist) {
+    void displayInfo() {
 
         std::cout << std::left << std::setw(20) << "Filename Details: "     << filename << std::endl;
 
@@ -528,7 +528,7 @@ private:
 
         std::cout << std::left << std::setw(20) << "File Hash Bytes: "      << hclfileblocksize << std::endl;
         std::cout << std::left << std::setw(20) << "Block Hash Bytes: "     << hclblockblocksize << std::endl;
-        // if (mdlist == false) std::cout << std::left << std::setw(20) << "Threadcount:" << threadcount << std::endl;
+        std::cout << std::left << std::setw(20) << "Threadcount:"           << threadcount << std::endl;
         std::cout << std::left << std::setw(20) << "Platform:" << (is_big_endian()? "Big": "Little") << " Endian" << std::endl;
 
         // display the file hash list parameters and hash block size

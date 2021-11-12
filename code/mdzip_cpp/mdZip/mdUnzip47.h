@@ -844,7 +844,7 @@ private:
 
         std::cout << std::left << std::setw(20) << "File Hash Bytes: "  << hclfileblocksize << std::endl;
         std::cout << std::left << std::setw(20) << "Block Hash Bytes: " << hclblockblocksize << std::endl;
-        if (mdlist) {
+        if (mdzip) {
         std::cout << std::left << std::setw(20) << "Threadcount:"       << threadcount << std::endl; }
         std::cout << std::left << std::setw(20) << "Logging: "          << boolalpha << log.checkIfLogging() << std::endl;
         std::cout << std::left << std::setw(20) << "Platform:"          << (is_big_endian()? "Big": "Little") << " Endian" << std::endl;
