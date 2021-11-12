@@ -826,7 +826,7 @@ private:
 
     }
 
-    // display the mdlist mdzip file info
+    // display the mdzip file info
     void displayInfo(bool mdlist) {
 
         std::cout << std::left << std::setw(20) << "Zip Filename: "     << filename << std::endl;

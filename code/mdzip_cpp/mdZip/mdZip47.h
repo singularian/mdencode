@@ -507,8 +507,6 @@ private:
 
 
     // display the mdlist mdzip file info
- //   void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, 
- //     int modsizeBits, int modsizeBytes, std::string& filehashnames, std::string& blockhashnames, int hclfileblocksize,
     void displayInfo(bool mdlist) {
 
         std::cout << std::left << std::setw(20) << "Filename Details: "     << filename << std::endl;
