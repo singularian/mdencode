@@ -49,12 +49,13 @@ private:
     int modexponent       = 0;  // 2 ^ n less than the byteblock int
     int modexponent2      = 0;  // the modulus to the exponent less than the byteblock int
     // hash context list variables
-    int hclblocksize      = 0; // redundant
-    int hclblockblocksize = 0; // hash file size
-    int hclblockkeysize   = 0; // variable for mdunzip 
+    // hcl placeholder
     // hash list variables
     std::string blockhashnames;
     std::vector<int> bhlist;
+    std::string blockkeys  = "default";
+    std::string vectorlist;
+    std::string hashlist;
     // boolean variables
     bool randombh          = false;
     bool skipDecode        = false;
@@ -237,17 +238,18 @@ private:
         } 
 
         // display the current block stats
-        std::string vectorlist = mst[0].hcl.getHLvectorsString(HASHBLOCK);
-        std::string hashlist   = mst[0].hcl.displayHLhashes();
+        vectorlist = mst[0].hcl.getHLvectorsString(HASHBLOCK);
+        hashlist   = mst[0].hcl.displayHLhashes();
 
-        std::string blockkeys = "default"; 
+        // set the blockkeys to default if the random block hash keys is false
+        // if the randombh is true set the blockkeys to the signature list 
         if (randombh == true) {
             blockkeys = mst[0].hcl.displayHLhashKeys();
         }  
 
         // display the current block stats after initialization
         // display the block keys
-        displayFloor(vectorlist, hashlist, blockkeys );
+        displayFloor();
 
         if (skipDecode) {
             delete[] byteblock;
@@ -373,10 +375,10 @@ private:
 
         int f = 0;
         for (unsigned int i = 0; i < source.length(); i += 2) {
-        std::string byteString = source.substr(i, 2);
-        unsigned char byte = (char) strtol(byteString.c_str(), NULL, 16);
-        byteblock[f] = byte;
-        f++;
+            std::string byteString = source.substr(i, 2);
+            unsigned char byte = (char) strtol(byteString.c_str(), NULL, 16);
+            byteblock[f] = byte;
+            f++;
         }
 
         return byteblock;
@@ -385,7 +387,7 @@ private:
 
 
     // displays the modulus scan information
-    void displayFloor(std::string& vectorlist, std::string& hashlist, std::string& blockkeys) {   
+    void displayFloor() {   
 
         std::ostringstream result;
         int f = 0;
