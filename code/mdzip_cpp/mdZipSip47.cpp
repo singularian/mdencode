@@ -2,20 +2,25 @@
  *
  * https://github.com/singularian/mdencode
  * 
- * Project MDencode GMP C++ Modulus Scan MDzip Program
+ * Project MDencode GMP C++ Modulus Scan mdunzip Program
  * 
- * mdZip.cpp zips a file with the mdzip format 
+ * mdUnzip.cpp unzips a mdzip file or displays the block list
  * 
- * The current mdzip file extension is mdz
- * 
- * This example uses 
+ * It can use two file signature block formats 
+ * siphash40 with a 32 bit modulus and a 10 block file.
+ * siphash48 with a 24 bit modulus and a 10 block file (--sip48 option)
+ *
+ * siphash40 uses 
  * siphash 40 
  * 32 bit modulus
  * 7 bit bitream for the modulus exponent
- * 10 bytes for the file block 
+ * 10 bytes for the file block
  * 
- *
- * 
+ * siphash48 uses 
+ * siphash 48
+ * 24 bit modulus
+ * 7 bit bitream for the modulus exponent
+ * 10 bytes for the file block
  * 
 */
 #include <iostream>
