@@ -111,13 +111,18 @@ private:
           
         // generate a random n byte byteblock if the hexstring is empty
         if (hexstring.empty()) {
-            byteblock = genRandomByteBlock(blocksize);
+            genRandomByteBlock(blocksize);
         // otherwise process the hex string into a byte block
         } else {
-            byteblock = convertHexToByteBlock(hexstring);
+            convertHexToByteBlock(hexstring);
             blocksize = hexstring.length() / 2;
         }
     }  
+
+    // get the random byteblock
+    unsigned char *getByteBlock() {
+        return byteblock;
+    }
 
     // set the modulus byte size
     void setModulus() {
@@ -349,23 +354,21 @@ private:
         return 0;
     }
 
-    // returns a random byte sized byteblock
-    unsigned char *genRandomByteBlock(size_t num_bytes) {
+    // creates a random number byte sized byteblock
+    void genRandomByteBlock(size_t num_bytes) {
 
         byteblock = new unsigned char [num_bytes];
 
         srand(time(0));
 
         for (int f = 0; f < num_bytes; f++) {
-        byteblock[f] = (rand() % 255);
+            byteblock[f] = (rand() % 255);
         }
-
-        return byteblock;
     }
 
     // convert a hex byte string argument to unsigned byte byteblock array
     // it should also check 00FF33 or 0000FFFF7873 hex strings
-    unsigned char *convertHexToByteBlock(std::string &source) {
+   void convertHexToByteBlock(std::string &source) {
 
         if ((source.length() % 2) == 1) source = source + "0";
         size_t num_bytes = (source.length() / 2);
@@ -378,9 +381,6 @@ private:
             byteblock[f] = byte;
             f++;
         }
-
-        return byteblock;
-
     }
 
 
