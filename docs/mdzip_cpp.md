@@ -162,7 +162,7 @@ mdunzip --file=filename.mdz --valmdzip
 
 This is the MDZip C++ Example Usage
 
-These are the 7 main programs. There are currently 3 mdzip variants.
+These are the 7 main programs. There are currently 3 main mdzip variants.
 
 - mdzip                - Creates an mdzip (mdz) binary file from an input file.
 - mdunzip              - Unzips an mdzip (mdz) file to an output file. It can also display the block list.
@@ -170,7 +170,7 @@ These are the 7 main programs. There are currently 3 mdzip variants.
 - mdunzipnh            - Unzips and decodes a simple mdzip (mdsz) file. It can also display the block list. 
 - mdzipsip40           - Creates a sip40 decrementing and incrementing key mdzip (mdz) binary file with a modular floor and multiple signatures. 
 - mdunzipsip40         - Unzips and decodes an sip40 mdzip (mdz) file to an output file. It can also display the block list.
-- mdzipsip47           - Creates a sip47 mdzip (mdz) file with either a Siphash 40 or Siphash 48 block signature. 
+- mdzipsip47           - Creates a sip47 mdzip (mdz) file with either a Siphash 40 or a Siphash 48 block signature. 
 - mdunzipsip47         - Unzips a sip47 mdzip (mdz) file to an output file. It can also display the block list.
 - mdtest               - Test modulus scan program for the C++ mdzip program.
 

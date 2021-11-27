@@ -6,6 +6,7 @@
  * 
  * mdZip47.h zips a file with a mdzip format
  * This currently uses sip40 with a 32 bit modulus and a 7 bit bitstream for the modulus exponent
+ * 
  *
  * 
  * 
