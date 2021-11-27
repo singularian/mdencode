@@ -40,7 +40,7 @@ void testDisplayHCL() {
 }    
 
 void testFileHCL() {
-    mdHashContextList hclfile;
+    mdHashContextList hclfile(HASHFILE);
 
     // initialize a file hash list vector  
     std::vector<int> file = { 1, 2, 3, 15, 16 };

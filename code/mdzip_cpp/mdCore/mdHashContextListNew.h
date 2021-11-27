@@ -304,15 +304,18 @@ public:
           }
 
           // set the Vector Hash List Tuple
+          // this will set the hashlist boolean to true or false if the random key hash signature is specified
           setVectorKeyHL(v);
     }
 
     // load the Signature keys from a file
     void readKeyList(std::ifstream &rf) {
           int hashblocksize = 0;
+          bool randhashkey  = true;
 
           for(auto hash  : hashlistvt) {
               hashblocksize = std::get<2>(hash);
+              randhashkey   = std::get<4>(hash); // if this is true it reads the hash key and if it's false it skips it
 
               switch(std::get<0>(hash)) {
                   case CIT64:
@@ -443,9 +446,11 @@ public:
     // write the Signature keys to a file
     void writeKeyList(std::ofstream &wf) {
           int hashblocksize = 0;
+          bool randhashkey  = true;
 
           for(auto hash  : hashlistvt) {
               hashblocksize = std::get<2>(hash);
+              randhashkey   = std::get<4>(hash); // if this is true it writes the hash key and if it's false it skips it
 
               switch(std::get<0>(hash)) {
                   case CIT64:
@@ -576,9 +581,11 @@ public:
     // randomize the Signature keys based on the signature list
     void randomizeKeyList() {
           int hashblocksize = 0;
+          bool randhashkey  = true;
 
           for(auto hash  : hashlistvt) {
               hashblocksize = std::get<2>(hash);
+              randhashkey   = std::get<4>(hash); // if this is true it randomizes the hash key and if it's false it skips it and uses the default
 
               switch(std::get<0>(hash)) {
                   case CIT64:
@@ -1785,10 +1792,16 @@ public:
         ss.str(std::string());
 
         int i = 0;
-        int hashblocksize = 0;
+        std::string hashname;
+        int hashblocksize    = 0;
+        int hashkeyblocksize = 0;
+        bool randhashkey     = true;
         for(auto hash  : hashlistvtkey) {
 
-              hashblocksize = std::get<2>(hash); // should be the key size     
+              hashname          = std::get<1>(hash);
+              hashblocksize     = std::get<2>(hash);    
+              hashkeyblocksize  = std::get<3>(hash); 
+              randhashkey       = std::get<4>(hash); 
               // ss << "hash id " << std::get<0>(hash) << " " << " name " << std::get<1>(hash) << " hashblocksize " << std::to_string(hashblocksize) << " ";
 
               switch(std::get<0>(hash)) {
@@ -2168,8 +2181,8 @@ public:
              hlss << std::left << std::setw(12) << std::get<2>(val);
              hlss << std::left << std::setw(11) << std::to_string(mdHashlist[std::get<0>(val)-1].keysize) << std::endl;
        
-             blocksize += std::get<2>(val);
-             blockkeysize += mdHashlist[std::get<0>(val)-1].keysize;
+             blocksize    += std::get<2>(val);
+             blockkeysize += std::get<3>(val);
              i++;
          }
          
@@ -2243,14 +2256,13 @@ public:
 
     // calculate the block key size for the correct hashlist type
     // this returns the sum of the hash list vector block sizes
+    // TODO Check if the hash key boolean is true or false
     int calcBlockKeySize() {
 
-        int signum = 0;
         int hashblocksize = 0;
         int sumhashkeyblocksize = 0;
         for(auto hash  : hashlistvt) {
-              signum = std::get<0>(hash) - 1;
-              hashblocksize = mdHashlist[signum].keysize;
+              hashblocksize = std::get<3>(hash);
               sumhashkeyblocksize += hashblocksize;
         }
 
