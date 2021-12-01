@@ -19,7 +19,8 @@
 #include <gmp.h>
 #include <gmpxx.h>
 #include "mdCore/mdCommon.h"
-#include "mdCore/mdHashContextList.h"
+// #include "mdCore/mdHashContextList.h"
+#include "mdCore/mdHashContextListNew.h"
 #include "mdCore/mdMutex.h"
 #include "mdCore/mdMutexLog.h"
 #include "mdCore/modscanFile.h"
@@ -281,25 +282,25 @@ private:
         blockcount = CalcFileBlocks(filesize, blocksize);
         blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
         
-        mdHashContextList hclfile;
+        mdHashContextList hclfile(HASHFILE);
         mdHashContextList hclblock;
 
         // set the hash list vector tuple for file and hash blocks
-        hclfile.setVectorHLstring(filehashnames, HASHBLOCK);
-        hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
+        hclfile.setVectorHLstring(filehashnames);
+        hclblock.setVectorHLstring(blockhashnames);
 
         // calculate the file and file block hash list size
-        hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
-        hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
+        hclfileblocksize  = hclfile.calcBlockSize();
+        hclblockblocksize = hclblock.calcBlockSize();
 
         // set the file hash list parameters and hash block size
-        filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
+        filehashvector = hclfile.getHLvectorsString();
 
         // TODO set the hashblockgroup 
-        //  std::string bghashvector = getHLvectorsString(HASHBLOCKGROUP);
+        //  std::string bghashvector = getHLvectorsString();
 
         // set the file block hash list
-        blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
+        blockhashvector = hclblock.getHLvectorsString();
 
         // TODO load the random file hash keys and key size
         // load the file hash list 
@@ -314,7 +315,7 @@ private:
         // if the hclblockkeylist size is greater than zero 
         // set hclblockkeysize to the hclblockkeysize calculated by the hash context list
         if (hclblockkeysize > 0) {
-            hclblockkeysize = hclblock.calcBlockKeySize(HASHBLOCK);
+            hclblockkeysize = hclblock.calcBlockKeySize();
         }  
 
         // calculate the modulus exponent block size
@@ -323,7 +324,7 @@ private:
         if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
 
         // calculate the total hash blcock size
-        int hashblocksize  = (hclblock.calcBlockSize(HASHBLOCK) + modsizeBytes);
+        int hashblocksize  = (hclblock.calcBlockSize() + modsizeBytes);
         int totalblocksize = (hashblocksize * blockcount);
 
         // calculate the mdzip file size
@@ -337,7 +338,7 @@ private:
         sumfilesize += modByteBlockSize;
 
         // add the file block size and key block size and hash block size
-        sumfilesize += hclfile.calcBlockSize(HASHBLOCK);
+        sumfilesize += hclfile.calcBlockSize();
         // if it is the default key hclblockkeysize is zero
         // if it is not the default key then hclblockkeysize is the calculated key block size
         sumfilesize += hclblockkeysize; 
@@ -352,7 +353,7 @@ private:
         } else {
             std::cout << "MDzip File doesn't validate" << std::endl; 
             std::cout << "MDzip File Sum " << sumfilesize << " != " << inputfilesize << std::endl; 
-            // std::cout << "MDzip File hash size " << hclfile.calcBlockSize(HASHBLOCK) << std::endl; 
+            // std::cout << "MDzip File hash size " << hclfile.calcBlockSize() << std::endl; 
             // std::cout << "MDzip File block size " << totalblocksize << std::endl; 
             // std::cout << "MDzip File block key size " << hclblockkeysize << std::endl;
 
@@ -433,25 +434,25 @@ private:
         blockcount = CalcFileBlocks(filesize, blocksize);
         blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
         
-        mdHashContextList hclfile;
+        mdHashContextList hclfile(HASHFILE);
         mdHashContextList hclblock;
 
         // set the hash list vector tuple for file and hash blocks
-        hclfile.setVectorHLstring(filehashnames, HASHBLOCK);
-        hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
+        hclfile.setVectorHLstring(filehashnames);
+        hclblock.setVectorHLstring(blockhashnames);
 
         // calculate the file and file block hash list size
-        hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
-        hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
+        hclfileblocksize  = hclfile.calcBlockSize();
+        hclblockblocksize = hclblock.calcBlockSize();
 
         // set the file hash list parameters and hash block size
-        filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
+        filehashvector = hclfile.getHLvectorsString();
 
         // TODO set the hashblockgroup 
-        //  std::string bghashvector = getHLvectorsString(HASHBLOCKGROUP);
+        //  std::string bghashvector = getHLvectorsString();
 
         // set the file block hash list
-        blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
+        blockhashvector = hclblock.getHLvectorsString();
 
         // TODO load the random file hash keys and key size
         // load the file hash list 
@@ -614,25 +615,25 @@ private:
         // calculate the last block size
         blockremainder  = CalcFileBlocksRemainder(filesize, blocksize);
 
-        mdHashContextList hclfile;
+        mdHashContextList hclfile(HASHFILE);
         mdHashContextList hclblock;
 
         // set the hash list vector tuple for file and hash blocks
-        hclfile.setVectorHLstring(filehashnames, HASHBLOCK);
-        hclblock.setVectorHLstring(blockhashnames, HASHBLOCK);
+        hclfile.setVectorHLstring(filehashnames);
+        hclblock.setVectorHLstring(blockhashnames);
 
         // calculate the file and file block hash list size
-        hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
-        hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
+        hclfileblocksize  = hclfile.calcBlockSize();
+        hclblockblocksize = hclblock.calcBlockSize();
 
         // set the file hash list parameters and hash block size
-        filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
+        filehashvector = hclfile.getHLvectorsString();
 
         // TODO set the hashblockgroup 
-        //  std::string bghashvector = getHLvectorsString(HASHBLOCKGROUP);
+        //  std::string bghashvector = getHLvectorsString();
 
         // set the file block hash list
-        blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
+        blockhashvector = hclblock.getHLvectorsString();
 
         // TODO load the random file hash keys and key size
         // load the file hash list 
@@ -665,7 +666,7 @@ private:
 
         // initialize the modulus scan thread objects with the block hash list string
         for(int tnum = 0; tnum < threadcount; tnum++) {
-                mst[tnum].hcl.setVectorHLstring(blockhashnames, HASHBLOCK);
+                mst[tnum].hcl.setVectorHLstring(blockhashnames);
         }
 
         // calculate modulus exponent bitstream block size

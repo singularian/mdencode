@@ -122,15 +122,12 @@ private:
     int incrementKey = NOINC;
     // set the hashlistsize to the last signatures enum value - 1
     int hashlistsize = LAST - 1;
-    // TODO Need to simplify this have hashblock, hashkey vectors
     // hash list vectors
-    // vector with tuple - hashnumber, hashname, blocksize
-    // std::vector<std::tuple<int,std::string,int>> hashlistvt;
-    // new tuple
-    // int number, name, blocksize, keysize, random keyset bool true or false // default to false
+    // number, hashname, blocksize, keysize, random keyset boolean true or false // default to false for default or randomized key
     std::vector<std::tuple<int,std::string,int,int,bool>> hashlistvt;
     // keylist vector
-    // std::vector<std::tuple<int,std::string,int>> hashlistvtkey;
+    // TODO Remove this
+    // TODO Need to add the commandline user specified keys
     std::vector<std::tuple<int,std::string,int,int,bool>> hashlistvtkey;
     // hash map
     std::map<std::string, int> hclmap;
@@ -212,6 +209,10 @@ public:
     // =============================================================
     // set the hash list key tuple
     // this is optional and allows the keylist to be set 
+    // make this a bitstream arg 
+    // store this as a bitstream parameter of booleans
+    // this will turn on or off the key randomization for a hash and use the signature list provided
+    // --randbh2=101110001 or --randfh2=10110011111
     void setVectorKeyHL(std::vector<int> &v)
     {
           // need to check type size of vector tuple so it's not zero
@@ -253,7 +254,7 @@ public:
     // the delimeter is ':' currently
     // ie hash string cit64:crc32:fast32
     // ie hash string cit64:crc32:fast32:fast64:fnv32a:fnv64:md2:md4:met641:met642:sha512:whp
-    void setVectorHLstring(std::string hashlist, int type) {
+    void setVectorHLstring(std::string hashlist) {
           std::vector<int> v;
 
           int hashnum = 0;
@@ -1425,9 +1426,6 @@ public:
           return true;
     }
 
-    
-
-
     // setByteBlockHashList
     // this sets the block hash list signatures for an input byte block
     void setByteBlockHashList(unsigned char *byteblock, int blocksize) {
@@ -1796,7 +1794,7 @@ public:
         int hashblocksize    = 0;
         int hashkeyblocksize = 0;
         bool randhashkey     = true;
-        for(auto hash  : hashlistvtkey) {
+        for(auto hash  : hashlistvt) {
 
               hashname          = std::get<1>(hash);
               hashblocksize     = std::get<2>(hash);    

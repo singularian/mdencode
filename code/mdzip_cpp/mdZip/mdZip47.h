@@ -16,7 +16,8 @@
 #include <gmp.h>
 #include <gmpxx.h>
 #include "mdCore/mdCommon.h"
-#include "mdCore/mdHashContextList.h"
+// #include "mdCore/mdHashContextList.h"
+#include "mdCore/mdHashContextListNew.h"
 #include "external/bitstream/Bitstream.h"
 
 
@@ -238,8 +239,8 @@ private:
         std::remove(fname);
 
         // set the file hash list
-        mdHashContextList hclfile;
-        hclfile.setVectorHL(fhlist, HASHBLOCK);
+        mdHashContextList hclfile(HASHFILE);
+        hclfile.setVectorHL(fhlist);
         hclfile.setFileHashList(filename);
 
         // create the ifstream and ofstream objects
@@ -276,16 +277,16 @@ private:
         // initialize the block hash context list
         mdHashContextList hclblock;
         // set the block hash list with the block hash list vector 
-        hclblock.setVectorHL(bhlist, HASHBLOCK);
+        hclblock.setVectorHL(bhlist);
         // display the block hash list vector
-        std::string vectorlist = hclblock.getHLvectorsString(HASHBLOCK);
+        std::string vectorlist = hclblock.getHLvectorsString();
 
         // write the hash list strings
         // TODO need to write the keylist as well
         // ie aes8:sha1:md5-aes8-keylist
         int hclsize;
-        filehashnames  = hclfile.getHLvectorsStringNames(HASHBLOCK);
-        blockhashnames = hclblock.getHLvectorsStringNames(HASHBLOCK);
+        filehashnames  = hclfile.getHLvectorsStringNames();
+        blockhashnames = hclblock.getHLvectorsStringNames();
 
         // write the file hash list names
         hclsize = filehashnames.size();
@@ -335,17 +336,17 @@ private:
         unsigned char *modulusint = new unsigned char[modsizeBytes];
 
         // calculate the file and file block hash list size
-        hclfileblocksize  = hclfile.calcBlockSize(HASHBLOCK);
-        hclblockblocksize = hclblock.calcBlockSize(HASHBLOCK);
+        hclfileblocksize  = hclfile.calcBlockSize();
+        hclblockblocksize = hclblock.calcBlockSize();
 
         // set the file hash list parameters and hash block size
-        filehashvector = hclfile.getHLvectorsString(HASHBLOCK);
+        filehashvector = hclfile.getHLvectorsString();
 
         // TODO set the hashblockgroup 
-        //  std::string bghashvector = getHLvectorsString(HASHBLOCKGROUP);
+        //  std::string bghashvector = getHLvectorsString();
 
         // set the file block hash list
-        blockhashvector = hclblock.getHLvectorsString(HASHBLOCK);
+        blockhashvector = hclblock.getHLvectorsString();
 
         // display the mdzip file info 
         displayInfo();
@@ -539,7 +540,7 @@ private:
 
         // TODO display the hashblockgroup 
         // std::cout << "File block group hash list " << std::endl;
-        // std::cout << getHLvectorsString(HASHBLOCKGROUP) << std::endl;
+        // std::cout << getHLvectorsString() << std::endl;
 
         // display the file block hash list
         std::cout << "File block hashlist " << std::endl;

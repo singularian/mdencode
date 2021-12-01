@@ -10,7 +10,9 @@
 #include <vector>
 #include "mdCore/mdCommon.h"
 #include "../mdCore/mdHashContextListNew.h"
+#include "mdCore/mdBitstream.h"
 
+void testBitstream();
 void testDisplayHCL();
 void testFileHCL();
 void testBlockHCL();
@@ -18,11 +20,29 @@ void testHashStringHCL();
 
 int main()
 {
+    testBitstream();
     testDisplayHCL();
     testFileHCL();
     testBlockHCL();
-    testHashStringHCL(); 
-    
+    testHashStringHCL();   
+}
+
+void testBitstream() {
+   // blocksize and blockcount and blockremainder
+    std::string filename = "Makefile";
+    std::ifstream nf(filename, std::ios::in | std::ios::binary);
+    // mdBitstream mb(11,421, 3);
+    mdBitstream mb(10,462, 3);
+    mb.calcMinMaxExponent(nf);
+    // mb.mdzipModExponentBitstream(nf); // not working except on last block
+    // seek to beginning of file
+    // nf.seekg (0, nf.beg);
+    // mb.testFile(nf); // I think there is an issue with ifstream and file in sub directory
+
+    std::cout << mb.getMinSize() << " " << mb.getMinSizeMinusLast() << " " << mb.getMaxSize() << std::endl;
+
+    nf.close();
+
 }
 
 void testDisplayHCL() {
@@ -105,7 +125,7 @@ void testHashStringHCL() {
     std::string hclstring = "cit64:crc32:fast32:fast64:fnv32a:fnv64:md2:md4:met641:met642:sha512:whp:zz12:";
     std::cout << std::endl << "Initializing hclstring " << hclstring << std::endl;
 
-    hclstr.setVectorHLstring(hclstring, HASHBLOCK);
+    hclstr.setVectorHLstring(hclstring);
     hclstr.displayHLvectors();
     std::cout << std::endl;
 
