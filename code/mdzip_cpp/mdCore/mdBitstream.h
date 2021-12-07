@@ -11,9 +11,11 @@ private:
     int fileListSize                = 0;
     int blockListSize               = 0;
     int bitformat                   = 7;
+    int bitsize                     = 7; // the modexponent bitstream bit size
     int minExponent                 = 255;
     int minExponentMinusLastBlock   = 255;
     int maxExponent                 = 0;
+    int diffExponent                = 0;
     uint8_t *modExpBlock;
     long modBitBlockSize            = 0;
     long modByteBlockSize           = 0;
@@ -59,10 +61,85 @@ public:
         return maxExponent;
     }
 
+    // get the max modexponent size
+    long getDiff() {
+        return diffExponent;
+    }
+
     // get the format
     int getFormat() {
         return bitformat;
     }
+
+    // set the bitsteam format
+    // currently from 2 to 7
+    void setFormat() {
+        bitformat = 7;
+        if (diffExponent <= 3) bitformat = 2;
+        if ((diffExponent > 3) &&  (diffExponent <= 7))  bitformat = 3;
+        if ((diffExponent > 8) &&  (diffExponent <= 15)) bitformat = 4;
+        if ((diffExponent > 16) && (diffExponent <= 31)) bitformat = 5;
+        if ((diffExponent > 32) && (diffExponent <= 63)) bitformat = 6;
+
+    }
+
+    // calculate modulus exponent bitstream bit size
+    long setBitstreamBitSize() {
+
+        bitsize = 7;
+        switch (bitformat) {
+            case 2:
+                bitsize = 2;
+            case 3:
+                bitsize = 3;
+            case 4:
+                bitsize = 4;
+            case 5:
+                bitsize = 5;
+            case 6:
+                bitsize = 6;    
+        }    
+
+        return bitsize;
+    }    
+
+    // calculate modulus exponent bitstream block size
+    void calcBitstreamSize() {
+
+        switch (bitformat) {
+            case 2:
+                modBitBlockSize = blockcount * 2;
+                // could also have a 3 bits for the bit size 2 - 7
+                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the minimum modulus exponent
+                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the last byte block
+                modByteBlockSize = (modBitBlockSize / 8);
+            case 3:
+                modBitBlockSize = blockcount * 3;
+                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the minimum modulus exponent
+                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the last byte block
+                modByteBlockSize = (modBitBlockSize / 8);  
+            case 4:
+                modBitBlockSize = blockcount * 4;
+                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the minimum modulus exponent
+                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the last byte block
+                modByteBlockSize = (modBitBlockSize / 8);   
+            case 5:
+                modBitBlockSize = blockcount * 5;
+                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the minimum modulus exponent
+                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the last byte block
+                modByteBlockSize = (modBitBlockSize / 8);     
+            case 6:
+                modBitBlockSize = blockcount * 6;
+                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the minimum modulus exponent
+                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the last byte block
+                modByteBlockSize = (modBitBlockSize / 8);
+            default:
+                long modBitBlockSize = blockcount * 7;
+                long modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks with a decimal result
+        }
+
+        if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
+    }    
 
     // return the modExpBlock
     uint8_t *getmodExpBlock() {
@@ -125,6 +202,12 @@ public:
     }
 
     // calculate the minimum and maximum exponent
+    // diff 3   = 2 bits
+    // diff 7   = 3 bits 
+    // diff 15  = 4 bits
+    // diff 31  = 5 bits
+    // diff 63  = 6 bits
+    // diff 63+ = 7 bits
     void calcMinMaxExponent(std::ifstream &nf) {
 
         long blocknumber = 1;
@@ -177,9 +260,85 @@ public:
                 std::cout << "Block " << blocknumber << " ";
                 std::cout << currentblocksize << "/" << blocksize;
                 std::cout << " modexponent " << modexponent;
-                std::cout << " modint " << modint << std::endl << std::endl;
+                std::cout << " modint " << modint << std::endl;
                 printByteblock(byteblock, currentblocksize, true);
+                 std::cout << "\n";
        
+                // if this is the last block stop processing 
+                if (blocknumber == blockcount) break;
+
+            }
+            blocknumber++;
+        }
+
+        // diffExponent = maxExponent - minExponent;
+        diffExponent = maxExponent - minExponentMinusLastBlock;
+
+        delete byteblock;	
+
+        /* free used memory */
+        mpz_clear(byteblockInt);
+
+    }
+
+    // converts the modulus exponent to a 2 to 6 bitstream
+    void mdzipModExponentBitstream26(std::ifstream &nf) {
+
+        long blocknumber = 1;
+
+        // the curent block size
+        long currentblocksize = blocksize;
+
+        // initialize the gmp bigint variables
+        size_t count;
+
+        // create the byteblock buffer with the blocksize  
+        unsigned char *byteblock  = new unsigned char[blocksize];
+
+        // set last block  
+        long lastblk = blockcount;
+
+        // initialize the byteblockint
+        mpz_init_set_str(byteblockInt, "0", 10);
+
+        // calculate modulus exponent bit block size
+        setFormat();
+        setBitstreamBitSize();
+        calcBitstreamSize();
+
+        // Create bitStream object
+        uint8_t *modExpBlock = new uint8_t[modByteBlockSize];
+        // std::cout << "block size " << sizeof(modExpBlock) << " " << modByteBlockSize << std::endl;
+        BitstreamWriter bsw(modExpBlock, modByteBlockSize);
+        bsw.put<bitsize>(minExponent);
+
+        while (!nf.eof())
+        {
+            if (blocknumber <= blockcount) {
+                // check if this is the last block and the lastblocksize is not equal to the file block size
+                // if it isn't resize the byteblock array and set the currentblocksize to blockremainder
+                if ((blocknumber == blockcount) && (blockremainder != blocksize)) {
+                    currentblocksize = blockremainder;   
+                    delete byteblock;
+                    byteblock  = new unsigned char[currentblocksize];   
+                } 
+
+                // read the current byteblock from the input file and generate a modulus exponent
+                nf.read(reinterpret_cast<char*>(byteblock), (size_t) currentblocksize);
+
+                // create a bigint number for the byte block
+                mpz_import (byteblockInt, currentblocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);
+
+                // calculate the modulus exponent with base two 
+                int modexponent = calcExponent(byteblockInt);
+                if (blocknumber < blockcount) {
+                    modexponent = modexponent - minExponent;
+                    bsw.put<bitsize>(modexponent);
+                } else {
+                    bsw.put<bitsize>(modexponent);
+                }   
+                std::cout << "modexponent " << modexponent << std::endl;
+
                 // if this is the last block stop processing 
                 if (blocknumber == blockcount) break;
 
@@ -191,18 +350,13 @@ public:
 
         /* free used memory */
         mpz_clear(byteblockInt);
-        // mpz_clear(modulusInt);
-        // mpz_clear(remainder);
 
     }
 
-    // need to clean this up
-    // change the global variable for modByteBlockSize
-    // converts the modulus exponent to a 7 bit stream
+    // converts the modulus exponent to a 7 bitstream
     void mdzipModExponentBitstream(std::ifstream &nf) {
 
         long blocknumber = 1;
-        // int modexponent  = 0;
 
         // the curent block size
         long currentblocksize = blocksize;
@@ -221,8 +375,8 @@ public:
 
         // calculate modulus exponent bit block size
         modBitBlockSize = blockcount * 7;
-        // long modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
-        modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
+        modByteBlockSize = (modBitBlockSize / 8);
+        // need to round up one for blocks with a decimal result
         if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
 
         // Create bitStream object

@@ -39,7 +39,10 @@ void testBitstream() {
     // nf.seekg (0, nf.beg);
     // mb.testFile(nf); // I think there is an issue with ifstream and file in sub directory
 
-    std::cout << mb.getMinSize() << " " << mb.getMinSizeMinusLast() << " " << mb.getMaxSize() << std::endl;
+    std::cout << "Min Exponent " << mb.getMinSize() << std::endl;
+    std::cout << "Max Exponent " << mb.getMaxSize() << std::endl;
+    std::cout << "Diff Min/Max Exponent " << mb.getDiff() << std::endl;
+    std::cout << "Last Block Exponent " << mb.getMinSizeMinusLast() << std::endl;
 
     nf.close();
 

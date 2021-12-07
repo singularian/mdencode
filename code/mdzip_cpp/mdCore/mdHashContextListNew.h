@@ -206,13 +206,15 @@ public:
 
     }
 
-    // =============================================================
     // set the hash list key tuple
+    // this should convert a boolean bitstream to set the default or random key flags in the hashlist for files or block groups or blocks
+    // true it's random and false it's default
     // this is optional and allows the keylist to be set 
     // make this a bitstream arg 
     // store this as a bitstream parameter of booleans
     // this will turn on or off the key randomization for a hash and use the signature list provided
     // --randbh2=101110001 or --randfh2=10110011111
+    // byteblock bitstream and bitstream starting position
     void setVectorKeyHL(std::vector<int> &v)
     {
           // need to check type size of vector tuple so it's not zero
@@ -221,33 +223,13 @@ public:
           // while hashlistvt 
           // if number = input vector number set it to true??? others to false??? if it's not in the list
           // I think the true or false would only apply to the read keylist or write keylist and generate the hash list string
+          for(auto hash  : hashlistvt) {
+
+            // std::get<4>(hash) = keyval;
+
+          }  
 
     }
-
-    // create a vector tuple from a signature int vector
-    // could also have a boolean for enabling or disabling the hash key for the hash key list
-    // this would make three types default random and composite with random and default keys
-    /* std::tuple<int,std::string,int,int,bool> setVectorTuple(std::vector<int> &v)
-    {
-          // Deduplicate or unique the hashlist input vector v and preserve the order
-          use_std_hash_remove_dup(v);
-
-          // create a hashlist tuple vector
-          std::tuple<int,std::string,int,int,bool> hashTuple;
-          for(int val  : v) {
-              if (val <= hashlistsize && val > 0) {
-                // hashTuple = make_tuple(val, mdHashlist[val-1].name, mdHashlist[val-1].blocksize);
-                hashTuple = make_tuple(val, mdHashlist[val-1].name, mdHashlist[val-1].blocksize, mdHashlist[val-1].keysize, true);
-
-                // need to check type size
-                hashlistvt.push_back(hashTuple);
-              }
-          }
-
-          return hashTuple;
-
-    } */
-    // ================================================================
 
     // setVectorHLstring
     // converts a string list to a int vector and then to the vector tuple
@@ -278,35 +260,6 @@ public:
 
           // set the Vector Hash List Tuple
           setVectorHL(v);
-    }
-
-    // converts a key string list to a int vector and then to the vector tuple
-    // this sets the key hash context list tuple
-    void setVectorKeyHLstring(std::string hashlist) {
-          std::vector<int> v;
-
-          int hashnum = 0;
-          char delim = ':';
-          std::stringstream ss(hashlist);
-          std::string token;
-
-          // split the hashlist string by the delimmeter and add the hashmap int to the vector v
-          while (std::getline(ss, token, delim)) {
-
-              // check if the hash token is a valid hash signature in the registry hash map
-              if ( hclmap.find(token) == hclmap.end() ) {
-                 std::cout << "Hash signature " << token << " not found " << std::endl;
-
-              // if it is found add it to the integer vector
-              } else {
-                 hashnum = hclmap[token];
-                 v.push_back(hashnum+1);
-              }
-          }
-
-          // set the Vector Hash List Tuple
-          // this will set the hashlist boolean to true or false if the random key hash signature is specified
-          setVectorKeyHL(v);
     }
 
     // load the Signature keys from a file
