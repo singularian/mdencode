@@ -39,19 +39,34 @@ public:
         blockcount     = blockCount;
         blockremainder = blockRemainder;
 
+        bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
     }
+
 
     // Destructor
     ~mdBitstream() {
         // std::cout << "Destroying mdBitstream" << std::endl;
         // delete the modulus exponent bitstream byte block
-        delete modExpBlock;	
+        if (modByteBlockSize > 0) delete modExpBlock;	
         // delete the bitstream readers and writers;
-        if (modByteBlockSize > 0) delete bsr;
+        // if (modByteBlockSize > 0) 
+        delete bsr;
         // the writer is not currently used
-        if (modByteBlockSize > 0) delete bsw;
+        // delete bsw;
         // std::cout << "Destroyed" << std::endl;
     } 
+
+    // initialize the mdBitstream
+    // this object method allows the object to be created and then initialized later
+    void mdInitBitstream(long blockSize, long blockCount, long blockRemainder) {
+        blocksize      = blockSize;
+        blockcount     = blockCount;
+        blockremainder = blockRemainder;
+
+        bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
+    }
+
+
 
     // get the min modexponent size
     long getMinSize() {
@@ -75,6 +90,8 @@ public:
 
     // set the bitsteam format based on the exponent diff
     // currently from 2 to 7
+    // I think there can be a 0 for just one modexponent value for all the blocks
+    // and 1 bit for just 2 values + the modexponent base
     void setDiffFormat() {
         bitformat = 7;
         if (diffExponent <= 3) bitformat = 2;
@@ -428,13 +445,15 @@ public:
 
         delete byteblock;	
 
-        bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
-
         /* free used memory */
         mpz_clear(byteblockInt);
 
         // set the file position to beginning
         nf.seekg (0, nf.beg);
+
+        // create the bitstream reader
+        // might need to delete the old one and create a new object
+        // bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
 
     }
 
@@ -459,10 +478,11 @@ public:
         mpz_init_set_str(byteblockInt, "0", 10);
 
         // calculate modulus exponent bit block size
-        modBitBlockSize = blockcount * 7;
-        modByteBlockSize = (modBitBlockSize / 8);
+        // modBitBlockSize = blockcount * 7;
+        // modByteBlockSize = (modBitBlockSize / 8);
         // need to round up one for blocks with a decimal result
-        if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
+        // if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
+        calcBitstreamSize();
 
         // Create bitStream object
         uint8_t *modExpBlock = new uint8_t[modByteBlockSize];
@@ -502,14 +522,15 @@ public:
 
         delete byteblock;	
 
-        // create the bitstream reader
-        bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
-
         /* free used memory */
         mpz_clear(byteblockInt);
 
         // set the file position to beginning
         nf.seekg (0, nf.beg);
+
+        // create the bitstream reader
+        // might need to delete the old one and create a new object
+        // bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
 
     }
 

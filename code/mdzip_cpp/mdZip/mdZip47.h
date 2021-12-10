@@ -49,6 +49,7 @@ private:
     int minExponentMinusLastBlock   = 0;
     int maxExponent                 = 0;
     int diffExponent                = 0;
+    mdBitstream mb;
     // hash context list variables
     int hclfileblocksize            = 0; // hash file string size
     int hclblockblocksize           = 0; // hash block string size
@@ -363,7 +364,7 @@ private:
         long lastblk = blockcount;
 
         // initialize the mdBitstream object
-        mdBitstream mb(blocksize, blockcount, blockremainder);
+        mb.mdInitBitstream(blocksize, blockcount, blockremainder);
         // calculate the min and max modulus exponent and the difference minus the last block
         // set the bitstream format based on the exponent difference
         // create the bitstream byte block
@@ -487,8 +488,6 @@ private:
         mpz_clear(byteblockInt);
         mpz_clear(modulusInt);
         mpz_clear(remainder);
-
-        // delete bsr;
 
         return 0;
 

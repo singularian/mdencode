@@ -29,37 +29,40 @@
 class mdUnzip47 
 {
 private:
-    int threadcount       = 8;
+    int threadcount                 = 8;
     // file variables
     std::string filename;
     std::string unzipfilename;
-    size_t inputfilesize  = 0;
-    long filesize         = 0;
+    size_t inputfilesize            = 0;
+    long filesize                   = 0;
     // mdzip variables
-    std::string mdzipExtension   = ".mdz";
-    std::string mdunzipExtension = ".out";
-    double mdversion      = 1.01;
-    long blocksize        = 10;
-    long blockcount       = 0;
-    long blockremainder   = 0; // the last file block size
-    long blocknumber      = 1; // current file block number position
+    std::string mdzipExtension      = ".mdz";
+    std::string mdunzipExtension    = ".out";
+    double mdversion                = 1.01;
+    long blocksize                  = 10;
+    long blockcount                 = 0;
+    long blockremainder             = 0; // the last file block size
+    long blocknumber                = 1; // current file block number position
     // modulus variables
-    int modsizebits       = 32; // should make this modsizeBits
-    int modsizeBytes      = 4;
-    int modexponent       = 0;
-    long modByteBlockSize = 0; // mdzip bitstream modulus exponent byte size
+    int modsizebits                 = 32; // should make this modsizeBits
+    int modsizeBytes                = 4;
+    int modexponent                 = 0;
+    // modexp bitstream variables
+    long modByteBlockSize           = 0; // mdzip bitstream modulus exponent byte size
+    int modexponentbase             = 0; // the modexponent base for 2 to 6 bit encoding  
+    mdBitstream mb;
     // hash context list variables
-    int hclfilesize       = 0; // redundant
-    int hclfileblocksize  = 0; // hash file size
-    int hclblocksize      = 0; // redundant
-    int hclblockblocksize = 0; // hash file size
-    int hclblockkeysize   = 0; // variable for mdunzip 
+    int hclfilesize                 = 0; // redundant
+    int hclfileblocksize            = 0; // hash file size
+    int hclblocksize                = 0; // redundant
+    int hclblockblocksize           = 0; // hash file size
+    int hclblockkeysize             = 0; // variable for mdunzip 
     std::string filehashnames;   
     std::string blockhashnames;
     std::vector<int> fhlist;
     std::vector<int> bhlist;
     std::string filesigs;
-    std::string blockkeys = "default";
+    std::string blockkeys           = "default";
     // file and block hash list data sizes and total size
     std::string filehashvector;
     std::string blockhashvector;
@@ -68,13 +71,13 @@ private:
     bool inc;
     bool dec;
     // mdunzip variables
-    bool overwrite         = false;
-    bool runlogging        = false;
-    bool validate          = false;
-    bool listfile          = false; 
+    bool overwrite                  = false;
+    bool runlogging                 = false;
+    bool validate                   = false;
+    bool listfile                   = false; 
     // initialize the gmp bigint variables
-    int byteorder = 0;
-    int endian    = 0;
+    int byteorder                   = 0;
+    int endian                      = 0;
     size_t count;
     mpz_t byteblockInt, modulusInt, modulusIntRemainder, remainder;
     // initialize the mutex and log objects
@@ -256,6 +259,12 @@ private:
         nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
         nf.read(reinterpret_cast<char*>(&modsizebits),   sizeof(int));
 
+        // validate the mdversion
+        if ((mdversion != 1.11) && (mdversion != 1.12) && (mdversion != 1.01)) {
+            std::cout << "MDzip File version doesn't validate" << std::endl; 
+            return 1;
+        }
+
         // initialize the modulusbytes size to store the modulo exponent
         setModulus();
 
@@ -330,12 +339,12 @@ private:
         mformat = format; // set this to a (long) // position is wrong
        
         if (format > 7) {
-            std::cout << "MDzip File doesn't validate" << std::endl; 
+            std::cout << "MDzip File bitstream format doesn't validate" << std::endl; 
             return 1;
         }
 
-        // create the mdBitstream object
-        mdBitstream mb(blocksize, blockcount, blockremainder);
+        // initialize the mdBitstream object
+        mb.mdInitBitstream(blocksize, blockcount, blockremainder);
         // set the current bitstream format and calculate the bitstream block size
         mb.setFormat(format);
         mb.calcBitstreamSize();
@@ -425,6 +434,12 @@ private:
         nf.read(reinterpret_cast<char*>(&blocksize), sizeof(blocksize));
         nf.read(reinterpret_cast<char*>(&modsizebits),   sizeof(int));
 
+        // validate the mdversion
+        if ((mdversion != 1.11) && (mdversion != 1.12) && (mdversion != 1.01)) {
+            std::cout << "MDzip File version doesn't validate" << std::endl; 
+            return 1;
+        }
+
         // if the increment or decrement is set change the mdVersion 
         // bool incrementKey = false;
         int incKey = NOINC;
@@ -495,9 +510,6 @@ private:
             blockkeys = hclblock.displayHLhashKeys();
         }  
 
-        // display the mdzip mdlist file info 
-        displayInfo(false);
-
         // display the file block hash block list
         // block signatures / modulus exponent / modulus remainder
         int blk = 0;
@@ -509,10 +521,11 @@ private:
         nf.read(reinterpret_cast<char*>(&format),  sizeof(char));
         mformat = format;
 
-        // create the mdBitstream object
-        mdBitstream mb(blocksize, blockcount, blockremainder);
+        // initialize the mdBitstream object
+        mb.mdInitBitstream(blocksize, blockcount, blockremainder);
         // set the bitstream format
         mb.setFormat(format);
+        mb.setBitstreamBitSize();
         // calculate the bitstream size base on the bitstream format
         mb.calcBitstreamSize();
         // calculate the bitstream block size
@@ -524,11 +537,14 @@ private:
         // initialize the bitstream reader
         BitstreamReader bsr(modExpBlock, modByteBlockSize);
 
-        int modexponentbase = 0;
+        // int modexponentbase = 0;
         // set the mod exponent base if the bitstream format it 2 to 6 bits
         if (mformat < 7) {
            modexponentbase = bsr.get<7>();
         }    
+
+        // display the mdzip mdlist file info 
+        displayInfo(false);
 
         // read each of the mdzip file signature blocks
         for (blk = 0; blk < blockcount; blk++) {
@@ -638,6 +654,12 @@ private:
         nf.read(reinterpret_cast<char*>(&blocksize),    sizeof(blocksize));
         nf.read(reinterpret_cast<char*>(&modsizebits),  sizeof(int));
 
+        // validate the mdversion
+        if ((mdversion != 1.11) && (mdversion != 1.12) && (mdversion != 1.01)) {
+            std::cout << "MDzip File version doesn't validate" << std::endl; 
+            return 1;
+        }
+
         // if the increment or decrement is set change the mdVersion 
         // bool incrementKey = false;
         int incKey = NOINC;
@@ -711,9 +733,6 @@ private:
             blockkeys = hclblock.displayHLhashKeys();
         }  
 
-        // display the mdzip file info
-        displayInfo(true);
-
         // display the file block hash block list
         // block signatures / modulus exponent / modulus remainder
         int blk = 0;
@@ -736,10 +755,14 @@ private:
         nf.read(reinterpret_cast<char*>(&format),  sizeof(char));
         mformat = format; // set this to a (long) 
 
-        // create the mdBitstream object
-        mdBitstream mb(blocksize, blockcount, blockremainder);
+        // initialize the mdBitstream object
+        mb.mdInitBitstream(blocksize, blockcount, blockremainder);
+        // set the bitstream format
         mb.setFormat(format);
+        mb.setBitstreamBitSize();
+        // calculate the bitstream size base on the bitstream format
         mb.calcBitstreamSize();
+        // calculate the bitstream block size
         long modByteBlockSize = mb.getByteBlockSize();
 
         // create the bitstream array and read in the modulus exponent bitstream data
@@ -748,11 +771,14 @@ private:
         // initialize the bitstream reader
         BitstreamReader bsr(modExpBlock, modByteBlockSize);
 
-        int modexponentbase = 0;
+        // int modexponentbase = 0;
         // set the mod exponent base if the bitstream format it 2 to 6 bits
         if (mformat < 7) {
            modexponentbase = bsr.get<7>();
         }    
+
+        // display the mdzip file info
+        displayInfo(true);
 
         // read each of the mdzip file signature blocks
         for (blk = 0; blk < blockcount; blk++) {
@@ -933,6 +959,14 @@ private:
         
         std::cout << std::left << std::setw(20) << "Modsize: "          << modsizebits << std::endl;
         std::cout << std::left << std::setw(20) << "Modsize Bytes: "    << modsizeBytes << std::endl;
+        // ==================================================================================================
+        std::cout << std::left << std::setw(20) << "Bitstream Format: "     << mb.getFormat() << std::endl;
+        std::cout << std::left << std::setw(20) << "Bitstream Bitsize: "    << mb.getBitstreamBitSize() << std::endl;
+        std::cout << std::left << std::setw(20) << "Bitstream Bits: "       << mb.getBitBlockSize() << std::endl;
+        std::cout << std::left << std::setw(20) << "Bitstream Bytes: "      << mb.getByteBlockSize() << std::endl;
+        std::cout << std::left << std::setw(20) << "Bitstream Exp Base: "   << modexponentbase << std::endl;
+        // std::cout << std::left << std::setw(20) << "Bitstream Diff Exp: "   << mb.getDiff() << std::endl;
+        // ==================================================================================================
         std::cout << std::left << std::setw(20) << "Filehashlist: "     << filehashnames << std::endl;
         std::cout << std::left << std::setw(20) << "Blockhashlist: "    << blockhashnames << std::endl;
         std::cout << std::left << std::setw(20) << "Blockkeylist: "     << blockkeys << std::endl;
