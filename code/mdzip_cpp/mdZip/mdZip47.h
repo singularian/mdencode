@@ -202,7 +202,7 @@ private:
         return modexponent;
     }
 
-    // modulus size
+    // increment the block number
     void incBlockNumber() {
         blocknumber++;
     }
