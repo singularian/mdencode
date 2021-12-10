@@ -452,8 +452,9 @@ public:
         nf.seekg (0, nf.beg);
 
         // create the bitstream reader
-        // might need to delete the old one and create a new object
-        // bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
+        // delete the existing bitstream reader and create a new object
+        delete bsr;
+        bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
 
     }
 
@@ -529,8 +530,9 @@ public:
         nf.seekg (0, nf.beg);
 
         // create the bitstream reader
-        // might need to delete the old one and create a new object
-        // bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
+        // delete the existing bitstream reader and create a new object
+        delete bsr;
+        bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
 
     }
 
