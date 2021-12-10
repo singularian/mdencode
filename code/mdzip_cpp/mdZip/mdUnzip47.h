@@ -24,7 +24,6 @@
 #include "mdCore/mdMutex.h"
 #include "mdCore/mdMutexLog.h"
 #include "mdCore/modscanFile.h"
-// #include "external/bitstream/Bitstream.h"
 #include "mdCore/mdBitstream.h"
 
 class mdUnzip47 

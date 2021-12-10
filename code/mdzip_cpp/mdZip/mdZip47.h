@@ -18,7 +18,6 @@
 #include "mdCore/mdCommon.h"
 // #include "mdCore/mdHashContextList.h"
 #include "mdCore/mdHashContextListNew.h"
-// #include "external/bitstream/Bitstream.h"
 #include "mdCore/mdBitstream.h"
 
 
@@ -373,6 +372,7 @@ private:
         mformat = mb.getFormat();
         minExponentMinusLastBlock = mb.getMinSizeMinusLast();
         
+        // if the bitstream format is less than 7 use the 2-6 bit encoding for the modulus exponent
         if (mformat < 7) { 
             mb.mdzipModExponentBitstream26(nf);
         } else {    
@@ -385,11 +385,12 @@ private:
         diffExponent     = mb.getDiff();
 
         // write the bitstream format as a uint8_t value
+        // need to clean this up a little
         uint8_t format = mformat;
         mdzip.write(reinterpret_cast<char*>(&format),  sizeof(char));
         mb.writeBitstream(mdzip);     
   
-        // set the mod exponent base if the bitstream format it 2 to 6 bits from the bitstream reader
+        // set the mod exponent base if the bitstream format is 2 to 6 bits from the bitstream reader
         if (mformat < 7) {
            modexponentbase = mb.bsr->get<7>();
         }    
