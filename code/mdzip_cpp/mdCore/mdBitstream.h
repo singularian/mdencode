@@ -258,7 +258,10 @@ public:
 
     }
 
-    // calculate the minimum and maximum exponent
+    // calculate the minimum and maximum exponent for a filestream
+    // and compute the difference skip the last byte block
+    // diff 0   = 0 bits -- TODO
+    // diff 1/2 = 1 bit  -- TODO
     // diff 3   = 2 bits
     // diff 7   = 3 bits 
     // diff 15  = 4 bits
