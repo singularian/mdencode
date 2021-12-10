@@ -18,49 +18,60 @@
 #include "mdCore/mdCommon.h"
 // #include "mdCore/mdHashContextList.h"
 #include "mdCore/mdHashContextListNew.h"
-#include "external/bitstream/Bitstream.h"
+// #include "external/bitstream/Bitstream.h"
+#include "mdCore/mdBitstream.h"
 
 
 class mdZip47 
 {
 private:
-    int threadcount       = 8;
+    int threadcount                 = 8;
     // file variables
     std::string filename;
-    size_t inputfilesize  = 0;
-    long filesize         = 0;
+    size_t inputfilesize            = 0;
+    long filesize                   = 0;
     // mdzip variables
-    std::string mdzipExtension = ".mdz";
-    double mdversion      = 1.01;
-    long blocksize        = 10;
-    long blockcount       = 0;
-    long blockremainder   = 0; // the last file block size
-    long blocknumber      = 1; // current file block number position
-    int modsizebits       = 32;
-    int modsizeBytes      = 4;
-    int modexponent       = 0;
-    long modByteBlockSize = 0; // mdzip bitstream modulus exponent byte size
+    std::string mdzipExtension      = ".mdz";
+    double mdversion                = 1.01;
+    long blocksize                  = 10;
+    long blockcount                 = 0;
+    long blockremainder             = 0; // the last file block size
+    long blocknumber                = 1; // current file block number position
+    int modsizebits                 = 32;
+    int modsizeBytes                = 4;
+    int modexponent                 = 0;
+    // modexponent bitstream variables
+    int mformat                     = 7; // mdzip bitstream format
+    int bitsize                     = 7; // the modexponent bitstream bit size
+    long modBitBlockSize            = 0;
+    long modByteBlockSize           = 0; // mdzip bitstream modulus exponent byte size
+    int modexponentbase             = 0; // the modexponent base for 2 to 6 bit encoding       
+    int minExponent                 = 0;
+    int minExponentMinusLastBlock   = 0;
+    int maxExponent                 = 0;
+    int diffExponent                = 0;
     // hash context list variables
-    int hclfileblocksize  = 0; // hash file string size
-    int hclblockblocksize = 0; // hash block string size
+    int hclfileblocksize            = 0; // hash file string size
+    int hclblockblocksize           = 0; // hash block string size
     std::string filehashnames;   
     std::string blockhashnames;
     std::vector<int> fhlist;
     std::vector<int> bhlist;
     std::string filesigs;
-    std::string blockkeys = "default";
+    std::string blockkeys           = "default";
     // file and block hash list data sizes and total size
     std::string filehashvector;
     std::string blockhashvector;
     // boolean variables
-    bool randombh         = false;
-    bool inc              = false;  
-    bool dec              = false;
+    bool randombh                   = false;
+    bool inc                        = false;  
+    bool dec                        = false;
     // initialize the gmp bigint variables
-    int byteorder         = 0;
-    int endian            = 0;
+    int byteorder                   = 0;
+    int endian                      = 0;
     size_t count;
     mpz_t byteblockInt, modulusInt, remainder;
+
     // log variables
     bool runlogging       = false;
     // mdMutexLog log{false};
@@ -214,7 +225,8 @@ private:
     int mdzipfile() {
 
         // check if filename is defined
-        // might readd cli11 checks it
+        // might re add cli11 checks it
+        // return 0; 
 
         filesize = GetFileSize(filename);
         // need to add the mdformat
@@ -348,21 +360,43 @@ private:
         // set the file block hash list
         blockhashvector = hclblock.getHLvectorsString();
 
-        // display the mdzip file info 
-        displayInfo();
-
         // set last block  
         long lastblk = blockcount;
 
-        // create the 7 bit modulus exponent bitstream block
-        uint8_t *modExpBlock = mdzipModExponentBitstream(nf);
-        // write the 7 bit modulus exponent bitstream to the mdzip file
-        mdzip.write(reinterpret_cast<char*>(modExpBlock),  modByteBlockSize);
-        // seek to beginning of file
-        nf.seekg (0, nf.beg);
-        // initialize the bitstreamreader with the modulus exponent block and size 
-        BitstreamReader bsr(modExpBlock, modByteBlockSize);
+        // initialize the mdBitstream object
+        mdBitstream mb(blocksize, blockcount, blockremainder);
+        // calculate the min and max modulus exponent and the difference minus the last block
+        // set the bitstream format based on the exponent difference
+        // create the bitstream byte block
+        mb.calcMinMaxExponent(nf);
+        // get the bitstream format
+        mformat = mb.getFormat();
+        minExponentMinusLastBlock = mb.getMinSizeMinusLast();
         
+        if (mformat < 7) { 
+            mb.mdzipModExponentBitstream26(nf);
+        } else {    
+            mb.mdzipModExponentBitstream(nf);
+        }    
+
+        bitsize = mb.getBitstreamBitSize();
+        modBitBlockSize  = mb.getBitBlockSize();
+        modByteBlockSize = mb.getByteBlockSize();
+        diffExponent     = mb.getDiff();
+
+        // write the bitstream format as a uint8_t value
+        uint8_t format = mformat;
+        mdzip.write(reinterpret_cast<char*>(&format),  sizeof(char));
+        mb.writeBitstream(mdzip);     
+  
+        // set the mod exponent base if the bitstream format it 2 to 6 bits from the bitstream reader
+        if (mformat < 7) {
+           modexponentbase = mb.bsr->get<7>();
+        }    
+
+        // display the mdzip file info 
+        displayInfo();
+
         blocknumber = 1;
         while (!nf.eof())
         {
@@ -393,8 +427,26 @@ private:
             // modulus remainder = byteblockInt mod modulusInt
             mpz_mod (remainder, byteblockInt, modulusInt);
 
-            // get the modulus exponent from the bitstream reader buffer
-            modexponent = bsr.get<7>();
+            // get the modulus exponent from the bitstream buffer
+            // there is a limitation with the template expecting a constant
+            if (blocknumber < blockcount) {
+                // should make this a case statement
+                if (mformat == 2) { 
+                    modexponent = mb.bsr->get<2>() + modexponentbase;
+                } else if (mformat == 3) { 
+                   modexponent = mb.bsr->get<3>() + modexponentbase;
+                } else if (mformat == 4) {
+                    modexponent = mb.bsr->get<4>() + modexponentbase;
+                } else if (mformat == 5) {
+                    modexponent = mb.bsr->get<5>() + modexponentbase;
+                } else if (mformat == 6) { 
+                    modexponent = mb.bsr->get<6>() + modexponentbase; 
+                } else if (mformat == 7) { 
+                    modexponent = mb.bsr->get<7>();
+                }    
+            } else {
+                modexponent = mb.bsr->get<7>();
+            }
 
             // export the gmp modulus int remainder to a modulus int byte block
             mpz_export(modulusint, &count, byteorder, sizeof(modulusint[0]), endian, 0, remainder);
@@ -407,7 +459,7 @@ private:
             mdzip.write(reinterpret_cast<char*>(modulusint),   sizeof(char) * modsizeBytes);
             
             // display the byte block info
-            // TODO Need to add the logging       
+            // TODO Need to add the logging  
             displayBlockInfo("Zipping", byteblock, currentblocksize, blocksize, blocknumber, lastblk, modexponent, remainder, hclblock); 
 
             // if this is the last block stop processing 
@@ -420,20 +472,22 @@ private:
 
         delete byteblock;
         delete modulusint;
-        delete modExpBlock;	
+        // delete modExpBlock;	
 
         nf.close();
         mdzip.close();
 
         if(!mdzip.good()) {
-        cout << "Error occurred at writing time!" << endl;
-        // return 1;
+            cout << "Error occurred at writing time!" << endl;
+            // return 1;
         }
 
         /* free used memory */
         mpz_clear(byteblockInt);
         mpz_clear(modulusInt);
         mpz_clear(remainder);
+
+        // delete bsr;
 
         return 0;
 
@@ -522,6 +576,14 @@ private:
 
         std::cout << std::left << std::setw(20) << "Modsize: "              << modsizebits << std::endl;
         std::cout << std::left << std::setw(20) << "Modsize Bytes: "        << modsizeBytes << std::endl;
+        // ==================================================================================================
+        std::cout << std::left << std::setw(20) << "Bitstream Format: "     << mformat << std::endl;
+        std::cout << std::left << std::setw(20) << "Bitstream Bitsize: "    << bitsize << std::endl;
+        std::cout << std::left << std::setw(20) << "Bitstream Bits: "       << modBitBlockSize << std::endl;
+        std::cout << std::left << std::setw(20) << "Bitstream Bytes: "      << modByteBlockSize << std::endl;
+        std::cout << std::left << std::setw(20) << "Bitstream Exp Base: "   << modexponentbase << std::endl;
+        std::cout << std::left << std::setw(20) << "Bitstream Diff Exp: "   << diffExponent << std::endl;
+        // ==================================================================================================
         std::cout << std::left << std::setw(20) << "Filehashlist: "         << filehashnames << std::endl;
         std::cout << std::left << std::setw(20) << "Blockhashlist: "        << blockhashnames << std::endl;
         std::cout << std::left << std::setw(20) << "Filehashlist size: "    << filehashnames.size() << std::endl;

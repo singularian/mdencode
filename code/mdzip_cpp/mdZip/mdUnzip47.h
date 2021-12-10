@@ -24,7 +24,8 @@
 #include "mdCore/mdMutex.h"
 #include "mdCore/mdMutexLog.h"
 #include "mdCore/modscanFile.h"
-#include "external/bitstream/Bitstream.h"
+// #include "external/bitstream/Bitstream.h"
+#include "mdCore/mdBitstream.h"
 
 class mdUnzip47 
 {
@@ -318,10 +319,29 @@ private:
             hclblockkeysize = hclblock.calcBlockKeySize();
         }  
 
-        // calculate the modulus exponent block size
-        long modBitBlockSize = blockcount * 7;
-        long modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
-        if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
+        // calculate the modulus exponent bitstream block size
+        // move the file pointer past the block keylist
+        // this simulates a file block hash key read
+        nf.seekg (hclblockkeysize,  ios_base::cur);
+
+        // read in the bitstream format type which is a byte currently
+        uint8_t format = 0;
+        long    mformat = 0;
+        nf.read(reinterpret_cast<char*>(&format),  sizeof(char));
+        mformat = format; // set this to a (long) // position is wrong
+       
+        if (format > 7) {
+            std::cout << "MDzip File doesn't validate" << std::endl; 
+            return 1;
+        }
+
+        // create the mdBitstream object
+        mdBitstream mb(blocksize, blockcount, blockremainder);
+        // set the current bitstream format and calculate the bitstream block size
+        mb.setFormat(format);
+        mb.calcBitstreamSize();
+        // add one to the bitstream byte block size for the bitstream format byte
+        long modByteBlockSize = mb.getByteBlockSize() + 1;
 
         // calculate the total hash blcock size
         int hashblocksize  = (hclblock.calcBlockSize() + modsizeBytes);
@@ -333,6 +353,9 @@ private:
         // add the hash string list size
         sumfilesize += hclfilesize;
         sumfilesize += hclblocksize;
+
+        // set the head size
+        long headersize = sumfilesize;
 
         // add the modexponent block byte size for the bitsteam data
         sumfilesize += modByteBlockSize;
@@ -348,15 +371,17 @@ private:
         nf.close();
 
         if (sumfilesize == inputfilesize) {
-            std::cout << "MDzip File " << filename << " validates " << std::endl; 
-            std::cout << "MDzip File " << sumfilesize << " = " << inputfilesize << std::endl; 
+            std::cout << "MDzip File " << filename      << " validates " << std::endl; 
+            std::cout << "MDzip File " << sumfilesize   << " = " << inputfilesize << std::endl; 
         } else {
-            std::cout << "MDzip File doesn't validate" << std::endl; 
-            std::cout << "MDzip File Sum " << sumfilesize << " != " << inputfilesize << std::endl; 
-            // std::cout << "MDzip File hash size " << hclfile.calcBlockSize() << std::endl; 
-            // std::cout << "MDzip File block size " << totalblocksize << std::endl; 
-            // std::cout << "MDzip File block key size " << hclblockkeysize << std::endl;
-
+            std::cout << "MDzip File doesn't validate " << std::endl << std::endl; 
+            std::cout << "MDzip File header size      " << headersize << std::endl; 
+            std::cout << "MDzip File hash size        " << hclfile.calcBlockSize() << std::endl; 
+            std::cout << "MDzip File block size       " << totalblocksize << std::endl; 
+            std::cout << "MDzip File block key size   " << hclblockkeysize << std::endl;
+            std::cout << "MDzip File bitstream size   " << modByteBlockSize << std::endl;
+            std::cout << std::endl;
+            std::cout << "MDzip File Sum " << sumfilesize << " != " << inputfilesize << std::endl;
             return 1;
         }
 
@@ -479,18 +504,32 @@ private:
         int blk = 0;
         int lastblk = blockcount - 1;
 
-        // calculate modulus exponent bitstream block size
-        long modBitBlockSize = blockcount * 7;
-        long modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
-        if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
+        // read in the bitstream format type which is a byte currently
+        uint8_t format  = 0;
+        long    mformat = 0;
+        nf.read(reinterpret_cast<char*>(&format),  sizeof(char));
+        mformat = format;
 
-        // Create bitStream object
-        // Create the modulus exponent bitstream buffer
+        // create the mdBitstream object
+        mdBitstream mb(blocksize, blockcount, blockremainder);
+        // set the bitstream format
+        mb.setFormat(format);
+        // calculate the bitstream size base on the bitstream format
+        mb.calcBitstreamSize();
+        // calculate the bitstream block size
+        long modByteBlockSize = mb.getByteBlockSize();
+
+        // create the bitstream array and read in the modulus exponent bitstream data
         uint8_t *modExpBlock = new uint8_t[modByteBlockSize];
-        // load the modulus exponent bitstream block from the file
         nf.read(reinterpret_cast<char*>(modExpBlock),  modByteBlockSize);
-        // initialize the bitstreamreader
+        // initialize the bitstream reader
         BitstreamReader bsr(modExpBlock, modByteBlockSize);
+
+        int modexponentbase = 0;
+        // set the mod exponent base if the bitstream format it 2 to 6 bits
+        if (mformat < 7) {
+           modexponentbase = bsr.get<7>();
+        }    
 
         // read each of the mdzip file signature blocks
         for (blk = 0; blk < blockcount; blk++) {
@@ -502,7 +541,28 @@ private:
                 hclblock.incrementBlockNum(incKey);
 
                 // read the modulus exponent
-                modexponent = bsr.get<7>();
+                // modexponent = bsr.get<7>();
+                modexponent = 0;
+                if (blk < (blockcount - 1)) {
+                    // should make this a case statement
+                    if (mformat == 2) { 
+                        modexponent = bsr.get<2>() + modexponentbase;
+                    } else if (mformat == 3) { 
+                        modexponent = bsr.get<3>() + modexponentbase;
+                    } else if (mformat == 4) {
+                        modexponent = bsr.get<4>() + modexponentbase;
+                    } else if (mformat == 5) {
+                        modexponent = bsr.get<5>() + modexponentbase;
+                    } else if (mformat == 6) { 
+                        modexponent = bsr.get<6>() + modexponentbase; 
+                    } else if (mformat == 7) { 
+                        modexponent = bsr.get<7>();
+                    }    
+                    // std::cout << "exponent " << modexponent << std::endl;
+                } else {
+                    modexponent = bsr.get<7>();
+                    // std::cout << "last exponent " << modexponent << std::endl;
+                }
 
                 // read the modulus remainder
                 nf.read(reinterpret_cast<char*>(modulusbytes),   sizeof(char) * modsizeBytes);
@@ -670,17 +730,30 @@ private:
         }
 
         // calculate modulus exponent bitstream block size
-        long modBitBlockSize = blockcount * 7;
-        long modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
-        if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
+        // read in the bitstream format type which is a byte currently
+        // TODO Need to add the bitstream info to the displayInfo(true) and move it after
+        uint8_t format = 0;
+        long    mformat = 0;
+        nf.read(reinterpret_cast<char*>(&format),  sizeof(char));
+        mformat = format; // set this to a (long) 
 
-        // Create bitStream object
-        // Create the modulus exponent bitstream buffer
+        // create the mdBitstream object
+        mdBitstream mb(blocksize, blockcount, blockremainder);
+        mb.setFormat(format);
+        mb.calcBitstreamSize();
+        long modByteBlockSize = mb.getByteBlockSize();
+
+        // create the bitstream array and read in the modulus exponent bitstream data
         uint8_t *modExpBlock = new uint8_t[modByteBlockSize];
-        // load the modulus exponent bitstream block from the file
         nf.read(reinterpret_cast<char*>(modExpBlock),  modByteBlockSize);
-        // initialize the bitstreamreader
+        // initialize the bitstream reader
         BitstreamReader bsr(modExpBlock, modByteBlockSize);
+
+        int modexponentbase = 0;
+        // set the mod exponent base if the bitstream format it 2 to 6 bits
+        if (mformat < 7) {
+           modexponentbase = bsr.get<7>();
+        }    
 
         // read each of the mdzip file signature blocks
         for (blk = 0; blk < blockcount; blk++) {
@@ -690,7 +763,28 @@ private:
 
                 // read the modulus exponent
                 // 7 bits at a time
-                modexponent = bsr.get<7>();
+                // modexponent = bsr.get<7>();
+                modexponent = 0;
+
+                // this won't work it runs from 0 to the last byte block < block count
+                if (blk < (blockcount - 1)) {
+                    // should make this a case statement
+                    if (mformat == 2) { 
+                        modexponent = bsr.get<2>() + modexponentbase;
+                    } else if (mformat == 3) { 
+                        modexponent = bsr.get<3>() + modexponentbase;
+                    } else if (mformat == 4) {
+                        modexponent = bsr.get<4>() + modexponentbase;
+                    } else if (mformat == 5) {
+                        modexponent = bsr.get<5>() + modexponentbase;
+                    } else if (mformat == 6) { 
+                        modexponent = bsr.get<6>() + modexponentbase; 
+                    } else if (mformat == 7) { 
+                        modexponent = bsr.get<7>();
+                    }    
+                } else {
+                    modexponent = bsr.get<7>();
+                }
 
                 // read the modulus remainder
                 nf.read(reinterpret_cast<char*>(modulusbytes),   sizeof(char) * modsizeBytes);
@@ -824,6 +918,7 @@ private:
     }
 
     // display the mdzip file info
+    // TODO Add the Bitstream info
     void displayInfo(bool mdzip) {
 
         std::cout << std::left << std::setw(20) << "Zip Filename: "     << filename << std::endl;

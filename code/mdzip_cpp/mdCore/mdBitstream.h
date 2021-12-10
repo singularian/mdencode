@@ -10,6 +10,7 @@ private:
     long blockremainder             = 0; // the last file block size
     int fileListSize                = 0;
     int blockListSize               = 0;
+    // bitstream variables
     int bitformat                   = 7;
     int bitsize                     = 7; // the modexponent bitstream bit size
     int minExponent                 = 255;
@@ -19,20 +20,20 @@ private:
     uint8_t *modExpBlock;
     long modBitBlockSize            = 0;
     long modByteBlockSize           = 0;
-    BitstreamReader *bsr;
-    BitstreamWriter *bsw;
     // initialize the gmp bigint variables
     int byteorder                   = 0;
     int endian                      = 0;
     size_t count;
     mpz_t byteblockInt, modulusInt, remainder;
 public:
-    int psize;
+    BitstreamReader *bsr;
+    BitstreamWriter *bsw;
 
     // initialize the mdBitstream object
     mdBitstream() {
     }
 
+    // initialize the mdBitstream Object with the blocksize and blockcount and last block size
     mdBitstream(long blockSize, long blockCount, long blockRemainder) {
         blocksize      = blockSize;
         blockcount     = blockCount;
@@ -42,8 +43,14 @@ public:
 
     // Destructor
     ~mdBitstream() {
-        std::cout << "Destroying mdBitstream" << std::endl;
+        // std::cout << "Destroying mdBitstream" << std::endl;
+        // delete the modulus exponent bitstream byte block
         delete modExpBlock;	
+        // delete the bitstream readers and writers;
+        if (modByteBlockSize > 0) delete bsr;
+        // the writer is not currently used
+        if (modByteBlockSize > 0) delete bsw;
+        // std::cout << "Destroyed" << std::endl;
     } 
 
     // get the min modexponent size
@@ -66,14 +73,9 @@ public:
         return diffExponent;
     }
 
-    // get the format
-    int getFormat() {
-        return bitformat;
-    }
-
-    // set the bitsteam format
+    // set the bitsteam format based on the exponent diff
     // currently from 2 to 7
-    void setFormat() {
+    void setDiffFormat() {
         bitformat = 7;
         if (diffExponent <= 3) bitformat = 2;
         if ((diffExponent > 3) &&  (diffExponent <= 7))  bitformat = 3;
@@ -83,6 +85,16 @@ public:
 
     }
 
+    // set the bitformat
+    void setFormat(long bitFormat) {
+        bitformat = bitFormat;
+    }    
+
+    // get the format
+    int getFormat() {
+        return bitformat;
+    }
+
     // calculate modulus exponent bitstream bit size
     long setBitstreamBitSize() {
 
@@ -90,60 +102,88 @@ public:
         switch (bitformat) {
             case 2:
                 bitsize = 2;
+                break;
             case 3:
                 bitsize = 3;
+                break;
             case 4:
                 bitsize = 4;
+                break;
             case 5:
                 bitsize = 5;
+                break;
             case 6:
-                bitsize = 6;    
+                bitsize = 6;
+                break;    
         }    
 
+        return bitsize;
+    }    
+
+    // get the modulus exponent bitstream bit size
+    long getBitstreamBitSize() {
         return bitsize;
     }    
 
     // calculate modulus exponent bitstream block size
     void calcBitstreamSize() {
 
-        switch (bitformat) {
-            case 2:
-                modBitBlockSize = blockcount * 2;
-                // could also have a 3 bits for the bit size 2 - 7
-                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the minimum modulus exponent
-                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the last byte block
-                modByteBlockSize = (modBitBlockSize / 8);
-            case 3:
-                modBitBlockSize = blockcount * 3;
-                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the minimum modulus exponent
-                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the last byte block
-                modByteBlockSize = (modBitBlockSize / 8);  
-            case 4:
-                modBitBlockSize = blockcount * 4;
-                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the minimum modulus exponent
-                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the last byte block
-                modByteBlockSize = (modBitBlockSize / 8);   
-            case 5:
-                modBitBlockSize = blockcount * 5;
-                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the minimum modulus exponent
-                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the last byte block
-                modByteBlockSize = (modBitBlockSize / 8);     
-            case 6:
-                modBitBlockSize = blockcount * 6;
-                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the minimum modulus exponent
-                modBitBlockSize = modBitBlockSize + 7; // add 7 bits for the last byte block
-                modByteBlockSize = (modBitBlockSize / 8);
-            default:
-                long modBitBlockSize = blockcount * 7;
-                long modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks with a decimal result
-        }
+        modBitBlockSize = 0;
+        modByteBlockSize = 0;
 
-        if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
-    }    
+        modBitBlockSize = blockcount * bitformat;
+
+        // add 7 bits for the minimum modulus exponent
+        // add 7 bits for the last byte block 
+        // TODO change this to skip the first block if the block size is 1 it duplicates it in this instance
+        if (bitformat < 7) modBitBlockSize = modBitBlockSize + 14;
+
+        // modByteBlockSize = (modBitBlockSize / 8);
+        modByteBlockSize = (modBitBlockSize / 8);
+        // need to round up one for blocks with a decimal result
+        if ((modBitBlockSize % 8) > 0) modByteBlockSize = modByteBlockSize + 1;
+
+        /* cout << "set format " << bitformat << '\n';
+        cout << "set block count " << blockcount << '\n';
+        cout << "set bit size " << modBitBlockSize << '\n';
+        cout << "set byte size " << modByteBlockSize << '\n';
+        */
+    }   
+
+    long getBitBlockSize() {
+        return modBitBlockSize;
+    } 
+
+    long getByteBlockSize() {
+        return modByteBlockSize;
+    }
 
     // return the modExpBlock
     uint8_t *getmodExpBlock() {
         return modExpBlock;
+    }    
+
+    // test get function for the byte reader
+    uint16_t getBits(int size) {
+        long bits = 0;
+/*
+        if (size == 2) bits = bsr->get<2>();
+        if (size == 3) bits = bsr->get<3>();
+        if (size == 4) bits = bsr->get<4>();
+        if (size == 5) bits = bsr->get<5>();
+        if (size == 6) bits = bsr->get<6>();
+        if (size == 7) bits = bsr->get<7>();
+*/
+       // std::cout << "1111111111111111111111111111111\n";
+        // BitstreamReader *bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
+        // uint16_t bits = bsr->get<7>();
+        // uint16_t bits = bsr->get<6>();
+       // std::cout << "Test " << bsr->size() << "\n";
+        // bs.write(0,  7,  5);
+        // bits = bsr->getWithOffset<10>(6);
+        // std::cout << "1111111111111111111111111111111\n";
+        return bits;
+
     }    
 
     void testFileBlock(std::string filename) {
@@ -254,15 +294,15 @@ public:
                 if (modexponent > maxExponent) maxExponent = modexponent;
 
                 // display the modulus remainder
-                mpz_class modint(byteblockInt);
+                // mpz_class modint(byteblockInt);
         
-
-                std::cout << "Block " << blocknumber << " ";
+                /* std::cout << "Block " << blocknumber << " ";
                 std::cout << currentblocksize << "/" << blocksize;
                 std::cout << " modexponent " << modexponent;
-                std::cout << " modint " << modint << std::endl;
+                // std::cout << " modint " << modint << std::endl;
                 printByteblock(byteblock, currentblocksize, true);
                  std::cout << "\n";
+                */ 
        
                 // if this is the last block stop processing 
                 if (blocknumber == blockcount) break;
@@ -273,11 +313,21 @@ public:
 
         // diffExponent = maxExponent - minExponent;
         diffExponent = maxExponent - minExponentMinusLastBlock;
+        //std::cout << "exponent max " << diffExponent << std::endl;
+        // std::cout << "exponent max " << maxExponent - minExponent << std::endl;
 
         delete byteblock;	
 
         /* free used memory */
         mpz_clear(byteblockInt);
+
+        // set the file position to beginning
+        nf.seekg (0, nf.beg);
+
+        // calculate modulus exponent bit block size
+        setDiffFormat();
+        setBitstreamBitSize();
+        // calcBitstreamSize();
 
     }
 
@@ -302,15 +352,18 @@ public:
         mpz_init_set_str(byteblockInt, "0", 10);
 
         // calculate modulus exponent bit block size
-        setFormat();
-        setBitstreamBitSize();
+        // setFormat();
+        // setBitstreamBitSize();
         calcBitstreamSize();
 
         // Create bitStream object
-        uint8_t *modExpBlock = new uint8_t[modByteBlockSize];
-        // std::cout << "block size " << sizeof(modExpBlock) << " " << modByteBlockSize << std::endl;
+        modExpBlock = new uint8_t[modByteBlockSize];
         BitstreamWriter bsw(modExpBlock, modByteBlockSize);
-        bsw.put<bitsize>(minExponent);
+        // bsw.put<bitsize>(minExponent);
+        // int const TWO = 2;
+        // bsw.put<7>(minExponent);
+        bsw.put<7>(minExponentMinusLastBlock);
+
 
         while (!nf.eof())
         {
@@ -331,13 +384,40 @@ public:
 
                 // calculate the modulus exponent with base two 
                 int modexponent = calcExponent(byteblockInt);
+ 
+                // write the byte block mod exponent
                 if (blocknumber < blockcount) {
-                    modexponent = modexponent - minExponent;
-                    bsw.put<bitsize>(modexponent);
+                    // modexponent = modexponent - minExponent;
+                    modexponent = modexponent - minExponentMinusLastBlock; 
+                    /*
+                    if (bitsize == 2) { 
+                        bsw.put<2>(modexponent);
+                    } else if (bitsize == 3) { 
+                        bsw.put<3>(modexponent);
+                    } else if (bitsize == 4) {
+                        bsw.put<4>(modexponent);
+                    } else if (bitsize == 5) {
+                        bsw.put<5>(modexponent);
+                    } else if (bitsize == 6) { 
+                        bsw.put<6>(modexponent); 
+                    }
+                    */
+                    if (bitformat == 2) { 
+                        bsw.put<2>(modexponent);
+                    } else if (bitformat == 3) { 
+                        bsw.put<3>(modexponent);
+                    } else if (bitformat == 4) {
+                        bsw.put<4>(modexponent);
+                    } else if (bitformat == 5) {
+                        bsw.put<5>(modexponent);
+                    } else if (bitformat == 6) { 
+                        bsw.put<6>(modexponent); 
+                    }
+                // write the last byte block mod exponent
                 } else {
-                    bsw.put<bitsize>(modexponent);
+                    bsw.put<7>(modexponent);
                 }   
-                std::cout << "modexponent " << modexponent << std::endl;
+                // std::cout << "block number " << blocknumber << " bitformat " << bitformat << " bitsize " << bitsize << " modexponent " << modexponent << " " << modexponent + minExponentMinusLastBlock << std::endl;
 
                 // if this is the last block stop processing 
                 if (blocknumber == blockcount) break;
@@ -348,8 +428,13 @@ public:
 
         delete byteblock;	
 
+        bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
+
         /* free used memory */
         mpz_clear(byteblockInt);
+
+        // set the file position to beginning
+        nf.seekg (0, nf.beg);
 
     }
 
@@ -407,7 +492,6 @@ public:
                 // this could be optimized to use RLE or 4 or 5 or 6 bits
                 // 7 bits will encode all the possible combinations of 2^80 which is the exponent max in a 10 byte block 
                 bsw.put<7>(modexponent);
-                std::cout << "modexponent " << modexponent << std::endl;
 
                 // if this is the last block stop processing 
                 if (blocknumber == blockcount) break;
@@ -418,8 +502,14 @@ public:
 
         delete byteblock;	
 
+        // create the bitstream reader
+        bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
+
         /* free used memory */
         mpz_clear(byteblockInt);
+
+        // set the file position to beginning
+        nf.seekg (0, nf.beg);
 
     }
 
@@ -436,7 +526,7 @@ public:
         nf.read(reinterpret_cast<char*>(modExpBlock),  modByteBlockSize);
         // initialize the bitstreamreader
 
-/////        bsr = BitstreamReader bsr(modExpBlock, modByteBlockSize);
+        ///// bsr = BitstreamReader bsr(modExpBlock, modByteBlockSize);
 
     }    
 
