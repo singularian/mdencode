@@ -556,23 +556,31 @@ private:
                 hclblock.incrementBlockNum(incKey);
 
                 // read the modulus exponent
-                // modexponent = bsr.get<7>();
                 modexponent = 0;
                 if (blk < (blockcount - 1)) {
-                    // should make this a case statement
-                    if (mformat == 2) { 
-                        modexponent = bsr.get<2>() + modexponentbase;
-                    } else if (mformat == 3) { 
-                        modexponent = bsr.get<3>() + modexponentbase;
-                    } else if (mformat == 4) {
-                        modexponent = bsr.get<4>() + modexponentbase;
-                    } else if (mformat == 5) {
-                        modexponent = bsr.get<5>() + modexponentbase;
-                    } else if (mformat == 6) { 
-                        modexponent = bsr.get<6>() + modexponentbase; 
-                    } else if (mformat == 7) { 
-                        modexponent = bsr.get<7>();
-                    }    
+                    // check the bitformat and read the modexponent from the bitstreamreader
+                    // the template needs a constant int for the bitsize
+                    // switch (bitformat) {
+                    switch (mformat) {
+                        case 2:
+                            modexponent = bsr.get<2>() + modexponentbase;
+                            break;
+                        case 3:
+                            modexponent = bsr.get<3>() + modexponentbase;
+                            break;
+                        case 4:
+                            modexponent = bsr.get<4>() + modexponentbase;
+                            break;
+                        case 5:
+                            modexponent = bsr.get<5>() + modexponentbase;
+                            break;
+                        case 6:
+                            modexponent = bsr.get<6>() + modexponentbase;
+                            break;    
+                        case 7:
+                            modexponent = bsr.get<7>();
+                            break;     
+                    } 
                     // std::cout << "exponent " << modexponent << std::endl;
                 } else {
                     modexponent = bsr.get<7>();
@@ -793,20 +801,29 @@ private:
 
                 // this won't work it runs from 0 to the last byte block < block count
                 if (blk < (blockcount - 1)) {
-                    // should make this a case statement
-                    if (mformat == 2) { 
-                        modexponent = bsr.get<2>() + modexponentbase;
-                    } else if (mformat == 3) { 
-                        modexponent = bsr.get<3>() + modexponentbase;
-                    } else if (mformat == 4) {
-                        modexponent = bsr.get<4>() + modexponentbase;
-                    } else if (mformat == 5) {
-                        modexponent = bsr.get<5>() + modexponentbase;
-                    } else if (mformat == 6) { 
-                        modexponent = bsr.get<6>() + modexponentbase; 
-                    } else if (mformat == 7) { 
-                        modexponent = bsr.get<7>();
-                    }    
+                    // check the bitformat and read the modexponent from the bitstreamreader
+                    // the template needs a constant int for the bitsize
+                    // switch (bitformat) {
+                    switch (mformat) {
+                        case 2:
+                            modexponent = bsr.get<2>() + modexponentbase;
+                            break;
+                        case 3:
+                            modexponent = bsr.get<3>() + modexponentbase;
+                            break;
+                        case 4:
+                            modexponent = bsr.get<4>() + modexponentbase;
+                            break;
+                        case 5:
+                            modexponent = bsr.get<5>() + modexponentbase;
+                            break;
+                        case 6:
+                            modexponent = bsr.get<6>() + modexponentbase;
+                            break;    
+                        case 7:
+                            modexponent = bsr.get<7>();
+                            break;     
+                    } 
                 } else {
                     modexponent = bsr.get<7>();
                 }

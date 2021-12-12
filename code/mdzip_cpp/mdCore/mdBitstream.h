@@ -271,7 +271,6 @@ public:
     void calcMinMaxExponent(std::ifstream &nf) {
 
         long blocknumber = 1;
-        // int modexponent  = 0;
 
         // the curent block size
         long currentblocksize = blocksize;
@@ -409,30 +408,26 @@ public:
                 if (blocknumber < blockcount) {
                     // modexponent = modexponent - minExponent;
                     modexponent = modexponent - minExponentMinusLastBlock; 
-                    /*
-                    if (bitsize == 2) { 
-                        bsw.put<2>(modexponent);
-                    } else if (bitsize == 3) { 
-                        bsw.put<3>(modexponent);
-                    } else if (bitsize == 4) {
-                        bsw.put<4>(modexponent);
-                    } else if (bitsize == 5) {
-                        bsw.put<5>(modexponent);
-                    } else if (bitsize == 6) { 
-                        bsw.put<6>(modexponent); 
-                    }
-                    */
-                    if (bitformat == 2) { 
-                        bsw.put<2>(modexponent);
-                    } else if (bitformat == 3) { 
-                        bsw.put<3>(modexponent);
-                    } else if (bitformat == 4) {
-                        bsw.put<4>(modexponent);
-                    } else if (bitformat == 5) {
-                        bsw.put<5>(modexponent);
-                    } else if (bitformat == 6) { 
-                        bsw.put<6>(modexponent); 
-                    }
+
+                    // check the bitformat and write the modexponent to the bitstreamwriter
+                    // the template needs a constant int for the bitsize
+                    switch (bitformat) {
+                        case 2:
+                            bsw.put<2>(modexponent);
+                            break;
+                        case 3:
+                            bsw.put<3>(modexponent);
+                            break;
+                        case 4:
+                            bsw.put<4>(modexponent);
+                            break;
+                        case 5:
+                            bsw.put<5>(modexponent);
+                            break;
+                        case 6:
+                            bsw.put<6>(modexponent); 
+                            break;    
+                    }    
                 // write the last byte block mod exponent
                 } else {
                     bsw.put<7>(modexponent);
@@ -540,18 +535,16 @@ public:
     }
 
     // load the 7 bit bitstream
+    // TODO
     void loadMdzipBitstream(std::ifstream &nf) {
-        modBitBlockSize = blockcount * 7;
-        modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
-        if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
 
         // Create bitStream object
         // Create the modulus exponent bitstream buffer
         uint8_t *modExpBlock = new uint8_t[modByteBlockSize];
         // load the modulus exponent bitstream block from the file
         nf.read(reinterpret_cast<char*>(modExpBlock),  modByteBlockSize);
-        // initialize the bitstreamreader
 
+        // initialize the bitstreamreader
         ///// bsr = BitstreamReader bsr(modExpBlock, modByteBlockSize);
 
     }    

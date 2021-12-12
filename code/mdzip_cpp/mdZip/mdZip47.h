@@ -98,12 +98,10 @@ private:
 
     }
 
-
     // Destructor
     ~mdZip47() {
     } 
     
-
     void readZipFile(std::ifstream &nf) {
         // nf.read(reinterpret_cast<char*>(&mdversion), sizeof(double));
         // nf.read(reinterpret_cast<char*>(&filesize),  sizeof(long));
@@ -219,8 +217,8 @@ private:
     // 
     // 5 bytes sip40
     // 4 bytes 32-bit modulus
-    // 3-7 bits for the modulus exponent (2^80 max or 80 max)
-    // 75-79 bits to encode an 80 bit file block
+    // 2-7 bits for the modulus exponent (2^80 max or 80 max)
+    // 74-79 bits to encode an 80 bit file block
     // 9.7/10 encoding
     int mdzipfile() {
 
@@ -432,19 +430,28 @@ private:
             // get the modulus exponent from the bitstream buffer
             // there is a limitation with the template expecting a constant
             if (blocknumber < blockcount) {
-                // should make this a case statement
-                if (mformat == 2) { 
-                    modexponent = mb.bsr->get<2>() + modexponentbase;
-                } else if (mformat == 3) { 
-                   modexponent = mb.bsr->get<3>() + modexponentbase;
-                } else if (mformat == 4) {
-                    modexponent = mb.bsr->get<4>() + modexponentbase;
-                } else if (mformat == 5) {
-                    modexponent = mb.bsr->get<5>() + modexponentbase;
-                } else if (mformat == 6) { 
-                    modexponent = mb.bsr->get<6>() + modexponentbase; 
-                } else if (mformat == 7) { 
-                    modexponent = mb.bsr->get<7>();
+                // check the bitformat and read the modexponent from the bitstreamreader
+                // the template needs a constant int for the bitsize
+                // switch (bitformat) {
+                switch (mformat) {
+                    case 2:
+                        modexponent = mb.bsr->get<2>() + modexponentbase;
+                        break;
+                    case 3:
+                        modexponent = mb.bsr->get<3>() + modexponentbase;
+                        break;
+                    case 4:
+                        modexponent = mb.bsr->get<4>() + modexponentbase;
+                        break;
+                    case 5:
+                        modexponent = mb.bsr->get<5>() + modexponentbase;
+                        break;
+                    case 6:
+                        modexponent = mb.bsr->get<6>() + modexponentbase;
+                        break;    
+                    case 7:
+                        modexponent = mb.bsr->get<7>();
+                        break;     
                 }    
             } else {
                 modexponent = mb.bsr->get<7>();
@@ -492,74 +499,6 @@ private:
         return 0;
 
     }
-
-    // need to clean this up
-    // change the global variable for modByteBlockSize
-    // converts the modulus exponent to a 7 bit stream
-    uint8_t *mdzipModExponentBitstream(std::ifstream &nf) {
-
-        long blocknumber = 1;
-        // int modexponent  = 0;
-
-        // the curent block size
-        long currentblocksize = blocksize;
-
-        // initialize the gmp bigint variables
-        size_t count;
-
-        // create the byteblock buffer with the blocksize  
-        unsigned char *byteblock  = new unsigned char[blocksize];
-
-        // set last block  
-        long lastblk = blockcount;
-
-        // calculate modulus exponent bit block size
-        long modBitBlockSize = blockcount * 7;
-        // long modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
-        modByteBlockSize = (modBitBlockSize / 8); // need to round up one for blocks a decimal result
-        if ((modBitBlockSize % 8) > 0) modByteBlockSize += 1;
-
-        // Create bitStream object
-        uint8_t *modExpBlock = new uint8_t[modByteBlockSize];
-        // std::cout << "block size " << sizeof(modExpBlock) << " " << modByteBlockSize << std::endl;
-        BitstreamWriter bsw(modExpBlock, modByteBlockSize);
-
-        while (!nf.eof())
-        {
-            if (blocknumber <= blockcount) {
-            // check if this is the last block and the lastblocksize is not equal to the file block size
-            // if it isn't resize the byteblock array and set the currentblocksize to blockremainder
-            if ((blocknumber == blockcount) && (blockremainder != blocksize)) {
-                currentblocksize = blockremainder;   
-                delete byteblock;
-                byteblock  = new unsigned char[currentblocksize];   
-            } 
-
-            // read the current byteblock from the input file and generate a modulus exponent
-            nf.read(reinterpret_cast<char*>(byteblock), (size_t) currentblocksize);
-
-            // create a bigint number for the byte block
-            mpz_import (byteblockInt, currentblocksize, byteorder, sizeof(byteblock[0]), endian, 0, byteblock);
-
-            // calculate the modulus exponent with base two 
-            int modexponent = calcExponent(byteblockInt);
-            // add the modulus exponent to the bitstreamwriter as a 7 bit number
-            // this could be optimized to use RLE or 4 or 5 or 6 bits
-            // 7 bits will encode all the possible combinations of 2^80 which is the exponent max in a 10 byte block 
-            bsw.put<7>(modexponent);
-
-            // if this is the last block stop processing 
-            if (blocknumber == blockcount) break;
-
-            }
-            blocknumber++;
-        }
-
-        delete byteblock;	
-
-        return modExpBlock;
-    }
-
 
     // display the mdlist mdzip file info
     void displayInfo() {
