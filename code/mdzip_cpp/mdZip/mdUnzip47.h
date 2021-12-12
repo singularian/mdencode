@@ -537,7 +537,6 @@ private:
         // initialize the bitstream reader
         BitstreamReader bsr(modExpBlock, modByteBlockSize);
 
-        // int modexponentbase = 0;
         // set the mod exponent base if the bitstream format it 2 to 6 bits
         if (mformat < 7) {
            modexponentbase = bsr.get<7>();
@@ -555,8 +554,11 @@ private:
                 // increment the hash context list block number 
                 hclblock.incrementBlockNum(incKey);
 
-                // read the modulus exponent
                 modexponent = 0;
+
+                // read the modulus exponent from the bitstream
+                // 2-7 bits at a time
+                // currently it runs on it runs from 0 to the last byte block < block count
                 if (blk < (blockcount - 1)) {
                     // check the bitformat and read the modexponent from the bitstreamreader
                     // the template needs a constant int for the bitsize
@@ -779,7 +781,6 @@ private:
         // initialize the bitstream reader
         BitstreamReader bsr(modExpBlock, modByteBlockSize);
 
-        // int modexponentbase = 0;
         // set the mod exponent base if the bitstream format it 2 to 6 bits
         if (mformat < 7) {
            modexponentbase = bsr.get<7>();
@@ -794,12 +795,11 @@ private:
                 // read the file block hash list 
                 hclblock.readBlockHashList(nf);
 
-                // read the modulus exponent
-                // 7 bits at a time
-                // modexponent = bsr.get<7>();
                 modexponent = 0;
 
-                // this won't work it runs from 0 to the last byte block < block count
+                // read the modulus exponent from the bitstream
+                // 2-7 bits at a time
+                // currently it runs on it runs from 0 to the last byte block < block count
                 if (blk < (blockcount - 1)) {
                     // check the bitformat and read the modexponent from the bitstreamreader
                     // the template needs a constant int for the bitsize
