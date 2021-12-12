@@ -1,3 +1,13 @@
+/**
+ *
+ * https://github.com/singularian/mdencode
+ * 
+ * Project MDencode C++ mdBitstream
+ * 
+ * mdBitstream.h creates a modulus exponent bitstream from a file
+ * 
+ * 
+*/
 #include "external/bitstream/Bitstream.h"
 #include <gmp.h>
 #include <gmpxx.h>
