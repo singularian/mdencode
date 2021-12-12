@@ -336,7 +336,7 @@ private:
         uint8_t format = 0;
         long    mformat = 0;
         nf.read(reinterpret_cast<char*>(&format),  sizeof(char));
-        mformat = format; // set this to a (long) // position is wrong
+        mformat = format; // set this to a (long) 
        
         if (format > 7) {
             std::cout << "MDzip File bitstream format doesn't validate" << std::endl; 
