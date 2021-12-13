@@ -70,10 +70,10 @@ It calculated and found the 14 byte block (13 bytes compressed) in 4 hours on a 
 - 1 byte for the modulus exponent 
 
 C++ Test program
-- ```$GOPATH/github.com/singularian/mdencode/code/testdecode_cpp/decoderRandomTestHC2```
+- ```$GOPATH/github.com/singularian/mdencode/code/testdecode_cpp/mdtest```
 
 ```
-./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=000000001211211111111122FFFC
+./mdtest --mod=32 --threads=32 --hl 4  --hex=000000001211211111111122FFFC
 hash values  4
 Start Time               Sun Nov 15 17:52:53 2020
 Block Size               14
@@ -101,7 +101,7 @@ Modulus Scan thread 17 and Random byteblock match
 Second modulus scan decompression example with a larger block running on a ryzen 3950x.
 
 ```
-./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=0000000016412161123F1822FFFC --log=true
+./mdtest --mod=32 --threads=32 --hl 4  --hex=0000000016412161123F1822FFFC --log=true
 hash values  4 
 Start Time               Tue Nov 17 21:44:08 2020
 Block Size               14
@@ -131,7 +131,7 @@ Modulus Scan thread 31 and Random byteblock match
 Another modulus scan decompression example with a larger byte block 
 
 ```
-./decoderRandomTestHC2 --mod=32 --threads=32 --hl 4  --hex=0000002020412161123F1822FFFC --log=true
+./mdtest --mod=32 --threads=32 --hl 4  --hex=0000002020412161123F1822FFFC --log=true
 hash values  4
 
 Start Time               Sat Nov 21 19:59:59 2020
@@ -165,7 +165,7 @@ This is the Sip47 modulus scan decompression example running on a ryzen 3950x.
 It could use a 4 to 7 bit bitstream to encode the modulus exponent.
 
 ```
-./decoderRandomTestHC2 --mod=32  --hl 30 --randbh  --log --hex=0066BDF2F888F000FF00 --block=10
+./mdtest --mod=32  --hl 30 --randbh  --log --hex=0066BDF2F888F000FF00 --block=10
 
 Start Time               Sun Oct 31 19:06:06 2021
 Block Size               10
@@ -206,7 +206,7 @@ Modulus Scan thread 15 and Random byteblock match
 There are currently two test modulus scan programs. These include
 
 - GO test modulus scan ```$GOPATH/github.com/singularian/mdencode/code/testdecode_go/decoderRandomTestHC``` uses GO routines to run the modulus scan for a signature on a byte block
-- C++ test modulus scan ```$GOPATH/github.com/singularian/mdencode/code/testdecode_cpp/decoderRandomTestHC2``` uses C++ threads to run the modulus scan
+- C++ test modulus scan ```$GOPATH/github.com/singularian/mdencode/code/testdecode_cpp/mdtest``` uses C++ threads to run the modulus scan
 
 MDZip and MDUnzip also use a parallel modulus scan with the GO or C++ core. [mdzip C++](https://github.com/singularian/mdencode/tree/master/docs/mdzip_cpp.md).  
 
