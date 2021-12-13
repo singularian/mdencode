@@ -68,4 +68,6 @@ RUN mdunzip
 RUN ls -lha
 RUN /go/src/app/mdencode/build/mdzipcpp
 RUN /go/src/app/mdencode/build/mdunzipcpp
-RUN /go/src/app/mdencode/build/decoderRandomTestHC2
+RUN /go/src/app/mdencode/build/mdzipsip47
+RUN /go/src/app/mdencode/build/mdunzipsip47
+RUN /go/src/app/mdencode/build/mdtest
