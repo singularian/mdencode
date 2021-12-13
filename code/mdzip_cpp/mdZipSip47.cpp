@@ -63,9 +63,13 @@ int main (int argc, char **argv) {
          return splitRange(val, flvals, signum);
       }, "File Hashlist integers list")->expected(1,signum)->allow_extra_args(true);
 
-      // randomize the keylist for the block hashes
+      // specify sip48 for the block hashes
       bool sip48 = false;
-      app.add_flag("--sip48", sip48, "Use Siphash48 for the block hash and modulus 24");    
+      app.add_flag("--sip48", sip48, "Use Siphash48 for the block hash and modulus 24");   
+      
+      // specify hw48 for the block hashes
+      bool hw48 = false;
+      app.add_flag("--hw48", hw48, "Use Highway Hash 48 for the block hash and modulus 24");          
 
       // add the csv block hashlist parameter   
       /* std::vector<int> csvvals;
@@ -146,12 +150,18 @@ int main (int argc, char **argv) {
          modsize = 24;
       }
 
+      // if the hw48 flag is set use siphash 48 and modulus 24 
+      if (hw48) {
+         blocklist = { HW48 };
+         modsize = 24;
+      }
+
       // possibly create a rolling signature where it can run si40/48 on one and hw40/48 on alternate runs 
       // byteblock mod x run this sig
       // alternate between mdscan iterations? Has to be repeatable
       // it can have a setter to set the rolling signature number in the hashcontext list before generating it
       // 
-      // another alternative is sip48 mod24 and a 3-6/7bitstream file block encoding. It trades some speed for a larger signature
+      // another alternative is sip48/hw48 mod24 and a 3-6/7bitstream file block encoding. It trades some speed for a larger signature
       // run mdzipfile
       mdZip47 mdz(filename, blocksize, modsize, flcsvvals, blocklist, randombh, increment, decrement, runlogging);
       mdz.mdzipfile();
