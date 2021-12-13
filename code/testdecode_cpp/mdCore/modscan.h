@@ -179,6 +179,9 @@ class modscan
                  // Compare op1 and op2. Return a positive value if op1 > op2, zero if op1 = op2, or a negative value if op1 < op2
                  if (mpz_cmp(modulusExpIntCeil, blockInt) < 0) {
                     mutexref->mdMutex::incNotFound();
+
+                    // maybe stop = true instead of break
+                    stopped = true;
                     break;
                  }
               }
@@ -187,7 +190,7 @@ class modscan
            // increment by the modulusInt 
            mpz_add (blockInt, blockInt, modulusInt);
            lineNum++;
-        }
+       }
 
        stopped = true; 
        return 0;

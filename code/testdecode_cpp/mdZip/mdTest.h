@@ -165,8 +165,6 @@ private:
     // decodes a random byte sized byteblock with a group of signatures and a random signature key
     int decodeRandomBlock () {
 
-        // could initialize the byteblock here 
-
         mpz_init_set_str(byteblockInt, "0", 10);
         mpz_init_set_str(modulusInt, "1", 10);
         mpz_init_set_str(remainder, "0", 10);
@@ -211,7 +209,7 @@ private:
             mst[tnum].setModscan(&log, byteorder, endian, remainder, modulusInt, modexponent, modexponent2, blocksize, tnum, threadcount, &mutex);
     
             // set the hash context list and the signatures based on the current byte block
-            mst[tnum].hcl.setVectorHL(bhlist, HASHBLOCK);
+            mst[tnum].hcl.setVectorHL(bhlist);
             
             // randomize the keylist if the randombh is true
             // copy the keylist to the other modscan objects after the first modscan object keylist randomization
@@ -237,7 +235,7 @@ private:
         } 
 
         // display the current block stats
-        vectorlist = mst[0].hcl.getHLvectorsString(HASHBLOCK);
+        vectorlist = mst[0].hcl.getHLvectorsString();
         hashlist   = mst[0].hcl.displayHLhashes();
 
         // set the blockkeys to default if the random block hash keys is false
