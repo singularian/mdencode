@@ -103,7 +103,7 @@ Hashlist mdHashlist[LAST] = {
     {45, "xxh64",    "xxHash64",              true,     8,      8},
     {46, "whp",      "Whirlpool",             false,    64,     0},
     {47, "wy64",     "WYhash 64",             true,     8,      48},
-    {46, "last",     "Unused Signature",      false,    8,      0}
+    {48, "last",     "Unused Signature",      false,    8,      0}
 };
 
 
