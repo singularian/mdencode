@@ -1793,155 +1793,155 @@ public:
 
               switch(std::get<0>(hash)) {
                   case CIT64:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].city64seed) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].city64seed) << " ";
+                      break;
                   case CRC32:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].crc32seed) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].crc32seed) << " ";
+                      break;
                   case CRC64:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].crc64seed) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].crc64seed) << " ";
+                      break;
                   case EDN224:
-                     break;   
+                      break;   
                   case FAST32:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].fast32seed) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].fast32seed) << " ";
+                      break;
                   case FAST64:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].fast64seed) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].fast64seed) << " ";
+                      break;
                   case FNV32:
-                     break;
+                      break;
                   case FNV32A:
-                     break;
+                      break;
                   case FNV64:
-                     break;
+                      break;
                   case FNV64A:
-                     break;
+                      break;
                   case HAS160:
-                     break;   
+                      break;   
                   case HW40: 
-                     ss << std::get<1>(hash) << " keys ";
-                     for(i=0; i < 4; i++) { ss << std::to_string(hregister[0].hw40key[i]) << " "; }
-                     break;  
+                      ss << std::get<1>(hash) << " keys ";
+                      for(i=0; i < 4; i++) { ss << std::to_string(hregister[0].hw40key[i]) << " "; }
+                      break;  
                   case HW48: 
-                     ss << std::get<1>(hash) << " keys ";
-                     for(i=0; i < 4; i++) { ss << std::to_string(hregister[0].hw48key[i]) << " "; }
-                     break;     
+                      ss << std::get<1>(hash) << " keys ";
+                      for(i=0; i < 4; i++) { ss << std::to_string(hregister[0].hw48key[i]) << " "; }
+                      break;     
                   case HW64:
-                     ////   addHashToDisplayStream(hregister[0].hw64key, 4); // TODO
-                     ss << std::get<1>(hash) << " keys ";
-                     for(i=0; i < 4; i++) { ss << std::to_string(hregister[0].hw64key[i]) << " "; }
-                     break;
+                      ////   addHashToDisplayStream(hregister[0].hw64key, 4); // TODO
+                      ss << std::get<1>(hash) << " keys ";
+                      for(i=0; i < 4; i++) { ss << std::to_string(hregister[0].hw64key[i]) << " "; }
+                      break;
                   case MD2s:
-                     break;
+                      break;
                   case MD4s:                     
-                     break;
+                      break;
                   case MD5s:
-                     break;
+                      break;
                   case MD6:
-                     //addHashToDisplayStream(hregister[0].md6i, hashblocksize);
-                     break;
+                      //addHashToDisplayStream(hregister[0].md6i, hashblocksize);
+                      break;
                   case MD62:
-                     //addHashToDisplayStream(hregister[0].md62i, hashblocksize);
-                     break;
+                      //addHashToDisplayStream(hregister[0].md62i, hashblocksize);
+                      break;
                   case MET641:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].met641seed) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].met641seed) << " ";
+                      break;
                   case MET642:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].met642seed) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].met642seed) << " ";
+                      break;
                   case MX3:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].mx3seed) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].mx3seed) << " ";
+                      break;
                   case PNG:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].png64seed) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].png64seed) << " ";
+                      break;
                   case RIPE128:
-                     break;   
+                      break;   
                   case RIPE160:
-                     break;
+                      break;
                   case RIPE256:
-                     break;
+                      break;
                   case RIPE320:
-                     break;      
+                      break;      
                   case SEA:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].sea64seed) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].sea64seed) << " ";
+                      break;
                   case SIP32:
-                     ss << std::get<1>(hash) << " keys ";
-                     addHashToDisplayStream((unsigned char*) hregister[0].sipkey32, 16);
-                     break;  
+                      ss << std::get<1>(hash) << " keys ";
+                      addHashToDisplayStream((unsigned char*) hregister[0].sipkey32, 16);
+                      break;  
                   case SIP322:
-                     ss << std::get<1>(hash) << " keys ";
-                     addHashToDisplayStream((unsigned char*) hregister[0].sipkey322, 16);
-                     break;   
+                      ss << std::get<1>(hash) << " keys ";
+                      addHashToDisplayStream((unsigned char*) hregister[0].sipkey322, 16);
+                      break;   
                   case SIP40:
-                     ss << std::get<1>(hash) << " keys ";
-                     addHashToDisplayStream((unsigned char*) hregister[0].sipkey40, 16);
-                     break;       
+                      ss << std::get<1>(hash) << " keys ";
+                      addHashToDisplayStream((unsigned char*) hregister[0].sipkey40, 16);
+                      break;       
                   case SIP48:
-                     ss << std::get<1>(hash) << " keys ";
-                     addHashToDisplayStream((unsigned char*) hregister[0].sipkey48, 16);
-                     break;        
+                      ss << std::get<1>(hash) << " keys ";
+                      addHashToDisplayStream((unsigned char*) hregister[0].sipkey48, 16);
+                      break;        
                   case SIP64:
-                     ss << std::get<1>(hash) << " keys ";
-                     addHashToDisplayStream((unsigned char*) hregister[0].sipkey64, 16);
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      addHashToDisplayStream((unsigned char*) hregister[0].sipkey64, 16);
+                      break;
                   case SIP128:
-                     ss << std::get<1>(hash) << " keys ";
-                     addHashToDisplayStream((unsigned char*) hregister[0].sipkey128, 16);
-                     break;   
+                      ss << std::get<1>(hash) << " keys ";
+                      addHashToDisplayStream((unsigned char*) hregister[0].sipkey128, 16);
+                      break;   
                   case SHA164:
-                     break;
+                      break;
                   case SHA1128:
-                     break;
+                      break;
                   case SHA1s:
-                     break;
+                      break;
                   case SHA256s:
-                     break;
+                      break;
                   case SHA384s:
-                     break;
+                      break;
                   case SHA512s:
-                     break;
+                      break;
                   case SPK32:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].spookyseed32) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].spookyseed32) << " ";
+                      break;
                   case SPK64:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].spookyseed64) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].spookyseed64) << " ";
+                      break;
                   case XXH32:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].xxseed32) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].xxseed32) << " ";
+                      break;
                   case TIGER192:
-                    break; 
+                      break; 
                   case XXH64:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].xxseed64) << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].xxseed64) << " ";
+                      break;
                   case WP:
-                     break;
+                      break;
                   case WYH:
-                     ss << std::get<1>(hash) << " keys ";
-                     ss << std::to_string(hregister[0].wyseed64) << " secret ";
-                     // addHashToDisplayStream(hregister[0].wysecret64, 16);
-                     int i = 0;
-                     for(i=0; i < 5; ++i)
-                        ss << std::to_string(hregister[0].wysecret64[i]) << " ";
-                        ss << " ";
-                     break;
+                      ss << std::get<1>(hash) << " keys ";
+                      ss << std::to_string(hregister[0].wyseed64) << " secret ";
+                      // addHashToDisplayStream(hregister[0].wysecret64, 16);
+                      int i = 0;
+                      for(i=0; i < 5; ++i)
+                          ss << std::to_string(hregister[0].wysecret64[i]) << " ";
+                          ss << " ";
+                      break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
               }
@@ -1965,150 +1965,150 @@ public:
 
               switch(std::get<0>(hash)) {
                   case CIT64:
-                     ss << std::to_string(hregister[0].city64i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].city64i) << " ";
+                      break;
                   case CRC32:
-                     ss << std::to_string(hregister[0].crc32i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].crc32i) << " ";
+                      break;
                   case CRC64:
-                     ss << std::to_string(hregister[0].crc64i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].crc64i) << " ";
+                      break;
                   case EDN224:
-                     addHashToDisplayStream(hregister[0].edn224i, hashblocksize);
-                     break;     
+                      addHashToDisplayStream(hregister[0].edn224i, hashblocksize);
+                      break;     
                   case FAST32:
-                     ss << std::to_string(hregister[0].fast32i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].fast32i) << " ";
+                      break;
                   case FAST64:
-                     ss << std::to_string(hregister[0].fast64i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].fast64i) << " ";
+                      break;
                   case FNV32:
-                     ss << std::to_string(hregister[0].fnv32_1i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].fnv32_1i) << " ";
+                      break;
                   case FNV32A:
-                     ss << std::to_string(hregister[0].fnv32a_1i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].fnv32a_1i) << " ";
+                      break;
                   case FNV64:
-                     ss << std::to_string(hregister[0].fnv64_1i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].fnv64_1i) << " ";
+                      break;
                   case FNV64A:
-                     ss << std::to_string(hregister[0].fnv64a_1i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].fnv64a_1i) << " ";
+                      break;
                   case HAS160:
-                     addHashToDisplayStream(hregister[0].has160i, hashblocksize);
-                     break;   
+                      addHashToDisplayStream(hregister[0].has160i, hashblocksize);
+                      break;   
                   case HW40:
-                     addHashToDisplayStream(hregister[0].hw40bi, hashblocksize);
-                     break;   
+                      addHashToDisplayStream(hregister[0].hw40bi, hashblocksize);
+                      break;   
                   case HW48: 
-                     ss << std::get<1>(hash) << " keys ";
-                     for(i=0; i < 4; i++) { ss << std::to_string(hregister[0].hw48key[i]) << " "; }
-                     break;     
+                      ss << std::get<1>(hash) << " keys ";
+                      for(i=0; i < 4; i++) { ss << std::to_string(hregister[0].hw48key[i]) << " "; }
+                      break;     
                   case HW64:
-                     ss << std::to_string(hregister[0].hw64i) << " ";
-                     uint8_t  hw40bi[8];
-                     convertLongToBytes(hregister[0].hw64i, hw40bi);
-                     addHashToDisplayStream(hw40bi, hashblocksize);
-                     break;
+                      ss << std::to_string(hregister[0].hw64i) << " ";
+                      uint8_t  hw40bi[8];
+                      convertLongToBytes(hregister[0].hw64i, hw40bi);
+                      addHashToDisplayStream(hw40bi, hashblocksize);
+                      break;
                   case MD2s:
-                     addHashToDisplayStream(hregister[0].md2i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].md2i, hashblocksize);
+                      break;
                   case MD4s:
-                     addHashToDisplayStream(hregister[0].md4i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].md4i, hashblocksize);
+                      break;
                   case MD5s:
-                     addHashToDisplayStream(hregister[0].md5i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].md5i, hashblocksize);
+                      break;
                   case MD6:
-                     addHashToDisplayStream(hregister[0].md6i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].md6i, hashblocksize);
+                      break;
                   case MD62:
-                     addHashToDisplayStream(hregister[0].md62i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].md62i, hashblocksize);
+                      break;
                   case MET641:
-                     addHashToDisplayStream(hregister[0].met641i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].met641i, hashblocksize);
+                      break;
                   case MET642:
-                     addHashToDisplayStream(hregister[0].met642i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].met642i, hashblocksize);
+                      break;
                   case MX3:
-                     ss << std::to_string(hregister[0].mx3i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].mx3i) << " ";
+                      break;
                   case PNG:
-                     ss << std::to_string(hregister[0].png64i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].png64i) << " ";
+                      break;
                   case RIPE128:
-                     addHashToDisplayStream(hregister[0].ripe128i, hashblocksize);
-                     break;   
+                      addHashToDisplayStream(hregister[0].ripe128i, hashblocksize);
+                      break;   
                   case RIPE160:
-                     addHashToDisplayStream(hregister[0].ripe160i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].ripe160i, hashblocksize);
+                      break;
                   case RIPE256:
-                     addHashToDisplayStream(hregister[0].ripe256i, hashblocksize);
-                     break;  
+                      addHashToDisplayStream(hregister[0].ripe256i, hashblocksize);
+                      break;  
                   case RIPE320:
-                     addHashToDisplayStream(hregister[0].ripe320i, hashblocksize);
-                     break;     
+                      addHashToDisplayStream(hregister[0].ripe320i, hashblocksize);
+                      break;     
                   case SEA:
-                     ss << std::to_string(hregister[0].sea64i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].sea64i) << " ";
+                      break;
                   case SIP32:
-                     addHashToDisplayStream(hregister[0].siphash32i, hashblocksize);
-                     break;  
+                      addHashToDisplayStream(hregister[0].siphash32i, hashblocksize);
+                      break;  
                   case SIP322:
-                     addHashToDisplayStream(hregister[0].siphash322i, hashblocksize);
-                     break;  
+                      addHashToDisplayStream(hregister[0].siphash322i, hashblocksize);
+                      break;  
                   case SIP40:
-                     addHashToDisplayStream(hregister[0].siphash40i, hashblocksize);
-                     break;        
+                      addHashToDisplayStream(hregister[0].siphash40i, hashblocksize);
+                      break;        
                   case SIP48:
-                     addHashToDisplayStream(hregister[0].siphash48i, hashblocksize);
-                     break;      
+                      addHashToDisplayStream(hregister[0].siphash48i, hashblocksize);
+                      break;      
                   case SIP64:
-                     ss << std::to_string(hregister[0].siphash64i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].siphash64i) << " ";
+                      break;
                   case SIP128:
-                     addHashToDisplayStream(hregister[0].siphash128i, hashblocksize);
-                     break;   
+                      addHashToDisplayStream(hregister[0].siphash128i, hashblocksize);
+                      break;   
                   case SHA164:
-                     addHashToDisplayStream(hregister[0].sha1i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].sha1i, hashblocksize);
+                      break;
                   case SHA1128:
-                     addHashToDisplayStream(hregister[0].sha1i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].sha1i, hashblocksize);
+                      break;
                   case SHA1s:
-                     addHashToDisplayStream(hregister[0].sha1i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].sha1i, hashblocksize);
+                      break;
                   case SHA256s:
-                     addHashToDisplayStream(hregister[0].sha256i, hashblocksize); 
-                     break;
+                      addHashToDisplayStream(hregister[0].sha256i, hashblocksize); 
+                      break;
                   case SHA384s:
-                     addHashToDisplayStream(hregister[0].sha384i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].sha384i, hashblocksize);
+                      break;
                   case SHA512s:
-                     addHashToDisplayStream(hregister[0].sha512i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].sha512i, hashblocksize);
+                      break;
                   case SPK32:
-                     ss << std::to_string(hregister[0].spooky32i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].spooky32i) << " ";
+                      break;
                   case SPK64:
-                     ss << std::to_string(hregister[0].spooky64i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].spooky64i) << " ";
+                      break;
                   case TIGER192:
-                     addHashToDisplayStream(hregister[0].tiger192i, hashblocksize);
-                     break;                     
+                      addHashToDisplayStream(hregister[0].tiger192i, hashblocksize);
+                      break;                     
                   case XXH32:
-                     ss << std::to_string(hregister[0].xxhash32i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].xxhash32i) << " ";
+                      break;
                   case XXH64:
-                     ss << std::to_string(hregister[0].xxhash64i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].xxhash64i) << " ";
+                      break;
                   case WP:
-                     addHashToDisplayStream(hregister[0].whp512i, hashblocksize);
-                     break;
+                      addHashToDisplayStream(hregister[0].whp512i, hashblocksize);
+                      break;
                   case WYH:
-                     ss << std::to_string(hregister[0].wyhash64i) << " ";
-                     break;
+                      ss << std::to_string(hregister[0].wyhash64i) << " ";
+                      break;
                   // default:
                   //  std::cout << "Invalid hash" << std::endl;
               }
