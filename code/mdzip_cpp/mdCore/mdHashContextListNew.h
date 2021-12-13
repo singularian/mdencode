@@ -2001,8 +2001,7 @@ public:
                       addHashToDisplayStream(hregister[0].hw40bi, hashblocksize);
                       break;   
                   case HW48: 
-                      ss << std::get<1>(hash) << " keys ";
-                      for(i=0; i < 4; i++) { ss << std::to_string(hregister[0].hw48key[i]) << " "; }
+                      addHashToDisplayStream(hregister[0].hw48bi, hashblocksize);
                       break;     
                   case HW64:
                       ss << std::to_string(hregister[0].hw64i) << " ";
