@@ -39,7 +39,13 @@ struct hash_list
     uint64_t hw40o;
     uint8_t  hw40bi[8];
     uint8_t  hw40bo[8];
-    uint64_t hw40key[4] = {1, 2, 3, 4};    
+    uint64_t hw40key[4] = {1, 2, 3, 4};  
+    // highway hash 48
+    uint64_t hw48i;
+    uint64_t hw48o;
+    uint8_t  hw48bi[8];
+    uint8_t  hw48bo[8];
+    uint64_t hw48key[4] = {1, 2, 3, 4};     
     // highway hash 64
     uint64_t hw64i;
     uint64_t hw64o;
