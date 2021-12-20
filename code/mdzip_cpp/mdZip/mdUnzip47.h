@@ -11,7 +11,7 @@
  * 
  * This currently uses 
  * sip40 with a 32 bit modulus and a 2-7 bit bitstream for the modulus exponent
- * sip48 with a 24 bit modulus and a 2-7 bit bitstream for the modulus exponent
+ * sip48/hw48 with a 24 bit modulus and a 2-7 bit bitstream for the modulus exponent
  *
 */
 #include <algorithm>
@@ -987,6 +987,7 @@ private:
         std::cout << std::left << std::setw(20) << "Bitstream Bytes: "      << mb.getByteBlockSize() << std::endl;
         std::cout << std::left << std::setw(20) << "Bitstream Exp Base: "   << modexponentbase << std::endl;
         // std::cout << std::left << std::setw(20) << "Bitstream Diff Exp: "   << mb.getDiff() << std::endl;
+        std::cout << std::left << std::setw(20) << "Bitstream Diff Exp: "   << mb.getFormatDiff() << std::endl;
         // ==================================================================================================
         std::cout << std::left << std::setw(20) << "Filehashlist: "     << filehashnames << std::endl;
         std::cout << std::left << std::setw(20) << "Blockhashlist: "    << blockhashnames << std::endl;

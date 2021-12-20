@@ -15,11 +15,10 @@ CMD=cmd
 LDFLAGS=-ldflags "-X github.com/nsross/mdencode/core.Version=${VERSION} -X github.com/nsross/mdencode/core.BuildTime=${BUILD_TIME}"
 
 all:
-	go build -o decoderRandom ${CMD}/decoderRandom.go
-	go build -o decoderRandomTest ${CMD}/decoderRandomTest.go 
-	go build -o decoderRandomTestHC ${CMD}/decoderRandomTestHC.go 
+	go build -o mdtestgo ${CMD}/mdTest.go 
+	go build -o mdtest ${CMD}/mdTestHC.go 
 clean:
-	rm -r decoderRandom decoderRandomTest decoderRandomTestHC *.log
+	rm -r mdtestgo mdtest *.log
 # Display general help about this command
 help:
 	@echo "$(PROJECT) Makefile."

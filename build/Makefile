@@ -54,9 +54,7 @@ all:
 	go build $(LDFLAGS) -o randfile ${MDZIP}/${CMD}/randomFile.go
 	go build $(LDFLAGS) -o randfile2 ${MDZIP}/${CMD}/randomFile2.go
 	@echo "Building mdzip GO test files"
-	go build $(LDFLAGS) -o decoderRandom ${TESTGO}/${CMD}/decoderRandom.go
-	go build $(LDFLAGS) -o decoderRandomTest ${TESTGO}/${CMD}/decoderRandomTest.go
-	go build $(LDFLAGS) -o decoderRandomTestHC ${TESTGO}/${CMD}/decoderRandomTestHC.go
+	go build $(LDFLAGS) -o mdtestgo ${TESTGO}/${CMD}/mdTestHC.go
 # build mdzip C++
 	make buildcpp
 # build the mdencode GO files	
@@ -126,9 +124,7 @@ mdzip:
 # build the mdzip test GO
 test:
 	@echo "Building mdzip GO decodeRandom Tests"
-	go build -o decoderRandom ${TESTGO}/${CMD}/decoderRandom.go
-	go build -o decoderRandomTest ${TESTGO}/${CMD}/decoderRandomTest.go
-	go build -o decoderRandomTestHC ${TESTGO}/${CMD}/decoderRandomTestHC.go	
+	go build -o mdtestgo ${TESTGO}/${CMD}/mdTestHC.go	
 # 	build mdzip c++
 mdzipcpp:
 	make buildcpp	
@@ -150,7 +146,7 @@ windows:
 	go build -o mdsig.exe ${MDZIP}/${CMD}/mdsig.go
 	go build -o randfile.exe ${MDZIP}/${CMD}/randomFile.go
 	@echo "Building mdzip decodeRandom Tests"
-	go build -o decoderRandomTestHC.exe ${TEST}/${CMD}/decoderRandomTestHC.go
+	go build -o mdtestgo.exe ${TEST}/${CMD}/mdTestHC.go
 # run mdzip go test
 runtest:
 	@echo "Running mdzip GO Test"
@@ -169,7 +165,7 @@ runtest:
 # run the Go Hash Context List Tests	
 hctest:
 	@echo "Running GO Hash Context List Tests"
-	./decoderRandomTestHC -all -mod=64 -block=11 -thread=16	
+	./mdtestgo -all -mod=64 -block=11 -thread=16	
 # run the C++ mdzip test
 runtestcpp:
 	@echo "Running mdzip C++ Test"

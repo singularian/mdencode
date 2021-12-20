@@ -179,6 +179,7 @@ Options:
   --fhs                       File Hashlist csv string
   --fh                        File Hashlist integers list
   --sip48                     Use Siphash48 for the block hash and modulus 24
+  --hw48                      Use Highway Hash 48 for the block hash and modulus 24
   -k,--keylist TEXT           Keylist csv string
   --randbh                    Randomize the Block Hash Keylist
   --inc                       Increment the Block Hash Keylist

@@ -118,19 +118,19 @@ mddbreport -file=md.db -fileid=1 -format=5000 -out=outputfile.xml -append=false
 
 ```
 
-# Example decoderRandom  Usage
+# Example mdtest Usage
 
 ```
 user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode
-$ ./decoderRandom
-Usage  ./decoderRandom  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] -hex=[OPTIONAL HEX BYTESTRING]
+$ ./mdtest
+Usage  ./mdtest  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] -hex=[OPTIONAL HEX BYTESTRING]
 
-Usage  ./decoderRandom  -block=12 -mod=64 -thread=16
-Usage  ./decoderRandom  -block=9 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
-Usage  ./decoderRandom  -block=8 -mod=64 -thread=10 -hex=FF0C3FDDAF
-Usage  ./decoderRandom  -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]
-Usage  ./decoderRandom  -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
-Usage  ./decoderRandom  -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF
+Usage  ./mdtest  -block=12 -mod=64 -thread=16
+Usage  ./mdtest  -block=9 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
+Usage  ./mdtest  -block=8 -mod=64 -thread=10 -hex=FF0C3FDDAF
+Usage  ./mdtest  -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]
+Usage  ./mdtest  -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
+Usage  ./mdtest  -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF
 ```
 
 # Example Usage of mdbinlist

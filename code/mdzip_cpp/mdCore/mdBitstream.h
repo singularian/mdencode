@@ -98,6 +98,31 @@ public:
         return diffExponent;
     }
 
+        // calculate the max bitsize based on the format
+    long getFormatDiff() {
+
+        bitsize = 80;
+        switch (bitformat) {
+            case 2:
+                bitsize = 3;
+                break;
+            case 3:
+                bitsize = 7;
+                break;
+            case 4:
+                bitsize = 15;
+                break;
+            case 5:
+                bitsize = 31;
+                break;
+            case 6:
+                bitsize = 63;
+                break;    
+        }    
+
+        return bitsize;
+    }  
+
     // set the bitsteam format based on the exponent diff
     // currently from 2 to 7
     // I think there can be a 0 for just one modexponent value for all the blocks
