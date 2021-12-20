@@ -363,7 +363,7 @@ Found block  thread 10 random bytestring and modulusscan bytestring match [222 2
 This examples shows a 14 byte block encoded in a 13 byte block. This is an example of modulus scan compression where the mdzip byte block is smaller than the input block.    
 It uses 2 32-bit signatures CRC-32 and FNV-32 and a 32-bit modulus and 1 byte for the modulus exponent.                                                                       
 ```                                                                                                                                                                           
-user@server:~/projects/src/github.com/singularian/mdencode/build$ ./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=16 -hex=0000000012002000000000000000   
+user@server:~/projects/src/github.com/singularian/mdencode/build$ ./mdtestgo -block=14 -mod=32 -bh=0000000010000001 -thread=16 -hex=0000000012002000000000000000   
 hashlist  [crc32 fnv32] 0000000010000001                                                                                                                                      
 Found Block [crc32 0b964a44 fnv32 7c87ac27] result = 0b964a447c87ac27 Found Block  [0 0 0 0 18 0 32 0 0 0 0 0 0 0]                                                            
 Total time  25h57m30.5502149s                                                                                                                                                 
@@ -378,7 +378,7 @@ This examples shows a 14 byte block encoded in a 13 byte block. This is an examp
 It uses 2 32-bit signatures CRC-32 and FNV-32 and a 32-bit modulus and 1 byte for the modulus exponent. It was run on a 60 core server with 120 threads.                      
                                                                                                                                                                               
 ```                                                                                                                                                                           
-user@instance-2:~/mdencode/build$ ./mdtest -block=14 -mod=32 -bh=0000000010000001 -thread=120 -hex=000000001200200000000000FFFC                   
+user@instance-2:~/projects/src/github.com/singularian/mdencode/build$ ./mdtestgo -block=14 -mod=32 -bh=0000000010000001 -thread=120 -hex=000000001200200000000000FFFC                   
 Running Decode                                                                                                                                                                
 Block Size        14                                                                                                                                                          
 Hashlist          [crc32 fnv32]                                                                                                                                               
@@ -401,15 +401,15 @@ It uses 2 32-bit signatures CRC-32 and FNV-32 and a 32-bit modulus and 1 byte fo
 It was run on 9 servers with 32 cores with a total of 288 cpu threads.                                                                                                        
                                                                                                                                                                               
 ```                                                                                                                                                                           
-./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=0 -end=32  -hex=0000000012002000000011DDFFFC                                                  
-./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=32 -end=64  -hex=0000000012002000000011DDFFFC                                                 
-./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=64 -end=96  -hex=0000000012002000000011DDFFFC                                                 
-./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=96 -end=128  -hex=0000000012002000000011DDFFFC                                                
-./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=128 -end=160 -hex=0000000012002000000011DDFFFC                                                
-./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=160 -end=192 -hex=0000000012002000000011DDFFFC                                                
-./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=192 -end=224 -hex=0000000012002000000011DDFFFC                                                
-./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=224 -end=256 -hex=0000000012002000000011DDFFFC                                                
-./decoderRandomTestHC -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=256 -end=288 -hex=0000000012002000000011DDFFFC                                                
+./mdtest -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=0 -end=32  -hex=0000000012002000000011DDFFFC                                                  
+./mdtest -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=32 -end=64  -hex=0000000012002000000011DDFFFC                                                 
+./mdtest -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=64 -end=96  -hex=0000000012002000000011DDFFFC                                                 
+./mdtest -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=96 -end=128  -hex=0000000012002000000011DDFFFC                                                
+./mdtest -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=128 -end=160 -hex=0000000012002000000011DDFFFC                                                
+./mdtest -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=160 -end=192 -hex=0000000012002000000011DDFFFC                                                
+./mdtest -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=192 -end=224 -hex=0000000012002000000011DDFFFC                                                
+./mdtest -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=224 -end=256 -hex=0000000012002000000011DDFFFC                                                
+./mdtest -block=14 -mod=32 -bh=0000000010000001 -thread=288 -start=256 -end=288 -hex=0000000012002000000011DDFFFC                                                
                                                                                                                                                                               
 Thread End        96                                                                                                                                                          
 Threads           288                                                                                                                                                         
