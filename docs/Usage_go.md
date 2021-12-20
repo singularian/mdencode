@@ -123,14 +123,37 @@ mddbreport -file=md.db -fileid=1 -format=5000 -out=outputfile.xml -append=false
 ```
 user@server:~/projects/src/github.com/singularian/mdencode/code/testdecode
 $ ./mdtest
-Usage  ./mdtest  -block=[BLOCKSIZE BYTES] -mod=[MODSIZE BITS] -thread=[THREADSIZE GOROUTINES] -start=[THREAD START] -end=[THREAD END] -bytes=[OPTIONAL JSON BYTESTRING] -hex=[OPTIONAL HEX BYTESTRING]
+USAGE of mdtest:
 
-Usage  ./mdtest  -block=12 -mod=64 -thread=16
-Usage  ./mdtest  -block=9 -mod=64 -thread=10 -bytes=[1,2,3,4,5]
-Usage  ./mdtest  -block=8 -mod=64 -thread=10 -hex=FF0C3FDDAF
-Usage  ./mdtest  -block=8 -mod=64 -thread=10 -bytes=[100,222,30,55,100]
-Usage  ./mdtest  -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
-Usage  ./mdtest  -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF
+  -block string
+        File Block Size Bytes (default "40")
+  -all
+        Run all the block signatures
+  -bh string
+        Block Hash List (default "01001") CSV or Binary
+  -mod string
+        Modulus Size in Bits (default "32")
+  -thread
+        Thread Number
+  -start
+        Thread Start
+  -end 
+        Thread End
+  -bytes
+        JSON Bytestring
+  -hex
+        Hex Bytestring
+  -keylist string
+        Signature Hash Keylist
+    
+Usage  mdtest  -block=12 -mod=64 -thread=16 -bh=1010101
+Usage  mdtest  -block=9 -mod=64 -thread=10 -bh=11111 -bytes=[1,2,3,4,5]
+Usage  mdtest  -block=8 -mod=64 -thread=10 -bh=1 -bytes=[100,222,30,55,100]
+Usage  mdtest  -block=8 -mod=64 -thread=10 -bh=101 -hex=FF0C3FDDAF
+Usage  mdtest  -block=20 -mod=128 -thread=16 -bh=0000000000000000001 -keylist=aes8:F01100119900112FF11
+Usage  mdtest  -mod=64 -thread=16 -start=2 -end=5 -bytes=[100,222,30,55,100,11,123]
+Usage  mdtest  -mod=64 -thread=16 -start=2 -end=5 -hex=0F0F0F22CDFF
+Usage  mdtest  -block=11 -mod=64 -bh=1,5,15,16 -thread=16
 ```
 
 # Example Usage of mdbinlist
