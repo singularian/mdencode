@@ -140,6 +140,29 @@ private:
         return mdversion;
     }
 
+    // get the version
+    bool validateVersion() {
+        bool validMDzip = false;
+
+        if ((mdversion != 1.11) && (mdversion != 1.12) && (mdversion != 1.01)) {
+            return true;
+        }     
+        // switch doesn't work with floats
+/*      switch (mdversion) {
+            case 1.01:
+                validMDzip = true;
+                break;
+            case 1.11:
+                validMDzip = true;
+                break;
+            case 1.12:
+                validMDzip = true;
+                break;     
+        } 
+*/
+        return validMDzip;
+    }
+
     // set the block size
     void setBlockSize(long bsize) {
         blocksize = bsize;
@@ -264,7 +287,7 @@ private:
         nf.read(reinterpret_cast<char*>(&modsizebits),   sizeof(int));
 
         // validate the mdversion
-        if ((mdversion != 1.11) && (mdversion != 1.12) && (mdversion != 1.01)) {
+        if (validateVersion()) {
             std::cout << "MDzip File version doesn't validate" << std::endl; 
             return 1;
         }
@@ -439,7 +462,7 @@ private:
         nf.read(reinterpret_cast<char*>(&modsizebits),   sizeof(int));
 
         // validate the mdversion
-        if ((mdversion != 1.11) && (mdversion != 1.12) && (mdversion != 1.01)) {
+        if (validateVersion()) {
             std::cout << "MDzip File version doesn't validate" << std::endl; 
             return 1;
         }
@@ -669,7 +692,7 @@ private:
         nf.read(reinterpret_cast<char*>(&modsizebits),  sizeof(int));
 
         // validate the mdversion
-        if ((mdversion != 1.11) && (mdversion != 1.12) && (mdversion != 1.01)) {
+        if (validateVersion()) {
             std::cout << "MDzip File version doesn't validate" << std::endl; 
             return 1;
         }

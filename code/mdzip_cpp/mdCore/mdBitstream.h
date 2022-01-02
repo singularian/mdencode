@@ -41,6 +41,8 @@ public:
 
     // initialize the mdBitstream object
     mdBitstream() {
+
+        // bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
     }
 
     // initialize the mdBitstream Object with the blocksize and blockcount and last block size
@@ -59,8 +61,7 @@ public:
         // delete the modulus exponent bitstream byte block
         if (modByteBlockSize > 0) delete modExpBlock;	
         // delete the bitstream readers and writers;
-        // if (modByteBlockSize > 0) 
-        delete bsr;
+        if (modByteBlockSize > 0) delete bsr;
         // the writer is not currently used
         // delete bsw;
         // std::cout << "Destroyed" << std::endl;
@@ -98,7 +99,7 @@ public:
         return diffExponent;
     }
 
-        // calculate the max bitsize based on the format
+    // calculate the max bitsize based on the format
     long getFormatDiff() {
 
         bitsize = 80;
