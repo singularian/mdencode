@@ -42,7 +42,6 @@ public:
     // initialize the mdBitstream object
     mdBitstream() {
 
-        // bsr = new BitstreamReader(modExpBlock, modByteBlockSize);
     }
 
     // initialize the mdBitstream Object with the blocksize and blockcount and last block size
