@@ -37,6 +37,7 @@ public:
     void incNotFound()
     {
         mutex.lock();
+        // std::scoped_lock lk {mutex}; // C++ 17 lock
         notFound++;
         if (notFound == threadCount) {
             isMatched = NOTFOUND;

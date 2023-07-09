@@ -20,6 +20,7 @@ TESTCPP=../code/testdecode_cpp
 CPPEXT=../code/mdzip_cpp/external
 
 # c compiler
+# CC=g++ -g 
 CC=g++
 
 # C++ Dependencies
@@ -126,8 +127,8 @@ test:
 	@echo "Building mdzip GO decodeRandom Tests"
 	go build -o mdtestgo ${TESTGO}/${CMD}/mdTestHC.go	
 # 	build mdzip c++
-mdzipcpp:
-	make buildcpp	
+mdzipcpp: buildcpp
+#	make buildcpp	
 # windows build
 windows:
 	@echo "Windows Build"
@@ -350,4 +351,4 @@ help:
 	@echo "    make clean         : Remove any local build artifacts"
 	@echo "    make cleanbuild    : Remove any build artifacts"
 list:
-	echo "all build mdencode mdzip test clean list"
+	@echo "all build mdencode mdzip test clean list"
