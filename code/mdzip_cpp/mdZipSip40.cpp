@@ -18,6 +18,7 @@
 #include <gmpxx.h>
 #include "mdCore/mdCommon.h"
 #include "mdCore/mdHashContextList.h"
+#include "setRange/setRange.h"
 
 int mdzipfile(std::string filename, long blocksize, int modsize, std::vector<int> &fhlist, std::vector<int> &bhlist, bool randombh, bool inc, bool dec);
 void displayInfo(std::string& filename, double mdversion, long filesize, long blocksize, long blockcount, long blockremainder, int modsize, 
@@ -49,15 +50,16 @@ int main (int argc, char **argv) {
      // app.add_option("-t,--thread,--threads", threadcount, "Thread count number")->check(CLI::PositiveNumber);
 
      // add the file hash list parameter
-     std::vector<int> flcsvvals;    
-     app.add_option("--fhs", [&flcsvvals, &signum](std::vector<std::string> val){
-        return splitRange(val, flcsvvals, signum);
+     std::vector<int> flcsvvals;
+     itSetRange isr;
+     app.add_option("--fhs", [&flcsvvals, &signum, &isr](std::vector<std::string> val){
+        return isr.splitRange(val, flcsvvals, signum);
      }, "File Hashlist csv string")->delimiter(',')->expected(1,signum)->allow_extra_args(true);
 
      // integer file hash list parameter
      std::vector<int> flvals;
-     app.add_option("--fh", [&flvals, &signum](std::vector<std::string> val){
-        return splitRange(val, flvals, signum);
+     app.add_option("--fh", [&flvals, &signum, &isr](std::vector<std::string> val){
+        return isr.splitRange(val, flvals, signum);
      }, "File Hashlist integers list")->expected(1,signum)->allow_extra_args(true);
 
      // add the csv block hashlist parameter   

@@ -254,60 +254,6 @@ std::vector<std::string> splitString(std::string &s, char delim)
     return elems;
 }
 
-// convert a csv or int vector range string to an int vector
-// this is for the CLI11 lambda function for hash lists
-// range example 1-9 or numberstart dash numberend
-// 1-3 12 19 20-22 = 1 3 12 19 20 21 22
-// 1-3,12,19,20-22 = 1 3 12 19 20 21 22
-bool splitRange(std::vector<std::string> &val, std::vector<int> &intvals, int signum)
-{
-    char delim = '-';
-    std::vector<std::string> v;
-    for (int i = 0; i < val.size(); i++)
-    {
-        // match for numbers
-        if (std::regex_match(val[i], std::regex("([0-9]+)")))
-        {
-            int a = std::stoi(val[i]);
-            if (a > signum)
-                return false;
-            intvals.push_back(a);
-            // check range numbers 1-9 or 10-23
-        }
-        else if (std::regex_match(val[i], std::regex("([0-9]+\\-[0-9]+)")))
-        {
-            std::string number = val[i];
-            v = splitString(number, delim);
-            if (v.size() == 2)
-            {
-                int a = std::stoi(v[0]);
-                int b = std::stoi(v[1]);
-                if (a > signum || b > signum)
-                    return false;
-                // the range should be 2-20 or the first number less than the second
-                if (a < b)
-                {
-                    for (int j = a; j <= b; j++)
-                        intvals.push_back(j);
-                }
-                else if (a == b)
-                {
-                    intvals.push_back(a);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
 /**
  * Get the size of a file.
  * @param filename The name of the file to check size for

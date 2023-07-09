@@ -2,23 +2,23 @@ package main
 
 // project mdencode
 // mdencode.go
-// 
+//
 // https://github.com/singularian/mdencode
 // copyright (C) Scott Ross 2019
-// 
+//
 // License
 // https://github.com/singularian/mdencode/blob/master/LICENSE
 
 import (
 	"flag"
 	"fmt"
-	"path/filepath"
-        _ "io/ioutil"
 	"github.com/singularian/mdencode/code/mdencode/mdEncode/mdEncodeALL"
 	"github.com/singularian/mdencode/code/mdencode/mdRand"
+	_ "io/ioutil"
 	"os"
-	"strconv"
+	"path/filepath"
 	"regexp"
+	"strconv"
 )
 
 var (
@@ -29,39 +29,39 @@ var (
 // mdencode flag struct
 type FlagData struct {
 	defaultFormat int
-        // var blocksize uint64
-        // var modsize uint64
-        blocksize string
-        modsize string
-        fhashlist string
-        bhashlist string
-        uhashlist string
-        key string
-	keylist string
-        appendfile bool
-        byteblock bool
-        byteblockint bool
-        filehashline bool
-        // random hashlist booleans
-        randomfilehash bool
-        randomblockhash bool
-        randomfileblockhash bool
-        randomfileblocksize bool
-        randomModSize bool
-        randomEverything bool
+	// var blocksize uint64
+	// var modsize uint64
+	blocksize    string
+	modsize      string
+	fhashlist    string
+	bhashlist    string
+	uhashlist    string
+	key          string
+	keylist      string
+	appendfile   bool
+	byteblock    bool
+	byteblockint bool
+	filehashline bool
+	// random hashlist booleans
+	randomfilehash      bool
+	randomblockhash     bool
+	randomfileblockhash bool
+	randomfileblocksize bool
+	randomModSize       bool
+	randomEverything    bool
 	// current working directory
-	cwd string
+	cwd           string
 	cwdoutputfile string
-        // input signature filename
-        filename string
-        // input directory name
-        directory string
-        // output file name
-        outputfilename string
-        // logfilename
-        logfilename string
-        // initialize sqlite3 md db
-        initdb string
+	// input signature filename
+	filename string
+	// input directory name
+	directory string
+	// output file name
+	outputfilename string
+	// logfilename
+	logfilename string
+	// initialize sqlite3 md db
+	initdb string
 	// mdEncodeAll variable
 	md *mdEncodeALL.FileData
 }
@@ -149,17 +149,17 @@ func (fd *FlagData) Encode() {
 
 	// set the mdEncode Parameters
 	fd.md.SetByteBlock(fd.byteblock)
-        fd.md.SetByteBlockBigInt(fd.byteblockint)
-        fd.md.SetAppendFile(fd.appendfile)
-        fd.md.SetFileHashLine(fd.filehashline)
-        fd.md.SetKeyFile(fd.key)
+	fd.md.SetByteBlockBigInt(fd.byteblockint)
+	fd.md.SetAppendFile(fd.appendfile)
+	fd.md.SetFileHashLine(fd.filehashline)
+	fd.md.SetKeyFile(fd.key)
 	fd.md.SetKeyList(fd.keylist)
-        fd.md.SetLogFile(fd.logfilename)
-        fd.md.SetOutputFile(fd.outputfilename)
-        // set the default format
-        fd.md.SetMdFormat(fd.defaultFormat)
-        // set the hash lists
-        fd.md.SetHashLists(fd.fhashlist, fd.bhashlist)
+	fd.md.SetLogFile(fd.logfilename)
+	fd.md.SetOutputFile(fd.outputfilename)
+	// set the default format
+	fd.md.SetMdFormat(fd.defaultFormat)
+	// set the hash lists
+	fd.md.SetHashLists(fd.fhashlist, fd.bhashlist)
 
 	// if the filename is specified
 	// mdencode generate a file signature
@@ -179,19 +179,18 @@ func (fd *FlagData) Encode() {
 
 }
 
-
 // set the Quaternian
 // initial implimentation of the quaternian file or block hashlist arguments
 // this could eventually have blockgroups which makes it have another 4 states 0-7
 func (fd *FlagData) SetQuaternian() {
 	if fd.uhashlist != "" {
-		var quaternianHashListArray  []string
+		var quaternianHashListArray []string
 		var fhashlist string
 		var bhashlist string
 		re := regexp.MustCompile("[0123]")
 		quaternianHashListArray = re.FindAllString(fd.uhashlist, -1)
 		for _, element := range quaternianHashListArray {
-		switch element {
+			switch element {
 			// if it is zero then no hash for that signature
 			case "0":
 				fhashlist += "0"
@@ -222,8 +221,8 @@ func (fd *FlagData) SetQuaternian() {
 // randomize the file or block signature lists
 func (fd *FlagData) randomizeFB() {
 
-	// var signatureSize int = BlockSize + 1 
-	var signatureSize int = fd.md.HclistSizeInt + 1 
+	// var signatureSize int = BlockSize + 1
+	var signatureSize int = fd.md.HclistSizeInt + 1
 
 	// fmt.Println("hash list size ", signatureSize)
 
@@ -232,7 +231,7 @@ func (fd *FlagData) randomizeFB() {
 		fd.fhashlist = mdRand.GetRandomBits(signatureSize)
 	}
 
-	// randomize the blockhash 
+	// randomize the blockhash
 	if fd.randomblockhash {
 		fd.bhashlist = mdRand.GetRandomBits(signatureSize)
 	}
@@ -263,7 +262,7 @@ func (fd *FlagData) randomizeFB() {
 
 }
 
-// printUsage 
+// printUsage
 func printUsage() {
 	fmt.Printf("USAGE of %s:\n", os.Args[0])
 	// fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
