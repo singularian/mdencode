@@ -36,6 +36,6 @@ require (
 	github.com/tildeleb/aeshash v0.0.0-20190627052759-9e6b40329b3b
 	github.com/tildeleb/hashland v0.0.0-20171003003232-07375b562dea // indirect
 	golang.org/x/crypto v0.11.0
-	golang.org/x/image v0.0.0-20200119044424-58c23975cae1 // indirect
+	golang.org/x/image v0.9.0 // indirect
 	leb.io/hashland v0.0.0-20171003003232-07375b562dea // indirect
 )
