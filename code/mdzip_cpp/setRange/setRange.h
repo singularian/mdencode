@@ -6,9 +6,9 @@
  *
  * setRange.h is the command line range parameter class
  *
- * setRange parses range arguments into an integer list
- * 1 2 3 4-8 10-12
- * 1 2 3 4 5 6 7 8 10 11 12
+ * setRange parses range arguments into an integer vector
+ * input  1 2 3 4-8 10-12
+ * output 1 2 3 4 5 6 7 8 10 11 12
  *
  */
 #include <iostream>
