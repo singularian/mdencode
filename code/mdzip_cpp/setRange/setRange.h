@@ -4,10 +4,11 @@
  *
  * Project mdencode
  *
- * itSetRange.h is the command line range parameter class
+ * setRange.h is the command line range parameter class
  *
- * it parses arguments into an integer list
- *
+ * setRange parses range arguments into an integer list
+ * 1 2 3 4-8 10-12
+ * 1 2 3 4 5 6 7 8 10 11 12
  *
  */
 #include <iostream>
@@ -16,7 +17,7 @@
 #include <set>
 #include <regex>
 #include <unordered_map>
-#include <fmt/format.h>
+// #include <fmt/format.h>
 
 using namespace std;
 
