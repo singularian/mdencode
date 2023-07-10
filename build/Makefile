@@ -125,7 +125,10 @@ mdzip:
 # build the mdzip test GO
 test:
 	@echo "Building mdzip GO decodeRandom Tests"
-	go build -o mdtestgo ${TESTGO}/${CMD}/mdTestHC.go	
+	go build -o mdtestgo ${TESTGO}/${CMD}/mdTestHC.go
+testcpp:
+	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/tests/testHCL.cpp -o testhcl  $(LDLIBS)
+	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/tests/testFileSignatures.cpp -o testfs  $(LDLIBS)
 # 	build mdzip c++
 mdzipcpp: buildcpp
 #	make buildcpp	

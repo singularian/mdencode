@@ -18,6 +18,7 @@
 #include "external/CLI11.hpp" 
 #include "mdCore/mdCommon.h"
 #include "../mdCore/mdHashContextList.h"
+#include "../setRange/setRange.h"
 
 
 //  testhashfile --file=file.txt --hl 14 15 13
@@ -26,6 +27,8 @@ int main (int argc, char **argv) {
     // current signature number handled in the hash context list
     int signum       = LAST - 1;
 
+    std::cout << "signumber size " << signum << endl;
+
     // process the command line argument with the CLI11 command line parser
     CLI::App app{"MDEncode GMP C++ Test Program"};
 
@@ -33,9 +36,10 @@ int main (int argc, char **argv) {
     app.add_option("-f,--file", filename, "MDunzip filename")->check(CLI::ExistingFile)->required();
 
     // std::vector<int> vals;
+    itSetRange isr;
     std::vector<int> fhlist = { 1, 10, 11, 12, 13, 14, 21, 22, 23, 24, 25, 26 };
-    app.add_option("-s,--hl", [&fhlist, &signum](std::vector<std::string> val){
-         return splitRange(val, fhlist, signum);
+    app.add_option("-s,--hl", [&fhlist, &signum, &isr](std::vector<std::string> val){
+         return isr.splitRange(val, fhlist, signum);
      }, "File Hashlist integers list")->expected(1,signum)->allow_extra_args(true);
 
     // check if no argument is specified
