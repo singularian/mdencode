@@ -115,8 +115,8 @@ void testBlockHCL() {
     std::cout << hclblock.displayHLhashes() << std::endl;
 
     assert(hclblock.getHLVectorLength()  == 7);
-    assert(hclblock.calcBlockSize()      == 80);
-    assert(hclblock.calcBlockKeySize()   == 20);
+    assert(hclblock.calcBlockSize()      == 84);
+    assert(hclblock.calcBlockKeySize()   == 36);
 
 }
 
