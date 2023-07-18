@@ -98,13 +98,11 @@ class itSetRange {
                             intvals.push_back(j);
                         }
                     }
-
                     // range values descending
                     // the range should be 5-2 or the first number greater than the second
                     // this adds 5 4 3 2 to the range list
                     else if (a > b)
                     {
-                       // for (int j = b; j <= a; j++)
                        for (int j = a; j >= b; j--) {
                             intvals.push_back(j);
                        }
