@@ -110,7 +110,7 @@ int main (int argc, char **argv) {
      // execute the mdlist display mdzip file blocks if list is true
      // ./mdunzip --file=test.mdz --list=true
      try {
-          if (list) mdlist(filename, list, runlogging);
+         if (list) mdlist(filename, list, runlogging);
      } catch (exception& ex) {
          std::cout << "MDList Exception " << std::endl;
      } 

@@ -50,24 +50,24 @@ class itSetRange {
     {
         char delim = '-';
         int a, b;
-        std::vector<std::string> v;
+        std::vector<std::string> rangeVal;
 
         for (int i = 0; i < val.size(); i++)
         {
             // match for numbers
             if (std::regex_match(val[i], std::regex("([0-9]+)")))
             {
-                // int a = std::stoi(val[i]);
+
                 // convert the number line to an integer
                 try {
                     a = std::stoi(val[i]);
                 } catch(exception &err) {
-                    cout << "Conversion failure " << a << endl;
-                    // exit(-1);
+                    std::cout << "Conversion failure " << a << std::endl;
                     return false;
                 }
-                if (a > signum)
-                    return false;
+                // if the range is greater than the range signum invalidate and return false
+                if (a > signum) return false;
+
                 intvals.push_back(a);
 
             }
@@ -75,23 +75,21 @@ class itSetRange {
             else if (std::regex_match(val[i], std::regex("([0-9]+\\-[0-9]+)")))
             {
                 std::string number = val[i];
-                v = splitString(number, delim);
-                if (v.size() == 2)
+                rangeVal = splitString(number, delim);
+                if (rangeVal.size() == 2)
                 {
-                    // int a = std::stoi(v[0]);
-                    // int b = std::stoi(v[1]);
                     // convert the number line to an integer
                     try {
-                        a = std::stoi(v[0]);
-                        b = std::stoi(v[1]);
+                        a = std::stoi(rangeVal[0]);
+                        b = std::stoi(rangeVal[1]);
                     } catch(exception &err) {
-                        cout<<"Conversion failure " << a << " " << b << endl;
-                        // exit(-1);
+                        std::cout << "Conversion failure " << a << " " << b << std::endl;
                         return false;
                     }
+                    // if the range is greater than the range signum invalidate and return false
+                    if (a > signum || b > signum) return false;
 
-                    if (a > signum || b > signum)
-                        return false;
+                    // range values ascending
                     // the range should be 2-5 or the first number less than the second
                     // this adds 2 3 4 5 to the range list
                     if (a < b)
@@ -100,6 +98,8 @@ class itSetRange {
                             intvals.push_back(j);
                         }
                     }
+
+                    // range values descending
                     // the range should be 5-2 or the first number greater than the second
                     // this adds 5 4 3 2 to the range list
                     else if (a > b)
@@ -109,7 +109,9 @@ class itSetRange {
                             intvals.push_back(j);
                        }
                     }
+                    // equal range
                     // a = b
+                    // 1-1 or 2-2
                     else if (a == b)
                     {
                         intvals.push_back(a);

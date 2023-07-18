@@ -89,9 +89,9 @@ int main (int argc, char **argv) {
 
     // process the command arguments
     try {
-    app.parse(argc, argv);
+        app.parse(argc, argv);
     } catch(const CLI::ParseError &e) {
-    return app.exit(e);
+        return app.exit(e);
     }
 
     // initialize the mdunzip object 
