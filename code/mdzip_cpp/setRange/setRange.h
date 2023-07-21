@@ -129,8 +129,8 @@ class itSetRange {
     }
 
     // split a string
-    // string 1,2,3,4
-    // split(string, ',') = 1 2 3 4
+    // split("1,2,3,4", ',') = 1 2 3 4
+    // split("1-2", '-')     = 1 2
     std::vector<std::string> splitString(std::string &s, char delim)
     {
         std::stringstream ss(s);
