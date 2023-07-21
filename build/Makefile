@@ -129,6 +129,7 @@ test:
 testcpp:
 	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/tests/testHCL.cpp -o testhcl  $(LDLIBS)
 	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/tests/testFileSignatures.cpp -o testfs  $(LDLIBS)
+	$(CC) -I$(MDZIPCPP) $(DEPS) $(MDZIPCPP)/tests/testSetRanges.cpp -o testranges   $(LDLIBS)
 # 	build mdzip c++
 mdzipcpp: buildcpp
 #	make buildcpp	
@@ -326,7 +327,7 @@ hctestcpp:
 	mdtest --mod=64 --block=11 --bh=6-8,23,33,34 --hl 1 2 3 4-8 --randbh
 # clean the build directory	
 clean:
-	rm -r mdzip mdunzip mdzipcpp mdunzipcpp mdzipnh mdunzipnh mdzipsip47 mdzipsip47 mdtest 
+	rm -r mdzip mdunzip mdzipcpp mdunzipcpp mdzipnh mdunzipnh mdzipsip40 mdunzipsip40 mdzipsip47 mdunzipsip47 mdtest testranges
 	rm -r mdcmd mdlist mdlistTest mdsig randfile randfile2 md mdencode mdnewdb mddbreport mdbinlist decoderRandom decoderRandomTest decoderRandomTestHC 
 #	rm -r randomfile randomfile.mdz randomfile.mdz.out *.mdsz *.mdsz.out *.log
 # clean the build directory

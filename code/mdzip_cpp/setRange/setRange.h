@@ -49,7 +49,7 @@ class itSetRange {
     bool splitRange(std::vector<std::string> &val, std::vector<int> &intvals, int signum)
     {
         char delim = '-';
-        int a, b;
+        int number, start, end;
         std::vector<std::string> rangeVal;
 
         for (int i = 0; i < val.size(); i++)
@@ -60,15 +60,15 @@ class itSetRange {
 
                 // convert the number line to an integer
                 try {
-                    a = std::stoi(val[i]);
+                    number = std::stoi(val[i]);
                 } catch(exception &err) {
-                    std::cout << "Conversion failure " << a << std::endl;
+                    std::cout << "Conversion failure " << number << std::endl;
                     return false;
                 }
                 // if the range is greater than the range signum invalidate and return false
-                if (a > signum) return false;
+                if (number > signum) return false;
 
-                intvals.push_back(a);
+                intvals.push_back(number);
 
             }
             // check range numbers 1-9 or 10-23 or 23-1
@@ -80,39 +80,39 @@ class itSetRange {
                 {
                     // convert the number line to an integer
                     try {
-                        a = std::stoi(rangeVal[0]);
-                        b = std::stoi(rangeVal[1]);
+                        start = std::stoi(rangeVal[0]);
+                        end   = std::stoi(rangeVal[1]);
                     } catch(exception &err) {
-                        std::cout << "Conversion failure " << a << " " << b << std::endl;
+                        std::cout << "Conversion failure " << start << " " << end << std::endl;
                         return false;
                     }
                     // if the range is greater than the range signum invalidate and return false
-                    if (a > signum || b > signum) return false;
+                    if (start > signum || end > signum) return false;
 
                     // range values ascending
                     // the range should be 2-5 or the first number less than the second
                     // this adds 2 3 4 5 to the range list
-                    if (a < b)
+                    if (start < end)
                     {
-                        for (int j = a; j <= b; j++) {
+                        for (int j = start; j <= end; j++) {
                             intvals.push_back(j);
                         }
                     }
                     // range values descending
                     // the range should be 5-2 or the first number greater than the second
                     // this adds 5 4 3 2 to the range list
-                    else if (a > b)
+                    else if (start > end)
                     {
-                       for (int j = a; j >= b; j--) {
+                       for (int j = start; j >= end; j--) {
                             intvals.push_back(j);
                        }
                     }
                     // equal range
                     // a = b
                     // 1-1 or 2-2
-                    else if (a == b)
+                    else if (start == end)
                     {
-                        intvals.push_back(a);
+                        intvals.push_back(start);
                     }
                     else
                     {
