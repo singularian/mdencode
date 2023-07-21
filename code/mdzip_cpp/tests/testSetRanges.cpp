@@ -4,7 +4,7 @@
  *
  * Project mdencode test ranges
  *
- * itTestRanges.cpp
+ * testSetRanges.cpp
  *
 */
 #include <iostream>
