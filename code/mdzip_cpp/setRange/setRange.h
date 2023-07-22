@@ -44,8 +44,8 @@ class itSetRange {
     // convert a csv or int vector range string to an int vector
     // this is for the CLI11 lambda function for hash lists
     // range example 1-9 or numberstart dash numberend
-    // 1-3 12 19 20-22 = 1 3 12 19 20 21 22
-    // 1-3,12,19,20-22 = 1 3 12 19 20 21 22
+    // 1-3 12 19 20-22 = 1 2 3 12 19 20 21 22
+    // 1-3,12,19,20-22 = 1 2 3 12 19 20 21 22
     bool splitRange(std::vector<std::string> &tokenlist, std::vector<int> &intvals, int signum)
     {
         char delim = '-';
