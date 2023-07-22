@@ -23,7 +23,7 @@ using namespace std;
 
 class itSetRange {
     private:
-        int size = 0;
+        std::size_t size = 0;
     public:
 
     // Default constructor
@@ -46,23 +46,25 @@ class itSetRange {
     // range example 1-9 or numberstart dash numberend
     // 1-3 12 19 20-22 = 1 3 12 19 20 21 22
     // 1-3,12,19,20-22 = 1 3 12 19 20 21 22
-    bool splitRange(std::vector<std::string> &val, std::vector<int> &intvals, int signum)
+    bool splitRange(std::vector<std::string> &tokenlist, std::vector<int> &intvals, int signum)
     {
         char delim = '-';
+        std::string pnum;
         int number, start, end;
         std::vector<std::string> rangeVal;
 
-        for (int i = 0; i < val.size(); i++)
+        for (int i = 0; i < tokenlist.size(); i++)
         {
-            // match for numbers
-            if (std::regex_match(val[i], std::regex("([0-9]+)")))
-            {
+            pnum = tokenlist[i];
 
+            // match for numbers
+            if (std::regex_match(pnum, std::regex("([0-9]+)")))
+            {
                 // convert the number line to an integer
                 try {
-                    number = std::stoi(val[i]);
+                    number = std::stoi(pnum);
                 } catch(exception &err) {
-                    std::cout << "Conversion failure " << number << std::endl;
+                    std::cout << "Conversion Failure " << pnum << std::endl;
                     return false;
                 }
                 // if the range is greater than the range signum invalidate and return false
@@ -72,10 +74,9 @@ class itSetRange {
 
             }
             // check range numbers 1-9 or 10-23 or 23-1
-            else if (std::regex_match(val[i], std::regex("([0-9]+\\-[0-9]+)")))
+            else if (std::regex_match(pnum, std::regex("([0-9]+\\-[0-9]+)")))
             {
-                std::string number = val[i];
-                rangeVal = splitString(number, delim);
+                rangeVal = splitString(pnum, delim);
                 if (rangeVal.size() == 2)
                 {
                     // convert the number line to an integer
@@ -83,7 +84,7 @@ class itSetRange {
                         start = std::stoi(rangeVal[0]);
                         end   = std::stoi(rangeVal[1]);
                     } catch(exception &err) {
-                        std::cout << "Conversion failure " << start << " " << end << std::endl;
+                        std::cout << "Conversion Range Failure " << pnum << std::endl;
                         return false;
                     }
                     // if the range is greater than the range signum invalidate and return false
