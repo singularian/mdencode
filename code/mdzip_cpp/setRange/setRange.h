@@ -51,9 +51,9 @@ class itSetRange {
         int number, start, end;
         std::vector<std::string> rangeVal;
 
-        for (int i = 0; i < tokenlist.size(); i++)
+        for (int tk = 0; tk < tokenlist.size(); tk++)
         {
-            pnum = tokenlist[i];
+            pnum = tokenlist[tk];
 
             // match for numbers
             if (std::regex_match(pnum, std::regex("([0-9]+)")))
@@ -93,8 +93,8 @@ class itSetRange {
                     // this adds 2 3 4 5 to the range list
                     if (start < end)
                     {
-                        for (int j = start; j <= end; j++) {
-                            intvals.push_back(j);
+                        for (number = start; number <= end; number++) {
+                            intvals.push_back(number);
                         }
                     }
                     // range values descending
@@ -102,8 +102,8 @@ class itSetRange {
                     // this adds 5 4 3 2 to the range list
                     else if (start > end)
                     {
-                       for (int j = start; j >= end; j--) {
-                            intvals.push_back(j);
+                       for (number = start; number >= end; number--) {
+                            intvals.push_back(number);
                        }
                     }
                     // equal range
